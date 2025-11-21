@@ -1,0 +1,46 @@
+Tu est un developpeur avec compréhension complète de la spécification OpenAPI (https://swagger.io/specification/).
+
+L'objéctif est d'écrire une librairie dans plusieurs languages comme Go, Rust, Python et Scala. on se focalisera sur Go dans un premier temps.
+Cette librairie a pour but de servir de SDK (Software Development Kit) de l'API de CleverCloud (https://www.clever.cloud/). et ce, afin de faciliter les integrations d'autres outils avec la platform de clevercloud.
+la package root de ce projet sera "go.clever-cloud.dev/sdk"
+
+La spécification de l'API CleverCloud se trouve ici https://api.clever-cloud.com/v4/ovd/swagger/docs.yaml
+une UI est disponnible ici: https://api.clever-cloud.com/v4/ovd/swagger/#/
+la spec OpenAPI contient une customisation a travers une attribut "x-service" qui permet de grouper certaines opérations ensembles. On aurait pu utiliser les tags, mais l'avantage de x-service c'est qu'une operation dans OpenAPI ne peux appartenir qu'a un seul x-service.
+
+l'instanciation du SDK se fait a travers une fonction avec le "Functional Options Pattern", celui ci doit wrapper les possibilité du "client clevercloud".
+Le client CleverCloud est une librairie Go dont la doc est ici https://pkg.go.dev/go.clever-cloud.dev/client et le code ici: https://github.com/CleverCloud/clevercloud-client-go?tab=readme-ov-file. TU analysera entièrement ce projet pour mieux en tirer partie
+
+le SDK est constitué de 2 niveaux,
+
+le premier niveau contient un package par x-service, dans lequel on retrouve 1 fichier par operation.
+les "models", c'est à dire toutes les structure necessaires aux payload des operations sont rangés dans un package "model" a part.
+Chaque model est définie dans son propre fichier.
+
+chaque operation se présente sous forme de fonction, qui prends en 1er paramètre, obligatoirement un context.Context, puis, potentiels paramètre d'URL, puis les structures
+et enfin les query parameters.
+Le nom de la fonction est issue de l'operation ID présent dans la définition OpenAPI
+la description des opertations et paramètres sera ajouté sous forme de commentaire au dessus du type Go correspondant.
+
+dans les 2 niveaux les query parameters sont confgurable a travers le "Functional Options Pattern" bien connu des developpeurs Go dont tu trouvera des exemples ici https://golang.cafe/blog/golang-functional-options-pattern.html
+
+
+chaque operation, donc chaque fonction utilise le Tracer opentelemetry afin de générer une span correspondante avec une nom dont le pattern sera l'operation ID.
+l'idée est de savoir combien de temps prends chaque operation donc chaque appel a l'API de clevercloud.
+
+les ENUM notemment celles de type string ou number, dans la mesure du possible seront définie sous forme de constantes.uxième
+Je ne sais pas comment gérer les enums de type struct, tu peux proposer ta solution.
+
+Le deuxième niveau, situé dans un package a part, tire partie du premier en réutilisant chaque fonction et en les wrappant dans une sorte de builder.
+Par exemple, pour l'operation dans le path est "/v4/addon-providers/addon-pulsar/addons/{addonId}/non-persistent-topics/{topic}"
+on produira un objet utilisable de la facon suivante:
+```go
+sdkInstance := NewSDK()
+topicsList := sdkInstance.V4.AddonProviders.AddonPulsar.Addons("addon_id").NonPersistentTopics("topic-name").List(context.Background)
+```
+
+Cette generation de code sera utiliser a chaque modification de la spec OpenAPI de clever, il faut donc que tu t'écrive des directives que tu pourra reprendre pa la suite
+pour comprendre comment tu l'as générer afin de pouvoir le modifier plus simplement pour le mettre à jour.
+
+enfin, tu générera une API de "mock" de CleverCloud qui répondra aux appels HTTP de chaque operation avec les bon paramètre et des payload d'exemple. utilise les payload d'exemple présente dans la spec OpenAPI quand celles-ci sont disponnibles.
+Et tu te servira de cette API http afin de valider le fonctionnement de chaque operation a travers de tests unitaires.
