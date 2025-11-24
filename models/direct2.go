@@ -4,5 +4,8 @@ package models
 
 // Direct2
 type Direct2 struct {
-	Direct DirectTransport `json:"direct"`
+	Direct BackendDirectTransport `json:"direct"`
 }
+
+// isTransport3 implements Transport3
+func (r Direct2) isTransport3() {}

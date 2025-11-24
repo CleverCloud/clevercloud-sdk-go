@@ -4,3 +4,6 @@ package models
 
 // NetworkgroupPeer
 type NetworkgroupPeer struct{}
+
+// isResourceType implements ResourceType
+func (r NetworkgroupPeer) isResourceType() {}

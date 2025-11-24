@@ -2,6 +2,8 @@
 
 package models
 
+const RawRecipientType = "RAW_HTTP"
+
 // RawRecipient
 type RawRecipient struct {
 	Password *string `json:"password,omitempty"`
@@ -9,3 +11,11 @@ type RawRecipient struct {
 	URL      string  `json:"url"`
 	Username *string `json:"username,omitempty"`
 }
+
+// GetType returns the type identifier for RawRecipient
+func (r RawRecipient) GetType() string {
+	return RawRecipientType
+}
+
+// isDrainRecipient implements DrainRecipient
+func (r RawRecipient) isDrainRecipient() {}

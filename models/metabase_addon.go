@@ -4,3 +4,6 @@ package models
 
 // MetabaseAddon
 type MetabaseAddon struct{}
+
+// isResourceType implements ResourceType
+func (r MetabaseAddon) isResourceType() {}

@@ -7,3 +7,6 @@ type OVDErrorFieldContext struct {
 	FieldName  string `json:"fieldName"`
 	FieldValue string `json:"fieldValue"`
 }
+
+// isOVDErrorContext implements OVDErrorContext
+func (r OVDErrorFieldContext) isOVDErrorContext() {}

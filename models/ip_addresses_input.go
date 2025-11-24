@@ -4,5 +4,5 @@ package models
 
 // IpAddressesInput
 type IpAddressesInput struct {
-	IpAddresses []string `json:"ipAddresses,omitempty"`
+	IPAddresses []string `json:"ipAddresses,omitempty"`
 }

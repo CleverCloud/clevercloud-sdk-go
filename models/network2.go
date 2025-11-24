@@ -4,3 +4,6 @@ package models
 
 // Network2
 type Network2 struct{}
+
+// isResourceType implements ResourceType
+func (r Network2) isResourceType() {}

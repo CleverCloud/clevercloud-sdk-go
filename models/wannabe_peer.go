@@ -7,7 +7,7 @@ type WannabePeer struct {
 	Hostname     *string  `json:"hostname,omitempty"`
 	Hv           *string  `json:"hv,omitempty"`
 	ID           string   `json:"id"`
-	Ip           *string  `json:"ip,omitempty"`
+	IP           *string  `json:"ip,omitempty"`
 	Label        *string  `json:"label,omitempty"`
 	ParentEvent  *string  `json:"parentEvent,omitempty"`
 	ParentMember string   `json:"parentMember"`

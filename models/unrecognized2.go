@@ -6,3 +6,6 @@ package models
 type Unrecognized2 struct {
 	UnrecognizedValue int `json:"unrecognizedValue"`
 }
+
+// isPathKind implements PathKind
+func (r Unrecognized2) isPathKind() {}

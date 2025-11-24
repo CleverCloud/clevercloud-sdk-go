@@ -6,3 +6,6 @@ package models
 type Placed struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 }
+
+// isVMDeploymentStatus implements VMDeploymentStatus
+func (r Placed) isVMDeploymentStatus() {}

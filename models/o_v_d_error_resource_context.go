@@ -7,3 +7,6 @@ type OVDErrorResourceContext struct {
 	ResourceName string `json:"resourceName"`
 	ResourceType string `json:"resourceType"`
 }
+
+// isOVDErrorContext implements OVDErrorContext
+func (r OVDErrorResourceContext) isOVDErrorContext() {}

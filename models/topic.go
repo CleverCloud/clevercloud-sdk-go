@@ -4,3 +4,6 @@ package models
 
 // Topic
 type Topic struct{}
+
+// isResourceType implements ResourceType
+func (r Topic) isResourceType() {}

@@ -6,3 +6,6 @@ package models
 type Booting struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 }
+
+// isVMDeploymentStatus implements VMDeploymentStatus
+func (r Booting) isVMDeploymentStatus() {}

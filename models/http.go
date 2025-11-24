@@ -4,5 +4,8 @@ package models
 
 // Http
 type Http struct {
-	HTTP HttpTransport `json:"http"`
+	HTTP HttpRouter `json:"http"`
 }
+
+// isProtocol implements Protocol
+func (r Http) isProtocol() {}

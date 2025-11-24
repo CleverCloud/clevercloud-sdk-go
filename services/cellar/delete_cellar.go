@@ -14,7 +14,7 @@ import (
 /*
 Deletecellar
 
-deprovision a Cellar account
+delete a Cellar account
 
 Parameters:
   - ctx: context for the request
@@ -40,7 +40,7 @@ func Deletecellar(ctx context.Context, c *client.Client, tracer trace.Tracer, ad
 	ctx, span := tracer.Start(ctx, "deleteCellar", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-cellar/%s", addonId)
+	path := utils.Path("/v4/addon-providers/addon-cellar/%s", addonId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)

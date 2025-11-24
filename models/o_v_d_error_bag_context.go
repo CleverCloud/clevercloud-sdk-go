@@ -6,3 +6,6 @@ package models
 type OVDErrorBagContext struct {
 	Elem []ResourceType1 `json:"elem,omitempty"`
 }
+
+// isOVDErrorContext implements OVDErrorContext
+func (r OVDErrorBagContext) isOVDErrorContext() {}

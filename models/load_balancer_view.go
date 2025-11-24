@@ -13,10 +13,10 @@ type LoadBalancerView struct {
 	DomainName                   DnsDomainName                 `json:"domainName"`
 	Flavor                       Flavor                        `json:"flavor"`
 	Frozen                       bool                          `json:"frozen"`
-	ID                           LoadbalancerId                `json:"id"`
+	ID                           LoadBalancerId                `json:"id"`
 	Ips                          []string                      `json:"ips,omitempty"`
 	Listeners                    []Listener                    `json:"listeners,omitempty"`
-	LoadbalancerParentResourceID *LoadbalancerParentResourceId `json:"loadbalancerParentResourceId,omitempty"`
+	LoadbalancerParentResourceID *LoadBalancerParentResourceId `json:"loadbalancerParentResourceId,omitempty"`
 	Mutualized                   bool                          `json:"mutualized"`
 	OwnerID                      TenantID                      `json:"ownerId"`
 	RegionID                     RegionId                      `json:"regionId"`

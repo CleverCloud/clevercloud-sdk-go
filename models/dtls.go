@@ -6,3 +6,6 @@ package models
 type Dtls struct {
 	Dtls BackendDTLSTransport `json:"dtls"`
 }
+
+// isTransport1 implements Transport1
+func (r Dtls) isTransport1() {}

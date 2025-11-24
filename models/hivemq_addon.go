@@ -4,3 +4,6 @@ package models
 
 // HivemqAddon
 type HivemqAddon struct{}
+
+// isResourceType implements ResourceType
+func (r HivemqAddon) isResourceType() {}

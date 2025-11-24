@@ -10,7 +10,7 @@ type Network1 struct {
 	CreatedAt     time.Time  `json:"createdAt"`
 	FrozenAt      *time.Time `json:"frozenAt,omitempty"`
 	ID            NetworkId  `json:"id"`
-	IpVersion     IpVersion  `json:"ipVersion"`
+	IPVersion     IpVersion  `json:"ipVersion"`
 	Name          *string    `json:"name,omitempty"`
 	NetworkOffset int        `json:"networkOffset"`
 	OwnerID       TenantID   `json:"ownerId"`

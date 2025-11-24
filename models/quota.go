@@ -4,3 +4,6 @@ package models
 
 // Quota
 type Quota struct{}
+
+// isResourceType implements ResourceType
+func (r Quota) isResourceType() {}

@@ -7,3 +7,6 @@ type BootFailed struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 	Reason     string             `json:"reason"`
 }
+
+// isVMDeploymentStatus implements VMDeploymentStatus
+func (r BootFailed) isVMDeploymentStatus() {}

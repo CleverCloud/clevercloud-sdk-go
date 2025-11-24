@@ -4,3 +4,6 @@ package models
 
 // MateriaDB
 type MateriaDB struct{}
+
+// isResourceType implements ResourceType
+func (r MateriaDB) isResourceType() {}

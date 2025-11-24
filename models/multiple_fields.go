@@ -6,3 +6,6 @@ package models
 type MultipleFields struct {
 	Fields MapFielderror1 `json:"fields"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r MultipleFields) isHTTPErrorContext() {}

@@ -3,7 +3,8 @@
 package models
 
 // Transport2
-// Union type - can be one of: Tcp1, Udp1
+// Union type - can be one of: Tcp1, Udp
 type Transport2 interface {
 	isTransport2()
+	GetType() string
 }

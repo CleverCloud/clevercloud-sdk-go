@@ -4,5 +4,8 @@ package models
 
 // Tls1
 type Tls1 struct {
-	Tls BackendTLSTransport `json:"tls"`
+	TLS BackendTLSTransport `json:"tls"`
 }
+
+// isTransport3 implements Transport3
+func (r Tls1) isTransport3() {}

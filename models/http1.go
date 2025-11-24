@@ -6,3 +6,6 @@ package models
 type Http1 struct {
 	HTTP BackendHttpTransport `json:"http"`
 }
+
+// isTransport3 implements Transport3
+func (r Http1) isTransport3() {}

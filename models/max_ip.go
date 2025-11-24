@@ -6,3 +6,6 @@ package models
 type MaxIp struct {
 	Maximum int `json:"maximum"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r MaxIp) isQuotaItem() {}

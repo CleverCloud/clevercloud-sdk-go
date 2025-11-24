@@ -4,3 +4,6 @@ package models
 
 // ConnectionTime
 type ConnectionTime struct{}
+
+// isLoadMetric implements LoadMetric
+func (r ConnectionTime) isLoadMetric() {}

@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: EmptyContext, OVDErrorBagContext, OVDErrorFieldContext, OVDErrorInputContext, OVDErrorOperationContext, OVDErrorResourceContext, OVDMultipleErrorFieldContext
 type OVDErrorContext interface {
 	isOVDErrorContext()
+	GetType() string
 }

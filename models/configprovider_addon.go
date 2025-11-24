@@ -4,3 +4,6 @@ package models
 
 // ConfigproviderAddon
 type ConfigproviderAddon struct{}
+
+// isResourceType implements ResourceType
+func (r ConfigproviderAddon) isResourceType() {}

@@ -4,6 +4,12 @@ package models
 
 // NetworkGroup
 type NetworkGroup struct {
-	ID    string              `json:"id"`
-	Peers []NetworkGroupPeer1 `json:"peers,omitempty"`
+	ID         string             `json:"id"`
+	Network    Network            `json:"network"`
+	OwnerID    string             `json:"ownerId"`
+	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
+	PrivateKey string             `json:"privateKey"`
 }
+
+// isNetworkDetails implements NetworkDetails
+func (r NetworkGroup) isNetworkDetails() {}

@@ -5,7 +5,7 @@ package models
 // WannabeExternalPeer
 type WannabeExternalPeer struct {
 	Hostname     *string  `json:"hostname,omitempty"`
-	Ip           *string  `json:"ip,omitempty"`
+	IP           *string  `json:"ip,omitempty"`
 	Label        string   `json:"label"`
 	ParentEvent  *string  `json:"parentEvent,omitempty"`
 	ParentMember string   `json:"parentMember"`

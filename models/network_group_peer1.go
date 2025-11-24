@@ -6,6 +6,6 @@ package models
 type NetworkGroupPeer1 struct {
 	Endpoint  *any   `json:"endpoint,omitempty"`
 	ID        string `json:"id"`
-	Ip        string `json:"ip"`
+	IP        string `json:"ip"`
 	PublicKey string `json:"publicKey"`
 }

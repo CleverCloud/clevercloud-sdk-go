@@ -4,3 +4,6 @@ package models
 
 // DrainStatus1
 type DrainStatus1 struct{}
+
+// isResourceType implements ResourceType
+func (r DrainStatus1) isResourceType() {}

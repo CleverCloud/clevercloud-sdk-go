@@ -32,6 +32,7 @@ type ModelField struct {
 	Comment    string
 	IsRequired bool
 	IsPointer  bool
+	ConstValue string // If set, this field has a const value
 }
 
 // ModelStruct represents a Go struct to be generated
@@ -46,6 +47,9 @@ type ModelStruct struct {
 	AliasType   string
 	IsUnion     bool
 	UnionTypes  []string
+	TypeField   string   // Name of the const field that identifies the type (e.g., "Type")
+	TypeValue   string   // Const value for this type (e.g., "DATADOG")
+	Implements  []string // List of union interfaces this type implements
 }
 
 // PackageData represents the complete package to generate
@@ -207,6 +211,13 @@ func getSchemaOneOf(schema Schema) []Schema {
 	return nil
 }
 
+func getSchemaConst(schema Schema) (string, bool) {
+	if c, ok := schema["const"].(string); ok {
+		return c, true
+	}
+	return "", false
+}
+
 func parseOpenAPISpec(specFile string) (*openapi31.Spec, error) {
 	// Read OpenAPI spec file
 	specBytes, err := os.ReadFile(specFile)
@@ -257,8 +268,16 @@ func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
 		return models, nil
 	}
 
+	// Sort schema names alphabetically for consistent output
+	var schemaNames []string
+	for schemaName := range spec.Components.Schemas {
+		schemaNames = append(schemaNames, schemaName)
+	}
+	sort.Strings(schemaNames)
+
 	// Process each schema in components/schemas
-	for schemaName, schema := range spec.Components.Schemas {
+	for _, schemaName := range schemaNames {
+		schema := spec.Components.Schemas[schemaName]
 		model, err := processSchema(schemaName, schema)
 		if err != nil {
 			log.Printf("Warning: Failed to process schema %s: %v", schemaName, err)
@@ -274,6 +293,25 @@ func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
 	sort.Slice(models, func(i, j int) bool {
 		return models[i].Name < models[j].Name
 	})
+
+	// Build map of unions and their member types
+	unionMembers := make(map[string][]string)
+	for _, m := range models {
+		if m.IsUnion {
+			unionMembers[m.Name] = m.UnionTypes
+		}
+	}
+
+	// Associate types with unions they implement
+	for i := range models {
+		for unionName, members := range unionMembers {
+			for _, member := range members {
+				if models[i].Name == member {
+					models[i].Implements = append(models[i].Implements, unionName)
+				}
+			}
+		}
+	}
 
 	return models, nil
 }
@@ -382,12 +420,27 @@ func processObjectSchema(name string, schema Schema) (*ModelStruct, error) {
 		requiredFields[req] = true
 	}
 
+	// Sort property names alphabetically for consistent output
+	properties := getSchemaProperties(schema)
+	var propNames []string
+	for propName := range properties {
+		propNames = append(propNames, propName)
+	}
+	sort.Strings(propNames)
+
 	// Process properties
-	for propName, propSchema := range getSchemaProperties(schema) {
+	for _, propName := range propNames {
+		propSchema := properties[propName]
 		field, err := processProperty(propName, propSchema, requiredFields[propName])
 		if err != nil {
 			log.Printf("Warning: Failed to process property %s.%s: %v", name, propName, err)
 			continue
+		}
+
+		// If this field has a const value, track it
+		if field.ConstValue != "" {
+			model.TypeField = field.Name
+			model.TypeValue = field.ConstValue
 		}
 
 		model.Fields = append(model.Fields, *field)
@@ -407,6 +460,11 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 		JSONTag:    buildJSONTag(propName, isRequired),
 		Comment:    formatComment(getSchemaDescription(propSchema)),
 		IsRequired: isRequired,
+	}
+
+	// Check for const value
+	if constVal, hasConst := getSchemaConst(propSchema); hasConst {
+		field.ConstValue = constVal
 	}
 
 	// Determine Go type
@@ -523,17 +581,20 @@ func fixIdSuffixes(s string) string {
 	// Fix common Go naming conventions for ID-related suffixes
 	// This ensures clusterId becomes ClusterID, ownerId becomes OwnerID, etc.
 	replacements := map[string]string{
-		"Id":    "ID",
-		"Url":   "URL",
-		"Uri":   "URI",
-		"Api":   "API",
-		"Ttl":   "TTL",
-		"Sql":   "SQL",
-		"Http":  "HTTP",
+		"Id":   "ID",
+		"Ip":   "IP",
+		"Ipam": "IPAM",
+		"Url":  "URL",
+		"Uri":  "URI",
+		"Api":  "API",
+		"Tls":  "TLS",
+		"Ttl":  "TTL",
+		"Sql":  "SQL",
+		"Http": "HTTP",
 		"Https": "HTTPS",
-		"Json":  "JSON",
-		"Xml":   "XML",
-		"Uuid":  "UUID",
+		"Json": "JSON",
+		"Xml":  "XML",
+		"Uuid": "UUID",
 	}
 
 	for old, new := range replacements {
@@ -714,9 +775,10 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 	f.Comment(fmt.Sprintf("%s %s", union.Name, union.Comment))
 	f.Comment(fmt.Sprintf("Union type - can be one of: %s", strings.Join(union.UnionTypes, ", ")))
 
-	// Interface with marker method
+	// Interface with marker method and GetType()
 	f.Type().Id(union.Name).Interface(
 		Id("is" + union.Name).Params(),
+		Id("GetType").Params().String(),
 	)
 
 	// Write to individual file
@@ -728,6 +790,13 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 func generateSingleStructFile(model ModelStruct, packageData *PackageData, outputDir string) error {
 	f := NewFile(packageData.Package)
 	f.HeaderComment("Code generated by generate-models. DO NOT EDIT.")
+
+	// Generate const for the type value if present
+	if model.TypeValue != "" && model.TypeField != "" {
+		constName := model.Name + model.TypeField
+		f.Const().Id(constName).Op("=").Lit(model.TypeValue)
+		f.Line()
+	}
 
 	// Struct comment
 	f.Comment(fmt.Sprintf("%s %s", model.Name, model.Comment))
@@ -756,6 +825,25 @@ func generateSingleStructFile(model ModelStruct, packageData *PackageData, outpu
 	}
 
 	f.Type().Id(model.Name).Struct(fields...)
+	f.Line()
+
+	// Generate GetType() method if this struct has a type const
+	if model.TypeValue != "" && model.TypeField != "" {
+		constName := model.Name + model.TypeField
+		f.Comment(fmt.Sprintf("GetType returns the type identifier for %s", model.Name))
+		f.Func().Params(Id("r").Id(model.Name)).Id("GetType").Params().String().Block(
+			Return(Id(constName)),
+		)
+		f.Line()
+	}
+
+	// Generate marker methods for union interfaces this type implements
+	for _, unionName := range model.Implements {
+		markerMethod := "is" + unionName
+		f.Comment(fmt.Sprintf("%s implements %s", markerMethod, unionName))
+		f.Func().Params(Id("r").Id(model.Name)).Id(markerMethod).Params().Block()
+		f.Line()
+	}
 
 	// Write to individual file
 	fileName := generateFileName(model.Name, ".go")

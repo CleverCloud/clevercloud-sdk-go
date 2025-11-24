@@ -4,3 +4,6 @@ package models
 
 // Empty
 type Empty struct{}
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Empty) isHTTPErrorContext() {}

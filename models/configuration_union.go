@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: NetworkGroupConfig, OpenVpn, Wireguard
 type Configuration interface {
 	isConfiguration()
+	GetType() string
 }

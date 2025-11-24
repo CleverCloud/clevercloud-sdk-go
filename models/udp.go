@@ -4,5 +4,8 @@ package models
 
 // Udp
 type Udp struct {
-	Udp UdpTransport `json:"udp"`
+	Udp BackendUDPTransport `json:"udp"`
 }
+
+// isTransport2 implements Transport2
+func (r Udp) isTransport2() {}

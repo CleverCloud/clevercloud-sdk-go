@@ -6,3 +6,6 @@ package models
 type Quic1 struct {
 	Quic BackendQuicTransport `json:"quic"`
 }
+
+// isTransport1 implements Transport1
+func (r Quic1) isTransport1() {}

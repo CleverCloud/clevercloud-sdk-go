@@ -6,3 +6,6 @@ package models
 type Wireguard struct {
 	Wireguard WireGuard `json:"wireguard"`
 }
+
+// isConfiguration implements Configuration
+func (r Wireguard) isConfiguration() {}

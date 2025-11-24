@@ -37,7 +37,7 @@ func Getconfigurationprovider(ctx context.Context, c *client.Client, tracer trac
 	ctx, span := tracer.Start(ctx, "getConfigurationProvider", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/config-provider/resources/%s", addonId)
+	path := utils.Path("/v4/addon-providers/config-provider/addons/%s", addonId)
 
 	// Make API call
 	response := client.Get[models.ConfigProvider](ctx, c, path)

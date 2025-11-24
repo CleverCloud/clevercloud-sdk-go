@@ -4,3 +4,6 @@ package models
 
 // KmsAddon
 type KmsAddon struct{}
+
+// isResourceType implements ResourceType
+func (r KmsAddon) isResourceType() {}

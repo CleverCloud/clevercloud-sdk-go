@@ -4,5 +4,8 @@ package models
 
 // Http2
 type Http2 struct {
-	HTTP BackendHttpTransport `json:"http"`
+	HTTP HttpTransport `json:"http"`
 }
+
+// isLayer1 implements Layer1
+func (r Http2) isLayer1() {}

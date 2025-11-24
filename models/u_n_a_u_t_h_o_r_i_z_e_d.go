@@ -4,3 +4,6 @@ package models
 
 // UNAUTHORIZED
 type UNAUTHORIZED struct{}
+
+// isPathKind implements PathKind
+func (r UNAUTHORIZED) isPathKind() {}

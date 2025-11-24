@@ -6,3 +6,6 @@ package models
 type Unrecognized struct {
 	UnrecognizedValue int `json:"unrecognizedValue"`
 }
+
+// isAlgorithm implements Algorithm
+func (r Unrecognized) isAlgorithm() {}

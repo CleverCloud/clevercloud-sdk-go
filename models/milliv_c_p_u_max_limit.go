@@ -6,3 +6,6 @@ package models
 type MillivCPUMaxLimit struct {
 	Maximum int `json:"maximum"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r MillivCPUMaxLimit) isQuotaItem() {}

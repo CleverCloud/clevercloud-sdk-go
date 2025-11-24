@@ -6,3 +6,6 @@ package models
 type Exact struct {
 	Exact string `json:"exact"`
 }
+
+// isPath implements Path
+func (r Exact) isPath() {}

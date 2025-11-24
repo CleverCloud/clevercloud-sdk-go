@@ -4,3 +4,6 @@ package models
 
 // AddressRecycle
 type AddressRecycle struct{}
+
+// isResourceType implements ResourceType
+func (r AddressRecycle) isResourceType() {}

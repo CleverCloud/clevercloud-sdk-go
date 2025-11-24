@@ -4,3 +4,6 @@ package models
 
 // PowerOfTwo
 type PowerOfTwo struct{}
+
+// isAlgorithm implements Algorithm
+func (r PowerOfTwo) isAlgorithm() {}

@@ -4,3 +4,6 @@ package models
 
 // KubernetesAddon
 type KubernetesAddon struct{}
+
+// isResourceType implements ResourceType
+func (r KubernetesAddon) isResourceType() {}

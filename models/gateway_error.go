@@ -7,3 +7,6 @@ type GatewayError struct {
 	OriginalBody   string `json:"originalBody"`
 	OriginalStatus int    `json:"originalStatus"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r GatewayError) isHTTPErrorContext() {}

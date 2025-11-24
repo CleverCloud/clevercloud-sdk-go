@@ -4,3 +4,6 @@ package models
 
 // Owner
 type Owner struct{}
+
+// isResourceType implements ResourceType
+func (r Owner) isResourceType() {}

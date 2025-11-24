@@ -4,3 +4,6 @@ package models
 
 // OVH
 type OVH struct{}
+
+// isProviderType implements ProviderType
+func (r OVH) isProviderType() {}

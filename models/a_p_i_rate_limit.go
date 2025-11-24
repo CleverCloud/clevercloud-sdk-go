@@ -6,3 +6,6 @@ package models
 type APIRateLimit struct {
 	Frequency int `json:"frequency"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r APIRateLimit) isQuotaItem() {}

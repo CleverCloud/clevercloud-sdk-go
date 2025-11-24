@@ -4,3 +4,6 @@ package models
 
 // Tls13Aes256GcmSha384
 type Tls13Aes256GcmSha384 struct{}
+
+// isCipher implements Cipher
+func (r Tls13Aes256GcmSha384) isCipher() {}

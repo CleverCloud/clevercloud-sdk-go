@@ -4,3 +4,6 @@ package models
 
 // Reserved
 type Reserved struct{}
+
+// isDeploymentStep implements DeploymentStep
+func (r Reserved) isDeploymentStep() {}

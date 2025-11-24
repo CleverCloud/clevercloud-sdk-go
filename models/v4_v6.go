@@ -8,3 +8,6 @@ type V4V6 struct {
 	NetworkV4 Network            `json:"networkV4"`
 	NetworkV6 Network            `json:"networkV6"`
 }
+
+// isPublicNetwork implements PublicNetwork
+func (r V4V6) isPublicNetwork() {}

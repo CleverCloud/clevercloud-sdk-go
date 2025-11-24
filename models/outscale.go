@@ -4,3 +4,6 @@ package models
 
 // Outscale
 type Outscale struct{}
+
+// isProviderType implements ProviderType
+func (r Outscale) isProviderType() {}

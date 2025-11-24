@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: DatadogRecipient, ElasticsearchRecipient, NewRelicRecipient, OVHTCPRecipient, RawRecipient, SyslogTCPRecipient, SyslogUDPRecipient
 type DrainRecipient interface {
 	isDrainRecipient()
+	GetType() string
 }

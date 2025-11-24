@@ -6,3 +6,6 @@ package models
 type NetworkGroupConfig struct {
 	NetworkGroup NetworkGroup `json:"networkGroup"`
 }
+
+// isConfiguration implements Configuration
+func (r NetworkGroupConfig) isConfiguration() {}

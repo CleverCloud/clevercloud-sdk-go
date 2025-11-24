@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: V4, V4V6, V6
 type PublicNetwork interface {
 	isPublicNetwork()
+	GetType() string
 }

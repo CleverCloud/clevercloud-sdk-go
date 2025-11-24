@@ -4,3 +4,6 @@ package models
 
 // CC
 type CC struct{}
+
+// isProviderType implements ProviderType
+func (r CC) isProviderType() {}

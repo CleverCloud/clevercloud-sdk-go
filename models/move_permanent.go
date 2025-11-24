@@ -4,3 +4,6 @@ package models
 
 // MovePermanent
 type MovePermanent struct{}
+
+// isPathKind implements PathKind
+func (r MovePermanent) isPathKind() {}

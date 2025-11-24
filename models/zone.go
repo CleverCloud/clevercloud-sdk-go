@@ -4,3 +4,6 @@ package models
 
 // Zone
 type Zone struct{}
+
+// isResourceType implements ResourceType
+func (r Zone) isResourceType() {}

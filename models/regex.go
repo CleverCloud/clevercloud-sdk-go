@@ -6,3 +6,6 @@ package models
 type Regex struct {
 	Regex string `json:"regex"`
 }
+
+// isPath implements Path
+func (r Regex) isPath() {}

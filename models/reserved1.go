@@ -6,3 +6,6 @@ package models
 type Reserved1 struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 }
+
+// isVMDeploymentStatus implements VMDeploymentStatus
+func (r Reserved1) isVMDeploymentStatus() {}

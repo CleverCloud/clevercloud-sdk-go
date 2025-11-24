@@ -6,3 +6,6 @@ package models
 type Input struct {
 	Names []string `json:"names,omitempty"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Input) isHTTPErrorContext() {}

@@ -4,3 +4,6 @@ package models
 
 // TlsEcdheEcdsaWithAes256GcmSha384
 type TlsEcdheEcdsaWithAes256GcmSha384 struct{}
+
+// isCipher implements Cipher
+func (r TlsEcdheEcdsaWithAes256GcmSha384) isCipher() {}

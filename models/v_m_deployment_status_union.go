@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: BootFailed, Booted, Booting, Placed, Reserved1
 type VMDeploymentStatus interface {
 	isVMDeploymentStatus()
+	GetType() string
 }

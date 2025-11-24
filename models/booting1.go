@@ -4,3 +4,6 @@ package models
 
 // Booting1
 type Booting1 struct{}
+
+// isDeploymentStep implements DeploymentStep
+func (r Booting1) isDeploymentStep() {}

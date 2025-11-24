@@ -4,3 +4,6 @@ package models
 
 // FORWARD
 type FORWARD struct{}
+
+// isPathKind implements PathKind
+func (r FORWARD) isPathKind() {}

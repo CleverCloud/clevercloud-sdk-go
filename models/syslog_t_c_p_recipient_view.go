@@ -2,9 +2,19 @@
 
 package models
 
+const SyslogTCPRecipientViewType = "SYSLOG_TCP"
+
 // SyslogTCPRecipientView
 type SyslogTCPRecipientView struct {
 	Rfc5424StructuredDataParameters *string `json:"rfc5424StructuredDataParameters,omitempty"`
 	Type                            string  `json:"type"`
 	URL                             string  `json:"url"`
 }
+
+// GetType returns the type identifier for SyslogTCPRecipientView
+func (r SyslogTCPRecipientView) GetType() string {
+	return SyslogTCPRecipientViewType
+}
+
+// isDrainRecipientView implements DrainRecipientView
+func (r SyslogTCPRecipientView) isDrainRecipientView() {}

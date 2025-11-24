@@ -2,9 +2,19 @@
 
 package models
 
+const SyslogUDPRecipientType = "SYSLOG_UDP"
+
 // SyslogUDPRecipient
 type SyslogUDPRecipient struct {
 	Rfc5424StructuredDataParameters *string `json:"rfc5424StructuredDataParameters,omitempty"`
 	Type                            string  `json:"type"`
 	URL                             string  `json:"url"`
 }
+
+// GetType returns the type identifier for SyslogUDPRecipient
+func (r SyslogUDPRecipient) GetType() string {
+	return SyslogUDPRecipientType
+}
+
+// isDrainRecipient implements DrainRecipient
+func (r SyslogUDPRecipient) isDrainRecipient() {}

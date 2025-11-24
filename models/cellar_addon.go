@@ -4,3 +4,6 @@ package models
 
 // CellarAddon
 type CellarAddon struct{}
+
+// isResourceType implements ResourceType
+func (r CellarAddon) isResourceType() {}

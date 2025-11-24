@@ -6,3 +6,6 @@ package models
 type Exact1 struct {
 	Exact string `json:"exact"`
 }
+
+// isHost implements Host
+func (r Exact1) isHost() {}

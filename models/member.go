@@ -9,3 +9,6 @@ type Member struct {
 	Kind       MemberKind `json:"kind"`
 	Label      string     `json:"label"`
 }
+
+// isNetworkGroupComponent implements NetworkGroupComponent
+func (r Member) isNetworkGroupComponent() {}

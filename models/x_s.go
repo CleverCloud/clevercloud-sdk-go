@@ -4,3 +4,6 @@ package models
 
 // XS
 type XS struct{}
+
+// isFlavor implements Flavor
+func (r XS) isFlavor() {}
