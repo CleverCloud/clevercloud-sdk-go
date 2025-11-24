@@ -6,3 +6,6 @@ package models
 type Regex1 struct {
 	Regex string `json:"regex"`
 }
+
+// isHost implements Host
+func (r Regex1) isHost() {}

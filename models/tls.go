@@ -4,5 +4,8 @@ package models
 
 // Tls
 type Tls struct {
-	Tls TlsTransport `json:"tls"`
+	TLS TlsTransport `json:"tls"`
 }
+
+// isTransport4 implements Transport4
+func (r Tls) isTransport4() {}

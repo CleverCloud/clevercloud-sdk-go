@@ -2,8 +2,18 @@
 
 package models
 
+const DatadogRecipientType = "DATADOG"
+
 // DatadogRecipient
 type DatadogRecipient struct {
 	Type string `json:"type"`
 	URL  string `json:"url"`
 }
+
+// GetType returns the type identifier for DatadogRecipient
+func (r DatadogRecipient) GetType() string {
+	return DatadogRecipientType
+}
+
+// isDrainRecipient implements DrainRecipient
+func (r DatadogRecipient) isDrainRecipient() {}

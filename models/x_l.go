@@ -4,3 +4,6 @@ package models
 
 // XL
 type XL struct{}
+
+// isFlavor implements Flavor
+func (r XL) isFlavor() {}

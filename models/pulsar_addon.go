@@ -4,3 +4,6 @@ package models
 
 // PulsarAddon
 type PulsarAddon struct{}
+
+// isResourceType implements ResourceType
+func (r PulsarAddon) isResourceType() {}

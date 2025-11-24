@@ -10,7 +10,7 @@ type AssignedIpAddress struct {
 	CreatedAt  time.Time           `json:"createdAt"`
 	FrozenAt   *time.Time          `json:"frozenAt,omitempty"`
 	ID         AssignedIpAddressId `json:"id"`
-	Ip         string              `json:"ip"`
+	IP         string              `json:"ip"`
 	NetworkID  NetworkId           `json:"networkId"`
 	OwnerID    TenantID            `json:"ownerId"`
 	ResourceID ResourceID          `json:"resourceId"`

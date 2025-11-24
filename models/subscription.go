@@ -4,3 +4,6 @@ package models
 
 // Subscription
 type Subscription struct{}
+
+// isResourceType implements ResourceType
+func (r Subscription) isResourceType() {}

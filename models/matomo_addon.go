@@ -4,3 +4,6 @@ package models
 
 // MatomoAddon
 type MatomoAddon struct{}
+
+// isResourceType implements ResourceType
+func (r MatomoAddon) isResourceType() {}

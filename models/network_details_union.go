@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: NetworkGroup
 type NetworkDetails interface {
 	isNetworkDetails()
+	GetType() string
 }

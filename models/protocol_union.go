@@ -3,7 +3,8 @@
 package models
 
 // Protocol
-// Union type - can be one of: Http3
+// Union type - can be one of: Http
 type Protocol interface {
 	isProtocol()
+	GetType() string
 }

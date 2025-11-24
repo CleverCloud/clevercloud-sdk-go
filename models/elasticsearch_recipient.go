@@ -2,12 +2,22 @@
 
 package models
 
+const ElasticsearchRecipientType = "ELASTICSEARCH"
+
 // ElasticsearchRecipient
 type ElasticsearchRecipient struct {
 	Index           string   `json:"index"`
 	Password        *string  `json:"password,omitempty"`
-	TlsVerification *TLSMode `json:"tlsVerification,omitempty"`
+	TLSVerification *TLSMode `json:"tlsVerification,omitempty"`
 	Type            string   `json:"type"`
 	URL             string   `json:"url"`
 	Username        *string  `json:"username,omitempty"`
 }
+
+// GetType returns the type identifier for ElasticsearchRecipient
+func (r ElasticsearchRecipient) GetType() string {
+	return ElasticsearchRecipientType
+}
+
+// isDrainRecipient implements DrainRecipient
+func (r ElasticsearchRecipient) isDrainRecipient() {}

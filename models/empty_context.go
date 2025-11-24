@@ -4,3 +4,6 @@ package models
 
 // EmptyContext
 type EmptyContext struct{}
+
+// isOVDErrorContext implements OVDErrorContext
+func (r EmptyContext) isOVDErrorContext() {}

@@ -4,5 +4,8 @@ package models
 
 // Http3
 type Http3 struct {
-	HTTP HttpRouter `json:"http"`
+	HTTP BackendHttpTransport `json:"http"`
 }
+
+// isLayer implements Layer
+func (r Http3) isLayer() {}

@@ -4,8 +4,8 @@ package models
 
 // LoadbalanceroutboxT
 type LoadbalanceroutboxT struct {
-	LoadbalancerID LoadbalancerId                  `json:"loadbalancerId"`
+	LoadbalancerID LoadBalancerId                  `json:"loadbalancerId"`
 	OutboxOffset   int                             `json:"outboxOffset"`
-	Payload        *LoadbalancerProtoConfiguration `json:"payload,omitempty"`
+	Payload        *LoadBalancerProtoConfiguration `json:"payload,omitempty"`
 	ServerID       string                          `json:"serverId"`
 }

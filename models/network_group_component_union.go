@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: CleverPeer, ExternalPeer, Member, NetworkGroup1
 type NetworkGroupComponent interface {
 	isNetworkGroupComponent()
+	GetType() string
 }

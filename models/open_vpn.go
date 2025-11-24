@@ -6,3 +6,6 @@ package models
 type OpenVpn struct {
 	Openvpn OpenVPN `json:"openvpn"`
 }
+
+// isConfiguration implements Configuration
+func (r OpenVpn) isConfiguration() {}

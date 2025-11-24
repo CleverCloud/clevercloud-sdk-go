@@ -6,3 +6,6 @@ package models
 type MaxParrallelConnections struct {
 	Maximum int `json:"maximum"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r MaxParrallelConnections) isQuotaItem() {}

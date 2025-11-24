@@ -7,3 +7,6 @@ type V6 struct {
 	Acl     *AccessControlList `json:"acl,omitempty"`
 	Network Network            `json:"network"`
 }
+
+// isPublicNetwork implements PublicNetwork
+func (r V6) isPublicNetwork() {}

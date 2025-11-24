@@ -3,7 +3,8 @@
 package models
 
 // Layer
-// Union type - can be one of: Direct4, Http1
+// Union type - can be one of: Direct5, Http3
 type Layer interface {
 	isLayer()
+	GetType() string
 }

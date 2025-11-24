@@ -6,3 +6,6 @@ package models
 type Prefix struct {
 	Prefix string `json:"prefix"`
 }
+
+// isPath implements Path
+func (r Prefix) isPath() {}

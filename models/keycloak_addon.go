@@ -4,3 +4,6 @@ package models
 
 // KeycloakAddon
 type KeycloakAddon struct{}
+
+// isResourceType implements ResourceType
+func (r KeycloakAddon) isResourceType() {}

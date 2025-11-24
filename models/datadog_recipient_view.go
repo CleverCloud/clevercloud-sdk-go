@@ -2,8 +2,18 @@
 
 package models
 
+const DatadogRecipientViewType = "DATADOG"
+
 // DatadogRecipientView
 type DatadogRecipientView struct {
 	Type string `json:"type"`
 	URL  string `json:"url"` // Masked API token extracted from URL path
 }
+
+// GetType returns the type identifier for DatadogRecipientView
+func (r DatadogRecipientView) GetType() string {
+	return DatadogRecipientViewType
+}
+
+// isDrainRecipientView implements DrainRecipientView
+func (r DatadogRecipientView) isDrainRecipientView() {}

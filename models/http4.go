@@ -6,3 +6,6 @@ package models
 type Http4 struct {
 	HTTP HttpTransport `json:"http"`
 }
+
+// isTransport4 implements Transport4
+func (r Http4) isTransport4() {}

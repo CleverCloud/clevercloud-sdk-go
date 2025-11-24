@@ -7,3 +7,6 @@ type Field struct {
 	Error FieldError `json:"error"`
 	Name  string     `json:"name"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Field) isHTTPErrorContext() {}

@@ -12,3 +12,6 @@ type RemoteBlockDevice struct {
 	StripeCount *int     `json:"stripeCount,omitempty"`
 	StripeUnit  *int     `json:"stripeUnit,omitempty"`
 }
+
+// isStorageConfiguration implements StorageConfiguration
+func (r RemoteBlockDevice) isStorageConfiguration() {}

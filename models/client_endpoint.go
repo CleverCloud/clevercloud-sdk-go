@@ -4,5 +4,8 @@ package models
 
 // ClientEndpoint
 type ClientEndpoint struct {
-	NgIp string `json:"ngIp"`
+	NgIP string `json:"ngIp"`
 }
+
+// isWireguardEndpoint implements WireguardEndpoint
+func (r ClientEndpoint) isWireguardEndpoint() {}

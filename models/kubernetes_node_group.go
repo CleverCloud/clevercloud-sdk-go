@@ -4,3 +4,6 @@ package models
 
 // KubernetesNodeGroup
 type KubernetesNodeGroup struct{}
+
+// isResourceType implements ResourceType
+func (r KubernetesNodeGroup) isResourceType() {}

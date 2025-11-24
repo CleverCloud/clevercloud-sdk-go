@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: ClientEndpoint, ServerEndpoint
 type WireguardEndpoint interface {
 	isWireguardEndpoint()
+	GetType() string
 }

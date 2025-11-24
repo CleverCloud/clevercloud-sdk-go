@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: FORWARD, MovePermanent, UNAUTHORIZED, Unrecognized2
 type PathKind interface {
 	isPathKind()
+	GetType() string
 }

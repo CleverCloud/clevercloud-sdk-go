@@ -4,3 +4,6 @@ package models
 
 // Tenant
 type Tenant struct{}
+
+// isResourceType implements ResourceType
+func (r Tenant) isResourceType() {}

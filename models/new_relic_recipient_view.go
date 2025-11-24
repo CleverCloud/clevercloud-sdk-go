@@ -2,9 +2,19 @@
 
 package models
 
+const NewRelicRecipientViewType = "NEWRELIC"
+
 // NewRelicRecipientView
 type NewRelicRecipientView struct {
 	APIKey string `json:"apiKey"` // Masked API key
 	Type   string `json:"type"`
 	URL    string `json:"url"`
 }
+
+// GetType returns the type identifier for NewRelicRecipientView
+func (r NewRelicRecipientView) GetType() string {
+	return NewRelicRecipientViewType
+}
+
+// isDrainRecipientView implements DrainRecipientView
+func (r NewRelicRecipientView) isDrainRecipientView() {}

@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: ResourceType, string
 type ResourceType1 interface {
 	isResourceType1()
+	GetType() string
 }

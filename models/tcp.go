@@ -6,3 +6,6 @@ package models
 type Tcp struct {
 	Tcp TcpTransport `json:"tcp"`
 }
+
+// isTransport implements Transport
+func (r Tcp) isTransport() {}

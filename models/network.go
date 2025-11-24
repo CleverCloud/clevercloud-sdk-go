@@ -4,7 +4,7 @@ package models
 
 // Network
 type Network struct {
-	AssignedGatewayIp *string `json:"assignedGatewayIp,omitempty"`
-	AssignedIp        string  `json:"assignedIp"`
+	AssignedGatewayIP *string `json:"assignedGatewayIp,omitempty"`
+	AssignedIP        string  `json:"assignedIp"`
 	Cidr              string  `json:"cidr"`
 }

@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: APIRateLimit, CoreMaxLimit, MaxIp, MaxMonthlyGtsCount, MaxParrallelConnections, MaxPointsPerDay, MillivCPUMaxLimit, RamMaxUsage
 type QuotaItem interface {
 	isQuotaItem()
+	GetType() string
 }

@@ -6,3 +6,6 @@ package models
 type OVDMultipleErrorFieldContext struct {
 	Fields MapFielderror `json:"fields"`
 }
+
+// isOVDErrorContext implements OVDErrorContext
+func (r OVDMultipleErrorFieldContext) isOVDErrorContext() {}

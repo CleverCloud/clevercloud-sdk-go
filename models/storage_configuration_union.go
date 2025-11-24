@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: NetworkFileSystem, RemoteBlockDevice
 type StorageConfiguration interface {
 	isStorageConfiguration()
+	GetType() string
 }

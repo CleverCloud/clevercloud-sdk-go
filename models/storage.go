@@ -4,3 +4,6 @@ package models
 
 // Storage
 type Storage struct{}
+
+// isResourceType implements ResourceType
+func (r Storage) isResourceType() {}
