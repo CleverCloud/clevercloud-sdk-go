@@ -13,8 +13,8 @@ type ExternalPeer struct {
 	PublicKey    string            `json:"publicKey"`
 }
 
-// isPeer implements Peer
-func (r ExternalPeer) isPeer() {}
-
 // isNetworkGroupComponent implements NetworkGroupComponent
 func (r ExternalPeer) isNetworkGroupComponent() {}
+
+// isPeer implements Peer
+func (r ExternalPeer) isPeer() {}

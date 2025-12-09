@@ -6,6 +6,6 @@ package models
 type OtoroshiApi struct {
 	Openapi string `json:"openapi"`
 	Secret  string `json:"secret"`
-	URL     string `json:"url"`
+	URL     string `json:"url"` // Absolute URL
 	User    string `json:"user"`
 }

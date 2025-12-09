@@ -218,6 +218,20 @@ func getSchemaConst(schema Schema) (string, bool) {
 	return "", false
 }
 
+func getSchemaAdditionalProperties(schema Schema) (Schema, bool) {
+	if ap, ok := schema["additionalProperties"]; ok {
+		// Can be true (any type) or a schema object
+		if apMap, ok := ap.(map[string]any); ok {
+			return apMap, true
+		}
+		if apBool, ok := ap.(bool); ok && apBool {
+			// additionalProperties: true means map[string]any
+			return nil, true
+		}
+	}
+	return nil, false
+}
+
 func parseOpenAPISpec(specFile string) (*openapi31.Spec, error) {
 	// Read OpenAPI spec file
 	specBytes, err := os.ReadFile(specFile)
@@ -330,6 +344,17 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 	// Handle object types
 	schemaTypes := getSchemaType(schema)
 	if len(schemaTypes) > 0 && schemaTypes[0] == "object" {
+		// Check if this is a map type (object with additionalProperties)
+		if apSchema, hasAP := getSchemaAdditionalProperties(schema); hasAP {
+			// Check if there are also regular properties
+			properties := getSchemaProperties(schema)
+			if len(properties) == 0 {
+				// Pure map type (no fixed properties, only additionalProperties)
+				return processMapSchema(name, schema, apSchema)
+			}
+			// Mixed object with both properties and additionalProperties
+			// Treat as regular object for now
+		}
 		return processObjectSchema(name, schema)
 	}
 
@@ -340,6 +365,33 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 
 	// Skip other schemas
 	return nil, nil
+}
+
+func processMapSchema(name string, schema Schema, additionalPropertiesSchema Schema) (*ModelStruct, error) {
+	var valueType string
+
+	if additionalPropertiesSchema == nil {
+		// additionalProperties: true means map[string]any
+		valueType = "any"
+	} else {
+		// Get the type of the values
+		vt, _, err := getGoType(additionalPropertiesSchema, true)
+		if err != nil {
+			return nil, err
+		}
+		valueType = vt
+	}
+
+	// Create a type alias for the map
+	mapType := fmt.Sprintf("map[string]%s", valueType)
+	model := &ModelStruct{
+		Name:        toGoStructName(name),
+		Comment:     formatComment(getSchemaDescription(schema)),
+		IsTypeAlias: true,
+		AliasType:   mapType,
+	}
+
+	return model, nil
 }
 
 func processEnumSchema(name string, schema Schema) (*ModelStruct, error) {

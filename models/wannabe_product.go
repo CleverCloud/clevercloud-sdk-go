@@ -4,11 +4,12 @@ package models
 
 // WannabeProduct
 type WannabeProduct struct {
-	Description string      `json:"description"`
-	Label       string      `json:"label"`
-	Limitations Limitations `json:"limitations"`
-	LogoURL     string      `json:"logoUrl"`     // URL
-	ProviderURL string      `json:"providerUrl"` // URL
-	Tags        []string    `json:"tags,omitempty"`
-	Version     string      `json:"version"`
+	Description string       `json:"description"`
+	Label       string       `json:"label"`
+	Limitations Limitations  `json:"limitations"`
+	LogoURL     string       `json:"logoUrl"` // URL
+	Maturity    MaturityKind `json:"maturity"`
+	ProviderURL string       `json:"providerUrl"` // URL
+	Tags        []string     `json:"tags,omitempty"`
+	Version     string       `json:"version"`
 }

@@ -14,7 +14,7 @@ import (
 /*
 Listavailableproducts
 
-List available products.
+List available products with optional authentication.
 
 Parameters:
   - ctx: context for the request
@@ -35,7 +35,7 @@ Example:
 x-service: base
 operationId: listAvailableProducts
 */
-func Listavailableproducts(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.Product] {
+func Listavailableproducts(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.ProductOutput] {
 	ctx, span := tracer.Start(ctx, "listAvailableProducts")
 	defer span.End()
 
@@ -48,7 +48,7 @@ func Listavailableproducts(ctx context.Context, c *client.Client, tracer trace.T
 	}
 
 	// Make API call
-	response := client.Get[[]models.Product](ctx, c, path)
+	response := client.Get[[]models.ProductOutput](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
