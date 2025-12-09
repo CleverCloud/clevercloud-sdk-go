@@ -6,6 +6,9 @@ package models
 type Booted struct {
 	AppPort    *int               `json:"appPort,omitempty"`
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
-	Ip         string             `json:"ip"`
+	IP         string             `json:"ip"`
 	ZabbixPort *int               `json:"zabbixPort,omitempty"`
 }
+
+// isVMDeploymentStatus implements VMDeploymentStatus
+func (r Booted) isVMDeploymentStatus() {}

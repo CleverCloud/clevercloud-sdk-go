@@ -7,3 +7,6 @@ type ServerEndpoint struct {
 	NgTerm     any `json:"ngTerm"`
 	PublicTerm any `json:"publicTerm"`
 }
+
+// isWireguardEndpoint implements WireguardEndpoint
+func (r ServerEndpoint) isWireguardEndpoint() {}

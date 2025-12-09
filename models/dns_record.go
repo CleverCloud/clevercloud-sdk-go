@@ -4,3 +4,6 @@ package models
 
 // DnsRecord
 type DnsRecord struct{}
+
+// isResourceType implements ResourceType
+func (r DnsRecord) isResourceType() {}

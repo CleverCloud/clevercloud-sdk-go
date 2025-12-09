@@ -2,6 +2,8 @@
 
 package models
 
+const OVHTCPRecipientType = "OVH_TCP"
+
 // OVHTCPRecipient
 type OVHTCPRecipient struct {
 	Rfc5424StructuredDataParameters *string `json:"rfc5424StructuredDataParameters,omitempty"`
@@ -9,3 +11,11 @@ type OVHTCPRecipient struct {
 	Type                            string  `json:"type"`
 	URL                             string  `json:"url"`
 }
+
+// GetType returns the type identifier for OVHTCPRecipient
+func (r OVHTCPRecipient) GetType() string {
+	return OVHTCPRecipientType
+}
+
+// isDrainRecipient implements DrainRecipient
+func (r OVHTCPRecipient) isDrainRecipient() {}

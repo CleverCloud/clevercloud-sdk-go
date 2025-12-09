@@ -20,13 +20,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - ownerId:
-  - addonAIId:
+  - aiId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ai.Getproviderinfos(ctx, client, tracer, ownerId, addonAIId)
+	response := ai.Getproviderinfos(ctx, client, tracer, ownerId, aiId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: ai
 operationId: getProviderInfos
 */
-func Getproviderinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonAIId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "getProviderInfos", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonAIId", addonAIId)))
+func Getproviderinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "getProviderInfos", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId)))
 	defer span.End()
 
-	path := utils.Path("/v4/ai/organisations/%s/ai/%s/providers", ownerId, addonAIId)
+	path := utils.Path("/v4/ai/organisations/%s/ai/%s/providers", ownerId, aiId)
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

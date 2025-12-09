@@ -6,3 +6,6 @@ package models
 type RamMaxUsage struct {
 	Information int `json:"information"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r RamMaxUsage) isQuotaItem() {}

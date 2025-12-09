@@ -8,3 +8,6 @@ type Operation struct {
 	Name      *string `json:"name,omitempty"`
 	Operation string  `json:"operation"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Operation) isHTTPErrorContext() {}

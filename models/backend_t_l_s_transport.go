@@ -4,5 +4,5 @@ package models
 
 // BackendTLSTransport
 type BackendTLSTransport struct {
-	Tls MapBackendtlstransportlayer `json:"tls"`
+	TLS MapBackendtlstransportlayer `json:"tls"`
 }

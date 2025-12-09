@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonAIId:
+  - aiId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ai.Getai(ctx, client, tracer, addonAIId)
+	response := ai.Getai(ctx, client, tracer, aiId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +35,14 @@ Example:
 x-service: ai
 operationId: getAI
 */
-func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, addonAIId string) client.Response[models.AddonView] {
-	ctx, span := tracer.Start(ctx, "getAI", trace.WithAttributes(attribute.String("addonAIId", addonAIId)))
+func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[models.AIView] {
+	ctx, span := tracer.Start(ctx, "getAI", trace.WithAttributes(attribute.String("aiId", aiId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-ai/addons/%s", addonAIId)
+	path := utils.Path("/v4/addon-providers/addon-ai/addons/%s", aiId)
 
 	// Make API call
-	response := client.Get[models.AddonView](ctx, c, path)
+	response := client.Get[models.AIView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

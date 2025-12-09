@@ -4,3 +4,6 @@ package models
 
 // Orchestration
 type Orchestration struct{}
+
+// isResourceType implements ResourceType
+func (r Orchestration) isResourceType() {}

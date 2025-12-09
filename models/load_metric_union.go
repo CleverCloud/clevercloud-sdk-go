@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: CONNECTIONS, ConnectionTime, REQUESTS, Unrecognized1
 type LoadMetric interface {
 	isLoadMetric()
+	GetType() string
 }

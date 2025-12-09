@@ -4,3 +4,6 @@ package models
 
 // FaasFunction
 type FaasFunction struct{}
+
+// isResourceType implements ResourceType
+func (r FaasFunction) isResourceType() {}

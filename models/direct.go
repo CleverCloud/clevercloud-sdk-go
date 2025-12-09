@@ -6,3 +6,6 @@ package models
 type Direct struct {
 	Direct DirectTransport `json:"direct"`
 }
+
+// isLayer1 implements Layer1
+func (r Direct) isLayer1() {}

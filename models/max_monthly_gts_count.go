@@ -6,3 +6,6 @@ package models
 type MaxMonthlyGtsCount struct {
 	Maximum int `json:"maximum"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r MaxMonthlyGtsCount) isQuotaItem() {}

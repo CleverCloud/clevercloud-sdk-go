@@ -4,3 +4,6 @@ package models
 
 // PostgreSQLDatabase
 type PostgreSQLDatabase struct{}
+
+// isResourceType implements ResourceType
+func (r PostgreSQLDatabase) isResourceType() {}

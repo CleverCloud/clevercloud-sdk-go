@@ -4,3 +4,6 @@ package models
 
 // KubernetesNodeGroupStatus
 type KubernetesNodeGroupStatus struct{}
+
+// isResourceType implements ResourceType
+func (r KubernetesNodeGroupStatus) isResourceType() {}

@@ -196,7 +196,15 @@ func extractOperations(spec openapi31.Spec) []ServiceOperation {
 		return operations
 	}
 
-	for path, pathItem := range spec.Paths.MapOfPathItemValues {
+	// Sort paths alphabetically for consistent output
+	var paths []string
+	for path := range spec.Paths.MapOfPathItemValues {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+
+	for _, path := range paths {
+		pathItem := spec.Paths.MapOfPathItemValues[path]
 		operations = append(operations, extractOperationsFromPath(path, pathItem)...)
 	}
 
@@ -206,7 +214,9 @@ func extractOperations(spec openapi31.Spec) []ServiceOperation {
 func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []ServiceOperation {
 	var operations []ServiceOperation
 
-	methods := map[string]*openapi31.Operation{
+	// Process methods in sorted order for consistent output
+	methodOrder := []string{"DELETE", "GET", "PATCH", "POST", "PUT"}
+	methodOps := map[string]*openapi31.Operation{
 		"GET":    pathItem.Get,
 		"POST":   pathItem.Post,
 		"PUT":    pathItem.Put,
@@ -214,7 +224,8 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 		"PATCH":  pathItem.Patch,
 	}
 
-	for method, operation := range methods {
+	for _, method := range methodOrder {
+		operation := methodOps[method]
 		if operation == nil {
 			continue
 		}
@@ -954,17 +965,20 @@ func fixIDSuffixes(s string) string {
 	// Fix common Go naming conventions for ID-related suffixes
 	// This ensures getPulsar becomes GetPulsar, getId becomes GetID, etc.
 	replacements := map[string]string{
-		"Id":    "ID",
-		"Url":   "URL",
-		"Uri":   "URI",
-		"Api":   "API",
-		"Ttl":   "TTL",
-		"Sql":   "SQL",
-		"Http":  "HTTP",
+		"Id":   "ID",
+		"Ip":   "IP",
+		"Ipam": "IPAM",
+		"Url":  "URL",
+		"Uri":  "URI",
+		"Api":  "API",
+		"Tls":  "TLS",
+		"Ttl":  "TTL",
+		"Sql":  "SQL",
+		"Http": "HTTP",
 		"Https": "HTTPS",
-		"Json":  "JSON",
-		"Xml":   "XML",
-		"Uuid":  "UUID",
+		"Json": "JSON",
+		"Xml":  "XML",
+		"Uuid": "UUID",
 	}
 
 	for old, new := range replacements {

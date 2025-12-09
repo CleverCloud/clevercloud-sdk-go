@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: L, M, S, XL, XS, XXL
 type Flavor interface {
 	isFlavor()
+	GetType() string
 }

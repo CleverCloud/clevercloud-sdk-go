@@ -4,5 +4,8 @@ package models
 
 // Direct5
 type Direct5 struct {
-	Direct DirectTransport `json:"direct"`
+	Direct BackendDirectTransport `json:"direct"`
 }
+
+// isLayer implements Layer
+func (r Direct5) isLayer() {}

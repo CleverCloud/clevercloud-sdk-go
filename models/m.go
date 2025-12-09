@@ -4,3 +4,6 @@ package models
 
 // M
 type M struct{}
+
+// isFlavor implements Flavor
+func (r M) isFlavor() {}

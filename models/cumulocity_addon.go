@@ -4,3 +4,6 @@ package models
 
 // CumulocityAddon
 type CumulocityAddon struct{}
+
+// isResourceType implements ResourceType
+func (r CumulocityAddon) isResourceType() {}

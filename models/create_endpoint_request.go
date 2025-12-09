@@ -4,7 +4,7 @@ package models
 
 // CreateEndpointRequest
 type CreateEndpointRequest struct {
-	APIKey   *string `json:"apiKey,omitempty"`
-	Endpoint *string `json:"endpoint,omitempty"`
-	Target   *string `json:"target,omitempty"`
+	APIKey         *any   `json:"apiKey,omitempty"`
+	Endpoint       *any   `json:"endpoint,omitempty"`
+	OtoroshiTarget string `json:"otoroshiTarget"`
 }

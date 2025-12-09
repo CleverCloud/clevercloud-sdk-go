@@ -6,3 +6,6 @@ package models
 type Selector struct {
 	Path []string `json:"path,omitempty"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Selector) isHTTPErrorContext() {}

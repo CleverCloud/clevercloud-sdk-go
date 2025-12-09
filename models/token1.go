@@ -4,3 +4,6 @@ package models
 
 // Token1
 type Token1 struct{}
+
+// isResourceType implements ResourceType
+func (r Token1) isResourceType() {}

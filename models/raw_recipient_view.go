@@ -2,6 +2,8 @@
 
 package models
 
+const RawRecipientViewType = "RAW_HTTP"
+
 // RawRecipientView
 type RawRecipientView struct {
 	Password *string `json:"password,omitempty"` // Masked password
@@ -9,3 +11,11 @@ type RawRecipientView struct {
 	URL      string  `json:"url"`
 	Username *string `json:"username,omitempty"`
 }
+
+// GetType returns the type identifier for RawRecipientView
+func (r RawRecipientView) GetType() string {
+	return RawRecipientViewType
+}
+
+// isDrainRecipientView implements DrainRecipientView
+func (r RawRecipientView) isDrainRecipientView() {}

@@ -6,12 +6,14 @@ import "time"
 
 // ClusterView
 type ClusterView struct {
-	CreationDate time.Time         `json:"creationDate"`
-	Description  *string           `json:"description,omitempty"`
-	ID           string            `json:"id"`
-	Name         string            `json:"name"`
-	Status       ClusterStatusType `json:"status"`
-	Tag          *string           `json:"tag,omitempty"`
-	TenantID     string            `json:"tenantId"`
-	Version      KubeMajorVersion  `json:"version"`
+	CreationDate      time.Time         `json:"creationDate"`
+	Description       *string           `json:"description,omitempty"`
+	ID                string            `json:"id"`
+	Name              string            `json:"name"`
+	ReplicationFactor int               `json:"replicationFactor"`
+	Status            ClusterStatusType `json:"status"`
+	Tag               *string           `json:"tag,omitempty"`
+	TenantID          string            `json:"tenantId"`
+	Topology          ClusterTopology   `json:"topology"`
+	Version           KubeMajorVersion  `json:"version"`
 }

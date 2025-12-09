@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: Booting1, Failure, Finish, Placed1, Reserved, Started
 type DeploymentStep interface {
 	isDeploymentStep()
+	GetType() string
 }

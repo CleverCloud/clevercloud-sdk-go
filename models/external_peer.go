@@ -12,3 +12,9 @@ type ExternalPeer struct {
 	ParentMember string            `json:"parentMember"`
 	PublicKey    string            `json:"publicKey"`
 }
+
+// isNetworkGroupComponent implements NetworkGroupComponent
+func (r ExternalPeer) isNetworkGroupComponent() {}
+
+// isPeer implements Peer
+func (r ExternalPeer) isPeer() {}

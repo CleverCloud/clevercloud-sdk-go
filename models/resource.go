@@ -7,3 +7,6 @@ type Resource struct {
 	Kind string `json:"kind"`
 	Name string `json:"name"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Resource) isHTTPErrorContext() {}

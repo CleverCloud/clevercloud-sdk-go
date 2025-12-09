@@ -6,3 +6,6 @@ package models
 type Direct1 struct {
 	Direct BackendDirectTransport `json:"direct"`
 }
+
+// isTransport1 implements Transport1
+func (r Direct1) isTransport1() {}

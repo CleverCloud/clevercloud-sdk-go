@@ -6,3 +6,6 @@ package models
 type CoreMaxLimit struct {
 	Maximum int `json:"maximum"`
 }
+
+// isQuotaItem implements QuotaItem
+func (r CoreMaxLimit) isQuotaItem() {}

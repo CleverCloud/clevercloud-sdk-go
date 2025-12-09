@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: LeastLoaded, PowerOfTwo, RANDOM, RoundRobin, Unrecognized
 type Algorithm interface {
 	isAlgorithm()
+	GetType() string
 }

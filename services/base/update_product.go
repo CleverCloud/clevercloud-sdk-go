@@ -14,7 +14,7 @@ import (
 /*
 Updateproduct
 
-Update an existing product.
+Update an existing product (partial update, excluding visibility).
 
 Parameters:
   - ctx: context for the request
@@ -44,7 +44,7 @@ func Updateproduct(ctx context.Context, c *client.Client, tracer trace.Tracer, t
 	path := utils.Path("/v4/tenants/%s/products/%s", tenantId, productId)
 
 	// Make API call
-	response := client.Put[models.Product](ctx, c, path, requestBody)
+	response := client.Patch[models.Product](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

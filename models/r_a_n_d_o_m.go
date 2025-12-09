@@ -4,3 +4,6 @@ package models
 
 // RANDOM
 type RANDOM struct{}
+
+// isAlgorithm implements Algorithm
+func (r RANDOM) isAlgorithm() {}

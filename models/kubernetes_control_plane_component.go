@@ -4,3 +4,6 @@ package models
 
 // KubernetesControlPlaneComponent
 type KubernetesControlPlaneComponent struct{}
+
+// isResourceType implements ResourceType
+func (r KubernetesControlPlaneComponent) isResourceType() {}

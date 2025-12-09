@@ -7,6 +7,6 @@ type NetworkGroupPeer struct {
 	Endpoint  *NetworkGroupServerEndpoint `json:"endpoint,omitempty"`
 	Hostname  *string                     `json:"hostname,omitempty"`
 	ID        string                      `json:"id"`
-	Ip        string                      `json:"ip"`
+	IP        string                      `json:"ip"`
 	PublicKey string                      `json:"publicKey"`
 }

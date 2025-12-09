@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: Tls13Aes128GcmSha256, Tls13Aes256GcmSha384, Tls13Chacha20Poly1305Sha256, TlsEcdheEcdsaWithAes128GcmSha256, TlsEcdheEcdsaWithAes256GcmSha384, TlsEcdheEcdsaWithChacha20Poly1305Sha256, TlsEcdheRsaWithAes128GcmSha256, TlsEcdheRsaWithAes256GcmSha384, TlsEcdheRsaWithChacha20Poly1305Sha256
 type Cipher interface {
 	isCipher()
+	GetType() string
 }

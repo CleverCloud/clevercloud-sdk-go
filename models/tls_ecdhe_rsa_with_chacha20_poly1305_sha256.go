@@ -4,3 +4,6 @@ package models
 
 // TlsEcdheRsaWithChacha20Poly1305Sha256
 type TlsEcdheRsaWithChacha20Poly1305Sha256 struct{}
+
+// isCipher implements Cipher
+func (r TlsEcdheRsaWithChacha20Poly1305Sha256) isCipher() {}

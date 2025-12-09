@@ -7,12 +7,12 @@ type PulsarCluster struct {
 	Available          bool         `json:"available"`
 	ID                 string       `json:"id"`
 	PulsarPort         int          `json:"pulsar_port"`
-	PulsarTlsPort      *int         `json:"pulsar_tls_port,omitempty"`
+	PulsarTLSPort      *int         `json:"pulsar_tls_port,omitempty"`
 	SupportColdStorage bool         `json:"support_cold_storage"`
 	SupportedPlans     []PulsarPlan `json:"supported_plans,omitempty"`
 	URL                string       `json:"url"`
 	Version            string       `json:"version"`
 	WebPort            *int         `json:"web_port,omitempty"`
-	WebTlsPort         *int         `json:"web_tls_port,omitempty"`
+	WebTLSPort         *int         `json:"web_tls_port,omitempty"`
 	Zone               string       `json:"zone"`
 }

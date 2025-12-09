@@ -4,3 +4,6 @@ package models
 
 // Tls13Chacha20Poly1305Sha256
 type Tls13Chacha20Poly1305Sha256 struct{}
+
+// isCipher implements Cipher
+func (r Tls13Chacha20Poly1305Sha256) isCipher() {}

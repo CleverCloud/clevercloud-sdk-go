@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: CleverPeer, ExternalPeer
 type Peer interface {
 	isPeer()
+	GetType() string
 }

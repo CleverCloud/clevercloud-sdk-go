@@ -13,3 +13,9 @@ type CleverPeer struct {
 	ParentMember string            `json:"parentMember"`
 	PublicKey    string            `json:"publicKey"`
 }
+
+// isNetworkGroupComponent implements NetworkGroupComponent
+func (r CleverPeer) isNetworkGroupComponent() {}
+
+// isPeer implements Peer
+func (r CleverPeer) isPeer() {}

@@ -6,3 +6,6 @@ package models
 type OVDErrorInputContext struct {
 	InputNames []string `json:"inputNames,omitempty"`
 }
+
+// isOVDErrorContext implements OVDErrorContext
+func (r OVDErrorInputContext) isOVDErrorContext() {}

@@ -4,3 +4,6 @@ package models
 
 // Otoroshi
 type Otoroshi struct{}
+
+// isResourceType implements ResourceType
+func (r Otoroshi) isResourceType() {}

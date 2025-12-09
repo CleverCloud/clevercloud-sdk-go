@@ -6,4 +6,5 @@ package models
 // Union type - can be one of: CC, OVH, Oracle, Outscale, Scaleway
 type ProviderType interface {
 	isProviderType()
+	GetType() string
 }

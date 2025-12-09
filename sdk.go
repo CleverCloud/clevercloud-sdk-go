@@ -12,6 +12,7 @@ var tracer = otel.Tracer("go.clever-cloud.dev/sdk")
 // SDK defines the interface for the Clever Cloud SDK
 type SDK interface {
 	// Level 2 API - Builder pattern interface
+	V2() V2Builder
 	V4() V4Builder
 }
 
@@ -19,6 +20,7 @@ type SDK interface {
 type sdkImpl struct {
 	client *client.Client
 	tracer trace.Tracer
+	v2     V2Builder
 	v4     V4Builder
 }
 
@@ -52,10 +54,14 @@ func NewSDK(opts ...Option) SDK {
 		opt(impl)
 	}
 
+	impl.v2 = newV2Builder(impl)
 	impl.v4 = newV4Builder(impl)
 
 	return impl
 }
+
+// V2 returns the V2 API builder
+func (s *sdkImpl) V2() V2Builder { return s.v2 }
 
 // V4 returns the V4 API builder
 func (s *sdkImpl) V4() V4Builder { return s.v4 }

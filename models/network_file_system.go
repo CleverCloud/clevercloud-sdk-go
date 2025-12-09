@@ -6,3 +6,6 @@ package models
 type NetworkFileSystem struct {
 	Size int `json:"size"`
 }
+
+// isStorageConfiguration implements StorageConfiguration
+func (r NetworkFileSystem) isStorageConfiguration() {}
