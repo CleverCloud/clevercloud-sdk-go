@@ -4,17 +4,9 @@ package models
 
 // NetworkGroup1
 type NetworkGroup1 struct {
-	Description     *string  `json:"description,omitempty"`
-	ID              string   `json:"id"`
-	Label           string   `json:"label"`
-	LastAllocatedIP string   `json:"lastAllocatedIp"`
-	Members         []Member `json:"members,omitempty"`
-	NetworkIP       string   `json:"networkIp"`
-	OwnerID         OwnerID  `json:"ownerId"`
-	Peers           []Peer   `json:"peers,omitempty"`
-	Tags            []string `json:"tags,omitempty"`
-	Version         int      `json:"version"`
+	ID         string             `json:"id"`
+	Network    Network            `json:"network"`
+	OwnerID    string             `json:"ownerId"`
+	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
+	PrivateKey string             `json:"privateKey"`
 }
-
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r NetworkGroup1) isNetworkGroupComponent() {}

@@ -6,6 +6,7 @@ import "time"
 
 // ClusterView
 type ClusterView struct {
+	AdvancedOptions   *AdvancedOptions  `json:"advancedOptions,omitempty"`
 	CreationDate      time.Time         `json:"creationDate"`
 	Description       *string           `json:"description,omitempty"`
 	ID                string            `json:"id"`
@@ -15,5 +16,5 @@ type ClusterView struct {
 	Tag               *string           `json:"tag,omitempty"`
 	TenantID          string            `json:"tenantId"`
 	Topology          ClusterTopology   `json:"topology"`
-	Version           KubeMajorVersion  `json:"version"`
+	Version           KubeMinorVersion  `json:"version"`
 }

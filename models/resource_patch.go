@@ -4,7 +4,7 @@ package models
 
 // ResourcePatch
 type ResourcePatch struct {
-	Description *string  `json:"description,omitempty"`
-	Label       *string  `json:"label,omitempty"`
-	Tags        []string `json:"tags,omitempty"`
+	Description *string             `json:"description,omitempty"`
+	Name        *StringMaxLength128 `json:"name,omitempty"`
+	Tags        []string            `json:"tags,omitempty"`
 }

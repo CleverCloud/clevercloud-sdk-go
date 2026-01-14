@@ -6,9 +6,10 @@ package models
 type ClusterStatusType string
 
 const (
-	ClusterStatusTypeACTIVE    ClusterStatusType = "ACTIVE"
-	ClusterStatusTypeDELETED   ClusterStatusType = "DELETED"
-	ClusterStatusTypeDELETING  ClusterStatusType = "DELETING"
-	ClusterStatusTypeDEPLOYING ClusterStatusType = "DEPLOYING"
-	ClusterStatusTypeFAILED    ClusterStatusType = "FAILED"
+	ClusterStatusTypeACTIVE      ClusterStatusType = "ACTIVE"
+	ClusterStatusTypeDELETED     ClusterStatusType = "DELETED"
+	ClusterStatusTypeDELETING    ClusterStatusType = "DELETING"
+	ClusterStatusTypeDEPLOYING   ClusterStatusType = "DEPLOYING"
+	ClusterStatusTypeFAILED      ClusterStatusType = "FAILED"
+	ClusterStatusTypeREDEPLOYING ClusterStatusType = "REDEPLOYING"
 )

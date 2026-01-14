@@ -14,6 +14,8 @@ import (
 /*
 Getvalidatematomokeycloaktoken
 
+validate a Matomo Keycloak token
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client

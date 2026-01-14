@@ -4,9 +4,14 @@ package models
 
 // Resource
 type Resource struct {
-	Kind string `json:"kind"`
-	Name string `json:"name"`
+	Consumption Consumption        `json:"consumption"`
+	Description string             `json:"description"`
+	ID          ResourceID         `json:"id"`
+	Kind        IdentifiedKind     `json:"kind"`
+	Name        StringMaxLength128 `json:"name"`
+	ProductID   string             `json:"productId"`
+	Statuses    []IdentifiedStatus `json:"statuses,omitempty"`
+	Tags        []string           `json:"tags,omitempty"`
+	TenantID    TenantID           `json:"tenantId"`
+	Version     string             `json:"version"`
 }
-
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Resource) isHTTPErrorContext() {}

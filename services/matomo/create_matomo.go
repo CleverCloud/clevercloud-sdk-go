@@ -13,6 +13,8 @@ import (
 /*
 Creatematomo
 
+provision a new Matomo instance
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client

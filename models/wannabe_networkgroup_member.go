@@ -4,8 +4,8 @@ package models
 
 // WannabeNetworkgroupMember
 type WannabeNetworkgroupMember struct {
-	DomainName string     `json:"domainName"`
-	ID         string     `json:"id"`
-	Kind       MemberKind `json:"kind"`
-	Label      *string    `json:"label,omitempty"`
+	DomainName string              `json:"domainName"`
+	ID         string              `json:"id"`
+	Kind       MemberKind          `json:"kind"`
+	Label      *StringMaxLength128 `json:"label,omitempty"`
 }

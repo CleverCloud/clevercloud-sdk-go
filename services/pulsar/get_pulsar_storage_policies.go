@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Getpulsarstoragepolicies(ctx, client, tracer, addonId)
+	response := pulsar.Getpulsarstoragepolicies(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: getPulsarStoragePolicies
 */
-func Getpulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.StoragePoliciesView] {
-	ctx, span := tracer.Start(ctx, "getPulsarStoragePolicies", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Getpulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.StoragePoliciesView] {
+	ctx, span := tracer.Start(ctx, "getPulsarStoragePolicies", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/storage-policies", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/storage-policies", pulsarId)
 
 	// Make API call
 	response := client.Get[models.StoragePoliciesView](ctx, c, path)

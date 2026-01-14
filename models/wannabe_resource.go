@@ -4,8 +4,8 @@ package models
 
 // WannabeResource
 type WannabeResource struct {
-	Description string   `json:"description"`
-	Label       string   `json:"label"`
-	Tags        []string `json:"tags,omitempty"`
-	Version     string   `json:"version"`
+	Description string             `json:"description"`
+	Name        StringMaxLength128 `json:"name"`
+	Tags        []string           `json:"tags,omitempty"`
+	Version     string             `json:"version"`
 }

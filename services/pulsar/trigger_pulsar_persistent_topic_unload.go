@@ -19,14 +19,14 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
   - topic:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Triggerpulsarpersistenttopicunload(ctx, client, tracer, addonId, topic)
+	response := pulsar.Triggerpulsarpersistenttopicunload(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +35,14 @@ Example:
 x-service: pulsar
 operationId: triggerPulsarPersistentTopicUnload
 */
-func Triggerpulsarpersistenttopicunload(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, topic string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "triggerPulsarPersistentTopicUnload", trace.WithAttributes(attribute.String("addonId", addonId), attribute.String("topic", topic)))
+func Triggerpulsarpersistenttopicunload(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "triggerPulsarPersistentTopicUnload", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics/%s/unload", addonId, topic)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics/%s/unload", pulsarId, topic)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

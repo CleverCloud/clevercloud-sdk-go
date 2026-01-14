@@ -20,14 +20,14 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Updatepulsarstoragepolicies(ctx, client, tracer, addonId, requestBody)
+	response := pulsar.Updatepulsarstoragepolicies(ctx, client, tracer, pulsarId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +36,11 @@ Example:
 x-service: pulsar
 operationId: updatePulsarStoragePolicies
 */
-func Updatepulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody *models.StoragePoliciesView) client.Response[models.StoragePoliciesView] {
-	ctx, span := tracer.Start(ctx, "updatePulsarStoragePolicies", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Updatepulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, requestBody *models.StoragePoliciesView) client.Response[models.StoragePoliciesView] {
+	ctx, span := tracer.Start(ctx, "updatePulsarStoragePolicies", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/storage-policies", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/storage-policies", pulsarId)
 
 	// Make API call
 	response := client.Patch[models.StoragePoliciesView](ctx, c, path, requestBody)

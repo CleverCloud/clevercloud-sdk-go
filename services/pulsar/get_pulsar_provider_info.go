@@ -13,7 +13,7 @@ import (
 /*
 Getpulsarproviderinfo
 
-# Get Addon provider infos
+# Get Pulsar provider infos
 
 Parameters:
   - ctx: context for the request

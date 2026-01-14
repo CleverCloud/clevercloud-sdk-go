@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Getpulsar(ctx, client, tracer, addonId)
+	response := pulsar.Getpulsar(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: getPulsar
 */
-func Getpulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Pulsar] {
-	ctx, span := tracer.Start(ctx, "getPulsar", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Getpulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+	ctx, span := tracer.Start(ctx, "getPulsar", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s", pulsarId)
 
 	// Make API call
 	response := client.Get[models.Pulsar](ctx, c, path)

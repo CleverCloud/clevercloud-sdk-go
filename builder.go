@@ -27,6 +27,7 @@ import (
 	postgresql "go.clever-cloud.dev/sdk/services/postgresql"
 	pulsar "go.clever-cloud.dev/sdk/services/pulsar"
 	storage "go.clever-cloud.dev/sdk/services/storage"
+	warp10token "go.clever-cloud.dev/sdk/services/warp10_token"
 	zone "go.clever-cloud.dev/sdk/services/zone"
 )
 
@@ -253,7 +254,7 @@ func (b *v2ProvidersAddonCellarAddonidBuilderImpl) Deletecellarv2(ctx context.Co
 
 // V2ProvidersAddonCellarResourcesBuilder provides access to operations
 type V2ProvidersAddonCellarResourcesBuilder interface {
-	Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar]
+	Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar1]
 }
 
 // v2ProvidersAddonCellarResourcesBuilderImpl implements V2ProvidersAddonCellarResourcesBuilder
@@ -267,7 +268,7 @@ func newV2ProvidersAddonCellarResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonCel
 }
 
 // Createcellar calls cellar.Createcellar
-func (b *v2ProvidersAddonCellarResourcesBuilderImpl) Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar] {
+func (b *v2ProvidersAddonCellarResourcesBuilderImpl) Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar1] {
 	return cellar.Createcellar(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -643,7 +644,7 @@ func (b *v2ProvidersAddonPulsarBuilderImpl) Resources() V2ProvidersAddonPulsarRe
 
 // V2ProvidersAddonPulsarResourcesBuilder provides access to operations
 type V2ProvidersAddonPulsarResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonPulsarResourcesAddonidBuilder
+	Pulsarid(pulsarid string) V2ProvidersAddonPulsarResourcesPulsaridBuilder
 	Createpulsarv2(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -657,9 +658,9 @@ func newV2ProvidersAddonPulsarResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonPul
 	return &v2ProvidersAddonPulsarResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonPulsarResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonPulsarResourcesAddonidBuilder {
-	return newV2ProvidersAddonPulsarResourcesAddonidBuilder(b.sdk, addonid)
+// Pulsarid returns builder for pulsarid
+func (b *v2ProvidersAddonPulsarResourcesBuilderImpl) Pulsarid(pulsarid string) V2ProvidersAddonPulsarResourcesPulsaridBuilder {
+	return newV2ProvidersAddonPulsarResourcesPulsaridBuilder(b.sdk, pulsarid)
 }
 
 // Createpulsarv2 calls pulsar.Createpulsarv2
@@ -667,90 +668,90 @@ func (b *v2ProvidersAddonPulsarResourcesBuilderImpl) Createpulsarv2(ctx context.
 	return pulsar.Createpulsarv2(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonPulsarResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonPulsarResourcesAddonidBuilder interface {
-	Topics() V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder
+// V2ProvidersAddonPulsarResourcesPulsaridBuilder provides access to operations
+type V2ProvidersAddonPulsarResourcesPulsaridBuilder interface {
+	Topics() V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder
 	Deletepulsarv2(ctx context.Context) client.Response[models.Pulsar]
 	Getpulsarv2(ctx context.Context) client.Response[models.Pulsar]
 }
 
-// v2ProvidersAddonPulsarResourcesAddonidBuilderImpl implements V2ProvidersAddonPulsarResourcesAddonidBuilder
-type v2ProvidersAddonPulsarResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl implements V2ProvidersAddonPulsarResourcesPulsaridBuilder
+type v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV2ProvidersAddonPulsarResourcesAddonidBuilder creates a new V2ProvidersAddonPulsarResourcesAddonidBuilder
-func newV2ProvidersAddonPulsarResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonPulsarResourcesAddonidBuilder {
-	return &v2ProvidersAddonPulsarResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonPulsarResourcesPulsaridBuilder creates a new V2ProvidersAddonPulsarResourcesPulsaridBuilder
+func newV2ProvidersAddonPulsarResourcesPulsaridBuilder(sdk *sdkImpl, pulsarid string) V2ProvidersAddonPulsarResourcesPulsaridBuilder {
+	return &v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Topics returns Topics builder
-func (b *v2ProvidersAddonPulsarResourcesAddonidBuilderImpl) Topics() V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder {
-	return newV2ProvidersAddonPulsarResourcesAddonidTopicsBuilder(b.sdk, b.addonid)
+func (b *v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl) Topics() V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder {
+	return newV2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder(b.sdk, b.pulsarid)
 }
 
 // Deletepulsarv2 calls pulsar.Deletepulsarv2
-func (b *v2ProvidersAddonPulsarResourcesAddonidBuilderImpl) Deletepulsarv2(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Deletepulsarv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl) Deletepulsarv2(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Deletepulsarv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // Getpulsarv2 calls pulsar.Getpulsarv2
-func (b *v2ProvidersAddonPulsarResourcesAddonidBuilderImpl) Getpulsarv2(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Getpulsarv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonPulsarResourcesPulsaridBuilderImpl) Getpulsarv2(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Getpulsarv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder provides access to operations
-type V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder interface {
-	Topic(topic string) V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder
+// V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder provides access to operations
+type V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder interface {
+	Topic(topic string) V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder
 }
 
-// v2ProvidersAddonPulsarResourcesAddonidTopicsBuilderImpl implements V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder
-type v2ProvidersAddonPulsarResourcesAddonidTopicsBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonPulsarResourcesPulsaridTopicsBuilderImpl implements V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder
+type v2ProvidersAddonPulsarResourcesPulsaridTopicsBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV2ProvidersAddonPulsarResourcesAddonidTopicsBuilder creates a new V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder
-func newV2ProvidersAddonPulsarResourcesAddonidTopicsBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonPulsarResourcesAddonidTopicsBuilder {
-	return &v2ProvidersAddonPulsarResourcesAddonidTopicsBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder creates a new V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder
+func newV2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder(sdk *sdkImpl, pulsarid string) V2ProvidersAddonPulsarResourcesPulsaridTopicsBuilder {
+	return &v2ProvidersAddonPulsarResourcesPulsaridTopicsBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Topic returns builder for topic
-func (b *v2ProvidersAddonPulsarResourcesAddonidTopicsBuilderImpl) Topic(topic string) V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder {
-	return newV2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder(b.sdk, b.addonid, topic)
+func (b *v2ProvidersAddonPulsarResourcesPulsaridTopicsBuilderImpl) Topic(topic string) V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder {
+	return newV2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder(b.sdk, b.pulsarid, topic)
 }
 
-// V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder provides access to operations
-type V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder interface {
+// V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder provides access to operations
+type V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder interface {
 	Deletepulsartopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilderImpl implements V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder
-type v2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilderImpl implements V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder
+type v2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder creates a new V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder
-func newV2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder(sdk *sdkImpl, addonid string, topic string) V2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilder {
-	return &v2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder creates a new V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder
+func newV2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder(sdk *sdkImpl, pulsarid string, topic string) V2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilder {
+	return &v2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Deletepulsartopic calls pulsar.Deletepulsartopic
-func (b *v2ProvidersAddonPulsarResourcesAddonidTopicsTopicBuilderImpl) Deletepulsartopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Deletepulsartopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic, opts...)
+func (b *v2ProvidersAddonPulsarResourcesPulsaridTopicsTopicBuilderImpl) Deletepulsartopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Deletepulsartopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic, opts...)
 }
 
 // V2ProvidersAddonTsBuilder provides access to operations
@@ -993,6 +994,7 @@ type V4Builder interface {
 	Keycloak() V4KeycloakBuilder
 	Keycloaks() V4KeycloaksBuilder
 	Kubernetes() V4KubernetesBuilder
+	KubernetesProduct() V4KubernetesProductBuilder
 	Loadbalancers() V4LoadbalancersBuilder
 	Login() V4LoginBuilder
 	Materia() V4MateriaBuilder
@@ -1005,6 +1007,7 @@ type V4Builder interface {
 	Providers() V4ProvidersBuilder
 	Pulsar() V4PulsarBuilder
 	Tenants() V4TenantsBuilder
+	Warp10Token() V4Warp10TokenBuilder
 }
 
 // v4BuilderImpl implements V4Builder
@@ -1097,6 +1100,11 @@ func (b *v4BuilderImpl) Kubernetes() V4KubernetesBuilder {
 	return newV4KubernetesBuilder(b.sdk)
 }
 
+// KubernetesProduct returns KubernetesProduct builder
+func (b *v4BuilderImpl) KubernetesProduct() V4KubernetesProductBuilder {
+	return newV4KubernetesProductBuilder(b.sdk)
+}
+
 // Loadbalancers returns Loadbalancers builder
 func (b *v4BuilderImpl) Loadbalancers() V4LoadbalancersBuilder {
 	return newV4LoadbalancersBuilder(b.sdk)
@@ -1155,6 +1163,11 @@ func (b *v4BuilderImpl) Pulsar() V4PulsarBuilder {
 // Tenants returns Tenants builder
 func (b *v4BuilderImpl) Tenants() V4TenantsBuilder {
 	return newV4TenantsBuilder(b.sdk)
+}
+
+// Warp10Token returns Warp10Token builder
+func (b *v4BuilderImpl) Warp10Token() V4Warp10TokenBuilder {
+	return newV4Warp10TokenBuilder(b.sdk)
 }
 
 // V4AddonProvidersBuilder provides access to operations
@@ -2393,8 +2406,8 @@ func (b *v4AddonProvidersAddonPulsarBuilderImpl) Getpulsarproviderinfo(ctx conte
 
 // V4AddonProvidersAddonPulsarAddonsBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsBuilder interface {
-	Addonid(addonid string) V4AddonProvidersAddonPulsarAddonsAddonidBuilder
-	Createpulsarv4(ctx context.Context, request *models.WannabeAddon) client.Response[models.Pulsar]
+	Pulsarid(pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridBuilder
+	Createpulsarv4(ctx context.Context, request *models.WannabePulsar) client.Response[models.Pulsar]
 }
 
 // v4AddonProvidersAddonPulsarAddonsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsBuilder
@@ -2407,407 +2420,441 @@ func newV4AddonProvidersAddonPulsarAddonsBuilder(sdk *sdkImpl) V4AddonProvidersA
 	return &v4AddonProvidersAddonPulsarAddonsBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v4AddonProvidersAddonPulsarAddonsBuilderImpl) Addonid(addonid string) V4AddonProvidersAddonPulsarAddonsAddonidBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidBuilder(b.sdk, addonid)
+// Pulsarid returns builder for pulsarid
+func (b *v4AddonProvidersAddonPulsarAddonsBuilderImpl) Pulsarid(pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridBuilder(b.sdk, pulsarid)
 }
 
 // Createpulsarv4 calls pulsar.Createpulsarv4
-func (b *v4AddonProvidersAddonPulsarAddonsBuilderImpl) Createpulsarv4(ctx context.Context, request *models.WannabeAddon) client.Response[models.Pulsar] {
+func (b *v4AddonProvidersAddonPulsarAddonsBuilderImpl) Createpulsarv4(ctx context.Context, request *models.WannabePulsar) client.Response[models.Pulsar] {
 	return pulsar.Createpulsarv4(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidBuilder interface {
-	CreateTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder
-	DeleteTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder
-	NonPersistentTopics() V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder
-	RenewBiscuit() V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder
-	StoragePolicies() V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder
-	Topics() V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder
+// V4AddonProvidersAddonPulsarAddonsPulsaridBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridBuilder interface {
+	CreateTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder
+	DeleteTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder
+	NonPersistentTopics() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder
+	RenewBiscuit() V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder
+	StoragePolicies() V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder
+	Topics() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder
 	Deletepulsarv4(ctx context.Context) client.Response[models.Pulsar]
 	Getpulsar(ctx context.Context) client.Response[models.Pulsar]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // CreateTenantAndNamespace returns CreateTenantAndNamespace builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) CreateTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) CreateTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder(b.sdk, b.pulsarid)
 }
 
 // DeleteTenantAndNamespace returns DeleteTenantAndNamespace builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) DeleteTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) DeleteTenantAndNamespace() V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder(b.sdk, b.pulsarid)
 }
 
 // NonPersistentTopics returns NonPersistentTopics builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) NonPersistentTopics() V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) NonPersistentTopics() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder(b.sdk, b.pulsarid)
 }
 
 // RenewBiscuit returns RenewBiscuit builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) RenewBiscuit() V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) RenewBiscuit() V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder(b.sdk, b.pulsarid)
 }
 
 // StoragePolicies returns StoragePolicies builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) StoragePolicies() V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) StoragePolicies() V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder(b.sdk, b.pulsarid)
 }
 
 // Topics returns Topics builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) Topics() V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder(b.sdk, b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) Topics() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder(b.sdk, b.pulsarid)
 }
 
 // Deletepulsarv4 calls pulsar.Deletepulsarv4
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) Deletepulsarv4(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Deletepulsarv4(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) Deletepulsarv4(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Deletepulsarv4(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // Getpulsar calls pulsar.Getpulsar
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidBuilderImpl) Getpulsar(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Getpulsar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) Getpulsar(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Getpulsar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder interface {
 	Createpulsartenantandnamespace(ctx context.Context) client.Response[models.Pulsar]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Createpulsartenantandnamespace calls pulsar.Createpulsartenantandnamespace
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidCreateTenantAndNamespaceBuilderImpl) Createpulsartenantandnamespace(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Createpulsartenantandnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridCreateTenantAndNamespaceBuilderImpl) Createpulsartenantandnamespace(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Createpulsartenantandnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder interface {
 	Deletepulsartenantandnamespace(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Deletepulsartenantandnamespace calls pulsar.Deletepulsartenantandnamespace
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidDeleteTenantAndNamespaceBuilderImpl) Deletepulsartenantandnamespace(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Deletepulsartenantandnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridDeleteTenantAndNamespaceBuilderImpl) Deletepulsartenantandnamespace(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Deletepulsartenantandnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder interface {
-	Topic(topic string) V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder
+// V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder interface {
+	Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder
 	Getpulsarnonpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Topic returns builder for topic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilderImpl) Topic(topic string) V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder(b.sdk, b.addonid, topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl) Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder(b.sdk, b.pulsarid, topic)
 }
 
 // Getpulsarnonpersistenttopics calls pulsar.Getpulsarnonpersistenttopics
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsBuilderImpl) Getpulsarnonpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Getpulsarnonpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl) Getpulsarnonpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Getpulsarnonpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, opts...)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder interface {
-	Token() V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder
+// V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder interface {
+	Token() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
+	Unload() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder
 	Deletepulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 	Createpulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder(sdk *sdkImpl, addonid string, topic string) V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Token returns Token builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl) Token() V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder(b.sdk, b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Token() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder(b.sdk, b.pulsarid, b.topic)
+}
+
+// Unload returns Unload builder
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Unload() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder(b.sdk, b.pulsarid, b.topic)
 }
 
 // Deletepulsarnonpersistenttopic calls pulsar.Deletepulsarnonpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl) Deletepulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Deletepulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Deletepulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Deletepulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic, opts...)
 }
 
 // Createpulsarnonpersistenttopic calls pulsar.Createpulsarnonpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicBuilderImpl) Createpulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Createpulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Createpulsarnonpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Createpulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic, opts...)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder interface {
 	Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder(sdk *sdkImpl, addonid string, topic string) V4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Createpulsarnonpersistenttopictoken calls pulsar.Createpulsarnonpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidNonPersistentTopicsTopicTokenBuilderImpl) Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Createpulsarnonpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl) Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Createpulsarnonpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder interface {
+	Triggerpulsarnonpersistenttopicunload(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
+}
+
+// newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
+	}
+}
+
+// Triggerpulsarnonpersistenttopicunload calls pulsar.Triggerpulsarnonpersistenttopicunload
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl) Triggerpulsarnonpersistenttopicunload(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Triggerpulsarnonpersistenttopicunload(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+}
+
+// V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder interface {
 	Renewpulsartoken(ctx context.Context) client.Response[models.Pulsar]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Renewpulsartoken calls pulsar.Renewpulsartoken
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidRenewBiscuitBuilderImpl) Renewpulsartoken(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Renewpulsartoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridRenewBiscuitBuilderImpl) Renewpulsartoken(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.Renewpulsartoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder interface {
 	Getpulsarstoragepolicies(ctx context.Context) client.Response[models.StoragePoliciesView]
 	Updatepulsarstoragepolicies(ctx context.Context, request *models.StoragePoliciesView) client.Response[models.StoragePoliciesView]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Getpulsarstoragepolicies calls pulsar.Getpulsarstoragepolicies
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilderImpl) Getpulsarstoragepolicies(ctx context.Context) client.Response[models.StoragePoliciesView] {
-	return pulsar.Getpulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) Getpulsarstoragepolicies(ctx context.Context) client.Response[models.StoragePoliciesView] {
+	return pulsar.Getpulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // Updatepulsarstoragepolicies calls pulsar.Updatepulsarstoragepolicies
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidStoragePoliciesBuilderImpl) Updatepulsarstoragepolicies(ctx context.Context, request *models.StoragePoliciesView) client.Response[models.StoragePoliciesView] {
-	return pulsar.Updatepulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) Updatepulsarstoragepolicies(ctx context.Context, request *models.StoragePoliciesView) client.Response[models.StoragePoliciesView] {
+	return pulsar.Updatepulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, request)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder interface {
-	Topic(topic string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder
+// V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder interface {
+	Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder
 	Getpulsarpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder(sdk *sdkImpl, addonid string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder(sdk *sdkImpl, pulsarid string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
 	}
 }
 
 // Topic returns builder for topic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilderImpl) Topic(topic string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder(b.sdk, b.addonid, topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl) Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder(b.sdk, b.pulsarid, topic)
 }
 
 // Getpulsarpersistenttopics calls pulsar.Getpulsarpersistenttopics
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsBuilderImpl) Getpulsarpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Getpulsarpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl) Getpulsarpersistenttopics(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Getpulsarpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, opts...)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder interface {
-	Token() V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder
-	Unload() V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder
+// V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder interface {
+	Token() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
+	Unload() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder
 	Deletepulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 	Createpulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder(sdk *sdkImpl, addonid string, topic string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Token returns Token builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl) Token() V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder(b.sdk, b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Token() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder(b.sdk, b.pulsarid, b.topic)
 }
 
 // Unload returns Unload builder
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl) Unload() V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder {
-	return newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder(b.sdk, b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Unload() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder {
+	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder(b.sdk, b.pulsarid, b.topic)
 }
 
 // Deletepulsarpersistenttopic calls pulsar.Deletepulsarpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl) Deletepulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Deletepulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Deletepulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Deletepulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic, opts...)
 }
 
 // Createpulsarpersistenttopic calls pulsar.Createpulsarpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicBuilderImpl) Createpulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
-	return pulsar.Createpulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic, opts...)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Createpulsarpersistenttopic(ctx context.Context, opts ...pulsar.Option) client.Response[client.Nothing] {
+	return pulsar.Createpulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic, opts...)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder interface {
 	Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder(sdk *sdkImpl, addonid string, topic string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Createpulsarpersistenttopictoken calls pulsar.Createpulsarpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicTokenBuilderImpl) Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Createpulsarpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl) Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Createpulsarpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
-// V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder provides access to operations
-type V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder interface {
+// V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder provides access to operations
+type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder interface {
 	Triggerpulsarpersistenttopicunload(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilderImpl implements V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder
-type v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
-	topic   string
+// v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder
+type v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl struct {
+	sdk      *sdkImpl
+	pulsarid string
+	topic    string
 }
 
-// newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder creates a new V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder
-func newV4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder(sdk *sdkImpl, addonid string, topic string) V4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilder {
-	return &v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
-		topic:   topic,
+// newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder creates a new V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder
+func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder(sdk *sdkImpl, pulsarid string, topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder {
+	return &v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl{
+		pulsarid: pulsarid,
+		sdk:      sdk,
+		topic:    topic,
 	}
 }
 
 // Triggerpulsarpersistenttopicunload calls pulsar.Triggerpulsarpersistenttopicunload
-func (b *v4AddonProvidersAddonPulsarAddonsAddonidTopicsTopicUnloadBuilderImpl) Triggerpulsarpersistenttopicunload(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Triggerpulsarpersistenttopicunload(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.topic)
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl) Triggerpulsarpersistenttopicunload(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Triggerpulsarpersistenttopicunload(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarClustersBuilder provides access to operations
 type V4AddonProvidersAddonPulsarClustersBuilder interface {
 	Clusterid(clusterid string) V4AddonProvidersAddonPulsarClustersClusteridBuilder
+	Listpulsarclusters(ctx context.Context) client.Response[[]models.PulsarCluster]
+	Createpulsarcluster(ctx context.Context, request *models.WannabePulsarCluster) client.Response[models.PulsarCluster]
 }
 
 // v4AddonProvidersAddonPulsarClustersBuilderImpl implements V4AddonProvidersAddonPulsarClustersBuilder
@@ -2825,9 +2872,21 @@ func (b *v4AddonProvidersAddonPulsarClustersBuilderImpl) Clusterid(clusterid str
 	return newV4AddonProvidersAddonPulsarClustersClusteridBuilder(b.sdk, clusterid)
 }
 
+// Listpulsarclusters calls pulsar.Listpulsarclusters
+func (b *v4AddonProvidersAddonPulsarClustersBuilderImpl) Listpulsarclusters(ctx context.Context) client.Response[[]models.PulsarCluster] {
+	return pulsar.Listpulsarclusters(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// Createpulsarcluster calls pulsar.Createpulsarcluster
+func (b *v4AddonProvidersAddonPulsarClustersBuilderImpl) Createpulsarcluster(ctx context.Context, request *models.WannabePulsarCluster) client.Response[models.PulsarCluster] {
+	return pulsar.Createpulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+}
+
 // V4AddonProvidersAddonPulsarClustersClusteridBuilder provides access to operations
 type V4AddonProvidersAddonPulsarClustersClusteridBuilder interface {
+	Deletepulsarcluster(ctx context.Context) client.Response[client.Nothing]
 	Getpulsarcluster(ctx context.Context) client.Response[models.PulsarCluster]
+	Updatepulsarcluster(ctx context.Context, request *models.WannabePulsarCluster) client.Response[models.PulsarCluster]
 }
 
 // v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl implements V4AddonProvidersAddonPulsarClustersClusteridBuilder
@@ -2844,9 +2903,19 @@ func newV4AddonProvidersAddonPulsarClustersClusteridBuilder(sdk *sdkImpl, cluste
 	}
 }
 
+// Deletepulsarcluster calls pulsar.Deletepulsarcluster
+func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Deletepulsarcluster(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.Deletepulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+}
+
 // Getpulsarcluster calls pulsar.Getpulsarcluster
 func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Getpulsarcluster(ctx context.Context) client.Response[models.PulsarCluster] {
 	return pulsar.Getpulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+}
+
+// Updatepulsarcluster calls pulsar.Updatepulsarcluster
+func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Updatepulsarcluster(ctx context.Context, request *models.WannabePulsarCluster) client.Response[models.PulsarCluster] {
+	return pulsar.Updatepulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
 }
 
 // V4AddonProvidersAddonTsBuilder provides access to operations
@@ -3667,9 +3736,10 @@ func (b *v4CellarOrganisationsOwneridCellarBuilderImpl) Cellarid(cellarid string
 
 // V4CellarOrganisationsOwneridCellarCellaridBuilder provides access to operations
 type V4CellarOrganisationsOwneridCellarCellaridBuilder interface {
+	Buckets() V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder
 	Credentials() V4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder
 	CredentialsCfg() V4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilder
-	Getcellarinfos(ctx context.Context) client.Response[models.Cellar1]
+	Getcellarinfos(ctx context.Context) client.Response[models.Cellar]
 }
 
 // v4CellarOrganisationsOwneridCellarCellaridBuilderImpl implements V4CellarOrganisationsOwneridCellarCellaridBuilder
@@ -3688,6 +3758,11 @@ func newV4CellarOrganisationsOwneridCellarCellaridBuilder(sdk *sdkImpl, ownerid 
 	}
 }
 
+// Buckets returns Buckets builder
+func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Buckets() V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder {
+	return newV4CellarOrganisationsOwneridCellarCellaridBucketsBuilder(b.sdk, b.ownerid, b.cellarid)
+}
+
 // Credentials returns Credentials builder
 func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Credentials() V4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder {
 	return newV4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder(b.sdk, b.ownerid, b.cellarid)
@@ -3699,13 +3774,40 @@ func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) CredentialsCfg()
 }
 
 // Getcellarinfos calls cellar.Getcellarinfos
-func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Getcellarinfos(ctx context.Context) client.Response[models.Cellar1] {
+func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Getcellarinfos(ctx context.Context) client.Response[models.Cellar] {
 	return cellar.Getcellarinfos(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
+}
+
+// V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder provides access to operations
+type V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder interface {
+	Listcellarbuckets(ctx context.Context) client.Response[[]models.BucketsView]
+}
+
+// v4CellarOrganisationsOwneridCellarCellaridBucketsBuilderImpl implements V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder
+type v4CellarOrganisationsOwneridCellarCellaridBucketsBuilderImpl struct {
+	sdk      *sdkImpl
+	ownerid  string
+	cellarid string
+}
+
+// newV4CellarOrganisationsOwneridCellarCellaridBucketsBuilder creates a new V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder
+func newV4CellarOrganisationsOwneridCellarCellaridBucketsBuilder(sdk *sdkImpl, ownerid string, cellarid string) V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder {
+	return &v4CellarOrganisationsOwneridCellarCellaridBucketsBuilderImpl{
+		cellarid: cellarid,
+		ownerid:  ownerid,
+		sdk:      sdk,
+	}
+}
+
+// Listcellarbuckets calls cellar.Listcellarbuckets
+func (b *v4CellarOrganisationsOwneridCellarCellaridBucketsBuilderImpl) Listcellarbuckets(ctx context.Context) client.Response[[]models.BucketsView] {
+	return cellar.Listcellarbuckets(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
 }
 
 // V4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder provides access to operations
 type V4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder interface {
 	PresignedURL() V4CellarOrganisationsOwneridCellarCellaridCredentialsPresignedURLBuilder
+	Renew() V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder
 	Getcellarcredentials(ctx context.Context) client.Response[models.CellarCredentials]
 }
 
@@ -3728,6 +3830,11 @@ func newV4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder(sdk *sdkImp
 // PresignedURL returns PresignedURL builder
 func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsBuilderImpl) PresignedURL() V4CellarOrganisationsOwneridCellarCellaridCredentialsPresignedURLBuilder {
 	return newV4CellarOrganisationsOwneridCellarCellaridCredentialsPresignedURLBuilder(b.sdk, b.ownerid, b.cellarid)
+}
+
+// Renew returns Renew builder
+func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsBuilderImpl) Renew() V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder {
+	return newV4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder(b.sdk, b.ownerid, b.cellarid)
 }
 
 // Getcellarcredentials calls cellar.Getcellarcredentials
@@ -3759,6 +3866,32 @@ func newV4CellarOrganisationsOwneridCellarCellaridCredentialsPresignedURLBuilder
 // Getcellarcredentialspresignedurl calls cellar.Getcellarcredentialspresignedurl
 func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsPresignedURLBuilderImpl) Getcellarcredentialspresignedurl(ctx context.Context) client.Response[models.PresignedURL] {
 	return cellar.Getcellarcredentialspresignedurl(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
+}
+
+// V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder provides access to operations
+type V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder interface {
+	Renewcellarcredentials(ctx context.Context) client.Response[models.CellarCredentials]
+}
+
+// v4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilderImpl implements V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder
+type v4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilderImpl struct {
+	sdk      *sdkImpl
+	ownerid  string
+	cellarid string
+}
+
+// newV4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder creates a new V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder
+func newV4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder(sdk *sdkImpl, ownerid string, cellarid string) V4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilder {
+	return &v4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilderImpl{
+		cellarid: cellarid,
+		ownerid:  ownerid,
+		sdk:      sdk,
+	}
+}
+
+// Renewcellarcredentials calls cellar.Renewcellarcredentials
+func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsRenewBuilderImpl) Renewcellarcredentials(ctx context.Context) client.Response[models.CellarCredentials] {
+	return cellar.Renewcellarcredentials(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
 }
 
 // V4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilder provides access to operations
@@ -7345,6 +7478,8 @@ type V4KubernetesOrganisationsOwneridClustersClusteridBuilder interface {
 	Kubeconfig() V4KubernetesOrganisationsOwneridClustersClusteridKubeconfigBuilder
 	KubeconfigYAML() V4KubernetesOrganisationsOwneridClustersClusteridKubeconfigYAMLBuilder
 	NodeGroups() V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder
+	Nodes() V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder
+	Redeploy() V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
 	Resume() V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder
 	Deletecluster(ctx context.Context) client.Response[models.ClusterView]
 	Getcluster(ctx context.Context) client.Response[models.ClusterView]
@@ -7384,6 +7519,16 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Kubeconfi
 // NodeGroups returns NodeGroups builder
 func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) NodeGroups() V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder {
 	return newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder(b.sdk, b.ownerid, b.clusterid)
+}
+
+// Nodes returns Nodes builder
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Nodes() V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder(b.sdk, b.ownerid, b.clusterid)
+}
+
+// Redeploy returns Redeploy builder
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Redeploy() V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder(b.sdk, b.ownerid, b.clusterid)
 }
 
 // Resume returns Resume builder
@@ -7609,6 +7754,104 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidB
 	return kubernetes.Updatenodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid, request)
 }
 
+// V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder interface {
+	Nodeid(nodeid string) V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder
+	Getnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView]
+	Createnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView]
+}
+
+// v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder
+type v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl struct {
+	sdk       *sdkImpl
+	ownerid   string
+	clusterid string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder creates a new V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder
+func newV4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder(sdk *sdkImpl, ownerid string, clusterid string) V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl{
+		clusterid: clusterid,
+		ownerid:   ownerid,
+		sdk:       sdk,
+	}
+}
+
+// Nodeid returns builder for nodeid
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Nodeid(nodeid string) V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder(b.sdk, b.ownerid, b.clusterid, nodeid)
+}
+
+// Getnodes calls kubernetes.Getnodes
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Getnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView] {
+	return kubernetes.Getnodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+}
+
+// Createnode calls kubernetes.Createnode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Createnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Createnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
+}
+
+// V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder interface {
+	Deletenode(ctx context.Context) client.Response[models.StandaloneNodeView]
+	Getnode(ctx context.Context) client.Response[models.StandaloneNodeView]
+}
+
+// v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder
+type v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl struct {
+	sdk       *sdkImpl
+	ownerid   string
+	clusterid string
+	nodeid    string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder creates a new V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder
+func newV4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder(sdk *sdkImpl, ownerid string, clusterid string, nodeid string) V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl{
+		clusterid: clusterid,
+		nodeid:    nodeid,
+		ownerid:   ownerid,
+		sdk:       sdk,
+	}
+}
+
+// Deletenode calls kubernetes.Deletenode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Deletenode(ctx context.Context) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Deletenode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
+}
+
+// Getnode calls kubernetes.Getnode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Getnode(ctx context.Context) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Getnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
+}
+
+// V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder interface {
+	Triggerclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView]
+}
+
+// v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
+type v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl struct {
+	sdk       *sdkImpl
+	ownerid   string
+	clusterid string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder creates a new V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
+func newV4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder(sdk *sdkImpl, ownerid string, clusterid string) V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl{
+		clusterid: clusterid,
+		ownerid:   ownerid,
+		sdk:       sdk,
+	}
+}
+
+// Triggerclusterredeploy calls kubernetes.Triggerclusterredeploy
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl) Triggerclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView] {
+	return kubernetes.Triggerclusterredeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
+}
+
 // V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder interface {
 	Triggerclusterresume(ctx context.Context) client.Response[models.ClusterView]
@@ -7633,6 +7876,26 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder(sdk *sdkI
 // Triggerclusterresume calls kubernetes.Triggerclusterresume
 func (b *v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl) Triggerclusterresume(ctx context.Context) client.Response[models.ClusterView] {
 	return kubernetes.Triggerclusterresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+}
+
+// V4KubernetesProductBuilder provides access to operations
+type V4KubernetesProductBuilder interface {
+	Getkubernetesserviceconfig(ctx context.Context) client.Response[models.KubernetesServiceConfig]
+}
+
+// v4KubernetesProductBuilderImpl implements V4KubernetesProductBuilder
+type v4KubernetesProductBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4KubernetesProductBuilder creates a new V4KubernetesProductBuilder
+func newV4KubernetesProductBuilder(sdk *sdkImpl) V4KubernetesProductBuilder {
+	return &v4KubernetesProductBuilderImpl{sdk: sdk}
+}
+
+// Getkubernetesserviceconfig calls kubernetes.Getkubernetesserviceconfig
+func (b *v4KubernetesProductBuilderImpl) Getkubernetesserviceconfig(ctx context.Context) client.Response[models.KubernetesServiceConfig] {
+	return kubernetes.Getkubernetesserviceconfig(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4LoadbalancersBuilder provides access to operations
@@ -9383,7 +9646,7 @@ type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder inter
 	Members() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilder
 	Peers() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder
 	Deletenetworkgroup(ctx context.Context) client.Response[client.Nothing]
-	Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup1]
+	Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder
@@ -9423,7 +9686,7 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderIm
 }
 
 // Getnetworkgroup calls network_group.Getnetworkgroup
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup1] {
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup] {
 	return networkgroup.Getnetworkgroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
@@ -10889,7 +11152,7 @@ func (b *v4ProvidersBuilderImpl) AddonCellar() V4ProvidersAddonCellarBuilder {
 
 // V4ProvidersAddonCellarBuilder provides access to operations
 type V4ProvidersAddonCellarBuilder interface {
-	Addonid(addonid string) V4ProvidersAddonCellarAddonidBuilder
+	Cellarid(cellarid string) V4ProvidersAddonCellarCellaridBuilder
 }
 
 // v4ProvidersAddonCellarBuilderImpl implements V4ProvidersAddonCellarBuilder
@@ -10902,33 +11165,33 @@ func newV4ProvidersAddonCellarBuilder(sdk *sdkImpl) V4ProvidersAddonCellarBuilde
 	return &v4ProvidersAddonCellarBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v4ProvidersAddonCellarBuilderImpl) Addonid(addonid string) V4ProvidersAddonCellarAddonidBuilder {
-	return newV4ProvidersAddonCellarAddonidBuilder(b.sdk, addonid)
+// Cellarid returns builder for cellarid
+func (b *v4ProvidersAddonCellarBuilderImpl) Cellarid(cellarid string) V4ProvidersAddonCellarCellaridBuilder {
+	return newV4ProvidersAddonCellarCellaridBuilder(b.sdk, cellarid)
 }
 
-// V4ProvidersAddonCellarAddonidBuilder provides access to operations
-type V4ProvidersAddonCellarAddonidBuilder interface {
-	Getcellar(ctx context.Context) client.Response[models.Cellar]
+// V4ProvidersAddonCellarCellaridBuilder provides access to operations
+type V4ProvidersAddonCellarCellaridBuilder interface {
+	Getcellar(ctx context.Context) client.Response[models.Cellar1]
 }
 
-// v4ProvidersAddonCellarAddonidBuilderImpl implements V4ProvidersAddonCellarAddonidBuilder
-type v4ProvidersAddonCellarAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v4ProvidersAddonCellarCellaridBuilderImpl implements V4ProvidersAddonCellarCellaridBuilder
+type v4ProvidersAddonCellarCellaridBuilderImpl struct {
+	sdk      *sdkImpl
+	cellarid string
 }
 
-// newV4ProvidersAddonCellarAddonidBuilder creates a new V4ProvidersAddonCellarAddonidBuilder
-func newV4ProvidersAddonCellarAddonidBuilder(sdk *sdkImpl, addonid string) V4ProvidersAddonCellarAddonidBuilder {
-	return &v4ProvidersAddonCellarAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV4ProvidersAddonCellarCellaridBuilder creates a new V4ProvidersAddonCellarCellaridBuilder
+func newV4ProvidersAddonCellarCellaridBuilder(sdk *sdkImpl, cellarid string) V4ProvidersAddonCellarCellaridBuilder {
+	return &v4ProvidersAddonCellarCellaridBuilderImpl{
+		cellarid: cellarid,
+		sdk:      sdk,
 	}
 }
 
 // Getcellar calls cellar.Getcellar
-func (b *v4ProvidersAddonCellarAddonidBuilderImpl) Getcellar(ctx context.Context) client.Response[models.Cellar] {
-	return cellar.Getcellar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v4ProvidersAddonCellarCellaridBuilderImpl) Getcellar(ctx context.Context) client.Response[models.Cellar1] {
+	return cellar.Getcellar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.cellarid)
 }
 
 // V4PulsarBuilder provides access to operations
@@ -11570,8 +11833,8 @@ func (b *v4TenantsTenantidProductsProductidPublishBuilderImpl) Publishproduct(ct
 // V4TenantsTenantidProductsProductidResourcesBuilder provides access to operations
 type V4TenantsTenantidProductsProductidResourcesBuilder interface {
 	Resourceid(resourceid string) V4TenantsTenantidProductsProductidResourcesResourceidBuilder
-	Listresources(ctx context.Context) client.Response[[]models.Resource1]
-	Createresource(ctx context.Context, request *models.WannabeResource) client.Response[models.Resource1]
+	Listresources(ctx context.Context) client.Response[[]models.Resource]
+	Createresource(ctx context.Context, request *models.WannabeResource) client.Response[models.Resource]
 }
 
 // v4TenantsTenantidProductsProductidResourcesBuilderImpl implements V4TenantsTenantidProductsProductidResourcesBuilder
@@ -11596,20 +11859,20 @@ func (b *v4TenantsTenantidProductsProductidResourcesBuilderImpl) Resourceid(reso
 }
 
 // Listresources calls base.Listresources
-func (b *v4TenantsTenantidProductsProductidResourcesBuilderImpl) Listresources(ctx context.Context) client.Response[[]models.Resource1] {
+func (b *v4TenantsTenantidProductsProductidResourcesBuilderImpl) Listresources(ctx context.Context) client.Response[[]models.Resource] {
 	return base.Listresources(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid)
 }
 
 // Createresource calls base.Createresource
-func (b *v4TenantsTenantidProductsProductidResourcesBuilderImpl) Createresource(ctx context.Context, request *models.WannabeResource) client.Response[models.Resource1] {
+func (b *v4TenantsTenantidProductsProductidResourcesBuilderImpl) Createresource(ctx context.Context, request *models.WannabeResource) client.Response[models.Resource] {
 	return base.Createresource(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, request)
 }
 
 // V4TenantsTenantidProductsProductidResourcesResourceidBuilder provides access to operations
 type V4TenantsTenantidProductsProductidResourcesResourceidBuilder interface {
 	Deleteresource(ctx context.Context) client.Response[client.Nothing]
-	Getresource(ctx context.Context) client.Response[models.Resource1]
-	Updateresource(ctx context.Context, request *models.ResourcePatch) client.Response[models.Resource1]
+	Getresource(ctx context.Context) client.Response[models.Resource]
+	Updateresource(ctx context.Context, request *models.ResourcePatch) client.Response[models.Resource]
 }
 
 // v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl implements V4TenantsTenantidProductsProductidResourcesResourceidBuilder
@@ -11636,18 +11899,18 @@ func (b *v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl) Delet
 }
 
 // Getresource calls base.Getresource
-func (b *v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl) Getresource(ctx context.Context) client.Response[models.Resource1] {
+func (b *v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl) Getresource(ctx context.Context) client.Response[models.Resource] {
 	return base.Getresource(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, b.resourceid)
 }
 
 // Updateresource calls base.Updateresource
-func (b *v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl) Updateresource(ctx context.Context, request *models.ResourcePatch) client.Response[models.Resource1] {
+func (b *v4TenantsTenantidProductsProductidResourcesResourceidBuilderImpl) Updateresource(ctx context.Context, request *models.ResourcePatch) client.Response[models.Resource] {
 	return base.Updateresource(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, b.resourceid, request)
 }
 
 // V4TenantsTenantidResourcesBuilder provides access to operations
 type V4TenantsTenantidResourcesBuilder interface {
-	Listavailableresources(ctx context.Context) client.Response[[]models.Resource1]
+	Listavailableresources(ctx context.Context) client.Response[[]models.Resource]
 }
 
 // v4TenantsTenantidResourcesBuilderImpl implements V4TenantsTenantidResourcesBuilder
@@ -11665,7 +11928,7 @@ func newV4TenantsTenantidResourcesBuilder(sdk *sdkImpl, tenantid string) V4Tenan
 }
 
 // Listavailableresources calls base.Listavailableresources
-func (b *v4TenantsTenantidResourcesBuilderImpl) Listavailableresources(ctx context.Context) client.Response[[]models.Resource1] {
+func (b *v4TenantsTenantidResourcesBuilderImpl) Listavailableresources(ctx context.Context) client.Response[[]models.Resource] {
 	return base.Listavailableresources(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid)
 }
 
@@ -11741,4 +12004,214 @@ func (b *v4TenantsTenantidStoragesStorageidBuilderImpl) Getstorage(ctx context.C
 // Updatestorage calls storage.Updatestorage
 func (b *v4TenantsTenantidStoragesStorageidBuilderImpl) Updatestorage(ctx context.Context, request *models.StoragePatch) client.Response[models.Storage1] {
 	return storage.Updatestorage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.storageid, request)
+}
+
+// V4Warp10TokenBuilder provides access to operations
+type V4Warp10TokenBuilder interface {
+	Cluster() V4Warp10TokenClusterBuilder
+}
+
+// v4Warp10TokenBuilderImpl implements V4Warp10TokenBuilder
+type v4Warp10TokenBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4Warp10TokenBuilder creates a new V4Warp10TokenBuilder
+func newV4Warp10TokenBuilder(sdk *sdkImpl) V4Warp10TokenBuilder {
+	return &v4Warp10TokenBuilderImpl{sdk: sdk}
+}
+
+// Cluster returns Cluster builder
+func (b *v4Warp10TokenBuilderImpl) Cluster() V4Warp10TokenClusterBuilder {
+	return newV4Warp10TokenClusterBuilder(b.sdk)
+}
+
+// V4Warp10TokenClusterBuilder provides access to operations
+type V4Warp10TokenClusterBuilder interface {
+	Clusterid(clusterid string) V4Warp10TokenClusterClusteridBuilder
+}
+
+// v4Warp10TokenClusterBuilderImpl implements V4Warp10TokenClusterBuilder
+type v4Warp10TokenClusterBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4Warp10TokenClusterBuilder creates a new V4Warp10TokenClusterBuilder
+func newV4Warp10TokenClusterBuilder(sdk *sdkImpl) V4Warp10TokenClusterBuilder {
+	return &v4Warp10TokenClusterBuilderImpl{sdk: sdk}
+}
+
+// Clusterid returns builder for clusterid
+func (b *v4Warp10TokenClusterBuilderImpl) Clusterid(clusterid string) V4Warp10TokenClusterClusteridBuilder {
+	return newV4Warp10TokenClusterClusteridBuilder(b.sdk, clusterid)
+}
+
+// V4Warp10TokenClusterClusteridBuilder provides access to operations
+type V4Warp10TokenClusterClusteridBuilder interface {
+	Token() V4Warp10TokenClusterClusteridTokenBuilder
+}
+
+// v4Warp10TokenClusterClusteridBuilderImpl implements V4Warp10TokenClusterClusteridBuilder
+type v4Warp10TokenClusterClusteridBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4Warp10TokenClusterClusteridBuilder creates a new V4Warp10TokenClusterClusteridBuilder
+func newV4Warp10TokenClusterClusteridBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridBuilder {
+	return &v4Warp10TokenClusterClusteridBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Token returns Token builder
+func (b *v4Warp10TokenClusterClusteridBuilderImpl) Token() V4Warp10TokenClusterClusteridTokenBuilder {
+	return newV4Warp10TokenClusterClusteridTokenBuilder(b.sdk, b.clusterid)
+}
+
+// V4Warp10TokenClusterClusteridTokenBuilder provides access to operations
+type V4Warp10TokenClusterClusteridTokenBuilder interface {
+	Revocationid(revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder
+	Read() V4Warp10TokenClusterClusteridTokenReadBuilder
+	Revocation() V4Warp10TokenClusterClusteridTokenRevocationBuilder
+	Write() V4Warp10TokenClusterClusteridTokenWriteBuilder
+}
+
+// v4Warp10TokenClusterClusteridTokenBuilderImpl implements V4Warp10TokenClusterClusteridTokenBuilder
+type v4Warp10TokenClusterClusteridTokenBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4Warp10TokenClusterClusteridTokenBuilder creates a new V4Warp10TokenClusterClusteridTokenBuilder
+func newV4Warp10TokenClusterClusteridTokenBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenBuilder {
+	return &v4Warp10TokenClusterClusteridTokenBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Revocationid returns builder for revocationid
+func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Revocationid(revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder {
+	return newV4Warp10TokenClusterClusteridTokenRevocationidBuilder(b.sdk, b.clusterid, revocationid)
+}
+
+// Read returns Read builder
+func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Read() V4Warp10TokenClusterClusteridTokenReadBuilder {
+	return newV4Warp10TokenClusterClusteridTokenReadBuilder(b.sdk, b.clusterid)
+}
+
+// Revocation returns Revocation builder
+func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Revocation() V4Warp10TokenClusterClusteridTokenRevocationBuilder {
+	return newV4Warp10TokenClusterClusteridTokenRevocationBuilder(b.sdk, b.clusterid)
+}
+
+// Write returns Write builder
+func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Write() V4Warp10TokenClusterClusteridTokenWriteBuilder {
+	return newV4Warp10TokenClusterClusteridTokenWriteBuilder(b.sdk, b.clusterid)
+}
+
+// V4Warp10TokenClusterClusteridTokenRevocationidBuilder provides access to operations
+type V4Warp10TokenClusterClusteridTokenRevocationidBuilder interface {
+	Deletetoken(ctx context.Context) client.Response[models.TokenRevokedResponse]
+	Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse]
+}
+
+// v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl implements V4Warp10TokenClusterClusteridTokenRevocationidBuilder
+type v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl struct {
+	sdk          *sdkImpl
+	clusterid    string
+	revocationid string
+}
+
+// newV4Warp10TokenClusterClusteridTokenRevocationidBuilder creates a new V4Warp10TokenClusterClusteridTokenRevocationidBuilder
+func newV4Warp10TokenClusterClusteridTokenRevocationidBuilder(sdk *sdkImpl, clusterid string, revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder {
+	return &v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl{
+		clusterid:    clusterid,
+		revocationid: revocationid,
+		sdk:          sdk,
+	}
+}
+
+// Deletetoken calls warp10_token.Deletetoken
+func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Deletetoken(ctx context.Context) client.Response[models.TokenRevokedResponse] {
+	return warp10token.Deletetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
+}
+
+// Gettokenmetadata calls warp10_token.Gettokenmetadata
+func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse] {
+	return warp10token.Gettokenmetadata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
+}
+
+// V4Warp10TokenClusterClusteridTokenReadBuilder provides access to operations
+type V4Warp10TokenClusterClusteridTokenReadBuilder interface {
+	Createreadtoken(ctx context.Context, request *models.CreateReadTokenRequest) client.Response[models.TokenCreatedResponse]
+}
+
+// v4Warp10TokenClusterClusteridTokenReadBuilderImpl implements V4Warp10TokenClusterClusteridTokenReadBuilder
+type v4Warp10TokenClusterClusteridTokenReadBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4Warp10TokenClusterClusteridTokenReadBuilder creates a new V4Warp10TokenClusterClusteridTokenReadBuilder
+func newV4Warp10TokenClusterClusteridTokenReadBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenReadBuilder {
+	return &v4Warp10TokenClusterClusteridTokenReadBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Createreadtoken calls warp10_token.Createreadtoken
+func (b *v4Warp10TokenClusterClusteridTokenReadBuilderImpl) Createreadtoken(ctx context.Context, request *models.CreateReadTokenRequest) client.Response[models.TokenCreatedResponse] {
+	return warp10token.Createreadtoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
+}
+
+// V4Warp10TokenClusterClusteridTokenRevocationBuilder provides access to operations
+type V4Warp10TokenClusterClusteridTokenRevocationBuilder interface {
+	Listrevokedtokens(ctx context.Context, opts ...warp10token.Option) client.Response[models.RevokedTokensResponse]
+}
+
+// v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl implements V4Warp10TokenClusterClusteridTokenRevocationBuilder
+type v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4Warp10TokenClusterClusteridTokenRevocationBuilder creates a new V4Warp10TokenClusterClusteridTokenRevocationBuilder
+func newV4Warp10TokenClusterClusteridTokenRevocationBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenRevocationBuilder {
+	return &v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Listrevokedtokens calls warp10_token.Listrevokedtokens
+func (b *v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl) Listrevokedtokens(ctx context.Context, opts ...warp10token.Option) client.Response[models.RevokedTokensResponse] {
+	return warp10token.Listrevokedtokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, opts...)
+}
+
+// V4Warp10TokenClusterClusteridTokenWriteBuilder provides access to operations
+type V4Warp10TokenClusterClusteridTokenWriteBuilder interface {
+	Createwritetoken(ctx context.Context, request *models.CreateWriteTokenRequest) client.Response[models.TokenCreatedResponse]
+}
+
+// v4Warp10TokenClusterClusteridTokenWriteBuilderImpl implements V4Warp10TokenClusterClusteridTokenWriteBuilder
+type v4Warp10TokenClusterClusteridTokenWriteBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4Warp10TokenClusterClusteridTokenWriteBuilder creates a new V4Warp10TokenClusterClusteridTokenWriteBuilder
+func newV4Warp10TokenClusterClusteridTokenWriteBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenWriteBuilder {
+	return &v4Warp10TokenClusterClusteridTokenWriteBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Createwritetoken calls warp10_token.Createwritetoken
+func (b *v4Warp10TokenClusterClusteridTokenWriteBuilderImpl) Createwritetoken(ctx context.Context, request *models.CreateWriteTokenRequest) client.Response[models.TokenCreatedResponse] {
+	return warp10token.Createwritetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
 }

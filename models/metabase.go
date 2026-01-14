@@ -4,15 +4,15 @@ package models
 
 // Metabase
 type Metabase struct {
-	AccessURL         string            `json:"accessUrl"`
-	AddonID           string            `json:"addonId"`
-	AvailableVersions []string          `json:"availableVersions,omitempty"`
-	EnvVars           MapString         `json:"envVars"`
-	JavaVersion       string            `json:"javaVersion"`
-	Name              string            `json:"name"`
-	OwnerID           OwnerID           `json:"ownerId"`
-	Plan              MetabasePlan      `json:"plan"`
-	ResourceID        string            `json:"resourceId"`
-	Resources         MetabaseResources `json:"resources"`
-	Version           string            `json:"version"`
+	AccessURL         string                 `json:"accessUrl"`
+	AddonID           string                 `json:"addonId"`
+	AvailableVersions []string               `json:"availableVersions,omitempty"`
+	EnvVars           MapString              `json:"envVars"`
+	JavaVersion       string                 `json:"javaVersion"`
+	Name              string                 `json:"name"`
+	OwnerID           OwnerID                `json:"ownerId"`
+	Plan              MetabasePlanIdentifier `json:"plan"`
+	ResourceID        string                 `json:"resourceId"`
+	Resources         MetabaseResources      `json:"resources"`
+	Version           string                 `json:"version"`
 }

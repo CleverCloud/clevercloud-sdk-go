@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Createpulsartenantandnamespace(ctx, client, tracer, addonId)
+	response := pulsar.Createpulsartenantandnamespace(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: createPulsarTenantAndNamespace
 */
-func Createpulsartenantandnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Pulsar] {
-	ctx, span := tracer.Start(ctx, "createPulsarTenantAndNamespace", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Createpulsartenantandnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+	ctx, span := tracer.Start(ctx, "createPulsarTenantAndNamespace", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/create-tenant-and-namespace", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/create-tenant-and-namespace", pulsarId)
 
 	// Make API call
 	response := client.Post[models.Pulsar](ctx, c, path, nil)

@@ -4,7 +4,7 @@ package models
 
 // ProductOutput
 type ProductOutput struct {
-	ID       string       `json:"id"`
-	Label    string       `json:"label"`
-	Maturity MaturityKind `json:"maturity"`
+	ID       string             `json:"id"`
+	Maturity MaturityKind       `json:"maturity"`
+	Name     StringMaxLength128 `json:"name"`
 }

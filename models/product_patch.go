@@ -4,14 +4,14 @@ package models
 
 // ProductPatch
 type ProductPatch struct {
-	DefaultVersion *string         `json:"defaultVersion,omitempty"`
-	Description    *string         `json:"description,omitempty"`
-	Label          *string         `json:"label,omitempty"`
-	Limitations    *Limitations    `json:"limitations,omitempty"`
-	LogoURL        *string         `json:"logoUrl,omitempty"` // URL
-	Maturity       *MaturityKind   `json:"maturity,omitempty"`
-	ProviderURL    *string         `json:"providerUrl,omitempty"` // URL
-	Tags           []string        `json:"tags,omitempty"`
-	Versions       []string        `json:"versions,omitempty"`
-	Visibility     *VisibilityKind `json:"visibility,omitempty"`
+	DefaultVersion *string             `json:"defaultVersion,omitempty"`
+	Description    *string             `json:"description,omitempty"`
+	Limitations    *Limitations        `json:"limitations,omitempty"`
+	LogoURL        *string             `json:"logoUrl,omitempty"` // URL
+	Maturity       *MaturityKind       `json:"maturity,omitempty"`
+	Name           *StringMaxLength128 `json:"name,omitempty"`
+	ProviderURL    *string             `json:"providerUrl,omitempty"` // URL
+	Tags           []string            `json:"tags,omitempty"`
+	Versions       []string            `json:"versions,omitempty"`
+	Visibility     *VisibilityKind     `json:"visibility,omitempty"`
 }
