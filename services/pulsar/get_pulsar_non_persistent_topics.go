@@ -20,14 +20,14 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Getpulsarnonpersistenttopics(ctx, client, tracer, addonId, opts...)
+	response := pulsar.Getpulsarnonpersistenttopics(ctx, client, tracer, pulsarId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +36,11 @@ Example:
 x-service: pulsar
 operationId: getPulsarNonPersistentTopics
 */
-func Getpulsarnonpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, opts ...Option) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "getPulsarNonPersistentTopics", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Getpulsarnonpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, opts ...Option) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "getPulsarNonPersistentTopics", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics", pulsarId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)

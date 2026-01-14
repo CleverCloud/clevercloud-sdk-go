@@ -4,7 +4,7 @@ package models
 
 // NetworkGroupConfig
 type NetworkGroupConfig struct {
-	NetworkGroup NetworkGroup `json:"networkGroup"`
+	NetworkGroup NetworkGroup1 `json:"networkGroup"`
 }
 
 // isConfiguration implements Configuration

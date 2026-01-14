@@ -6,7 +6,7 @@ package models
 type WannabeNetworkGroup struct {
 	Description *string                     `json:"description,omitempty"`
 	ID          *string                     `json:"id,omitempty"`
-	Label       *string                     `json:"label,omitempty"`
+	Label       *StringMaxLength128         `json:"label,omitempty"`
 	Members     []WannabeNetworkgroupMember `json:"members,omitempty"`
 	Tags        []string                    `json:"tags,omitempty"`
 }

@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Renewpulsartoken(ctx, client, tracer, addonId)
+	response := pulsar.Renewpulsartoken(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: renewPulsarToken
 */
-func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Pulsar] {
-	ctx, span := tracer.Start(ctx, "renewPulsarToken", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+	ctx, span := tracer.Start(ctx, "renewPulsarToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/renew-biscuit", addonId)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/renew-biscuit", pulsarId)
 
 	// Make API call
 	response := client.Patch[models.Pulsar](ctx, c, path, nil)

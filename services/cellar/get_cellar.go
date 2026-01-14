@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - CellarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Getcellar(ctx, client, tracer, addonId)
+	response := cellar.Getcellar(ctx, client, tracer, CellarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +35,14 @@ Example:
 x-service: cellar
 operationId: getCellar
 */
-func Getcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Cellar] {
-	ctx, span := tracer.Start(ctx, "getCellar", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Getcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, CellarId string) client.Response[models.Cellar1] {
+	ctx, span := tracer.Start(ctx, "getCellar", trace.WithAttributes(attribute.String("CellarId", CellarId)))
 	defer span.End()
 
-	path := utils.Path("/v4/providers/addon-cellar/%s", addonId)
+	path := utils.Path("/v4/providers/addon-cellar/%s", CellarId)
 
 	// Make API call
-	response := client.Get[models.Cellar](ctx, c, path)
+	response := client.Get[models.Cellar1](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -4,13 +4,13 @@ package models
 
 // NodeGroupCreationPayload
 type NodeGroupCreationPayload struct {
-	Description     *string    `json:"description,omitempty"`
-	Flavor          NodeFlavor `json:"flavor"`
-	Labels          *MapString `json:"labels,omitempty"`
-	MaxNodeCount    int        `json:"maxNodeCount"`
-	MinNodeCount    int        `json:"minNodeCount"`
-	Name            string     `json:"name"`
-	Tag             *string    `json:"tag,omitempty"`
-	Taints          string     `json:"taints"`
-	TargetNodeCount int        `json:"targetNodeCount"`
+	Description     *StringMaxLength4096 `json:"description,omitempty"`
+	Flavor          NodeFlavor           `json:"flavor"`
+	Labels          *MapString           `json:"labels,omitempty"`
+	MaxNodeCount    *int                 `json:"maxNodeCount,omitempty"`
+	MinNodeCount    *int                 `json:"minNodeCount,omitempty"`
+	Name            DnsDomainNameRfc1123 `json:"name"`
+	Tag             *StringMaxLength1024 `json:"tag,omitempty"`
+	Taints          *string              `json:"taints,omitempty"`
+	TargetNodeCount int                  `json:"targetNodeCount"`
 }

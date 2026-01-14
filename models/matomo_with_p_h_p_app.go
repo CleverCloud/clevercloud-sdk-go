@@ -4,7 +4,7 @@ package models
 
 // MatomoWithPHPApp
 type MatomoWithPHPApp struct {
-	AddonID  AddonID `json:"addonId"`
+	AddonID  string  `json:"addonId"`
 	OwnerID  OwnerID `json:"ownerId"`
 	PhpAppID string  `json:"phpAppId"`
 }

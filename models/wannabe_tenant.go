@@ -4,5 +4,5 @@ package models
 
 // WannabeTenant
 type WannabeTenant struct {
-	Label string `json:"label"`
+	Name StringMaxLength128 `json:"name"`
 }

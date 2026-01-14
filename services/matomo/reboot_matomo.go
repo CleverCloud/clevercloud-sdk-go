@@ -13,6 +13,8 @@ import (
 /*
 Rebootmatomo
 
+reboot Matomo application
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client

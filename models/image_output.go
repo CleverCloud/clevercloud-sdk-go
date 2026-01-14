@@ -4,8 +4,8 @@ package models
 
 // ImageOutput
 type ImageOutput struct {
-	ID       string           `json:"id"`
-	Label    string           `json:"label"`
-	Packages []ExherboPackage `json:"packages,omitempty"`
-	Tags     []string         `json:"tags,omitempty"`
+	ID       string             `json:"id"`
+	Name     StringMaxLength128 `json:"name"`
+	Packages []ExherboPackage   `json:"packages,omitempty"`
+	Tags     []string           `json:"tags,omitempty"`
 }

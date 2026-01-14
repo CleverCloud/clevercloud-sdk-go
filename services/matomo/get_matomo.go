@@ -14,6 +14,8 @@ import (
 /*
 Getmatomo
 
+get a Matomo
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client

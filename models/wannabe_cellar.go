@@ -4,10 +4,9 @@ package models
 
 // WannabeCellar
 type WannabeCellar struct {
-	AuthorID          *string    `json:"author_id,omitempty"`
-	ClusterID         string     `json:"cluster_id"`
-	DependencyOfAddon *AddonID   `json:"dependency_of_addon,omitempty"`
-	Options           MapString  `json:"options"`
-	OwnerID           OwnerID    `json:"owner_id"`
-	Plan              CellarPlan `json:"plan"`
+	AuthorID  *string    `json:"authorId,omitempty"`
+	ClusterID string     `json:"clusterId"`
+	Options   MapString  `json:"options"`
+	OwnerID   OwnerID    `json:"ownerId"`
+	Plan      CellarPlan `json:"plan"`
 }

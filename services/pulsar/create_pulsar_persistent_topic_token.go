@@ -19,14 +19,14 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
   - topic:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Createpulsarpersistenttopictoken(ctx, client, tracer, addonId, topic)
+	response := pulsar.Createpulsarpersistenttopictoken(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: createPulsarPersistentTopicToken
 */
-func Createpulsarpersistenttopictoken(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, topic string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "createPulsarPersistentTopicToken", trace.WithAttributes(attribute.String("addonId", addonId), attribute.String("topic", topic)))
+func Createpulsarpersistenttopictoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "createPulsarPersistentTopicToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics/%s/token", addonId, topic)
+	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics/%s/token", pulsarId, topic)
 
 	// Make API call
 	response := client.Post[client.Nothing](ctx, c, path, nil)

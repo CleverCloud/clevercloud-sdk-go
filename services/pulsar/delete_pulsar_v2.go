@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - pulsarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Deletepulsarv2(ctx, client, tracer, addonId)
+	response := pulsar.Deletepulsarv2(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: pulsar
 operationId: deletePulsarV2
 */
-func Deletepulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Pulsar] {
-	ctx, span := tracer.Start(ctx, "deletePulsarV2", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletepulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+	ctx, span := tracer.Start(ctx, "deletePulsarV2", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-pulsar/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-pulsar/resources/%s", pulsarId)
 
 	// Make API call
 	response := client.Delete[models.Pulsar](ctx, c, path)

@@ -8,14 +8,14 @@ import "time"
 type Pulsar struct {
 	AskForDeletionDate        *time.Time   `json:"ask_for_deletion_date,omitempty"`
 	ClusterID                 string       `json:"cluster_id"`
-	ColdStorageID             *AddonID     `json:"cold_storage_id,omitempty"`
+	ColdStorageID             *string      `json:"cold_storage_id,omitempty"`
 	ColdStorageLinked         bool         `json:"cold_storage_linked"`
 	ColdStorageMustBeProvided bool         `json:"cold_storage_must_be_provided"`
 	CreationDate              time.Time    `json:"creation_date"`
 	DeletionDate              *time.Time   `json:"deletion_date,omitempty"`
-	ID                        AddonID      `json:"id"`
+	ID                        string       `json:"id"`
 	Namespace                 string       `json:"namespace"`
-	OwnerID                   OwnerID      `json:"owner_id"`
+	OwnerID                   string       `json:"owner_id"`
 	Plan                      PulsarPlan   `json:"plan"`
 	Status                    PulsarStatus `json:"status"`
 	Tenant                    string       `json:"tenant"`

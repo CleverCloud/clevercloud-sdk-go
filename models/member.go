@@ -4,10 +4,10 @@ package models
 
 // Member
 type Member struct {
-	DomainName string     `json:"domainName"`
-	ID         string     `json:"id"`
-	Kind       MemberKind `json:"kind"`
-	Label      string     `json:"label"`
+	DomainName string             `json:"domainName"`
+	ID         string             `json:"id"`
+	Kind       MemberKind         `json:"kind"`
+	Label      StringMaxLength128 `json:"label"`
 }
 
 // isNetworkGroupComponent implements NetworkGroupComponent

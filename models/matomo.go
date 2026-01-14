@@ -12,7 +12,7 @@ type Matomo struct {
 	OwnerID           OwnerID         `json:"ownerId"`
 	PhpVersion        string          `json:"phpVersion"`
 	Plan              MatomoPlan      `json:"plan"`
-	ResourceID        AddonID         `json:"resourceId"`
+	ResourceID        string          `json:"resourceId"`
 	Resources         MatomoResources `json:"resources"`
 	Version           string          `json:"version"`
 }

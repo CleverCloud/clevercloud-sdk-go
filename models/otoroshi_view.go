@@ -6,10 +6,10 @@ package models
 type OtoroshiView struct {
 	API                OtoroshiApi       `json:"api"`
 	AccessURL          string            `json:"accessUrl"`
+	AddonID            string            `json:"addonId"`
 	AvailableVersions  []string          `json:"availableVersions,omitempty"`
 	EnvVars            MapString         `json:"envVars"`
 	Features           OtoroshiFeatures  `json:"features"`
-	ID                 string            `json:"id"`
 	InitialCredentials BasicCredentials  `json:"initialCredentials"`
 	JavaVersion        string            `json:"javaVersion"`
 	Name               string            `json:"name"`

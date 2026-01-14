@@ -6,19 +6,19 @@ import "time"
 
 // NodeGroupView
 type NodeGroupView struct {
-	ClusterID        string              `json:"clusterId"`
-	CreatedAt        time.Time           `json:"createdAt"`
-	CurrentNodeCount int                 `json:"currentNodeCount"`
-	Description      *string             `json:"description,omitempty"`
-	Flavor           NodeFlavor          `json:"flavor"`
-	ID               string              `json:"id"`
-	Labels           MapString           `json:"labels"`
-	MaxNodeCount     int                 `json:"maxNodeCount"`
-	MinNodeCount     int                 `json:"minNodeCount"`
-	Name             string              `json:"name"`
-	Status           NodeGroupStatusType `json:"status"`
-	Tag              *string             `json:"tag,omitempty"`
-	Taints           string              `json:"taints"`
-	TargetNodeCount  int                 `json:"targetNodeCount"`
-	UpdatedAt        *time.Time          `json:"updatedAt,omitempty"`
+	ClusterID        string               `json:"clusterId"`
+	CreatedAt        time.Time            `json:"createdAt"`
+	CurrentNodeCount int                  `json:"currentNodeCount"`
+	Description      *StringMaxLength4096 `json:"description,omitempty"`
+	Flavor           NodeFlavor           `json:"flavor"`
+	ID               string               `json:"id"`
+	Labels           MapString            `json:"labels"`
+	MaxNodeCount     int                  `json:"maxNodeCount"`
+	MinNodeCount     int                  `json:"minNodeCount"`
+	Name             DnsDomainNameRfc1123 `json:"name"`
+	Status           NodeGroupStatusType  `json:"status"`
+	Tag              *StringMaxLength1024 `json:"tag,omitempty"`
+	Taints           string               `json:"taints"`
+	TargetNodeCount  int                  `json:"targetNodeCount"`
+	UpdatedAt        *time.Time           `json:"updatedAt,omitempty"`
 }

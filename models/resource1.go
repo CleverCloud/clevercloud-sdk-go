@@ -4,14 +4,9 @@ package models
 
 // Resource1
 type Resource1 struct {
-	Consumption Consumption        `json:"consumption"`
-	Description string             `json:"description"`
-	ID          ResourceID         `json:"id"`
-	Kind        IdentifiedKind     `json:"kind"`
-	Label       string             `json:"label"`
-	ProductID   string             `json:"productId"`
-	Statuses    []IdentifiedStatus `json:"statuses,omitempty"`
-	Tags        []string           `json:"tags,omitempty"`
-	TenantID    TenantID           `json:"tenantId"`
-	Version     string             `json:"version"`
+	Kind string `json:"kind"`
+	Name string `json:"name"`
 }
+
+// isHTTPErrorContext implements HTTPErrorContext
+func (r Resource1) isHTTPErrorContext() {}

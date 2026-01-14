@@ -34,7 +34,7 @@ Example:
 x-service: pulsar
 operationId: createPulsarV4
 */
-func Createpulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeAddon) client.Response[models.Pulsar] {
+func Createpulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabePulsar) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "createPulsarV4")
 	defer span.End()
 

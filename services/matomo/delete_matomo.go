@@ -13,6 +13,8 @@ import (
 /*
 Deletematomo
 
+deprovision an existing Matomo
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
