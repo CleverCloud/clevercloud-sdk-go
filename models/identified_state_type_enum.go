@@ -15,3 +15,8 @@ const (
 	IdentifiedStateTypeSoftDeleted IdentifiedStateType = "SOFT_DELETED"
 	IdentifiedStateTypeVALIDATED   IdentifiedStateType = "VALIDATED"
 )
+
+// String returns the underlying string value
+func (e IdentifiedStateType) String() string {
+	return string(e)
+}

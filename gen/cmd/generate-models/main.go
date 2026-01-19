@@ -395,11 +395,27 @@ func processMapSchema(name string, schema Schema, additionalPropertiesSchema Sch
 }
 
 func processEnumSchema(name string, schema Schema) (*ModelStruct, error) {
+	// Determine the enum's base type from the schema
+	enumType := "string" // Default to string
+	schemaTypes := getSchemaType(schema)
+	if len(schemaTypes) > 0 {
+		switch schemaTypes[0] {
+		case "integer":
+			enumType = "int"
+		case "number":
+			enumType = "float64"
+		case "boolean":
+			enumType = "bool"
+		case "string":
+			enumType = "string"
+		}
+	}
+
 	model := &ModelStruct{
 		Name:       toGoStructName(name),
 		Comment:    formatComment(getSchemaDescription(schema)),
 		IsEnum:     true,
-		EnumType:   "string", // Most enums are string-based
+		EnumType:   enumType,
 		EnumValues: getSchemaEnum(schema),
 	}
 
@@ -798,11 +814,42 @@ func generateSingleEnumFile(enum ModelStruct, packageData *PackageData, outputDi
 		defs = append(defs, Id(enum.Name+toPascalCase(value)).Id(enum.Name).Op("=").Lit(value))
 	}
 	f.Const().Defs(defs...)
+	f.Line()
+
+	// Generate method to convert to native type
+	methodName, returnType := getEnumMethodName(enum.EnumType)
+	f.Comment(fmt.Sprintf("%s returns the underlying %s value", methodName, enum.EnumType))
+	f.Func().Params(Id("e").Id(enum.Name)).Id(methodName).Params().Id(returnType).Block(
+		Return(Id(returnType).Parens(Id("e"))),
+	)
 
 	// Write to individual file
 	fileName := generateFileName(enum.Name, "_enum.go")
 	outputFile := filepath.Join(outputDir, fileName)
 	return f.Save(outputFile)
+}
+
+// getEnumMethodName returns the method name and return type for an enum's native type conversion
+func getEnumMethodName(enumType string) (methodName string, returnType string) {
+	switch enumType {
+	case "string":
+		return "String", "string"
+	case "int":
+		return "Int", "int"
+	case "int32":
+		return "Int32", "int32"
+	case "int64":
+		return "Int64", "int64"
+	case "float32":
+		return "Float32", "float32"
+	case "float64":
+		return "Float64", "float64"
+	case "bool":
+		return "Bool", "bool"
+	default:
+		// Default to String for unknown types
+		return "String", enumType
+	}
 }
 
 func generateSingleTypeAliasFile(alias ModelStruct, packageData *PackageData, outputDir string) error {

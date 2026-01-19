@@ -12,3 +12,8 @@ const (
 	FunctionDeploymentStatusREADY            FunctionDeploymentStatus = "READY"
 	FunctionDeploymentStatusWaitingForUpload FunctionDeploymentStatus = "WAITING_FOR_UPLOAD"
 )
+
+// String returns the underlying string value
+func (e FunctionDeploymentStatus) String() string {
+	return string(e)
+}

@@ -9,3 +9,8 @@ const (
 	StorageKindNetworkFileSystem StorageKind = "NETWORK_FILE_SYSTEM"
 	StorageKindRemoteBlockDevice StorageKind = "REMOTE_BLOCK_DEVICE"
 )
+
+// String returns the underlying string value
+func (e StorageKind) String() string {
+	return string(e)
+}

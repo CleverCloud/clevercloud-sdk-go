@@ -9,3 +9,8 @@ const (
 	WriteActionTypeCREATE WriteActionType = "CREATE"
 	WriteActionTypeDELETE WriteActionType = "DELETE"
 )
+
+// String returns the underlying string value
+func (e WriteActionType) String() string {
+	return string(e)
+}

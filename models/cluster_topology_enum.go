@@ -10,3 +10,8 @@ const (
 	ClusterTopologyDedicatedCompute ClusterTopology = "DEDICATED_COMPUTE"
 	ClusterTopologyDISTRIBUTED      ClusterTopology = "DISTRIBUTED"
 )
+
+// String returns the underlying string value
+func (e ClusterTopology) String() string {
+	return string(e)
+}

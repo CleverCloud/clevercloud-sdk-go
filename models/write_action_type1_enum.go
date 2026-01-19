@@ -14,3 +14,8 @@ const (
 	WriteActionType1UNREGISTER WriteActionType1 = "UNREGISTER"
 	WriteActionType1UPDATE     WriteActionType1 = "UPDATE"
 )
+
+// String returns the underlying string value
+func (e WriteActionType1) String() string {
+	return string(e)
+}

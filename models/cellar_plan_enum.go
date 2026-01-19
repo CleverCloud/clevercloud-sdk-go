@@ -11,3 +11,8 @@ const (
 	CellarPlanOrganisationLogs   CellarPlan = "ORGANISATION_LOGS"
 	CellarPlanS                  CellarPlan = "S"
 )
+
+// String returns the underlying string value
+func (e CellarPlan) String() string {
+	return string(e)
+}

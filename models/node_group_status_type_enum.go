@@ -15,3 +15,8 @@ const (
 	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
 	NodeGroupStatusTypeTERMINATING NodeGroupStatusType = "TERMINATING"
 )
+
+// String returns the underlying string value
+func (e NodeGroupStatusType) String() string {
+	return string(e)
+}

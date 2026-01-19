@@ -9,3 +9,8 @@ const (
 	TLSModeDEFAULT  TLSMode = "DEFAULT"
 	TLSModeTRUSTFUL TLSMode = "TRUSTFUL"
 )
+
+// String returns the underlying string value
+func (e TLSMode) String() string {
+	return string(e)
+}

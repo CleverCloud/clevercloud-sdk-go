@@ -8,3 +8,8 @@ type MatomoPlan string
 const (
 	MatomoPlanBETA MatomoPlan = "BETA"
 )
+
+// String returns the underlying string value
+func (e MatomoPlan) String() string {
+	return string(e)
+}

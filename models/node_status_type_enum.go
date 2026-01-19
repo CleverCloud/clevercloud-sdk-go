@@ -12,3 +12,8 @@ const (
 	NodeStatusTypeFAILED    NodeStatusType = "FAILED"
 	NodeStatusTypeREADY     NodeStatusType = "READY"
 )
+
+// String returns the underlying string value
+func (e NodeStatusType) String() string {
+	return string(e)
+}

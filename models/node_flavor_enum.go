@@ -12,3 +12,8 @@ const (
 	NodeFlavorL  NodeFlavor = "l"
 	NodeFlavorXl NodeFlavor = "xl"
 )
+
+// String returns the underlying string value
+func (e NodeFlavor) String() string {
+	return string(e)
+}

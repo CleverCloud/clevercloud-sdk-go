@@ -8,6 +8,7 @@ import "time"
 type TokenCreatedResponse struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	ExpiresAt    time.Time `json:"expiresAt"`
+	ID           string    `json:"id"`
 	RevocationID string    `json:"revocationId"`
 	Scope        string    `json:"scope"`
 	TTL          string    `json:"ttl"`

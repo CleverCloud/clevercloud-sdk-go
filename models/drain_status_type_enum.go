@@ -13,3 +13,8 @@ const (
 	DrainStatusTypeENABLED   DrainStatusType = "ENABLED"
 	DrainStatusTypeENABLING  DrainStatusType = "ENABLING"
 )
+
+// String returns the underlying string value
+func (e DrainStatusType) String() string {
+	return string(e)
+}

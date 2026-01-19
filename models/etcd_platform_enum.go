@@ -6,5 +6,11 @@ package models
 type EtcdPlatform string
 
 const (
-	EtcdPlatformSTAGING EtcdPlatform = "STAGING"
+	EtcdPlatformProdBenchmark EtcdPlatform = "PROD_BENCHMARK"
+	EtcdPlatformSTAGING       EtcdPlatform = "STAGING"
 )
+
+// String returns the underlying string value
+func (e EtcdPlatform) String() string {
+	return string(e)
+}

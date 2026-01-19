@@ -9,3 +9,8 @@ const (
 	PeerKindCLEVER   PeerKind = "CLEVER"
 	PeerKindEXTERNAL PeerKind = "EXTERNAL"
 )
+
+// String returns the underlying string value
+func (e PeerKind) String() string {
+	return string(e)
+}

@@ -12,3 +12,8 @@ const (
 	WriteActionType2UNFREEZE WriteActionType2 = "UNFREEZE"
 	WriteActionType2UPDATE   WriteActionType2 = "UPDATE"
 )
+
+// String returns the underlying string value
+func (e WriteActionType2) String() string {
+	return string(e)
+}

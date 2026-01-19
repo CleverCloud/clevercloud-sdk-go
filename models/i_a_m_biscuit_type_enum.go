@@ -11,3 +11,8 @@ const (
 	IAMBiscuitTypeSERVICE  IAMBiscuitType = "SERVICE"
 	IAMBiscuitTypeUSER     IAMBiscuitType = "USER"
 )
+
+// String returns the underlying string value
+func (e IAMBiscuitType) String() string {
+	return string(e)
+}

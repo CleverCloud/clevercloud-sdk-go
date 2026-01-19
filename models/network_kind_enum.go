@@ -12,3 +12,8 @@ const (
 	NetworkKindVirtualPrivateCloud NetworkKind = "VIRTUAL_PRIVATE_CLOUD"
 	NetworkKindWireGuard           NetworkKind = "WIRE_GUARD"
 )
+
+// String returns the underlying string value
+func (e NetworkKind) String() string {
+	return string(e)
+}

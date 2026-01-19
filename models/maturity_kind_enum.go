@@ -12,3 +12,8 @@ const (
 	MaturityKindReleaseCandidate    MaturityKind = "RELEASE_CANDIDATE"
 	MaturityKindTechPreview         MaturityKind = "TECH_PREVIEW"
 )
+
+// String returns the underlying string value
+func (e MaturityKind) String() string {
+	return string(e)
+}

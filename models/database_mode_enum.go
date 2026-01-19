@@ -9,3 +9,8 @@ const (
 	DatabaseModeReadOnly DatabaseMode = "READ_ONLY"
 	DatabaseModeWRITABLE DatabaseMode = "WRITABLE"
 )
+
+// String returns the underlying string value
+func (e DatabaseMode) String() string {
+	return string(e)
+}

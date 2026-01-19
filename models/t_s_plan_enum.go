@@ -9,3 +9,8 @@ const (
 	TSPlanBASE TSPlan = "BASE"
 	TSPlanBETA TSPlan = "BETA"
 )
+
+// String returns the underlying string value
+func (e TSPlan) String() string {
+	return string(e)
+}

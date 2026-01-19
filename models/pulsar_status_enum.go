@@ -12,3 +12,8 @@ const (
 	PulsarStatusNamespaceDeleted   PulsarStatus = "NAMESPACE_DELETED"
 	PulsarStatusToDelete           PulsarStatus = "TO_DELETE"
 )
+
+// String returns the underlying string value
+func (e PulsarStatus) String() string {
+	return string(e)
+}

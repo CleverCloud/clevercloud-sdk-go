@@ -42,3 +42,8 @@ const (
 	IdentifiedKindTENANT               IdentifiedKind = "TENANT"
 	IdentifiedKindVM                   IdentifiedKind = "VM"
 )
+
+// String returns the underlying string value
+func (e IdentifiedKind) String() string {
+	return string(e)
+}

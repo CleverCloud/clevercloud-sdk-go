@@ -10,3 +10,8 @@ const (
 	KeycloakPlanBASE  KeycloakPlan = "BASE"
 	KeycloakPlanBETA  KeycloakPlan = "BETA"
 )
+
+// String returns the underlying string value
+func (e KeycloakPlan) String() string {
+	return string(e)
+}

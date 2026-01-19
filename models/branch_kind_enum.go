@@ -10,3 +10,8 @@ const (
 	BranchKindRegionalOffice BranchKind = "RegionalOffice"
 	BranchKindSubsidiary     BranchKind = "Subsidiary"
 )
+
+// String returns the underlying string value
+func (e BranchKind) String() string {
+	return string(e)
+}

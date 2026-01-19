@@ -11,3 +11,8 @@ const (
 	FunctionPlatformRUST           FunctionPlatform = "RUST"
 	FunctionPlatformTinyGo         FunctionPlatform = "TINY_GO"
 )
+
+// String returns the underlying string value
+func (e FunctionPlatform) String() string {
+	return string(e)
+}

@@ -12,3 +12,8 @@ const (
 	PulsarPlanOrganisationAuditLogs  PulsarPlan = "ORGANISATION_AUDIT_LOGS"
 	PulsarPlanOrganisationLogs       PulsarPlan = "ORGANISATION_LOGS"
 )
+
+// String returns the underlying string value
+func (e PulsarPlan) String() string {
+	return string(e)
+}

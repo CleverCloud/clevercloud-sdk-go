@@ -10,3 +10,8 @@ const (
 	OtoroshiPlanBASE  OtoroshiPlan = "BASE"
 	OtoroshiPlanBETA  OtoroshiPlan = "BETA"
 )
+
+// String returns the underlying string value
+func (e OtoroshiPlan) String() string {
+	return string(e)
+}

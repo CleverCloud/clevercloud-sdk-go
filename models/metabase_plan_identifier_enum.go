@@ -10,3 +10,8 @@ const (
 	MetabasePlanIdentifierBASE  MetabasePlanIdentifier = "BASE"
 	MetabasePlanIdentifierBETA  MetabasePlanIdentifier = "BETA"
 )
+
+// String returns the underlying string value
+func (e MetabasePlanIdentifier) String() string {
+	return string(e)
+}

@@ -12,3 +12,8 @@ const (
 	StatusPROVISIONING Status = "PROVISIONING"
 	StatusToDelete     Status = "TO_DELETE"
 )
+
+// String returns the underlying string value
+func (e Status) String() string {
+	return string(e)
+}

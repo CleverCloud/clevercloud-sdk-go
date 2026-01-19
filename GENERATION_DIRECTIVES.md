@@ -123,7 +123,21 @@ const (
     {EnumName}{Value2} {EnumName} = "{value2}"
     // ...
 )
+
+// {MethodName} returns the underlying {baseType} value
+func (e {EnumName}) {MethodName}() {BaseType} {
+    return {BaseType}(e)
+}
 ```
+
+**Note**: Chaque enum génère une méthode pour récupérer sa valeur native:
+- `string` → méthode `String()` (implémente `fmt.Stringer`)
+- `int` → méthode `Int()`
+- `int32` → méthode `Int32()`
+- `int64` → méthode `Int64()`
+- `float32` → méthode `Float32()`
+- `float64` → méthode `Float64()`
+- `bool` → méthode `Bool()`
 
 ### 6. Gestion des x-service
 

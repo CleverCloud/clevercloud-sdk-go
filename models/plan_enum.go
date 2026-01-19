@@ -9,3 +9,8 @@ const (
 	PlanALPHA Plan = "ALPHA"
 	PlanBASE  Plan = "BASE"
 )
+
+// String returns the underlying string value
+func (e Plan) String() string {
+	return string(e)
+}

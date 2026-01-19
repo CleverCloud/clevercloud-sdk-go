@@ -53,3 +53,8 @@ const (
 	DNSRecordTypeURI        DNSRecordType = "URI"
 	DNSRecordTypeZONEMD     DNSRecordType = "ZONEMD"
 )
+
+// String returns the underlying string value
+func (e DNSRecordType) String() string {
+	return string(e)
+}

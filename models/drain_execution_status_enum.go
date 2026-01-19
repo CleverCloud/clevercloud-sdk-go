@@ -10,3 +10,8 @@ const (
 	DrainExecutionStatusRETRYING   DrainExecutionStatus = "RETRYING"
 	DrainExecutionStatusRUNNING    DrainExecutionStatus = "RUNNING"
 )
+
+// String returns the underlying string value
+func (e DrainExecutionStatus) String() string {
+	return string(e)
+}

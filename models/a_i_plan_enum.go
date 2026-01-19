@@ -10,3 +10,8 @@ const (
 	AIPlanBASE  AIPlan = "BASE"
 	AIPlanBETA  AIPlan = "BETA"
 )
+
+// String returns the underlying string value
+func (e AIPlan) String() string {
+	return string(e)
+}

@@ -11,3 +11,8 @@ const (
 	MemberKindEXTERNAL     MemberKind = "EXTERNAL"
 	MemberKindLOADBALANCER MemberKind = "LOADBALANCER"
 )
+
+// String returns the underlying string value
+func (e MemberKind) String() string {
+	return string(e)
+}

@@ -9,3 +9,8 @@ const (
 	AddonPlanIdentifierBASE AddonPlanIdentifier = "BASE"
 	AddonPlanIdentifierBETA AddonPlanIdentifier = "BETA"
 )
+
+// String returns the underlying string value
+func (e AddonPlanIdentifier) String() string {
+	return string(e)
+}

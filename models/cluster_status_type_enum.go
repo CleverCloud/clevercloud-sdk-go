@@ -13,3 +13,8 @@ const (
 	ClusterStatusTypeFAILED      ClusterStatusType = "FAILED"
 	ClusterStatusTypeREDEPLOYING ClusterStatusType = "REDEPLOYING"
 )
+
+// String returns the underlying string value
+func (e ClusterStatusType) String() string {
+	return string(e)
+}

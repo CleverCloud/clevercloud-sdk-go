@@ -10,3 +10,8 @@ const (
 	KubeMinorVersion_1Dot34 KubeMinorVersion = "1.34"
 	KubeMinorVersion_1Dot35 KubeMinorVersion = "1.35"
 )
+
+// String returns the underlying string value
+func (e KubeMinorVersion) String() string {
+	return string(e)
+}

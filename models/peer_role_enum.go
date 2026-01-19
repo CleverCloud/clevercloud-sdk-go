@@ -9,3 +9,8 @@ const (
 	PeerRoleCLIENT PeerRole = "CLIENT"
 	PeerRoleSERVER PeerRole = "SERVER"
 )
+
+// String returns the underlying string value
+func (e PeerRole) String() string {
+	return string(e)
+}

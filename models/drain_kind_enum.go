@@ -10,3 +10,8 @@ const (
 	DrainKindAUDITLOG  DrainKind = "AUDITLOG"
 	DrainKindLOG       DrainKind = "LOG"
 )
+
+// String returns the underlying string value
+func (e DrainKind) String() string {
+	return string(e)
+}

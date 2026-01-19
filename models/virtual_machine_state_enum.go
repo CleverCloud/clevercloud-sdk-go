@@ -21,3 +21,8 @@ const (
 	VirtualMachineStateMigrationInProgress VirtualMachineState = "migration_in_progress"
 	VirtualMachineStateRebooting           VirtualMachineState = "rebooting"
 )
+
+// String returns the underlying string value
+func (e VirtualMachineState) String() string {
+	return string(e)
+}

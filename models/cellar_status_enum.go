@@ -10,3 +10,8 @@ const (
 	CellarStatusDELETED  CellarStatus = "DELETED"
 	CellarStatusToDelete CellarStatus = "TO_DELETE"
 )
+
+// String returns the underlying string value
+func (e CellarStatus) String() string {
+	return string(e)
+}

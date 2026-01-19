@@ -9,3 +9,8 @@ const (
 	IAMBiscuitStatusACTIVE  IAMBiscuitStatus = "ACTIVE"
 	IAMBiscuitStatusREVOKED IAMBiscuitStatus = "REVOKED"
 )
+
+// String returns the underlying string value
+func (e IAMBiscuitStatus) String() string {
+	return string(e)
+}

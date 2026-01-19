@@ -14,8 +14,8 @@ type CleverPeer struct {
 	PublicKey    string            `json:"publicKey"`
 }
 
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r CleverPeer) isNetworkGroupComponent() {}
-
 // isPeer implements Peer
 func (r CleverPeer) isPeer() {}
+
+// isNetworkGroupComponent implements NetworkGroupComponent
+func (r CleverPeer) isNetworkGroupComponent() {}

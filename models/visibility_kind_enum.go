@@ -9,3 +9,8 @@ const (
 	VisibilityKindPRIVATE VisibilityKind = "PRIVATE"
 	VisibilityKindPUBLIC  VisibilityKind = "PUBLIC"
 )
+
+// String returns the underlying string value
+func (e VisibilityKind) String() string {
+	return string(e)
+}

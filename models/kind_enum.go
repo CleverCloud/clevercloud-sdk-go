@@ -8,3 +8,8 @@ type Kind string
 const (
 	KindKV Kind = "KV"
 )
+
+// String returns the underlying string value
+func (e Kind) String() string {
+	return string(e)
+}
