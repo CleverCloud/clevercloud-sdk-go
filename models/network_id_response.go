@@ -4,5 +4,5 @@ package models
 
 // NetworkIdResponse
 type NetworkIdResponse struct {
-	NetworkID string `json:"networkId"`
+	NetworkID NetworkId `json:"networkId"`
 }

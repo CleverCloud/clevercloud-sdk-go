@@ -2,8 +2,15 @@
 
 package models
 
+import "time"
+
 // DrainExecution
 type DrainExecution struct {
-	LastError *string              `json:"lastError,omitempty"`
-	Status    DrainExecutionStatus `json:"status"`
+	Attempt       *int                 `json:"attempt,omitempty"`
+	LastAttemptAt *time.Time           `json:"lastAttemptAt,omitempty"`
+	LastError     *string              `json:"lastError,omitempty"`
+	MaxAttempt    *int                 `json:"maxAttempt,omitempty"`
+	NextAttemptAt *time.Time           `json:"nextAttemptAt,omitempty"`
+	RetryingSince *time.Time           `json:"retryingSince,omitempty"`
+	Status        DrainExecutionStatus `json:"status"`
 }

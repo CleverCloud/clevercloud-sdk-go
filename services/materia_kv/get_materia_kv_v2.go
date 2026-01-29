@@ -20,13 +20,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - resourceId:
+  - kvId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := materia_kv.Getmateriakvv2(ctx, client, tracer, resourceId)
+	response := materia_kv.Getmateriakvv2(ctx, client, tracer, kvId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +35,11 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKvV2
 */
-func Getmateriakvv2(ctx context.Context, c *client.Client, tracer trace.Tracer, resourceId string) client.Response[models.MateriaDB1] {
-	ctx, span := tracer.Start(ctx, "getMateriaKvV2", trace.WithAttributes(attribute.String("resourceId", resourceId)))
+func Getmateriakvv2(ctx context.Context, c *client.Client, tracer trace.Tracer, kvId string) client.Response[models.MateriaDB1] {
+	ctx, span := tracer.Start(ctx, "getMateriaKvV2", trace.WithAttributes(attribute.String("kvId", kvId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/kv/resources/%s", resourceId)
+	path := utils.Path("/v2/providers/kv/resources/%s", kvId)
 
 	// Make API call
 	response := client.Get[models.MateriaDB1](ctx, c, path)
