@@ -2,9 +2,17 @@
 
 package models
 
+const MillivCPUMaxLimitType = "MillivCPUMaxLimit"
+
 // MillivCPUMaxLimit
 type MillivCPUMaxLimit struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for MillivCPUMaxLimit
+func (r MillivCPUMaxLimit) GetType() string {
+	return MillivCPUMaxLimitType
 }
 
 // isQuotaItem implements QuotaItem

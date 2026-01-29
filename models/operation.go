@@ -2,12 +2,20 @@
 
 package models
 
+const OperationType = "operation"
+
 // Operation
 type Operation struct {
 	Kind      string  `json:"kind"`
 	Name      *string `json:"name,omitempty"`
 	Operation string  `json:"operation"`
+	Type      string  `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Operation) isHTTPErrorContext() {}
+// GetType returns the type identifier for Operation
+func (r Operation) GetType() string {
+	return OperationType
+}
+
+// isTyped implements Typed
+func (r Operation) isTyped() {}

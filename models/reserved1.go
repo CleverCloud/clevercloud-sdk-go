@@ -2,9 +2,17 @@
 
 package models
 
+const Reserved1Status = "Reserved"
+
 // Reserved1
 type Reserved1 struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
+	Status     string             `json:"status"`
+}
+
+// GetType returns the type identifier for Reserved1
+func (r Reserved1) GetType() string {
+	return Reserved1Status
 }
 
 // isVMDeploymentStatus implements VMDeploymentStatus

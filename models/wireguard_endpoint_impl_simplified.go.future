@@ -1,0 +1,99 @@
+// Manual implementation for WireguardEndpoint union type
+// This file is NOT generated and should be maintained manually
+//
+// VERSION SIMPLIFIÉE - À utiliser après régénération des modèles avec le champ Type
+// Renommer en wireguard_endpoint_impl.go après régénération
+
+package models
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// GetType returns the type discriminator for ClientEndpoint
+func (c ClientEndpoint) GetType() string {
+	if c.Type == "" {
+		return "ClientEndpoint" // Fallback pour rétrocompatibilité
+	}
+	return c.Type
+}
+
+// GetType returns the type discriminator for ServerEndpoint
+func (s ServerEndpoint) GetType() string {
+	if s.Type == "" {
+		return "ServerEndpoint" // Fallback pour rétrocompatibilité
+	}
+	return s.Type
+}
+
+// WireguardEndpointUnion is a wrapper type that implements json.Marshaler and json.Unmarshaler
+// for the WireguardEndpoint interface union type.
+type WireguardEndpointUnion struct {
+	Endpoint WireguardEndpoint
+}
+
+// NewWireguardEndpointUnion creates a new WireguardEndpointUnion wrapping the given WireguardEndpoint
+func NewWireguardEndpointUnion(e WireguardEndpoint) WireguardEndpointUnion {
+	return WireguardEndpointUnion{Endpoint: e}
+}
+
+// MarshalJSON implements json.Marshaler for WireguardEndpointUnion
+func (w WireguardEndpointUnion) MarshalJSON() ([]byte, error) {
+	if w.Endpoint == nil {
+		return []byte("null"), nil
+	}
+	// Les types concrets ont maintenant le champ Type, pas besoin de MarshalJSON custom
+	return json.Marshal(w.Endpoint)
+}
+
+// UnmarshalJSON implements json.Unmarshaler for WireguardEndpointUnion
+// SIMPLIFIÉ - unmarshalling direct sans structures auxiliaires
+func (w *WireguardEndpointUnion) UnmarshalJSON(data []byte) error {
+	// Handle null
+	if string(data) == "null" {
+		w.Endpoint = nil
+		return nil
+	}
+
+	// Déterminer le type via le discriminateur
+	var envelope struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &envelope); err != nil {
+		return fmt.Errorf("failed to unmarshal wireguard endpoint envelope: %w", err)
+	}
+
+	switch envelope.Type {
+	case "ClientEndpoint":
+		// Unmarshalling direct
+		var clientEndpoint ClientEndpoint
+		if err := json.Unmarshal(data, &clientEndpoint); err != nil {
+			return fmt.Errorf("failed to unmarshal ClientEndpoint: %w", err)
+		}
+		w.Endpoint = clientEndpoint
+		return nil
+
+	case "ServerEndpoint":
+		// Unmarshalling direct
+		var serverEndpoint ServerEndpoint
+		if err := json.Unmarshal(data, &serverEndpoint); err != nil {
+			return fmt.Errorf("failed to unmarshal ServerEndpoint: %w", err)
+		}
+		w.Endpoint = serverEndpoint
+		return nil
+
+	default:
+		return fmt.Errorf("unknown wireguard endpoint type: %s", envelope.Type)
+	}
+}
+
+// UnmarshalWireguardEndpointJSON is a convenience function for backwards compatibility
+// Prefer using WireguardEndpointUnion with json.Unmarshal directly
+func UnmarshalWireguardEndpointJSON(data []byte) (WireguardEndpoint, error) {
+	var w WireguardEndpointUnion
+	if err := json.Unmarshal(data, &w); err != nil {
+		return nil, err
+	}
+	return w.Endpoint, nil
+}

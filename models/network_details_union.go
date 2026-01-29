@@ -3,7 +3,7 @@
 package models
 
 // NetworkDetails
-// Union type - can be one of: NetworkGroup
+// Union type - can be one of: NetworkGroupEnum
 type NetworkDetails interface {
 	isNetworkDetails()
 	GetType() string

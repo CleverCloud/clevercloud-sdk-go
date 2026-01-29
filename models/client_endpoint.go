@@ -2,9 +2,17 @@
 
 package models
 
+const ClientEndpointType = "ClientEndpoint"
+
 // ClientEndpoint
 type ClientEndpoint struct {
 	NgIP string `json:"ngIp"`
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for ClientEndpoint
+func (r ClientEndpoint) GetType() string {
+	return ClientEndpointType
 }
 
 // isWireguardEndpoint implements WireguardEndpoint

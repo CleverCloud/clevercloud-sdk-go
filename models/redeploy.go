@@ -2,8 +2,17 @@
 
 package models
 
+const RedeployType = "Redeploy"
+
 // Redeploy
-type Redeploy struct{}
+type Redeploy struct {
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for Redeploy
+func (r Redeploy) GetType() string {
+	return RedeployType
+}
 
 // isRedeployPayload implements RedeployPayload
 func (r Redeploy) isRedeployPayload() {}

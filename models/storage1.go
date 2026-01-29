@@ -4,11 +4,11 @@ package models
 
 // Storage1
 type Storage1 struct {
-	Configuration StorageConfiguration `json:"configuration"`
-	ID            string               `json:"id"`
-	Kind          StorageKind          `json:"kind"`
-	Label         string               `json:"label"`
-	Statuses      []IdentifiedStatus   `json:"statuses,omitempty"`
-	Tags          []string             `json:"tags,omitempty"`
-	TenantID      TenantID             `json:"tenantId"`
+	Configuration StorageConfiguration      `json:"configuration"`
+	ID            string                    `json:"id"`
+	Kind          StorageKind               `json:"kind"`
+	Label         string                    `json:"label"`
+	Statuses      []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags          []string                  `json:"tags,omitempty"`
+	TenantID      TenantID                  `json:"tenantId"`
 }

@@ -27,6 +27,7 @@ import (
 	postgresql "go.clever-cloud.dev/sdk/services/postgresql"
 	pulsar "go.clever-cloud.dev/sdk/services/pulsar"
 	storage "go.clever-cloud.dev/sdk/services/storage"
+	tokens "go.clever-cloud.dev/sdk/services/tokens"
 	warp10token "go.clever-cloud.dev/sdk/services/warp10_token"
 	zone "go.clever-cloud.dev/sdk/services/zone"
 )
@@ -154,7 +155,7 @@ func (b *v2ProvidersAddonAiBuilderImpl) Resources() V2ProvidersAddonAiResourcesB
 
 // V2ProvidersAddonAiResourcesBuilder provides access to operations
 type V2ProvidersAddonAiResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonAiResourcesAddonidBuilder
+	Aiid(aiid string) V2ProvidersAddonAiResourcesAiidBuilder
 	Createai(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -168,9 +169,9 @@ func newV2ProvidersAddonAiResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonAiResou
 	return &v2ProvidersAddonAiResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonAiResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonAiResourcesAddonidBuilder {
-	return newV2ProvidersAddonAiResourcesAddonidBuilder(b.sdk, addonid)
+// Aiid returns builder for aiid
+func (b *v2ProvidersAddonAiResourcesBuilderImpl) Aiid(aiid string) V2ProvidersAddonAiResourcesAiidBuilder {
+	return newV2ProvidersAddonAiResourcesAiidBuilder(b.sdk, aiid)
 }
 
 // Createai calls ai.Createai
@@ -178,28 +179,28 @@ func (b *v2ProvidersAddonAiResourcesBuilderImpl) Createai(ctx context.Context, r
 	return ai.Createai(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonAiResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonAiResourcesAddonidBuilder interface {
+// V2ProvidersAddonAiResourcesAiidBuilder provides access to operations
+type V2ProvidersAddonAiResourcesAiidBuilder interface {
 	Deleteai(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonAiResourcesAddonidBuilderImpl implements V2ProvidersAddonAiResourcesAddonidBuilder
-type v2ProvidersAddonAiResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonAiResourcesAiidBuilderImpl implements V2ProvidersAddonAiResourcesAiidBuilder
+type v2ProvidersAddonAiResourcesAiidBuilderImpl struct {
+	sdk  *sdkImpl
+	aiid string
 }
 
-// newV2ProvidersAddonAiResourcesAddonidBuilder creates a new V2ProvidersAddonAiResourcesAddonidBuilder
-func newV2ProvidersAddonAiResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonAiResourcesAddonidBuilder {
-	return &v2ProvidersAddonAiResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonAiResourcesAiidBuilder creates a new V2ProvidersAddonAiResourcesAiidBuilder
+func newV2ProvidersAddonAiResourcesAiidBuilder(sdk *sdkImpl, aiid string) V2ProvidersAddonAiResourcesAiidBuilder {
+	return &v2ProvidersAddonAiResourcesAiidBuilderImpl{
+		aiid: aiid,
+		sdk:  sdk,
 	}
 }
 
 // Deleteai calls ai.Deleteai
-func (b *v2ProvidersAddonAiResourcesAddonidBuilderImpl) Deleteai(ctx context.Context) client.Response[client.Nothing] {
-	return ai.Deleteai(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonAiResourcesAiidBuilderImpl) Deleteai(ctx context.Context) client.Response[client.Nothing] {
+	return ai.Deleteai(ctx, b.sdk.Client(), b.sdk.Tracer(), b.aiid)
 }
 
 // V2ProvidersAddonCellarBuilder provides access to operations
@@ -254,7 +255,7 @@ func (b *v2ProvidersAddonCellarAddonidBuilderImpl) Deletecellarv2(ctx context.Co
 
 // V2ProvidersAddonCellarResourcesBuilder provides access to operations
 type V2ProvidersAddonCellarResourcesBuilder interface {
-	Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar1]
+	Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar]
 }
 
 // v2ProvidersAddonCellarResourcesBuilderImpl implements V2ProvidersAddonCellarResourcesBuilder
@@ -268,7 +269,7 @@ func newV2ProvidersAddonCellarResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonCel
 }
 
 // Createcellar calls cellar.Createcellar
-func (b *v2ProvidersAddonCellarResourcesBuilderImpl) Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar1] {
+func (b *v2ProvidersAddonCellarResourcesBuilderImpl) Createcellar(ctx context.Context, request *models.WannabeCellar) client.Response[models.Cellar] {
 	return cellar.Createcellar(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -294,7 +295,7 @@ func (b *v2ProvidersAddonCumulocityBuilderImpl) Resources() V2ProvidersAddonCumu
 
 // V2ProvidersAddonCumulocityResourcesBuilder provides access to operations
 type V2ProvidersAddonCumulocityResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonCumulocityResourcesAddonidBuilder
+	Addoncumulocityid(addoncumulocityid string) V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder
 	Createcumulocity(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -308,9 +309,9 @@ func newV2ProvidersAddonCumulocityResourcesBuilder(sdk *sdkImpl) V2ProvidersAddo
 	return &v2ProvidersAddonCumulocityResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonCumulocityResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonCumulocityResourcesAddonidBuilder {
-	return newV2ProvidersAddonCumulocityResourcesAddonidBuilder(b.sdk, addonid)
+// Addoncumulocityid returns builder for addoncumulocityid
+func (b *v2ProvidersAddonCumulocityResourcesBuilderImpl) Addoncumulocityid(addoncumulocityid string) V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder {
+	return newV2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder(b.sdk, addoncumulocityid)
 }
 
 // Createcumulocity calls cumulocity.Createcumulocity
@@ -318,28 +319,28 @@ func (b *v2ProvidersAddonCumulocityResourcesBuilderImpl) Createcumulocity(ctx co
 	return cumulocity.Createcumulocity(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonCumulocityResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonCumulocityResourcesAddonidBuilder interface {
+// V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder provides access to operations
+type V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder interface {
 	Deletecumulocity(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonCumulocityResourcesAddonidBuilderImpl implements V2ProvidersAddonCumulocityResourcesAddonidBuilder
-type v2ProvidersAddonCumulocityResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilderImpl implements V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder
+type v2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilderImpl struct {
+	sdk               *sdkImpl
+	addoncumulocityid string
 }
 
-// newV2ProvidersAddonCumulocityResourcesAddonidBuilder creates a new V2ProvidersAddonCumulocityResourcesAddonidBuilder
-func newV2ProvidersAddonCumulocityResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonCumulocityResourcesAddonidBuilder {
-	return &v2ProvidersAddonCumulocityResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder creates a new V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder
+func newV2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder(sdk *sdkImpl, addoncumulocityid string) V2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilder {
+	return &v2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilderImpl{
+		addoncumulocityid: addoncumulocityid,
+		sdk:               sdk,
 	}
 }
 
 // Deletecumulocity calls cumulocity.Deletecumulocity
-func (b *v2ProvidersAddonCumulocityResourcesAddonidBuilderImpl) Deletecumulocity(ctx context.Context) client.Response[client.Nothing] {
-	return cumulocity.Deletecumulocity(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonCumulocityResourcesAddoncumulocityidBuilderImpl) Deletecumulocity(ctx context.Context) client.Response[client.Nothing] {
+	return cumulocity.Deletecumulocity(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addoncumulocityid)
 }
 
 // V2ProvidersAddonKeycloakBuilder provides access to operations
@@ -364,7 +365,7 @@ func (b *v2ProvidersAddonKeycloakBuilderImpl) Resources() V2ProvidersAddonKeyclo
 
 // V2ProvidersAddonKeycloakResourcesBuilder provides access to operations
 type V2ProvidersAddonKeycloakResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonKeycloakResourcesAddonidBuilder
+	Addonkeycloakid(addonkeycloakid string) V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder
 	Createkeycloak(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -378,9 +379,9 @@ func newV2ProvidersAddonKeycloakResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonK
 	return &v2ProvidersAddonKeycloakResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonKeycloakResourcesAddonidBuilder {
-	return newV2ProvidersAddonKeycloakResourcesAddonidBuilder(b.sdk, addonid)
+// Addonkeycloakid returns builder for addonkeycloakid
+func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Addonkeycloakid(addonkeycloakid string) V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder {
+	return newV2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder(b.sdk, addonkeycloakid)
 }
 
 // Createkeycloak calls keycloak.Createkeycloak
@@ -388,28 +389,28 @@ func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Createkeycloak(ctx contex
 	return keycloak.Createkeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonKeycloakResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonKeycloakResourcesAddonidBuilder interface {
+// V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder provides access to operations
+type V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder interface {
 	Deletekeycloak(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonKeycloakResourcesAddonidBuilderImpl implements V2ProvidersAddonKeycloakResourcesAddonidBuilder
-type v2ProvidersAddonKeycloakResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilderImpl implements V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder
+type v2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilderImpl struct {
+	sdk             *sdkImpl
+	addonkeycloakid string
 }
 
-// newV2ProvidersAddonKeycloakResourcesAddonidBuilder creates a new V2ProvidersAddonKeycloakResourcesAddonidBuilder
-func newV2ProvidersAddonKeycloakResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonKeycloakResourcesAddonidBuilder {
-	return &v2ProvidersAddonKeycloakResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder creates a new V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder
+func newV2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder(sdk *sdkImpl, addonkeycloakid string) V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder {
+	return &v2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilderImpl{
+		addonkeycloakid: addonkeycloakid,
+		sdk:             sdk,
 	}
 }
 
 // Deletekeycloak calls keycloak.Deletekeycloak
-func (b *v2ProvidersAddonKeycloakResourcesAddonidBuilderImpl) Deletekeycloak(ctx context.Context) client.Response[client.Nothing] {
-	return keycloak.Deletekeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilderImpl) Deletekeycloak(ctx context.Context) client.Response[client.Nothing] {
+	return keycloak.Deletekeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V2ProvidersAddonMatomoBuilder provides access to operations
@@ -434,7 +435,7 @@ func (b *v2ProvidersAddonMatomoBuilderImpl) Resources() V2ProvidersAddonMatomoRe
 
 // V2ProvidersAddonMatomoResourcesBuilder provides access to operations
 type V2ProvidersAddonMatomoResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonMatomoResourcesAddonidBuilder
+	Addonmatomoid(addonmatomoid string) V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder
 	Creatematomo(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -448,9 +449,9 @@ func newV2ProvidersAddonMatomoResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonMat
 	return &v2ProvidersAddonMatomoResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonMatomoResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonMatomoResourcesAddonidBuilder {
-	return newV2ProvidersAddonMatomoResourcesAddonidBuilder(b.sdk, addonid)
+// Addonmatomoid returns builder for addonmatomoid
+func (b *v2ProvidersAddonMatomoResourcesBuilderImpl) Addonmatomoid(addonmatomoid string) V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder {
+	return newV2ProvidersAddonMatomoResourcesAddonmatomoidBuilder(b.sdk, addonmatomoid)
 }
 
 // Creatematomo calls matomo.Creatematomo
@@ -458,28 +459,28 @@ func (b *v2ProvidersAddonMatomoResourcesBuilderImpl) Creatematomo(ctx context.Co
 	return matomo.Creatematomo(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonMatomoResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonMatomoResourcesAddonidBuilder interface {
+// V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder provides access to operations
+type V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder interface {
 	Deletematomo(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonMatomoResourcesAddonidBuilderImpl implements V2ProvidersAddonMatomoResourcesAddonidBuilder
-type v2ProvidersAddonMatomoResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonMatomoResourcesAddonmatomoidBuilderImpl implements V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder
+type v2ProvidersAddonMatomoResourcesAddonmatomoidBuilderImpl struct {
+	sdk           *sdkImpl
+	addonmatomoid string
 }
 
-// newV2ProvidersAddonMatomoResourcesAddonidBuilder creates a new V2ProvidersAddonMatomoResourcesAddonidBuilder
-func newV2ProvidersAddonMatomoResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonMatomoResourcesAddonidBuilder {
-	return &v2ProvidersAddonMatomoResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonMatomoResourcesAddonmatomoidBuilder creates a new V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder
+func newV2ProvidersAddonMatomoResourcesAddonmatomoidBuilder(sdk *sdkImpl, addonmatomoid string) V2ProvidersAddonMatomoResourcesAddonmatomoidBuilder {
+	return &v2ProvidersAddonMatomoResourcesAddonmatomoidBuilderImpl{
+		addonmatomoid: addonmatomoid,
+		sdk:           sdk,
 	}
 }
 
 // Deletematomo calls matomo.Deletematomo
-func (b *v2ProvidersAddonMatomoResourcesAddonidBuilderImpl) Deletematomo(ctx context.Context) client.Response[client.Nothing] {
-	return matomo.Deletematomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonMatomoResourcesAddonmatomoidBuilderImpl) Deletematomo(ctx context.Context) client.Response[client.Nothing] {
+	return matomo.Deletematomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
 }
 
 // V2ProvidersAddonMetabaseBuilder provides access to operations
@@ -504,7 +505,7 @@ func (b *v2ProvidersAddonMetabaseBuilderImpl) Resources() V2ProvidersAddonMetaba
 
 // V2ProvidersAddonMetabaseResourcesBuilder provides access to operations
 type V2ProvidersAddonMetabaseResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonMetabaseResourcesAddonidBuilder
+	Addonmetabaseid(addonmetabaseid string) V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder
 	Createmetabase(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -518,9 +519,9 @@ func newV2ProvidersAddonMetabaseResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonM
 	return &v2ProvidersAddonMetabaseResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonMetabaseResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonMetabaseResourcesAddonidBuilder {
-	return newV2ProvidersAddonMetabaseResourcesAddonidBuilder(b.sdk, addonid)
+// Addonmetabaseid returns builder for addonmetabaseid
+func (b *v2ProvidersAddonMetabaseResourcesBuilderImpl) Addonmetabaseid(addonmetabaseid string) V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder {
+	return newV2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder(b.sdk, addonmetabaseid)
 }
 
 // Createmetabase calls metabase.Createmetabase
@@ -528,28 +529,28 @@ func (b *v2ProvidersAddonMetabaseResourcesBuilderImpl) Createmetabase(ctx contex
 	return metabase.Createmetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonMetabaseResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonMetabaseResourcesAddonidBuilder interface {
+// V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder provides access to operations
+type V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder interface {
 	Deletemetabase(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonMetabaseResourcesAddonidBuilderImpl implements V2ProvidersAddonMetabaseResourcesAddonidBuilder
-type v2ProvidersAddonMetabaseResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilderImpl implements V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder
+type v2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilderImpl struct {
+	sdk             *sdkImpl
+	addonmetabaseid string
 }
 
-// newV2ProvidersAddonMetabaseResourcesAddonidBuilder creates a new V2ProvidersAddonMetabaseResourcesAddonidBuilder
-func newV2ProvidersAddonMetabaseResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonMetabaseResourcesAddonidBuilder {
-	return &v2ProvidersAddonMetabaseResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder creates a new V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder
+func newV2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder(sdk *sdkImpl, addonmetabaseid string) V2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilder {
+	return &v2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilderImpl{
+		addonmetabaseid: addonmetabaseid,
+		sdk:             sdk,
 	}
 }
 
 // Deletemetabase calls metabase.Deletemetabase
-func (b *v2ProvidersAddonMetabaseResourcesAddonidBuilderImpl) Deletemetabase(ctx context.Context) client.Response[client.Nothing] {
-	return metabase.Deletemetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonMetabaseResourcesAddonmetabaseidBuilderImpl) Deletemetabase(ctx context.Context) client.Response[client.Nothing] {
+	return metabase.Deletemetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
 }
 
 // V2ProvidersAddonOtoroshiBuilder provides access to operations
@@ -776,7 +777,7 @@ func (b *v2ProvidersAddonTsBuilderImpl) Resources() V2ProvidersAddonTsResourcesB
 
 // V2ProvidersAddonTsResourcesBuilder provides access to operations
 type V2ProvidersAddonTsResourcesBuilder interface {
-	Addonid(addonid string) V2ProvidersAddonTsResourcesAddonidBuilder
+	Addontsid(addontsid string) V2ProvidersAddonTsResourcesAddontsidBuilder
 	Createmateriats(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -790,9 +791,9 @@ func newV2ProvidersAddonTsResourcesBuilder(sdk *sdkImpl) V2ProvidersAddonTsResou
 	return &v2ProvidersAddonTsResourcesBuilderImpl{sdk: sdk}
 }
 
-// Addonid returns builder for addonid
-func (b *v2ProvidersAddonTsResourcesBuilderImpl) Addonid(addonid string) V2ProvidersAddonTsResourcesAddonidBuilder {
-	return newV2ProvidersAddonTsResourcesAddonidBuilder(b.sdk, addonid)
+// Addontsid returns builder for addontsid
+func (b *v2ProvidersAddonTsResourcesBuilderImpl) Addontsid(addontsid string) V2ProvidersAddonTsResourcesAddontsidBuilder {
+	return newV2ProvidersAddonTsResourcesAddontsidBuilder(b.sdk, addontsid)
 }
 
 // Createmateriats calls materia_timeseries.Createmateriats
@@ -800,28 +801,28 @@ func (b *v2ProvidersAddonTsResourcesBuilderImpl) Createmateriats(ctx context.Con
 	return materiatimeseries.Createmateriats(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersAddonTsResourcesAddonidBuilder provides access to operations
-type V2ProvidersAddonTsResourcesAddonidBuilder interface {
+// V2ProvidersAddonTsResourcesAddontsidBuilder provides access to operations
+type V2ProvidersAddonTsResourcesAddontsidBuilder interface {
 	Deletemateriats(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v2ProvidersAddonTsResourcesAddonidBuilderImpl implements V2ProvidersAddonTsResourcesAddonidBuilder
-type v2ProvidersAddonTsResourcesAddonidBuilderImpl struct {
-	sdk     *sdkImpl
-	addonid string
+// v2ProvidersAddonTsResourcesAddontsidBuilderImpl implements V2ProvidersAddonTsResourcesAddontsidBuilder
+type v2ProvidersAddonTsResourcesAddontsidBuilderImpl struct {
+	sdk       *sdkImpl
+	addontsid string
 }
 
-// newV2ProvidersAddonTsResourcesAddonidBuilder creates a new V2ProvidersAddonTsResourcesAddonidBuilder
-func newV2ProvidersAddonTsResourcesAddonidBuilder(sdk *sdkImpl, addonid string) V2ProvidersAddonTsResourcesAddonidBuilder {
-	return &v2ProvidersAddonTsResourcesAddonidBuilderImpl{
-		addonid: addonid,
-		sdk:     sdk,
+// newV2ProvidersAddonTsResourcesAddontsidBuilder creates a new V2ProvidersAddonTsResourcesAddontsidBuilder
+func newV2ProvidersAddonTsResourcesAddontsidBuilder(sdk *sdkImpl, addontsid string) V2ProvidersAddonTsResourcesAddontsidBuilder {
+	return &v2ProvidersAddonTsResourcesAddontsidBuilderImpl{
+		addontsid: addontsid,
+		sdk:       sdk,
 	}
 }
 
 // Deletemateriats calls materia_timeseries.Deletemateriats
-func (b *v2ProvidersAddonTsResourcesAddonidBuilderImpl) Deletemateriats(ctx context.Context) client.Response[client.Nothing] {
-	return materiatimeseries.Deletemateriats(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+func (b *v2ProvidersAddonTsResourcesAddontsidBuilderImpl) Deletemateriats(ctx context.Context) client.Response[client.Nothing] {
+	return materiatimeseries.Deletemateriats(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addontsid)
 }
 
 // V2ProvidersConfigProviderBuilder provides access to operations
@@ -922,7 +923,7 @@ func (b *v2ProvidersKvBuilderImpl) Resources() V2ProvidersKvResourcesBuilder {
 
 // V2ProvidersKvResourcesBuilder provides access to operations
 type V2ProvidersKvResourcesBuilder interface {
-	Resourceid(resourceid string) V2ProvidersKvResourcesResourceidBuilder
+	Kvid(kvid string) V2ProvidersKvResourcesKvidBuilder
 	Createmateriakv(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
@@ -936,9 +937,9 @@ func newV2ProvidersKvResourcesBuilder(sdk *sdkImpl) V2ProvidersKvResourcesBuilde
 	return &v2ProvidersKvResourcesBuilderImpl{sdk: sdk}
 }
 
-// Resourceid returns builder for resourceid
-func (b *v2ProvidersKvResourcesBuilderImpl) Resourceid(resourceid string) V2ProvidersKvResourcesResourceidBuilder {
-	return newV2ProvidersKvResourcesResourceidBuilder(b.sdk, resourceid)
+// Kvid returns builder for kvid
+func (b *v2ProvidersKvResourcesBuilderImpl) Kvid(kvid string) V2ProvidersKvResourcesKvidBuilder {
+	return newV2ProvidersKvResourcesKvidBuilder(b.sdk, kvid)
 }
 
 // Createmateriakv calls materia_kv.Createmateriakv
@@ -946,34 +947,34 @@ func (b *v2ProvidersKvResourcesBuilderImpl) Createmateriakv(ctx context.Context,
 	return materiakv.Createmateriakv(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
-// V2ProvidersKvResourcesResourceidBuilder provides access to operations
-type V2ProvidersKvResourcesResourceidBuilder interface {
+// V2ProvidersKvResourcesKvidBuilder provides access to operations
+type V2ProvidersKvResourcesKvidBuilder interface {
 	Deletemateriakvv2(ctx context.Context) client.Response[client.Nothing]
 	Getmateriakvv2(ctx context.Context) client.Response[models.MateriaDB1]
 }
 
-// v2ProvidersKvResourcesResourceidBuilderImpl implements V2ProvidersKvResourcesResourceidBuilder
-type v2ProvidersKvResourcesResourceidBuilderImpl struct {
-	sdk        *sdkImpl
-	resourceid string
+// v2ProvidersKvResourcesKvidBuilderImpl implements V2ProvidersKvResourcesKvidBuilder
+type v2ProvidersKvResourcesKvidBuilderImpl struct {
+	sdk  *sdkImpl
+	kvid string
 }
 
-// newV2ProvidersKvResourcesResourceidBuilder creates a new V2ProvidersKvResourcesResourceidBuilder
-func newV2ProvidersKvResourcesResourceidBuilder(sdk *sdkImpl, resourceid string) V2ProvidersKvResourcesResourceidBuilder {
-	return &v2ProvidersKvResourcesResourceidBuilderImpl{
-		resourceid: resourceid,
-		sdk:        sdk,
+// newV2ProvidersKvResourcesKvidBuilder creates a new V2ProvidersKvResourcesKvidBuilder
+func newV2ProvidersKvResourcesKvidBuilder(sdk *sdkImpl, kvid string) V2ProvidersKvResourcesKvidBuilder {
+	return &v2ProvidersKvResourcesKvidBuilderImpl{
+		kvid: kvid,
+		sdk:  sdk,
 	}
 }
 
 // Deletemateriakvv2 calls materia_kv.Deletemateriakvv2
-func (b *v2ProvidersKvResourcesResourceidBuilderImpl) Deletemateriakvv2(ctx context.Context) client.Response[client.Nothing] {
-	return materiakv.Deletemateriakvv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.resourceid)
+func (b *v2ProvidersKvResourcesKvidBuilderImpl) Deletemateriakvv2(ctx context.Context) client.Response[client.Nothing] {
+	return materiakv.Deletemateriakvv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kvid)
 }
 
 // Getmateriakvv2 calls materia_kv.Getmateriakvv2
-func (b *v2ProvidersKvResourcesResourceidBuilderImpl) Getmateriakvv2(ctx context.Context) client.Response[models.MateriaDB1] {
-	return materiakv.Getmateriakvv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.resourceid)
+func (b *v2ProvidersKvResourcesKvidBuilderImpl) Getmateriakvv2(ctx context.Context) client.Response[models.MateriaDB1] {
+	return materiakv.Getmateriakvv2(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kvid)
 }
 
 // V4Builder provides access to operations
@@ -1007,6 +1008,7 @@ type V4Builder interface {
 	Providers() V4ProvidersBuilder
 	Pulsar() V4PulsarBuilder
 	Tenants() V4TenantsBuilder
+	Tokens() V4TokensBuilder
 	Warp10Token() V4Warp10TokenBuilder
 }
 
@@ -1163,6 +1165,11 @@ func (b *v4BuilderImpl) Pulsar() V4PulsarBuilder {
 // Tenants returns Tenants builder
 func (b *v4BuilderImpl) Tenants() V4TenantsBuilder {
 	return newV4TenantsBuilder(b.sdk)
+}
+
+// Tokens returns Tokens builder
+func (b *v4BuilderImpl) Tokens() V4TokensBuilder {
+	return newV4TokensBuilder(b.sdk)
 }
 
 // Warp10Token returns Warp10Token builder
@@ -3066,7 +3073,7 @@ func (b *v4AddonProvidersAddonTsTokenBuilderImpl) Revocation() V4AddonProvidersA
 
 // V4AddonProvidersAddonTsTokenRevocationBuilder provides access to operations
 type V4AddonProvidersAddonTsTokenRevocationBuilder interface {
-	Getmateriatsrevocationlist(ctx context.Context, opts ...materiatimeseries.Option) client.Response[models.RevocationListResponse]
+	Getmateriatsrevocationlist(ctx context.Context, opts ...materiatimeseries.Option) client.Response[models.RevocationListResponse1]
 }
 
 // v4AddonProvidersAddonTsTokenRevocationBuilderImpl implements V4AddonProvidersAddonTsTokenRevocationBuilder
@@ -3080,7 +3087,7 @@ func newV4AddonProvidersAddonTsTokenRevocationBuilder(sdk *sdkImpl) V4AddonProvi
 }
 
 // Getmateriatsrevocationlist calls materia_timeseries.Getmateriatsrevocationlist
-func (b *v4AddonProvidersAddonTsTokenRevocationBuilderImpl) Getmateriatsrevocationlist(ctx context.Context, opts ...materiatimeseries.Option) client.Response[models.RevocationListResponse] {
+func (b *v4AddonProvidersAddonTsTokenRevocationBuilderImpl) Getmateriatsrevocationlist(ctx context.Context, opts ...materiatimeseries.Option) client.Response[models.RevocationListResponse1] {
 	return materiatimeseries.Getmateriatsrevocationlist(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
@@ -3648,6 +3655,7 @@ func (b *v4AiOrganisationsOwneridAiAiidProvidersBuilderImpl) Getproviderinfos(ct
 
 // V4CellarBuilder provides access to operations
 type V4CellarBuilder interface {
+	Clusters() V4CellarClustersBuilder
 	Organisations() V4CellarOrganisationsBuilder
 }
 
@@ -3661,9 +3669,82 @@ func newV4CellarBuilder(sdk *sdkImpl) V4CellarBuilder {
 	return &v4CellarBuilderImpl{sdk: sdk}
 }
 
+// Clusters returns Clusters builder
+func (b *v4CellarBuilderImpl) Clusters() V4CellarClustersBuilder {
+	return newV4CellarClustersBuilder(b.sdk)
+}
+
 // Organisations returns Organisations builder
 func (b *v4CellarBuilderImpl) Organisations() V4CellarOrganisationsBuilder {
 	return newV4CellarOrganisationsBuilder(b.sdk)
+}
+
+// V4CellarClustersBuilder provides access to operations
+type V4CellarClustersBuilder interface {
+	Clusterid(clusterid string) V4CellarClustersClusteridBuilder
+	Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ClusterView1]
+	Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.ClusterView1]
+}
+
+// v4CellarClustersBuilderImpl implements V4CellarClustersBuilder
+type v4CellarClustersBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4CellarClustersBuilder creates a new V4CellarClustersBuilder
+func newV4CellarClustersBuilder(sdk *sdkImpl) V4CellarClustersBuilder {
+	return &v4CellarClustersBuilderImpl{sdk: sdk}
+}
+
+// Clusterid returns builder for clusterid
+func (b *v4CellarClustersBuilderImpl) Clusterid(clusterid string) V4CellarClustersClusteridBuilder {
+	return newV4CellarClustersClusteridBuilder(b.sdk, clusterid)
+}
+
+// Listclusters calls cellar.Listclusters
+func (b *v4CellarClustersBuilderImpl) Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ClusterView1] {
+	return cellar.Listclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+}
+
+// Createcluster calls cellar.Createcluster
+func (b *v4CellarClustersBuilderImpl) Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.ClusterView1] {
+	return cellar.Createcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+}
+
+// V4CellarClustersClusteridBuilder provides access to operations
+type V4CellarClustersClusteridBuilder interface {
+	Deletecluster(ctx context.Context) client.Response[models.ClusterView1]
+	Getcluster(ctx context.Context) client.Response[models.ClusterView1]
+	Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.ClusterView1]
+}
+
+// v4CellarClustersClusteridBuilderImpl implements V4CellarClustersClusteridBuilder
+type v4CellarClustersClusteridBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterid string
+}
+
+// newV4CellarClustersClusteridBuilder creates a new V4CellarClustersClusteridBuilder
+func newV4CellarClustersClusteridBuilder(sdk *sdkImpl, clusterid string) V4CellarClustersClusteridBuilder {
+	return &v4CellarClustersClusteridBuilderImpl{
+		clusterid: clusterid,
+		sdk:       sdk,
+	}
+}
+
+// Deletecluster calls cellar.Deletecluster
+func (b *v4CellarClustersClusteridBuilderImpl) Deletecluster(ctx context.Context) client.Response[models.ClusterView1] {
+	return cellar.Deletecluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+}
+
+// Getcluster calls cellar.Getcluster
+func (b *v4CellarClustersClusteridBuilderImpl) Getcluster(ctx context.Context) client.Response[models.ClusterView1] {
+	return cellar.Getcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+}
+
+// Updatecluster calls cellar.Updatecluster
+func (b *v4CellarClustersClusteridBuilderImpl) Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.ClusterView1] {
+	return cellar.Updatecluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
 }
 
 // V4CellarOrganisationsBuilder provides access to operations
@@ -3739,7 +3820,7 @@ type V4CellarOrganisationsOwneridCellarCellaridBuilder interface {
 	Buckets() V4CellarOrganisationsOwneridCellarCellaridBucketsBuilder
 	Credentials() V4CellarOrganisationsOwneridCellarCellaridCredentialsBuilder
 	CredentialsCfg() V4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilder
-	Getcellarinfos(ctx context.Context) client.Response[models.Cellar]
+	Getcellarinfos(ctx context.Context) client.Response[models.Cellar1]
 }
 
 // v4CellarOrganisationsOwneridCellarCellaridBuilderImpl implements V4CellarOrganisationsOwneridCellarCellaridBuilder
@@ -3774,7 +3855,7 @@ func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) CredentialsCfg()
 }
 
 // Getcellarinfos calls cellar.Getcellarinfos
-func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Getcellarinfos(ctx context.Context) client.Response[models.Cellar] {
+func (b *v4CellarOrganisationsOwneridCellarCellaridBuilderImpl) Getcellarinfos(ctx context.Context) client.Response[models.Cellar1] {
 	return cellar.Getcellarinfos(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
 }
 
@@ -4420,7 +4501,7 @@ type V4DnsOrganisationsTenantidResourcesResourceidRecordsBuilder interface {
 	Type() V4DnsOrganisationsTenantidResourcesResourceidRecordsTypeBuilder
 	Deletednsrecordsforresource(ctx context.Context) client.Response[client.Nothing]
 	Getdnsrecordsforresource(ctx context.Context) client.Response[[]models.DnsRecord1]
-	Creatednsrecords(ctx context.Context) client.Response[[]models.ResourceIdResponse]
+	Creatednsrecords(ctx context.Context) client.Response[[]models.DnsRecordIdResponse]
 }
 
 // v4DnsOrganisationsTenantidResourcesResourceidRecordsBuilderImpl implements V4DnsOrganisationsTenantidResourcesResourceidRecordsBuilder
@@ -4460,7 +4541,7 @@ func (b *v4DnsOrganisationsTenantidResourcesResourceidRecordsBuilderImpl) Getdns
 }
 
 // Creatednsrecords calls dns.Creatednsrecords
-func (b *v4DnsOrganisationsTenantidResourcesResourceidRecordsBuilderImpl) Creatednsrecords(ctx context.Context) client.Response[[]models.ResourceIdResponse] {
+func (b *v4DnsOrganisationsTenantidResourcesResourceidRecordsBuilderImpl) Creatednsrecords(ctx context.Context) client.Response[[]models.DnsRecordIdResponse] {
 	return dns.Creatednsrecords(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.resourceid)
 }
 
@@ -5418,7 +5499,7 @@ func (b *v4IamOrganisationsOwneridIamBuilderImpl) Tokens() V4IamOrganisationsOwn
 
 // V4IamOrganisationsOwneridIamMateriaDbKvBuilder provides access to operations
 type V4IamOrganisationsOwneridIamMateriaDbKvBuilder interface {
-	Resourceid(resourceid string) V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder
+	Kvid(kvid string) V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder
 }
 
 // v4IamOrganisationsOwneridIamMateriaDbKvBuilderImpl implements V4IamOrganisationsOwneridIamMateriaDbKvBuilder
@@ -5435,61 +5516,61 @@ func newV4IamOrganisationsOwneridIamMateriaDbKvBuilder(sdk *sdkImpl, ownerid str
 	}
 }
 
-// Resourceid returns builder for resourceid
-func (b *v4IamOrganisationsOwneridIamMateriaDbKvBuilderImpl) Resourceid(resourceid string) V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder {
-	return newV4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder(b.sdk, b.ownerid, resourceid)
+// Kvid returns builder for kvid
+func (b *v4IamOrganisationsOwneridIamMateriaDbKvBuilderImpl) Kvid(kvid string) V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder {
+	return newV4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder(b.sdk, b.ownerid, kvid)
 }
 
-// V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder provides access to operations
-type V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder interface {
-	Tokens() V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder
+// V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder provides access to operations
+type V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder interface {
+	Tokens() V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder
 }
 
-// v4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilderImpl implements V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder
-type v4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilderImpl struct {
-	sdk        *sdkImpl
-	ownerid    string
-	resourceid string
+// v4IamOrganisationsOwneridIamMateriaDbKvKvidBuilderImpl implements V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder
+type v4IamOrganisationsOwneridIamMateriaDbKvKvidBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	kvid    string
 }
 
-// newV4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder creates a new V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder
-func newV4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder(sdk *sdkImpl, ownerid string, resourceid string) V4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilder {
-	return &v4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilderImpl{
-		ownerid:    ownerid,
-		resourceid: resourceid,
-		sdk:        sdk,
+// newV4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder creates a new V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder
+func newV4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder(sdk *sdkImpl, ownerid string, kvid string) V4IamOrganisationsOwneridIamMateriaDbKvKvidBuilder {
+	return &v4IamOrganisationsOwneridIamMateriaDbKvKvidBuilderImpl{
+		kvid:    kvid,
+		ownerid: ownerid,
+		sdk:     sdk,
 	}
 }
 
 // Tokens returns Tokens builder
-func (b *v4IamOrganisationsOwneridIamMateriaDbKvResourceidBuilderImpl) Tokens() V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder {
-	return newV4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder(b.sdk, b.ownerid, b.resourceid)
+func (b *v4IamOrganisationsOwneridIamMateriaDbKvKvidBuilderImpl) Tokens() V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder {
+	return newV4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder(b.sdk, b.ownerid, b.kvid)
 }
 
-// V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder provides access to operations
-type V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder interface {
+// V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder provides access to operations
+type V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder interface {
 	Createbiscuit(ctx context.Context, request *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView]
 }
 
-// v4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilderImpl implements V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder
-type v4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilderImpl struct {
-	sdk        *sdkImpl
-	ownerid    string
-	resourceid string
+// v4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilderImpl implements V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder
+type v4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	kvid    string
 }
 
-// newV4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder creates a new V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder
-func newV4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder(sdk *sdkImpl, ownerid string, resourceid string) V4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilder {
-	return &v4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilderImpl{
-		ownerid:    ownerid,
-		resourceid: resourceid,
-		sdk:        sdk,
+// newV4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder creates a new V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder
+func newV4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder(sdk *sdkImpl, ownerid string, kvid string) V4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilder {
+	return &v4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilderImpl{
+		kvid:    kvid,
+		ownerid: ownerid,
+		sdk:     sdk,
 	}
 }
 
 // Createbiscuit calls base.Createbiscuit
-func (b *v4IamOrganisationsOwneridIamMateriaDbKvResourceidTokensBuilderImpl) Createbiscuit(ctx context.Context, request *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView] {
-	return base.Createbiscuit(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.resourceid, request)
+func (b *v4IamOrganisationsOwneridIamMateriaDbKvKvidTokensBuilderImpl) Createbiscuit(ctx context.Context, request *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView] {
+	return base.Createbiscuit(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kvid, request)
 }
 
 // V4IamOrganisationsOwneridIamTokensBuilder provides access to operations
@@ -6324,7 +6405,7 @@ func (b *v4IPamOrganisationsTenantidAssignmentResourcesResourceidBuilderImpl) Ge
 
 // V4IPamOrganisationsTenantidAuditBuilder provides access to operations
 type V4IPamOrganisationsTenantidAuditBuilder interface {
-	Auditresourceid(auditresourceid string) V4IPamOrganisationsTenantidAuditAuditresourceidBuilder
+	Auditipamresourceid(auditipamresourceid string) V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder
 	Getauditsforowner(ctx context.Context) client.Response[[]models.IpamAudit1]
 }
 
@@ -6342,9 +6423,9 @@ func newV4IPamOrganisationsTenantidAuditBuilder(sdk *sdkImpl, tenantid string) V
 	}
 }
 
-// Auditresourceid returns builder for auditresourceid
-func (b *v4IPamOrganisationsTenantidAuditBuilderImpl) Auditresourceid(auditresourceid string) V4IPamOrganisationsTenantidAuditAuditresourceidBuilder {
-	return newV4IPamOrganisationsTenantidAuditAuditresourceidBuilder(b.sdk, b.tenantid, auditresourceid)
+// Auditipamresourceid returns builder for auditipamresourceid
+func (b *v4IPamOrganisationsTenantidAuditBuilderImpl) Auditipamresourceid(auditipamresourceid string) V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder {
+	return newV4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder(b.sdk, b.tenantid, auditipamresourceid)
 }
 
 // Getauditsforowner calls ipam.Getauditsforowner
@@ -6352,30 +6433,30 @@ func (b *v4IPamOrganisationsTenantidAuditBuilderImpl) Getauditsforowner(ctx cont
 	return ipam.Getauditsforowner(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid)
 }
 
-// V4IPamOrganisationsTenantidAuditAuditresourceidBuilder provides access to operations
-type V4IPamOrganisationsTenantidAuditAuditresourceidBuilder interface {
+// V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder provides access to operations
+type V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder interface {
 	Getipamauditsforresource(ctx context.Context) client.Response[[]models.IpamAudit1]
 }
 
-// v4IPamOrganisationsTenantidAuditAuditresourceidBuilderImpl implements V4IPamOrganisationsTenantidAuditAuditresourceidBuilder
-type v4IPamOrganisationsTenantidAuditAuditresourceidBuilderImpl struct {
-	sdk             *sdkImpl
-	tenantid        string
-	auditresourceid string
+// v4IPamOrganisationsTenantidAuditAuditipamresourceidBuilderImpl implements V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder
+type v4IPamOrganisationsTenantidAuditAuditipamresourceidBuilderImpl struct {
+	sdk                 *sdkImpl
+	tenantid            string
+	auditipamresourceid string
 }
 
-// newV4IPamOrganisationsTenantidAuditAuditresourceidBuilder creates a new V4IPamOrganisationsTenantidAuditAuditresourceidBuilder
-func newV4IPamOrganisationsTenantidAuditAuditresourceidBuilder(sdk *sdkImpl, tenantid string, auditresourceid string) V4IPamOrganisationsTenantidAuditAuditresourceidBuilder {
-	return &v4IPamOrganisationsTenantidAuditAuditresourceidBuilderImpl{
-		auditresourceid: auditresourceid,
-		sdk:             sdk,
-		tenantid:        tenantid,
+// newV4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder creates a new V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder
+func newV4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder(sdk *sdkImpl, tenantid string, auditipamresourceid string) V4IPamOrganisationsTenantidAuditAuditipamresourceidBuilder {
+	return &v4IPamOrganisationsTenantidAuditAuditipamresourceidBuilderImpl{
+		auditipamresourceid: auditipamresourceid,
+		sdk:                 sdk,
+		tenantid:            tenantid,
 	}
 }
 
 // Getipamauditsforresource calls ipam.Getipamauditsforresource
-func (b *v4IPamOrganisationsTenantidAuditAuditresourceidBuilderImpl) Getipamauditsforresource(ctx context.Context) client.Response[[]models.IpamAudit1] {
-	return ipam.Getipamauditsforresource(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.auditresourceid)
+func (b *v4IPamOrganisationsTenantidAuditAuditipamresourceidBuilderImpl) Getipamauditsforresource(ctx context.Context) client.Response[[]models.IpamAudit1] {
+	return ipam.Getipamauditsforresource(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.auditipamresourceid)
 }
 
 // V4IPamOrganisationsTenantidRegionsBuilder provides access to operations
@@ -7415,6 +7496,8 @@ func (b *v4KubernetesOrganisationsBuilderImpl) Ownerid(ownerid string) V4Kuberne
 // V4KubernetesOrganisationsOwneridBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridBuilder interface {
 	Clusters() V4KubernetesOrganisationsOwneridClustersBuilder
+	Kubernetes() V4KubernetesOrganisationsOwneridKubernetesBuilder
+	Usage() V4KubernetesOrganisationsOwneridUsageBuilder
 }
 
 // v4KubernetesOrganisationsOwneridBuilderImpl implements V4KubernetesOrganisationsOwneridBuilder
@@ -7436,11 +7519,21 @@ func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Clusters() V4KubernetesOrg
 	return newV4KubernetesOrganisationsOwneridClustersBuilder(b.sdk, b.ownerid)
 }
 
+// Kubernetes returns Kubernetes builder
+func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Kubernetes() V4KubernetesOrganisationsOwneridKubernetesBuilder {
+	return newV4KubernetesOrganisationsOwneridKubernetesBuilder(b.sdk, b.ownerid)
+}
+
+// Usage returns Usage builder
+func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Usage() V4KubernetesOrganisationsOwneridUsageBuilder {
+	return newV4KubernetesOrganisationsOwneridUsageBuilder(b.sdk, b.ownerid)
+}
+
 // V4KubernetesOrganisationsOwneridClustersBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersBuilder interface {
 	Clusterid(clusterid string) V4KubernetesOrganisationsOwneridClustersClusteridBuilder
-	Getclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView]
-	Createcluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView]
+	Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView]
+	Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersBuilderImpl implements V4KubernetesOrganisationsOwneridClustersBuilder
@@ -7462,14 +7555,14 @@ func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Clusterid(clusteri
 	return newV4KubernetesOrganisationsOwneridClustersClusteridBuilder(b.sdk, b.ownerid, clusterid)
 }
 
-// Getclusters calls kubernetes.Getclusters
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Getclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView] {
-	return kubernetes.Getclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+// Listkubernetesclusters calls kubernetes.Listkubernetesclusters
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView] {
+	return kubernetes.Listkubernetesclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
-// Createcluster calls kubernetes.Createcluster
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Createcluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView] {
-	return kubernetes.Createcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
+// Createkubernetescluster calls kubernetes.Createkubernetescluster
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView] {
+	return kubernetes.Createkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridBuilder provides access to operations
@@ -7481,8 +7574,8 @@ type V4KubernetesOrganisationsOwneridClustersClusteridBuilder interface {
 	Nodes() V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder
 	Redeploy() V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
 	Resume() V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder
-	Deletecluster(ctx context.Context) client.Response[models.ClusterView]
-	Getcluster(ctx context.Context) client.Response[models.ClusterView]
+	Deletekubernetescluster(ctx context.Context) client.Response[models.ClusterView]
+	Getkubernetescluster(ctx context.Context) client.Response[models.ClusterView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridBuilder
@@ -7536,14 +7629,14 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Resume() 
 	return newV4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder(b.sdk, b.ownerid, b.clusterid)
 }
 
-// Deletecluster calls kubernetes.Deletecluster
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Deletecluster(ctx context.Context) client.Response[models.ClusterView] {
-	return kubernetes.Deletecluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+// Deletekubernetescluster calls kubernetes.Deletekubernetescluster
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Deletekubernetescluster(ctx context.Context) client.Response[models.ClusterView] {
+	return kubernetes.Deletekubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
-// Getcluster calls kubernetes.Getcluster
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Getcluster(ctx context.Context) client.Response[models.ClusterView] {
-	return kubernetes.Getcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+// Getkubernetescluster calls kubernetes.Getkubernetescluster
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Getkubernetescluster(ctx context.Context) client.Response[models.ClusterView] {
+	return kubernetes.Getkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridCsiBuilder provides access to operations
@@ -7574,7 +7667,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiBuilderImpl) Ceph()
 
 // V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder interface {
-	Assigncephcsiplugin(ctx context.Context) client.Response[models.ClusterView]
+	Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.ClusterView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder
@@ -7593,9 +7686,9 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder(sdk *sdk
 	}
 }
 
-// Assigncephcsiplugin calls kubernetes.Assigncephcsiplugin
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl) Assigncephcsiplugin(ctx context.Context) client.Response[models.ClusterView] {
-	return kubernetes.Assigncephcsiplugin(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+// Assignkubernetescephcsiplugin calls kubernetes.Assignkubernetescephcsiplugin
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl) Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.ClusterView] {
+	return kubernetes.Assignkubernetescephcsiplugin(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridKubeconfigBuilder provides access to operations
@@ -7679,8 +7772,8 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridKubeconfigYAMLBuilderI
 // V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder interface {
 	Nodegroupid(nodegroupid string) V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilder
-	Getnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroupView]
-	Createnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView]
+	Listkubernetesnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroupView]
+	Createkubernetesnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilder
@@ -7704,21 +7797,22 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl)
 	return newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilder(b.sdk, b.ownerid, b.clusterid, nodegroupid)
 }
 
-// Getnodegroups calls kubernetes.Getnodegroups
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl) Getnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroupView] {
-	return kubernetes.Getnodegroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, opts...)
+// Listkubernetesnodegroups calls kubernetes.Listkubernetesnodegroups
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl) Listkubernetesnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroupView] {
+	return kubernetes.Listkubernetesnodegroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, opts...)
 }
 
-// Createnodegroup calls kubernetes.Createnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl) Createnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView] {
-	return kubernetes.Createnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
+// Createkubernetesnodegroup calls kubernetes.Createkubernetesnodegroup
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsBuilderImpl) Createkubernetesnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView] {
+	return kubernetes.Createkubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilder interface {
-	Deletenodegroup(ctx context.Context) client.Response[models.NodeGroupView]
-	Getnodegroup(ctx context.Context) client.Response[models.NodeGroupView]
-	Updatenodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView]
+	Resume() V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder
+	Deletekubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroupView]
+	Getkubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroupView]
+	Updatekubernetesnodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilder
@@ -7739,26 +7833,59 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBu
 	}
 }
 
-// Deletenodegroup calls kubernetes.Deletenodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Deletenodegroup(ctx context.Context) client.Response[models.NodeGroupView] {
-	return kubernetes.Deletenodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid)
+// Resume returns Resume builder
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Resume() V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder(b.sdk, b.ownerid, b.clusterid, b.nodegroupid)
 }
 
-// Getnodegroup calls kubernetes.Getnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Getnodegroup(ctx context.Context) client.Response[models.NodeGroupView] {
-	return kubernetes.Getnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid)
+// Deletekubernetesnodegroup calls kubernetes.Deletekubernetesnodegroup
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Deletekubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroupView] {
+	return kubernetes.Deletekubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid)
 }
 
-// Updatenodegroup calls kubernetes.Updatenodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Updatenodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView] {
-	return kubernetes.Updatenodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid, request)
+// Getkubernetesnodegroup calls kubernetes.Getkubernetesnodegroup
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Getkubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroupView] {
+	return kubernetes.Getkubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid)
+}
+
+// Updatekubernetesnodegroup calls kubernetes.Updatekubernetesnodegroup
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidBuilderImpl) Updatekubernetesnodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView] {
+	return kubernetes.Updatekubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid, request)
+}
+
+// V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder interface {
+	Triggerkubernetesnodegroupresume(ctx context.Context) client.Response[models.NodeGroupView]
+}
+
+// v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder
+type v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilderImpl struct {
+	sdk         *sdkImpl
+	ownerid     string
+	clusterid   string
+	nodegroupid string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder creates a new V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder
+func newV4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder(sdk *sdkImpl, ownerid string, clusterid string, nodegroupid string) V4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilderImpl{
+		clusterid:   clusterid,
+		nodegroupid: nodegroupid,
+		ownerid:     ownerid,
+		sdk:         sdk,
+	}
+}
+
+// Triggerkubernetesnodegroupresume calls kubernetes.Triggerkubernetesnodegroupresume
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodeGroupsNodegroupidResumeBuilderImpl) Triggerkubernetesnodegroupresume(ctx context.Context) client.Response[models.NodeGroupView] {
+	return kubernetes.Triggerkubernetesnodegroupresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodegroupid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder interface {
 	Nodeid(nodeid string) V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder
-	Getnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView]
-	Createnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView]
+	Listkubernetesnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView]
+	Createkubernetesnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodesBuilder
@@ -7782,20 +7909,20 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Node
 	return newV4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder(b.sdk, b.ownerid, b.clusterid, nodeid)
 }
 
-// Getnodes calls kubernetes.Getnodes
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Getnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView] {
-	return kubernetes.Getnodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+// Listkubernetesnodes calls kubernetes.Listkubernetesnodes
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Listkubernetesnodes(ctx context.Context) client.Response[[]models.StandaloneNodeView] {
+	return kubernetes.Listkubernetesnodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
-// Createnode calls kubernetes.Createnode
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Createnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView] {
-	return kubernetes.Createnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
+// Createkubernetesnode calls kubernetes.Createkubernetesnode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesBuilderImpl) Createkubernetesnode(ctx context.Context, request *models.StandaloneNodeCreationPayload) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Createkubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder interface {
-	Deletenode(ctx context.Context) client.Response[models.StandaloneNodeView]
-	Getnode(ctx context.Context) client.Response[models.StandaloneNodeView]
+	Deletekubernetesnode(ctx context.Context) client.Response[models.StandaloneNodeView]
+	Getkubernetesnode(ctx context.Context) client.Response[models.StandaloneNodeView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder
@@ -7816,19 +7943,19 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilder(sdk 
 	}
 }
 
-// Deletenode calls kubernetes.Deletenode
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Deletenode(ctx context.Context) client.Response[models.StandaloneNodeView] {
-	return kubernetes.Deletenode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
+// Deletekubernetesnode calls kubernetes.Deletekubernetesnode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Deletekubernetesnode(ctx context.Context) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Deletekubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
 }
 
-// Getnode calls kubernetes.Getnode
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Getnode(ctx context.Context) client.Response[models.StandaloneNodeView] {
-	return kubernetes.Getnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
+// Getkubernetesnode calls kubernetes.Getkubernetesnode
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl) Getkubernetesnode(ctx context.Context) client.Response[models.StandaloneNodeView] {
+	return kubernetes.Getkubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, b.nodeid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder interface {
-	Triggerclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView]
+	Triggerkubernetesclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
@@ -7847,14 +7974,14 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder(sdk *sd
 	}
 }
 
-// Triggerclusterredeploy calls kubernetes.Triggerclusterredeploy
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl) Triggerclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView] {
-	return kubernetes.Triggerclusterredeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
+// Triggerkubernetesclusterredeploy calls kubernetes.Triggerkubernetesclusterredeploy
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl) Triggerkubernetesclusterredeploy(ctx context.Context, request *models.RedeployPayload) client.Response[models.ClusterView] {
+	return kubernetes.Triggerkubernetesclusterredeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder interface {
-	Triggerclusterresume(ctx context.Context) client.Response[models.ClusterView]
+	Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.ClusterView]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder
@@ -7873,9 +8000,81 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder(sdk *sdkI
 	}
 }
 
-// Triggerclusterresume calls kubernetes.Triggerclusterresume
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl) Triggerclusterresume(ctx context.Context) client.Response[models.ClusterView] {
-	return kubernetes.Triggerclusterresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+// Triggerkubernetesclusterresume calls kubernetes.Triggerkubernetesclusterresume
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl) Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.ClusterView] {
+	return kubernetes.Triggerkubernetesclusterresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
+}
+
+// V4KubernetesOrganisationsOwneridKubernetesBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridKubernetesBuilder interface {
+	Consumptions() V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder
+}
+
+// v4KubernetesOrganisationsOwneridKubernetesBuilderImpl implements V4KubernetesOrganisationsOwneridKubernetesBuilder
+type v4KubernetesOrganisationsOwneridKubernetesBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KubernetesOrganisationsOwneridKubernetesBuilder creates a new V4KubernetesOrganisationsOwneridKubernetesBuilder
+func newV4KubernetesOrganisationsOwneridKubernetesBuilder(sdk *sdkImpl, ownerid string) V4KubernetesOrganisationsOwneridKubernetesBuilder {
+	return &v4KubernetesOrganisationsOwneridKubernetesBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Consumptions returns Consumptions builder
+func (b *v4KubernetesOrganisationsOwneridKubernetesBuilderImpl) Consumptions() V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder {
+	return newV4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder(b.sdk, b.ownerid)
+}
+
+// V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder interface {
+	Listkubernetesconsumptions(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ResourceConsumption]
+}
+
+// v4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilderImpl implements V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder
+type v4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder creates a new V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder
+func newV4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder(sdk *sdkImpl, ownerid string) V4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder {
+	return &v4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Listkubernetesconsumptions calls kubernetes.Listkubernetesconsumptions
+func (b *v4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilderImpl) Listkubernetesconsumptions(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ResourceConsumption] {
+	return kubernetes.Listkubernetesconsumptions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+}
+
+// V4KubernetesOrganisationsOwneridUsageBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridUsageBuilder interface {
+	Listkubernetescurrentusage(ctx context.Context) client.Response[[]models.ClusterItemUsageView]
+}
+
+// v4KubernetesOrganisationsOwneridUsageBuilderImpl implements V4KubernetesOrganisationsOwneridUsageBuilder
+type v4KubernetesOrganisationsOwneridUsageBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KubernetesOrganisationsOwneridUsageBuilder creates a new V4KubernetesOrganisationsOwneridUsageBuilder
+func newV4KubernetesOrganisationsOwneridUsageBuilder(sdk *sdkImpl, ownerid string) V4KubernetesOrganisationsOwneridUsageBuilder {
+	return &v4KubernetesOrganisationsOwneridUsageBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Listkubernetescurrentusage calls kubernetes.Listkubernetescurrentusage
+func (b *v4KubernetesOrganisationsOwneridUsageBuilderImpl) Listkubernetescurrentusage(ctx context.Context) client.Response[[]models.ClusterItemUsageView] {
+	return kubernetes.Listkubernetescurrentusage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
 }
 
 // V4KubernetesProductBuilder provides access to operations
@@ -8118,7 +8317,8 @@ func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridBuilderI
 
 // V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersBuilder provides access to operations
 type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersBuilder interface {
-	Stringmaxlength128(stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder
+	Clusterid(clusterid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder
+	Getloadbalancerclusters(ctx context.Context) client.Response[[]models.Cluster]
 	Assignloadbalancerclusters(ctx context.Context, request []*models.Cluster) client.Response[models.LoadBalancerView]
 }
 
@@ -8138,9 +8338,14 @@ func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersB
 	}
 }
 
-// Stringmaxlength128 returns builder for stringmaxlength128
-func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersBuilderImpl) Stringmaxlength128(stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder {
-	return newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder(b.sdk, b.tenantid, b.loadbalancerid, stringmaxlength128)
+// Clusterid returns builder for clusterid
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersBuilderImpl) Clusterid(clusterid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder {
+	return newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder(b.sdk, b.tenantid, b.loadbalancerid, clusterid)
+}
+
+// Getloadbalancerclusters calls loadbalancer.Getloadbalancerclusters
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersBuilderImpl) Getloadbalancerclusters(ctx context.Context) client.Response[[]models.Cluster] {
+	return loadbalancer.Getloadbalancerclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid)
 }
 
 // Assignloadbalancerclusters calls loadbalancer.Assignloadbalancerclusters
@@ -8148,37 +8353,44 @@ func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClusters
 	return loadbalancer.Assignloadbalancerclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, request)
 }
 
-// V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder provides access to operations
-type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder interface {
+// V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder provides access to operations
+type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder interface {
 	Unassignloadbalancercluster(ctx context.Context) client.Response[client.Nothing]
+	Getloadbalancercluster(ctx context.Context) client.Response[models.Cluster]
 }
 
-// v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128BuilderImpl implements V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder
-type v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128BuilderImpl struct {
-	sdk                *sdkImpl
-	tenantid           string
-	loadbalancerid     string
-	stringmaxlength128 string
+// v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilderImpl implements V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder
+type v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilderImpl struct {
+	sdk            *sdkImpl
+	tenantid       string
+	loadbalancerid string
+	clusterid      string
 }
 
-// newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder creates a new V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder
-func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder(sdk *sdkImpl, tenantid string, loadbalancerid string, stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128Builder {
-	return &v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128BuilderImpl{
-		loadbalancerid:     loadbalancerid,
-		sdk:                sdk,
-		stringmaxlength128: stringmaxlength128,
-		tenantid:           tenantid,
+// newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder creates a new V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder
+func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder(sdk *sdkImpl, tenantid string, loadbalancerid string, clusterid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilder {
+	return &v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilderImpl{
+		clusterid:      clusterid,
+		loadbalancerid: loadbalancerid,
+		sdk:            sdk,
+		tenantid:       tenantid,
 	}
 }
 
 // Unassignloadbalancercluster calls loadbalancer.Unassignloadbalancercluster
-func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersStringmaxlength128BuilderImpl) Unassignloadbalancercluster(ctx context.Context) client.Response[client.Nothing] {
-	return loadbalancer.Unassignloadbalancercluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.stringmaxlength128)
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilderImpl) Unassignloadbalancercluster(ctx context.Context) client.Response[client.Nothing] {
+	return loadbalancer.Unassignloadbalancercluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.clusterid)
+}
+
+// Getloadbalancercluster calls loadbalancer.Getloadbalancercluster
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridClustersClusteridBuilderImpl) Getloadbalancercluster(ctx context.Context) client.Response[models.Cluster] {
+	return loadbalancer.Getloadbalancercluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.clusterid)
 }
 
 // V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersBuilder provides access to operations
 type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersBuilder interface {
-	Stringmaxlength128(stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder
+	Listenerid(listenerid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder
+	Getloadbalancerlisteners(ctx context.Context) client.Response[[]models.Listener]
 	Assignloadbalancerlisteners(ctx context.Context, request []*models.Listener) client.Response[models.LoadBalancerView]
 }
 
@@ -8198,9 +8410,14 @@ func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListeners
 	}
 }
 
-// Stringmaxlength128 returns builder for stringmaxlength128
-func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersBuilderImpl) Stringmaxlength128(stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder {
-	return newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder(b.sdk, b.tenantid, b.loadbalancerid, stringmaxlength128)
+// Listenerid returns builder for listenerid
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersBuilderImpl) Listenerid(listenerid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder {
+	return newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder(b.sdk, b.tenantid, b.loadbalancerid, listenerid)
+}
+
+// Getloadbalancerlisteners calls loadbalancer.Getloadbalancerlisteners
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersBuilderImpl) Getloadbalancerlisteners(ctx context.Context) client.Response[[]models.Listener] {
+	return loadbalancer.Getloadbalancerlisteners(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid)
 }
 
 // Assignloadbalancerlisteners calls loadbalancer.Assignloadbalancerlisteners
@@ -8208,32 +8425,38 @@ func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListener
 	return loadbalancer.Assignloadbalancerlisteners(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, request)
 }
 
-// V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder provides access to operations
-type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder interface {
+// V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder provides access to operations
+type V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder interface {
 	Unassignloadbalancerlistener(ctx context.Context) client.Response[client.Nothing]
+	Getloadbalancerlistener(ctx context.Context) client.Response[models.Listener]
 }
 
-// v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128BuilderImpl implements V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder
-type v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128BuilderImpl struct {
-	sdk                *sdkImpl
-	tenantid           string
-	loadbalancerid     string
-	stringmaxlength128 string
+// v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilderImpl implements V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder
+type v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilderImpl struct {
+	sdk            *sdkImpl
+	tenantid       string
+	loadbalancerid string
+	listenerid     string
 }
 
-// newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder creates a new V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder
-func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder(sdk *sdkImpl, tenantid string, loadbalancerid string, stringmaxlength128 string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128Builder {
-	return &v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128BuilderImpl{
-		loadbalancerid:     loadbalancerid,
-		sdk:                sdk,
-		stringmaxlength128: stringmaxlength128,
-		tenantid:           tenantid,
+// newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder creates a new V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder
+func newV4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder(sdk *sdkImpl, tenantid string, loadbalancerid string, listenerid string) V4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilder {
+	return &v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilderImpl{
+		listenerid:     listenerid,
+		loadbalancerid: loadbalancerid,
+		sdk:            sdk,
+		tenantid:       tenantid,
 	}
 }
 
 // Unassignloadbalancerlistener calls loadbalancer.Unassignloadbalancerlistener
-func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersStringmaxlength128BuilderImpl) Unassignloadbalancerlistener(ctx context.Context) client.Response[client.Nothing] {
-	return loadbalancer.Unassignloadbalancerlistener(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.stringmaxlength128)
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilderImpl) Unassignloadbalancerlistener(ctx context.Context) client.Response[client.Nothing] {
+	return loadbalancer.Unassignloadbalancerlistener(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.listenerid)
+}
+
+// Getloadbalancerlistener calls loadbalancer.Getloadbalancerlistener
+func (b *v4LoadbalancersOrganisationsTenantidLoadbalancersLoadbalanceridListenersListeneridBuilderImpl) Getloadbalancerlistener(ctx context.Context) client.Response[models.Listener] {
+	return loadbalancer.Getloadbalancerlistener(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.loadbalancerid, b.listenerid)
 }
 
 // V4LoadbalancersOrganisationsTenantidNetworksBuilder provides access to operations
@@ -8706,7 +8929,7 @@ func (b *v4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbal
 
 // V4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilder provides access to operations
 type V4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilder interface {
-	Updateloadbalancercoowners(ctx context.Context) client.Response[models.LoadBalancerView]
+	Updateloadbalancercoowners(ctx context.Context, request []*models.TenantID) client.Response[models.LoadBalancerView]
 }
 
 // v4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilderImpl implements V4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilder
@@ -8728,8 +8951,8 @@ func newV4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbala
 }
 
 // Updateloadbalancercoowners calls loadbalancer.Updateloadbalancercoowners
-func (b *v4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilderImpl) Updateloadbalancercoowners(ctx context.Context) client.Response[models.LoadBalancerView] {
-	return loadbalancer.Updateloadbalancercoowners(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.regionid, b.loadbalancerid)
+func (b *v4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridCoOwnersBuilderImpl) Updateloadbalancercoowners(ctx context.Context, request []*models.TenantID) client.Response[models.LoadBalancerView] {
+	return loadbalancer.Updateloadbalancercoowners(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.regionid, b.loadbalancerid, request)
 }
 
 // V4LoadbalancersOrganisationsTenantidRegionsRegionidLoadbalancersLoadbalanceridConfigurationBuilder provides access to operations
@@ -9320,7 +9543,7 @@ func (b *v4MateriaOrganisationsOwneridMateriaBuilderImpl) Databases() V4MateriaO
 
 // V4MateriaOrganisationsOwneridMateriaDatabasesBuilder provides access to operations
 type V4MateriaOrganisationsOwneridMateriaDatabasesBuilder interface {
-	Resourceid(resourceid string) V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder
+	Kvid(kvid string) V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder
 }
 
 // v4MateriaOrganisationsOwneridMateriaDatabasesBuilderImpl implements V4MateriaOrganisationsOwneridMateriaDatabasesBuilder
@@ -9337,41 +9560,41 @@ func newV4MateriaOrganisationsOwneridMateriaDatabasesBuilder(sdk *sdkImpl, owner
 	}
 }
 
-// Resourceid returns builder for resourceid
-func (b *v4MateriaOrganisationsOwneridMateriaDatabasesBuilderImpl) Resourceid(resourceid string) V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder {
-	return newV4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder(b.sdk, b.ownerid, resourceid)
+// Kvid returns builder for kvid
+func (b *v4MateriaOrganisationsOwneridMateriaDatabasesBuilderImpl) Kvid(kvid string) V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder {
+	return newV4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder(b.sdk, b.ownerid, kvid)
 }
 
-// V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder provides access to operations
-type V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder interface {
-	Deletemateriakvv4(ctx context.Context) client.Response[client.Nothing]
-	Getmateriakvv4(ctx context.Context) client.Response[models.MateriaDB1]
+// V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder provides access to operations
+type V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder interface {
+	Deletemateriakv(ctx context.Context) client.Response[client.Nothing]
+	Getmateriakv(ctx context.Context) client.Response[models.MateriaDB1]
 }
 
-// v4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilderImpl implements V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder
-type v4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilderImpl struct {
-	sdk        *sdkImpl
-	ownerid    string
-	resourceid string
+// v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl implements V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder
+type v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	kvid    string
 }
 
-// newV4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder creates a new V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder
-func newV4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder(sdk *sdkImpl, ownerid string, resourceid string) V4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilder {
-	return &v4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilderImpl{
-		ownerid:    ownerid,
-		resourceid: resourceid,
-		sdk:        sdk,
+// newV4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder creates a new V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder
+func newV4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder(sdk *sdkImpl, ownerid string, kvid string) V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder {
+	return &v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl{
+		kvid:    kvid,
+		ownerid: ownerid,
+		sdk:     sdk,
 	}
 }
 
-// Deletemateriakvv4 calls materia_kv.Deletemateriakvv4
-func (b *v4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilderImpl) Deletemateriakvv4(ctx context.Context) client.Response[client.Nothing] {
-	return materiakv.Deletemateriakvv4(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.resourceid)
+// Deletemateriakv calls materia_kv.Deletemateriakv
+func (b *v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl) Deletemateriakv(ctx context.Context) client.Response[client.Nothing] {
+	return materiakv.Deletemateriakv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kvid)
 }
 
-// Getmateriakvv4 calls materia_kv.Getmateriakvv4
-func (b *v4MateriaOrganisationsOwneridMateriaDatabasesResourceidBuilderImpl) Getmateriakvv4(ctx context.Context) client.Response[models.MateriaDB1] {
-	return materiakv.Getmateriakvv4(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.resourceid)
+// Getmateriakv calls materia_kv.Getmateriakv
+func (b *v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl) Getmateriakv(ctx context.Context) client.Response[models.MateriaDB1] {
+	return materiakv.Getmateriakv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kvid)
 }
 
 // V4MetabaseBuilder provides access to operations
@@ -11172,7 +11395,7 @@ func (b *v4ProvidersAddonCellarBuilderImpl) Cellarid(cellarid string) V4Provider
 
 // V4ProvidersAddonCellarCellaridBuilder provides access to operations
 type V4ProvidersAddonCellarCellaridBuilder interface {
-	Getcellar(ctx context.Context) client.Response[models.Cellar1]
+	Getcellar(ctx context.Context) client.Response[models.Cellar]
 }
 
 // v4ProvidersAddonCellarCellaridBuilderImpl implements V4ProvidersAddonCellarCellaridBuilder
@@ -11190,7 +11413,7 @@ func newV4ProvidersAddonCellarCellaridBuilder(sdk *sdkImpl, cellarid string) V4P
 }
 
 // Getcellar calls cellar.Getcellar
-func (b *v4ProvidersAddonCellarCellaridBuilderImpl) Getcellar(ctx context.Context) client.Response[models.Cellar1] {
+func (b *v4ProvidersAddonCellarCellaridBuilderImpl) Getcellar(ctx context.Context) client.Response[models.Cellar] {
 	return cellar.Getcellar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.cellarid)
 }
 
@@ -11348,6 +11571,7 @@ type V4TenantsTenantidBuilder interface {
 	Products() V4TenantsTenantidProductsBuilder
 	Resources() V4TenantsTenantidResourcesBuilder
 	Storages() V4TenantsTenantidStoragesBuilder
+	Tokens() V4TenantsTenantidTokensBuilder
 	Deletetenant(ctx context.Context) client.Response[client.Nothing]
 	Gettenant(ctx context.Context) client.Response[models.TenantView]
 }
@@ -11404,6 +11628,11 @@ func (b *v4TenantsTenantidBuilderImpl) Resources() V4TenantsTenantidResourcesBui
 // Storages returns Storages builder
 func (b *v4TenantsTenantidBuilderImpl) Storages() V4TenantsTenantidStoragesBuilder {
 	return newV4TenantsTenantidStoragesBuilder(b.sdk, b.tenantid)
+}
+
+// Tokens returns Tokens builder
+func (b *v4TenantsTenantidBuilderImpl) Tokens() V4TenantsTenantidTokensBuilder {
+	return newV4TenantsTenantidTokensBuilder(b.sdk, b.tenantid)
 }
 
 // Deletetenant calls base.Deletetenant
@@ -11756,6 +11985,7 @@ func (b *v4TenantsTenantidProductsBuilderImpl) Createproduct(ctx context.Context
 
 // V4TenantsTenantidProductsProductidBuilder provides access to operations
 type V4TenantsTenantidProductsProductidBuilder interface {
+	Keys() V4TenantsTenantidProductsProductidKeysBuilder
 	Publish() V4TenantsTenantidProductsProductidPublishBuilder
 	Resources() V4TenantsTenantidProductsProductidResourcesBuilder
 	Deleteproduct(ctx context.Context) client.Response[client.Nothing]
@@ -11777,6 +12007,11 @@ func newV4TenantsTenantidProductsProductidBuilder(sdk *sdkImpl, tenantid string,
 		sdk:       sdk,
 		tenantid:  tenantid,
 	}
+}
+
+// Keys returns Keys builder
+func (b *v4TenantsTenantidProductsProductidBuilderImpl) Keys() V4TenantsTenantidProductsProductidKeysBuilder {
+	return newV4TenantsTenantidProductsProductidKeysBuilder(b.sdk, b.tenantid, b.productid)
 }
 
 // Publish returns Publish builder
@@ -11802,6 +12037,106 @@ func (b *v4TenantsTenantidProductsProductidBuilderImpl) Getproduct(ctx context.C
 // Updateproduct calls base.Updateproduct
 func (b *v4TenantsTenantidProductsProductidBuilderImpl) Updateproduct(ctx context.Context, request *models.ProductPatch) client.Response[models.Product] {
 	return base.Updateproduct(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, request)
+}
+
+// V4TenantsTenantidProductsProductidKeysBuilder provides access to operations
+type V4TenantsTenantidProductsProductidKeysBuilder interface {
+	Keyid(keyid string) V4TenantsTenantidProductsProductidKeysKeyidBuilder
+	Listsigningkeys(ctx context.Context, opts ...tokens.Option) client.Response[[]models.SigningKey]
+	Createsigningkey(ctx context.Context, request *models.WannabeSigningKey) client.Response[models.SigningKey]
+}
+
+// v4TenantsTenantidProductsProductidKeysBuilderImpl implements V4TenantsTenantidProductsProductidKeysBuilder
+type v4TenantsTenantidProductsProductidKeysBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantid  string
+	productid string
+}
+
+// newV4TenantsTenantidProductsProductidKeysBuilder creates a new V4TenantsTenantidProductsProductidKeysBuilder
+func newV4TenantsTenantidProductsProductidKeysBuilder(sdk *sdkImpl, tenantid string, productid string) V4TenantsTenantidProductsProductidKeysBuilder {
+	return &v4TenantsTenantidProductsProductidKeysBuilderImpl{
+		productid: productid,
+		sdk:       sdk,
+		tenantid:  tenantid,
+	}
+}
+
+// Keyid returns builder for keyid
+func (b *v4TenantsTenantidProductsProductidKeysBuilderImpl) Keyid(keyid string) V4TenantsTenantidProductsProductidKeysKeyidBuilder {
+	return newV4TenantsTenantidProductsProductidKeysKeyidBuilder(b.sdk, b.tenantid, b.productid, keyid)
+}
+
+// Listsigningkeys calls tokens.Listsigningkeys
+func (b *v4TenantsTenantidProductsProductidKeysBuilderImpl) Listsigningkeys(ctx context.Context, opts ...tokens.Option) client.Response[[]models.SigningKey] {
+	return tokens.Listsigningkeys(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, opts...)
+}
+
+// Createsigningkey calls tokens.Createsigningkey
+func (b *v4TenantsTenantidProductsProductidKeysBuilderImpl) Createsigningkey(ctx context.Context, request *models.WannabeSigningKey) client.Response[models.SigningKey] {
+	return tokens.Createsigningkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, request)
+}
+
+// V4TenantsTenantidProductsProductidKeysKeyidBuilder provides access to operations
+type V4TenantsTenantidProductsProductidKeysKeyidBuilder interface {
+	Rotate() V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder
+	Deletesigningkey(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v4TenantsTenantidProductsProductidKeysKeyidBuilderImpl implements V4TenantsTenantidProductsProductidKeysKeyidBuilder
+type v4TenantsTenantidProductsProductidKeysKeyidBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantid  string
+	productid string
+	keyid     string
+}
+
+// newV4TenantsTenantidProductsProductidKeysKeyidBuilder creates a new V4TenantsTenantidProductsProductidKeysKeyidBuilder
+func newV4TenantsTenantidProductsProductidKeysKeyidBuilder(sdk *sdkImpl, tenantid string, productid string, keyid string) V4TenantsTenantidProductsProductidKeysKeyidBuilder {
+	return &v4TenantsTenantidProductsProductidKeysKeyidBuilderImpl{
+		keyid:     keyid,
+		productid: productid,
+		sdk:       sdk,
+		tenantid:  tenantid,
+	}
+}
+
+// Rotate returns Rotate builder
+func (b *v4TenantsTenantidProductsProductidKeysKeyidBuilderImpl) Rotate() V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder {
+	return newV4TenantsTenantidProductsProductidKeysKeyidRotateBuilder(b.sdk, b.tenantid, b.productid, b.keyid)
+}
+
+// Deletesigningkey calls tokens.Deletesigningkey
+func (b *v4TenantsTenantidProductsProductidKeysKeyidBuilderImpl) Deletesigningkey(ctx context.Context) client.Response[client.Nothing] {
+	return tokens.Deletesigningkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, b.keyid)
+}
+
+// V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder provides access to operations
+type V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder interface {
+	Replacesigningkey(ctx context.Context) client.Response[models.SigningKey]
+}
+
+// v4TenantsTenantidProductsProductidKeysKeyidRotateBuilderImpl implements V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder
+type v4TenantsTenantidProductsProductidKeysKeyidRotateBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantid  string
+	productid string
+	keyid     string
+}
+
+// newV4TenantsTenantidProductsProductidKeysKeyidRotateBuilder creates a new V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder
+func newV4TenantsTenantidProductsProductidKeysKeyidRotateBuilder(sdk *sdkImpl, tenantid string, productid string, keyid string) V4TenantsTenantidProductsProductidKeysKeyidRotateBuilder {
+	return &v4TenantsTenantidProductsProductidKeysKeyidRotateBuilderImpl{
+		keyid:     keyid,
+		productid: productid,
+		sdk:       sdk,
+		tenantid:  tenantid,
+	}
+}
+
+// Replacesigningkey calls tokens.Replacesigningkey
+func (b *v4TenantsTenantidProductsProductidKeysKeyidRotateBuilderImpl) Replacesigningkey(ctx context.Context) client.Response[models.SigningKey] {
+	return tokens.Replacesigningkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.productid, b.keyid)
 }
 
 // V4TenantsTenantidProductsProductidPublishBuilder provides access to operations
@@ -12006,6 +12341,146 @@ func (b *v4TenantsTenantidStoragesStorageidBuilderImpl) Updatestorage(ctx contex
 	return storage.Updatestorage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.storageid, request)
 }
 
+// V4TenantsTenantidTokensBuilder provides access to operations
+type V4TenantsTenantidTokensBuilder interface {
+	Tokenid(tokenid string) V4TenantsTenantidTokensTokenidBuilder
+	Listtokens(ctx context.Context, opts ...tokens.Option) client.Response[[]models.Token1]
+	Createtoken(ctx context.Context, request *models.WannabeToken) client.Response[models.CreatedToken]
+}
+
+// v4TenantsTenantidTokensBuilderImpl implements V4TenantsTenantidTokensBuilder
+type v4TenantsTenantidTokensBuilderImpl struct {
+	sdk      *sdkImpl
+	tenantid string
+}
+
+// newV4TenantsTenantidTokensBuilder creates a new V4TenantsTenantidTokensBuilder
+func newV4TenantsTenantidTokensBuilder(sdk *sdkImpl, tenantid string) V4TenantsTenantidTokensBuilder {
+	return &v4TenantsTenantidTokensBuilderImpl{
+		sdk:      sdk,
+		tenantid: tenantid,
+	}
+}
+
+// Tokenid returns builder for tokenid
+func (b *v4TenantsTenantidTokensBuilderImpl) Tokenid(tokenid string) V4TenantsTenantidTokensTokenidBuilder {
+	return newV4TenantsTenantidTokensTokenidBuilder(b.sdk, b.tenantid, tokenid)
+}
+
+// Listtokens calls tokens.Listtokens
+func (b *v4TenantsTenantidTokensBuilderImpl) Listtokens(ctx context.Context, opts ...tokens.Option) client.Response[[]models.Token1] {
+	return tokens.Listtokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, opts...)
+}
+
+// Createtoken calls tokens.Createtoken
+func (b *v4TenantsTenantidTokensBuilderImpl) Createtoken(ctx context.Context, request *models.WannabeToken) client.Response[models.CreatedToken] {
+	return tokens.Createtoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, request)
+}
+
+// V4TenantsTenantidTokensTokenidBuilder provides access to operations
+type V4TenantsTenantidTokensTokenidBuilder interface {
+	Refresh() V4TenantsTenantidTokensTokenidRefreshBuilder
+	Deletetoken(ctx context.Context) client.Response[client.Nothing]
+	Gettoken(ctx context.Context) client.Response[models.Token1]
+}
+
+// v4TenantsTenantidTokensTokenidBuilderImpl implements V4TenantsTenantidTokensTokenidBuilder
+type v4TenantsTenantidTokensTokenidBuilderImpl struct {
+	sdk      *sdkImpl
+	tenantid string
+	tokenid  string
+}
+
+// newV4TenantsTenantidTokensTokenidBuilder creates a new V4TenantsTenantidTokensTokenidBuilder
+func newV4TenantsTenantidTokensTokenidBuilder(sdk *sdkImpl, tenantid string, tokenid string) V4TenantsTenantidTokensTokenidBuilder {
+	return &v4TenantsTenantidTokensTokenidBuilderImpl{
+		sdk:      sdk,
+		tenantid: tenantid,
+		tokenid:  tokenid,
+	}
+}
+
+// Refresh returns Refresh builder
+func (b *v4TenantsTenantidTokensTokenidBuilderImpl) Refresh() V4TenantsTenantidTokensTokenidRefreshBuilder {
+	return newV4TenantsTenantidTokensTokenidRefreshBuilder(b.sdk, b.tenantid, b.tokenid)
+}
+
+// Deletetoken calls tokens.Deletetoken
+func (b *v4TenantsTenantidTokensTokenidBuilderImpl) Deletetoken(ctx context.Context) client.Response[client.Nothing] {
+	return tokens.Deletetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.tokenid)
+}
+
+// Gettoken calls tokens.Gettoken
+func (b *v4TenantsTenantidTokensTokenidBuilderImpl) Gettoken(ctx context.Context) client.Response[models.Token1] {
+	return tokens.Gettoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.tokenid)
+}
+
+// V4TenantsTenantidTokensTokenidRefreshBuilder provides access to operations
+type V4TenantsTenantidTokensTokenidRefreshBuilder interface {
+	Renewtoken(ctx context.Context) client.Response[models.CreatedToken]
+}
+
+// v4TenantsTenantidTokensTokenidRefreshBuilderImpl implements V4TenantsTenantidTokensTokenidRefreshBuilder
+type v4TenantsTenantidTokensTokenidRefreshBuilderImpl struct {
+	sdk      *sdkImpl
+	tenantid string
+	tokenid  string
+}
+
+// newV4TenantsTenantidTokensTokenidRefreshBuilder creates a new V4TenantsTenantidTokensTokenidRefreshBuilder
+func newV4TenantsTenantidTokensTokenidRefreshBuilder(sdk *sdkImpl, tenantid string, tokenid string) V4TenantsTenantidTokensTokenidRefreshBuilder {
+	return &v4TenantsTenantidTokensTokenidRefreshBuilderImpl{
+		sdk:      sdk,
+		tenantid: tenantid,
+		tokenid:  tokenid,
+	}
+}
+
+// Renewtoken calls tokens.Renewtoken
+func (b *v4TenantsTenantidTokensTokenidRefreshBuilderImpl) Renewtoken(ctx context.Context) client.Response[models.CreatedToken] {
+	return tokens.Renewtoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.tokenid)
+}
+
+// V4TokensBuilder provides access to operations
+type V4TokensBuilder interface {
+	Revocations() V4TokensRevocationsBuilder
+}
+
+// v4TokensBuilderImpl implements V4TokensBuilder
+type v4TokensBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4TokensBuilder creates a new V4TokensBuilder
+func newV4TokensBuilder(sdk *sdkImpl) V4TokensBuilder {
+	return &v4TokensBuilderImpl{sdk: sdk}
+}
+
+// Revocations returns Revocations builder
+func (b *v4TokensBuilderImpl) Revocations() V4TokensRevocationsBuilder {
+	return newV4TokensRevocationsBuilder(b.sdk)
+}
+
+// V4TokensRevocationsBuilder provides access to operations
+type V4TokensRevocationsBuilder interface {
+	Listrevocations(ctx context.Context, opts ...tokens.Option) client.Response[models.RevocationListResponse]
+}
+
+// v4TokensRevocationsBuilderImpl implements V4TokensRevocationsBuilder
+type v4TokensRevocationsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4TokensRevocationsBuilder creates a new V4TokensRevocationsBuilder
+func newV4TokensRevocationsBuilder(sdk *sdkImpl) V4TokensRevocationsBuilder {
+	return &v4TokensRevocationsBuilderImpl{sdk: sdk}
+}
+
+// Listrevocations calls tokens.Listrevocations
+func (b *v4TokensRevocationsBuilderImpl) Listrevocations(ctx context.Context, opts ...tokens.Option) client.Response[models.RevocationListResponse] {
+	return tokens.Listrevocations(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+}
+
 // V4Warp10TokenBuilder provides access to operations
 type V4Warp10TokenBuilder interface {
 	Cluster() V4Warp10TokenClusterBuilder
@@ -12114,7 +12589,7 @@ func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Write() V4Warp10TokenClu
 
 // V4Warp10TokenClusterClusteridTokenRevocationidBuilder provides access to operations
 type V4Warp10TokenClusterClusteridTokenRevocationidBuilder interface {
-	Deletetoken(ctx context.Context) client.Response[models.TokenRevokedResponse]
+	Deletewarp10token(ctx context.Context) client.Response[models.TokenRevokedResponse]
 	Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse]
 }
 
@@ -12134,9 +12609,9 @@ func newV4Warp10TokenClusterClusteridTokenRevocationidBuilder(sdk *sdkImpl, clus
 	}
 }
 
-// Deletetoken calls warp10_token.Deletetoken
-func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Deletetoken(ctx context.Context) client.Response[models.TokenRevokedResponse] {
-	return warp10token.Deletetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
+// Deletewarp10token calls warp10_token.Deletewarp10token
+func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Deletewarp10token(ctx context.Context) client.Response[models.TokenRevokedResponse] {
+	return warp10token.Deletewarp10token(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
 }
 
 // Gettokenmetadata calls warp10_token.Gettokenmetadata

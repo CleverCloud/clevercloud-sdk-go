@@ -2,9 +2,17 @@
 
 package models
 
+const MaxParrallelConnectionsType = "MaxParrallelConnections"
+
 // MaxParrallelConnections
 type MaxParrallelConnections struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for MaxParrallelConnections
+func (r MaxParrallelConnections) GetType() string {
+	return MaxParrallelConnectionsType
 }
 
 // isQuotaItem implements QuotaItem

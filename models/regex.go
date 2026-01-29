@@ -2,9 +2,17 @@
 
 package models
 
+const RegexType = "Regex"
+
 // Regex
 type Regex struct {
 	Regex string `json:"regex"`
+	Type  string `json:"type"`
+}
+
+// GetType returns the type identifier for Regex
+func (r Regex) GetType() string {
+	return RegexType
 }
 
 // isPath implements Path

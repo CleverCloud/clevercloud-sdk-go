@@ -3,7 +3,7 @@
 package models
 
 // Transport1
-// Union type - can be one of: Direct1, Dtls, Quic1
+// Union type - can be one of: Direct2, Dtls1, Quic
 type Transport1 interface {
 	isTransport1()
 	GetType() string

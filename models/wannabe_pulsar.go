@@ -6,7 +6,7 @@ package models
 type WannabePulsar struct {
 	AuthorID  *string    `json:"authorId,omitempty"`
 	ClusterID string     `json:"clusterId"`
-	OwnerID   string     `json:"ownerId"`
+	OwnerID   OwnerID    `json:"ownerId"`
 	Plan      PulsarPlan `json:"plan"`
 	Tenant    string     `json:"tenant"`
 }

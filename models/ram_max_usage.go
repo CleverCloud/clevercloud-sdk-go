@@ -2,9 +2,17 @@
 
 package models
 
+const RamMaxUsageType = "RamMaxUsage"
+
 // RamMaxUsage
 type RamMaxUsage struct {
-	Information int `json:"information"`
+	Information int    `json:"information"`
+	Type        string `json:"type"`
+}
+
+// GetType returns the type identifier for RamMaxUsage
+func (r RamMaxUsage) GetType() string {
+	return RamMaxUsageType
 }
 
 // isQuotaItem implements QuotaItem

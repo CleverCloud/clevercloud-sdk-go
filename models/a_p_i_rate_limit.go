@@ -2,9 +2,17 @@
 
 package models
 
+const APIRateLimitType = "APIRateLimit"
+
 // APIRateLimit
 type APIRateLimit struct {
-	Frequency int `json:"frequency"`
+	Frequency int    `json:"frequency"`
+	Type      string `json:"type"`
+}
+
+// GetType returns the type identifier for APIRateLimit
+func (r APIRateLimit) GetType() string {
+	return APIRateLimitType
 }
 
 // isQuotaItem implements QuotaItem

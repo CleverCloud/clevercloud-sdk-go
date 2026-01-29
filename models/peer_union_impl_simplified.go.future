@@ -1,0 +1,101 @@
+// Manual implementation for Peer union type deserialization
+// This file is NOT generated and should be maintained manually
+//
+// VERSION SIMPLIFIÉE - À utiliser après régénération des modèles avec le champ Type
+// Renommer en peer_union_impl.go après régénération
+
+package models
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// GetType returns the type discriminator for CleverPeer
+// Avec le champ Type généré, cette méthode retourne simplement le champ
+func (c CleverPeer) GetType() string {
+	if c.Type == "" {
+		return "CleverPeer" // Fallback pour rétrocompatibilité
+	}
+	return c.Type
+}
+
+// GetType returns the type discriminator for ExternalPeer
+func (e ExternalPeer) GetType() string {
+	if e.Type == "" {
+		return "ExternalPeer" // Fallback pour rétrocompatibilité
+	}
+	return e.Type
+}
+
+// PeerUnion is a wrapper type that implements json.Marshaler and json.Unmarshaler
+// for the Peer interface union type.
+type PeerUnion struct {
+	Peer Peer
+}
+
+// NewPeerUnion creates a new PeerUnion wrapping the given Peer
+func NewPeerUnion(p Peer) PeerUnion {
+	return PeerUnion{Peer: p}
+}
+
+// MarshalJSON implements json.Marshaler for PeerUnion
+// Avec le champ Type généré dans les structs, on peut directement déléguer
+func (p PeerUnion) MarshalJSON() ([]byte, error) {
+	if p.Peer == nil {
+		return []byte("null"), nil
+	}
+	// Les types concrets ont maintenant le champ Type, pas besoin de MarshalJSON custom
+	return json.Marshal(p.Peer)
+}
+
+// UnmarshalJSON implements json.Unmarshaler for PeerUnion
+// GRANDEMENT SIMPLIFIÉ - plus besoin de structures auxiliaires ni de reconstruction manuelle
+func (p *PeerUnion) UnmarshalJSON(data []byte) error {
+	// Handle null
+	if string(data) == "null" {
+		p.Peer = nil
+		return nil
+	}
+
+	// Déterminer le type via le champ discriminateur
+	var envelope struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &envelope); err != nil {
+		return fmt.Errorf("failed to unmarshal peer envelope: %w", err)
+	}
+
+	switch envelope.Type {
+	case "CleverPeer":
+		// Plus de structure auxiliaire ! Unmarshalling direct
+		var cleverPeer CleverPeer
+		if err := json.Unmarshal(data, &cleverPeer); err != nil {
+			return fmt.Errorf("failed to unmarshal CleverPeer: %w", err)
+		}
+		p.Peer = &cleverPeer
+		return nil
+
+	case "ExternalPeer":
+		// Plus de structure auxiliaire ! Unmarshalling direct
+		var externalPeer ExternalPeer
+		if err := json.Unmarshal(data, &externalPeer); err != nil {
+			return fmt.Errorf("failed to unmarshal ExternalPeer: %w", err)
+		}
+		p.Peer = &externalPeer
+		return nil
+
+	default:
+		return fmt.Errorf("unknown peer type: %s", envelope.Type)
+	}
+}
+
+// UnmarshalPeerJSON is a convenience function for backwards compatibility
+// Prefer using PeerUnion with json.Unmarshal directly
+func UnmarshalPeerJSON(data []byte) (Peer, error) {
+	var p PeerUnion
+	if err := json.Unmarshal(data, &p); err != nil {
+		return nil, err
+	}
+	return p.Peer, nil
+}

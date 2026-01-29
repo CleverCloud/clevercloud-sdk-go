@@ -618,6 +618,10 @@ func toGoStructName(name string) string {
 	if name == "WireGuard" {
 		return "WireGuard"
 	}
+	// Handle NETWORK_GROUP to avoid conflict with NetworkGroup
+	if name == "NETWORK_GROUP" {
+		return "NetworkGroupEnum"
+	}
 	return toPascalCase(name)
 }
 

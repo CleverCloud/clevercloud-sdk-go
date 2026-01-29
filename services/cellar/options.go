@@ -12,13 +12,21 @@ type Option func(*Options)
 
 // Options holds query parameters for cellar operations
 type Options struct {
-	Force *bool `url:"force,omitempty"`
+	Force              *bool `url:"force,omitempty"`
+	Includeunavailable *bool `url:"includeUnavailable,omitempty"`
 }
 
 // WithForce sets the force query parameter
 func WithForce(force bool) Option {
 	return func(o *Options) {
 		o.Force = &force
+	}
+}
+
+// WithIncludeunavailable sets the includeUnavailable query parameter
+func WithIncludeunavailable(includeUnavailable bool) Option {
+	return func(o *Options) {
+		o.Includeunavailable = &includeUnavailable
 	}
 }
 
@@ -32,6 +40,9 @@ func buildQueryString(opts ...Option) string {
 	var params []string
 	if options.Force != nil {
 		params = append(params, fmt.Sprintf("force=%t", *options.Force))
+	}
+	if options.Includeunavailable != nil {
+		params = append(params, fmt.Sprintf("includeUnavailable=%t", *options.Includeunavailable))
 	}
 
 	if len(params) == 0 {

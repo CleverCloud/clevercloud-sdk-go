@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonCumulocityId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cumulocity.Deletecumulocity(ctx, client, tracer, addonId)
+	response := cumulocity.Deletecumulocity(ctx, client, tracer, addonCumulocityId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: cumulocity
 operationId: deleteCumulocity
 */
-func Deletecumulocity(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteCumulocity", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletecumulocity(ctx context.Context, c *client.Client, tracer trace.Tracer, addonCumulocityId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteCumulocity", trace.WithAttributes(attribute.String("addonCumulocityId", addonCumulocityId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-cumulocity/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-cumulocity/resources/%s", addonCumulocityId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

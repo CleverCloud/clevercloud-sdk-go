@@ -2,11 +2,19 @@
 
 package models
 
+const Resource1Type = "resource"
+
 // Resource1
 type Resource1 struct {
 	Kind string `json:"kind"`
 	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Resource1) isHTTPErrorContext() {}
+// GetType returns the type identifier for Resource1
+func (r Resource1) GetType() string {
+	return Resource1Type
+}
+
+// isTyped implements Typed
+func (r Resource1) isTyped() {}

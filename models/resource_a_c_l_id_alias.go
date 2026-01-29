@@ -2,5 +2,5 @@
 
 package models
 
-// ResourceACLId a resource ACL
+// ResourceACLId a resource ACL ID
 type ResourceACLId = string

@@ -2,10 +2,18 @@
 
 package models
 
+const Http1Type = "Http"
+
 // Http1
 type Http1 struct {
 	HTTP BackendHttpTransport `json:"http"`
+	Type string               `json:"type"`
 }
 
-// isTransport3 implements Transport3
-func (r Http1) isTransport3() {}
+// GetType returns the type identifier for Http1
+func (r Http1) GetType() string {
+	return Http1Type
+}
+
+// isLayer implements Layer
+func (r Http1) isLayer() {}

@@ -14,7 +14,7 @@ type ClusterView struct {
 	ReplicationFactor int               `json:"replicationFactor"`
 	Status            ClusterStatusType `json:"status"`
 	Tag               *string           `json:"tag,omitempty"`
-	TenantID          string            `json:"tenantId"`
+	TenantID          OwnerID           `json:"tenantId"`
 	Topology          ClusterTopology   `json:"topology"`
 	Version           KubeMinorVersion  `json:"version"`
 }

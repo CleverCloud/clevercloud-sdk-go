@@ -2,9 +2,17 @@
 
 package models
 
+const DirectType = "Direct"
+
 // Direct
 type Direct struct {
 	Direct DirectTransport `json:"direct"`
+	Type   string          `json:"type"`
+}
+
+// GetType returns the type identifier for Direct
+func (r Direct) GetType() string {
+	return DirectType
 }
 
 // isLayer1 implements Layer1

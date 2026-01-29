@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - aiId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ai.Deleteai(ctx, client, tracer, addonId)
+	response := ai.Deleteai(ctx, client, tracer, aiId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: ai
 operationId: deleteAI
 */
-func Deleteai(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteAI", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deleteai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteAI", trace.WithAttributes(attribute.String("aiId", aiId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-ai/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-ai/resources/%s", aiId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

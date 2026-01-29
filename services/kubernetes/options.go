@@ -13,8 +13,25 @@ type Option func(*Options)
 
 // Options holds query parameters for kubernetes operations
 type Options struct {
-	Status    *[]string `url:"status,omitempty"`
-	Typeparam *string   `url:"typeParam,omitempty"`
+	Resourceid *[]string `url:"resourceId,omitempty"`
+	Since      *string   `url:"since,omitempty"`
+	Status     *[]string `url:"status,omitempty"`
+	Typeparam  *string   `url:"typeParam,omitempty"`
+	Until      *string   `url:"until,omitempty"`
+}
+
+// WithResourceid sets the resourceId query parameter
+func WithResourceid(resourceId []string) Option {
+	return func(o *Options) {
+		o.Resourceid = &resourceId
+	}
+}
+
+// WithSince sets the since query parameter
+func WithSince(since string) Option {
+	return func(o *Options) {
+		o.Since = &since
+	}
 }
 
 // WithStatus sets the status query parameter
@@ -31,6 +48,13 @@ func WithTypeparam(typeParam string) Option {
 	}
 }
 
+// WithUntil sets the until query parameter
+func WithUntil(until string) Option {
+	return func(o *Options) {
+		o.Until = &until
+	}
+}
+
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
 	options := &Options{}
@@ -39,11 +63,20 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Resourceid != nil {
+		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
+	}
+	if options.Since != nil {
+		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
 	if options.Status != nil {
 		params = append(params, fmt.Sprintf("status=%v", *options.Status))
 	}
 	if options.Typeparam != nil {
 		params = append(params, fmt.Sprintf("typeParam=%s", url.QueryEscape(*options.Typeparam)))
+	}
+	if options.Until != nil {
+		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
 	}
 
 	if len(params) == 0 {

@@ -2,9 +2,17 @@
 
 package models
 
+const CoreMaxLimitType = "CoreMaxLimit"
+
 // CoreMaxLimit
 type CoreMaxLimit struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for CoreMaxLimit
+func (r CoreMaxLimit) GetType() string {
+	return CoreMaxLimitType
 }
 
 // isQuotaItem implements QuotaItem

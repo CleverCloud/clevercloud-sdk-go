@@ -13,6 +13,6 @@ type AssignedIpAddress struct {
 	IP         string              `json:"ip"`
 	NetworkID  NetworkId           `json:"networkId"`
 	OwnerID    TenantID            `json:"ownerId"`
-	ResourceID ResourceID          `json:"resourceId"`
+	ResourceID string              `json:"resourceId"`
 	UpdatedAt  time.Time           `json:"updatedAt"`
 }

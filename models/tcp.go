@@ -2,9 +2,17 @@
 
 package models
 
+const TcpType = "Tcp"
+
 // Tcp
 type Tcp struct {
-	Tcp TcpTransport `json:"tcp"`
+	Tcp  TcpTransport `json:"tcp"`
+	Type string       `json:"type"`
+}
+
+// GetType returns the type identifier for Tcp
+func (r Tcp) GetType() string {
+	return TcpType
 }
 
 // isTransport implements Transport

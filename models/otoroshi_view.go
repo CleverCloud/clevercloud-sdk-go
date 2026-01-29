@@ -5,7 +5,7 @@ package models
 // OtoroshiView
 type OtoroshiView struct {
 	API                OtoroshiApi       `json:"api"`
-	AccessURL          string            `json:"accessUrl"`
+	AccessURL          string            `json:"accessUrl"` // Absolute URL
 	AddonID            string            `json:"addonId"`
 	AvailableVersions  []string          `json:"availableVersions,omitempty"`
 	EnvVars            MapString         `json:"envVars"`

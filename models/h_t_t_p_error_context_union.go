@@ -3,7 +3,7 @@
 package models
 
 // HTTPErrorContext
-// Union type - can be one of: Empty, Field, GatewayError, Input, MultipleFields, Operation, Resource1, Selector
+// Union type - can be one of: Empty, Typed, Typed, Typed, Typed, Typed, Typed, Typed
 type HTTPErrorContext interface {
 	isHTTPErrorContext()
 	GetType() string

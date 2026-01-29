@@ -2,9 +2,17 @@
 
 package models
 
+const UpgradeType = "Upgrade"
+
 // Upgrade
 type Upgrade struct {
 	TargetVersion KubeMinorVersion `json:"targetVersion"`
+	Type          string           `json:"type"`
+}
+
+// GetType returns the type identifier for Upgrade
+func (r Upgrade) GetType() string {
+	return UpgradeType
 }
 
 // isRedeployPayload implements RedeployPayload

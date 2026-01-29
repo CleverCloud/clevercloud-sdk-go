@@ -2,10 +2,18 @@
 
 package models
 
+const InputType = "input"
+
 // Input
 type Input struct {
 	Names []string `json:"names,omitempty"`
+	Type  string   `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Input) isHTTPErrorContext() {}
+// GetType returns the type identifier for Input
+func (r Input) GetType() string {
+	return InputType
+}
+
+// isTyped implements Typed
+func (r Input) isTyped() {}

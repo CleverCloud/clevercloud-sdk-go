@@ -2,10 +2,18 @@
 
 package models
 
+const Tls1Type = "Tls"
+
 // Tls1
 type Tls1 struct {
-	TLS BackendTLSTransport `json:"tls"`
+	TLS  TlsTransport `json:"tls"`
+	Type string       `json:"type"`
 }
 
-// isTransport3 implements Transport3
-func (r Tls1) isTransport3() {}
+// GetType returns the type identifier for Tls1
+func (r Tls1) GetType() string {
+	return Tls1Type
+}
+
+// isTransport5 implements Transport5
+func (r Tls1) isTransport5() {}

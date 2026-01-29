@@ -2,6 +2,8 @@
 
 package models
 
+const ExternalPeerType = "ExternalPeer"
+
 // ExternalPeer
 type ExternalPeer struct {
 	Endpoint     WireguardEndpoint `json:"endpoint"`
@@ -11,6 +13,12 @@ type ExternalPeer struct {
 	ParentEvent  *string           `json:"parentEvent,omitempty"`
 	ParentMember string            `json:"parentMember"`
 	PublicKey    string            `json:"publicKey"`
+	Type         string            `json:"type"`
+}
+
+// GetType returns the type identifier for ExternalPeer
+func (r ExternalPeer) GetType() string {
+	return ExternalPeerType
 }
 
 // isNetworkGroupComponent implements NetworkGroupComponent

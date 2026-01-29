@@ -4,12 +4,12 @@ package models
 
 // TenantView
 type TenantView struct {
-	Branches     []Branch           `json:"branches,omitempty"`
-	Headquarters *Branch            `json:"headquarters,omitempty"`
-	ID           TenantID           `json:"id"`
-	Members      []Membership       `json:"members,omitempty"`
-	Name         StringMaxLength128 `json:"name"`
-	Quota        Quota1             `json:"quota"`
-	Statuses     []IdentifiedStatus `json:"statuses,omitempty"`
-	Tags         []string           `json:"tags,omitempty"`
+	Branches     []Branch                  `json:"branches,omitempty"`
+	Headquarters *Branch                   `json:"headquarters,omitempty"`
+	ID           TenantID                  `json:"id"`
+	Members      []Membership              `json:"members,omitempty"`
+	Name         StringMaxLength128        `json:"name"`
+	Quota        Quota1                    `json:"quota"`
+	Statuses     []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags         []string                  `json:"tags,omitempty"`
 }

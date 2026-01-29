@@ -2,6 +2,8 @@
 
 package models
 
+const RemoteBlockDeviceType = "RemoteBlockDevice"
+
 // RemoteBlockDevice
 type RemoteBlockDevice struct {
 	Features    []string `json:"features,omitempty"`
@@ -11,6 +13,12 @@ type RemoteBlockDevice struct {
 	Size        int      `json:"size"`
 	StripeCount *int     `json:"stripeCount,omitempty"`
 	StripeUnit  *int     `json:"stripeUnit,omitempty"`
+	Type        string   `json:"type"`
+}
+
+// GetType returns the type identifier for RemoteBlockDevice
+func (r RemoteBlockDevice) GetType() string {
+	return RemoteBlockDeviceType
 }
 
 // isStorageConfiguration implements StorageConfiguration

@@ -21,14 +21,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - ownerId:
-  - resourceId:
+  - kvId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := base.Createbiscuit(ctx, client, tracer, ownerId, resourceId, requestBody)
+	response := base.Createbiscuit(ctx, client, tracer, ownerId, kvId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,11 +37,11 @@ Example:
 x-service: base
 operationId: createBiscuit
 */
-func Createbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string, requestBody *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView] {
-	ctx, span := tracer.Start(ctx, "createBiscuit", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("resourceId", resourceId)))
+func Createbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string, requestBody *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView] {
+	ctx, span := tracer.Start(ctx, "createBiscuit", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kvId", kvId)))
 	defer span.End()
 
-	path := utils.Path("/v4/iam/organisations/%s/iam/materia-db-kv/%s/tokens", ownerId, resourceId)
+	path := utils.Path("/v4/iam/organisations/%s/iam/materia-db-kv/%s/tokens", ownerId, kvId)
 
 	// Make API call
 	response := client.Post[models.IAMBiscuitView](ctx, c, path, requestBody)

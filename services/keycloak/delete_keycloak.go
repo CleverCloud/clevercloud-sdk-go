@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonKeycloakId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := keycloak.Deletekeycloak(ctx, client, tracer, addonId)
+	response := keycloak.Deletekeycloak(ctx, client, tracer, addonKeycloakId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: keycloak
 operationId: deleteKeycloak
 */
-func Deletekeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteKeycloak", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletekeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteKeycloak", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-keycloak/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-keycloak/resources/%s", addonKeycloakId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

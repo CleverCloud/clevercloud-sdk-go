@@ -2,10 +2,18 @@
 
 package models
 
+const Direct2Type = "Direct"
+
 // Direct2
 type Direct2 struct {
 	Direct BackendDirectTransport `json:"direct"`
+	Type   string                 `json:"type"`
 }
 
-// isTransport3 implements Transport3
-func (r Direct2) isTransport3() {}
+// GetType returns the type identifier for Direct2
+func (r Direct2) GetType() string {
+	return Direct2Type
+}
+
+// isTransport1 implements Transport1
+func (r Direct2) isTransport1() {}

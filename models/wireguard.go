@@ -2,9 +2,17 @@
 
 package models
 
+const WireguardType = "Wireguard"
+
 // Wireguard
 type Wireguard struct {
+	Type      string    `json:"type"`
 	Wireguard WireGuard `json:"wireguard"`
+}
+
+// GetType returns the type identifier for Wireguard
+func (r Wireguard) GetType() string {
+	return WireguardType
 }
 
 // isConfiguration implements Configuration

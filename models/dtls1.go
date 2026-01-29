@@ -2,10 +2,18 @@
 
 package models
 
+const Dtls1Type = "Dtls"
+
 // Dtls1
 type Dtls1 struct {
-	Dtls DtlsTransport `json:"dtls"`
+	Dtls BackendDTLSTransport `json:"dtls"`
+	Type string               `json:"type"`
 }
 
-// isTransport5 implements Transport5
-func (r Dtls1) isTransport5() {}
+// GetType returns the type identifier for Dtls1
+func (r Dtls1) GetType() string {
+	return Dtls1Type
+}
+
+// isTransport1 implements Transport1
+func (r Dtls1) isTransport1() {}

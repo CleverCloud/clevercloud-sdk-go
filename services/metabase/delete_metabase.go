@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonMetabaseId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := metabase.Deletemetabase(ctx, client, tracer, addonId)
+	response := metabase.Deletemetabase(ctx, client, tracer, addonMetabaseId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: metabase
 operationId: deleteMetabase
 */
-func Deletemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteMetabase", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteMetabase", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-metabase/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-metabase/resources/%s", addonMetabaseId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

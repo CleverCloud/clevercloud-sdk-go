@@ -11,6 +11,6 @@ type ResourceACL struct {
 	Deny       []string      `json:"deny,omitempty"`
 	ID         ResourceACLId `json:"id"`
 	OwnerID    TenantID      `json:"ownerId"`
-	ResourceID ResourceID    `json:"resourceId"`
+	ResourceID string        `json:"resourceId"`
 	UpdatedAt  time.Time     `json:"updatedAt"`
 }

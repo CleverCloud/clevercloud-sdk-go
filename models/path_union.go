@@ -3,7 +3,7 @@
 package models
 
 // Path
-// Union type - can be one of: Exact, Prefix, Regex
+// Union type - can be one of: Exact1, Prefix, Regex
 type Path interface {
 	isPath()
 	GetType() string

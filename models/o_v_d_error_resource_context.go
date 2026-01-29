@@ -2,10 +2,18 @@
 
 package models
 
+const OVDErrorResourceContextType = "resource"
+
 // OVDErrorResourceContext
 type OVDErrorResourceContext struct {
 	ResourceName string `json:"resourceName"`
 	ResourceType string `json:"resourceType"`
+	Type         string `json:"type"`
+}
+
+// GetType returns the type identifier for OVDErrorResourceContext
+func (r OVDErrorResourceContext) GetType() string {
+	return OVDErrorResourceContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

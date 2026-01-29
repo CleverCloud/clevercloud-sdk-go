@@ -11,5 +11,5 @@ type CreateWriteTokenRequest struct {
 	Producer    string     `json:"producer"`
 	Resource    string     `json:"resource"`
 	TTL         string     `json:"ttl"`
-	Tenant      string     `json:"tenant"`
+	Tenant      TenantID   `json:"tenant"`
 }

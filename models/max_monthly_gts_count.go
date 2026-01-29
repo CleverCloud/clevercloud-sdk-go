@@ -2,9 +2,17 @@
 
 package models
 
+const MaxMonthlyGtsCountType = "MaxMonthlyGtsCount"
+
 // MaxMonthlyGtsCount
 type MaxMonthlyGtsCount struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for MaxMonthlyGtsCount
+func (r MaxMonthlyGtsCount) GetType() string {
+	return MaxMonthlyGtsCountType
 }
 
 // isQuotaItem implements QuotaItem

@@ -2,9 +2,17 @@
 
 package models
 
+const OVDErrorBagContextType = "bag"
+
 // OVDErrorBagContext
 type OVDErrorBagContext struct {
-	Elem []ResourceType1 `json:"elem,omitempty"`
+	Elem []OwnerId `json:"elem,omitempty"`
+	Type string    `json:"type"`
+}
+
+// GetType returns the type identifier for OVDErrorBagContext
+func (r OVDErrorBagContext) GetType() string {
+	return OVDErrorBagContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

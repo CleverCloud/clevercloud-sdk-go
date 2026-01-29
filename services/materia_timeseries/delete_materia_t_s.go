@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonTsId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := materia_timeseries.Deletemateriats(ctx, client, tracer, addonId)
+	response := materia_timeseries.Deletemateriats(ctx, client, tracer, addonTsId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: materia_timeseries
 operationId: deleteMateriaTS
 */
-func Deletemateriats(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteMateriaTS", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletemateriats(ctx context.Context, c *client.Client, tracer trace.Tracer, addonTsId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteMateriaTS", trace.WithAttributes(attribute.String("addonTsId", addonTsId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-ts/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-ts/resources/%s", addonTsId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

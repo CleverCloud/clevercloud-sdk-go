@@ -2,9 +2,17 @@
 
 package models
 
+const Http2Type = "Http"
+
 // Http2
 type Http2 struct {
 	HTTP HttpTransport `json:"http"`
+	Type string        `json:"type"`
+}
+
+// GetType returns the type identifier for Http2
+func (r Http2) GetType() string {
+	return Http2Type
 }
 
 // isLayer1 implements Layer1

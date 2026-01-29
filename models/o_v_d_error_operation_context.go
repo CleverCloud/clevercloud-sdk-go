@@ -2,11 +2,19 @@
 
 package models
 
+const OVDErrorOperationContextType = "resource.operation"
+
 // OVDErrorOperationContext
 type OVDErrorOperationContext struct {
 	Operation    string  `json:"operation"`
 	ResourceName *string `json:"resourceName,omitempty"`
 	ResourceType string  `json:"resourceType"`
+	Type         string  `json:"type"`
+}
+
+// GetType returns the type identifier for OVDErrorOperationContext
+func (r OVDErrorOperationContext) GetType() string {
+	return OVDErrorOperationContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

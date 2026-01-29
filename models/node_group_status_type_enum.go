@@ -11,6 +11,7 @@ const (
 	NodeGroupStatusTypeDEPLOYED    NodeGroupStatusType = "DEPLOYED"
 	NodeGroupStatusTypeDEPLOYING   NodeGroupStatusType = "DEPLOYING"
 	NodeGroupStatusTypeFAILED      NodeGroupStatusType = "FAILED"
+	NodeGroupStatusTypePENDING     NodeGroupStatusType = "PENDING"
 	NodeGroupStatusTypeREADY       NodeGroupStatusType = "READY"
 	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
 	NodeGroupStatusTypeTERMINATING NodeGroupStatusType = "TERMINATING"

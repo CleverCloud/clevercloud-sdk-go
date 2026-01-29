@@ -2,10 +2,18 @@
 
 package models
 
+const Http3Type = "Http"
+
 // Http3
 type Http3 struct {
 	HTTP BackendHttpTransport `json:"http"`
+	Type string               `json:"type"`
 }
 
-// isLayer implements Layer
-func (r Http3) isLayer() {}
+// GetType returns the type identifier for Http3
+func (r Http3) GetType() string {
+	return Http3Type
+}
+
+// isTransport3 implements Transport3
+func (r Http3) isTransport3() {}

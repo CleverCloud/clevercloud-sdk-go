@@ -12,9 +12,9 @@ type DnsAudit struct {
 	Kind       WriteActionType `json:"kind"`
 	Name       DnsDomainName   `json:"name"`
 	OwnerID    TenantID        `json:"ownerId"`
-	RecordID   ResourceID      `json:"recordId"`
+	RecordID   string          `json:"recordId"`
 	RecordType DNSRecordType   `json:"recordType"`
-	ResourceID ResourceID      `json:"resourceId"`
+	ResourceID string          `json:"resourceId"`
 	TTL        int             `json:"ttl"`
 	UserID     string          `json:"userId"`
 }

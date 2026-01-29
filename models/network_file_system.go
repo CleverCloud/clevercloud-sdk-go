@@ -2,9 +2,17 @@
 
 package models
 
+const NetworkFileSystemType = "NetworkFileSystem"
+
 // NetworkFileSystem
 type NetworkFileSystem struct {
-	Size int `json:"size"`
+	Size int    `json:"size"`
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for NetworkFileSystem
+func (r NetworkFileSystem) GetType() string {
+	return NetworkFileSystemType
 }
 
 // isStorageConfiguration implements StorageConfiguration

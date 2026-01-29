@@ -2,10 +2,18 @@
 
 package models
 
+const ServerEndpointType = "ServerEndpoint"
+
 // ServerEndpoint
 type ServerEndpoint struct {
-	NgTerm     any `json:"ngTerm"`
-	PublicTerm any `json:"publicTerm"`
+	NgTerm     any    `json:"ngTerm"`
+	PublicTerm any    `json:"publicTerm"`
+	Type       string `json:"type"`
+}
+
+// GetType returns the type identifier for ServerEndpoint
+func (r ServerEndpoint) GetType() string {
+	return ServerEndpointType
 }
 
 // isWireguardEndpoint implements WireguardEndpoint

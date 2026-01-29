@@ -2,5 +2,5 @@
 
 package models
 
-// AssignedIpAddressId an assigned IP address
+// AssignedIpAddressId an assigned IP address ID
 type AssignedIpAddressId = string

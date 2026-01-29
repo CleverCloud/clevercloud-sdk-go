@@ -21,7 +21,7 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (name or UUID)
+  - clusterId: Cluster identifier (UUID)
   - opts: optional query parameters
 
 # Returns the operation result or an error

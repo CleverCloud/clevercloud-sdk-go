@@ -2,10 +2,18 @@
 
 package models
 
+const Quic1Type = "Quic"
+
 // Quic1
 type Quic1 struct {
-	Quic BackendQuicTransport `json:"quic"`
+	Quic QuicTransport `json:"quic"`
+	Type string        `json:"type"`
 }
 
-// isTransport1 implements Transport1
-func (r Quic1) isTransport1() {}
+// GetType returns the type identifier for Quic1
+func (r Quic1) GetType() string {
+	return Quic1Type
+}
+
+// isTransport4 implements Transport4
+func (r Quic1) isTransport4() {}
