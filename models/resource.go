@@ -6,8 +6,8 @@ package models
 type Resource struct {
 	Consumption Consumption        `json:"consumption"`
 	Description string             `json:"description"`
-	ID          ResourceID         `json:"id"`
-	Kind        IdentifiedKind     `json:"kind"`
+	ID          string             `json:"id"`
+	Kind        string             `json:"kind"`
 	Name        StringMaxLength128 `json:"name"`
 	ProductID   string             `json:"productId"`
 	Statuses    []IdentifiedStatus `json:"statuses,omitempty"`

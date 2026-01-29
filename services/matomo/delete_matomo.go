@@ -19,13 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonMatomoId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := matomo.Deletematomo(ctx, client, tracer, addonId)
+	response := matomo.Deletematomo(ctx, client, tracer, addonMatomoId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +34,11 @@ Example:
 x-service: matomo
 operationId: deleteMatomo
 */
-func Deletematomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteMatomo", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletematomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteMatomo", trace.WithAttributes(attribute.String("addonMatomoId", addonMatomoId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-matomo/resources/%s", addonId)
+	path := utils.Path("/v2/providers/addon-matomo/resources/%s", addonMatomoId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

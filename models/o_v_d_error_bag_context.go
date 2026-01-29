@@ -4,7 +4,7 @@ package models
 
 // OVDErrorBagContext
 type OVDErrorBagContext struct {
-	Elem []ResourceType1 `json:"elem,omitempty"`
+	Elem []OwnerId `json:"elem,omitempty"`
 }
 
 // isOVDErrorContext implements OVDErrorContext

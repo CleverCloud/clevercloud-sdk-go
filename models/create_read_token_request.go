@@ -11,5 +11,5 @@ type CreateReadTokenRequest struct {
 	Producers    []string   `json:"producers,omitempty"`
 	Resource     string     `json:"resource"`
 	TTL          string     `json:"ttl"`
-	Tenant       string     `json:"tenant"`
+	Tenant       TenantID   `json:"tenant"`
 }

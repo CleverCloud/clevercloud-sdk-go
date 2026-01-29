@@ -6,11 +6,11 @@ package models
 type NodeGroupPatchPayload struct {
 	Description     *StringMaxLength4096 `json:"description,omitempty"`
 	Flavor          NodeFlavor           `json:"flavor"`
-	Labels          MapString            `json:"labels"`
-	MaxNodeCount    int                  `json:"maxNodeCount"`
-	MinNodeCount    int                  `json:"minNodeCount"`
+	Labels          *MapString           `json:"labels,omitempty"`
+	MaxNodeCount    *int                 `json:"maxNodeCount,omitempty"`
+	MinNodeCount    *int                 `json:"minNodeCount,omitempty"`
 	Name            DnsDomainNameRfc1123 `json:"name"`
 	Tag             *StringMaxLength1024 `json:"tag,omitempty"`
-	Taints          string               `json:"taints"`
+	Taints          *string              `json:"taints,omitempty"`
 	TargetNodeCount int                  `json:"targetNodeCount"`
 }

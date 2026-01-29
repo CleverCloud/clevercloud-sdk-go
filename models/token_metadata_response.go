@@ -14,5 +14,5 @@ type TokenMetadataResponse struct {
 	RevokedAt    *time.Time `json:"revokedAt,omitempty"`
 	Scope        string     `json:"scope"`
 	TTL          string     `json:"ttl"`
-	Tenant       string     `json:"tenant"`
+	Tenant       TenantID   `json:"tenant"`
 }

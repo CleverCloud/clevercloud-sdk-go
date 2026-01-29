@@ -4,9 +4,9 @@ package models
 
 // IAMBiscuitLabelsView
 type IAMBiscuitLabelsView struct {
-	Creator    string  `json:"creator"`
-	Owner      *string `json:"owner,omitempty"`
-	Region     string  `json:"region"`
-	ResourceID *string `json:"resource_id,omitempty"`
-	Service    *string `json:"service,omitempty"`
+	Creator    string   `json:"creator"`
+	Owner      *OwnerID `json:"owner,omitempty"`
+	Region     string   `json:"region"`
+	ResourceID *string  `json:"resource_id,omitempty"`
+	Service    *string  `json:"service,omitempty"`
 }

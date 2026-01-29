@@ -15,7 +15,7 @@ type Pulsar struct {
 	DeletionDate              *time.Time   `json:"deletion_date,omitempty"`
 	ID                        string       `json:"id"`
 	Namespace                 string       `json:"namespace"`
-	OwnerID                   string       `json:"owner_id"`
+	OwnerID                   OwnerID      `json:"owner_id"`
 	Plan                      PulsarPlan   `json:"plan"`
 	Status                    PulsarStatus `json:"status"`
 	Tenant                    string       `json:"tenant"`

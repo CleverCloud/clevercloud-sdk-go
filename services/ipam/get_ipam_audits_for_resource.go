@@ -21,13 +21,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - auditResourceId: Audit Resource ID (includes region, network, etc.)
+  - auditIpamResourceId: Audit Resource ID (includes region, network, etc.)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ipam.Getipamauditsforresource(ctx, client, tracer, tenantId, auditResourceId)
+	response := ipam.Getipamauditsforresource(ctx, client, tracer, tenantId, auditIpamResourceId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +36,11 @@ Example:
 x-service: ipam
 operationId: getIpamAuditsForResource
 */
-func Getipamauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, auditResourceId string) client.Response[[]models.IpamAudit1] {
-	ctx, span := tracer.Start(ctx, "getIpamAuditsForResource", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("auditResourceId", auditResourceId)))
+func Getipamauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, auditIpamResourceId string) client.Response[[]models.IpamAudit1] {
+	ctx, span := tracer.Start(ctx, "getIpamAuditsForResource", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("auditIpamResourceId", auditIpamResourceId)))
 	defer span.End()
 
-	path := utils.Path("/v4/ipam/organisations/%s/audit/%s", tenantId, auditResourceId)
+	path := utils.Path("/v4/ipam/organisations/%s/audit/%s", tenantId, auditIpamResourceId)
 
 	// Make API call
 	response := client.Get[[]models.IpamAudit1](ctx, c, path)

@@ -7,10 +7,10 @@ import "time"
 // DnsRecord1
 type DnsRecord1 struct {
 	Content    string        `json:"content"`
-	ID         ResourceID    `json:"id"`
+	ID         string        `json:"id"`
 	Name       DnsDomainName `json:"name"`
 	OwnerID    TenantID      `json:"ownerId"`
-	ResourceID ResourceID    `json:"resourceId"`
+	ResourceID string        `json:"resourceId"`
 	TTL        int           `json:"ttl"`
 	Type       DNSRecordType `json:"type"`
 	UpdatedAt  time.Time     `json:"updatedAt"`
