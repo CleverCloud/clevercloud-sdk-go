@@ -2,9 +2,17 @@
 
 package models
 
+const MaxIpType = "MaxIp"
+
 // MaxIp
 type MaxIp struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for MaxIp
+func (r MaxIp) GetType() string {
+	return MaxIpType
 }
 
 // isQuotaItem implements QuotaItem

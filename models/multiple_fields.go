@@ -2,10 +2,18 @@
 
 package models
 
+const MultipleFieldsType = "fields"
+
 // MultipleFields
 type MultipleFields struct {
 	Fields MapFielderror1 `json:"fields"`
+	Type   string         `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r MultipleFields) isHTTPErrorContext() {}
+// GetType returns the type identifier for MultipleFields
+func (r MultipleFields) GetType() string {
+	return MultipleFieldsType
+}
+
+// isTyped implements Typed
+func (r MultipleFields) isTyped() {}

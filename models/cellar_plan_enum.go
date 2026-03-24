@@ -6,10 +6,9 @@ package models
 type CellarPlan string
 
 const (
-	CellarPlanAddonPulsarOffload CellarPlan = "ADDON_PULSAR_OFFLOAD"
-	CellarPlanBACKUP             CellarPlan = "BACKUP"
-	CellarPlanOrganisationLogs   CellarPlan = "ORGANISATION_LOGS"
-	CellarPlanS                  CellarPlan = "S"
+	CellarPlanBACKUP            CellarPlan = "BACKUP"
+	CellarPlanPulsarColdStorage CellarPlan = "PULSAR_COLD_STORAGE"
+	CellarPlanS                 CellarPlan = "S"
 )
 
 // String returns the underlying string value

@@ -4,17 +4,17 @@ package models
 
 // Product
 type Product struct {
-	DefaultVersion string             `json:"defaultVersion"`
-	Description    string             `json:"description"`
-	ID             string             `json:"id"`
-	Limitations    Limitations        `json:"limitations"`
-	LogoURL        string             `json:"logoUrl"` // URL
-	Maturity       MaturityKind       `json:"maturity"`
-	Name           StringMaxLength128 `json:"name"`
-	ProviderURL    string             `json:"providerUrl"` // URL
-	Statuses       []IdentifiedStatus `json:"statuses,omitempty"`
-	Tags           []string           `json:"tags,omitempty"`
-	TenantID       TenantID           `json:"tenantId"`
-	Versions       []string           `json:"versions,omitempty"`
-	Visibility     VisibilityKind     `json:"visibility"`
+	DefaultVersion string                    `json:"defaultVersion"`
+	Description    string                    `json:"description"`
+	ID             string                    `json:"id"`
+	Limitations    Limitations               `json:"limitations"`
+	LogoURL        string                    `json:"logoUrl"` // URL
+	Maturity       MaturityKind              `json:"maturity"`
+	Name           StringMaxLength128        `json:"name"`
+	ProviderURL    string                    `json:"providerUrl"` // URL
+	Statuses       []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags           []string                  `json:"tags,omitempty"`
+	TenantID       TenantID                  `json:"tenantId"`
+	Versions       []string                  `json:"versions,omitempty"`
+	Visibility     VisibilityKind            `json:"visibility"`
 }

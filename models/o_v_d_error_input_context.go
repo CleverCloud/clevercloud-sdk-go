@@ -2,9 +2,17 @@
 
 package models
 
+const OVDErrorInputContextType = "input"
+
 // OVDErrorInputContext
 type OVDErrorInputContext struct {
 	InputNames []string `json:"inputNames,omitempty"`
+	Type       string   `json:"type"`
+}
+
+// GetType returns the type identifier for OVDErrorInputContext
+func (r OVDErrorInputContext) GetType() string {
+	return OVDErrorInputContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

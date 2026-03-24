@@ -2,8 +2,17 @@
 
 package models
 
+const EmptyType = "Empty"
+
 // Empty
-type Empty struct{}
+type Empty struct {
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for Empty
+func (r Empty) GetType() string {
+	return EmptyType
+}
 
 // isHTTPErrorContext implements HTTPErrorContext
 func (r Empty) isHTTPErrorContext() {}

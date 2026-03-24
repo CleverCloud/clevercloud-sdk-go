@@ -2,9 +2,17 @@
 
 package models
 
+const OVDMultipleErrorFieldContextType = "fields"
+
 // OVDMultipleErrorFieldContext
 type OVDMultipleErrorFieldContext struct {
 	Fields MapFielderror `json:"fields"`
+	Type   string        `json:"type"`
+}
+
+// GetType returns the type identifier for OVDMultipleErrorFieldContext
+func (r OVDMultipleErrorFieldContext) GetType() string {
+	return OVDMultipleErrorFieldContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

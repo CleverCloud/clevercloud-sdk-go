@@ -4,6 +4,6 @@ package models
 
 // Membership
 type Membership struct {
-	Identity IdentityView `json:"identity"`
-	Role     Role         `json:"role"`
+	Identity Identity `json:"identity"`
+	Role     Role     `json:"role"`
 }

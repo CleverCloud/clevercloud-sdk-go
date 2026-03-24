@@ -12,6 +12,7 @@ const (
 	ClusterStatusTypeDEPLOYING   ClusterStatusType = "DEPLOYING"
 	ClusterStatusTypeFAILED      ClusterStatusType = "FAILED"
 	ClusterStatusTypeREDEPLOYING ClusterStatusType = "REDEPLOYING"
+	ClusterStatusTypeUPDATING    ClusterStatusType = "UPDATING"
 )
 
 // String returns the underlying string value

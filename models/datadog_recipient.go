@@ -15,5 +15,5 @@ func (r DatadogRecipient) GetType() string {
 	return DatadogRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r DatadogRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r DatadogRecipient) isDrainRecipient1() {}

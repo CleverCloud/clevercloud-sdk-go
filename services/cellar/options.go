@@ -4,6 +4,7 @@ package cellar
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -12,13 +13,53 @@ type Option func(*Options)
 
 // Options holds query parameters for cellar operations
 type Options struct {
-	Force *bool `url:"force,omitempty"`
+	Count              *int    `url:"count,omitempty"`
+	Cursor             *string `url:"cursor,omitempty"`
+	Force              *bool   `url:"force,omitempty"`
+	Includeunavailable *bool   `url:"includeUnavailable,omitempty"`
+	Prefix             *string `url:"prefix,omitempty"`
+	Purgeobjects       *bool   `url:"purgeObjects,omitempty"`
+}
+
+// WithCount sets the count query parameter
+func WithCount(count int) Option {
+	return func(o *Options) {
+		o.Count = &count
+	}
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
 }
 
 // WithForce sets the force query parameter
 func WithForce(force bool) Option {
 	return func(o *Options) {
 		o.Force = &force
+	}
+}
+
+// WithIncludeunavailable sets the includeUnavailable query parameter
+func WithIncludeunavailable(includeUnavailable bool) Option {
+	return func(o *Options) {
+		o.Includeunavailable = &includeUnavailable
+	}
+}
+
+// WithPrefix sets the prefix query parameter
+func WithPrefix(prefix string) Option {
+	return func(o *Options) {
+		o.Prefix = &prefix
+	}
+}
+
+// WithPurgeobjects sets the purgeObjects query parameter
+func WithPurgeobjects(purgeObjects bool) Option {
+	return func(o *Options) {
+		o.Purgeobjects = &purgeObjects
 	}
 }
 
@@ -30,8 +71,23 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Count != nil {
+		params = append(params, fmt.Sprintf("count=%d", *options.Count))
+	}
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
 	if options.Force != nil {
 		params = append(params, fmt.Sprintf("force=%t", *options.Force))
+	}
+	if options.Includeunavailable != nil {
+		params = append(params, fmt.Sprintf("includeUnavailable=%t", *options.Includeunavailable))
+	}
+	if options.Prefix != nil {
+		params = append(params, fmt.Sprintf("prefix=%s", url.QueryEscape(*options.Prefix)))
+	}
+	if options.Purgeobjects != nil {
+		params = append(params, fmt.Sprintf("purgeObjects=%t", *options.Purgeobjects))
 	}
 
 	if len(params) == 0 {

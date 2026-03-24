@@ -3,7 +3,9 @@
 package models
 
 // Cluster1
-type Cluster1 struct{}
-
-// isResourceType implements ResourceType
-func (r Cluster1) isResourceType() {}
+type Cluster1 struct {
+	Backends Backends           `json:"backends"`
+	ID       StringMaxLength128 `json:"id"`
+	OwnerID  TenantID           `json:"ownerId"`
+	Router   *Router            `json:"router,omitempty"`
+}

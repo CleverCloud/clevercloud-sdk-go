@@ -6,14 +6,13 @@ import "time"
 
 // Cellar
 type Cellar struct {
-	ClusterID    string       `json:"clusterId"`
-	CreationDate time.Time    `json:"creationDate"`
-	DeletionDate *time.Time   `json:"deletionDate,omitempty"`
-	Host         string       `json:"host"`
-	ID           string       `json:"id"`
-	KeyID        string       `json:"keyId"`
-	KeySecret    string       `json:"keySecret"`
-	OwnerID      OwnerID      `json:"ownerId"`
-	Plan         CellarPlan   `json:"plan"`
-	Status       CellarStatus `json:"status"`
+	AddonID      string             `json:"addonId"`
+	Buckets      CellarBucketsCount `json:"buckets"`
+	CreationDate time.Time          `json:"creationDate"`
+	ID           string             `json:"id"`
+	Name         string             `json:"name"`
+	OwnerID      OwnerID            `json:"ownerId"`
+	Plan         CellarPlan         `json:"plan"`
+	Status       CellarStatus       `json:"status"`
+	Traffic      CellarTraffic      `json:"traffic"`
 }

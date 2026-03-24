@@ -8,4 +8,5 @@ type CreateRegionInput struct {
 	ID          RegionId     `json:"id"`
 	Name        *string      `json:"name,omitempty"`
 	Provider    ProviderType `json:"provider"`
+	Tags        []string     `json:"tags,omitempty"`
 }

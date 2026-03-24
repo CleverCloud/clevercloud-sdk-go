@@ -4,6 +4,6 @@ package models
 
 // WannabeDrain
 type WannabeDrain struct {
-	Kind      DrainKind      `json:"kind"`
-	Recipient DrainRecipient `json:"recipient"`
+	Kind      DrainKind       `json:"kind"`
+	Recipient DrainRecipient1 `json:"recipient"`
 }

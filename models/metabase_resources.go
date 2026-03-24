@@ -4,6 +4,6 @@ package models
 
 // MetabaseResources
 type MetabaseResources struct {
-	Entrypoint string  `json:"entrypoint"`
-	PgsqlID    AddonID `json:"pgsqlId"`
+	Entrypoint *string `json:"entrypoint,omitempty"`
+	PgsqlID    *string `json:"pgsqlId,omitempty"`
 }

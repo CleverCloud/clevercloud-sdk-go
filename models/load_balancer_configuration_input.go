@@ -4,7 +4,7 @@ package models
 
 // LoadBalancerConfigurationInput
 type LoadBalancerConfigurationInput struct {
-	Clusters       []Cluster      `json:"clusters,omitempty"`
+	Clusters       []Cluster1     `json:"clusters,omitempty"`
 	Listeners      []Listener     `json:"listeners,omitempty"`
 	LoadbalancerID LoadBalancerId `json:"loadbalancerId"`
 	Version        int            `json:"version"`

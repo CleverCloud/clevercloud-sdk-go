@@ -16,5 +16,5 @@ func (r NewRelicRecipient) GetType() string {
 	return NewRelicRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r NewRelicRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r NewRelicRecipient) isDrainRecipient1() {}

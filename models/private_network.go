@@ -7,6 +7,6 @@ type PrivateNetwork struct {
 	Configuration *Configuration `json:"configuration,omitempty"`
 	ID            string         `json:"id"`
 	OwnerID       string         `json:"ownerId"`
-	V4            *Network       `json:"v4,omitempty"`
-	V6            *Network       `json:"v6,omitempty"`
+	V4            *Network1      `json:"v4,omitempty"`
+	V6            *Network1      `json:"v6,omitempty"`
 }

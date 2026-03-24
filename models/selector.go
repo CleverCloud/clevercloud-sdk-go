@@ -2,10 +2,18 @@
 
 package models
 
+const SelectorType = "selector"
+
 // Selector
 type Selector struct {
 	Path []string `json:"path,omitempty"`
+	Type string   `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Selector) isHTTPErrorContext() {}
+// GetType returns the type identifier for Selector
+func (r Selector) GetType() string {
+	return SelectorType
+}
+
+// isTyped implements Typed
+func (r Selector) isTyped() {}

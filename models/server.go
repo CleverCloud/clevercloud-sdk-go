@@ -2,10 +2,17 @@
 
 package models
 
+import "time"
+
 // Server
 type Server struct {
-	Address any    `json:"address"`
-	Backup  bool   `json:"backup"`
-	ID      string `json:"id"`
-	Weight  *int   `json:"weight,omitempty"`
+	AvailabilityZone     string    `json:"availabilityZone"`
+	CreatedAt            time.Time `json:"createdAt"`
+	Drain                bool      `json:"drain"`
+	ID                   string    `json:"id"`
+	LoadbalancerCapacity int       `json:"loadbalancerCapacity"`
+	Maintenance          bool      `json:"maintenance"`
+	OwnerID              TenantID  `json:"ownerId"`
+	RegionID             RegionId  `json:"regionId"`
+	UpdatedAt            time.Time `json:"updatedAt"`
 }

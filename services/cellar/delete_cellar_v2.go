@@ -4,7 +4,6 @@ package cellar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -20,14 +19,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
-  - opts: optional query parameters
+  - CellarId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Deletecellarv2(ctx, client, tracer, addonId, opts...)
+	response := cellar.Deletecellarv2(ctx, client, tracer, CellarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,17 +34,11 @@ Example:
 x-service: cellar
 operationId: deleteCellarV2
 */
-func Deletecellarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, opts ...Option) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteCellarV2", trace.WithAttributes(attribute.String("addonId", addonId)))
+func Deletecellarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, CellarId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteCellarV2", trace.WithAttributes(attribute.String("CellarId", CellarId)))
 	defer span.End()
 
-	path := utils.Path("/v2/providers/addon-cellar/%s", addonId)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
+	path := utils.Path("/v2/providers/addon-cellar/%s", CellarId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

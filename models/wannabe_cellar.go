@@ -4,9 +4,12 @@ package models
 
 // WannabeCellar
 type WannabeCellar struct {
-	AuthorID  *string    `json:"authorId,omitempty"`
-	ClusterID string     `json:"clusterId"`
-	Options   MapString  `json:"options"`
-	OwnerID   OwnerID    `json:"ownerId"`
-	Plan      CellarPlan `json:"plan"`
+	AppID        string     `json:"appId"`
+	AuthorID     *string    `json:"authorId,omitempty"`
+	CallbackURL  string     `json:"callbackUrl"`
+	ClusterID    int        `json:"clusterId"`
+	LogplexToken string     `json:"logplexToken"`
+	Options      MapString  `json:"options"`
+	OwnerID      OwnerID    `json:"ownerId"`
+	Plan         CellarPlan `json:"plan"`
 }

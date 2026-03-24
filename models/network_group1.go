@@ -5,7 +5,7 @@ package models
 // NetworkGroup1
 type NetworkGroup1 struct {
 	ID         string             `json:"id"`
-	Network    Network            `json:"network"`
+	Network    Network1           `json:"network"`
 	OwnerID    string             `json:"ownerId"`
 	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
 	PrivateKey string             `json:"privateKey"`

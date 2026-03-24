@@ -9,6 +9,3 @@ type Member struct {
 	Kind       MemberKind         `json:"kind"`
 	Label      StringMaxLength128 `json:"label"`
 }
-
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r Member) isNetworkGroupComponent() {}

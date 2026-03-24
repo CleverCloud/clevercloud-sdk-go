@@ -4,6 +4,6 @@ package models
 
 // RevocationListResponse
 type RevocationListResponse struct {
-	Metadata      RevocationMetadata `json:"metadata"`
-	RevokedTokens []RevocationEntry  `json:"revokedTokens,omitempty"`
+	Items    []string           `json:"items,omitempty"`
+	Metadata PaginationMetadata `json:"metadata"`
 }

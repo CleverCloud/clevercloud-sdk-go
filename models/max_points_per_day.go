@@ -2,9 +2,17 @@
 
 package models
 
+const MaxPointsPerDayType = "MaxPointsPerDay"
+
 // MaxPointsPerDay
 type MaxPointsPerDay struct {
-	Maximum int `json:"maximum"`
+	Maximum int    `json:"maximum"`
+	Type    string `json:"type"`
+}
+
+// GetType returns the type identifier for MaxPointsPerDay
+func (r MaxPointsPerDay) GetType() string {
+	return MaxPointsPerDayType
 }
 
 // isQuotaItem implements QuotaItem

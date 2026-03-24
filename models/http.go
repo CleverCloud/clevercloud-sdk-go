@@ -2,9 +2,17 @@
 
 package models
 
+const HttpType = "Http"
+
 // Http
 type Http struct {
 	HTTP HttpRouter `json:"http"`
+	Type string     `json:"type"`
+}
+
+// GetType returns the type identifier for Http
+func (r Http) GetType() string {
+	return HttpType
 }
 
 // isProtocol implements Protocol

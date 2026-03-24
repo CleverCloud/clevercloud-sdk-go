@@ -4,5 +4,5 @@ package models
 
 // TcpTransport
 type TcpTransport struct {
-	Transport Transport4 `json:"transport"`
+	Transport Transport5 `json:"transport"`
 }

@@ -4,10 +4,10 @@ package models
 
 // EmailAddress
 type EmailAddress struct {
-	Address    string             `json:"address"`
-	ID         string             `json:"id"`
-	IdentityID string             `json:"identityId"`
-	Label      *string            `json:"label,omitempty"`
-	Statuses   []IdentifiedStatus `json:"statuses,omitempty"`
-	Tags       []string           `json:"tags,omitempty"`
+	Address    string                    `json:"address"`
+	ID         string                    `json:"id"`
+	IdentityID string                    `json:"identityId"`
+	Label      *string                   `json:"label,omitempty"`
+	Statuses   []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags       []string                  `json:"tags,omitempty"`
 }

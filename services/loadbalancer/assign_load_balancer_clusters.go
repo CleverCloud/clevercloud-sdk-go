@@ -37,14 +37,14 @@ Example:
 x-service: loadbalancer
 operationId: assignLoadBalancerClusters
 */
-func Assignloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Cluster) client.Response[models.LoadBalancerView] {
+func Assignloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Cluster1) client.Response[models.LoadBalancer] {
 	ctx, span := tracer.Start(ctx, "assignLoadBalancerClusters", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/clusters", tenantId, loadbalancerId)
 
 	// Make API call
-	response := client.Post[models.LoadBalancerView](ctx, c, path, requestBody)
+	response := client.Post[models.LoadBalancer](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

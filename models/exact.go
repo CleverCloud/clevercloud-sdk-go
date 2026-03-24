@@ -2,10 +2,18 @@
 
 package models
 
+const ExactType = "Exact"
+
 // Exact
 type Exact struct {
 	Exact string `json:"exact"`
+	Type  string `json:"type"`
 }
 
-// isPath implements Path
-func (r Exact) isPath() {}
+// GetType returns the type identifier for Exact
+func (r Exact) GetType() string {
+	return ExactType
+}
+
+// isHost implements Host
+func (r Exact) isHost() {}

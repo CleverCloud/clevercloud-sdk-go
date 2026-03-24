@@ -4,5 +4,5 @@ package models
 
 // UdpTransport
 type UdpTransport struct {
-	Transport Transport5 `json:"transport"`
+	Transport Transport4 `json:"transport"`
 }

@@ -16,5 +16,5 @@ func (r SyslogTCPRecipient) GetType() string {
 	return SyslogTCPRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r SyslogTCPRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r SyslogTCPRecipient) isDrainRecipient1() {}

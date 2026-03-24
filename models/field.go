@@ -2,11 +2,19 @@
 
 package models
 
+const FieldType = "field"
+
 // Field
 type Field struct {
 	Error FieldError `json:"error"`
 	Name  string     `json:"name"`
+	Type  string     `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Field) isHTTPErrorContext() {}
+// GetType returns the type identifier for Field
+func (r Field) GetType() string {
+	return FieldType
+}
+
+// isTyped implements Typed
+func (r Field) isTyped() {}

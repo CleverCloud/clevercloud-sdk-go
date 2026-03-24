@@ -4,6 +4,8 @@ package models
 
 // CreateNetworkInput
 type CreateNetworkInput struct {
-	Cidr string  `json:"cidr"`
-	Name *string `json:"name,omitempty"`
+	Capabilities []NetworkCapability `json:"capabilities,omitempty"`
+	Cidr         string              `json:"cidr"`
+	Name         *string             `json:"name,omitempty"`
+	Tags         []string            `json:"tags,omitempty"`
 }

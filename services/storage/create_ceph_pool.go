@@ -21,13 +21,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := storage.Createcephpool(ctx, client, tracer, tenantId, requestBody)
+	response := storage.Createcephpool(ctx, client, tracer, tenantId, clusterId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: storage
 operationId: createCephPool
 */
-func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephPool) client.Response[models.CephPool] {
-	ctx, span := tracer.Start(ctx, "createCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephPool) client.Response[models.CephPool] {
+	ctx, span := tracer.Start(ctx, "createCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/ceph-pools", tenantId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-pools", tenantId, clusterId)
 
 	// Make API call
 	response := client.Post[models.CephPool](ctx, c, path, requestBody)

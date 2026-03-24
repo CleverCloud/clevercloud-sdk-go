@@ -2,12 +2,20 @@
 
 package models
 
+const BootedStatus = "Booted"
+
 // Booted
 type Booted struct {
 	AppPort    *int               `json:"appPort,omitempty"`
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 	IP         string             `json:"ip"`
+	Status     string             `json:"status"`
 	ZabbixPort *int               `json:"zabbixPort,omitempty"`
+}
+
+// GetType returns the type identifier for Booted
+func (r Booted) GetType() string {
+	return BootedStatus
 }
 
 // isVMDeploymentStatus implements VMDeploymentStatus

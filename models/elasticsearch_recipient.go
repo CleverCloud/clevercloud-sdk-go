@@ -19,5 +19,5 @@ func (r ElasticsearchRecipient) GetType() string {
 	return ElasticsearchRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r ElasticsearchRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r ElasticsearchRecipient) isDrainRecipient1() {}

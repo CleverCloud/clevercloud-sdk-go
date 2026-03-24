@@ -4,12 +4,18 @@ package models
 
 // NetworkGroup
 type NetworkGroup struct {
-	ID    string              `json:"id"`
-	Peers []NetworkGroupPeer1 `json:"peers,omitempty"`
+	Description       *string             `json:"description,omitempty"`
+	DnsSanitizedLabel *StringMaxLength128 `json:"dnsSanitizedLabel,omitempty"`
+	ID                string              `json:"id"`
+	Label             StringMaxLength128  `json:"label"`
+	LastAllocatedIP   string              `json:"lastAllocatedIp"`
+	Members           []Member            `json:"members,omitempty"`
+	NetworkIP         string              `json:"networkIp"`
+	OwnerID           OwnerID             `json:"ownerId"`
+	Peers             []Peer              `json:"peers,omitempty"`
+	Tags              []string            `json:"tags,omitempty"`
+	Version           int                 `json:"version"`
 }
 
 // isNetworkDetails implements NetworkDetails
 func (r NetworkGroup) isNetworkDetails() {}
-
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r NetworkGroup) isNetworkGroupComponent() {}

@@ -2,10 +2,18 @@
 
 package models
 
+const OVDErrorFieldContextType = "field"
+
 // OVDErrorFieldContext
 type OVDErrorFieldContext struct {
 	FieldName  string `json:"fieldName"`
 	FieldValue string `json:"fieldValue"`
+	Type       string `json:"type"`
+}
+
+// GetType returns the type identifier for OVDErrorFieldContext
+func (r OVDErrorFieldContext) GetType() string {
+	return OVDErrorFieldContextType
 }
 
 // isOVDErrorContext implements OVDErrorContext

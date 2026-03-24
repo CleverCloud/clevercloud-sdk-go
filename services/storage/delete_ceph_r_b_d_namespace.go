@@ -20,6 +20,7 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - poolId:
   - namespaceId:
 
@@ -27,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := storage.Deletecephrbdnamespace(ctx, client, tracer, tenantId, poolId, namespaceId)
+	response := storage.Deletecephrbdnamespace(ctx, client, tracer, tenantId, clusterId, poolId, namespaceId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: storage
 operationId: deleteCephRBDNamespace
 */
-func Deletecephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, poolId string, namespaceId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("poolId", poolId), attribute.String("namespaceId", namespaceId)))
+func Deletecephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, poolId string, namespaceId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId), attribute.String("poolId", poolId), attribute.String("namespaceId", namespaceId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/ceph-pools/%s/namespaces/%s", tenantId, poolId, namespaceId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-pools/%s/namespaces/%s", tenantId, clusterId, poolId, namespaceId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

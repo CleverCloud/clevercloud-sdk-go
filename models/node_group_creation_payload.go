@@ -6,11 +6,11 @@ package models
 type NodeGroupCreationPayload struct {
 	Description     *StringMaxLength4096 `json:"description,omitempty"`
 	Flavor          NodeFlavor           `json:"flavor"`
-	Labels          *MapString           `json:"labels,omitempty"`
+	Labels          []KubernetesLabel    `json:"labels,omitempty"`
 	MaxNodeCount    *int                 `json:"maxNodeCount,omitempty"`
 	MinNodeCount    *int                 `json:"minNodeCount,omitempty"`
-	Name            DnsDomainNameRfc1123 `json:"name"`
+	Name            NodeGroupName        `json:"name"`
 	Tag             *StringMaxLength1024 `json:"tag,omitempty"`
-	Taints          *string              `json:"taints,omitempty"`
+	Taints          []KubernetesTaint    `json:"taints,omitempty"`
 	TargetNodeCount int                  `json:"targetNodeCount"`
 }

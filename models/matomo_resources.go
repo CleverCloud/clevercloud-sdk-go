@@ -4,8 +4,8 @@ package models
 
 // MatomoResources
 type MatomoResources struct {
-	Entrypoint string   `json:"entrypoint"`
-	KvID       *AddonID `json:"kvId,omitempty"`
-	MysqlID    AddonID  `json:"mysqlId"`
-	RedisID    *AddonID `json:"redisId,omitempty"`
+	Entrypoint *string `json:"entrypoint,omitempty"`
+	KvID       *string `json:"kvId,omitempty"`
+	MysqlID    *string `json:"mysqlId,omitempty"`
+	RedisID    *string `json:"redisId,omitempty"`
 }

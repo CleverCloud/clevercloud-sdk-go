@@ -21,7 +21,7 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - ownerId:
-  - applicationId:
+  - applicationId: Resource identifier for drain target. Accepted prefixes: app_, cellar_, postgresql_, mysql_, mongodb_, elasticsearch_, redis_, pulsar_, matomo_, keycloak_, otoroshi_, cumulocity_, hivemq_, metabase_, xen_, ai_, kms_, kubernetes_, kv_, ts_, grist_. Generic addon_ prefix is not accepted.
   - drainId:
 
 # Returns the operation result or an error

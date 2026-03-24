@@ -4,6 +4,8 @@ package models
 
 // CephCluster
 type CephCluster struct {
-	ID       string `json:"id"`
-	Monitors []any  `json:"monitors,omitempty"`
+	Dashboard CephDashboardInfo         `json:"dashboard"`
+	ID        string                    `json:"id"`
+	Monitors  []any                     `json:"monitors,omitempty"`
+	Statuses  []DefaultIdentifiedStatus `json:"statuses,omitempty"`
 }

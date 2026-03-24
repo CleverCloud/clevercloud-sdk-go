@@ -2,10 +2,18 @@
 
 package models
 
+const Http4Type = "Http"
+
 // Http4
 type Http4 struct {
 	HTTP HttpTransport `json:"http"`
+	Type string        `json:"type"`
 }
 
-// isTransport4 implements Transport4
-func (r Http4) isTransport4() {}
+// GetType returns the type identifier for Http4
+func (r Http4) GetType() string {
+	return Http4Type
+}
+
+// isTransport5 implements Transport5
+func (r Http4) isTransport5() {}

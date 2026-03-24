@@ -2,10 +2,18 @@
 
 package models
 
+const V4Type = "V4"
+
 // V4
 type V4 struct {
 	Acl     *AccessControlList `json:"acl,omitempty"`
-	Network Network            `json:"network"`
+	Network Network1           `json:"network"`
+	Type    string             `json:"type"`
+}
+
+// GetType returns the type identifier for V4
+func (r V4) GetType() string {
+	return V4Type
 }
 
 // isPublicNetwork implements PublicNetwork

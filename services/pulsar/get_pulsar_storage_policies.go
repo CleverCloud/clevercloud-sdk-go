@@ -35,14 +35,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarStoragePolicies
 */
-func Getpulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.StoragePoliciesView] {
+func Getpulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.StoragePolicies] {
 	ctx, span := tracer.Start(ctx, "getPulsarStoragePolicies", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/storage-policies", pulsarId)
 
 	// Make API call
-	response := client.Get[models.StoragePoliciesView](ctx, c, path)
+	response := client.Get[models.StoragePolicies](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

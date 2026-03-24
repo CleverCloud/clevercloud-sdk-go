@@ -21,13 +21,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
   - loadbalancerId: LoadBalancer ID
-  - stringMaxLength128:
+  - listenerId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := loadbalancer.Unassignloadbalancerlistener(ctx, client, tracer, tenantId, loadbalancerId, stringMaxLength128)
+	response := loadbalancer.Unassignloadbalancerlistener(ctx, client, tracer, tenantId, loadbalancerId, listenerId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +36,11 @@ Example:
 x-service: loadbalancer
 operationId: unassignLoadBalancerListener
 */
-func Unassignloadbalancerlistener(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, stringMaxLength128 string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "unassignLoadBalancerListener", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId), attribute.String("stringMaxLength128", stringMaxLength128)))
+func Unassignloadbalancerlistener(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, listenerId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "unassignLoadBalancerListener", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId), attribute.String("listenerId", listenerId)))
 	defer span.End()
 
-	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/listeners/%s", tenantId, loadbalancerId, stringMaxLength128)
+	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/listeners/%s", tenantId, loadbalancerId, listenerId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

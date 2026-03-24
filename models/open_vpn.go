@@ -2,9 +2,17 @@
 
 package models
 
+const OpenVpnType = "OpenVpn"
+
 // OpenVpn
 type OpenVpn struct {
 	Openvpn OpenVPN `json:"openvpn"`
+	Type    string  `json:"type"`
+}
+
+// GetType returns the type identifier for OpenVpn
+func (r OpenVpn) GetType() string {
+	return OpenVpnType
 }
 
 // isConfiguration implements Configuration

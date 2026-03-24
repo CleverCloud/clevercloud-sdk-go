@@ -2,9 +2,17 @@
 
 package models
 
+const NetworkGroupConfigType = "NetworkGroupConfig"
+
 // NetworkGroupConfig
 type NetworkGroupConfig struct {
 	NetworkGroup NetworkGroup1 `json:"networkGroup"`
+	Type         string        `json:"type"`
+}
+
+// GetType returns the type identifier for NetworkGroupConfig
+func (r NetworkGroupConfig) GetType() string {
+	return NetworkGroupConfigType
 }
 
 // isConfiguration implements Configuration

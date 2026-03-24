@@ -4,8 +4,8 @@ package models
 
 // ProviderInfos
 type ProviderInfos struct {
-	Clusters                []ClusterConsoleView `json:"clusters,omitempty"`
-	Dedicated               MapDedicatedview     `json:"dedicated"`
-	DefaultDedicatedVersion string               `json:"defaultDedicatedVersion"`
-	ProviderID              string               `json:"providerId"`
+	Clusters                []ClusterConsole `json:"clusters,omitempty"`
+	Dedicated               MapDedicated     `json:"dedicated"`
+	DefaultDedicatedVersion string           `json:"defaultDedicatedVersion"`
+	ProviderID              string           `json:"providerId"`
 }

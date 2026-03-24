@@ -13,10 +13,36 @@ type Option func(*Options)
 
 // Options holds query parameters for infrastructure operations
 type Options struct {
-	Region     *string `url:"region,omitempty"`
-	Resourceid *string `url:"resourceId,omitempty"`
-	State      *string `url:"state,omitempty"`
-	Zone       *string `url:"zone,omitempty"`
+	Image       *string `url:"image,omitempty"`
+	Label       *string `url:"label,omitempty"`
+	Mode        *string `url:"mode,omitempty"`
+	Region      *string `url:"region,omitempty"`
+	Resourceid  *string `url:"resourceId,omitempty"`
+	Schedulable *bool   `url:"schedulable,omitempty"`
+	State       *string `url:"state,omitempty"`
+	Tag         *string `url:"tag,omitempty"`
+	Zone        *string `url:"zone,omitempty"`
+}
+
+// WithImage sets the image query parameter
+func WithImage(image string) Option {
+	return func(o *Options) {
+		o.Image = &image
+	}
+}
+
+// WithLabel sets the label query parameter
+func WithLabel(label string) Option {
+	return func(o *Options) {
+		o.Label = &label
+	}
+}
+
+// WithMode sets the mode query parameter
+func WithMode(mode string) Option {
+	return func(o *Options) {
+		o.Mode = &mode
+	}
 }
 
 // WithRegion sets the region query parameter
@@ -33,10 +59,24 @@ func WithResourceid(resourceId string) Option {
 	}
 }
 
+// WithSchedulable sets the schedulable query parameter
+func WithSchedulable(schedulable bool) Option {
+	return func(o *Options) {
+		o.Schedulable = &schedulable
+	}
+}
+
 // WithState sets the state query parameter
 func WithState(state string) Option {
 	return func(o *Options) {
 		o.State = &state
+	}
+}
+
+// WithTag sets the tag query parameter
+func WithTag(tag string) Option {
+	return func(o *Options) {
+		o.Tag = &tag
 	}
 }
 
@@ -55,14 +95,29 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Image != nil {
+		params = append(params, fmt.Sprintf("image=%s", url.QueryEscape(*options.Image)))
+	}
+	if options.Label != nil {
+		params = append(params, fmt.Sprintf("label=%s", url.QueryEscape(*options.Label)))
+	}
+	if options.Mode != nil {
+		params = append(params, fmt.Sprintf("mode=%s", url.QueryEscape(*options.Mode)))
+	}
 	if options.Region != nil {
 		params = append(params, fmt.Sprintf("region=%s", url.QueryEscape(*options.Region)))
 	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
 	}
+	if options.Schedulable != nil {
+		params = append(params, fmt.Sprintf("schedulable=%t", *options.Schedulable))
+	}
 	if options.State != nil {
 		params = append(params, fmt.Sprintf("state=%s", url.QueryEscape(*options.State)))
+	}
+	if options.Tag != nil {
+		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
 	}
 	if options.Zone != nil {
 		params = append(params, fmt.Sprintf("zone=%s", url.QueryEscape(*options.Zone)))

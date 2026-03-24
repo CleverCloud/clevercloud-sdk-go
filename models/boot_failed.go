@@ -2,10 +2,18 @@
 
 package models
 
+const BootFailedStatus = "BootFailed"
+
 // BootFailed
 type BootFailed struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
 	Reason     string             `json:"reason"`
+	Status     string             `json:"status"`
+}
+
+// GetType returns the type identifier for BootFailed
+func (r BootFailed) GetType() string {
+	return BootFailedStatus
 }
 
 // isVMDeploymentStatus implements VMDeploymentStatus

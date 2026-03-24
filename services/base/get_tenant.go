@@ -35,14 +35,14 @@ Example:
 x-service: base
 operationId: getTenant
 */
-func Gettenant(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[models.TenantView] {
+func Gettenant(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[models.Tenant1] {
 	ctx, span := tracer.Start(ctx, "getTenant", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s", tenantId)
 
 	// Make API call
-	response := client.Get[models.TenantView](ctx, c, path)
+	response := client.Get[models.Tenant1](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

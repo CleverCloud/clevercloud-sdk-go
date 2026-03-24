@@ -2,5 +2,5 @@
 
 package models
 
-// TenantID Either a tenant ID or an organisation ID
+// TenantID A tenant ID with tenant_ prefix
 type TenantID = string

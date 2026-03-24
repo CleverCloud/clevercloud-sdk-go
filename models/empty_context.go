@@ -2,8 +2,17 @@
 
 package models
 
+const EmptyContextType = "EmptyContext"
+
 // EmptyContext
-type EmptyContext struct{}
+type EmptyContext struct {
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for EmptyContext
+func (r EmptyContext) GetType() string {
+	return EmptyContextType
+}
 
 // isOVDErrorContext implements OVDErrorContext
 func (r EmptyContext) isOVDErrorContext() {}

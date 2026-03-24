@@ -2,9 +2,17 @@
 
 package models
 
+const PrefixType = "Prefix"
+
 // Prefix
 type Prefix struct {
 	Prefix string `json:"prefix"`
+	Type   string `json:"type"`
+}
+
+// GetType returns the type identifier for Prefix
+func (r Prefix) GetType() string {
+	return PrefixType
 }
 
 // isPath implements Path

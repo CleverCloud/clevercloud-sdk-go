@@ -4,6 +4,9 @@ package models
 
 // OtoroshiResources
 type OtoroshiResources struct {
-	Entrypoint string `json:"entrypoint"`
-	RedisID    string `json:"redisId"`
+	CellarID   *string `json:"cellarId,omitempty"`
+	ElasticID  *string `json:"elasticId,omitempty"`
+	Entrypoint string  `json:"entrypoint"`
+	PulsarID   *string `json:"pulsarId,omitempty"`
+	RedisID    string  `json:"redisId"`
 }

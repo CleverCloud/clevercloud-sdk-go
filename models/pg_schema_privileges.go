@@ -4,9 +4,10 @@ package models
 
 // PgSchemaPrivileges
 type PgSchemaPrivileges struct {
-	DatabaseOID int        `json:"databaseOId"`
-	ID          string     `json:"id"`
-	Oid         int        `json:"oid"`
-	Privileges  Privileges `json:"privileges"`
-	UserID      string     `json:"userId"`
+	DatabaseOID         int        `json:"databaseOId"`
+	ID                  string     `json:"id"`
+	Oid                 int        `json:"oid"`
+	Privileges          Privileges `json:"privileges"`
+	PrivilegesAllTables Privileges `json:"privilegesAllTables"`
+	UserID              string     `json:"userId"`
 }

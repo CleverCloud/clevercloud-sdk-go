@@ -2,9 +2,17 @@
 
 package models
 
+const PlacedStatus = "Placed"
+
 // Placed
 type Placed struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
+	Status     string             `json:"status"`
+}
+
+// GetType returns the type identifier for Placed
+func (r Placed) GetType() string {
+	return PlacedStatus
 }
 
 // isVMDeploymentStatus implements VMDeploymentStatus

@@ -4,14 +4,14 @@ package models
 
 // Resource
 type Resource struct {
-	Consumption Consumption        `json:"consumption"`
-	Description string             `json:"description"`
-	ID          string             `json:"id"`
-	Kind        string             `json:"kind"`
-	Name        StringMaxLength128 `json:"name"`
-	ProductID   string             `json:"productId"`
-	Statuses    []IdentifiedStatus `json:"statuses,omitempty"`
-	Tags        []string           `json:"tags,omitempty"`
-	TenantID    TenantID           `json:"tenantId"`
-	Version     string             `json:"version"`
+	Consumption Consumption               `json:"consumption"`
+	Description string                    `json:"description"`
+	ID          string                    `json:"id"`
+	Kind        string                    `json:"kind"`
+	Name        StringMaxLength128        `json:"name"`
+	ProductID   string                    `json:"productId"`
+	Statuses    []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags        []string                  `json:"tags,omitempty"`
+	TenantID    TenantID                  `json:"tenantId"`
+	Version     string                    `json:"version"`
 }

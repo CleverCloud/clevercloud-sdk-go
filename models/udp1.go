@@ -2,10 +2,18 @@
 
 package models
 
+const Udp1Type = "Udp"
+
 // Udp1
 type Udp1 struct {
-	Udp UdpTransport `json:"udp"`
+	Type string              `json:"type"`
+	Udp  BackendUDPTransport `json:"udp"`
 }
 
-// isTransport implements Transport
-func (r Udp1) isTransport() {}
+// GetType returns the type identifier for Udp1
+func (r Udp1) GetType() string {
+	return Udp1Type
+}
+
+// isTransport2 implements Transport2
+func (r Udp1) isTransport2() {}

@@ -2,16 +2,8 @@
 
 package models
 
-import "time"
-
 // Server2
-type Server2 struct {
-	AvailabilityZone     string    `json:"availabilityZone"`
-	CreatedAt            time.Time `json:"createdAt"`
-	ID                   string    `json:"id"`
-	LoadbalancerCapacity int       `json:"loadbalancerCapacity"`
-	Maintenance          bool      `json:"maintenance"`
-	OwnerID              TenantID  `json:"ownerId"`
-	RegionID             RegionId  `json:"regionId"`
-	UpdatedAt            time.Time `json:"updatedAt"`
-}
+type Server2 struct{}
+
+// isResourceType implements ResourceType
+func (r Server2) isResourceType() {}

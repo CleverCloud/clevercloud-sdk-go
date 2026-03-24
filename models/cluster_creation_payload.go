@@ -4,13 +4,14 @@ package models
 
 // ClusterCreationPayload
 type ClusterCreationPayload struct {
-	AdvancedOptions   *AdvancedOptions           `json:"advancedOptions,omitempty"`
 	Description       *string                    `json:"description,omitempty"`
+	Features          *ClusterFeatures           `json:"features,omitempty"`
+	LocationID        *string                    `json:"locationId,omitempty"`
 	Name              string                     `json:"name"`
 	NetworkGroupID    *string                    `json:"networkGroupId,omitempty"`
 	NodeGroups        []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`
 	ReplicationFactor *int                       `json:"replicationFactor,omitempty"`
-	Tag               *string                    `json:"tag,omitempty"`
+	Tags              []string                   `json:"tags,omitempty"`
 	Topology          *ClusterTopology           `json:"topology,omitempty"`
-	Version           *KubeMinorVersion          `json:"version,omitempty"`
+	Version           *string                    `json:"version,omitempty"`
 }

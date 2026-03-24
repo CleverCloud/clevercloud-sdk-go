@@ -3,7 +3,7 @@
 package models
 
 // Flavor
-// Union type - can be one of: L, M, S, XL, XS, XXL
+// Union type - can be one of: LOcto, MOcto, MQuattro, SDuo, SQuattro, XsDuo, XsQuattro
 type Flavor interface {
 	isFlavor()
 	GetType() string

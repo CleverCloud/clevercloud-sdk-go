@@ -2,6 +2,8 @@
 
 package models
 
+const CleverPeerType = "CleverPeer"
+
 // CleverPeer
 type CleverPeer struct {
 	Endpoint     WireguardEndpoint `json:"endpoint"`
@@ -12,10 +14,16 @@ type CleverPeer struct {
 	ParentEvent  *string           `json:"parentEvent,omitempty"`
 	ParentMember string            `json:"parentMember"`
 	PublicKey    string            `json:"publicKey"`
+	Type         string            `json:"type"`
 }
 
-// isPeer implements Peer
-func (r CleverPeer) isPeer() {}
+// GetType returns the type identifier for CleverPeer
+func (r CleverPeer) GetType() string {
+	return CleverPeerType
+}
 
 // isNetworkGroupComponent implements NetworkGroupComponent
 func (r CleverPeer) isNetworkGroupComponent() {}
+
+// isPeer implements Peer
+func (r CleverPeer) isPeer() {}

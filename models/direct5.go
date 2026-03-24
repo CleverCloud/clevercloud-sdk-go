@@ -2,10 +2,18 @@
 
 package models
 
+const Direct5Type = "Direct"
+
 // Direct5
 type Direct5 struct {
-	Direct BackendDirectTransport `json:"direct"`
+	Direct DirectTransport `json:"direct"`
+	Type   string          `json:"type"`
 }
 
-// isLayer implements Layer
-func (r Direct5) isLayer() {}
+// GetType returns the type identifier for Direct5
+func (r Direct5) GetType() string {
+	return Direct5Type
+}
+
+// isTransport4 implements Transport4
+func (r Direct5) isTransport4() {}

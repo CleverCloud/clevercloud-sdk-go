@@ -4,6 +4,6 @@ package models
 
 // Backends
 type Backends struct {
-	Servers   []Server   `json:"servers,omitempty"`
+	Servers   []Server1  `json:"servers,omitempty"`
 	Transport Transport2 `json:"transport"`
 }

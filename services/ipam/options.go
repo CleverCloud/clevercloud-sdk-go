@@ -2,11 +2,42 @@
 
 package ipam
 
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+
 // Option defines a functional option for ipam operations
 type Option func(*Options)
 
 // Options holds query parameters for ipam operations
-type Options struct{}
+type Options struct {
+	Resourceid *[]string `url:"resourceId,omitempty"`
+	Since      *string   `url:"since,omitempty"`
+	Until      *string   `url:"until,omitempty"`
+}
+
+// WithResourceid sets the resourceId query parameter
+func WithResourceid(resourceId []string) Option {
+	return func(o *Options) {
+		o.Resourceid = &resourceId
+	}
+}
+
+// WithSince sets the since query parameter
+func WithSince(since string) Option {
+	return func(o *Options) {
+		o.Since = &since
+	}
+}
+
+// WithUntil sets the until query parameter
+func WithUntil(until string) Option {
+	return func(o *Options) {
+		o.Until = &until
+	}
+}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -14,5 +45,20 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-	return ""
+
+	var params []string
+	if options.Resourceid != nil {
+		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
+	}
+	if options.Since != nil {
+		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Until != nil {
+		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+	return strings.Join(params, "&")
 }

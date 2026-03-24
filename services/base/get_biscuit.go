@@ -36,14 +36,14 @@ Example:
 x-service: base
 operationId: getBiscuit
 */
-func Getbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, p1 string) client.Response[models.IAMBiscuitView] {
+func Getbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, p1 string) client.Response[models.IAMBiscuit] {
 	ctx, span := tracer.Start(ctx, "getBiscuit", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("p1", p1)))
 	defer span.End()
 
 	path := utils.Path("/v4/iam/organisations/%s/iam/tokens/%s", ownerId, p1)
 
 	// Make API call
-	response := client.Get[models.IAMBiscuitView](ctx, c, path)
+	response := client.Get[models.IAMBiscuit](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -20,13 +20,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - poolId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := storage.Deletecephpool(ctx, client, tracer, tenantId, poolId)
+	response := storage.Deletecephpool(ctx, client, tracer, tenantId, clusterId, poolId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +36,11 @@ Example:
 x-service: storage
 operationId: deleteCephPool
 */
-func Deletecephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, poolId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("poolId", poolId)))
+func Deletecephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, poolId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId), attribute.String("poolId", poolId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/ceph-pools/%s", tenantId, poolId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-pools/%s", tenantId, clusterId, poolId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

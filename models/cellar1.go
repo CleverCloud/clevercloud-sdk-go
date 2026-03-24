@@ -6,10 +6,13 @@ import "time"
 
 // Cellar1
 type Cellar1 struct {
-	AddonID      string       `json:"addonId"`
+	ClusterID    int          `json:"clusterId"`
 	CreationDate time.Time    `json:"creationDate"`
+	DeletionDate *time.Time   `json:"deletionDate,omitempty"`
+	Host         string       `json:"host"`
 	ID           string       `json:"id"`
-	Name         string       `json:"name"`
+	KeyID        string       `json:"keyId"`
+	KeySecret    string       `json:"keySecret"`
 	OwnerID      OwnerID      `json:"ownerId"`
 	Plan         CellarPlan   `json:"plan"`
 	Status       CellarStatus `json:"status"`

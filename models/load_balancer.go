@@ -2,8 +2,24 @@
 
 package models
 
-// LoadBalancer
-type LoadBalancer struct{}
+import "time"
 
-// isResourceType implements ResourceType
-func (r LoadBalancer) isResourceType() {}
+// LoadBalancer
+type LoadBalancer struct {
+	AppliedConfigVersion         *int                          `json:"appliedConfigVersion,omitempty"`
+	Clusters                     []Cluster1                    `json:"clusters,omitempty"`
+	CoOwners                     []TenantID                    `json:"coOwners,omitempty"`
+	CreatedAt                    time.Time                     `json:"createdAt"`
+	DomainName                   DnsDomainName                 `json:"domainName"`
+	Flavor                       Flavor                        `json:"flavor"`
+	Frozen                       bool                          `json:"frozen"`
+	ID                           LoadBalancerId                `json:"id"`
+	Ips                          []string                      `json:"ips,omitempty"`
+	Listeners                    []Listener                    `json:"listeners,omitempty"`
+	LoadbalancerParentResourceID *LoadBalancerParentResourceId `json:"loadbalancerParentResourceId,omitempty"`
+	Mutualized                   bool                          `json:"mutualized"`
+	OwnerID                      TenantID                      `json:"ownerId"`
+	RegionID                     RegionId                      `json:"regionId"`
+	Specification                *Specification                `json:"specification,omitempty"`
+	Tags                         []string                      `json:"tags,omitempty"`
+}

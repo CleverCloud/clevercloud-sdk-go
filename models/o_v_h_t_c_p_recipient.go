@@ -17,5 +17,5 @@ func (r OVHTCPRecipient) GetType() string {
 	return OVHTCPRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r OVHTCPRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r OVHTCPRecipient) isDrainRecipient1() {}

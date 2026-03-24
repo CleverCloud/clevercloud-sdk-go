@@ -6,7 +6,6 @@ package models
 type NodeFlavor string
 
 const (
-	NodeFlavorXs NodeFlavor = "xs"
 	NodeFlavorS  NodeFlavor = "s"
 	NodeFlavorM  NodeFlavor = "m"
 	NodeFlavorL  NodeFlavor = "l"

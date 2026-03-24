@@ -4,7 +4,7 @@ package models
 
 // PostgreSQLSchemaPrivileges
 type PostgreSQLSchemaPrivileges struct {
-	SchemaName string                      `json:"schemaName"`
-	Tables     []PostgreSQLTablePrivileges `json:"tables,omitempty"`
-	Users      []PostgreSQLObjectPrivilege `json:"users,omitempty"`
+	SchemaName string                            `json:"schemaName"`
+	Tables     []PostgreSQLTablePrivileges       `json:"tables,omitempty"`
+	Users      []PostgreSQLSchemaObjectPrivilege `json:"users,omitempty"`
 }

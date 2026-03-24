@@ -36,14 +36,14 @@ Example:
 x-service: base
 operationId: updatePartialIdentity
 */
-func Updatepartialidentity(ctx context.Context, c *client.Client, tracer trace.Tracer, identityId string, requestBody *models.WannabeIdentity) client.Response[models.IdentityView] {
+func Updatepartialidentity(ctx context.Context, c *client.Client, tracer trace.Tracer, identityId string, requestBody *models.WannabeIdentity) client.Response[models.Identity] {
 	ctx, span := tracer.Start(ctx, "updatePartialIdentity", trace.WithAttributes(attribute.String("identityId", identityId)))
 	defer span.End()
 
 	path := utils.Path("/v4/identities/%s/complete", identityId)
 
 	// Make API call
-	response := client.Patch[models.IdentityView](ctx, c, path, requestBody)
+	response := client.Patch[models.Identity](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

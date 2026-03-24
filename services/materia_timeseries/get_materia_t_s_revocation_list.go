@@ -35,7 +35,7 @@ Example:
 x-service: materia_timeseries
 operationId: getMateriaTSRevocationList
 */
-func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse] {
+func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse1] {
 	ctx, span := tracer.Start(ctx, "getMateriaTSRevocationList")
 	defer span.End()
 
@@ -48,7 +48,7 @@ func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer tr
 	}
 
 	// Make API call
-	response := client.Get[models.RevocationListResponse](ctx, c, path)
+	response := client.Get[models.RevocationListResponse1](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

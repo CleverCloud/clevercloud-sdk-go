@@ -2,9 +2,17 @@
 
 package models
 
+const BootingStatus = "Booting"
+
 // Booting
 type Booting struct {
 	Hypervisor HypervisorMetadata `json:"hypervisor"`
+	Status     string             `json:"status"`
+}
+
+// GetType returns the type identifier for Booting
+func (r Booting) GetType() string {
+	return BootingStatus
 }
 
 // isVMDeploymentStatus implements VMDeploymentStatus

@@ -4,5 +4,5 @@ package models
 
 // OtoroshiFeatures
 type OtoroshiFeatures struct {
-	NetworkGroup *OtoroshiNetworkGroupView `json:"networkGroup,omitempty"`
+	NetworkGroup *OtoroshiNetworkGroup `json:"networkGroup,omitempty"`
 }

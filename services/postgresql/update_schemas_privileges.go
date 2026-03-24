@@ -39,7 +39,7 @@ Example:
 x-service: postgresql
 operationId: updateSchemasPrivileges
 */
-func Updateschemasprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadPrivilege) client.Response[models.PgSchemaPrivileges] {
+func Updateschemasprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.SchemaPrivilegePatch) client.Response[models.PgSchemaPrivileges] {
 	ctx, span := tracer.Start(ctx, "updateSchemasPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("objectId", objectId)))
 	defer span.End()
 

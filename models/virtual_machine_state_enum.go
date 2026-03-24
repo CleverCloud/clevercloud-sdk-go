@@ -20,6 +20,7 @@ const (
 	VirtualMachineStateDeleted             VirtualMachineState = "deleted"
 	VirtualMachineStateMigrationInProgress VirtualMachineState = "migration_in_progress"
 	VirtualMachineStateRebooting           VirtualMachineState = "rebooting"
+	VirtualMachineStateImporting           VirtualMachineState = "importing"
 )
 
 // String returns the underlying string value

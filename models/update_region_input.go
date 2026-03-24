@@ -7,4 +7,5 @@ type UpdateRegionInput struct {
 	Credentials *string      `json:"credentials,omitempty"`
 	Name        *string      `json:"name,omitempty"`
 	Provider    ProviderType `json:"provider"`
+	Tags        []string     `json:"tags,omitempty"`
 }

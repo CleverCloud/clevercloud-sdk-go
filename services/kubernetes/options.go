@@ -13,11 +13,19 @@ type Option func(*Options)
 
 // Options holds query parameters for kubernetes operations
 type Options struct {
+	Limit      *int      `url:"limit,omitempty"`
 	Resourceid *[]string `url:"resourceId,omitempty"`
 	Since      *string   `url:"since,omitempty"`
 	Status     *[]string `url:"status,omitempty"`
 	Typeparam  *string   `url:"typeParam,omitempty"`
 	Until      *string   `url:"until,omitempty"`
+}
+
+// WithLimit sets the limit query parameter
+func WithLimit(limit int) Option {
+	return func(o *Options) {
+		o.Limit = &limit
+	}
 }
 
 // WithResourceid sets the resourceId query parameter
@@ -63,6 +71,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
 	}

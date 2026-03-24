@@ -2,9 +2,20 @@
 
 package models
 
+import "time"
+
 // Network
 type Network struct {
-	AssignedGatewayIP *string `json:"assignedGatewayIp,omitempty"`
-	AssignedIP        string  `json:"assignedIp"`
-	Cidr              string  `json:"cidr"`
+	Capabilities  []NetworkCapability `json:"capabilities,omitempty"`
+	Cidr          string              `json:"cidr"`
+	CreatedAt     time.Time           `json:"createdAt"`
+	FrozenAt      *time.Time          `json:"frozenAt,omitempty"`
+	ID            NetworkId           `json:"id"`
+	IPVersion     IpVersion           `json:"ipVersion"`
+	Name          *string             `json:"name,omitempty"`
+	NetworkOffset int                 `json:"networkOffset"`
+	OwnerID       TenantID            `json:"ownerId"`
+	RegionID      RegionId            `json:"regionId"`
+	Tags          []string            `json:"tags,omitempty"`
+	UpdatedAt     time.Time           `json:"updatedAt"`
 }

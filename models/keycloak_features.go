@@ -4,5 +4,5 @@ package models
 
 // KeycloakFeatures
 type KeycloakFeatures struct {
-	NetworkGroup *KeycloakNetworkGroupView `json:"networkGroup,omitempty"`
+	NetworkGroup *KeycloakNetworkGroup `json:"networkGroup,omitempty"`
 }

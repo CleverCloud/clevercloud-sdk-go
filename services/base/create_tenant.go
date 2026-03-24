@@ -34,14 +34,14 @@ Example:
 x-service: base
 operationId: createTenant
 */
-func Createtenant(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeTenant) client.Response[models.TenantView] {
+func Createtenant(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeTenant) client.Response[models.Tenant1] {
 	ctx, span := tracer.Start(ctx, "createTenant")
 	defer span.End()
 
 	path := utils.Path("/v4/tenants")
 
 	// Make API call
-	response := client.Post[models.TenantView](ctx, c, path, requestBody)
+	response := client.Post[models.Tenant1](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

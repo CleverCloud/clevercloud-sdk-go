@@ -21,13 +21,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := storage.Createstorage(ctx, client, tracer, tenantId, requestBody)
+	response := storage.Createstorage(ctx, client, tracer, tenantId, clusterId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: storage
 operationId: createStorage
 */
-func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeStorage) client.Response[models.Storage1] {
-	ctx, span := tracer.Start(ctx, "createStorage", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeStorage) client.Response[models.Storage1] {
+	ctx, span := tracer.Start(ctx, "createStorage", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/storages", tenantId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/storages", tenantId, clusterId)
 
 	// Make API call
 	response := client.Post[models.Storage1](ctx, c, path, requestBody)

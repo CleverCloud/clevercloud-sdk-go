@@ -3,7 +3,7 @@
 package models
 
 // Host
-// Union type - can be one of: Exact1, Regex1
+// Union type - can be one of: Exact, Regex1
 type Host interface {
 	isHost()
 	GetType() string

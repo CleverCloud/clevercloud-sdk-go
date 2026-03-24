@@ -35,14 +35,14 @@ Example:
 x-service: metabase
 operationId: getCheckVersionMetabaseApplication
 */
-func Getcheckversionmetabaseapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.MetabaseVersionChecker] {
+func Getcheckversionmetabaseapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.MetabaseVersionCheck] {
 	ctx, span := tracer.Start(ctx, "getCheckVersionMetabaseApplication", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-metabase/addons/%s/version/check", addonMetabaseId)
 
 	// Make API call
-	response := client.Get[models.MetabaseVersionChecker](ctx, c, path)
+	response := client.Get[models.MetabaseVersionCheck](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

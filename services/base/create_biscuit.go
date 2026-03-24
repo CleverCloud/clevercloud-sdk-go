@@ -37,14 +37,14 @@ Example:
 x-service: base
 operationId: createBiscuit
 */
-func Createbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string, requestBody *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuitView] {
+func Createbiscuit(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string, requestBody *models.IAMUserBiscuitBody) client.Response[models.IAMBiscuit] {
 	ctx, span := tracer.Start(ctx, "createBiscuit", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kvId", kvId)))
 	defer span.End()
 
 	path := utils.Path("/v4/iam/organisations/%s/iam/materia-db-kv/%s/tokens", ownerId, kvId)
 
 	// Make API call
-	response := client.Post[models.IAMBiscuitView](ctx, c, path, requestBody)
+	response := client.Post[models.IAMBiscuit](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,11 +2,19 @@
 
 package models
 
+const GatewayErrorType = "gateway"
+
 // GatewayError
 type GatewayError struct {
 	OriginalBody   string `json:"originalBody"`
 	OriginalStatus int    `json:"originalStatus"`
+	Type           string `json:"type"`
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r GatewayError) isHTTPErrorContext() {}
+// GetType returns the type identifier for GatewayError
+func (r GatewayError) GetType() string {
+	return GatewayErrorType
+}
+
+// isTyped implements Typed
+func (r GatewayError) isTyped() {}

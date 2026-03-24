@@ -2,9 +2,17 @@
 
 package models
 
+const Tcp1Type = "Tcp"
+
 // Tcp1
 type Tcp1 struct {
-	Tcp BackendTCPTransport `json:"tcp"`
+	Tcp  BackendTCPTransport `json:"tcp"`
+	Type string              `json:"type"`
+}
+
+// GetType returns the type identifier for Tcp1
+func (r Tcp1) GetType() string {
+	return Tcp1Type
 }
 
 // isTransport2 implements Transport2

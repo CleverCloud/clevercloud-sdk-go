@@ -21,13 +21,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := storage.Createcephrbdnamespace(ctx, client, tracer, tenantId, requestBody)
+	response := storage.Createcephrbdnamespace(ctx, client, tracer, tenantId, clusterId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: storage
 operationId: createCephRBDNamespace
 */
-func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephRBDNamespace) client.Response[models.CephRBDNamespace] {
-	ctx, span := tracer.Start(ctx, "createCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephRBDNamespace) client.Response[models.CephRBDNamespace] {
+	ctx, span := tracer.Start(ctx, "createCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/ceph-rbd-namespaces", tenantId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-rbd-namespaces", tenantId, clusterId)
 
 	// Make API call
 	response := client.Post[models.CephRBDNamespace](ctx, c, path, requestBody)

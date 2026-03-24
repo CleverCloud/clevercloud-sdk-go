@@ -11,5 +11,6 @@ type Region2 struct {
 	Name        *string      `json:"name,omitempty"`
 	OwnerID     TenantID     `json:"ownerId"`
 	Provider    ProviderType `json:"provider"`
+	Tags        []string     `json:"tags,omitempty"`
 	UpdatedAt   time.Time    `json:"updatedAt"`
 }

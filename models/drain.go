@@ -8,8 +8,8 @@ type Drain struct {
 	Execution  DrainExecution     `json:"execution"`
 	ID         string             `json:"id"`
 	Kind       DrainKind          `json:"kind"`
-	Recipient  DrainRecipientView `json:"recipient"`
-	ResourceID string             `json:"resourceId"`
+	Recipient  DrainRecipient     `json:"recipient"`
+	ResourceID string             `json:"resourceId"` // Resource identifier for drain target. Accepted prefixes: app_, cellar_, postgresql_, mysql_, mong...
 	Status     DrainStatus        `json:"status"`
 	TenantID   OwnerID            `json:"tenantId"`
 }

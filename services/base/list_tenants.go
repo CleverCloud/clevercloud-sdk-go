@@ -33,14 +33,14 @@ Example:
 x-service: base
 operationId: listTenants
 */
-func Listtenants(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.TenantView] {
+func Listtenants(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.Tenant1] {
 	ctx, span := tracer.Start(ctx, "listTenants")
 	defer span.End()
 
 	path := utils.Path("/v4/tenants")
 
 	// Make API call
-	response := client.Get[[]models.TenantView](ctx, c, path)
+	response := client.Get[[]models.Tenant1](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

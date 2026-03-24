@@ -21,13 +21,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
+  - clusterId:
   - entityId:
 
 # Returns the operation result or an error
 
 Example:
 
-	response := storage.Getcephxuser(ctx, client, tracer, tenantId, entityId)
+	response := storage.Getcephxuser(ctx, client, tracer, tenantId, clusterId, entityId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: storage
 operationId: getCephXUser
 */
-func Getcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, entityId string) client.Response[models.CephXUser] {
-	ctx, span := tracer.Start(ctx, "getCephXUser", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("entityId", entityId)))
+func Getcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, entityId string) client.Response[models.CephXUser] {
+	ctx, span := tracer.Start(ctx, "getCephXUser", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId), attribute.String("entityId", entityId)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/ceph-x-users/%s", tenantId, entityId)
+	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-x-users/%s", tenantId, clusterId, entityId)
 
 	// Make API call
 	response := client.Get[models.CephXUser](ctx, c, path)

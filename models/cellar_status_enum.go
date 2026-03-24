@@ -8,6 +8,7 @@ type CellarStatus string
 const (
 	CellarStatusACTIVE   CellarStatus = "ACTIVE"
 	CellarStatusDELETED  CellarStatus = "DELETED"
+	CellarStatusDELETING CellarStatus = "DELETING"
 	CellarStatusToDelete CellarStatus = "TO_DELETE"
 )
 

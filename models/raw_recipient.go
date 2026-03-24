@@ -17,5 +17,5 @@ func (r RawRecipient) GetType() string {
 	return RawRecipientType
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r RawRecipient) isDrainRecipient() {}
+// isDrainRecipient1 implements DrainRecipient1
+func (r RawRecipient) isDrainRecipient1() {}

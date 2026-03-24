@@ -2,9 +2,17 @@
 
 package models
 
+const Regex1Type = "Regex"
+
 // Regex1
 type Regex1 struct {
 	Regex string `json:"regex"`
+	Type  string `json:"type"`
+}
+
+// GetType returns the type identifier for Regex1
+func (r Regex1) GetType() string {
+	return Regex1Type
 }
 
 // isHost implements Host

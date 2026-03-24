@@ -23,12 +23,13 @@ Parameters:
   - tenantId:
   - regionId: Region ID
   - loadbalancerId: LoadBalancer ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := loadbalancer.Createloadbalanceracl(ctx, client, tracer, tenantId, regionId, loadbalancerId)
+	response := loadbalancer.Createloadbalanceracl(ctx, client, tracer, tenantId, regionId, loadbalancerId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,14 +38,14 @@ Example:
 x-service: loadbalancer
 operationId: createLoadBalancerAcl
 */
-func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[models.ResourceACL] {
+func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.AccessControlList) client.Response[models.ResourceACL] {
 	ctx, span := tracer.Start(ctx, "createLoadBalancerAcl", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/acl", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Post[models.ResourceACL](ctx, c, path, nil)
+	response := client.Post[models.ResourceACL](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -38,14 +38,14 @@ Example:
 x-service: loadbalancer
 operationId: updateLoadBalancerTLSCiphers
 */
-func Updateloadbalancertlsciphers(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody []*models.Cipher) client.Response[models.LoadBalancerView] {
+func Updateloadbalancertlsciphers(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody []*models.Cipher) client.Response[models.LoadBalancer] {
 	ctx, span := tracer.Start(ctx, "updateLoadBalancerTLSCiphers", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/tls-ciphers", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Put[models.LoadBalancerView](ctx, c, path, requestBody)
+	response := client.Put[models.LoadBalancer](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

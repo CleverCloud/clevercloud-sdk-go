@@ -14,7 +14,7 @@ import (
 /*
 Listcellarbuckets
 
-list all buckets for a Cellar account
+list all buckets with storage statistics for a Cellar account
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: listCellarBuckets
 */
-func Listcellarbuckets(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[[]models.BucketsView] {
+func Listcellarbuckets(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.BucketsListResponse] {
 	ctx, span := tracer.Start(ctx, "listCellarBuckets", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets", ownerId, CellarId)
 
 	// Make API call
-	response := client.Get[[]models.BucketsView](ctx, c, path)
+	response := client.Get[models.BucketsListResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
