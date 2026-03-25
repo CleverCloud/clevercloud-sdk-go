@@ -8313,6 +8313,7 @@ func (b *v4KubernetesOrganisationsBuilderImpl) Ownerid(ownerid string) V4Kuberne
 type V4KubernetesOrganisationsOwneridBuilder interface {
 	Clusters() V4KubernetesOrganisationsOwneridClustersBuilder
 	Kubernetes() V4KubernetesOrganisationsOwneridKubernetesBuilder
+	Quota() V4KubernetesOrganisationsOwneridQuotaBuilder
 	Usage() V4KubernetesOrganisationsOwneridUsageBuilder
 }
 
@@ -8338,6 +8339,11 @@ func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Clusters() V4KubernetesOrg
 // Kubernetes returns Kubernetes builder
 func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Kubernetes() V4KubernetesOrganisationsOwneridKubernetesBuilder {
 	return newV4KubernetesOrganisationsOwneridKubernetesBuilder(b.sdk, b.ownerid)
+}
+
+// Quota returns Quota builder
+func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Quota() V4KubernetesOrganisationsOwneridQuotaBuilder {
+	return newV4KubernetesOrganisationsOwneridQuotaBuilder(b.sdk, b.ownerid)
 }
 
 // Usage returns Usage builder
@@ -8995,6 +9001,30 @@ func newV4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilder(sdk *sdkIm
 // Listkubernetesconsumptions calls kubernetes.Listkubernetesconsumptions
 func (b *v4KubernetesOrganisationsOwneridKubernetesConsumptionsBuilderImpl) Listkubernetesconsumptions(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ResourceConsumption] {
 	return kubernetes.Listkubernetesconsumptions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+}
+
+// V4KubernetesOrganisationsOwneridQuotaBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridQuotaBuilder interface {
+	Getkubernetesquota(ctx context.Context) client.Response[models.Quota1]
+}
+
+// v4KubernetesOrganisationsOwneridQuotaBuilderImpl implements V4KubernetesOrganisationsOwneridQuotaBuilder
+type v4KubernetesOrganisationsOwneridQuotaBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KubernetesOrganisationsOwneridQuotaBuilder creates a new V4KubernetesOrganisationsOwneridQuotaBuilder
+func newV4KubernetesOrganisationsOwneridQuotaBuilder(sdk *sdkImpl, ownerid string) V4KubernetesOrganisationsOwneridQuotaBuilder {
+	return &v4KubernetesOrganisationsOwneridQuotaBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Getkubernetesquota calls kubernetes.Getkubernetesquota
+func (b *v4KubernetesOrganisationsOwneridQuotaBuilderImpl) Getkubernetesquota(ctx context.Context) client.Response[models.Quota1] {
+	return kubernetes.Getkubernetesquota(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
 }
 
 // V4KubernetesOrganisationsOwneridUsageBuilder provides access to operations
@@ -13260,7 +13290,7 @@ func (b *v4TenantsTenantidCephClustersClusteridCephRbdNamespacesBuilderImpl) Cre
 // V4TenantsTenantidCephClustersClusteridCephXUsersBuilder provides access to operations
 type V4TenantsTenantidCephClustersClusteridCephXUsersBuilder interface {
 	Entityid(entityid string) V4TenantsTenantidCephClustersClusteridCephXUsersEntityidBuilder
-	Createcephxuser(ctx context.Context, request *models.WannabeCephXUser) client.Response[client.Nothing]
+	Createcephxuser(ctx context.Context, request *models.WannabeCephXUser) client.Response[models.JustCreatedCephXUser]
 }
 
 // v4TenantsTenantidCephClustersClusteridCephXUsersBuilderImpl implements V4TenantsTenantidCephClustersClusteridCephXUsersBuilder
@@ -13285,7 +13315,7 @@ func (b *v4TenantsTenantidCephClustersClusteridCephXUsersBuilderImpl) Entityid(e
 }
 
 // Createcephxuser calls storage.Createcephxuser
-func (b *v4TenantsTenantidCephClustersClusteridCephXUsersBuilderImpl) Createcephxuser(ctx context.Context, request *models.WannabeCephXUser) client.Response[client.Nothing] {
+func (b *v4TenantsTenantidCephClustersClusteridCephXUsersBuilderImpl) Createcephxuser(ctx context.Context, request *models.WannabeCephXUser) client.Response[models.JustCreatedCephXUser] {
 	return storage.Createcephxuser(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.clusterid, request)
 }
 
