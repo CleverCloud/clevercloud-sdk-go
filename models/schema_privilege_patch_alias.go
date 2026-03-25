@@ -2,5 +2,5 @@
 
 package models
 
-// ResourceID a resource ID
-type ResourceID = string
+// SchemaPrivilegePatch
+type SchemaPrivilegePatch = any

@@ -3,7 +3,7 @@
 package models
 
 // Algorithm
-// Union type - can be one of: LeastLoaded, PowerOfTwo, RANDOM, RoundRobin, Unrecognized
+// Union type - can be one of: DestinationHashing, LeastLoaded, MaglevHashing, PowerOfTwo, RANDOM, RoundRobin, SourceHashing, Unrecognized
 type Algorithm interface {
 	isAlgorithm()
 	GetType() string
