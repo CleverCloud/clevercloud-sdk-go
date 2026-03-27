@@ -22,8 +22,8 @@ func (r CleverPeer) GetType() string {
 	return CleverPeerType
 }
 
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r CleverPeer) isNetworkGroupComponent() {}
-
 // isPeer implements Peer
 func (r CleverPeer) isPeer() {}
+
+// isNetworkGroupComponent implements NetworkGroupComponent
+func (r CleverPeer) isNetworkGroupComponent() {}

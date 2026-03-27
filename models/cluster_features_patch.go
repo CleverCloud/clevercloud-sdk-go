@@ -2,9 +2,9 @@
 
 package models
 
-// ClusterFeatures
-type ClusterFeatures struct {
-	AutoscalingEnabled bool    `json:"autoscalingEnabled"`
+// ClusterFeaturesPatch
+type ClusterFeaturesPatch struct {
+	AutoscalingEnabled *bool   `json:"autoscalingEnabled,omitempty"`
 	Csi                *bool   `json:"csi,omitempty"`
 	Registries         *string `json:"registries,omitempty"`
 }

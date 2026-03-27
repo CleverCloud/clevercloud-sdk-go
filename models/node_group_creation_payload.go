@@ -4,13 +4,14 @@ package models
 
 // NodeGroupCreationPayload
 type NodeGroupCreationPayload struct {
-	Description     *StringMaxLength4096 `json:"description,omitempty"`
-	Flavor          NodeFlavor           `json:"flavor"`
-	Labels          []KubernetesLabel    `json:"labels,omitempty"`
-	MaxNodeCount    *int                 `json:"maxNodeCount,omitempty"`
-	MinNodeCount    *int                 `json:"minNodeCount,omitempty"`
-	Name            NodeGroupName        `json:"name"`
-	Tag             *StringMaxLength1024 `json:"tag,omitempty"`
-	Taints          []KubernetesTaint    `json:"taints,omitempty"`
-	TargetNodeCount int                  `json:"targetNodeCount"`
+	AutoscalingEnabled *bool                  `json:"autoscalingEnabled,omitempty"`
+	Description        *StringMaxLength4096   `json:"description,omitempty"`
+	Flavor             NodeFlavor             `json:"flavor"`
+	Labels             *MapLabelkeyLabelvalue `json:"labels,omitempty"`
+	MaxNodeCount       *int                   `json:"maxNodeCount,omitempty"`
+	MinNodeCount       *int                   `json:"minNodeCount,omitempty"`
+	Name               NodeGroupName          `json:"name"`
+	Tag                *StringMaxLength1024   `json:"tag,omitempty"`
+	Taints             []KubernetesTaint      `json:"taints,omitempty"`
+	TargetNodeCount    int                    `json:"targetNodeCount"`
 }

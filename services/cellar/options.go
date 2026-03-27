@@ -13,12 +13,16 @@ type Option func(*Options)
 
 // Options holds query parameters for cellar operations
 type Options struct {
-	Count              *int    `url:"count,omitempty"`
-	Cursor             *string `url:"cursor,omitempty"`
-	Force              *bool   `url:"force,omitempty"`
-	Includeunavailable *bool   `url:"includeUnavailable,omitempty"`
-	Prefix             *string `url:"prefix,omitempty"`
-	Purgeobjects       *bool   `url:"purgeObjects,omitempty"`
+	Count              *int      `url:"count,omitempty"`
+	Cursor             *string   `url:"cursor,omitempty"`
+	Force              *bool     `url:"force,omitempty"`
+	Includeunavailable *bool     `url:"includeUnavailable,omitempty"`
+	Prefix             *string   `url:"prefix,omitempty"`
+	Purgeobjects       *bool     `url:"purgeObjects,omitempty"`
+	Resourceid         *[]string `url:"resourceId,omitempty"`
+	Since              *string   `url:"since,omitempty"`
+	Until              *string   `url:"until,omitempty"`
+	Withmetadata       *bool     `url:"withMetadata,omitempty"`
 }
 
 // WithCount sets the count query parameter
@@ -63,6 +67,34 @@ func WithPurgeobjects(purgeObjects bool) Option {
 	}
 }
 
+// WithResourceid sets the resourceId query parameter
+func WithResourceid(resourceId []string) Option {
+	return func(o *Options) {
+		o.Resourceid = &resourceId
+	}
+}
+
+// WithSince sets the since query parameter
+func WithSince(since string) Option {
+	return func(o *Options) {
+		o.Since = &since
+	}
+}
+
+// WithUntil sets the until query parameter
+func WithUntil(until string) Option {
+	return func(o *Options) {
+		o.Until = &until
+	}
+}
+
+// WithWithmetadata sets the withMetadata query parameter
+func WithWithmetadata(withMetadata bool) Option {
+	return func(o *Options) {
+		o.Withmetadata = &withMetadata
+	}
+}
+
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
 	options := &Options{}
@@ -88,6 +120,18 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Purgeobjects != nil {
 		params = append(params, fmt.Sprintf("purgeObjects=%t", *options.Purgeobjects))
+	}
+	if options.Resourceid != nil {
+		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
+	}
+	if options.Since != nil {
+		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Until != nil {
+		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+	}
+	if options.Withmetadata != nil {
+		params = append(params, fmt.Sprintf("withMetadata=%t", *options.Withmetadata))
 	}
 
 	if len(params) == 0 {

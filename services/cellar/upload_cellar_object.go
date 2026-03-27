@@ -14,7 +14,7 @@ import (
 /*
 Uploadcellarobject
 
-stream upload an object to a bucket
+Stream upload an object to a bucket. Custom metadata can be attached via x-amz-meta-* headers (e.g. x-amz-meta-author: John). Keys are normalized to lowercase, matching AWS S3 conventions.
 
 Parameters:
   - ctx: context for the request

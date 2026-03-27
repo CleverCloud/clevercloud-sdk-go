@@ -6,6 +6,7 @@ import "time"
 
 // RevocationMetadata1
 type RevocationMetadata1 struct {
-	HasMore   bool       `json:"hasMore"`
-	NextSince *time.Time `json:"nextSince,omitempty"`
+	HasMore    bool       `json:"hasMore"`
+	LocationID string     `json:"locationId"`
+	NextSince  *time.Time `json:"nextSince,omitempty"`
 }
