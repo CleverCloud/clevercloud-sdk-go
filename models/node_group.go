@@ -6,19 +6,20 @@ import "time"
 
 // NodeGroup
 type NodeGroup struct {
-	ClusterID        string               `json:"clusterId"`
-	CreatedAt        time.Time            `json:"createdAt"`
-	CurrentNodeCount int                  `json:"currentNodeCount"`
-	Description      *StringMaxLength4096 `json:"description,omitempty"`
-	Flavor           NodeFlavor           `json:"flavor"`
-	ID               string               `json:"id"`
-	Labels           []KubernetesLabel    `json:"labels,omitempty"`
-	MaxNodeCount     int                  `json:"maxNodeCount"`
-	MinNodeCount     int                  `json:"minNodeCount"`
-	Name             NodeGroupName        `json:"name"`
-	Status           NodeGroupStatusType  `json:"status"`
-	Tag              *StringMaxLength1024 `json:"tag,omitempty"`
-	Taints           []KubernetesTaint    `json:"taints,omitempty"`
-	TargetNodeCount  int                  `json:"targetNodeCount"`
-	UpdatedAt        *time.Time           `json:"updatedAt,omitempty"`
+	AutoscalingEnabled bool                  `json:"autoscalingEnabled"`
+	ClusterID          string                `json:"clusterId"`
+	CreatedAt          time.Time             `json:"createdAt"`
+	CurrentNodeCount   int                   `json:"currentNodeCount"`
+	Description        *StringMaxLength4096  `json:"description,omitempty"`
+	Flavor             NodeFlavor            `json:"flavor"`
+	ID                 string                `json:"id"`
+	Labels             MapLabelkeyLabelvalue `json:"labels"`
+	MaxNodeCount       int                   `json:"maxNodeCount"`
+	MinNodeCount       int                   `json:"minNodeCount"`
+	Name               NodeGroupName         `json:"name"`
+	Status             NodeGroupStatusType   `json:"status"`
+	Tag                *StringMaxLength1024  `json:"tag,omitempty"`
+	Taints             []KubernetesTaint     `json:"taints,omitempty"`
+	TargetNodeCount    int                   `json:"targetNodeCount"`
+	UpdatedAt          *time.Time            `json:"updatedAt,omitempty"`
 }

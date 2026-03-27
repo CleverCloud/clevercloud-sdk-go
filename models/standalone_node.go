@@ -4,13 +4,13 @@ package models
 
 // StandaloneNode
 type StandaloneNode struct {
-	ClusterID   string            `json:"clusterId"`
-	Description *string           `json:"description,omitempty"`
-	Flavor      NodeFlavor        `json:"flavor"`
-	ID          string            `json:"id"`
-	Labels      []KubernetesLabel `json:"labels,omitempty"`
-	Name        string            `json:"name"`
-	Status      NodeStatusType    `json:"status"`
-	Tag         *string           `json:"tag,omitempty"`
-	Taints      []KubernetesTaint `json:"taints,omitempty"`
+	ClusterID   string                `json:"clusterId"`
+	Description *string               `json:"description,omitempty"`
+	Flavor      NodeFlavor            `json:"flavor"`
+	ID          string                `json:"id"`
+	Labels      MapLabelkeyLabelvalue `json:"labels"`
+	Name        string                `json:"name"`
+	Status      NodeStatusType        `json:"status"`
+	Tag         *string               `json:"tag,omitempty"`
+	Taints      []KubernetesTaint     `json:"taints,omitempty"`
 }

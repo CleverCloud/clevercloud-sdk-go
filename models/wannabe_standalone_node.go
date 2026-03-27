@@ -4,10 +4,10 @@ package models
 
 // WannabeStandaloneNode
 type WannabeStandaloneNode struct {
-	Description *string           `json:"description,omitempty"`
-	Flavor      NodeFlavor        `json:"flavor"`
-	Labels      []KubernetesLabel `json:"labels,omitempty"`
-	Name        string            `json:"name"`
-	Tag         *string           `json:"tag,omitempty"`
-	Taints      []KubernetesTaint `json:"taints,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	Flavor      NodeFlavor             `json:"flavor"`
+	Labels      *MapLabelkeyLabelvalue `json:"labels,omitempty"`
+	Name        string                 `json:"name"`
+	Tag         *string                `json:"tag,omitempty"`
+	Taints      []KubernetesTaint      `json:"taints,omitempty"`
 }

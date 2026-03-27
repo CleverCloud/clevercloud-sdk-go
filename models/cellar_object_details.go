@@ -11,7 +11,7 @@ type CellarObjectDetails struct {
 	ContentType   string      `json:"contentType"`
 	ETag          string      `json:"eTag"`
 	Key           string      `json:"key"`
-	Metadata      MapString   `json:"metadata"`
+	Metadata      MapString   `json:"metadata"` // S3 user-defined metadata key-value pairs from x-amz-meta-* headers
 	Name          string      `json:"name"`
 	Tags          []CellarTag `json:"tags,omitempty"`
 	Type          string      `json:"type"`

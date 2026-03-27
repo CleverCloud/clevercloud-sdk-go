@@ -4,10 +4,11 @@ package models
 
 // NodeGroupPatchPayload
 type NodeGroupPatchPayload struct {
-	Description     *StringMaxLength4096 `json:"description,omitempty"`
-	MaxNodeCount    *int                 `json:"maxNodeCount,omitempty"`
-	MinNodeCount    *int                 `json:"minNodeCount,omitempty"`
-	Name            NodeGroupName        `json:"name"`
-	Tag             *StringMaxLength1024 `json:"tag,omitempty"`
-	TargetNodeCount int                  `json:"targetNodeCount"`
+	AutoscalingEnabled *bool                `json:"autoscalingEnabled,omitempty"`
+	Description        *StringMaxLength4096 `json:"description,omitempty"`
+	MaxNodeCount       *int                 `json:"maxNodeCount,omitempty"`
+	MinNodeCount       *int                 `json:"minNodeCount,omitempty"`
+	Name               NodeGroupName        `json:"name"`
+	Tag                *StringMaxLength1024 `json:"tag,omitempty"`
+	TargetNodeCount    int                  `json:"targetNodeCount"`
 }

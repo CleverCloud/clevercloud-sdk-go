@@ -4,7 +4,8 @@ package models
 
 // ClusterPatchPayload
 type ClusterPatchPayload struct {
-	Description *string  `json:"description,omitempty"`
-	Name        *string  `json:"name,omitempty"`
-	Tags        []string `json:"tags,omitempty"`
+	Description *string               `json:"description,omitempty"`
+	Features    *ClusterFeaturesPatch `json:"features,omitempty"`
+	Name        *string               `json:"name,omitempty"`
+	Tags        []string              `json:"tags,omitempty"`
 }

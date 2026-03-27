@@ -30,7 +30,7 @@ import (
 	pulsar "go.clever-cloud.dev/sdk/services/pulsar"
 	storage "go.clever-cloud.dev/sdk/services/storage"
 	tokens "go.clever-cloud.dev/sdk/services/tokens"
-	warp10token "go.clever-cloud.dev/sdk/services/warp10_token"
+	warp10 "go.clever-cloud.dev/sdk/services/warp10"
 	zone "go.clever-cloud.dev/sdk/services/zone"
 )
 
@@ -1013,7 +1013,7 @@ type V4Builder interface {
 	Pulsar() V4PulsarBuilder
 	Tenants() V4TenantsBuilder
 	Tokens() V4TokensBuilder
-	Warp10Token() V4Warp10TokenBuilder
+	Warp10() V4Warp10Builder
 }
 
 // v4BuilderImpl implements V4Builder
@@ -1186,9 +1186,9 @@ func (b *v4BuilderImpl) Tokens() V4TokensBuilder {
 	return newV4TokensBuilder(b.sdk)
 }
 
-// Warp10Token returns Warp10Token builder
-func (b *v4BuilderImpl) Warp10Token() V4Warp10TokenBuilder {
-	return newV4Warp10TokenBuilder(b.sdk)
+// Warp10 returns Warp10 builder
+func (b *v4BuilderImpl) Warp10() V4Warp10Builder {
+	return newV4Warp10Builder(b.sdk)
 }
 
 // V4AddonProvidersBuilder provides access to operations
@@ -3740,6 +3740,7 @@ func (b *v4CellarOrganisationsOwneridBuilderImpl) Clusters() V4CellarOrganisatio
 // V4CellarOrganisationsOwneridCellarBuilder provides access to operations
 type V4CellarOrganisationsOwneridCellarBuilder interface {
 	Cellarid(cellarid string) V4CellarOrganisationsOwneridCellarCellaridBuilder
+	Consumptions() V4CellarOrganisationsOwneridCellarConsumptionsBuilder
 }
 
 // v4CellarOrganisationsOwneridCellarBuilderImpl implements V4CellarOrganisationsOwneridCellarBuilder
@@ -3759,6 +3760,11 @@ func newV4CellarOrganisationsOwneridCellarBuilder(sdk *sdkImpl, ownerid string) 
 // Cellarid returns builder for cellarid
 func (b *v4CellarOrganisationsOwneridCellarBuilderImpl) Cellarid(cellarid string) V4CellarOrganisationsOwneridCellarCellaridBuilder {
 	return newV4CellarOrganisationsOwneridCellarCellaridBuilder(b.sdk, b.ownerid, cellarid)
+}
+
+// Consumptions returns Consumptions builder
+func (b *v4CellarOrganisationsOwneridCellarBuilderImpl) Consumptions() V4CellarOrganisationsOwneridCellarConsumptionsBuilder {
+	return newV4CellarOrganisationsOwneridCellarConsumptionsBuilder(b.sdk, b.ownerid)
 }
 
 // V4CellarOrganisationsOwneridCellarCellaridBuilder provides access to operations
@@ -4241,6 +4247,30 @@ func newV4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilder(sdk *sdk
 // Getcellarcredentialsfile calls cellar.Getcellarcredentialsfile
 func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilderImpl) Getcellarcredentialsfile(ctx context.Context) client.Response[client.Nothing] {
 	return cellar.Getcellarcredentialsfile(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.cellarid)
+}
+
+// V4CellarOrganisationsOwneridCellarConsumptionsBuilder provides access to operations
+type V4CellarOrganisationsOwneridCellarConsumptionsBuilder interface {
+	Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ResourceConsumption]
+}
+
+// v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl implements V4CellarOrganisationsOwneridCellarConsumptionsBuilder
+type v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4CellarOrganisationsOwneridCellarConsumptionsBuilder creates a new V4CellarOrganisationsOwneridCellarConsumptionsBuilder
+func newV4CellarOrganisationsOwneridCellarConsumptionsBuilder(sdk *sdkImpl, ownerid string) V4CellarOrganisationsOwneridCellarConsumptionsBuilder {
+	return &v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Listcellarconsumptions calls cellar.Listcellarconsumptions
+func (b *v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl) Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ResourceConsumption] {
+	return cellar.Listcellarconsumptions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
 // V4CellarOrganisationsOwneridClustersBuilder provides access to operations
@@ -14131,262 +14161,262 @@ func (b *v4TokensRevocationsBuilderImpl) Listrevocations(ctx context.Context, op
 	return tokens.Listrevocations(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
-// V4Warp10TokenBuilder provides access to operations
-type V4Warp10TokenBuilder interface {
-	Cluster() V4Warp10TokenClusterBuilder
-	Clusters() V4Warp10TokenClustersBuilder
+// V4Warp10Builder provides access to operations
+type V4Warp10Builder interface {
+	Cluster() V4Warp10ClusterBuilder
+	Clusters() V4Warp10ClustersBuilder
 }
 
-// v4Warp10TokenBuilderImpl implements V4Warp10TokenBuilder
-type v4Warp10TokenBuilderImpl struct {
+// v4Warp10BuilderImpl implements V4Warp10Builder
+type v4Warp10BuilderImpl struct {
 	sdk *sdkImpl
 }
 
-// newV4Warp10TokenBuilder creates a new V4Warp10TokenBuilder
-func newV4Warp10TokenBuilder(sdk *sdkImpl) V4Warp10TokenBuilder {
-	return &v4Warp10TokenBuilderImpl{sdk: sdk}
+// newV4Warp10Builder creates a new V4Warp10Builder
+func newV4Warp10Builder(sdk *sdkImpl) V4Warp10Builder {
+	return &v4Warp10BuilderImpl{sdk: sdk}
 }
 
 // Cluster returns Cluster builder
-func (b *v4Warp10TokenBuilderImpl) Cluster() V4Warp10TokenClusterBuilder {
-	return newV4Warp10TokenClusterBuilder(b.sdk)
+func (b *v4Warp10BuilderImpl) Cluster() V4Warp10ClusterBuilder {
+	return newV4Warp10ClusterBuilder(b.sdk)
 }
 
 // Clusters returns Clusters builder
-func (b *v4Warp10TokenBuilderImpl) Clusters() V4Warp10TokenClustersBuilder {
-	return newV4Warp10TokenClustersBuilder(b.sdk)
+func (b *v4Warp10BuilderImpl) Clusters() V4Warp10ClustersBuilder {
+	return newV4Warp10ClustersBuilder(b.sdk)
 }
 
-// V4Warp10TokenClusterBuilder provides access to operations
-type V4Warp10TokenClusterBuilder interface {
-	Clusterid(clusterid string) V4Warp10TokenClusterClusteridBuilder
+// V4Warp10ClusterBuilder provides access to operations
+type V4Warp10ClusterBuilder interface {
+	Clusterid(clusterid string) V4Warp10ClusterClusteridBuilder
 }
 
-// v4Warp10TokenClusterBuilderImpl implements V4Warp10TokenClusterBuilder
-type v4Warp10TokenClusterBuilderImpl struct {
+// v4Warp10ClusterBuilderImpl implements V4Warp10ClusterBuilder
+type v4Warp10ClusterBuilderImpl struct {
 	sdk *sdkImpl
 }
 
-// newV4Warp10TokenClusterBuilder creates a new V4Warp10TokenClusterBuilder
-func newV4Warp10TokenClusterBuilder(sdk *sdkImpl) V4Warp10TokenClusterBuilder {
-	return &v4Warp10TokenClusterBuilderImpl{sdk: sdk}
+// newV4Warp10ClusterBuilder creates a new V4Warp10ClusterBuilder
+func newV4Warp10ClusterBuilder(sdk *sdkImpl) V4Warp10ClusterBuilder {
+	return &v4Warp10ClusterBuilderImpl{sdk: sdk}
 }
 
 // Clusterid returns builder for clusterid
-func (b *v4Warp10TokenClusterBuilderImpl) Clusterid(clusterid string) V4Warp10TokenClusterClusteridBuilder {
-	return newV4Warp10TokenClusterClusteridBuilder(b.sdk, clusterid)
+func (b *v4Warp10ClusterBuilderImpl) Clusterid(clusterid string) V4Warp10ClusterClusteridBuilder {
+	return newV4Warp10ClusterClusteridBuilder(b.sdk, clusterid)
 }
 
-// V4Warp10TokenClusterClusteridBuilder provides access to operations
-type V4Warp10TokenClusterClusteridBuilder interface {
-	Token() V4Warp10TokenClusterClusteridTokenBuilder
+// V4Warp10ClusterClusteridBuilder provides access to operations
+type V4Warp10ClusterClusteridBuilder interface {
+	Token() V4Warp10ClusterClusteridTokenBuilder
 }
 
-// v4Warp10TokenClusterClusteridBuilderImpl implements V4Warp10TokenClusterClusteridBuilder
-type v4Warp10TokenClusterClusteridBuilderImpl struct {
+// v4Warp10ClusterClusteridBuilderImpl implements V4Warp10ClusterClusteridBuilder
+type v4Warp10ClusterClusteridBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClusterClusteridBuilder creates a new V4Warp10TokenClusterClusteridBuilder
-func newV4Warp10TokenClusterClusteridBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridBuilder {
-	return &v4Warp10TokenClusterClusteridBuilderImpl{
+// newV4Warp10ClusterClusteridBuilder creates a new V4Warp10ClusterClusteridBuilder
+func newV4Warp10ClusterClusteridBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClusterClusteridBuilder {
+	return &v4Warp10ClusterClusteridBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
 // Token returns Token builder
-func (b *v4Warp10TokenClusterClusteridBuilderImpl) Token() V4Warp10TokenClusterClusteridTokenBuilder {
-	return newV4Warp10TokenClusterClusteridTokenBuilder(b.sdk, b.clusterid)
+func (b *v4Warp10ClusterClusteridBuilderImpl) Token() V4Warp10ClusterClusteridTokenBuilder {
+	return newV4Warp10ClusterClusteridTokenBuilder(b.sdk, b.clusterid)
 }
 
-// V4Warp10TokenClusterClusteridTokenBuilder provides access to operations
-type V4Warp10TokenClusterClusteridTokenBuilder interface {
-	Revocationid(revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder
-	Read() V4Warp10TokenClusterClusteridTokenReadBuilder
-	Revocation() V4Warp10TokenClusterClusteridTokenRevocationBuilder
-	Write() V4Warp10TokenClusterClusteridTokenWriteBuilder
+// V4Warp10ClusterClusteridTokenBuilder provides access to operations
+type V4Warp10ClusterClusteridTokenBuilder interface {
+	Revocationid(revocationid string) V4Warp10ClusterClusteridTokenRevocationidBuilder
+	Read() V4Warp10ClusterClusteridTokenReadBuilder
+	Revocation() V4Warp10ClusterClusteridTokenRevocationBuilder
+	Write() V4Warp10ClusterClusteridTokenWriteBuilder
 }
 
-// v4Warp10TokenClusterClusteridTokenBuilderImpl implements V4Warp10TokenClusterClusteridTokenBuilder
-type v4Warp10TokenClusterClusteridTokenBuilderImpl struct {
+// v4Warp10ClusterClusteridTokenBuilderImpl implements V4Warp10ClusterClusteridTokenBuilder
+type v4Warp10ClusterClusteridTokenBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClusterClusteridTokenBuilder creates a new V4Warp10TokenClusterClusteridTokenBuilder
-func newV4Warp10TokenClusterClusteridTokenBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenBuilder {
-	return &v4Warp10TokenClusterClusteridTokenBuilderImpl{
+// newV4Warp10ClusterClusteridTokenBuilder creates a new V4Warp10ClusterClusteridTokenBuilder
+func newV4Warp10ClusterClusteridTokenBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClusterClusteridTokenBuilder {
+	return &v4Warp10ClusterClusteridTokenBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
 // Revocationid returns builder for revocationid
-func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Revocationid(revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder {
-	return newV4Warp10TokenClusterClusteridTokenRevocationidBuilder(b.sdk, b.clusterid, revocationid)
+func (b *v4Warp10ClusterClusteridTokenBuilderImpl) Revocationid(revocationid string) V4Warp10ClusterClusteridTokenRevocationidBuilder {
+	return newV4Warp10ClusterClusteridTokenRevocationidBuilder(b.sdk, b.clusterid, revocationid)
 }
 
 // Read returns Read builder
-func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Read() V4Warp10TokenClusterClusteridTokenReadBuilder {
-	return newV4Warp10TokenClusterClusteridTokenReadBuilder(b.sdk, b.clusterid)
+func (b *v4Warp10ClusterClusteridTokenBuilderImpl) Read() V4Warp10ClusterClusteridTokenReadBuilder {
+	return newV4Warp10ClusterClusteridTokenReadBuilder(b.sdk, b.clusterid)
 }
 
 // Revocation returns Revocation builder
-func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Revocation() V4Warp10TokenClusterClusteridTokenRevocationBuilder {
-	return newV4Warp10TokenClusterClusteridTokenRevocationBuilder(b.sdk, b.clusterid)
+func (b *v4Warp10ClusterClusteridTokenBuilderImpl) Revocation() V4Warp10ClusterClusteridTokenRevocationBuilder {
+	return newV4Warp10ClusterClusteridTokenRevocationBuilder(b.sdk, b.clusterid)
 }
 
 // Write returns Write builder
-func (b *v4Warp10TokenClusterClusteridTokenBuilderImpl) Write() V4Warp10TokenClusterClusteridTokenWriteBuilder {
-	return newV4Warp10TokenClusterClusteridTokenWriteBuilder(b.sdk, b.clusterid)
+func (b *v4Warp10ClusterClusteridTokenBuilderImpl) Write() V4Warp10ClusterClusteridTokenWriteBuilder {
+	return newV4Warp10ClusterClusteridTokenWriteBuilder(b.sdk, b.clusterid)
 }
 
-// V4Warp10TokenClusterClusteridTokenRevocationidBuilder provides access to operations
-type V4Warp10TokenClusterClusteridTokenRevocationidBuilder interface {
+// V4Warp10ClusterClusteridTokenRevocationidBuilder provides access to operations
+type V4Warp10ClusterClusteridTokenRevocationidBuilder interface {
 	Deletewarp10token(ctx context.Context) client.Response[models.TokenRevokedResponse]
 	Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse]
 }
 
-// v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl implements V4Warp10TokenClusterClusteridTokenRevocationidBuilder
-type v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl struct {
+// v4Warp10ClusterClusteridTokenRevocationidBuilderImpl implements V4Warp10ClusterClusteridTokenRevocationidBuilder
+type v4Warp10ClusterClusteridTokenRevocationidBuilderImpl struct {
 	sdk          *sdkImpl
 	clusterid    string
 	revocationid string
 }
 
-// newV4Warp10TokenClusterClusteridTokenRevocationidBuilder creates a new V4Warp10TokenClusterClusteridTokenRevocationidBuilder
-func newV4Warp10TokenClusterClusteridTokenRevocationidBuilder(sdk *sdkImpl, clusterid string, revocationid string) V4Warp10TokenClusterClusteridTokenRevocationidBuilder {
-	return &v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl{
+// newV4Warp10ClusterClusteridTokenRevocationidBuilder creates a new V4Warp10ClusterClusteridTokenRevocationidBuilder
+func newV4Warp10ClusterClusteridTokenRevocationidBuilder(sdk *sdkImpl, clusterid string, revocationid string) V4Warp10ClusterClusteridTokenRevocationidBuilder {
+	return &v4Warp10ClusterClusteridTokenRevocationidBuilderImpl{
 		clusterid:    clusterid,
 		revocationid: revocationid,
 		sdk:          sdk,
 	}
 }
 
-// Deletewarp10token calls warp10_token.Deletewarp10token
-func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Deletewarp10token(ctx context.Context) client.Response[models.TokenRevokedResponse] {
-	return warp10token.Deletewarp10token(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
+// Deletewarp10token calls warp10.Deletewarp10token
+func (b *v4Warp10ClusterClusteridTokenRevocationidBuilderImpl) Deletewarp10token(ctx context.Context) client.Response[models.TokenRevokedResponse] {
+	return warp10.Deletewarp10token(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
 }
 
-// Gettokenmetadata calls warp10_token.Gettokenmetadata
-func (b *v4Warp10TokenClusterClusteridTokenRevocationidBuilderImpl) Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse] {
-	return warp10token.Gettokenmetadata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
+// Gettokenmetadata calls warp10.Gettokenmetadata
+func (b *v4Warp10ClusterClusteridTokenRevocationidBuilderImpl) Gettokenmetadata(ctx context.Context) client.Response[models.TokenMetadataResponse] {
+	return warp10.Gettokenmetadata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, b.revocationid)
 }
 
-// V4Warp10TokenClusterClusteridTokenReadBuilder provides access to operations
-type V4Warp10TokenClusterClusteridTokenReadBuilder interface {
+// V4Warp10ClusterClusteridTokenReadBuilder provides access to operations
+type V4Warp10ClusterClusteridTokenReadBuilder interface {
 	Createreadtoken(ctx context.Context, request *models.CreateReadTokenRequest) client.Response[models.TokenCreatedResponse]
 }
 
-// v4Warp10TokenClusterClusteridTokenReadBuilderImpl implements V4Warp10TokenClusterClusteridTokenReadBuilder
-type v4Warp10TokenClusterClusteridTokenReadBuilderImpl struct {
+// v4Warp10ClusterClusteridTokenReadBuilderImpl implements V4Warp10ClusterClusteridTokenReadBuilder
+type v4Warp10ClusterClusteridTokenReadBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClusterClusteridTokenReadBuilder creates a new V4Warp10TokenClusterClusteridTokenReadBuilder
-func newV4Warp10TokenClusterClusteridTokenReadBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenReadBuilder {
-	return &v4Warp10TokenClusterClusteridTokenReadBuilderImpl{
+// newV4Warp10ClusterClusteridTokenReadBuilder creates a new V4Warp10ClusterClusteridTokenReadBuilder
+func newV4Warp10ClusterClusteridTokenReadBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClusterClusteridTokenReadBuilder {
+	return &v4Warp10ClusterClusteridTokenReadBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
-// Createreadtoken calls warp10_token.Createreadtoken
-func (b *v4Warp10TokenClusterClusteridTokenReadBuilderImpl) Createreadtoken(ctx context.Context, request *models.CreateReadTokenRequest) client.Response[models.TokenCreatedResponse] {
-	return warp10token.Createreadtoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
+// Createreadtoken calls warp10.Createreadtoken
+func (b *v4Warp10ClusterClusteridTokenReadBuilderImpl) Createreadtoken(ctx context.Context, request *models.CreateReadTokenRequest) client.Response[models.TokenCreatedResponse] {
+	return warp10.Createreadtoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
 }
 
-// V4Warp10TokenClusterClusteridTokenRevocationBuilder provides access to operations
-type V4Warp10TokenClusterClusteridTokenRevocationBuilder interface {
-	Listrevokedtokens(ctx context.Context, opts ...warp10token.Option) client.Response[models.RevokedTokensResponse]
+// V4Warp10ClusterClusteridTokenRevocationBuilder provides access to operations
+type V4Warp10ClusterClusteridTokenRevocationBuilder interface {
+	Listrevokedtokens(ctx context.Context, opts ...warp10.Option) client.Response[models.RevokedTokensResponse]
 }
 
-// v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl implements V4Warp10TokenClusterClusteridTokenRevocationBuilder
-type v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl struct {
+// v4Warp10ClusterClusteridTokenRevocationBuilderImpl implements V4Warp10ClusterClusteridTokenRevocationBuilder
+type v4Warp10ClusterClusteridTokenRevocationBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClusterClusteridTokenRevocationBuilder creates a new V4Warp10TokenClusterClusteridTokenRevocationBuilder
-func newV4Warp10TokenClusterClusteridTokenRevocationBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenRevocationBuilder {
-	return &v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl{
+// newV4Warp10ClusterClusteridTokenRevocationBuilder creates a new V4Warp10ClusterClusteridTokenRevocationBuilder
+func newV4Warp10ClusterClusteridTokenRevocationBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClusterClusteridTokenRevocationBuilder {
+	return &v4Warp10ClusterClusteridTokenRevocationBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
-// Listrevokedtokens calls warp10_token.Listrevokedtokens
-func (b *v4Warp10TokenClusterClusteridTokenRevocationBuilderImpl) Listrevokedtokens(ctx context.Context, opts ...warp10token.Option) client.Response[models.RevokedTokensResponse] {
-	return warp10token.Listrevokedtokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, opts...)
+// Listrevokedtokens calls warp10.Listrevokedtokens
+func (b *v4Warp10ClusterClusteridTokenRevocationBuilderImpl) Listrevokedtokens(ctx context.Context, opts ...warp10.Option) client.Response[models.RevokedTokensResponse] {
+	return warp10.Listrevokedtokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, opts...)
 }
 
-// V4Warp10TokenClusterClusteridTokenWriteBuilder provides access to operations
-type V4Warp10TokenClusterClusteridTokenWriteBuilder interface {
+// V4Warp10ClusterClusteridTokenWriteBuilder provides access to operations
+type V4Warp10ClusterClusteridTokenWriteBuilder interface {
 	Createwritetoken(ctx context.Context, request *models.CreateWriteTokenRequest) client.Response[models.TokenCreatedResponse]
 }
 
-// v4Warp10TokenClusterClusteridTokenWriteBuilderImpl implements V4Warp10TokenClusterClusteridTokenWriteBuilder
-type v4Warp10TokenClusterClusteridTokenWriteBuilderImpl struct {
+// v4Warp10ClusterClusteridTokenWriteBuilderImpl implements V4Warp10ClusterClusteridTokenWriteBuilder
+type v4Warp10ClusterClusteridTokenWriteBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClusterClusteridTokenWriteBuilder creates a new V4Warp10TokenClusterClusteridTokenWriteBuilder
-func newV4Warp10TokenClusterClusteridTokenWriteBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClusterClusteridTokenWriteBuilder {
-	return &v4Warp10TokenClusterClusteridTokenWriteBuilderImpl{
+// newV4Warp10ClusterClusteridTokenWriteBuilder creates a new V4Warp10ClusterClusteridTokenWriteBuilder
+func newV4Warp10ClusterClusteridTokenWriteBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClusterClusteridTokenWriteBuilder {
+	return &v4Warp10ClusterClusteridTokenWriteBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
-// Createwritetoken calls warp10_token.Createwritetoken
-func (b *v4Warp10TokenClusterClusteridTokenWriteBuilderImpl) Createwritetoken(ctx context.Context, request *models.CreateWriteTokenRequest) client.Response[models.TokenCreatedResponse] {
-	return warp10token.Createwritetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
+// Createwritetoken calls warp10.Createwritetoken
+func (b *v4Warp10ClusterClusteridTokenWriteBuilderImpl) Createwritetoken(ctx context.Context, request *models.CreateWriteTokenRequest) client.Response[models.TokenCreatedResponse] {
+	return warp10.Createwritetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
 }
 
-// V4Warp10TokenClustersBuilder provides access to operations
-type V4Warp10TokenClustersBuilder interface {
-	Clusterid(clusterid string) V4Warp10TokenClustersClusteridBuilder
+// V4Warp10ClustersBuilder provides access to operations
+type V4Warp10ClustersBuilder interface {
+	Clusterid(clusterid string) V4Warp10ClustersClusteridBuilder
 }
 
-// v4Warp10TokenClustersBuilderImpl implements V4Warp10TokenClustersBuilder
-type v4Warp10TokenClustersBuilderImpl struct {
+// v4Warp10ClustersBuilderImpl implements V4Warp10ClustersBuilder
+type v4Warp10ClustersBuilderImpl struct {
 	sdk *sdkImpl
 }
 
-// newV4Warp10TokenClustersBuilder creates a new V4Warp10TokenClustersBuilder
-func newV4Warp10TokenClustersBuilder(sdk *sdkImpl) V4Warp10TokenClustersBuilder {
-	return &v4Warp10TokenClustersBuilderImpl{sdk: sdk}
+// newV4Warp10ClustersBuilder creates a new V4Warp10ClustersBuilder
+func newV4Warp10ClustersBuilder(sdk *sdkImpl) V4Warp10ClustersBuilder {
+	return &v4Warp10ClustersBuilderImpl{sdk: sdk}
 }
 
 // Clusterid returns builder for clusterid
-func (b *v4Warp10TokenClustersBuilderImpl) Clusterid(clusterid string) V4Warp10TokenClustersClusteridBuilder {
-	return newV4Warp10TokenClustersClusteridBuilder(b.sdk, clusterid)
+func (b *v4Warp10ClustersBuilderImpl) Clusterid(clusterid string) V4Warp10ClustersClusteridBuilder {
+	return newV4Warp10ClustersClusteridBuilder(b.sdk, clusterid)
 }
 
-// V4Warp10TokenClustersClusteridBuilder provides access to operations
-type V4Warp10TokenClustersClusteridBuilder interface {
+// V4Warp10ClustersClusteridBuilder provides access to operations
+type V4Warp10ClustersClusteridBuilder interface {
 	Getclustermetadata(ctx context.Context) client.Response[models.ClusterMetadataResponse]
 }
 
-// v4Warp10TokenClustersClusteridBuilderImpl implements V4Warp10TokenClustersClusteridBuilder
-type v4Warp10TokenClustersClusteridBuilderImpl struct {
+// v4Warp10ClustersClusteridBuilderImpl implements V4Warp10ClustersClusteridBuilder
+type v4Warp10ClustersClusteridBuilderImpl struct {
 	sdk       *sdkImpl
 	clusterid string
 }
 
-// newV4Warp10TokenClustersClusteridBuilder creates a new V4Warp10TokenClustersClusteridBuilder
-func newV4Warp10TokenClustersClusteridBuilder(sdk *sdkImpl, clusterid string) V4Warp10TokenClustersClusteridBuilder {
-	return &v4Warp10TokenClustersClusteridBuilderImpl{
+// newV4Warp10ClustersClusteridBuilder creates a new V4Warp10ClustersClusteridBuilder
+func newV4Warp10ClustersClusteridBuilder(sdk *sdkImpl, clusterid string) V4Warp10ClustersClusteridBuilder {
+	return &v4Warp10ClustersClusteridBuilderImpl{
 		clusterid: clusterid,
 		sdk:       sdk,
 	}
 }
 
-// Getclustermetadata calls warp10_token.Getclustermetadata
-func (b *v4Warp10TokenClustersClusteridBuilderImpl) Getclustermetadata(ctx context.Context) client.Response[models.ClusterMetadataResponse] {
-	return warp10token.Getclustermetadata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+// Getclustermetadata calls warp10.Getclustermetadata
+func (b *v4Warp10ClustersClusteridBuilderImpl) Getclustermetadata(ctx context.Context) client.Response[models.ClusterMetadataResponse] {
+	return warp10.Getclustermetadata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
 }
