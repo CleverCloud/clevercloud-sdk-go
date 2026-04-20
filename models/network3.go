@@ -6,8 +6,8 @@ import "time"
 
 // Network3
 type Network3 struct {
-	Cidrv4    any            `json:"cidrv4"`
-	Cidrv6    any            `json:"cidrv6"`
+	Cidrv4    *string        `json:"cidrv4,omitempty"`
+	Cidrv6    *string        `json:"cidrv6,omitempty"`
 	CreatedAt time.Time      `json:"createdAt"`
 	Details   NetworkDetails `json:"details"`
 	ID        NetworkId      `json:"id"`

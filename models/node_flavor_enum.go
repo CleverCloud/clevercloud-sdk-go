@@ -6,10 +6,12 @@ package models
 type NodeFlavor string
 
 const (
-	NodeFlavorS  NodeFlavor = "s"
-	NodeFlavorM  NodeFlavor = "m"
-	NodeFlavorL  NodeFlavor = "l"
-	NodeFlavorXl NodeFlavor = "xl"
+	NodeFlavor2XS NodeFlavor = "2XS"
+	NodeFlavorXS  NodeFlavor = "XS"
+	NodeFlavorS   NodeFlavor = "S"
+	NodeFlavorM   NodeFlavor = "M"
+	NodeFlavorL   NodeFlavor = "L"
+	NodeFlavorXL  NodeFlavor = "XL"
 )
 
 // String returns the underlying string value

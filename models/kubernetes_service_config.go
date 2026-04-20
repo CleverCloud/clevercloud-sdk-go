@@ -4,7 +4,6 @@ package models
 
 // KubernetesServiceConfig
 type KubernetesServiceConfig struct {
-	ReplicationFactor ReplicationFactorConfig `json:"replicationFactor"`
-	Topology          []ClusterTopology       `json:"topology,omitempty"`
-	Versions          []string                `json:"versions,omitempty"`
+	Topologies []TopologyConstraints `json:"topologies,omitempty"`
+	Versions   []string              `json:"versions,omitempty"`
 }

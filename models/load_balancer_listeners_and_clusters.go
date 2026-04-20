@@ -4,6 +4,6 @@ package models
 
 // LoadBalancerListenersAndClusters
 type LoadBalancerListenersAndClusters struct {
-	Clusters  []Cluster1 `json:"clusters,omitempty"`
+	Clusters  []Cluster  `json:"clusters,omitempty"`
 	Listeners []Listener `json:"listeners,omitempty"`
 }

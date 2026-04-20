@@ -4,14 +4,13 @@ package models
 
 // ClusterCreationPayload
 type ClusterCreationPayload struct {
-	Description       *string                    `json:"description,omitempty"`
-	Features          *ClusterFeatures           `json:"features,omitempty"`
-	LocationID        *string                    `json:"locationId,omitempty"`
-	Name              string                     `json:"name"`
-	NetworkGroupID    *string                    `json:"networkGroupId,omitempty"`
-	NodeGroups        []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`
-	ReplicationFactor *int                       `json:"replicationFactor,omitempty"`
-	Tags              []string                   `json:"tags,omitempty"`
-	Topology          *ClusterTopology           `json:"topology,omitempty"`
-	Version           *string                    `json:"version,omitempty"`
+	Description    *string                    `json:"description,omitempty"`
+	Features       *ClusterFeatures           `json:"features,omitempty"`
+	LocationID     *string                    `json:"locationId,omitempty"`
+	Name           string                     `json:"name"`
+	NetworkGroupID *string                    `json:"networkGroupId,omitempty"`
+	NodeGroups     []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`
+	Tags           []string                   `json:"tags,omitempty"`
+	TopologyConfig *TopologyConfig            `json:"topologyConfig,omitempty"`
+	Version        *string                    `json:"version,omitempty"`
 }

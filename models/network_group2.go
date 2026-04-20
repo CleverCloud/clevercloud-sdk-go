@@ -14,6 +14,7 @@ type NetworkGroup2 struct {
 	Members           []Member            `json:"members,omitempty"`
 	NetworkIP         string              `json:"networkIp"`
 	OwnerID           OwnerID             `json:"ownerId"`
+	Ownership         *Ownership          `json:"ownership,omitempty"`
 	Peers             []Peer              `json:"peers,omitempty"`
 	Tags              []string            `json:"tags,omitempty"`
 	Type              string              `json:"type"`

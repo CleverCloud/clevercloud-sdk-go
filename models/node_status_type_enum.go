@@ -9,6 +9,7 @@ const (
 	NodeStatusTypeDELETED   NodeStatusType = "DELETED"
 	NodeStatusTypeDEPLOYED  NodeStatusType = "DEPLOYED"
 	NodeStatusTypeDEPLOYING NodeStatusType = "DEPLOYING"
+	NodeStatusTypeDRAINING  NodeStatusType = "DRAINING"
 	NodeStatusTypeFAILED    NodeStatusType = "FAILED"
 	NodeStatusTypeREADY     NodeStatusType = "READY"
 )

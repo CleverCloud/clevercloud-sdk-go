@@ -4,6 +4,6 @@ package models
 
 // AIEndpointResponse
 type AIEndpointResponse struct {
-	Endpoint       any    `json:"endpoint"`
-	OtoroshiTarget string `json:"otoroshiTarget"`
+	Endpoint       map[string]any `json:"endpoint"` // JSON payload forwarded from Otoroshi
+	OtoroshiTarget string         `json:"otoroshiTarget"`
 }

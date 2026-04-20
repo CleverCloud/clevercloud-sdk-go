@@ -37,7 +37,7 @@ Example:
 x-service: loadbalancer
 operationId: assignLoadBalancerClusters
 */
-func Assignloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Cluster1) client.Response[models.LoadBalancer] {
+func Assignloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Cluster) client.Response[models.LoadBalancer] {
 	ctx, span := tracer.Start(ctx, "assignLoadBalancerClusters", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 

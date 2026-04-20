@@ -7,7 +7,7 @@ import "time"
 // LoadBalancer
 type LoadBalancer struct {
 	AppliedConfigVersion         *int                          `json:"appliedConfigVersion,omitempty"`
-	Clusters                     []Cluster1                    `json:"clusters,omitempty"`
+	Clusters                     []Cluster                     `json:"clusters,omitempty"`
 	CoOwners                     []TenantID                    `json:"coOwners,omitempty"`
 	CreatedAt                    time.Time                     `json:"createdAt"`
 	DomainName                   DnsDomainName                 `json:"domainName"`

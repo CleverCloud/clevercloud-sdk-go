@@ -4,7 +4,7 @@ package models
 
 // Server1
 type Server1 struct {
-	Address any    `json:"address"`
+	Address string `json:"address"`
 	Backup  bool   `json:"backup"`
 	ID      string `json:"id"`
 	Weight  *int   `json:"weight,omitempty"`

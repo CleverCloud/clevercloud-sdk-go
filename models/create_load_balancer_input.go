@@ -8,5 +8,6 @@ type CreateLoadBalancerInput struct {
 	Configuration                *LoadBalancerConfigurationInput `json:"configuration,omitempty"`
 	Flavor                       Flavor                          `json:"flavor"`
 	LoadbalancerParentResourceID *LoadBalancerParentResourceId   `json:"loadbalancerParentResourceId,omitempty"`
+	Specification                *Specification                  `json:"specification,omitempty"`
 	Tags                         []string                        `json:"tags,omitempty"`
 }

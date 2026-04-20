@@ -4,6 +4,6 @@ package models
 
 // NetworkGroupServerEndpoint
 type NetworkGroupServerEndpoint struct {
-	PrivateAddress any `json:"privateAddress"`
-	PublicAddress  any `json:"publicAddress"`
+	PrivateAddress string `json:"privateAddress"`
+	PublicAddress  string `json:"publicAddress"`
 }

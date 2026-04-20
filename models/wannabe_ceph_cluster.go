@@ -5,5 +5,5 @@ package models
 // WannabeCephCluster
 type WannabeCephCluster struct {
 	Dashboard CephDashboard `json:"dashboard"`
-	Monitors  []any         `json:"monitors,omitempty"`
+	Monitors  []string      `json:"monitors,omitempty"`
 }

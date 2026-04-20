@@ -4,8 +4,8 @@ package models
 
 // NetworkGroupPeer1
 type NetworkGroupPeer1 struct {
-	Endpoint  *any   `json:"endpoint,omitempty"`
-	ID        string `json:"id"`
-	IP        string `json:"ip"`
-	PublicKey string `json:"publicKey"`
+	Endpoint  *string `json:"endpoint,omitempty"`
+	ID        string  `json:"id"`
+	IP        string  `json:"ip"`
+	PublicKey string  `json:"publicKey"`
 }

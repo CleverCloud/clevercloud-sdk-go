@@ -6,8 +6,8 @@ const NetworkGroupConfigType = "NetworkGroupConfig"
 
 // NetworkGroupConfig
 type NetworkGroupConfig struct {
-	NetworkGroup NetworkGroup1 `json:"networkGroup"`
-	Type         string        `json:"type"`
+	NetworkGroup NetworkGroup `json:"networkGroup"`
+	Type         string       `json:"type"`
 }
 
 // GetType returns the type identifier for NetworkGroupConfig

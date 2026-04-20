@@ -34,14 +34,14 @@ Example:
 x-service: kubernetes
 operationId: assignKubernetesCephCSIPlugin
 */
-func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster] {
+func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
 	ctx, span := tracer.Start(ctx, "assignKubernetesCephCSIPlugin", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/csi/ceph", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Cluster](ctx, c, path, nil)
+	response := client.Post[models.Cluster1](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

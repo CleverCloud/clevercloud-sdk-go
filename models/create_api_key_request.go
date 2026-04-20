@@ -4,5 +4,5 @@ package models
 
 // CreateApiKeyRequest
 type CreateApiKeyRequest struct {
-	APIKey *any `json:"apiKey,omitempty"`
+	APIKey *map[string]any `json:"apiKey,omitempty"` // JSON payload forwarded from Otoroshi
 }

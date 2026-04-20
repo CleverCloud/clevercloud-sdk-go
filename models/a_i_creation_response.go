@@ -4,7 +4,7 @@ package models
 
 // AICreationResponse
 type AICreationResponse struct {
-	APIKey   any     `json:"apiKey"`
-	Endpoint any     `json:"endpoint"`
-	Error    *string `json:"error,omitempty"`
+	APIKey   map[string]any `json:"apiKey"`   // JSON payload forwarded from Otoroshi
+	Endpoint map[string]any `json:"endpoint"` // JSON payload forwarded from Otoroshi
+	Error    *string        `json:"error,omitempty"`
 }

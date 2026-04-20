@@ -4,6 +4,6 @@ package models
 
 // PathRule
 type PathRule struct {
-	Kind PathKind `json:"kind"`
-	Path Path     `json:"path"`
+	Kind string `json:"kind"`
+	Path Path   `json:"path"`
 }

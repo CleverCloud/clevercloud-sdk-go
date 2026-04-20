@@ -2,10 +2,23 @@
 
 package models
 
+import "time"
+
 // Cluster1
 type Cluster1 struct {
-	Backends Backends           `json:"backends"`
-	ID       StringMaxLength128 `json:"id"`
-	OwnerID  TenantID           `json:"ownerId"`
-	Router   *Router            `json:"router,omitempty"`
+	CreationDate         time.Time                    `json:"creationDate"`
+	Description          *string                      `json:"description,omitempty"`
+	Features             *ClusterFeatures             `json:"features,omitempty"`
+	ID                   string                       `json:"id"`
+	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`
+	LocationID           string                       `json:"locationId"`
+	Name                 string                       `json:"name"`
+	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitempty"`
+	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitempty"`
+	Status               ClusterStatusType            `json:"status"`
+	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`
+	Tags                 []string                     `json:"tags,omitempty"`
+	TenantID             OwnerID                      `json:"tenantId"`
+	TopologyConfig       TopologyConfig               `json:"topologyConfig"`
+	Version              string                       `json:"version"`
 }

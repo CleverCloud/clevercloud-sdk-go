@@ -6,8 +6,8 @@ const ServerEndpointType = "ServerEndpoint"
 
 // ServerEndpoint
 type ServerEndpoint struct {
-	NgTerm     any    `json:"ngTerm"`
-	PublicTerm any    `json:"publicTerm"`
+	NgTerm     string `json:"ngTerm"`
+	PublicTerm string `json:"publicTerm"`
 	Type       string `json:"type"`
 }
 

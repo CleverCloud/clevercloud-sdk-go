@@ -15,6 +15,8 @@ const (
 	NodeGroupStatusTypeREADY       NodeGroupStatusType = "READY"
 	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
 	NodeGroupStatusTypeTERMINATING NodeGroupStatusType = "TERMINATING"
+	NodeGroupStatusTypeToResize    NodeGroupStatusType = "TO_RESIZE"
+	NodeGroupStatusTypeToTerminate NodeGroupStatusType = "TO_TERMINATE"
 )
 
 // String returns the underlying string value

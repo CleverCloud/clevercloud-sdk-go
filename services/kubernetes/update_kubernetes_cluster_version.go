@@ -35,14 +35,14 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesClusterVersion
 */
-func Updatekubernetesclusterversion(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.PatchClusterVersion) client.Response[models.Cluster] {
+func Updatekubernetesclusterversion(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.PatchClusterVersion) client.Response[models.Cluster1] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesClusterVersion", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/version/update", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Cluster](ctx, c, path, requestBody)
+	response := client.Post[models.Cluster1](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

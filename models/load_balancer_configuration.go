@@ -6,7 +6,7 @@ import "time"
 
 // LoadBalancerConfiguration
 type LoadBalancerConfiguration struct {
-	Clusters       []Cluster1     `json:"clusters,omitempty"`
+	Clusters       []Cluster      `json:"clusters,omitempty"`
 	CreatedAt      time.Time      `json:"createdAt"`
 	Listeners      []Listener     `json:"listeners,omitempty"`
 	LoadbalancerID LoadBalancerId `json:"loadbalancerId"`

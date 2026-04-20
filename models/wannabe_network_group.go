@@ -8,5 +8,6 @@ type WannabeNetworkGroup struct {
 	ID          *string                     `json:"id,omitempty"`
 	Label       *StringMaxLength128         `json:"label,omitempty"`
 	Members     []WannabeNetworkgroupMember `json:"members,omitempty"`
+	Ownership   *Ownership                  `json:"ownership,omitempty"`
 	Tags        []string                    `json:"tags,omitempty"`
 }

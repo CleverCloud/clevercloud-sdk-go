@@ -3,4 +3,9 @@
 package models
 
 // WannabeCephPool
-type WannabeCephPool struct{}
+type WannabeCephPool struct {
+	CrushRule    *CephCrushRule `json:"crushRule,omitempty"`
+	PgNum        *int           `json:"pgNum,omitempty"`
+	PoolType     *CephPoolType  `json:"poolType,omitempty"`
+	ReplicaCount *int           `json:"replicaCount,omitempty"`
+}

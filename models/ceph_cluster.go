@@ -6,6 +6,6 @@ package models
 type CephCluster struct {
 	Dashboard CephDashboardInfo         `json:"dashboard"`
 	ID        string                    `json:"id"`
-	Monitors  []any                     `json:"monitors,omitempty"`
+	Monitors  []string                  `json:"monitors,omitempty"`
 	Statuses  []DefaultIdentifiedStatus `json:"statuses,omitempty"`
 }

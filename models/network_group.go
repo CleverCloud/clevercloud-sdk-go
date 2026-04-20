@@ -4,17 +4,11 @@ package models
 
 // NetworkGroup
 type NetworkGroup struct {
-	Description       *string             `json:"description,omitempty"`
-	DnsSanitizedLabel *StringMaxLength128 `json:"dnsSanitizedLabel,omitempty"`
-	ID                string              `json:"id"`
-	Label             StringMaxLength128  `json:"label"`
-	LastAllocatedIP   string              `json:"lastAllocatedIp"`
-	Members           []Member            `json:"members,omitempty"`
-	NetworkIP         string              `json:"networkIp"`
-	OwnerID           OwnerID             `json:"ownerId"`
-	Peers             []Peer              `json:"peers,omitempty"`
-	Tags              []string            `json:"tags,omitempty"`
-	Version           int                 `json:"version"`
+	ID         string             `json:"id"`
+	Network    Network1           `json:"network"`
+	OwnerID    string             `json:"ownerId"`
+	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
+	PrivateKey string             `json:"privateKey"`
 }
 
 // isNetworkDetails implements NetworkDetails

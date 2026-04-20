@@ -5,5 +5,5 @@ package models
 // CephClusterPatch
 type CephClusterPatch struct {
 	Dashboard *CephDashboard `json:"dashboard,omitempty"`
-	Monitors  []any          `json:"monitors,omitempty"`
+	Monitors  []string       `json:"monitors,omitempty"`
 }

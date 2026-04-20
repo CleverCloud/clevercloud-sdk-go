@@ -224,9 +224,21 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 							responseType = "client.Nothing"
 							break
 						}
-						for _, mediaType := range resp.Content {
-							responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
-							break
+						// Try to find application/json content type first
+						jsonFound := false
+						for contentType, mediaType := range resp.Content {
+							if contentType == "application/json" || contentType == "*/*" || contentType == "" {
+								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
+								jsonFound = true
+								break
+							}
+						}
+						// If no application/json, take first content type
+						if !jsonFound {
+							for _, mediaType := range resp.Content {
+								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
+								break
+							}
 						}
 						if responseType != "" && responseType != "any" {
 							break
