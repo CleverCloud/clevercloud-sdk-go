@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const DatadogRecipient1Type = "DATADOG"
 
 // DatadogRecipient1
@@ -15,5 +17,18 @@ func (r DatadogRecipient1) GetType() string {
 	return DatadogRecipient1Type
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r DatadogRecipient1) isDrainRecipient() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(DatadogRecipient1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v DatadogRecipient1) MarshalJSON() ([]byte, error) {
+	v.Type = DatadogRecipient1Type
+	type alias DatadogRecipient1
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient wraps the value into a DrainRecipient ready to be JSON-encoded.
+// The discriminator is set automatically by DatadogRecipient1's MarshalJSON.
+func (v DatadogRecipient1) ToDrainRecipient() DrainRecipient {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient{raw: raw}
+}

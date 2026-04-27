@@ -2,9 +2,82 @@
 
 package models
 
+import "encoding/json"
+
 // StorageConfiguration
-// Union type - can be one of: NetworkFileSystem, RemoteBlockDevice
-type StorageConfiguration interface {
-	isStorageConfiguration()
-	GetType() string
+// Tagged union - can hold one of: NetworkFileSystem, RemoteBlockDevice
+type StorageConfiguration struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u StorageConfiguration) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u StorageConfiguration) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *StorageConfiguration) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// StorageConfigurationVariant is satisfied by every concrete type that can be wrapped into a StorageConfiguration.
+// Lets generic code accept any variant without naming each one.
+type StorageConfigurationVariant interface {
+	ToStorageConfiguration() StorageConfiguration
+}
+
+// AsNetworkFileSystem decodes the held payload as a NetworkFileSystem. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u StorageConfiguration) AsNetworkFileSystem() (NetworkFileSystem, bool) {
+	var v NetworkFileSystem
+	if t, err := peekType(u.raw); err != nil || t != NetworkFileSystemType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewStorageConfigurationFromNetworkFileSystem wraps a NetworkFileSystem into a StorageConfiguration ready to be JSON-encoded.
+func NewStorageConfigurationFromNetworkFileSystem(v NetworkFileSystem) (StorageConfiguration, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return StorageConfiguration{}, err
+	}
+	return StorageConfiguration{raw: raw}, nil
+}
+
+// AsRemoteBlockDevice decodes the held payload as a RemoteBlockDevice. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u StorageConfiguration) AsRemoteBlockDevice() (RemoteBlockDevice, bool) {
+	var v RemoteBlockDevice
+	if t, err := peekType(u.raw); err != nil || t != RemoteBlockDeviceType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewStorageConfigurationFromRemoteBlockDevice wraps a RemoteBlockDevice into a StorageConfiguration ready to be JSON-encoded.
+func NewStorageConfigurationFromRemoteBlockDevice(v RemoteBlockDevice) (StorageConfiguration, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return StorageConfiguration{}, err
+	}
+	return StorageConfiguration{raw: raw}, nil
 }

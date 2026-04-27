@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const OVDErrorOperationContextType = "resource.operation"
 
 // OVDErrorOperationContext
@@ -17,5 +19,18 @@ func (r OVDErrorOperationContext) GetType() string {
 	return OVDErrorOperationContextType
 }
 
-// isOVDErrorContext implements OVDErrorContext
-func (r OVDErrorOperationContext) isOVDErrorContext() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(OVDErrorOperationContext{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v OVDErrorOperationContext) MarshalJSON() ([]byte, error) {
+	v.Type = OVDErrorOperationContextType
+	type alias OVDErrorOperationContext
+	return json.Marshal((alias)(v))
+}
+
+// ToOVDErrorContext wraps the value into a OVDErrorContext ready to be JSON-encoded.
+// The discriminator is set automatically by OVDErrorOperationContext's MarshalJSON.
+func (v OVDErrorOperationContext) ToOVDErrorContext() OVDErrorContext {
+	raw, _ := json.Marshal(v)
+	return OVDErrorContext{raw: raw}
+}

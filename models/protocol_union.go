@@ -2,9 +2,60 @@
 
 package models
 
+import "encoding/json"
+
 // Protocol
-// Union type - can be one of: Http
-type Protocol interface {
-	isProtocol()
-	GetType() string
+// Tagged union - can hold one of: Http
+type Protocol struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Protocol) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Protocol) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Protocol) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// ProtocolVariant is satisfied by every concrete type that can be wrapped into a Protocol.
+// Lets generic code accept any variant without naming each one.
+type ProtocolVariant interface {
+	ToProtocol() Protocol
+}
+
+// AsHttp decodes the held payload as a Http. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Protocol) AsHttp() (Http, bool) {
+	var v Http
+	if t, err := peekType(u.raw); err != nil || t != HttpType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewProtocolFromHttp wraps a Http into a Protocol ready to be JSON-encoded.
+func NewProtocolFromHttp(v Http) (Protocol, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Protocol{}, err
+	}
+	return Protocol{raw: raw}, nil
 }

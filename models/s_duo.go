@@ -4,6 +4,3 @@ package models
 
 // SDuo
 type SDuo struct{}
-
-// isFlavor implements Flavor
-func (r SDuo) isFlavor() {}

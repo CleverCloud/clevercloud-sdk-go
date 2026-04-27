@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Regex1Type = "Regex"
 
 // Regex1
@@ -15,5 +17,18 @@ func (r Regex1) GetType() string {
 	return Regex1Type
 }
 
-// isHost implements Host
-func (r Regex1) isHost() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Regex1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Regex1) MarshalJSON() ([]byte, error) {
+	v.Type = Regex1Type
+	type alias Regex1
+	return json.Marshal((alias)(v))
+}
+
+// ToHost wraps the value into a Host ready to be JSON-encoded.
+// The discriminator is set automatically by Regex1's MarshalJSON.
+func (v Regex1) ToHost() Host {
+	raw, _ := json.Marshal(v)
+	return Host{raw: raw}
+}

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const RamMaxUsageType = "RamMaxUsage"
 
 // RamMaxUsage
@@ -15,5 +17,18 @@ func (r RamMaxUsage) GetType() string {
 	return RamMaxUsageType
 }
 
-// isQuotaItem implements QuotaItem
-func (r RamMaxUsage) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(RamMaxUsage{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v RamMaxUsage) MarshalJSON() ([]byte, error) {
+	v.Type = RamMaxUsageType
+	type alias RamMaxUsage
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by RamMaxUsage's MarshalJSON.
+func (v RamMaxUsage) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

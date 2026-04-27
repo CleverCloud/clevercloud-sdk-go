@@ -4,6 +4,3 @@ package models
 
 // OpenTelemetryGateway
 type OpenTelemetryGateway struct{}
-
-// isResourceType implements ResourceType
-func (r OpenTelemetryGateway) isResourceType() {}

@@ -4,6 +4,3 @@ package models
 
 // LOcto
 type LOcto struct{}
-
-// isFlavor implements Flavor
-func (r LOcto) isFlavor() {}

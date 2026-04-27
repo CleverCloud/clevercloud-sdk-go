@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const CleverPeerType = "CleverPeer"
 
 // CleverPeer
@@ -22,8 +24,25 @@ func (r CleverPeer) GetType() string {
 	return CleverPeerType
 }
 
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r CleverPeer) isNetworkGroupComponent() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(CleverPeer{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v CleverPeer) MarshalJSON() ([]byte, error) {
+	v.Type = CleverPeerType
+	type alias CleverPeer
+	return json.Marshal((alias)(v))
+}
 
-// isPeer implements Peer
-func (r CleverPeer) isPeer() {}
+// ToNetworkGroupComponent wraps the value into a NetworkGroupComponent ready to be JSON-encoded.
+// The discriminator is set automatically by CleverPeer's MarshalJSON.
+func (v CleverPeer) ToNetworkGroupComponent() NetworkGroupComponent {
+	raw, _ := json.Marshal(v)
+	return NetworkGroupComponent{raw: raw}
+}
+
+// ToPeer wraps the value into a Peer ready to be JSON-encoded.
+// The discriminator is set automatically by CleverPeer's MarshalJSON.
+func (v CleverPeer) ToPeer() Peer {
+	raw, _ := json.Marshal(v)
+	return Peer{raw: raw}
+}

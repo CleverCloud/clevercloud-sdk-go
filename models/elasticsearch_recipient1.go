@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const ElasticsearchRecipient1Type = "ELASTICSEARCH"
 
 // ElasticsearchRecipient1
@@ -19,5 +21,18 @@ func (r ElasticsearchRecipient1) GetType() string {
 	return ElasticsearchRecipient1Type
 }
 
-// isDrainRecipient implements DrainRecipient
-func (r ElasticsearchRecipient1) isDrainRecipient() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(ElasticsearchRecipient1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v ElasticsearchRecipient1) MarshalJSON() ([]byte, error) {
+	v.Type = ElasticsearchRecipient1Type
+	type alias ElasticsearchRecipient1
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient wraps the value into a DrainRecipient ready to be JSON-encoded.
+// The discriminator is set automatically by ElasticsearchRecipient1's MarshalJSON.
+func (v ElasticsearchRecipient1) ToDrainRecipient() DrainRecipient {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient{raw: raw}
+}

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const DistributedTopologyDiscriminator = "DISTRIBUTED"
 
 // Distributed
@@ -15,5 +17,18 @@ func (r Distributed) GetType() string {
 	return DistributedTopologyDiscriminator
 }
 
-// isTopologyConfig implements TopologyConfig
-func (r Distributed) isTopologyConfig() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Distributed{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Distributed) MarshalJSON() ([]byte, error) {
+	v.TopologyDiscriminator = DistributedTopologyDiscriminator
+	type alias Distributed
+	return json.Marshal((alias)(v))
+}
+
+// ToTopologyConfig wraps the value into a TopologyConfig ready to be JSON-encoded.
+// The discriminator is set automatically by Distributed's MarshalJSON.
+func (v Distributed) ToTopologyConfig() TopologyConfig {
+	raw, _ := json.Marshal(v)
+	return TopologyConfig{raw: raw}
+}

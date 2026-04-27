@@ -4,6 +4,3 @@ package models
 
 // OwnerACL1
 type OwnerACL1 struct{}
-
-// isResourceType implements ResourceType
-func (r OwnerACL1) isResourceType() {}

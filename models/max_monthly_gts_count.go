@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const MaxMonthlyGtsCountType = "MaxMonthlyGtsCount"
 
 // MaxMonthlyGtsCount
@@ -15,5 +17,18 @@ func (r MaxMonthlyGtsCount) GetType() string {
 	return MaxMonthlyGtsCountType
 }
 
-// isQuotaItem implements QuotaItem
-func (r MaxMonthlyGtsCount) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(MaxMonthlyGtsCount{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v MaxMonthlyGtsCount) MarshalJSON() ([]byte, error) {
+	v.Type = MaxMonthlyGtsCountType
+	type alias MaxMonthlyGtsCount
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by MaxMonthlyGtsCount's MarshalJSON.
+func (v MaxMonthlyGtsCount) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

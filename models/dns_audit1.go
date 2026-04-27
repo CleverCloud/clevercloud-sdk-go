@@ -4,6 +4,3 @@ package models
 
 // DnsAudit1
 type DnsAudit1 struct{}
-
-// isResourceType implements ResourceType
-func (r DnsAudit1) isResourceType() {}

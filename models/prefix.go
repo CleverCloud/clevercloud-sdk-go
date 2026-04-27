@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const PrefixType = "Prefix"
 
 // Prefix
@@ -15,5 +17,18 @@ func (r Prefix) GetType() string {
 	return PrefixType
 }
 
-// isPath implements Path
-func (r Prefix) isPath() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Prefix{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Prefix) MarshalJSON() ([]byte, error) {
+	v.Type = PrefixType
+	type alias Prefix
+	return json.Marshal((alias)(v))
+}
+
+// ToPath wraps the value into a Path ready to be JSON-encoded.
+// The discriminator is set automatically by Prefix's MarshalJSON.
+func (v Prefix) ToPath() Path {
+	raw, _ := json.Marshal(v)
+	return Path{raw: raw}
+}

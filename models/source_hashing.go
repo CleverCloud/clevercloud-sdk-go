@@ -4,6 +4,3 @@ package models
 
 // SourceHashing
 type SourceHashing struct{}
-
-// isAlgorithm implements Algorithm
-func (r SourceHashing) isAlgorithm() {}

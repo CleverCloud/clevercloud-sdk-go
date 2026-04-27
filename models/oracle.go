@@ -4,6 +4,3 @@ package models
 
 // Oracle
 type Oracle struct{}
-
-// isProviderType implements ProviderType
-func (r Oracle) isProviderType() {}

@@ -4,6 +4,3 @@ package models
 
 // Placed1
 type Placed1 struct{}
-
-// isDeploymentStep implements DeploymentStep
-func (r Placed1) isDeploymentStep() {}

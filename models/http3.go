@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Http3Type = "Http"
 
 // Http3
@@ -15,5 +17,18 @@ func (r Http3) GetType() string {
 	return Http3Type
 }
 
-// isTransport3 implements Transport3
-func (r Http3) isTransport3() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Http3{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Http3) MarshalJSON() ([]byte, error) {
+	v.Type = Http3Type
+	type alias Http3
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport3 wraps the value into a Transport3 ready to be JSON-encoded.
+// The discriminator is set automatically by Http3's MarshalJSON.
+func (v Http3) ToTransport3() Transport3 {
+	raw, _ := json.Marshal(v)
+	return Transport3{raw: raw}
+}

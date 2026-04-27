@@ -4,6 +4,3 @@ package models
 
 // Grist
 type Grist struct{}
-
-// isResourceType implements ResourceType
-func (r Grist) isResourceType() {}

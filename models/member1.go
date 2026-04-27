@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Member1Type = "Member"
 
 // Member1
@@ -18,5 +20,18 @@ func (r Member1) GetType() string {
 	return Member1Type
 }
 
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r Member1) isNetworkGroupComponent() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Member1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Member1) MarshalJSON() ([]byte, error) {
+	v.Type = Member1Type
+	type alias Member1
+	return json.Marshal((alias)(v))
+}
+
+// ToNetworkGroupComponent wraps the value into a NetworkGroupComponent ready to be JSON-encoded.
+// The discriminator is set automatically by Member1's MarshalJSON.
+func (v Member1) ToNetworkGroupComponent() NetworkGroupComponent {
+	raw, _ := json.Marshal(v)
+	return NetworkGroupComponent{raw: raw}
+}

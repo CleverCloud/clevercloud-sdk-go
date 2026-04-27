@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const DedicatedComputeTopologyDiscriminator = "DEDICATED_COMPUTE"
 
 // DedicatedCompute
@@ -16,5 +18,18 @@ func (r DedicatedCompute) GetType() string {
 	return DedicatedComputeTopologyDiscriminator
 }
 
-// isTopologyConfig implements TopologyConfig
-func (r DedicatedCompute) isTopologyConfig() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(DedicatedCompute{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v DedicatedCompute) MarshalJSON() ([]byte, error) {
+	v.TopologyDiscriminator = DedicatedComputeTopologyDiscriminator
+	type alias DedicatedCompute
+	return json.Marshal((alias)(v))
+}
+
+// ToTopologyConfig wraps the value into a TopologyConfig ready to be JSON-encoded.
+// The discriminator is set automatically by DedicatedCompute's MarshalJSON.
+func (v DedicatedCompute) ToTopologyConfig() TopologyConfig {
+	raw, _ := json.Marshal(v)
+	return TopologyConfig{raw: raw}
+}

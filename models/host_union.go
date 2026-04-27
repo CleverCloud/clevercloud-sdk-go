@@ -2,9 +2,82 @@
 
 package models
 
+import "encoding/json"
+
 // Host
-// Union type - can be one of: Exact, Regex1
-type Host interface {
-	isHost()
-	GetType() string
+// Tagged union - can hold one of: Exact, Regex1
+type Host struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Host) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Host) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Host) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// HostVariant is satisfied by every concrete type that can be wrapped into a Host.
+// Lets generic code accept any variant without naming each one.
+type HostVariant interface {
+	ToHost() Host
+}
+
+// AsExact decodes the held payload as a Exact. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Host) AsExact() (Exact, bool) {
+	var v Exact
+	if t, err := peekType(u.raw); err != nil || t != ExactType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewHostFromExact wraps a Exact into a Host ready to be JSON-encoded.
+func NewHostFromExact(v Exact) (Host, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Host{}, err
+	}
+	return Host{raw: raw}, nil
+}
+
+// AsRegex1 decodes the held payload as a Regex1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Host) AsRegex1() (Regex1, bool) {
+	var v Regex1
+	if t, err := peekType(u.raw); err != nil || t != Regex1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewHostFromRegex1 wraps a Regex1 into a Host ready to be JSON-encoded.
+func NewHostFromRegex1(v Regex1) (Host, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Host{}, err
+	}
+	return Host{raw: raw}, nil
 }

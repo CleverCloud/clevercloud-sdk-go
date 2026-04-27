@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Direct2Type = "Direct"
 
 // Direct2
@@ -15,5 +17,18 @@ func (r Direct2) GetType() string {
 	return Direct2Type
 }
 
-// isTransport1 implements Transport1
-func (r Direct2) isTransport1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Direct2{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Direct2) MarshalJSON() ([]byte, error) {
+	v.Type = Direct2Type
+	type alias Direct2
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport1 wraps the value into a Transport1 ready to be JSON-encoded.
+// The discriminator is set automatically by Direct2's MarshalJSON.
+func (v Direct2) ToTransport1() Transport1 {
+	raw, _ := json.Marshal(v)
+	return Transport1{raw: raw}
+}

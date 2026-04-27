@@ -2,9 +2,82 @@
 
 package models
 
+import "encoding/json"
+
 // WireguardEndpoint
-// Union type - can be one of: ClientEndpoint, ServerEndpoint
-type WireguardEndpoint interface {
-	isWireguardEndpoint()
-	GetType() string
+// Tagged union - can hold one of: ClientEndpoint, ServerEndpoint
+type WireguardEndpoint struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u WireguardEndpoint) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u WireguardEndpoint) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *WireguardEndpoint) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// WireguardEndpointVariant is satisfied by every concrete type that can be wrapped into a WireguardEndpoint.
+// Lets generic code accept any variant without naming each one.
+type WireguardEndpointVariant interface {
+	ToWireguardEndpoint() WireguardEndpoint
+}
+
+// AsClientEndpoint decodes the held payload as a ClientEndpoint. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u WireguardEndpoint) AsClientEndpoint() (ClientEndpoint, bool) {
+	var v ClientEndpoint
+	if t, err := peekType(u.raw); err != nil || t != ClientEndpointType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewWireguardEndpointFromClientEndpoint wraps a ClientEndpoint into a WireguardEndpoint ready to be JSON-encoded.
+func NewWireguardEndpointFromClientEndpoint(v ClientEndpoint) (WireguardEndpoint, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return WireguardEndpoint{}, err
+	}
+	return WireguardEndpoint{raw: raw}, nil
+}
+
+// AsServerEndpoint decodes the held payload as a ServerEndpoint. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u WireguardEndpoint) AsServerEndpoint() (ServerEndpoint, bool) {
+	var v ServerEndpoint
+	if t, err := peekType(u.raw); err != nil || t != ServerEndpointType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewWireguardEndpointFromServerEndpoint wraps a ServerEndpoint into a WireguardEndpoint ready to be JSON-encoded.
+func NewWireguardEndpointFromServerEndpoint(v ServerEndpoint) (WireguardEndpoint, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return WireguardEndpoint{}, err
+	}
+	return WireguardEndpoint{raw: raw}, nil
 }

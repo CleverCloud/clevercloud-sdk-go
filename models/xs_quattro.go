@@ -4,6 +4,3 @@ package models
 
 // XsQuattro
 type XsQuattro struct{}
-
-// isFlavor implements Flavor
-func (r XsQuattro) isFlavor() {}

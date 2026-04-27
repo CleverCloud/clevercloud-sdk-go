@@ -4,8 +4,9 @@ package models
 
 // OtoroshiApi
 type OtoroshiApi struct {
-	Openapi string `json:"openapi"` // Absolute URL
-	Secret  string `json:"secret"`
-	URL     string `json:"url"` // Absolute URL
-	User    string `json:"user"`
+	Openapi    string `json:"openapi"` // Absolute URL
+	Secret     string `json:"secret"`
+	SwaggerURL string `json:"swaggerUrl"` // Absolute URL
+	URL        string `json:"url"`        // Absolute URL
+	User       string `json:"user"`
 }

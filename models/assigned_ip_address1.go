@@ -4,6 +4,3 @@ package models
 
 // AssignedIpAddress1
 type AssignedIpAddress1 struct{}
-
-// isResourceType implements ResourceType
-func (r AssignedIpAddress1) isResourceType() {}

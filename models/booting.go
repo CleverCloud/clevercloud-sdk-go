@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const BootingStatus = "Booting"
 
 // Booting
@@ -15,5 +17,18 @@ func (r Booting) GetType() string {
 	return BootingStatus
 }
 
-// isVMDeploymentStatus implements VMDeploymentStatus
-func (r Booting) isVMDeploymentStatus() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Booting{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Booting) MarshalJSON() ([]byte, error) {
+	v.Status = BootingStatus
+	type alias Booting
+	return json.Marshal((alias)(v))
+}
+
+// ToVMDeploymentStatus wraps the value into a VMDeploymentStatus ready to be JSON-encoded.
+// The discriminator is set automatically by Booting's MarshalJSON.
+func (v Booting) ToVMDeploymentStatus() VMDeploymentStatus {
+	raw, _ := json.Marshal(v)
+	return VMDeploymentStatus{raw: raw}
+}

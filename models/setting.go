@@ -4,6 +4,3 @@ package models
 
 // Setting
 type Setting struct{}
-
-// isResourceType implements ResourceType
-func (r Setting) isResourceType() {}

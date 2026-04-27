@@ -3,7 +3,18 @@
 package models
 
 // Otoroshi
-type Otoroshi struct{}
-
-// isResourceType implements ResourceType
-func (r Otoroshi) isResourceType() {}
+type Otoroshi struct {
+	API                OtoroshiApi       `json:"api"`
+	AccessURL          string            `json:"accessUrl"` // Absolute URL
+	AddonID            string            `json:"addonId"`
+	AvailableVersions  []string          `json:"availableVersions,omitempty"`
+	Features           OtoroshiFeatures  `json:"features"`
+	InitialCredentials BasicCredentials  `json:"initialCredentials"`
+	JavaVersion        string            `json:"javaVersion"`
+	Name               string            `json:"name"`
+	OwnerID            OwnerID           `json:"ownerId"`
+	Plan               OtoroshiPlan      `json:"plan"`
+	ResourceID         string            `json:"resourceId"`
+	Resources          OtoroshiResources `json:"resources"`
+	Version            string            `json:"version"`
+}

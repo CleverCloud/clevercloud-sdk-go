@@ -2,9 +2,104 @@
 
 package models
 
+import "encoding/json"
+
 // Transport1
-// Union type - can be one of: Direct2, Dtls1, Quic
-type Transport1 interface {
-	isTransport1()
-	GetType() string
+// Tagged union - can hold one of: Direct2, Dtls1, Quic
+type Transport1 struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Transport1) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Transport1) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Transport1) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Transport1Variant is satisfied by every concrete type that can be wrapped into a Transport1.
+// Lets generic code accept any variant without naming each one.
+type Transport1Variant interface {
+	ToTransport1() Transport1
+}
+
+// AsDirect2 decodes the held payload as a Direct2. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport1) AsDirect2() (Direct2, bool) {
+	var v Direct2
+	if t, err := peekType(u.raw); err != nil || t != Direct2Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport1FromDirect2 wraps a Direct2 into a Transport1 ready to be JSON-encoded.
+func NewTransport1FromDirect2(v Direct2) (Transport1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport1{}, err
+	}
+	return Transport1{raw: raw}, nil
+}
+
+// AsDtls1 decodes the held payload as a Dtls1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport1) AsDtls1() (Dtls1, bool) {
+	var v Dtls1
+	if t, err := peekType(u.raw); err != nil || t != Dtls1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport1FromDtls1 wraps a Dtls1 into a Transport1 ready to be JSON-encoded.
+func NewTransport1FromDtls1(v Dtls1) (Transport1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport1{}, err
+	}
+	return Transport1{raw: raw}, nil
+}
+
+// AsQuic decodes the held payload as a Quic. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport1) AsQuic() (Quic, bool) {
+	var v Quic
+	if t, err := peekType(u.raw); err != nil || t != QuicType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport1FromQuic wraps a Quic into a Transport1 ready to be JSON-encoded.
+func NewTransport1FromQuic(v Quic) (Transport1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport1{}, err
+	}
+	return Transport1{raw: raw}, nil
 }

@@ -4,6 +4,3 @@ package models
 
 // XsDuo
 type XsDuo struct{}
-
-// isFlavor implements Flavor
-func (r XsDuo) isFlavor() {}

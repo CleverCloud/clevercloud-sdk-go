@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const AllInOneTopologyDiscriminator = "ALL_IN_ONE"
 
 // AllInOne
@@ -16,5 +18,18 @@ func (r AllInOne) GetType() string {
 	return AllInOneTopologyDiscriminator
 }
 
-// isTopologyConfig implements TopologyConfig
-func (r AllInOne) isTopologyConfig() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(AllInOne{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v AllInOne) MarshalJSON() ([]byte, error) {
+	v.TopologyDiscriminator = AllInOneTopologyDiscriminator
+	type alias AllInOne
+	return json.Marshal((alias)(v))
+}
+
+// ToTopologyConfig wraps the value into a TopologyConfig ready to be JSON-encoded.
+// The discriminator is set automatically by AllInOne's MarshalJSON.
+func (v AllInOne) ToTopologyConfig() TopologyConfig {
+	raw, _ := json.Marshal(v)
+	return TopologyConfig{raw: raw}
+}

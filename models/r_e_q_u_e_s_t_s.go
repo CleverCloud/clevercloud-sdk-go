@@ -4,6 +4,3 @@ package models
 
 // REQUESTS
 type REQUESTS struct{}
-
-// isLoadMetric implements LoadMetric
-func (r REQUESTS) isLoadMetric() {}

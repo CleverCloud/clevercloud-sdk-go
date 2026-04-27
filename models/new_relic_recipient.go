@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const NewRelicRecipientType = "NEWRELIC"
 
 // NewRelicRecipient
@@ -16,5 +18,18 @@ func (r NewRelicRecipient) GetType() string {
 	return NewRelicRecipientType
 }
 
-// isDrainRecipient1 implements DrainRecipient1
-func (r NewRelicRecipient) isDrainRecipient1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(NewRelicRecipient{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v NewRelicRecipient) MarshalJSON() ([]byte, error) {
+	v.Type = NewRelicRecipientType
+	type alias NewRelicRecipient
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient1 wraps the value into a DrainRecipient1 ready to be JSON-encoded.
+// The discriminator is set automatically by NewRelicRecipient's MarshalJSON.
+func (v NewRelicRecipient) ToDrainRecipient1() DrainRecipient1 {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient1{raw: raw}
+}

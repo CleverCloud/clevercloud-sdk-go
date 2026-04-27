@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const MaxPointsPerDayType = "MaxPointsPerDay"
 
 // MaxPointsPerDay
@@ -15,5 +17,18 @@ func (r MaxPointsPerDay) GetType() string {
 	return MaxPointsPerDayType
 }
 
-// isQuotaItem implements QuotaItem
-func (r MaxPointsPerDay) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(MaxPointsPerDay{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v MaxPointsPerDay) MarshalJSON() ([]byte, error) {
+	v.Type = MaxPointsPerDayType
+	type alias MaxPointsPerDay
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by MaxPointsPerDay's MarshalJSON.
+func (v MaxPointsPerDay) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

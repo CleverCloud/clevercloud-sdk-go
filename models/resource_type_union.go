@@ -2,9 +2,32 @@
 
 package models
 
+import "encoding/json"
+
 // ResourceType
-// Union type - can be one of: AIAddon, AddressRecycle, Application, AssignedIpAddress1, Biscuit, CellarAddon, CellarCluster, Cluster2, ConfigproviderAddon, CumulocityAddon, Deployment, DnsAudit1, DnsOutbox, DnsRecord, Drain1, DrainExecutionStatus1, DrainStatus1, FaasDeployment, FaasFunction, Grist, HivemqAddon, Image, IpamAudit, KeycloakAddon, KmsAddon, KubernetesAddon, KubernetesCluster, KubernetesClusterStatus, KubernetesControlPlaneComponent, KubernetesNode, KubernetesNodeGroup, KubernetesNodeGroupStatus, KubernetesNodeStatus, KubernetesQuotaReservation, LoadBalancer1, LoadBalancerAudit1, LoadBalancerServer, MateriaDB, MatomoAddon, Metabase1, Namespace, Network2, Networkgroup, NetworkgroupPeer, OpenTelemetry, OpenTelemetryGateway, Orchestration, OtelIndex, Otoroshi, Owner, OwnerACL1, PostgreSQL, PostgreSQLDatabase, PulsarAddon, PulsarCluster1, Quota, Region1, ResourceACL1, Server2, Setting, Storage, Subscription, TSAddon, Tenant, Topic, XenAddon, Zone
-type ResourceType interface {
-	isResourceType()
-	GetType() string
+// Tagged union - can hold one of: AIAddon, AddressRecycle, Application, AssignedIpAddress1, Biscuit, CellarAddon, CellarCluster, Cluster2, ConfigproviderAddon, CumulocityAddon, Deployment, DnsAudit1, DnsOutbox, DnsRecord, Drain1, DrainExecutionStatus1, DrainStatus1, FaasDeployment, FaasFunction, Grist, HivemqAddon, Image, IpamAudit, KeycloakAddon, KmsAddon, KubernetesAddon, KubernetesCluster, KubernetesClusterStatus, KubernetesControlPlaneComponent, KubernetesNode, KubernetesNodeGroup, KubernetesNodeGroupStatus, KubernetesNodeStatus, KubernetesQuotaReservation, LoadBalancer1, LoadBalancerAudit1, LoadBalancerServer, MateriaDB, MatomoAddon, Metabase1, Namespace, Network2, Networkgroup, NetworkgroupPeer, OpenTelemetry, OpenTelemetryGateway, Orchestration, OtelIndex, Otoroshi1, Owner, OwnerACL1, PostgreSQL, PostgreSQLDatabase, PulsarAddon, PulsarCluster1, Quota, Region1, ResourceACL1, Server2, Setting, Storage, Subscription, TSAddon, Tenant, Topic, XenAddon, Zone
+type ResourceType struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u ResourceType) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u ResourceType) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *ResourceType) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
 }

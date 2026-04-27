@@ -4,6 +4,3 @@ package models
 
 // Started
 type Started struct{}
-
-// isDeploymentStep implements DeploymentStep
-func (r Started) isDeploymentStep() {}

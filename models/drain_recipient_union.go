@@ -2,9 +2,192 @@
 
 package models
 
+import "encoding/json"
+
 // DrainRecipient
-// Union type - can be one of: DatadogRecipient1, ElasticsearchRecipient1, NewRelicRecipient1, OVHTCPRecipient1, RawRecipient1, SyslogTCPRecipient1, SyslogUDPRecipient1
-type DrainRecipient interface {
-	isDrainRecipient()
-	GetType() string
+// Tagged union - can hold one of: DatadogRecipient1, ElasticsearchRecipient1, NewRelicRecipient1, OVHTCPRecipient1, RawRecipient1, SyslogTCPRecipient1, SyslogUDPRecipient1
+type DrainRecipient struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u DrainRecipient) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u DrainRecipient) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *DrainRecipient) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// DrainRecipientVariant is satisfied by every concrete type that can be wrapped into a DrainRecipient.
+// Lets generic code accept any variant without naming each one.
+type DrainRecipientVariant interface {
+	ToDrainRecipient() DrainRecipient
+}
+
+// AsDatadogRecipient1 decodes the held payload as a DatadogRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsDatadogRecipient1() (DatadogRecipient1, bool) {
+	var v DatadogRecipient1
+	if t, err := peekType(u.raw); err != nil || t != DatadogRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromDatadogRecipient1 wraps a DatadogRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromDatadogRecipient1(v DatadogRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsElasticsearchRecipient1 decodes the held payload as a ElasticsearchRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsElasticsearchRecipient1() (ElasticsearchRecipient1, bool) {
+	var v ElasticsearchRecipient1
+	if t, err := peekType(u.raw); err != nil || t != ElasticsearchRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromElasticsearchRecipient1 wraps a ElasticsearchRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromElasticsearchRecipient1(v ElasticsearchRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsNewRelicRecipient1 decodes the held payload as a NewRelicRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsNewRelicRecipient1() (NewRelicRecipient1, bool) {
+	var v NewRelicRecipient1
+	if t, err := peekType(u.raw); err != nil || t != NewRelicRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromNewRelicRecipient1 wraps a NewRelicRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromNewRelicRecipient1(v NewRelicRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsOVHTCPRecipient1 decodes the held payload as a OVHTCPRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsOVHTCPRecipient1() (OVHTCPRecipient1, bool) {
+	var v OVHTCPRecipient1
+	if t, err := peekType(u.raw); err != nil || t != OVHTCPRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromOVHTCPRecipient1 wraps a OVHTCPRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromOVHTCPRecipient1(v OVHTCPRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsRawRecipient1 decodes the held payload as a RawRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsRawRecipient1() (RawRecipient1, bool) {
+	var v RawRecipient1
+	if t, err := peekType(u.raw); err != nil || t != RawRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromRawRecipient1 wraps a RawRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromRawRecipient1(v RawRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsSyslogTCPRecipient1 decodes the held payload as a SyslogTCPRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsSyslogTCPRecipient1() (SyslogTCPRecipient1, bool) {
+	var v SyslogTCPRecipient1
+	if t, err := peekType(u.raw); err != nil || t != SyslogTCPRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromSyslogTCPRecipient1 wraps a SyslogTCPRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromSyslogTCPRecipient1(v SyslogTCPRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
+}
+
+// AsSyslogUDPRecipient1 decodes the held payload as a SyslogUDPRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsSyslogUDPRecipient1() (SyslogUDPRecipient1, bool) {
+	var v SyslogUDPRecipient1
+	if t, err := peekType(u.raw); err != nil || t != SyslogUDPRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromSyslogUDPRecipient1 wraps a SyslogUDPRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromSyslogUDPRecipient1(v SyslogUDPRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
 }

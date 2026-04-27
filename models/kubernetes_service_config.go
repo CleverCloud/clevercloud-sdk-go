@@ -5,5 +5,5 @@ package models
 // KubernetesServiceConfig
 type KubernetesServiceConfig struct {
 	Topologies []TopologyConstraints `json:"topologies,omitempty"`
-	Versions   []string              `json:"versions,omitempty"`
+	Versions   VersionsConfig        `json:"versions"`
 }

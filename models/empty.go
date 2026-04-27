@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const EmptyType = "Empty"
 
 // Empty
@@ -14,5 +16,18 @@ func (r Empty) GetType() string {
 	return EmptyType
 }
 
-// isHTTPErrorContext implements HTTPErrorContext
-func (r Empty) isHTTPErrorContext() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Empty{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Empty) MarshalJSON() ([]byte, error) {
+	v.Type = EmptyType
+	type alias Empty
+	return json.Marshal((alias)(v))
+}
+
+// ToHTTPErrorContext wraps the value into a HTTPErrorContext ready to be JSON-encoded.
+// The discriminator is set automatically by Empty's MarshalJSON.
+func (v Empty) ToHTTPErrorContext() HTTPErrorContext {
+	raw, _ := json.Marshal(v)
+	return HTTPErrorContext{raw: raw}
+}

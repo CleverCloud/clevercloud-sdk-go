@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const PlacedStatus = "Placed"
 
 // Placed
@@ -15,5 +17,18 @@ func (r Placed) GetType() string {
 	return PlacedStatus
 }
 
-// isVMDeploymentStatus implements VMDeploymentStatus
-func (r Placed) isVMDeploymentStatus() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Placed{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Placed) MarshalJSON() ([]byte, error) {
+	v.Status = PlacedStatus
+	type alias Placed
+	return json.Marshal((alias)(v))
+}
+
+// ToVMDeploymentStatus wraps the value into a VMDeploymentStatus ready to be JSON-encoded.
+// The discriminator is set automatically by Placed's MarshalJSON.
+func (v Placed) ToVMDeploymentStatus() VMDeploymentStatus {
+	raw, _ := json.Marshal(v)
+	return VMDeploymentStatus{raw: raw}
+}

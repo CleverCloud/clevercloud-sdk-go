@@ -2,9 +2,104 @@
 
 package models
 
+import "encoding/json"
+
 // Transport3
-// Union type - can be one of: Direct4, Http3, Tls
-type Transport3 interface {
-	isTransport3()
-	GetType() string
+// Tagged union - can hold one of: Direct4, Http3, Tls
+type Transport3 struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Transport3) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Transport3) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Transport3) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Transport3Variant is satisfied by every concrete type that can be wrapped into a Transport3.
+// Lets generic code accept any variant without naming each one.
+type Transport3Variant interface {
+	ToTransport3() Transport3
+}
+
+// AsDirect4 decodes the held payload as a Direct4. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport3) AsDirect4() (Direct4, bool) {
+	var v Direct4
+	if t, err := peekType(u.raw); err != nil || t != Direct4Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport3FromDirect4 wraps a Direct4 into a Transport3 ready to be JSON-encoded.
+func NewTransport3FromDirect4(v Direct4) (Transport3, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport3{}, err
+	}
+	return Transport3{raw: raw}, nil
+}
+
+// AsHttp3 decodes the held payload as a Http3. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport3) AsHttp3() (Http3, bool) {
+	var v Http3
+	if t, err := peekType(u.raw); err != nil || t != Http3Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport3FromHttp3 wraps a Http3 into a Transport3 ready to be JSON-encoded.
+func NewTransport3FromHttp3(v Http3) (Transport3, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport3{}, err
+	}
+	return Transport3{raw: raw}, nil
+}
+
+// AsTls decodes the held payload as a Tls. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport3) AsTls() (Tls, bool) {
+	var v Tls
+	if t, err := peekType(u.raw); err != nil || t != TlsType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport3FromTls wraps a Tls into a Transport3 ready to be JSON-encoded.
+func NewTransport3FromTls(v Tls) (Transport3, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport3{}, err
+	}
+	return Transport3{raw: raw}, nil
 }

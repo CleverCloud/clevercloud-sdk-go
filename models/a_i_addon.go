@@ -4,6 +4,3 @@ package models
 
 // AIAddon
 type AIAddon struct{}
-
-// isResourceType implements ResourceType
-func (r AIAddon) isResourceType() {}

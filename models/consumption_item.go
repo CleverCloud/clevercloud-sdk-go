@@ -5,7 +5,7 @@ package models
 // ConsumptionItem
 type ConsumptionItem struct {
 	Details    ConsumptionDetail `json:"details"`
-	Quantity   int               `json:"quantity"`
+	Quantity   float64           `json:"quantity"`
 	Reference  string            `json:"reference"`
 	ResourceID *string           `json:"resourceId,omitempty"`
 	Unit       string            `json:"unit"`

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const HttpType = "Http"
 
 // Http
@@ -15,5 +17,18 @@ func (r Http) GetType() string {
 	return HttpType
 }
 
-// isProtocol implements Protocol
-func (r Http) isProtocol() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Http{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Http) MarshalJSON() ([]byte, error) {
+	v.Type = HttpType
+	type alias Http
+	return json.Marshal((alias)(v))
+}
+
+// ToProtocol wraps the value into a Protocol ready to be JSON-encoded.
+// The discriminator is set automatically by Http's MarshalJSON.
+func (v Http) ToProtocol() Protocol {
+	raw, _ := json.Marshal(v)
+	return Protocol{raw: raw}
+}

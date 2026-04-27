@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const EmptyContextType = "EmptyContext"
 
 // EmptyContext
@@ -14,5 +16,18 @@ func (r EmptyContext) GetType() string {
 	return EmptyContextType
 }
 
-// isOVDErrorContext implements OVDErrorContext
-func (r EmptyContext) isOVDErrorContext() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(EmptyContext{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v EmptyContext) MarshalJSON() ([]byte, error) {
+	v.Type = EmptyContextType
+	type alias EmptyContext
+	return json.Marshal((alias)(v))
+}
+
+// ToOVDErrorContext wraps the value into a OVDErrorContext ready to be JSON-encoded.
+// The discriminator is set automatically by EmptyContext's MarshalJSON.
+func (v EmptyContext) ToOVDErrorContext() OVDErrorContext {
+	raw, _ := json.Marshal(v)
+	return OVDErrorContext{raw: raw}
+}

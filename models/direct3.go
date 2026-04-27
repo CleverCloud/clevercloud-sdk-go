@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Direct3Type = "Direct"
 
 // Direct3
@@ -15,5 +17,18 @@ func (r Direct3) GetType() string {
 	return Direct3Type
 }
 
-// isLayer implements Layer
-func (r Direct3) isLayer() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Direct3{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Direct3) MarshalJSON() ([]byte, error) {
+	v.Type = Direct3Type
+	type alias Direct3
+	return json.Marshal((alias)(v))
+}
+
+// ToLayer wraps the value into a Layer ready to be JSON-encoded.
+// The discriminator is set automatically by Direct3's MarshalJSON.
+func (v Direct3) ToLayer() Layer {
+	raw, _ := json.Marshal(v)
+	return Layer{raw: raw}
+}

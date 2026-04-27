@@ -6,6 +6,3 @@ package models
 type Unrecognized1 struct {
 	UnrecognizedValue int `json:"unrecognizedValue"`
 }
-
-// isLoadMetric implements LoadMetric
-func (r Unrecognized1) isLoadMetric() {}

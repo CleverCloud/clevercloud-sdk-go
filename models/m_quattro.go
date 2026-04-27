@@ -4,6 +4,3 @@ package models
 
 // MQuattro
 type MQuattro struct{}
-
-// isFlavor implements Flavor
-func (r MQuattro) isFlavor() {}

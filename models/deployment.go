@@ -4,6 +4,3 @@ package models
 
 // Deployment
 type Deployment struct{}
-
-// isResourceType implements ResourceType
-func (r Deployment) isResourceType() {}

@@ -2,9 +2,104 @@
 
 package models
 
+import "encoding/json"
+
 // Path
-// Union type - can be one of: Exact1, Prefix, Regex
-type Path interface {
-	isPath()
-	GetType() string
+// Tagged union - can hold one of: Exact1, Prefix, Regex
+type Path struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Path) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Path) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Path) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// PathVariant is satisfied by every concrete type that can be wrapped into a Path.
+// Lets generic code accept any variant without naming each one.
+type PathVariant interface {
+	ToPath() Path
+}
+
+// AsExact1 decodes the held payload as a Exact1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Path) AsExact1() (Exact1, bool) {
+	var v Exact1
+	if t, err := peekType(u.raw); err != nil || t != Exact1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPathFromExact1 wraps a Exact1 into a Path ready to be JSON-encoded.
+func NewPathFromExact1(v Exact1) (Path, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Path{}, err
+	}
+	return Path{raw: raw}, nil
+}
+
+// AsPrefix decodes the held payload as a Prefix. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Path) AsPrefix() (Prefix, bool) {
+	var v Prefix
+	if t, err := peekType(u.raw); err != nil || t != PrefixType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPathFromPrefix wraps a Prefix into a Path ready to be JSON-encoded.
+func NewPathFromPrefix(v Prefix) (Path, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Path{}, err
+	}
+	return Path{raw: raw}, nil
+}
+
+// AsRegex decodes the held payload as a Regex. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Path) AsRegex() (Regex, bool) {
+	var v Regex
+	if t, err := peekType(u.raw); err != nil || t != RegexType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPathFromRegex wraps a Regex into a Path ready to be JSON-encoded.
+func NewPathFromRegex(v Regex) (Path, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Path{}, err
+	}
+	return Path{raw: raw}, nil
 }

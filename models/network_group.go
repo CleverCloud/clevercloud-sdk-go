@@ -10,6 +10,3 @@ type NetworkGroup struct {
 	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
 	PrivateKey string             `json:"privateKey"`
 }
-
-// isNetworkDetails implements NetworkDetails
-func (r NetworkGroup) isNetworkDetails() {}

@@ -4,6 +4,6 @@ package models
 
 // ConsumptionDetail
 type ConsumptionDetail struct {
-	Interval   string `json:"interval"`
-	Quantities []int  `json:"quantities,omitempty"`
+	Interval   string    `json:"interval"`
+	Quantities []float64 `json:"quantities,omitempty"`
 }

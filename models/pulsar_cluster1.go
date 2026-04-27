@@ -4,6 +4,3 @@ package models
 
 // PulsarCluster1
 type PulsarCluster1 struct{}
-
-// isResourceType implements ResourceType
-func (r PulsarCluster1) isResourceType() {}

@@ -2,9 +2,214 @@
 
 package models
 
+import "encoding/json"
+
 // QuotaItem
-// Union type - can be one of: APIRateLimit, CoreMaxLimit, MaxIp, MaxMonthlyGtsCount, MaxParrallelConnections, MaxPointsPerDay, MillivCPUMaxLimit, RamMaxUsage
-type QuotaItem interface {
-	isQuotaItem()
-	GetType() string
+// Tagged union - can hold one of: APIRateLimit, CoreMaxLimit, MaxIp, MaxMonthlyGtsCount, MaxParrallelConnections, MaxPointsPerDay, MillivCPUMaxLimit, RamMaxUsage
+type QuotaItem struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u QuotaItem) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u QuotaItem) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *QuotaItem) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// QuotaItemVariant is satisfied by every concrete type that can be wrapped into a QuotaItem.
+// Lets generic code accept any variant without naming each one.
+type QuotaItemVariant interface {
+	ToQuotaItem() QuotaItem
+}
+
+// AsAPIRateLimit decodes the held payload as a APIRateLimit. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsAPIRateLimit() (APIRateLimit, bool) {
+	var v APIRateLimit
+	if t, err := peekType(u.raw); err != nil || t != APIRateLimitType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromAPIRateLimit wraps a APIRateLimit into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromAPIRateLimit(v APIRateLimit) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsCoreMaxLimit decodes the held payload as a CoreMaxLimit. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsCoreMaxLimit() (CoreMaxLimit, bool) {
+	var v CoreMaxLimit
+	if t, err := peekType(u.raw); err != nil || t != CoreMaxLimitType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromCoreMaxLimit wraps a CoreMaxLimit into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromCoreMaxLimit(v CoreMaxLimit) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsMaxIp decodes the held payload as a MaxIp. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsMaxIp() (MaxIp, bool) {
+	var v MaxIp
+	if t, err := peekType(u.raw); err != nil || t != MaxIpType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromMaxIp wraps a MaxIp into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromMaxIp(v MaxIp) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsMaxMonthlyGtsCount decodes the held payload as a MaxMonthlyGtsCount. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsMaxMonthlyGtsCount() (MaxMonthlyGtsCount, bool) {
+	var v MaxMonthlyGtsCount
+	if t, err := peekType(u.raw); err != nil || t != MaxMonthlyGtsCountType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromMaxMonthlyGtsCount wraps a MaxMonthlyGtsCount into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromMaxMonthlyGtsCount(v MaxMonthlyGtsCount) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsMaxParrallelConnections decodes the held payload as a MaxParrallelConnections. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsMaxParrallelConnections() (MaxParrallelConnections, bool) {
+	var v MaxParrallelConnections
+	if t, err := peekType(u.raw); err != nil || t != MaxParrallelConnectionsType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromMaxParrallelConnections wraps a MaxParrallelConnections into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromMaxParrallelConnections(v MaxParrallelConnections) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsMaxPointsPerDay decodes the held payload as a MaxPointsPerDay. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsMaxPointsPerDay() (MaxPointsPerDay, bool) {
+	var v MaxPointsPerDay
+	if t, err := peekType(u.raw); err != nil || t != MaxPointsPerDayType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromMaxPointsPerDay wraps a MaxPointsPerDay into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromMaxPointsPerDay(v MaxPointsPerDay) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsMillivCPUMaxLimit decodes the held payload as a MillivCPUMaxLimit. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsMillivCPUMaxLimit() (MillivCPUMaxLimit, bool) {
+	var v MillivCPUMaxLimit
+	if t, err := peekType(u.raw); err != nil || t != MillivCPUMaxLimitType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromMillivCPUMaxLimit wraps a MillivCPUMaxLimit into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromMillivCPUMaxLimit(v MillivCPUMaxLimit) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
+}
+
+// AsRamMaxUsage decodes the held payload as a RamMaxUsage. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u QuotaItem) AsRamMaxUsage() (RamMaxUsage, bool) {
+	var v RamMaxUsage
+	if t, err := peekType(u.raw); err != nil || t != RamMaxUsageType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewQuotaItemFromRamMaxUsage wraps a RamMaxUsage into a QuotaItem ready to be JSON-encoded.
+func NewQuotaItemFromRamMaxUsage(v RamMaxUsage) (QuotaItem, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return QuotaItem{}, err
+	}
+	return QuotaItem{raw: raw}, nil
 }

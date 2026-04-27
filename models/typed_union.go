@@ -2,9 +2,192 @@
 
 package models
 
+import "encoding/json"
+
 // Typed
-// Union type - can be one of: Field, GatewayError, Input, MultipleFields, Operation, Resource1, Selector
-type Typed interface {
-	isTyped()
-	GetType() string
+// Tagged union - can hold one of: Field, GatewayError, Input, MultipleFields, Operation, Resource1, Selector
+type Typed struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Typed) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Typed) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Typed) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// TypedVariant is satisfied by every concrete type that can be wrapped into a Typed.
+// Lets generic code accept any variant without naming each one.
+type TypedVariant interface {
+	ToTyped() Typed
+}
+
+// AsField decodes the held payload as a Field. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsField() (Field, bool) {
+	var v Field
+	if t, err := peekType(u.raw); err != nil || t != FieldType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromField wraps a Field into a Typed ready to be JSON-encoded.
+func NewTypedFromField(v Field) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsGatewayError decodes the held payload as a GatewayError. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsGatewayError() (GatewayError, bool) {
+	var v GatewayError
+	if t, err := peekType(u.raw); err != nil || t != GatewayErrorType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromGatewayError wraps a GatewayError into a Typed ready to be JSON-encoded.
+func NewTypedFromGatewayError(v GatewayError) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsInput decodes the held payload as a Input. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsInput() (Input, bool) {
+	var v Input
+	if t, err := peekType(u.raw); err != nil || t != InputType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromInput wraps a Input into a Typed ready to be JSON-encoded.
+func NewTypedFromInput(v Input) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsMultipleFields decodes the held payload as a MultipleFields. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsMultipleFields() (MultipleFields, bool) {
+	var v MultipleFields
+	if t, err := peekType(u.raw); err != nil || t != MultipleFieldsType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromMultipleFields wraps a MultipleFields into a Typed ready to be JSON-encoded.
+func NewTypedFromMultipleFields(v MultipleFields) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsOperation decodes the held payload as a Operation. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsOperation() (Operation, bool) {
+	var v Operation
+	if t, err := peekType(u.raw); err != nil || t != OperationType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromOperation wraps a Operation into a Typed ready to be JSON-encoded.
+func NewTypedFromOperation(v Operation) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsResource1 decodes the held payload as a Resource1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsResource1() (Resource1, bool) {
+	var v Resource1
+	if t, err := peekType(u.raw); err != nil || t != Resource1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromResource1 wraps a Resource1 into a Typed ready to be JSON-encoded.
+func NewTypedFromResource1(v Resource1) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
+}
+
+// AsSelector decodes the held payload as a Selector. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Typed) AsSelector() (Selector, bool) {
+	var v Selector
+	if t, err := peekType(u.raw); err != nil || t != SelectorType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTypedFromSelector wraps a Selector into a Typed ready to be JSON-encoded.
+func NewTypedFromSelector(v Selector) (Typed, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Typed{}, err
+	}
+	return Typed{raw: raw}, nil
 }

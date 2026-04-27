@@ -4,6 +4,3 @@ package models
 
 // Region1
 type Region1 struct{}
-
-// isResourceType implements ResourceType
-func (r Region1) isResourceType() {}

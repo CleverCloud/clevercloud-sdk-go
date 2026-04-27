@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const MaxParrallelConnectionsType = "MaxParrallelConnections"
 
 // MaxParrallelConnections
@@ -15,5 +17,18 @@ func (r MaxParrallelConnections) GetType() string {
 	return MaxParrallelConnectionsType
 }
 
-// isQuotaItem implements QuotaItem
-func (r MaxParrallelConnections) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(MaxParrallelConnections{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v MaxParrallelConnections) MarshalJSON() ([]byte, error) {
+	v.Type = MaxParrallelConnectionsType
+	type alias MaxParrallelConnections
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by MaxParrallelConnections's MarshalJSON.
+func (v MaxParrallelConnections) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

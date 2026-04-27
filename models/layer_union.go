@@ -2,9 +2,82 @@
 
 package models
 
+import "encoding/json"
+
 // Layer
-// Union type - can be one of: Direct3, Http1
-type Layer interface {
-	isLayer()
-	GetType() string
+// Tagged union - can hold one of: Direct3, Http1
+type Layer struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Layer) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Layer) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Layer) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// LayerVariant is satisfied by every concrete type that can be wrapped into a Layer.
+// Lets generic code accept any variant without naming each one.
+type LayerVariant interface {
+	ToLayer() Layer
+}
+
+// AsDirect3 decodes the held payload as a Direct3. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Layer) AsDirect3() (Direct3, bool) {
+	var v Direct3
+	if t, err := peekType(u.raw); err != nil || t != Direct3Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewLayerFromDirect3 wraps a Direct3 into a Layer ready to be JSON-encoded.
+func NewLayerFromDirect3(v Direct3) (Layer, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Layer{}, err
+	}
+	return Layer{raw: raw}, nil
+}
+
+// AsHttp1 decodes the held payload as a Http1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Layer) AsHttp1() (Http1, bool) {
+	var v Http1
+	if t, err := peekType(u.raw); err != nil || t != Http1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewLayerFromHttp1 wraps a Http1 into a Layer ready to be JSON-encoded.
+func NewLayerFromHttp1(v Http1) (Layer, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Layer{}, err
+	}
+	return Layer{raw: raw}, nil
 }

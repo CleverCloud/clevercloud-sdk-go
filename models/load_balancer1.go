@@ -4,6 +4,3 @@ package models
 
 // LoadBalancer1
 type LoadBalancer1 struct{}
-
-// isResourceType implements ResourceType
-func (r LoadBalancer1) isResourceType() {}

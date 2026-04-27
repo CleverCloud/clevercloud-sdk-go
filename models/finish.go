@@ -4,6 +4,3 @@ package models
 
 // Finish
 type Finish struct{}
-
-// isDeploymentStep implements DeploymentStep
-func (r Finish) isDeploymentStep() {}

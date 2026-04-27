@@ -4,6 +4,3 @@ package models
 
 // Metabase1
 type Metabase1 struct{}
-
-// isResourceType implements ResourceType
-func (r Metabase1) isResourceType() {}

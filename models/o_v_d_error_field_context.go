@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const OVDErrorFieldContextType = "field"
 
 // OVDErrorFieldContext
@@ -16,5 +18,18 @@ func (r OVDErrorFieldContext) GetType() string {
 	return OVDErrorFieldContextType
 }
 
-// isOVDErrorContext implements OVDErrorContext
-func (r OVDErrorFieldContext) isOVDErrorContext() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(OVDErrorFieldContext{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v OVDErrorFieldContext) MarshalJSON() ([]byte, error) {
+	v.Type = OVDErrorFieldContextType
+	type alias OVDErrorFieldContext
+	return json.Marshal((alias)(v))
+}
+
+// ToOVDErrorContext wraps the value into a OVDErrorContext ready to be JSON-encoded.
+// The discriminator is set automatically by OVDErrorFieldContext's MarshalJSON.
+func (v OVDErrorFieldContext) ToOVDErrorContext() OVDErrorContext {
+	raw, _ := json.Marshal(v)
+	return OVDErrorContext{raw: raw}
+}

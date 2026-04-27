@@ -4,6 +4,3 @@ package models
 
 // Scaleway
 type Scaleway struct{}
-
-// isProviderType implements ProviderType
-func (r Scaleway) isProviderType() {}

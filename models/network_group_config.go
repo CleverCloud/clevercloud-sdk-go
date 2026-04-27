@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const NetworkGroupConfigType = "NetworkGroupConfig"
 
 // NetworkGroupConfig
@@ -15,5 +17,18 @@ func (r NetworkGroupConfig) GetType() string {
 	return NetworkGroupConfigType
 }
 
-// isConfiguration implements Configuration
-func (r NetworkGroupConfig) isConfiguration() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(NetworkGroupConfig{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v NetworkGroupConfig) MarshalJSON() ([]byte, error) {
+	v.Type = NetworkGroupConfigType
+	type alias NetworkGroupConfig
+	return json.Marshal((alias)(v))
+}
+
+// ToConfiguration wraps the value into a Configuration ready to be JSON-encoded.
+// The discriminator is set automatically by NetworkGroupConfig's MarshalJSON.
+func (v NetworkGroupConfig) ToConfiguration() Configuration {
+	raw, _ := json.Marshal(v)
+	return Configuration{raw: raw}
+}

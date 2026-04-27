@@ -4,6 +4,3 @@ package models
 
 // DestinationHashing
 type DestinationHashing struct{}
-
-// isAlgorithm implements Algorithm
-func (r DestinationHashing) isAlgorithm() {}

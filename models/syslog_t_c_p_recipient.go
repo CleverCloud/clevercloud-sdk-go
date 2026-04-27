@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const SyslogTCPRecipientType = "SYSLOG_TCP"
 
 // SyslogTCPRecipient
@@ -16,5 +18,18 @@ func (r SyslogTCPRecipient) GetType() string {
 	return SyslogTCPRecipientType
 }
 
-// isDrainRecipient1 implements DrainRecipient1
-func (r SyslogTCPRecipient) isDrainRecipient1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(SyslogTCPRecipient{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v SyslogTCPRecipient) MarshalJSON() ([]byte, error) {
+	v.Type = SyslogTCPRecipientType
+	type alias SyslogTCPRecipient
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient1 wraps the value into a DrainRecipient1 ready to be JSON-encoded.
+// The discriminator is set automatically by SyslogTCPRecipient's MarshalJSON.
+func (v SyslogTCPRecipient) ToDrainRecipient1() DrainRecipient1 {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient1{raw: raw}
+}

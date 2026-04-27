@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const SelectorType = "selector"
 
 // Selector
@@ -15,5 +17,18 @@ func (r Selector) GetType() string {
 	return SelectorType
 }
 
-// isTyped implements Typed
-func (r Selector) isTyped() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Selector{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Selector) MarshalJSON() ([]byte, error) {
+	v.Type = SelectorType
+	type alias Selector
+	return json.Marshal((alias)(v))
+}
+
+// ToTyped wraps the value into a Typed ready to be JSON-encoded.
+// The discriminator is set automatically by Selector's MarshalJSON.
+func (v Selector) ToTyped() Typed {
+	raw, _ := json.Marshal(v)
+	return Typed{raw: raw}
+}

@@ -4,6 +4,3 @@ package models
 
 // Server2
 type Server2 struct{}
-
-// isResourceType implements ResourceType
-func (r Server2) isResourceType() {}

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const OperationType = "operation"
 
 // Operation
@@ -17,5 +19,18 @@ func (r Operation) GetType() string {
 	return OperationType
 }
 
-// isTyped implements Typed
-func (r Operation) isTyped() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Operation{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Operation) MarshalJSON() ([]byte, error) {
+	v.Type = OperationType
+	type alias Operation
+	return json.Marshal((alias)(v))
+}
+
+// ToTyped wraps the value into a Typed ready to be JSON-encoded.
+// The discriminator is set automatically by Operation's MarshalJSON.
+func (v Operation) ToTyped() Typed {
+	raw, _ := json.Marshal(v)
+	return Typed{raw: raw}
+}

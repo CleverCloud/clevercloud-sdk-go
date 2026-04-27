@@ -4,6 +4,3 @@ package models
 
 // Failure
 type Failure struct{}
-
-// isDeploymentStep implements DeploymentStep
-func (r Failure) isDeploymentStep() {}
