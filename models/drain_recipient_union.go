@@ -2,7 +2,10 @@
 
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // DrainRecipient
 // Tagged union - can hold one of: DatadogRecipient1, ElasticsearchRecipient1, NewRelicRecipient1, OVHTCPRecipient1, RawRecipient1, SyslogTCPRecipient1, SyslogUDPRecipient1
@@ -25,20 +28,47 @@ func (u DrainRecipient) MarshalJSON() ([]byte, error) {
 	return u.raw, nil
 }
 
-// String returns the JSON representation of the held value, or "null" if empty.
-// Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.
-func (u DrainRecipient) String() string {
-	if u.raw == nil {
-		return "null"
-	}
-	return string(u.raw)
-}
-
 // UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
 // or As<Member>() to materialize a concrete value.
 func (u *DrainRecipient) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u DrainRecipient) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case DatadogRecipient1Type:
+		v, _ := u.AsDatadogRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case ElasticsearchRecipient1Type:
+		v, _ := u.AsElasticsearchRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case NewRelicRecipient1Type:
+		v, _ := u.AsNewRelicRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVHTCPRecipient1Type:
+		v, _ := u.AsOVHTCPRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case RawRecipient1Type:
+		v, _ := u.AsRawRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case SyslogTCPRecipient1Type:
+		v, _ := u.AsSyslogTCPRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case SyslogUDPRecipient1Type:
+		v, _ := u.AsSyslogUDPRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
 }
 
 // DrainRecipientVariant is satisfied by every concrete type that can be wrapped into a DrainRecipient.

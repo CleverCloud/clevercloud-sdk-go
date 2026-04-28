@@ -2,7 +2,11 @@
 
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
 
 // peekType extracts the OpenAPI discriminator ("type" field) from a JSON
 // object without fully decoding the payload. The stdlib decoder skips
@@ -23,4 +27,25 @@ func peekType(data []byte) (string, error) {
 		return "", err
 	}
 	return t.Type, nil
+}
+
+// formatVerbSpec rebuilds the original verb string (e.g. "%+v", "%#v", "%s")
+// from a fmt.State + verb so a Format method can pass it through to a
+// delegated value via fmt.Fprintf.
+func formatVerbSpec(f fmt.State, verb rune) string {
+	var b strings.Builder
+	b.WriteByte('%')
+	for _, flag := range [...]rune{'+', '-', '#', ' ', '0'} {
+		if f.Flag(int(flag)) {
+			b.WriteRune(flag)
+		}
+	}
+	if w, ok := f.Width(); ok {
+		fmt.Fprintf(&b, "%d", w)
+	}
+	if p, ok := f.Precision(); ok {
+		fmt.Fprintf(&b, ".%d", p)
+	}
+	b.WriteRune(verb)
+	return b.String()
 }

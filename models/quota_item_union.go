@@ -2,7 +2,10 @@
 
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // QuotaItem
 // Tagged union - can hold one of: APIRateLimit, CoreMaxLimit, MaxIp, MaxMonthlyGtsCount, MaxParrallelConnections, MaxPointsPerDay, MillivCPUMaxLimit, RamMaxUsage
@@ -25,20 +28,50 @@ func (u QuotaItem) MarshalJSON() ([]byte, error) {
 	return u.raw, nil
 }
 
-// String returns the JSON representation of the held value, or "null" if empty.
-// Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.
-func (u QuotaItem) String() string {
-	if u.raw == nil {
-		return "null"
-	}
-	return string(u.raw)
-}
-
 // UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
 // or As<Member>() to materialize a concrete value.
 func (u *QuotaItem) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u QuotaItem) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case APIRateLimitType:
+		v, _ := u.AsAPIRateLimit()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case CoreMaxLimitType:
+		v, _ := u.AsCoreMaxLimit()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case MaxIpType:
+		v, _ := u.AsMaxIp()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case MaxMonthlyGtsCountType:
+		v, _ := u.AsMaxMonthlyGtsCount()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case MaxParrallelConnectionsType:
+		v, _ := u.AsMaxParrallelConnections()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case MaxPointsPerDayType:
+		v, _ := u.AsMaxPointsPerDay()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case MillivCPUMaxLimitType:
+		v, _ := u.AsMillivCPUMaxLimit()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case RamMaxUsageType:
+		v, _ := u.AsRamMaxUsage()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
 }
 
 // QuotaItemVariant is satisfied by every concrete type that can be wrapped into a QuotaItem.

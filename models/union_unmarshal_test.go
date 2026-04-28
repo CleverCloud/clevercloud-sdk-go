@@ -197,20 +197,53 @@ func TestPeerRoundTrip(t *testing.T) {
 	}
 }
 
-// TestPeerString verifies that fmt prints the JSON payload (via String())
-// rather than the raw byte slice. Important for log readability when a
-// union is embedded in a parent struct printed with %+v.
-func TestPeerString(t *testing.T) {
-	cp := CleverPeer{ID: "x1", PublicKey: "pk"}.ToPeer()
-	got := fmt.Sprintf("%v", cp)
-	if !strings.Contains(got, `"type":"CleverPeer"`) {
-		t.Errorf("fmt should render JSON, got: %s", got)
-	}
+// TestPeerFormat verifies fmt.Formatter dispatch:
+//   - %v / %+v on a Peer renders the concrete variant (typed Go repr)
+//   - flags propagate (%+v shows field names)
+//   - unknown variants fall back to the raw JSON bytes
+//   - empty Peer renders as "null"
+func TestPeerFormat(t *testing.T) {
+	t.Run("known variant uses concrete type", func(t *testing.T) {
+		cp := CleverPeer{ID: "peer_x", PublicKey: "pk"}.ToPeer()
+		got := fmt.Sprintf("%+v", cp)
+		// %+v on a struct includes field names; we should see the concrete
+		// CleverPeer fields, not byte-slice noise.
+		if !strings.Contains(got, "ID:peer_x") {
+			t.Errorf("%%+v should show concrete CleverPeer fields, got: %s", got)
+		}
+		if strings.Contains(got, "raw:[") {
+			t.Errorf("raw bytes leaked through: %s", got)
+		}
+	})
 
-	var empty Peer
-	if got := fmt.Sprintf("%v", empty); got != "null" {
-		t.Errorf("empty peer should print as %q, got %q", "null", got)
-	}
+	t.Run("unknown variant falls back to raw JSON", func(t *testing.T) {
+		var p Peer
+		_ = p.UnmarshalJSON([]byte(`{"type":"FuturePeer","id":"x"}`))
+		got := fmt.Sprintf("%v", p)
+		if !strings.Contains(got, `"FuturePeer"`) {
+			t.Errorf("unknown variant should print raw JSON, got: %s", got)
+		}
+	})
+
+	t.Run("empty peer prints null", func(t *testing.T) {
+		var empty Peer
+		if got := fmt.Sprintf("%v", empty); got != "null" {
+			t.Errorf("empty peer should print as %q, got %q", "null", got)
+		}
+	})
+
+	t.Run("nested union prints typed too", func(t *testing.T) {
+		cp := CleverPeer{
+			ID:       "p1",
+			Endpoint: ClientEndpoint{NgIP: "10.0.0.10"}.ToWireguardEndpoint(),
+		}.ToPeer()
+		got := fmt.Sprintf("%+v", cp)
+		// The nested WireguardEndpoint should also dispatch to ClientEndpoint
+		// rather than printing as raw bytes.
+		if !strings.Contains(got, "NgIP:10.0.0.10") {
+			t.Errorf("nested union should dispatch to ClientEndpoint, got: %s", got)
+		}
+	})
 }
 
 // TestPeerDirectMarshal verifies that json.Marshal on a concrete member

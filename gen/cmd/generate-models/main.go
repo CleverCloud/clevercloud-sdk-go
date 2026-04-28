@@ -850,6 +850,31 @@ func generateJSONHelpersFile(packageData *PackageData, outputDir string) error {
 		),
 		Return(Id("t").Dot("Type"), Nil()),
 	)
+	f.Line()
+
+	// formatVerbSpec rebuilds the original fmt verb string (with flags, width,
+	// precision) from a fmt.State + verb. Used by tagged-union Format methods
+	// to propagate the user's verb to the concrete type.
+	f.Comment("formatVerbSpec rebuilds the original verb string (e.g. \"%+v\", \"%#v\", \"%s\")")
+	f.Comment("from a fmt.State + verb so a Format method can pass it through to a")
+	f.Comment("delegated value via fmt.Fprintf.")
+	f.Func().Id("formatVerbSpec").Params(Id("f").Qual("fmt", "State"), Id("verb").Rune()).String().Block(
+		Var().Id("b").Qual("strings", "Builder"),
+		Id("b").Dot("WriteByte").Call(LitRune('%')),
+		For(List(Id("_"), Id("flag")).Op(":=").Range().Index(Op("...")).Rune().Values(LitRune('+'), LitRune('-'), LitRune('#'), LitRune(' '), LitRune('0'))).Block(
+			If(Id("f").Dot("Flag").Call(Int().Parens(Id("flag")))).Block(
+				Id("b").Dot("WriteRune").Call(Id("flag")),
+			),
+		),
+		If(List(Id("w"), Id("ok")).Op(":=").Id("f").Dot("Width").Call(), Id("ok")).Block(
+			Qual("fmt", "Fprintf").Call(Op("&").Id("b"), Lit("%d"), Id("w")),
+		),
+		If(List(Id("p"), Id("ok")).Op(":=").Id("f").Dot("Precision").Call(), Id("ok")).Block(
+			Qual("fmt", "Fprintf").Call(Op("&").Id("b"), Lit(".%d"), Id("p")),
+		),
+		Id("b").Dot("WriteRune").Call(Id("verb")),
+		Return(Id("b").Dot("String").Call()),
+	)
 
 	outputFile := filepath.Join(outputDir, "json_helpers.go")
 	return f.Save(outputFile)
@@ -978,18 +1003,6 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 	)
 	f.Line()
 
-	// String() makes fmt verbs (%v, %+v, %s) render the JSON payload instead
-	// of the raw byte slice, so logs/debugging stay readable when the union
-	// is embedded in a parent struct.
-	f.Comment("String returns the JSON representation of the held value, or \"null\" if empty.")
-	f.Comment("Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.")
-	f.Func().Params(Id("u").Id(union.Name)).Id("String").Params().String().Block(
-		If(Id("u").Dot("raw").Op("==").Nil()).Block(
-			Return(Lit("null")),
-		),
-		Return(String().Parens(Id("u").Dot("raw"))),
-	)
-	f.Line()
 
 	// UnmarshalJSON just stores the bytes — discriminator is read lazily.
 	// "null" / empty inputs are stored verbatim; Type()/As<Member>() handle
@@ -1003,6 +1016,13 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 	f.Line()
 
 	dispatchable := unionDispatchableMembers(union, packageData.Models)
+
+	// Format implements fmt.Formatter so that fmt verbs (%v, %+v, %#v, %s, …)
+	// dispatch to the concrete variant rather than printing the raw byte slice.
+	// Unknown variants fall back to the raw JSON bytes.
+	if len(dispatchable) > 0 {
+		emitUnionFormat(f, union, dispatchable)
+	}
 
 	// <Union>Variant interface: anything that can be wrapped into the union.
 	// Each member's To<Union>() method satisfies this interface, so users can
@@ -1090,6 +1110,41 @@ func emitUnionAccessors(f *File, union ModelStruct, member ModelStruct) {
 			Return(Id(union.Name).Values(), Err()),
 		),
 		Return(Id(union.Name).Values(Dict{Id("raw"): Id("raw")}), Nil()),
+	)
+	f.Line()
+}
+
+// emitUnionFormat writes a fmt.Formatter implementation that dispatches each
+// known variant to its concrete type. The user's verb (with flags, width,
+// precision) is propagated via formatVerbSpec so %+v, %#v etc. behave the
+// same as if the concrete value had been printed directly.
+//
+// Unknown variants fall back to writing the raw JSON bytes — better than
+// nothing for forward-compat with future server-side variants.
+func emitUnionFormat(f *File, union ModelStruct, members []ModelStruct) {
+	cases := make([]Code, 0, len(members)+1)
+	for _, m := range members {
+		constName := m.Name + m.TypeField
+		cases = append(cases, Case(Id(constName)).Block(
+			List(Id("v"), Id("_")).Op(":=").Id("u").Dot("As"+m.Name).Call(),
+			Qual("fmt", "Fprintf").Call(Id("f"), Id("formatVerbSpec").Call(Id("f"), Id("verb")), Id("v")),
+		))
+	}
+	cases = append(cases, Default().Block(
+		// Unknown variant or empty raw → write the raw payload (or "null").
+		If(Id("u").Dot("raw").Op("==").Nil()).Block(
+			Id("f").Dot("Write").Call(Index().Byte().Parens(Lit("null"))),
+			Return(),
+		),
+		Id("f").Dot("Write").Call(Id("u").Dot("raw")),
+	))
+
+	f.Comment("Format implements fmt.Formatter: dispatches the verb to the concrete")
+	f.Comment("variant currently held, falling back to the raw JSON bytes for unknown")
+	f.Comment("or empty values. Lets %+v on a parent struct render this field as the")
+	f.Comment("matching concrete type instead of a byte slice.")
+	f.Func().Params(Id("u").Id(union.Name)).Id("Format").Params(Id("f").Qual("fmt", "State"), Id("verb").Rune()).Block(
+		Switch(Id("u").Dot("Type").Call()).Block(cases...),
 	)
 	f.Line()
 }

@@ -2,7 +2,10 @@
 
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Configuration
 // Tagged union - can hold one of: NetworkGroupConfig, OpenVpn, Wireguard
@@ -25,20 +28,35 @@ func (u Configuration) MarshalJSON() ([]byte, error) {
 	return u.raw, nil
 }
 
-// String returns the JSON representation of the held value, or "null" if empty.
-// Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.
-func (u Configuration) String() string {
-	if u.raw == nil {
-		return "null"
-	}
-	return string(u.raw)
-}
-
 // UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
 // or As<Member>() to materialize a concrete value.
 func (u *Configuration) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Configuration) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case NetworkGroupConfigType:
+		v, _ := u.AsNetworkGroupConfig()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OpenVpnType:
+		v, _ := u.AsOpenVpn()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case WireguardType:
+		v, _ := u.AsWireguard()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
 }
 
 // ConfigurationVariant is satisfied by every concrete type that can be wrapped into a Configuration.

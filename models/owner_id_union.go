@@ -25,15 +25,6 @@ func (u OwnerId) MarshalJSON() ([]byte, error) {
 	return u.raw, nil
 }
 
-// String returns the JSON representation of the held value, or "null" if empty.
-// Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.
-func (u OwnerId) String() string {
-	if u.raw == nil {
-		return "null"
-	}
-	return string(u.raw)
-}
-
 // UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
 // or As<Member>() to materialize a concrete value.
 func (u *OwnerId) UnmarshalJSON(data []byte) error {
