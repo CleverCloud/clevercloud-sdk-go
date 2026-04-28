@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Http1Type = "Http"
 
 // Http1
@@ -15,5 +17,18 @@ func (r Http1) GetType() string {
 	return Http1Type
 }
 
-// isLayer implements Layer
-func (r Http1) isLayer() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Http1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Http1) MarshalJSON() ([]byte, error) {
+	v.Type = Http1Type
+	type alias Http1
+	return json.Marshal((alias)(v))
+}
+
+// ToLayer wraps the value into a Layer ready to be JSON-encoded.
+// The discriminator is set automatically by Http1's MarshalJSON.
+func (v Http1) ToLayer() Layer {
+	raw, _ := json.Marshal(v)
+	return Layer{raw: raw}
+}

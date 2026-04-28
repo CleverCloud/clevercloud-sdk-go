@@ -4,6 +4,3 @@ package models
 
 // CellarCluster
 type CellarCluster struct{}
-
-// isResourceType implements ResourceType
-func (r CellarCluster) isResourceType() {}

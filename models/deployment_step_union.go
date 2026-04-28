@@ -2,9 +2,32 @@
 
 package models
 
+import "encoding/json"
+
 // DeploymentStep
-// Union type - can be one of: Booting1, Failure, Finish, Placed1, Reserved, Started
-type DeploymentStep interface {
-	isDeploymentStep()
-	GetType() string
+// Tagged union - can hold one of: Booting1, Failure, Finish, Placed1, Reserved, Started
+type DeploymentStep struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u DeploymentStep) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u DeploymentStep) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *DeploymentStep) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
 }

@@ -4,6 +4,3 @@ package models
 
 // NoSchedule
 type NoSchedule struct{}
-
-// isTaintEffect implements TaintEffect
-func (r NoSchedule) isTaintEffect() {}

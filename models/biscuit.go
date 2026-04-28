@@ -4,6 +4,3 @@ package models
 
 // Biscuit
 type Biscuit struct{}
-
-// isResourceType implements ResourceType
-func (r Biscuit) isResourceType() {}

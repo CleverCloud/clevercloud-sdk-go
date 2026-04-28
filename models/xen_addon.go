@@ -4,6 +4,3 @@ package models
 
 // XenAddon
 type XenAddon struct{}
-
-// isResourceType implements ResourceType
-func (r XenAddon) isResourceType() {}

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const DtlsType = "Dtls"
 
 // Dtls
@@ -15,5 +17,18 @@ func (r Dtls) GetType() string {
 	return DtlsType
 }
 
-// isTransport4 implements Transport4
-func (r Dtls) isTransport4() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Dtls{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Dtls) MarshalJSON() ([]byte, error) {
+	v.Type = DtlsType
+	type alias Dtls
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport4 wraps the value into a Transport4 ready to be JSON-encoded.
+// The discriminator is set automatically by Dtls's MarshalJSON.
+func (v Dtls) ToTransport4() Transport4 {
+	raw, _ := json.Marshal(v)
+	return Transport4{raw: raw}
+}

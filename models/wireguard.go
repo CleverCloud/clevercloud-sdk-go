@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const WireguardType = "Wireguard"
 
 // Wireguard
@@ -15,5 +17,18 @@ func (r Wireguard) GetType() string {
 	return WireguardType
 }
 
-// isConfiguration implements Configuration
-func (r Wireguard) isConfiguration() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Wireguard{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Wireguard) MarshalJSON() ([]byte, error) {
+	v.Type = WireguardType
+	type alias Wireguard
+	return json.Marshal((alias)(v))
+}
+
+// ToConfiguration wraps the value into a Configuration ready to be JSON-encoded.
+// The discriminator is set automatically by Wireguard's MarshalJSON.
+func (v Wireguard) ToConfiguration() Configuration {
+	raw, _ := json.Marshal(v)
+	return Configuration{raw: raw}
+}

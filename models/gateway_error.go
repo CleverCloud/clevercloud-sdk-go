@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const GatewayErrorType = "gateway"
 
 // GatewayError
@@ -16,5 +18,18 @@ func (r GatewayError) GetType() string {
 	return GatewayErrorType
 }
 
-// isTyped implements Typed
-func (r GatewayError) isTyped() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(GatewayError{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v GatewayError) MarshalJSON() ([]byte, error) {
+	v.Type = GatewayErrorType
+	type alias GatewayError
+	return json.Marshal((alias)(v))
+}
+
+// ToTyped wraps the value into a Typed ready to be JSON-encoded.
+// The discriminator is set automatically by GatewayError's MarshalJSON.
+func (v GatewayError) ToTyped() Typed {
+	raw, _ := json.Marshal(v)
+	return Typed{raw: raw}
+}

@@ -4,6 +4,3 @@ package models
 
 // CONNECTIONS
 type CONNECTIONS struct{}
-
-// isLoadMetric implements LoadMetric
-func (r CONNECTIONS) isLoadMetric() {}

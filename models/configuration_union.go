@@ -2,9 +2,131 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Configuration
-// Union type - can be one of: NetworkGroupConfig, OpenVpn, Wireguard
-type Configuration interface {
-	isConfiguration()
-	GetType() string
+// Tagged union - can hold one of: NetworkGroupConfig, OpenVpn, Wireguard
+type Configuration struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Configuration) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Configuration) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Configuration) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Configuration) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case NetworkGroupConfigType:
+		v, _ := u.AsNetworkGroupConfig()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OpenVpnType:
+		v, _ := u.AsOpenVpn()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case WireguardType:
+		v, _ := u.AsWireguard()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// ConfigurationVariant is satisfied by every concrete type that can be wrapped into a Configuration.
+// Lets generic code accept any variant without naming each one.
+type ConfigurationVariant interface {
+	ToConfiguration() Configuration
+}
+
+// AsNetworkGroupConfig decodes the held payload as a NetworkGroupConfig. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Configuration) AsNetworkGroupConfig() (NetworkGroupConfig, bool) {
+	var v NetworkGroupConfig
+	if t, err := peekType(u.raw); err != nil || t != NetworkGroupConfigType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewConfigurationFromNetworkGroupConfig wraps a NetworkGroupConfig into a Configuration ready to be JSON-encoded.
+func NewConfigurationFromNetworkGroupConfig(v NetworkGroupConfig) (Configuration, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Configuration{}, err
+	}
+	return Configuration{raw: raw}, nil
+}
+
+// AsOpenVpn decodes the held payload as a OpenVpn. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Configuration) AsOpenVpn() (OpenVpn, bool) {
+	var v OpenVpn
+	if t, err := peekType(u.raw); err != nil || t != OpenVpnType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewConfigurationFromOpenVpn wraps a OpenVpn into a Configuration ready to be JSON-encoded.
+func NewConfigurationFromOpenVpn(v OpenVpn) (Configuration, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Configuration{}, err
+	}
+	return Configuration{raw: raw}, nil
+}
+
+// AsWireguard decodes the held payload as a Wireguard. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Configuration) AsWireguard() (Wireguard, bool) {
+	var v Wireguard
+	if t, err := peekType(u.raw); err != nil || t != WireguardType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewConfigurationFromWireguard wraps a Wireguard into a Configuration ready to be JSON-encoded.
+func NewConfigurationFromWireguard(v Wireguard) (Configuration, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Configuration{}, err
+	}
+	return Configuration{raw: raw}, nil
 }

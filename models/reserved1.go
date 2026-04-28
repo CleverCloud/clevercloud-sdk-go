@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Reserved1Status = "Reserved"
 
 // Reserved1
@@ -15,5 +17,18 @@ func (r Reserved1) GetType() string {
 	return Reserved1Status
 }
 
-// isVMDeploymentStatus implements VMDeploymentStatus
-func (r Reserved1) isVMDeploymentStatus() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Reserved1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Reserved1) MarshalJSON() ([]byte, error) {
+	v.Status = Reserved1Status
+	type alias Reserved1
+	return json.Marshal((alias)(v))
+}
+
+// ToVMDeploymentStatus wraps the value into a VMDeploymentStatus ready to be JSON-encoded.
+// The discriminator is set automatically by Reserved1's MarshalJSON.
+func (v Reserved1) ToVMDeploymentStatus() VMDeploymentStatus {
+	raw, _ := json.Marshal(v)
+	return VMDeploymentStatus{raw: raw}
+}

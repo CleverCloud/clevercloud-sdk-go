@@ -4,6 +4,3 @@ package models
 
 // DnsOutbox
 type DnsOutbox struct{}
-
-// isResourceType implements ResourceType
-func (r DnsOutbox) isResourceType() {}

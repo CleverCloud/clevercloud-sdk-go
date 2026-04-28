@@ -4,6 +4,3 @@ package models
 
 // FaasDeployment
 type FaasDeployment struct{}
-
-// isResourceType implements ResourceType
-func (r FaasDeployment) isResourceType() {}

@@ -2,9 +2,81 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // HTTPErrorContext
-// Union type - can be one of: Empty, Typed, Typed, Typed, Typed, Typed, Typed, Typed
-type HTTPErrorContext interface {
-	isHTTPErrorContext()
-	GetType() string
+// Tagged union - can hold one of: Empty, Typed, Typed, Typed, Typed, Typed, Typed, Typed
+type HTTPErrorContext struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u HTTPErrorContext) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u HTTPErrorContext) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *HTTPErrorContext) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u HTTPErrorContext) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case EmptyType:
+		v, _ := u.AsEmpty()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// HTTPErrorContextVariant is satisfied by every concrete type that can be wrapped into a HTTPErrorContext.
+// Lets generic code accept any variant without naming each one.
+type HTTPErrorContextVariant interface {
+	ToHTTPErrorContext() HTTPErrorContext
+}
+
+// AsEmpty decodes the held payload as a Empty. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u HTTPErrorContext) AsEmpty() (Empty, bool) {
+	var v Empty
+	if t, err := peekType(u.raw); err != nil || t != EmptyType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewHTTPErrorContextFromEmpty wraps a Empty into a HTTPErrorContext ready to be JSON-encoded.
+func NewHTTPErrorContextFromEmpty(v Empty) (HTTPErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return HTTPErrorContext{}, err
+	}
+	return HTTPErrorContext{raw: raw}, nil
 }

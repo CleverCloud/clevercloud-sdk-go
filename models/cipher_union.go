@@ -2,9 +2,32 @@
 
 package models
 
+import "encoding/json"
+
 // Cipher
-// Union type - can be one of: Tls13Aes128GcmSha256, Tls13Aes256GcmSha384, Tls13Chacha20Poly1305Sha256, TlsEcdheEcdsaWithAes128GcmSha256, TlsEcdheEcdsaWithAes256GcmSha384, TlsEcdheEcdsaWithChacha20Poly1305Sha256, TlsEcdheRsaWithAes128GcmSha256, TlsEcdheRsaWithAes256GcmSha384, TlsEcdheRsaWithChacha20Poly1305Sha256
-type Cipher interface {
-	isCipher()
-	GetType() string
+// Tagged union - can hold one of: Tls13Aes128GcmSha256, Tls13Aes256GcmSha384, Tls13Chacha20Poly1305Sha256, TlsEcdheEcdsaWithAes128GcmSha256, TlsEcdheEcdsaWithAes256GcmSha384, TlsEcdheEcdsaWithChacha20Poly1305Sha256, TlsEcdheRsaWithAes128GcmSha256, TlsEcdheRsaWithAes256GcmSha384, TlsEcdheRsaWithChacha20Poly1305Sha256
+type Cipher struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Cipher) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Cipher) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Cipher) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
 }

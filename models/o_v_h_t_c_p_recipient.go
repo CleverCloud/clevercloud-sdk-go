@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const OVHTCPRecipientType = "OVH_TCP"
 
 // OVHTCPRecipient
@@ -17,5 +19,18 @@ func (r OVHTCPRecipient) GetType() string {
 	return OVHTCPRecipientType
 }
 
-// isDrainRecipient1 implements DrainRecipient1
-func (r OVHTCPRecipient) isDrainRecipient1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(OVHTCPRecipient{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v OVHTCPRecipient) MarshalJSON() ([]byte, error) {
+	v.Type = OVHTCPRecipientType
+	type alias OVHTCPRecipient
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient1 wraps the value into a DrainRecipient1 ready to be JSON-encoded.
+// The discriminator is set automatically by OVHTCPRecipient's MarshalJSON.
+func (v OVHTCPRecipient) ToDrainRecipient1() DrainRecipient1 {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient1{raw: raw}
+}

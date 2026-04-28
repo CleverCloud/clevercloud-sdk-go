@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const ClientEndpointType = "ClientEndpoint"
 
 // ClientEndpoint
@@ -15,5 +17,18 @@ func (r ClientEndpoint) GetType() string {
 	return ClientEndpointType
 }
 
-// isWireguardEndpoint implements WireguardEndpoint
-func (r ClientEndpoint) isWireguardEndpoint() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(ClientEndpoint{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v ClientEndpoint) MarshalJSON() ([]byte, error) {
+	v.Type = ClientEndpointType
+	type alias ClientEndpoint
+	return json.Marshal((alias)(v))
+}
+
+// ToWireguardEndpoint wraps the value into a WireguardEndpoint ready to be JSON-encoded.
+// The discriminator is set automatically by ClientEndpoint's MarshalJSON.
+func (v ClientEndpoint) ToWireguardEndpoint() WireguardEndpoint {
+	raw, _ := json.Marshal(v)
+	return WireguardEndpoint{raw: raw}
+}

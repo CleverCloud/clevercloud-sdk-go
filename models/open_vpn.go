@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const OpenVpnType = "OpenVpn"
 
 // OpenVpn
@@ -15,5 +17,18 @@ func (r OpenVpn) GetType() string {
 	return OpenVpnType
 }
 
-// isConfiguration implements Configuration
-func (r OpenVpn) isConfiguration() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(OpenVpn{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v OpenVpn) MarshalJSON() ([]byte, error) {
+	v.Type = OpenVpnType
+	type alias OpenVpn
+	return json.Marshal((alias)(v))
+}
+
+// ToConfiguration wraps the value into a Configuration ready to be JSON-encoded.
+// The discriminator is set automatically by OpenVpn's MarshalJSON.
+func (v OpenVpn) ToConfiguration() Configuration {
+	raw, _ := json.Marshal(v)
+	return Configuration{raw: raw}
+}

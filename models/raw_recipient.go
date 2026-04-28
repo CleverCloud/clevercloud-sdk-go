@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const RawRecipientType = "RAW_HTTP"
 
 // RawRecipient
@@ -17,5 +19,18 @@ func (r RawRecipient) GetType() string {
 	return RawRecipientType
 }
 
-// isDrainRecipient1 implements DrainRecipient1
-func (r RawRecipient) isDrainRecipient1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(RawRecipient{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v RawRecipient) MarshalJSON() ([]byte, error) {
+	v.Type = RawRecipientType
+	type alias RawRecipient
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient1 wraps the value into a DrainRecipient1 ready to be JSON-encoded.
+// The discriminator is set automatically by RawRecipient's MarshalJSON.
+func (v RawRecipient) ToDrainRecipient1() DrainRecipient1 {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient1{raw: raw}
+}

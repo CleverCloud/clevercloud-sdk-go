@@ -4,6 +4,3 @@ package models
 
 // Image
 type Image struct{}
-
-// isResourceType implements ResourceType
-func (r Image) isResourceType() {}

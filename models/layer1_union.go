@@ -2,9 +2,106 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Layer1
-// Union type - can be one of: Direct, Http2
-type Layer1 interface {
-	isLayer1()
-	GetType() string
+// Tagged union - can hold one of: Direct, Http2
+type Layer1 struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Layer1) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Layer1) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Layer1) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Layer1) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case DirectType:
+		v, _ := u.AsDirect()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case Http2Type:
+		v, _ := u.AsHttp2()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// Layer1Variant is satisfied by every concrete type that can be wrapped into a Layer1.
+// Lets generic code accept any variant without naming each one.
+type Layer1Variant interface {
+	ToLayer1() Layer1
+}
+
+// AsDirect decodes the held payload as a Direct. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Layer1) AsDirect() (Direct, bool) {
+	var v Direct
+	if t, err := peekType(u.raw); err != nil || t != DirectType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewLayer1FromDirect wraps a Direct into a Layer1 ready to be JSON-encoded.
+func NewLayer1FromDirect(v Direct) (Layer1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Layer1{}, err
+	}
+	return Layer1{raw: raw}, nil
+}
+
+// AsHttp2 decodes the held payload as a Http2. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Layer1) AsHttp2() (Http2, bool) {
+	var v Http2
+	if t, err := peekType(u.raw); err != nil || t != Http2Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewLayer1FromHttp2 wraps a Http2 into a Layer1 ready to be JSON-encoded.
+func NewLayer1FromHttp2(v Http2) (Layer1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Layer1{}, err
+	}
+	return Layer1{raw: raw}, nil
 }

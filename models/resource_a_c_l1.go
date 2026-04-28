@@ -4,6 +4,3 @@ package models
 
 // ResourceACL1
 type ResourceACL1 struct{}
-
-// isResourceType implements ResourceType
-func (r ResourceACL1) isResourceType() {}

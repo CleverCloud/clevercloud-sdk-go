@@ -73,6 +73,9 @@ test-sdk:
 clean:
 	@echo "🧹 Cleaning generated files..."
 	@rm -f ../builder.go
-	@rm -rf ../models
-	@rm -rf ../services
+	@# Drop generated *.go files but keep hand-written tests/examples/fixtures.
+	@# Anything regen-able (json_helpers.go, *_union.go, *_alias.go, model structs)
+	@# is rewritten on the next `make generate-models`.
+	@find ../models -type f -name '*.go' ! -name '*_test.go' -delete 2>/dev/null || true
+	@find ../services -type f -name '*.go' ! -name '*_test.go' -delete 2>/dev/null || true
 	@echo "✅ Clean complete"

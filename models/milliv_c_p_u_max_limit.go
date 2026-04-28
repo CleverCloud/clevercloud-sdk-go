@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const MillivCPUMaxLimitType = "MillivCPUMaxLimit"
 
 // MillivCPUMaxLimit
@@ -15,5 +17,18 @@ func (r MillivCPUMaxLimit) GetType() string {
 	return MillivCPUMaxLimitType
 }
 
-// isQuotaItem implements QuotaItem
-func (r MillivCPUMaxLimit) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(MillivCPUMaxLimit{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v MillivCPUMaxLimit) MarshalJSON() ([]byte, error) {
+	v.Type = MillivCPUMaxLimitType
+	type alias MillivCPUMaxLimit
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by MillivCPUMaxLimit's MarshalJSON.
+func (v MillivCPUMaxLimit) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

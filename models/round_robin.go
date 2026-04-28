@@ -4,6 +4,3 @@ package models
 
 // RoundRobin
 type RoundRobin struct{}
-
-// isAlgorithm implements Algorithm
-func (r RoundRobin) isAlgorithm() {}

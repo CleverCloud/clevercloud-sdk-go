@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const SyslogUDPRecipientType = "SYSLOG_UDP"
 
 // SyslogUDPRecipient
@@ -16,5 +18,18 @@ func (r SyslogUDPRecipient) GetType() string {
 	return SyslogUDPRecipientType
 }
 
-// isDrainRecipient1 implements DrainRecipient1
-func (r SyslogUDPRecipient) isDrainRecipient1() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(SyslogUDPRecipient{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v SyslogUDPRecipient) MarshalJSON() ([]byte, error) {
+	v.Type = SyslogUDPRecipientType
+	type alias SyslogUDPRecipient
+	return json.Marshal((alias)(v))
+}
+
+// ToDrainRecipient1 wraps the value into a DrainRecipient1 ready to be JSON-encoded.
+// The discriminator is set automatically by SyslogUDPRecipient's MarshalJSON.
+func (v SyslogUDPRecipient) ToDrainRecipient1() DrainRecipient1 {
+	raw, _ := json.Marshal(v)
+	return DrainRecipient1{raw: raw}
+}

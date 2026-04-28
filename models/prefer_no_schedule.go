@@ -4,6 +4,3 @@ package models
 
 // PreferNoSchedule
 type PreferNoSchedule struct{}
-
-// isTaintEffect implements TaintEffect
-func (r PreferNoSchedule) isTaintEffect() {}

@@ -4,6 +4,3 @@ package models
 
 // Application
 type Application struct{}
-
-// isResourceType implements ResourceType
-func (r Application) isResourceType() {}

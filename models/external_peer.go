@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const ExternalPeerType = "ExternalPeer"
 
 // ExternalPeer
@@ -21,8 +23,25 @@ func (r ExternalPeer) GetType() string {
 	return ExternalPeerType
 }
 
-// isPeer implements Peer
-func (r ExternalPeer) isPeer() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(ExternalPeer{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v ExternalPeer) MarshalJSON() ([]byte, error) {
+	v.Type = ExternalPeerType
+	type alias ExternalPeer
+	return json.Marshal((alias)(v))
+}
 
-// isNetworkGroupComponent implements NetworkGroupComponent
-func (r ExternalPeer) isNetworkGroupComponent() {}
+// ToNetworkGroupComponent wraps the value into a NetworkGroupComponent ready to be JSON-encoded.
+// The discriminator is set automatically by ExternalPeer's MarshalJSON.
+func (v ExternalPeer) ToNetworkGroupComponent() NetworkGroupComponent {
+	raw, _ := json.Marshal(v)
+	return NetworkGroupComponent{raw: raw}
+}
+
+// ToPeer wraps the value into a Peer ready to be JSON-encoded.
+// The discriminator is set automatically by ExternalPeer's MarshalJSON.
+func (v ExternalPeer) ToPeer() Peer {
+	raw, _ := json.Marshal(v)
+	return Peer{raw: raw}
+}

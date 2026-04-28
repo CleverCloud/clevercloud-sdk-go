@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const MaxIpType = "MaxIp"
 
 // MaxIp
@@ -15,5 +17,18 @@ func (r MaxIp) GetType() string {
 	return MaxIpType
 }
 
-// isQuotaItem implements QuotaItem
-func (r MaxIp) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(MaxIp{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v MaxIp) MarshalJSON() ([]byte, error) {
+	v.Type = MaxIpType
+	type alias MaxIp
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by MaxIp's MarshalJSON.
+func (v MaxIp) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

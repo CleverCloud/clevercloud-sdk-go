@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const ExactType = "Exact"
 
 // Exact
@@ -15,5 +17,18 @@ func (r Exact) GetType() string {
 	return ExactType
 }
 
-// isHost implements Host
-func (r Exact) isHost() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Exact{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Exact) MarshalJSON() ([]byte, error) {
+	v.Type = ExactType
+	type alias Exact
+	return json.Marshal((alias)(v))
+}
+
+// ToHost wraps the value into a Host ready to be JSON-encoded.
+// The discriminator is set automatically by Exact's MarshalJSON.
+func (v Exact) ToHost() Host {
+	raw, _ := json.Marshal(v)
+	return Host{raw: raw}
+}

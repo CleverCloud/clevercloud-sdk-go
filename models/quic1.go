@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Quic1Type = "Quic"
 
 // Quic1
@@ -15,5 +17,18 @@ func (r Quic1) GetType() string {
 	return Quic1Type
 }
 
-// isTransport4 implements Transport4
-func (r Quic1) isTransport4() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Quic1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Quic1) MarshalJSON() ([]byte, error) {
+	v.Type = Quic1Type
+	type alias Quic1
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport4 wraps the value into a Transport4 ready to be JSON-encoded.
+// The discriminator is set automatically by Quic1's MarshalJSON.
+func (v Quic1) ToTransport4() Transport4 {
+	raw, _ := json.Marshal(v)
+	return Transport4{raw: raw}
+}

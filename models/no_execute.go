@@ -4,6 +4,3 @@ package models
 
 // NoExecute
 type NoExecute struct{}
-
-// isTaintEffect implements TaintEffect
-func (r NoExecute) isTaintEffect() {}

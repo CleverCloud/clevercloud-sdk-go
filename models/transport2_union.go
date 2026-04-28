@@ -2,9 +2,106 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Transport2
-// Union type - can be one of: Tcp1, Udp1
-type Transport2 interface {
-	isTransport2()
-	GetType() string
+// Tagged union - can hold one of: Tcp1, Udp1
+type Transport2 struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Transport2) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Transport2) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Transport2) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Transport2) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case Tcp1Type:
+		v, _ := u.AsTcp1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case Udp1Type:
+		v, _ := u.AsUdp1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// Transport2Variant is satisfied by every concrete type that can be wrapped into a Transport2.
+// Lets generic code accept any variant without naming each one.
+type Transport2Variant interface {
+	ToTransport2() Transport2
+}
+
+// AsTcp1 decodes the held payload as a Tcp1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport2) AsTcp1() (Tcp1, bool) {
+	var v Tcp1
+	if t, err := peekType(u.raw); err != nil || t != Tcp1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport2FromTcp1 wraps a Tcp1 into a Transport2 ready to be JSON-encoded.
+func NewTransport2FromTcp1(v Tcp1) (Transport2, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport2{}, err
+	}
+	return Transport2{raw: raw}, nil
+}
+
+// AsUdp1 decodes the held payload as a Udp1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport2) AsUdp1() (Udp1, bool) {
+	var v Udp1
+	if t, err := peekType(u.raw); err != nil || t != Udp1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport2FromUdp1 wraps a Udp1 into a Transport2 ready to be JSON-encoded.
+func NewTransport2FromUdp1(v Udp1) (Transport2, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport2{}, err
+	}
+	return Transport2{raw: raw}, nil
 }

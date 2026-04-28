@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const V4Type = "V4"
 
 // V4
@@ -16,5 +18,18 @@ func (r V4) GetType() string {
 	return V4Type
 }
 
-// isPublicNetwork implements PublicNetwork
-func (r V4) isPublicNetwork() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(V4{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v V4) MarshalJSON() ([]byte, error) {
+	v.Type = V4Type
+	type alias V4
+	return json.Marshal((alias)(v))
+}
+
+// ToPublicNetwork wraps the value into a PublicNetwork ready to be JSON-encoded.
+// The discriminator is set automatically by V4's MarshalJSON.
+func (v V4) ToPublicNetwork() PublicNetwork {
+	raw, _ := json.Marshal(v)
+	return PublicNetwork{raw: raw}
+}

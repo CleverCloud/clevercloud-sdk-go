@@ -4,6 +4,3 @@ package models
 
 // Networkgroup
 type Networkgroup struct{}
-
-// isResourceType implements ResourceType
-func (r Networkgroup) isResourceType() {}

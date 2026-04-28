@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const UdpType = "Udp"
 
 // Udp
@@ -15,5 +17,18 @@ func (r Udp) GetType() string {
 	return UdpType
 }
 
-// isTransport implements Transport
-func (r Udp) isTransport() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Udp{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Udp) MarshalJSON() ([]byte, error) {
+	v.Type = UdpType
+	type alias Udp
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport wraps the value into a Transport ready to be JSON-encoded.
+// The discriminator is set automatically by Udp's MarshalJSON.
+func (v Udp) ToTransport() Transport {
+	raw, _ := json.Marshal(v)
+	return Transport{raw: raw}
+}

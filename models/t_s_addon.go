@@ -4,6 +4,3 @@ package models
 
 // TSAddon
 type TSAddon struct{}
-
-// isResourceType implements ResourceType
-func (r TSAddon) isResourceType() {}

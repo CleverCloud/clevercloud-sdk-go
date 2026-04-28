@@ -2,9 +2,106 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Peer
-// Union type - can be one of: CleverPeer, ExternalPeer
-type Peer interface {
-	isPeer()
-	GetType() string
+// Tagged union - can hold one of: CleverPeer, ExternalPeer
+type Peer struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Peer) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Peer) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Peer) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Peer) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case CleverPeerType:
+		v, _ := u.AsCleverPeer()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case ExternalPeerType:
+		v, _ := u.AsExternalPeer()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// PeerVariant is satisfied by every concrete type that can be wrapped into a Peer.
+// Lets generic code accept any variant without naming each one.
+type PeerVariant interface {
+	ToPeer() Peer
+}
+
+// AsCleverPeer decodes the held payload as a CleverPeer. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Peer) AsCleverPeer() (CleverPeer, bool) {
+	var v CleverPeer
+	if t, err := peekType(u.raw); err != nil || t != CleverPeerType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPeerFromCleverPeer wraps a CleverPeer into a Peer ready to be JSON-encoded.
+func NewPeerFromCleverPeer(v CleverPeer) (Peer, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Peer{}, err
+	}
+	return Peer{raw: raw}, nil
+}
+
+// AsExternalPeer decodes the held payload as a ExternalPeer. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Peer) AsExternalPeer() (ExternalPeer, bool) {
+	var v ExternalPeer
+	if t, err := peekType(u.raw); err != nil || t != ExternalPeerType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPeerFromExternalPeer wraps a ExternalPeer into a Peer ready to be JSON-encoded.
+func NewPeerFromExternalPeer(v ExternalPeer) (Peer, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Peer{}, err
+	}
+	return Peer{raw: raw}, nil
 }

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Direct4Type = "Direct"
 
 // Direct4
@@ -15,5 +17,18 @@ func (r Direct4) GetType() string {
 	return Direct4Type
 }
 
-// isTransport3 implements Transport3
-func (r Direct4) isTransport3() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Direct4{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Direct4) MarshalJSON() ([]byte, error) {
+	v.Type = Direct4Type
+	type alias Direct4
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport3 wraps the value into a Transport3 ready to be JSON-encoded.
+// The discriminator is set automatically by Direct4's MarshalJSON.
+func (v Direct4) ToTransport3() Transport3 {
+	raw, _ := json.Marshal(v)
+	return Transport3{raw: raw}
+}

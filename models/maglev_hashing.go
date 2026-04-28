@@ -4,6 +4,3 @@ package models
 
 // MaglevHashing
 type MaglevHashing struct{}
-
-// isAlgorithm implements Algorithm
-func (r MaglevHashing) isAlgorithm() {}

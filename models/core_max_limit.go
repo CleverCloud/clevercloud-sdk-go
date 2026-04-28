@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const CoreMaxLimitType = "CoreMaxLimit"
 
 // CoreMaxLimit
@@ -15,5 +17,18 @@ func (r CoreMaxLimit) GetType() string {
 	return CoreMaxLimitType
 }
 
-// isQuotaItem implements QuotaItem
-func (r CoreMaxLimit) isQuotaItem() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(CoreMaxLimit{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v CoreMaxLimit) MarshalJSON() ([]byte, error) {
+	v.Type = CoreMaxLimitType
+	type alias CoreMaxLimit
+	return json.Marshal((alias)(v))
+}
+
+// ToQuotaItem wraps the value into a QuotaItem ready to be JSON-encoded.
+// The discriminator is set automatically by CoreMaxLimit's MarshalJSON.
+func (v CoreMaxLimit) ToQuotaItem() QuotaItem {
+	raw, _ := json.Marshal(v)
+	return QuotaItem{raw: raw}
+}

@@ -2,9 +2,32 @@
 
 package models
 
+import "encoding/json"
+
 // Algorithm
-// Union type - can be one of: DestinationHashing, LeastLoaded, MaglevHashing, PowerOfTwo, RANDOM, RoundRobin, SourceHashing, Unrecognized
-type Algorithm interface {
-	isAlgorithm()
-	GetType() string
+// Tagged union - can hold one of: DestinationHashing, LeastLoaded, MaglevHashing, PowerOfTwo, RANDOM, RoundRobin, SourceHashing, Unrecognized
+type Algorithm struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Algorithm) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Algorithm) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Algorithm) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
 }

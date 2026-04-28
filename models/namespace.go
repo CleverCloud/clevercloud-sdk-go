@@ -4,6 +4,3 @@ package models
 
 // Namespace
 type Namespace struct{}
-
-// isResourceType implements ResourceType
-func (r Namespace) isResourceType() {}

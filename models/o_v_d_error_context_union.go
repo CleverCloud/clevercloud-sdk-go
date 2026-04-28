@@ -2,9 +2,231 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // OVDErrorContext
-// Union type - can be one of: EmptyContext, OVDErrorBagContext, OVDErrorFieldContext, OVDErrorInputContext, OVDErrorOperationContext, OVDErrorResourceContext, OVDMultipleErrorFieldContext
-type OVDErrorContext interface {
-	isOVDErrorContext()
-	GetType() string
+// Tagged union - can hold one of: EmptyContext, OVDErrorBagContext, OVDErrorFieldContext, OVDErrorInputContext, OVDErrorOperationContext, OVDErrorResourceContext, OVDMultipleErrorFieldContext
+type OVDErrorContext struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u OVDErrorContext) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u OVDErrorContext) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *OVDErrorContext) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u OVDErrorContext) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case EmptyContextType:
+		v, _ := u.AsEmptyContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDErrorBagContextType:
+		v, _ := u.AsOVDErrorBagContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDErrorFieldContextType:
+		v, _ := u.AsOVDErrorFieldContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDErrorInputContextType:
+		v, _ := u.AsOVDErrorInputContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDErrorOperationContextType:
+		v, _ := u.AsOVDErrorOperationContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDErrorResourceContextType:
+		v, _ := u.AsOVDErrorResourceContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case OVDMultipleErrorFieldContextType:
+		v, _ := u.AsOVDMultipleErrorFieldContext()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// OVDErrorContextVariant is satisfied by every concrete type that can be wrapped into a OVDErrorContext.
+// Lets generic code accept any variant without naming each one.
+type OVDErrorContextVariant interface {
+	ToOVDErrorContext() OVDErrorContext
+}
+
+// AsEmptyContext decodes the held payload as a EmptyContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsEmptyContext() (EmptyContext, bool) {
+	var v EmptyContext
+	if t, err := peekType(u.raw); err != nil || t != EmptyContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromEmptyContext wraps a EmptyContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromEmptyContext(v EmptyContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDErrorBagContext decodes the held payload as a OVDErrorBagContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDErrorBagContext() (OVDErrorBagContext, bool) {
+	var v OVDErrorBagContext
+	if t, err := peekType(u.raw); err != nil || t != OVDErrorBagContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDErrorBagContext wraps a OVDErrorBagContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDErrorBagContext(v OVDErrorBagContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDErrorFieldContext decodes the held payload as a OVDErrorFieldContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDErrorFieldContext() (OVDErrorFieldContext, bool) {
+	var v OVDErrorFieldContext
+	if t, err := peekType(u.raw); err != nil || t != OVDErrorFieldContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDErrorFieldContext wraps a OVDErrorFieldContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDErrorFieldContext(v OVDErrorFieldContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDErrorInputContext decodes the held payload as a OVDErrorInputContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDErrorInputContext() (OVDErrorInputContext, bool) {
+	var v OVDErrorInputContext
+	if t, err := peekType(u.raw); err != nil || t != OVDErrorInputContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDErrorInputContext wraps a OVDErrorInputContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDErrorInputContext(v OVDErrorInputContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDErrorOperationContext decodes the held payload as a OVDErrorOperationContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDErrorOperationContext() (OVDErrorOperationContext, bool) {
+	var v OVDErrorOperationContext
+	if t, err := peekType(u.raw); err != nil || t != OVDErrorOperationContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDErrorOperationContext wraps a OVDErrorOperationContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDErrorOperationContext(v OVDErrorOperationContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDErrorResourceContext decodes the held payload as a OVDErrorResourceContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDErrorResourceContext() (OVDErrorResourceContext, bool) {
+	var v OVDErrorResourceContext
+	if t, err := peekType(u.raw); err != nil || t != OVDErrorResourceContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDErrorResourceContext wraps a OVDErrorResourceContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDErrorResourceContext(v OVDErrorResourceContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
+}
+
+// AsOVDMultipleErrorFieldContext decodes the held payload as a OVDMultipleErrorFieldContext. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u OVDErrorContext) AsOVDMultipleErrorFieldContext() (OVDMultipleErrorFieldContext, bool) {
+	var v OVDMultipleErrorFieldContext
+	if t, err := peekType(u.raw); err != nil || t != OVDMultipleErrorFieldContextType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewOVDErrorContextFromOVDMultipleErrorFieldContext wraps a OVDMultipleErrorFieldContext into a OVDErrorContext ready to be JSON-encoded.
+func NewOVDErrorContextFromOVDMultipleErrorFieldContext(v OVDMultipleErrorFieldContext) (OVDErrorContext, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return OVDErrorContext{}, err
+	}
+	return OVDErrorContext{raw: raw}, nil
 }

@@ -4,6 +4,3 @@ package models
 
 // KubernetesQuotaReservation
 type KubernetesQuotaReservation struct{}
-
-// isResourceType implements ResourceType
-func (r KubernetesQuotaReservation) isResourceType() {}

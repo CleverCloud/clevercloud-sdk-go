@@ -4,6 +4,3 @@ package models
 
 // IpamAudit
 type IpamAudit struct{}
-
-// isResourceType implements ResourceType
-func (r IpamAudit) isResourceType() {}

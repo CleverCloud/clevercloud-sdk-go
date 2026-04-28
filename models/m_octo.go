@@ -4,6 +4,3 @@ package models
 
 // MOcto
 type MOcto struct{}
-
-// isFlavor implements Flavor
-func (r MOcto) isFlavor() {}

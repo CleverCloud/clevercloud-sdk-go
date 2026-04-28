@@ -4,6 +4,3 @@ package models
 
 // PostgreSQL
 type PostgreSQL struct{}
-
-// isResourceType implements ResourceType
-func (r PostgreSQL) isResourceType() {}

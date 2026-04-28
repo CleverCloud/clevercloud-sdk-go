@@ -2,9 +2,32 @@
 
 package models
 
+import "encoding/json"
+
 // TaintEffect
-// Union type - can be one of: NoExecute, NoSchedule, PreferNoSchedule
-type TaintEffect interface {
-	isTaintEffect()
-	GetType() string
+// Tagged union - can hold one of: NoExecute, NoSchedule, PreferNoSchedule
+type TaintEffect struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u TaintEffect) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u TaintEffect) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *TaintEffect) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
 }

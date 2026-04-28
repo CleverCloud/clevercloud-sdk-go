@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const RegexType = "Regex"
 
 // Regex
@@ -15,5 +17,18 @@ func (r Regex) GetType() string {
 	return RegexType
 }
 
-// isPath implements Path
-func (r Regex) isPath() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Regex{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Regex) MarshalJSON() ([]byte, error) {
+	v.Type = RegexType
+	type alias Regex
+	return json.Marshal((alias)(v))
+}
+
+// ToPath wraps the value into a Path ready to be JSON-encoded.
+// The discriminator is set automatically by Regex's MarshalJSON.
+func (v Regex) ToPath() Path {
+	raw, _ := json.Marshal(v)
+	return Path{raw: raw}
+}

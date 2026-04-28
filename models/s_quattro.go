@@ -4,6 +4,3 @@ package models
 
 // SQuattro
 type SQuattro struct{}
-
-// isFlavor implements Flavor
-func (r SQuattro) isFlavor() {}

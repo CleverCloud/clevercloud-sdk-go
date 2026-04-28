@@ -2,9 +2,131 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Transport4
-// Union type - can be one of: Direct5, Dtls, Quic1
-type Transport4 interface {
-	isTransport4()
-	GetType() string
+// Tagged union - can hold one of: Direct5, Dtls, Quic1
+type Transport4 struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u Transport4) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u Transport4) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *Transport4) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u Transport4) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case Direct5Type:
+		v, _ := u.AsDirect5()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case DtlsType:
+		v, _ := u.AsDtls()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case Quic1Type:
+		v, _ := u.AsQuic1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// Transport4Variant is satisfied by every concrete type that can be wrapped into a Transport4.
+// Lets generic code accept any variant without naming each one.
+type Transport4Variant interface {
+	ToTransport4() Transport4
+}
+
+// AsDirect5 decodes the held payload as a Direct5. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport4) AsDirect5() (Direct5, bool) {
+	var v Direct5
+	if t, err := peekType(u.raw); err != nil || t != Direct5Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport4FromDirect5 wraps a Direct5 into a Transport4 ready to be JSON-encoded.
+func NewTransport4FromDirect5(v Direct5) (Transport4, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport4{}, err
+	}
+	return Transport4{raw: raw}, nil
+}
+
+// AsDtls decodes the held payload as a Dtls. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport4) AsDtls() (Dtls, bool) {
+	var v Dtls
+	if t, err := peekType(u.raw); err != nil || t != DtlsType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport4FromDtls wraps a Dtls into a Transport4 ready to be JSON-encoded.
+func NewTransport4FromDtls(v Dtls) (Transport4, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport4{}, err
+	}
+	return Transport4{raw: raw}, nil
+}
+
+// AsQuic1 decodes the held payload as a Quic1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u Transport4) AsQuic1() (Quic1, bool) {
+	var v Quic1
+	if t, err := peekType(u.raw); err != nil || t != Quic1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewTransport4FromQuic1 wraps a Quic1 into a Transport4 ready to be JSON-encoded.
+func NewTransport4FromQuic1(v Quic1) (Transport4, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return Transport4{}, err
+	}
+	return Transport4{raw: raw}, nil
 }

@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const TcpType = "Tcp"
 
 // Tcp
@@ -15,5 +17,18 @@ func (r Tcp) GetType() string {
 	return TcpType
 }
 
-// isTransport implements Transport
-func (r Tcp) isTransport() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Tcp{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Tcp) MarshalJSON() ([]byte, error) {
+	v.Type = TcpType
+	type alias Tcp
+	return json.Marshal((alias)(v))
+}
+
+// ToTransport wraps the value into a Transport ready to be JSON-encoded.
+// The discriminator is set automatically by Tcp's MarshalJSON.
+func (v Tcp) ToTransport() Transport {
+	raw, _ := json.Marshal(v)
+	return Transport{raw: raw}
+}

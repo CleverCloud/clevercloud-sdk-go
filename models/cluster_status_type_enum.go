@@ -12,6 +12,10 @@ const (
 	ClusterStatusTypeDEPLOYING   ClusterStatusType = "DEPLOYING"
 	ClusterStatusTypeFAILED      ClusterStatusType = "FAILED"
 	ClusterStatusTypeREDEPLOYING ClusterStatusType = "REDEPLOYING"
+	ClusterStatusTypeToDelete    ClusterStatusType = "TO_DELETE"
+	ClusterStatusTypeToDeploy    ClusterStatusType = "TO_DEPLOY"
+	ClusterStatusTypeToRedeploy  ClusterStatusType = "TO_REDEPLOY"
+	ClusterStatusTypeToUpgrade   ClusterStatusType = "TO_UPGRADE"
 	ClusterStatusTypeUPDATING    ClusterStatusType = "UPDATING"
 )
 

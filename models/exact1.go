@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Exact1Type = "Exact"
 
 // Exact1
@@ -15,5 +17,18 @@ func (r Exact1) GetType() string {
 	return Exact1Type
 }
 
-// isPath implements Path
-func (r Exact1) isPath() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Exact1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Exact1) MarshalJSON() ([]byte, error) {
+	v.Type = Exact1Type
+	type alias Exact1
+	return json.Marshal((alias)(v))
+}
+
+// ToPath wraps the value into a Path ready to be JSON-encoded.
+// The discriminator is set automatically by Exact1's MarshalJSON.
+func (v Exact1) ToPath() Path {
+	raw, _ := json.Marshal(v)
+	return Path{raw: raw}
+}

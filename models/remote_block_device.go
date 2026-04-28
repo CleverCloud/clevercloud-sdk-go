@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const RemoteBlockDeviceType = "RemoteBlockDevice"
 
 // RemoteBlockDevice
@@ -21,5 +23,18 @@ func (r RemoteBlockDevice) GetType() string {
 	return RemoteBlockDeviceType
 }
 
-// isStorageConfiguration implements StorageConfiguration
-func (r RemoteBlockDevice) isStorageConfiguration() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(RemoteBlockDevice{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v RemoteBlockDevice) MarshalJSON() ([]byte, error) {
+	v.Type = RemoteBlockDeviceType
+	type alias RemoteBlockDevice
+	return json.Marshal((alias)(v))
+}
+
+// ToStorageConfiguration wraps the value into a StorageConfiguration ready to be JSON-encoded.
+// The discriminator is set automatically by RemoteBlockDevice's MarshalJSON.
+func (v RemoteBlockDevice) ToStorageConfiguration() StorageConfiguration {
+	raw, _ := json.Marshal(v)
+	return StorageConfiguration{raw: raw}
+}

@@ -4,6 +4,3 @@ package models
 
 // Cluster2
 type Cluster2 struct{}
-
-// isResourceType implements ResourceType
-func (r Cluster2) isResourceType() {}

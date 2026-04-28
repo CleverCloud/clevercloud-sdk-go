@@ -4,6 +4,3 @@ package models
 
 // LeastLoaded
 type LeastLoaded struct{}
-
-// isAlgorithm implements Algorithm
-func (r LeastLoaded) isAlgorithm() {}

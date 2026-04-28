@@ -2,9 +2,131 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // PublicNetwork
-// Union type - can be one of: V4, V4V6, V6
-type PublicNetwork interface {
-	isPublicNetwork()
-	GetType() string
+// Tagged union - can hold one of: V4, V4V6, V6
+type PublicNetwork struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u PublicNetwork) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u PublicNetwork) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *PublicNetwork) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u PublicNetwork) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case V4Type:
+		v, _ := u.AsV4()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case V4V6Type:
+		v, _ := u.AsV4V6()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case V6Type:
+		v, _ := u.AsV6()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// PublicNetworkVariant is satisfied by every concrete type that can be wrapped into a PublicNetwork.
+// Lets generic code accept any variant without naming each one.
+type PublicNetworkVariant interface {
+	ToPublicNetwork() PublicNetwork
+}
+
+// AsV4 decodes the held payload as a V4. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u PublicNetwork) AsV4() (V4, bool) {
+	var v V4
+	if t, err := peekType(u.raw); err != nil || t != V4Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPublicNetworkFromV4 wraps a V4 into a PublicNetwork ready to be JSON-encoded.
+func NewPublicNetworkFromV4(v V4) (PublicNetwork, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return PublicNetwork{}, err
+	}
+	return PublicNetwork{raw: raw}, nil
+}
+
+// AsV4V6 decodes the held payload as a V4V6. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u PublicNetwork) AsV4V6() (V4V6, bool) {
+	var v V4V6
+	if t, err := peekType(u.raw); err != nil || t != V4V6Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPublicNetworkFromV4V6 wraps a V4V6 into a PublicNetwork ready to be JSON-encoded.
+func NewPublicNetworkFromV4V6(v V4V6) (PublicNetwork, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return PublicNetwork{}, err
+	}
+	return PublicNetwork{raw: raw}, nil
+}
+
+// AsV6 decodes the held payload as a V6. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u PublicNetwork) AsV6() (V6, bool) {
+	var v V6
+	if t, err := peekType(u.raw); err != nil || t != V6Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewPublicNetworkFromV6 wraps a V6 into a PublicNetwork ready to be JSON-encoded.
+func NewPublicNetworkFromV6(v V6) (PublicNetwork, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return PublicNetwork{}, err
+	}
+	return PublicNetwork{raw: raw}, nil
 }

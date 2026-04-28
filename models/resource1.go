@@ -2,6 +2,8 @@
 
 package models
 
+import "encoding/json"
+
 const Resource1Type = "resource"
 
 // Resource1
@@ -16,5 +18,18 @@ func (r Resource1) GetType() string {
 	return Resource1Type
 }
 
-// isTyped implements Typed
-func (r Resource1) isTyped() {}
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Resource1{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Resource1) MarshalJSON() ([]byte, error) {
+	v.Type = Resource1Type
+	type alias Resource1
+	return json.Marshal((alias)(v))
+}
+
+// ToTyped wraps the value into a Typed ready to be JSON-encoded.
+// The discriminator is set automatically by Resource1's MarshalJSON.
+func (v Resource1) ToTyped() Typed {
+	raw, _ := json.Marshal(v)
+	return Typed{raw: raw}
+}

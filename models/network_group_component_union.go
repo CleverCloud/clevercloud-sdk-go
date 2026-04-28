@@ -2,9 +2,156 @@
 
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // NetworkGroupComponent
-// Union type - can be one of: CleverPeer, ExternalPeer, Member1, NetworkGroup2
-type NetworkGroupComponent interface {
-	isNetworkGroupComponent()
-	GetType() string
+// Tagged union - can hold one of: CleverPeer, ExternalPeer, Member1, NetworkGroup2
+type NetworkGroupComponent struct {
+	raw json.RawMessage
+}
+
+// Type returns the OpenAPI discriminator ("type" field) of the held value.
+// Returns "" when empty or when the payload is not a JSON object with a "type" key.
+func (u NetworkGroupComponent) Type() string {
+	t, _ := peekType(u.raw)
+	return t
+}
+
+// MarshalJSON returns the raw JSON payload of the held value, or null if empty.
+func (u NetworkGroupComponent) MarshalJSON() ([]byte, error) {
+	if u.raw == nil {
+		return []byte("null"), nil
+	}
+	return u.raw, nil
+}
+
+// UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
+// or As<Member>() to materialize a concrete value.
+func (u *NetworkGroupComponent) UnmarshalJSON(data []byte) error {
+	u.raw = append(u.raw[:0], data...)
+	return nil
+}
+
+// Format implements fmt.Formatter: dispatches the verb to the concrete
+// variant currently held, falling back to the raw JSON bytes for unknown
+// or empty values. Lets %+v on a parent struct render this field as the
+// matching concrete type instead of a byte slice.
+func (u NetworkGroupComponent) Format(f fmt.State, verb rune) {
+	switch u.Type() {
+	case CleverPeerType:
+		v, _ := u.AsCleverPeer()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case ExternalPeerType:
+		v, _ := u.AsExternalPeer()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case Member1Type:
+		v, _ := u.AsMember1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case NetworkGroup2Type:
+		v, _ := u.AsNetworkGroup2()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	default:
+		if u.raw == nil {
+			f.Write([]byte("null"))
+			return
+		}
+		f.Write(u.raw)
+	}
+}
+
+// NetworkGroupComponentVariant is satisfied by every concrete type that can be wrapped into a NetworkGroupComponent.
+// Lets generic code accept any variant without naming each one.
+type NetworkGroupComponentVariant interface {
+	ToNetworkGroupComponent() NetworkGroupComponent
+}
+
+// AsCleverPeer decodes the held payload as a CleverPeer. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u NetworkGroupComponent) AsCleverPeer() (CleverPeer, bool) {
+	var v CleverPeer
+	if t, err := peekType(u.raw); err != nil || t != CleverPeerType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewNetworkGroupComponentFromCleverPeer wraps a CleverPeer into a NetworkGroupComponent ready to be JSON-encoded.
+func NewNetworkGroupComponentFromCleverPeer(v CleverPeer) (NetworkGroupComponent, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return NetworkGroupComponent{}, err
+	}
+	return NetworkGroupComponent{raw: raw}, nil
+}
+
+// AsExternalPeer decodes the held payload as a ExternalPeer. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u NetworkGroupComponent) AsExternalPeer() (ExternalPeer, bool) {
+	var v ExternalPeer
+	if t, err := peekType(u.raw); err != nil || t != ExternalPeerType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewNetworkGroupComponentFromExternalPeer wraps a ExternalPeer into a NetworkGroupComponent ready to be JSON-encoded.
+func NewNetworkGroupComponentFromExternalPeer(v ExternalPeer) (NetworkGroupComponent, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return NetworkGroupComponent{}, err
+	}
+	return NetworkGroupComponent{raw: raw}, nil
+}
+
+// AsMember1 decodes the held payload as a Member1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u NetworkGroupComponent) AsMember1() (Member1, bool) {
+	var v Member1
+	if t, err := peekType(u.raw); err != nil || t != Member1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewNetworkGroupComponentFromMember1 wraps a Member1 into a NetworkGroupComponent ready to be JSON-encoded.
+func NewNetworkGroupComponentFromMember1(v Member1) (NetworkGroupComponent, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return NetworkGroupComponent{}, err
+	}
+	return NetworkGroupComponent{raw: raw}, nil
+}
+
+// AsNetworkGroup2 decodes the held payload as a NetworkGroup2. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u NetworkGroupComponent) AsNetworkGroup2() (NetworkGroup2, bool) {
+	var v NetworkGroup2
+	if t, err := peekType(u.raw); err != nil || t != NetworkGroup2Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewNetworkGroupComponentFromNetworkGroup2 wraps a NetworkGroup2 into a NetworkGroupComponent ready to be JSON-encoded.
+func NewNetworkGroupComponentFromNetworkGroup2(v NetworkGroup2) (NetworkGroupComponent, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return NetworkGroupComponent{}, err
+	}
+	return NetworkGroupComponent{raw: raw}, nil
 }
