@@ -316,7 +316,10 @@ func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
 		}
 	}
 
-	// Associate types with unions they implement
+	// Associate types with unions they implement.
+	// Sort Implements at the end so generator output is deterministic — map
+	// iteration order is randomized per Go run, which would otherwise reorder
+	// To<Union>() methods in every regen.
 	for i := range models {
 		for unionName, members := range unionMembers {
 			for _, member := range members {
@@ -325,6 +328,7 @@ func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
 				}
 			}
 		}
+		sort.Strings(models[i].Implements)
 	}
 
 	return models, nil
@@ -971,6 +975,19 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 			Return(Index().Byte().Parens(Lit("null")), Nil()),
 		),
 		Return(Id("u").Dot("raw"), Nil()),
+	)
+	f.Line()
+
+	// String() makes fmt verbs (%v, %+v, %s) render the JSON payload instead
+	// of the raw byte slice, so logs/debugging stay readable when the union
+	// is embedded in a parent struct.
+	f.Comment("String returns the JSON representation of the held value, or \"null\" if empty.")
+	f.Comment("Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.")
+	f.Func().Params(Id("u").Id(union.Name)).Id("String").Params().String().Block(
+		If(Id("u").Dot("raw").Op("==").Nil()).Block(
+			Return(Lit("null")),
+		),
+		Return(String().Parens(Id("u").Dot("raw"))),
 	)
 	f.Line()
 

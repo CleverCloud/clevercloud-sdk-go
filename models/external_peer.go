@@ -32,16 +32,16 @@ func (v ExternalPeer) MarshalJSON() ([]byte, error) {
 	return json.Marshal((alias)(v))
 }
 
-// ToPeer wraps the value into a Peer ready to be JSON-encoded.
-// The discriminator is set automatically by ExternalPeer's MarshalJSON.
-func (v ExternalPeer) ToPeer() Peer {
-	raw, _ := json.Marshal(v)
-	return Peer{raw: raw}
-}
-
 // ToNetworkGroupComponent wraps the value into a NetworkGroupComponent ready to be JSON-encoded.
 // The discriminator is set automatically by ExternalPeer's MarshalJSON.
 func (v ExternalPeer) ToNetworkGroupComponent() NetworkGroupComponent {
 	raw, _ := json.Marshal(v)
 	return NetworkGroupComponent{raw: raw}
+}
+
+// ToPeer wraps the value into a Peer ready to be JSON-encoded.
+// The discriminator is set automatically by ExternalPeer's MarshalJSON.
+func (v ExternalPeer) ToPeer() Peer {
+	raw, _ := json.Marshal(v)
+	return Peer{raw: raw}
 }

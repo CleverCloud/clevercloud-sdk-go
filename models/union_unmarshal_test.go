@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -193,6 +194,22 @@ func TestPeerRoundTrip(t *testing.T) {
 	}
 	if rt.ID != "peer_a" || rt.PublicKey != "pk-a" {
 		t.Errorf("peer fields not preserved: %+v", rt)
+	}
+}
+
+// TestPeerString verifies that fmt prints the JSON payload (via String())
+// rather than the raw byte slice. Important for log readability when a
+// union is embedded in a parent struct printed with %+v.
+func TestPeerString(t *testing.T) {
+	cp := CleverPeer{ID: "x1", PublicKey: "pk"}.ToPeer()
+	got := fmt.Sprintf("%v", cp)
+	if !strings.Contains(got, `"type":"CleverPeer"`) {
+		t.Errorf("fmt should render JSON, got: %s", got)
+	}
+
+	var empty Peer
+	if got := fmt.Sprintf("%v", empty); got != "null" {
+		t.Errorf("empty peer should print as %q, got %q", "null", got)
 	}
 }
 

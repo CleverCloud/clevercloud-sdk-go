@@ -25,6 +25,15 @@ func (u Transport4) MarshalJSON() ([]byte, error) {
 	return u.raw, nil
 }
 
+// String returns the JSON representation of the held value, or "null" if empty.
+// Implemented so that fmt %v/%+v print readable JSON rather than the underlying bytes.
+func (u Transport4) String() string {
+	if u.raw == nil {
+		return "null"
+	}
+	return string(u.raw)
+}
+
 // UnmarshalJSON stores the raw payload. Use Type() to inspect the discriminator
 // or As<Member>() to materialize a concrete value.
 func (u *Transport4) UnmarshalJSON(data []byte) error {
