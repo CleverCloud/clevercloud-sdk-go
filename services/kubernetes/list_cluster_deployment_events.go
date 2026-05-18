@@ -36,7 +36,7 @@ Example:
 x-service: kubernetes
 operationId: listClusterDeploymentEvents
 */
-func Listclusterdeploymentevents(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, opts ...Option) client.Response[[]models.DeploymentEvent] {
+func Listclusterdeploymentevents(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, opts ...Option) client.Response[[]models.ClusterDeploymentEvent] {
 	ctx, span := tracer.Start(ctx, "listClusterDeploymentEvents", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
@@ -49,7 +49,7 @@ func Listclusterdeploymentevents(ctx context.Context, c *client.Client, tracer t
 	}
 
 	// Make API call
-	response := client.Get[[]models.DeploymentEvent](ctx, c, path)
+	response := client.Get[[]models.ClusterDeploymentEvent](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

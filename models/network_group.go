@@ -2,11 +2,27 @@
 
 package models
 
+import "encoding/json"
+
+const NetworkGroupType = "NETWORK_GROUP"
+
 // NetworkGroup
 type NetworkGroup struct {
-	ID         string             `json:"id"`
-	Network    Network1           `json:"network"`
-	OwnerID    string             `json:"ownerId"`
-	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
-	PrivateKey string             `json:"privateKey"`
+	ID    string              `json:"id"`
+	Peers []NetworkGroupPeer1 `json:"peers,omitempty"`
+	Type  string              `json:"type"`
+}
+
+// GetType returns the type identifier for NetworkGroup
+func (r NetworkGroup) GetType() string {
+	return NetworkGroupType
+}
+
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(NetworkGroup{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v NetworkGroup) MarshalJSON() ([]byte, error) {
+	v.Type = NetworkGroupType
+	type alias NetworkGroup
+	return json.Marshal((alias)(v))
 }

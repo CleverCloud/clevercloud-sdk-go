@@ -4,6 +4,7 @@ package log
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -12,9 +13,22 @@ type Option func(*Options)
 
 // Options holds query parameters for log operations
 type Options struct {
+	Cursor               *string   `url:"cursor,omitempty"`
 	Executionstatus      *[]string `url:"executionStatus,omitempty"`
 	Executionstatusnotin *[]string `url:"executionStatusNotIn,omitempty"`
+	Kind                 *[]string `url:"kind,omitempty"`
+	Limit                *int      `url:"limit,omitempty"`
+	Recipienttype        *[]string `url:"recipientType,omitempty"`
+	Resourceid           *string   `url:"resourceId,omitempty"`
 	Status               *[]string `url:"status,omitempty"`
+	Tenantid             *string   `url:"tenantId,omitempty"`
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
 }
 
 // WithExecutionstatus sets the executionStatus query parameter
@@ -31,10 +45,45 @@ func WithExecutionstatusnotin(executionStatusNotIn []string) Option {
 	}
 }
 
+// WithKind sets the kind query parameter
+func WithKind(kind []string) Option {
+	return func(o *Options) {
+		o.Kind = &kind
+	}
+}
+
+// WithLimit sets the limit query parameter
+func WithLimit(limit int) Option {
+	return func(o *Options) {
+		o.Limit = &limit
+	}
+}
+
+// WithRecipienttype sets the recipientType query parameter
+func WithRecipienttype(recipientType []string) Option {
+	return func(o *Options) {
+		o.Recipienttype = &recipientType
+	}
+}
+
+// WithResourceid sets the resourceId query parameter
+func WithResourceid(resourceId string) Option {
+	return func(o *Options) {
+		o.Resourceid = &resourceId
+	}
+}
+
 // WithStatus sets the status query parameter
 func WithStatus(status []string) Option {
 	return func(o *Options) {
 		o.Status = &status
+	}
+}
+
+// WithTenantid sets the tenantId query parameter
+func WithTenantid(tenantId string) Option {
+	return func(o *Options) {
+		o.Tenantid = &tenantId
 	}
 }
 
@@ -46,14 +95,32 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
 	if options.Executionstatus != nil {
 		params = append(params, fmt.Sprintf("executionStatus=%v", *options.Executionstatus))
 	}
 	if options.Executionstatusnotin != nil {
 		params = append(params, fmt.Sprintf("executionStatusNotIn=%v", *options.Executionstatusnotin))
 	}
+	if options.Kind != nil {
+		params = append(params, fmt.Sprintf("kind=%v", *options.Kind))
+	}
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
+	if options.Recipienttype != nil {
+		params = append(params, fmt.Sprintf("recipientType=%v", *options.Recipienttype))
+	}
+	if options.Resourceid != nil {
+		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
+	}
 	if options.Status != nil {
 		params = append(params, fmt.Sprintf("status=%v", *options.Status))
+	}
+	if options.Tenantid != nil {
+		params = append(params, fmt.Sprintf("tenantId=%s", url.QueryEscape(*options.Tenantid)))
 	}
 
 	if len(params) == 0 {

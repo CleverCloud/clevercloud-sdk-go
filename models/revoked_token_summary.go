@@ -6,8 +6,9 @@ import "time"
 
 // RevokedTokenSummary
 type RevokedTokenSummary struct {
-	CreatorID    string    `json:"creatorId"`
-	RevocationID string    `json:"revocationId"`
-	RevokedAt    time.Time `json:"revokedAt"`
-	Scope        string    `json:"scope"`
+	CreatorID    string      `json:"creatorId"` // Identifier of the token creator: service account ('sa_<UUID>'), robot ('robot_<UUID>'), or identi...
+	CreatorKind  CreatorKind `json:"creatorKind"`
+	RevocationID string      `json:"revocationId"`
+	RevokedAt    time.Time   `json:"revokedAt"`
+	Scope        string      `json:"scope"`
 }
