@@ -34,14 +34,14 @@ Example:
 x-service: cellar
 operationId: createCellar
 */
-func Createcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeCellar) client.Response[models.Cellar1] {
+func Createcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "createCellar")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-cellar/resources")
 
 	// Make API call
-	response := client.Post[models.Cellar1](ctx, c, path, requestBody)
+	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -15,7 +15,6 @@ type Option func(*Options)
 type Options struct {
 	Count              *int      `url:"count,omitempty"`
 	Cursor             *string   `url:"cursor,omitempty"`
-	Force              *bool     `url:"force,omitempty"`
 	Includeunavailable *bool     `url:"includeUnavailable,omitempty"`
 	Prefix             *string   `url:"prefix,omitempty"`
 	Purgeobjects       *bool     `url:"purgeObjects,omitempty"`
@@ -36,13 +35,6 @@ func WithCount(count int) Option {
 func WithCursor(cursor string) Option {
 	return func(o *Options) {
 		o.Cursor = &cursor
-	}
-}
-
-// WithForce sets the force query parameter
-func WithForce(force bool) Option {
-	return func(o *Options) {
-		o.Force = &force
 	}
 }
 
@@ -108,9 +100,6 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Cursor != nil {
 		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
-	}
-	if options.Force != nil {
-		params = append(params, fmt.Sprintf("force=%t", *options.Force))
 	}
 	if options.Includeunavailable != nil {
 		params = append(params, fmt.Sprintf("includeUnavailable=%t", *options.Includeunavailable))

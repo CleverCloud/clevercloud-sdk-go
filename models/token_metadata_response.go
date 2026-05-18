@@ -6,13 +6,14 @@ import "time"
 
 // TokenMetadataResponse
 type TokenMetadataResponse struct {
-	CreatedAt    time.Time  `json:"createdAt"`
-	CreatorID    string     `json:"creatorId"`
-	ExpiresAt    time.Time  `json:"expiresAt"`
-	Resource     string     `json:"resource"`
-	RevocationID string     `json:"revocationId"`
-	RevokedAt    *time.Time `json:"revokedAt,omitempty"`
-	Scope        string     `json:"scope"`
-	TTL          string     `json:"ttl"`
-	Tenant       TenantID   `json:"tenant"`
+	CreatedAt    time.Time   `json:"createdAt"`
+	CreatorID    string      `json:"creatorId"` // Identifier of the token creator: service account ('sa_<UUID>'), robot ('robot_<UUID>'), or identi...
+	CreatorKind  CreatorKind `json:"creatorKind"`
+	ExpiresAt    time.Time   `json:"expiresAt"`
+	Resource     string      `json:"resource"`
+	RevocationID string      `json:"revocationId"`
+	RevokedAt    *time.Time  `json:"revokedAt,omitempty"`
+	Scope        string      `json:"scope"`
+	TTL          string      `json:"ttl"`
+	Tenant       TenantID    `json:"tenant"`
 }

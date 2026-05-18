@@ -8,7 +8,7 @@ import (
 )
 
 // DrainRecipient
-// Tagged union - can hold one of: DatadogRecipient1, ElasticsearchRecipient1, NewRelicRecipient1, OVHTCPRecipient1, RawRecipient1, SyslogTCPRecipient1, SyslogUDPRecipient1
+// Tagged union - can hold one of: BetterStackRecipient1, DatadogRecipient1, ElasticsearchRecipient1, NewRelicRecipient1, OVHTCPRecipient1, RawRecipient1, SyslogTCPRecipient1, SyslogUDPRecipient1
 type DrainRecipient struct {
 	raw json.RawMessage
 }
@@ -41,6 +41,9 @@ func (u *DrainRecipient) UnmarshalJSON(data []byte) error {
 // matching concrete type instead of a byte slice.
 func (u DrainRecipient) Format(f fmt.State, verb rune) {
 	switch u.Type() {
+	case BetterStackRecipient1Type:
+		v, _ := u.AsBetterStackRecipient1()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
 	case DatadogRecipient1Type:
 		v, _ := u.AsDatadogRecipient1()
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
@@ -75,6 +78,28 @@ func (u DrainRecipient) Format(f fmt.State, verb rune) {
 // Lets generic code accept any variant without naming each one.
 type DrainRecipientVariant interface {
 	ToDrainRecipient() DrainRecipient
+}
+
+// AsBetterStackRecipient1 decodes the held payload as a BetterStackRecipient1. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient) AsBetterStackRecipient1() (BetterStackRecipient1, bool) {
+	var v BetterStackRecipient1
+	if t, err := peekType(u.raw); err != nil || t != BetterStackRecipient1Type {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipientFromBetterStackRecipient1 wraps a BetterStackRecipient1 into a DrainRecipient ready to be JSON-encoded.
+func NewDrainRecipientFromBetterStackRecipient1(v BetterStackRecipient1) (DrainRecipient, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient{}, err
+	}
+	return DrainRecipient{raw: raw}, nil
 }
 
 // AsDatadogRecipient1 decodes the held payload as a DatadogRecipient1. The bool is false if the union

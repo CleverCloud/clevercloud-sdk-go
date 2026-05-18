@@ -13,36 +13,36 @@ import (
 )
 
 /*
-Listdrainsbyresource
+Listdrainsbyapplication
 
-List drains for a resource.
+Get drains.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - ownerId:
-  - resourceId: Resource identifier for drain target. Accepted prefixes: app_, cellar_, postgresql_, mysql_, mongodb_, elasticsearch_, redis_, pulsar_, matomo_, keycloak_, otoroshi_, cumulocity_, hivemq_, metabase_, xen_, ai_, kms_, kubernetes_, kv_, ts_, grist_, addon_.
+  - applicationId: Resource identifier for drain target. Accepted prefixes: app_, cellar_, postgresql_, mysql_, mongodb_, elasticsearch_, redis_, pulsar_, matomo_, keycloak_, otoroshi_, cumulocity_, hivemq_, metabase_, xen_, ai_, kms_, kubernetes_, kv_, ts_, grist_, addon_.
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := log.Listdrainsbyresource(ctx, client, tracer, ownerId, resourceId, opts...)
+	response := log.Listdrainsbyapplication(ctx, client, tracer, ownerId, applicationId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: log
-operationId: listDrainsByResource
+operationId: listDrainsByApplication
 */
-func Listdrainsbyresource(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string, opts ...Option) client.Response[[]models.Drain] {
-	ctx, span := tracer.Start(ctx, "listDrainsByResource", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("resourceId", resourceId)))
+func Listdrainsbyapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, applicationId string, opts ...Option) client.Response[[]models.Drain] {
+	ctx, span := tracer.Start(ctx, "listDrainsByApplication", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("applicationId", applicationId)))
 	defer span.End()
 
-	path := utils.Path("/v4/drains/organisations/%s/resources/%s/drains", ownerId, resourceId)
+	path := utils.Path("/v4/drains/organisations/%s/applications/%s/drains", ownerId, applicationId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)

@@ -8,7 +8,7 @@ import (
 )
 
 // DrainRecipient1
-// Tagged union - can hold one of: DatadogRecipient, ElasticsearchRecipient, NewRelicRecipient, OVHTCPRecipient, RawRecipient, SyslogTCPRecipient, SyslogUDPRecipient
+// Tagged union - can hold one of: BetterStackRecipient, DatadogRecipient, ElasticsearchRecipient, NewRelicRecipient, OVHTCPRecipient, RawRecipient, SyslogTCPRecipient, SyslogUDPRecipient
 type DrainRecipient1 struct {
 	raw json.RawMessage
 }
@@ -41,6 +41,9 @@ func (u *DrainRecipient1) UnmarshalJSON(data []byte) error {
 // matching concrete type instead of a byte slice.
 func (u DrainRecipient1) Format(f fmt.State, verb rune) {
 	switch u.Type() {
+	case BetterStackRecipientType:
+		v, _ := u.AsBetterStackRecipient()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
 	case DatadogRecipientType:
 		v, _ := u.AsDatadogRecipient()
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
@@ -75,6 +78,28 @@ func (u DrainRecipient1) Format(f fmt.State, verb rune) {
 // Lets generic code accept any variant without naming each one.
 type DrainRecipient1Variant interface {
 	ToDrainRecipient1() DrainRecipient1
+}
+
+// AsBetterStackRecipient decodes the held payload as a BetterStackRecipient. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u DrainRecipient1) AsBetterStackRecipient() (BetterStackRecipient, bool) {
+	var v BetterStackRecipient
+	if t, err := peekType(u.raw); err != nil || t != BetterStackRecipientType {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewDrainRecipient1FromBetterStackRecipient wraps a BetterStackRecipient into a DrainRecipient1 ready to be JSON-encoded.
+func NewDrainRecipient1FromBetterStackRecipient(v BetterStackRecipient) (DrainRecipient1, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return DrainRecipient1{}, err
+	}
+	return DrainRecipient1{raw: raw}, nil
 }
 
 // AsDatadogRecipient decodes the held payload as a DatadogRecipient. The bool is false if the union

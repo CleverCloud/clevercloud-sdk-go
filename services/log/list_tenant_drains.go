@@ -8,38 +8,40 @@ import (
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
+	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listdrains
+Listtenantdrains
 
-List every drain across tenants (admin).
+List tenant-scoped drains (e.g. auditlogs).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - ownerId:
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := log.Listdrains(ctx, client, tracer, opts...)
+	response := log.Listtenantdrains(ctx, client, tracer, ownerId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: log
-operationId: listDrains
+operationId: listTenantDrains
 */
-func Listdrains(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.DrainPage] {
-	ctx, span := tracer.Start(ctx, "listDrains")
+func Listtenantdrains(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.Drain] {
+	ctx, span := tracer.Start(ctx, "listTenantDrains", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
-	path := utils.Path("/v4/drains")
+	path := utils.Path("/v4/drains/organisations/%s/drains", ownerId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)
@@ -48,7 +50,7 @@ func Listdrains(ctx context.Context, c *client.Client, tracer trace.Tracer, opts
 	}
 
 	// Make API call
-	response := client.Get[models.DrainPage](ctx, c, path)
+	response := client.Get[[]models.Drain](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
