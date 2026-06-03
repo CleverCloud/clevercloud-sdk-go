@@ -9,7 +9,7 @@ const PublicMateriaLogicalDBDataType = "PublicMateriaLogicalDBData"
 // PublicMateriaLogicalDBData
 type PublicMateriaLogicalDBData struct {
 	AddonID    string            `json:"addonId"`
-	LayerName  MateriaLayerName  `json:"layerName"`
+	LayerName  string            `json:"layerName"`
 	OrgID      TenantIdOrOwnerId `json:"orgId"`
 	QuotaBytes int               `json:"quotaBytes"`
 	Type       string            `json:"type"`
