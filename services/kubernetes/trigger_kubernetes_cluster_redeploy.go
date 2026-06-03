@@ -20,12 +20,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - ownerId:
   - clusterId: A Kubernetes cluster identifier
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, clusterId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +35,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterRedeploy
 */
-func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
+func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.RedeployControlPlanePayload) client.Response[models.Cluster1] {
 	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, nil)
+	response := client.Post[models.Cluster1](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

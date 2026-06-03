@@ -13,6 +13,8 @@ const (
 	DeploymentStepNameNetworkGroup        DeploymentStepName = "NETWORK_GROUP"
 	DeploymentStepNameOtelConfig          DeploymentStepName = "OTEL_CONFIG"
 	DeploymentStepNamePLUGIN              DeploymentStepName = "PLUGIN"
+	DeploymentStepNameRedeployAfterYaml   DeploymentStepName = "REDEPLOY_AFTER_YAML"
+	DeploymentStepNameRedeployBeforeYaml  DeploymentStepName = "REDEPLOY_BEFORE_YAML"
 	DeploymentStepNameSTORAGE             DeploymentStepName = "STORAGE"
 )
 

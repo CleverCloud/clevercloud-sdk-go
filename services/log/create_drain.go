@@ -4,6 +4,7 @@ package log
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -14,7 +15,7 @@ import (
 /*
 Createdrain
 
-Create drain.
+Create drain. By default the drain recipient is probed before persistence; pass `skipCheck=true` to bypass (useful for Terraform and other IaC flows where the target may not yet be reachable).
 
 Parameters:
   - ctx: context for the request
@@ -23,12 +24,13 @@ Parameters:
   - ownerId:
   - applicationId: Resource identifier for drain creation. Accepted prefixes: app_, postgresql_, mysql_, mongodb_, redis_, elasticsearch_.
   - requestBody: the request payload
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := log.Createdrain(ctx, client, tracer, ownerId, applicationId, requestBody)
+	response := log.Createdrain(ctx, client, tracer, ownerId, applicationId, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,11 +39,17 @@ Example:
 x-service: log
 operationId: createDrain
 */
-func Createdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, applicationId string, requestBody *models.WannabeDrain) client.Response[models.Drain] {
+func Createdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, applicationId string, requestBody *models.WannabeDrain, opts ...Option) client.Response[models.Drain] {
 	ctx, span := tracer.Start(ctx, "createDrain", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("applicationId", applicationId)))
 	defer span.End()
 
 	path := utils.Path("/v4/drains/organisations/%s/applications/%s/drains", ownerId, applicationId)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Post[models.Drain](ctx, c, path, requestBody)

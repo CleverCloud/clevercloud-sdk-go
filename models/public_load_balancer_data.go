@@ -8,14 +8,12 @@ const PublicLoadBalancerDataType = "PublicLoadBalancerData"
 
 // PublicLoadBalancerData
 type PublicLoadBalancerData struct {
-	DomainName     string             `json:"domainName"`
-	LbClusterID    StringMaxLength128 `json:"lbClusterId"`
-	ListenerID     StringMaxLength128 `json:"listenerId"`
-	LoadbalancerID LoadBalancerId     `json:"loadbalancerId"`
-	Port           int                `json:"port"`
-	RegionID       RegionId           `json:"regionId"`
-	TenantID       TenantID           `json:"tenantId"`
-	Type           string             `json:"type"`
+	DomainName  string   `json:"domainName"`
+	LbClusterID string   `json:"lbClusterId"`
+	Port        int      `json:"port"`
+	RegionID    RegionId `json:"regionId"`
+	TenantID    TenantID `json:"tenantId"`
+	Type        string   `json:"type"`
 }
 
 // GetType returns the type identifier for PublicLoadBalancerData

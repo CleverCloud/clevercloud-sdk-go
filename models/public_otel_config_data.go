@@ -10,7 +10,6 @@ const PublicOtelConfigDataType = "PublicOtelConfigData"
 type PublicOtelConfigData struct {
 	LogsEndpoint    string  `json:"logsEndpoint"`
 	MetricsEndpoint string  `json:"metricsEndpoint"`
-	OtelID          string  `json:"otelId"`
 	TenantID        OwnerID `json:"tenantId"`
 	TracesEndpoint  string  `json:"tracesEndpoint"`
 	Type            string  `json:"type"`

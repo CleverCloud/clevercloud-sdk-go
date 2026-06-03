@@ -20,6 +20,7 @@ type Options struct {
 	Limit                *int      `url:"limit,omitempty"`
 	Recipienttype        *[]string `url:"recipientType,omitempty"`
 	Resourceid           *string   `url:"resourceId,omitempty"`
+	Skipcheck            *bool     `url:"skipCheck,omitempty"`
 	Status               *[]string `url:"status,omitempty"`
 	Tenantid             *string   `url:"tenantId,omitempty"`
 }
@@ -73,6 +74,13 @@ func WithResourceid(resourceId string) Option {
 	}
 }
 
+// WithSkipcheck sets the skipCheck query parameter
+func WithSkipcheck(skipCheck bool) Option {
+	return func(o *Options) {
+		o.Skipcheck = &skipCheck
+	}
+}
+
 // WithStatus sets the status query parameter
 func WithStatus(status []string) Option {
 	return func(o *Options) {
@@ -115,6 +123,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
+	}
+	if options.Skipcheck != nil {
+		params = append(params, fmt.Sprintf("skipCheck=%t", *options.Skipcheck))
 	}
 	if options.Status != nil {
 		params = append(params, fmt.Sprintf("status=%v", *options.Status))

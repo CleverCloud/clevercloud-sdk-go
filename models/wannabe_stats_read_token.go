@@ -5,5 +5,5 @@ package models
 // WannabeStatsReadToken
 type WannabeStatsReadToken struct {
 	Applications []PlatformApplication `json:"applications,omitempty"`
-	TTL          string                `json:"ttl"`
+	TTL          *string               `json:"ttl,omitempty"`
 }

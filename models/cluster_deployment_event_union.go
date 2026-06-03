@@ -8,7 +8,7 @@ import (
 )
 
 // ClusterDeploymentEvent
-// Tagged union - can hold one of: ClusterItem, ClusterStatus
+// Tagged union - can hold one of: ClusterItem, ClusterStatus, NodeLifecycle
 type ClusterDeploymentEvent struct {
 	raw json.RawMessage
 }
@@ -46,6 +46,9 @@ func (u ClusterDeploymentEvent) Format(f fmt.State, verb rune) {
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
 	case ClusterStatusEvent:
 		v, _ := u.AsClusterStatus()
+		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
+	case NodeLifecycleEvent:
+		v, _ := u.AsNodeLifecycle()
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
 	default:
 		if u.raw == nil {
@@ -99,6 +102,28 @@ func (u ClusterDeploymentEvent) AsClusterStatus() (ClusterStatus, bool) {
 
 // NewClusterDeploymentEventFromClusterStatus wraps a ClusterStatus into a ClusterDeploymentEvent ready to be JSON-encoded.
 func NewClusterDeploymentEventFromClusterStatus(v ClusterStatus) (ClusterDeploymentEvent, error) {
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return ClusterDeploymentEvent{}, err
+	}
+	return ClusterDeploymentEvent{raw: raw}, nil
+}
+
+// AsNodeLifecycle decodes the held payload as a NodeLifecycle. The bool is false if the union
+// does not currently hold this variant or the payload fails to decode.
+func (u ClusterDeploymentEvent) AsNodeLifecycle() (NodeLifecycle, bool) {
+	var v NodeLifecycle
+	if t, err := peekType(u.raw); err != nil || t != NodeLifecycleEvent {
+		return v, false
+	}
+	if err := json.Unmarshal(u.raw, &v); err != nil {
+		return v, false
+	}
+	return v, true
+}
+
+// NewClusterDeploymentEventFromNodeLifecycle wraps a NodeLifecycle into a ClusterDeploymentEvent ready to be JSON-encoded.
+func NewClusterDeploymentEventFromNodeLifecycle(v NodeLifecycle) (ClusterDeploymentEvent, error) {
 	raw, err := json.Marshal(v)
 	if err != nil {
 		return ClusterDeploymentEvent{}, err
