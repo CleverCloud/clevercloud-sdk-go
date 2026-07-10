@@ -3,4 +3,15 @@
 package models
 
 // MateriaDB
-type MateriaDB struct{}
+type MateriaDB struct {
+	ClusterID string  `json:"clusterId"`
+	Host      string  `json:"host"`
+	ID        string  `json:"id"`
+	Kind      Kind    `json:"kind"`
+	OwnerID   OwnerID `json:"ownerId"`
+	Plan      Plan    `json:"plan"`
+	Port      int     `json:"port"`
+	Status    Status  `json:"status"`
+	Token     string  `json:"token"`
+	TokenID   string  `json:"tokenId"`
+}

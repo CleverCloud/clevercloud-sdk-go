@@ -40,7 +40,7 @@ Example:
 x-service: postgresql
 operationId: updateDatabase
 */
-func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string, requestBody *models.WannaPatchPostgreSQLDatabase, opts ...Option) client.Response[models.PostgreSQLDatabase1] {
+func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string, requestBody *models.WannaPatchPostgreSQLDatabase, opts ...Option) client.Response[models.PostgreSQLDatabase] {
 	ctx, span := tracer.Start(ctx, "updateDatabase", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("databaseId", databaseId)))
 	defer span.End()
 
@@ -53,7 +53,7 @@ func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, 
 	}
 
 	// Make API call
-	response := client.Patch[models.PostgreSQLDatabase1](ctx, c, path, requestBody)
+	response := client.Patch[models.PostgreSQLDatabase](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

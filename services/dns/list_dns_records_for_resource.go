@@ -36,14 +36,14 @@ Example:
 x-service: dns
 operationId: listDnsRecordsForResource
 */
-func Listdnsrecordsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[[]models.DnsRecord1] {
+func Listdnsrecordsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[[]models.DnsRecord] {
 	ctx, span := tracer.Start(ctx, "listDnsRecordsForResource", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("resourceId", resourceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/dns/organisations/%s/resources/%s/records", tenantId, resourceId)
 
 	// Make API call
-	response := client.Get[[]models.DnsRecord1](ctx, c, path)
+	response := client.Get[[]models.DnsRecord](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

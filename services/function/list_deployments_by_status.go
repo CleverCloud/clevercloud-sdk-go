@@ -35,14 +35,14 @@ Example:
 x-service: function
 operationId: listDeploymentsByStatus
 */
-func Listdeploymentsbystatus(ctx context.Context, c *client.Client, tracer trace.Tracer, status string) client.Response[[]models.Deployment1] {
+func Listdeploymentsbystatus(ctx context.Context, c *client.Client, tracer trace.Tracer, status string) client.Response[[]models.Deployment] {
 	ctx, span := tracer.Start(ctx, "listDeploymentsByStatus", trace.WithAttributes(attribute.String("status", status)))
 	defer span.End()
 
 	path := utils.Path("/v4/functions/deployments/%s", status)
 
 	// Make API call
-	response := client.Get[[]models.Deployment1](ctx, c, path)
+	response := client.Get[[]models.Deployment](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

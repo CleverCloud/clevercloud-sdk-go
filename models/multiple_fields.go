@@ -8,8 +8,8 @@ const MultipleFieldsType = "fields"
 
 // MultipleFields
 type MultipleFields struct {
-	Fields MapFielderror1 `json:"fields"`
-	Type   string         `json:"type"`
+	Fields MapFielderror `json:"fields"`
+	Type   string        `json:"type"`
 }
 
 // GetType returns the type identifier for MultipleFields

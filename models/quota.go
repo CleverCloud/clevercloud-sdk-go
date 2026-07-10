@@ -3,4 +3,9 @@
 package models
 
 // Quota
-type Quota struct{}
+type Quota struct {
+	ID       string      `json:"id"`
+	Quotas   []QuotaItem `json:"quotas,omitempty"`
+	Tags     []string    `json:"tags,omitempty"`
+	TenantID TenantID    `json:"tenantId"`
+}

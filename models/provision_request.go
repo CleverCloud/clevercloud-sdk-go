@@ -4,9 +4,9 @@ package models
 
 // ProvisionRequest
 type ProvisionRequest struct {
+	AddonID       string    `json:"addon_id"`
 	AddonName     *string   `json:"addon_name,omitempty"`
 	CallbackURL   string    `json:"callback_url"`
-	HerokuID      string    `json:"heroku_id"`
 	LogplexToken  string    `json:"logplex_token"`
 	LogsCollector *string   `json:"logs_collector,omitempty"`
 	Options       MapString `json:"options"`

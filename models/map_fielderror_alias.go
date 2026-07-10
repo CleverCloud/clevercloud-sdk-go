@@ -3,4 +3,4 @@
 package models
 
 // MapFielderror
-type MapFielderror = map[string]FieldError1
+type MapFielderror = map[string]FieldError

@@ -8,7 +8,7 @@ import (
 )
 
 // Typed
-// Tagged union - can hold one of: Field, GatewayError, Input, MultipleFields, Operation, Resource1, Selector
+// Tagged union - can hold one of: Field, GatewayError, Input, MultipleFields, Operation, Resource, Selector
 type Typed struct {
 	raw json.RawMessage
 }
@@ -56,8 +56,8 @@ func (u Typed) Format(f fmt.State, verb rune) {
 	case OperationType:
 		v, _ := u.AsOperation()
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case Resource1Type:
-		v, _ := u.AsResource1()
+	case ResourceType:
+		v, _ := u.AsResource()
 		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
 	case SelectorType:
 		v, _ := u.AsSelector()
@@ -187,11 +187,11 @@ func NewTypedFromOperation(v Operation) (Typed, error) {
 	return Typed{raw: raw}, nil
 }
 
-// AsResource1 decodes the held payload as a Resource1. The bool is false if the union
+// AsResource decodes the held payload as a Resource. The bool is false if the union
 // does not currently hold this variant or the payload fails to decode.
-func (u Typed) AsResource1() (Resource1, bool) {
-	var v Resource1
-	if t, err := peekType(u.raw); err != nil || t != Resource1Type {
+func (u Typed) AsResource() (Resource, bool) {
+	var v Resource
+	if t, err := peekType(u.raw); err != nil || t != ResourceType {
 		return v, false
 	}
 	if err := json.Unmarshal(u.raw, &v); err != nil {
@@ -200,8 +200,8 @@ func (u Typed) AsResource1() (Resource1, bool) {
 	return v, true
 }
 
-// NewTypedFromResource1 wraps a Resource1 into a Typed ready to be JSON-encoded.
-func NewTypedFromResource1(v Resource1) (Typed, error) {
+// NewTypedFromResource wraps a Resource into a Typed ready to be JSON-encoded.
+func NewTypedFromResource(v Resource) (Typed, error) {
 	raw, err := json.Marshal(v)
 	if err != nil {
 		return Typed{}, err

@@ -3,4 +3,9 @@
 package models
 
 // CellarCluster
-type CellarCluster struct{}
+type CellarCluster struct {
+	Available bool   `json:"available"`
+	Host      string `json:"host"`
+	ID        int    `json:"id"`
+	Zone      string `json:"zone"`
+}

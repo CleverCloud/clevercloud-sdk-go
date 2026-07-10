@@ -13,9 +13,17 @@ type Option func(*Options)
 
 // Options holds query parameters for ipam operations
 type Options struct {
+	Prefix     *string   `url:"prefix,omitempty"`
 	Resourceid *[]string `url:"resourceId,omitempty"`
 	Since      *string   `url:"since,omitempty"`
 	Until      *string   `url:"until,omitempty"`
+}
+
+// WithPrefix sets the prefix query parameter
+func WithPrefix(prefix string) Option {
+	return func(o *Options) {
+		o.Prefix = &prefix
+	}
 }
 
 // WithResourceid sets the resourceId query parameter
@@ -47,6 +55,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Prefix != nil {
+		params = append(params, fmt.Sprintf("prefix=%s", url.QueryEscape(*options.Prefix)))
+	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
 	}

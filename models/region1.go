@@ -2,5 +2,15 @@
 
 package models
 
+import "time"
+
 // Region1
-type Region1 struct{}
+type Region1 struct {
+	Credentials *string      `json:"credentials,omitempty"`
+	ID          RegionId     `json:"id"`
+	Name        *string      `json:"name,omitempty"`
+	OwnerID     TenantID     `json:"ownerId"`
+	Provider    ProviderType `json:"provider"`
+	Tags        []string     `json:"tags,omitempty"`
+	UpdatedAt   time.Time    `json:"updatedAt"`
+}

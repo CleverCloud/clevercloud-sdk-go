@@ -2,16 +2,34 @@
 
 package models
 
+import "encoding/json"
+
+const ResourceType = "resource"
+
 // Resource
 type Resource struct {
-	Consumption Consumption               `json:"consumption"`
-	Description string                    `json:"description"`
-	ID          string                    `json:"id"`
-	Kind        string                    `json:"kind"`
-	Name        StringMaxLength128        `json:"name"`
-	ProductID   string                    `json:"productId"`
-	Statuses    []DefaultIdentifiedStatus `json:"statuses,omitempty"`
-	Tags        []string                  `json:"tags,omitempty"`
-	TenantID    TenantID                  `json:"tenantId"`
-	Version     string                    `json:"version"`
+	Kind string `json:"kind"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+// GetType returns the type identifier for Resource
+func (r Resource) GetType() string {
+	return ResourceType
+}
+
+// MarshalJSON forces the discriminator field to the constant value before
+// encoding so that json.Marshal(Resource{...}) always produces a valid
+// payload — no need to set the type field manually.
+func (v Resource) MarshalJSON() ([]byte, error) {
+	v.Type = ResourceType
+	type alias Resource
+	return json.Marshal((alias)(v))
+}
+
+// ToTyped wraps the value into a Typed ready to be JSON-encoded.
+// The discriminator is set automatically by Resource's MarshalJSON.
+func (v Resource) ToTyped() Typed {
+	raw, _ := json.Marshal(v)
+	return Typed{raw: raw}
 }

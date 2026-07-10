@@ -2,5 +2,19 @@
 
 package models
 
+import "time"
+
 // Deployment
-type Deployment struct{}
+type Deployment struct {
+	CreatedAt   time.Time                `json:"createdAt"`
+	Description *DeploymentDescription   `json:"description,omitempty"`
+	ErrorReason *string                  `json:"errorReason,omitempty"`
+	FunctionID  FunctionID               `json:"functionId"`
+	ID          DeploymentID             `json:"id"`
+	Name        *DeploymentName          `json:"name,omitempty"`
+	Platform    FunctionPlatform         `json:"platform"`
+	Status      FunctionDeploymentStatus `json:"status"`
+	Tag         *DeploymentTag           `json:"tag,omitempty"`
+	URL         *string                  `json:"url,omitempty"`
+	UpdatedAt   time.Time                `json:"updatedAt"`
+}

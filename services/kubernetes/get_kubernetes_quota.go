@@ -33,14 +33,14 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesQuota
 */
-func Getkubernetesquota(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[models.Quota1] {
+func Getkubernetesquota(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[models.Quota] {
 	ctx, span := tracer.Start(ctx, "getKubernetesQuota", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/quota", ownerId)
 
 	// Make API call
-	response := client.Get[models.Quota1](ctx, c, path)
+	response := client.Get[models.Quota](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -36,14 +36,14 @@ Example:
 x-service: ipam
 operationId: getSpecificRegionForOwner
 */
-func Getspecificregionforowner(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string) client.Response[models.Region2] {
+func Getspecificregionforowner(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string) client.Response[models.Region1] {
 	ctx, span := tracer.Start(ctx, "getSpecificRegionForOwner", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ipam/organisations/%s/regions/%s", tenantId, regionId)
 
 	// Make API call
-	response := client.Get[models.Region2](ctx, c, path)
+	response := client.Get[models.Region1](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
