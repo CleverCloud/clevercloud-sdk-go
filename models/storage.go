@@ -3,4 +3,12 @@
 package models
 
 // Storage
-type Storage struct{}
+type Storage struct {
+	Configuration StorageConfiguration      `json:"configuration"`
+	ID            string                    `json:"id"`
+	Kind          StorageKind               `json:"kind"`
+	Label         string                    `json:"label"`
+	Statuses      []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Tags          []string                  `json:"tags,omitempty"`
+	TenantID      TenantID                  `json:"tenantId"`
+}

@@ -2,5 +2,17 @@
 
 package models
 
+import "time"
+
 // PostgreSQLDatabase
-type PostgreSQLDatabase struct{}
+type PostgreSQLDatabase struct {
+	AddonID      string       `json:"addonId"`
+	CreationDate time.Time    `json:"creationDate"`
+	DeletionDate *time.Time   `json:"deletionDate,omitempty"`
+	ID           string       `json:"id"`
+	Locale       string       `json:"locale"`
+	Mode         DatabaseMode `json:"mode"`
+	Name         string       `json:"name"`
+	OwnerID      string       `json:"ownerId"`
+	RealAddonID  string       `json:"realAddonId"`
+}

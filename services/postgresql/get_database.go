@@ -37,14 +37,14 @@ Example:
 x-service: postgresql
 operationId: getDatabase
 */
-func Getdatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string) client.Response[models.PostgreSQLDatabase1] {
+func Getdatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string) client.Response[models.PostgreSQLDatabase] {
 	ctx, span := tracer.Start(ctx, "getDatabase", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("databaseId", databaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/databases/%s", ownerId, postgreSQLId, databaseId)
 
 	// Make API call
-	response := client.Get[models.PostgreSQLDatabase1](ctx, c, path)
+	response := client.Get[models.PostgreSQLDatabase](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

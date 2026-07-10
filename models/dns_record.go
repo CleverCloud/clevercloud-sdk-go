@@ -2,5 +2,16 @@
 
 package models
 
+import "time"
+
 // DnsRecord
-type DnsRecord struct{}
+type DnsRecord struct {
+	Content    string        `json:"content"`
+	ID         string        `json:"id"`
+	Name       DnsDomainName `json:"name"`
+	OwnerID    TenantID      `json:"ownerId"`
+	ResourceID string        `json:"resourceId"`
+	TTL        int           `json:"ttl"`
+	Type       DNSRecordType `json:"type"`
+	UpdatedAt  time.Time     `json:"updatedAt"`
+}

@@ -37,14 +37,14 @@ Example:
 x-service: storage
 operationId: createStorage
 */
-func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeStorage) client.Response[models.Storage1] {
+func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeStorage) client.Response[models.Storage] {
 	ctx, span := tracer.Start(ctx, "createStorage", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/storages", tenantId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Storage1](ctx, c, path, requestBody)
+	response := client.Post[models.Storage](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

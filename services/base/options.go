@@ -4,7 +4,6 @@ package base
 
 import (
 	"fmt"
-	"net/url"
 	"strings"
 )
 
@@ -13,11 +12,8 @@ type Option func(*Options)
 
 // Options holds query parameters for base operations
 type Options struct {
-	From       *int      `url:"from,omitempty"`
-	Locationid *string   `url:"locationId,omitempty"`
-	Size       *int      `url:"size,omitempty"`
-	Tag        *[]string `url:"tag,omitempty"`
-	Tenantid   *string   `url:"tenantId,omitempty"`
+	From *int `url:"from,omitempty"`
+	Size *int `url:"size,omitempty"`
 }
 
 // WithFrom sets the from query parameter
@@ -27,31 +23,10 @@ func WithFrom(from int) Option {
 	}
 }
 
-// WithLocationid sets the locationId query parameter
-func WithLocationid(locationId string) Option {
-	return func(o *Options) {
-		o.Locationid = &locationId
-	}
-}
-
 // WithSize sets the size query parameter
 func WithSize(size int) Option {
 	return func(o *Options) {
 		o.Size = &size
-	}
-}
-
-// WithTag sets the tag query parameter
-func WithTag(tag []string) Option {
-	return func(o *Options) {
-		o.Tag = &tag
-	}
-}
-
-// WithTenantid sets the tenantId query parameter
-func WithTenantid(tenantId string) Option {
-	return func(o *Options) {
-		o.Tenantid = &tenantId
 	}
 }
 
@@ -66,17 +41,8 @@ func buildQueryString(opts ...Option) string {
 	if options.From != nil {
 		params = append(params, fmt.Sprintf("from=%d", *options.From))
 	}
-	if options.Locationid != nil {
-		params = append(params, fmt.Sprintf("locationId=%s", url.QueryEscape(*options.Locationid)))
-	}
 	if options.Size != nil {
 		params = append(params, fmt.Sprintf("size=%d", *options.Size))
-	}
-	if options.Tag != nil {
-		params = append(params, fmt.Sprintf("tag=%v", *options.Tag))
-	}
-	if options.Tenantid != nil {
-		params = append(params, fmt.Sprintf("tenantId=%s", url.QueryEscape(*options.Tenantid)))
 	}
 
 	if len(params) == 0 {

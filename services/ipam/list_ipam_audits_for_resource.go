@@ -36,14 +36,14 @@ Example:
 x-service: ipam
 operationId: listIpamAuditsForResource
 */
-func Listipamauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, auditIpamResourceId string) client.Response[[]models.IpamAudit1] {
+func Listipamauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, auditIpamResourceId string) client.Response[[]models.IpamAudit] {
 	ctx, span := tracer.Start(ctx, "listIpamAuditsForResource", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("auditIpamResourceId", auditIpamResourceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ipam/organisations/%s/audit/%s", tenantId, auditIpamResourceId)
 
 	// Make API call
-	response := client.Get[[]models.IpamAudit1](ctx, c, path)
+	response := client.Get[[]models.IpamAudit](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -6,7 +6,19 @@ import "time"
 
 // Token
 type Token struct {
-	ExpiryDate   time.Time `json:"expiryDate"`
-	RevocationID string    `json:"revocationId"`
-	Token        string    `json:"token"`
+	CreatedAt    time.Time            `json:"createdAt"`
+	Description  *StringMaxLength1024 `json:"description,omitempty"`
+	ExpiredAt    *time.Time           `json:"expiredAt,omitempty"`
+	ID           string               `json:"id"`
+	InstigatorID string               `json:"instigatorId"`
+	LocationID   string               `json:"locationId"`
+	Name         *StringMaxLength128  `json:"name,omitempty"`
+	ProductID    string               `json:"productId"`
+	ResourceID   *string              `json:"resourceId,omitempty"`
+	RevocationID string               `json:"revocationId"`
+	RevokedAt    *time.Time           `json:"revokedAt,omitempty"`
+	Status       TokenStateType       `json:"status"`
+	Tags         []string             `json:"tags,omitempty"`
+	TenantID     TenantID             `json:"tenantId"`
+	TokenType    TokenType            `json:"tokenType"`
 }

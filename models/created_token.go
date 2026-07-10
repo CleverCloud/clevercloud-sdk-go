@@ -4,7 +4,7 @@ package models
 
 // CreatedToken
 type CreatedToken struct {
-	Metadata     Token1  `json:"metadata"`
+	Metadata     Token   `json:"metadata"`
 	RefreshToken *string `json:"refreshToken,omitempty"`
 	Token        string  `json:"token"`
 }

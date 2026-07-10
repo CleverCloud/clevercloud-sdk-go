@@ -38,14 +38,14 @@ Example:
 x-service: function
 operationId: replaceDeployment
 */
-func Replacedeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, functionId string, deploymentId string, requestBody *models.DeploymentUpdateOpts) client.Response[models.Deployment1] {
+func Replacedeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, functionId string, deploymentId string, requestBody *models.DeploymentUpdateOpts) client.Response[models.Deployment] {
 	ctx, span := tracer.Start(ctx, "replaceDeployment", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("functionId", functionId), attribute.String("deploymentId", deploymentId)))
 	defer span.End()
 
 	path := utils.Path("/v4/functions/organisations/%s/functions/%s/deployments/%s", ownerId, functionId, deploymentId)
 
 	// Make API call
-	response := client.Put[models.Deployment1](ctx, c, path, requestBody)
+	response := client.Put[models.Deployment](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

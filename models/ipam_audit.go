@@ -2,5 +2,14 @@
 
 package models
 
+import "time"
+
 // IpamAudit
-type IpamAudit struct{}
+type IpamAudit struct {
+	Context    any              `json:"context"`
+	CreatedAt  time.Time        `json:"createdAt"`
+	Kind       WriteActionType2 `json:"kind"`
+	OwnerID    TenantID         `json:"ownerId"`
+	ResourceID string           `json:"resourceId"`
+	UserID     string           `json:"userId"`
+}

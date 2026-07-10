@@ -2,5 +2,18 @@
 
 package models
 
+import "time"
+
 // Network2
-type Network2 struct{}
+type Network2 struct {
+	Cidrv4    *string        `json:"cidrv4,omitempty"`
+	Cidrv6    *string        `json:"cidrv6,omitempty"`
+	CreatedAt time.Time      `json:"createdAt"`
+	Details   NetworkDetails `json:"details"`
+	ID        NetworkId      `json:"id"`
+	Kind      NetworkKind    `json:"kind"`
+	Offsetv4  *int           `json:"offsetv4,omitempty"`
+	Offsetv6  *int           `json:"offsetv6,omitempty"`
+	OwnerID   TenantID       `json:"ownerId"`
+	UpdatedAt time.Time      `json:"updatedAt"`
+}

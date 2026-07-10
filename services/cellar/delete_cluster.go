@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: deleteCluster
 */
-func Deletecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[models.CellarCluster1] {
+func Deletecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[models.CellarCluster] {
 	ctx, span := tracer.Start(ctx, "deleteCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.Int64("ClusterIndex", ClusterIndex)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters/%s", ownerId, ClusterIndex)
 
 	// Make API call
-	response := client.Delete[models.CellarCluster1](ctx, c, path)
+	response := client.Delete[models.CellarCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

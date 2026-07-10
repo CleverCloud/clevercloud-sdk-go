@@ -20,8 +20,13 @@ help:
 .PHONY: all
 all: build check
 
+# `clean` first so files for schemas/operations removed from the spec don't
+# linger and clash with current output (e.g. a deleted union leaving a stale
+# *_union.go that redeclares an identifier). Generators only ever write files
+# for schemas present in the spec — they never delete — so orphans must be
+# swept before each build.
 .PHONY: build
-build: generate-models generate-services generate-builder
+build: clean generate-models generate-services generate-builder
 
 .PHONY: generate-models
 generate-models:
