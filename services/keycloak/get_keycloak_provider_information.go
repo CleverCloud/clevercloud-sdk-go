@@ -11,9 +11,10 @@ import (
 )
 
 /*
-Getkeycloakproviderinformation
+GetKeycloakProviderInformation GET /v4/addon-providers/addon-keycloak
 
-retrieve the Keycloak provider information
+Source: ovd AddonKeycloakAddonActor.scala:1317 getProviderInformation
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -24,23 +25,23 @@ Parameters:
 
 Example:
 
-	response := keycloak.Getkeycloakproviderinformation(ctx, client, tracer)
+	response := keycloak.GetKeycloakProviderInformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: keycloak
-operationId: getKeycloakProviderInformation
+operationId: get_keycloak_provider_information
 */
-func Getkeycloakproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
-	ctx, span := tracer.Start(ctx, "getKeycloakProviderInformation")
+func GetKeycloakProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.KeycloakProviderView] {
+	ctx, span := tracer.Start(ctx, "get_keycloak_provider_information")
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/keycloak")
+	path := utils.Path("/v4/addon-providers/addon-keycloak")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.KeycloakProviderView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,18 +12,32 @@ import (
 )
 
 /*
-Deleteotoroshiapikey
+Deleteotoroshiapikey **Legacy**: ovd AIProviderController.scala:207 deleteApiKeys()
+**Algorithm**:
+  - Verify tenancy, undeploy + delete apikey on Otoroshi
+  - Returns ApiKeyDeletionResult with per-step success/failure
 
-delete route APIKey
+**Conformity**: YES (Cloud Versatile: returns error result when Otoroshi not configured)
+
+DELETE /v4/ai/.../endpoints/{endpoint_id}/apikeys/{apikey_id} — delete API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — deleteApiKeys
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — deleteApiKeys()
+Behavior: verifies tenancy, calls otoroshiClient.undeployApiKey + deleteApiKey.
+
+	Returns ApiKeyDeletionResult with success/failure status for each step.
+	Partial failures return the result with an error field.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - apikeyId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - apikeyId: Otoroshi API key ID
 
 # Returns the operation result or an error
 

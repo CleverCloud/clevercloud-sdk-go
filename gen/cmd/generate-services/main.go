@@ -37,6 +37,12 @@ var SERVICE_NAME_EXCEPTIONS = map[string]string{
 	"drain":  "drains",
 	"drains": "drains",
 
+	// `internal` is reserved by Go: a package at services/internal is importable only from
+	// services/..., so builder.go at the module root cannot reach it and the SDK stops
+	// compiling. AXO publishes an `Internal` tag (46 operations), hence the rename.
+	"internal": "internalapi",
+	"Internal": "internalapi",
+
 	// Example of consolidating related services
 	// "keycloak":        "product", // Move keycloak operations to product package
 	// "matomo":          "product", // Move matomo operations to product package
@@ -449,13 +455,13 @@ func generateOperationFile(packageDir string, op ServiceOperation) error {
 	responseType := formatResponseTypeJen(op.ResponseType)
 
 	// Build function comment
-	commentLines := []string{op.FunctionName + " " + op.Summary}
+	commentLines := []string{op.FunctionName + " " + sanitizeComment(op.Summary)}
 	if op.Description != "" {
-		commentLines = append(commentLines, "", op.Description)
+		commentLines = append(commentLines, "", sanitizeComment(op.Description))
 	}
 	commentLines = append(commentLines, "", "Parameters:", "  - ctx: context for the request", "  - client: the Clever Cloud client", "  - tracer: OpenTelemetry tracer for observability")
 	for _, p := range op.PathParams {
-		commentLines = append(commentLines, fmt.Sprintf("  - %s: %s", p.Name, p.Description))
+		commentLines = append(commentLines, fmt.Sprintf("  - %s: %s", p.Name, sanitizeComment(p.Description)))
 	}
 	if op.HasRequestBody {
 		commentLines = append(commentLines, "  - requestBody: the request payload")
@@ -964,21 +970,29 @@ func derivePackageFromPath(path string) string {
 func fixIDSuffixes(s string) string {
 	// Fix common Go naming conventions for ID-related suffixes
 	// This ensures getPulsar becomes GetPulsar, getId becomes GetID, etc.
+	// Acronyms that Go spells in full caps. This table is duplicated in
+	// generate-services/main.go and generate-builder/main.go and MUST stay identical: the two
+	// generators derive the same function names independently, and a divergence produces a
+	// builder that calls a service function under a name the services package never emitted.
+	// It had drifted — services knew Ipam/Sql/Ttl/Uri/Uuid, the builder knew Yaml — and
+	// `builder.go` referenced `GetInternalBestAppForUri` where the package exports
+	// `GetInternalBestAppForURI`.
 	replacements := map[string]string{
-		"Id":   "ID",
-		"Ip":   "IP",
-		"Ipam": "IPAM",
-		"Url":  "URL",
-		"Uri":  "URI",
-		"Api":  "API",
-		"Tls":  "TLS",
-		"Ttl":  "TTL",
-		"Sql":  "SQL",
-		"Http": "HTTP",
+		"Api":   "API",
+		"Http":  "HTTP",
 		"Https": "HTTPS",
-		"Json": "JSON",
-		"Xml":  "XML",
-		"Uuid": "UUID",
+		"Id":    "ID",
+		"Ip":    "IP",
+		"Ipam":  "IPAM",
+		"Json":  "JSON",
+		"Sql":   "SQL",
+		"Tls":   "TLS",
+		"Ttl":   "TTL",
+		"Uri":   "URI",
+		"Url":   "URL",
+		"Uuid":  "UUID",
+		"Xml":   "XML",
+		"Yaml":  "YAML",
 	}
 
 	for old, new := range replacements {
@@ -1047,4 +1061,17 @@ func applyMappingRules(operationID, path string, tags []string) string {
 func fileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil
+}
+
+// sanitizeComment makes spec prose safe to embed in a Go block comment.
+//
+// Descriptions in the AXO spec are the handlers' Rust doc comments, so they carry prose that a
+// Scala-generated spec never did: Markdown, MIME wildcards like `*/*`, and globs like
+// `KV_*/REDIS_*`. Each of those contains `*/`, which closes the generated block comment early
+// and leaves the remainder of the description as bare tokens — "expected declaration, found '*'".
+// Three operations trip this today (updateOrganisationAvatar, get_ping, createMateriaKv).
+//
+// The sequence is spaced rather than dropped so the prose still reads correctly.
+func sanitizeComment(text string) string {
+	return strings.ReplaceAll(text, "*/", "* /")
 }

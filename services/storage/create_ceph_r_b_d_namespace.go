@@ -12,16 +12,40 @@ import (
 )
 
 /*
-Createcephrbdnamespace
+Createcephrbdnamespace POST /v4/tenants/{tenantId}/ceph-rbd-namespaces -- create a Ceph RBD namespace.
 
-Create a new ceph rbd namespace.
+Source: ovd StorageController.scala:221 createCephRBDNamespace()
+Schema: V3__add_ceph_rbd_namespace_table.sql — table ceph_rbd_namespace
+Behavior: inserts namespace row with PENDING status, calls Ceph to create namespace,
+
+	updates status to PROVISIONED.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Create a Ceph RBD namespace in a pool.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- Generate namespace ID, create CephRBDNamespaceRecord with PENDING status
+- INSERT into ceph_rbd_namespace table
+- POST /api/block/pool/{pool}/namespace to Ceph Dashboard
+- UPDATE status to PROVISIONED
+- Source: ovd StorageController.scala:221, StorageRepository.scala:382
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_rbd_op:create_namespace` on the path tenant
+  - Insert namespace in DB with PENDING status
+  - Call ceph.create_rbd_namespace(); a failure answers with the mapped Ceph
+    status (legacy semantics, refs #2901) after rolling the PENDING row back
+    best-effort (an axo addition: nothing ever reaps PENDING orphans)
+  - Update status to PROVISIONED on success
+  - Return 201 with CephRBDNamespaceView
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +61,14 @@ Example:
 x-service: storage
 operationId: createCephRBDNamespace
 */
-func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephRBDNamespace) client.Response[models.CephRBDNamespace] {
+func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CreateCephRBDNamespaceRequest) client.Response[models.CephRBDNamespaceView] {
 	ctx, span := tracer.Start(ctx, "createCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-rbd-namespaces", tenantId, clusterId)
 
 	// Make API call
-	response := client.Post[models.CephRBDNamespace](ctx, c, path, requestBody)
+	response := client.Post[models.CephRBDNamespaceView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

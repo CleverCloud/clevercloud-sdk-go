@@ -12,15 +12,26 @@ import (
 )
 
 /*
-Createversionupdateotoroshi
+Createversionupdateotoroshi POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/version/update — update version.
 
-update version
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — updateVersion()
+
+📥 **Algo Source (Legacy):**
+- Fetch addon from DB
+- Verify targetVersion is in config.availableVersions
+- Get java_application_id
+- Update CC_OTOROSHI_VERSION env var on Java app via cc-api
+- Reboot Java app via PaaS
+- Return updated OtoroshiView
+- Source: ovd OtoroshiProviderService.scala:614 updateVersion()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +47,14 @@ Example:
 x-service: otoroshi
 operationId: createVersionUpdateOtoroshi
 */
-func Createversionupdateotoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string, requestBody *models.OtoroshiPatchRequest) client.Response[models.Otoroshi] {
+func Createversionupdateotoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string, requestBody *models.PatchOtoroshiRequest) client.Response[models.OtoroshiView] {
 	ctx, span := tracer.Start(ctx, "createVersionUpdateOtoroshi", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-otoroshi/addons/%s/version/update", OtoroshiId)
 
 	// Make API call
-	response := client.Post[models.Otoroshi](ctx, c, path, requestBody)
+	response := client.Post[models.OtoroshiView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

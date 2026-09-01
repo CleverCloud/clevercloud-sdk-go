@@ -12,16 +12,25 @@ import (
 )
 
 /*
-Updatecephcluster
+Updatecephcluster PATCH /v4/tenants/{tenantId}/ceph-clusters/{clusterId} -- update a Ceph cluster.
 
-Update an existing ceph cluster.
+Source: ovd StorageController.scala updateCephCluster().
+
+📥 **Algo Source (Legacy):** patch a cluster's monitors/endpoint/credentials,
+re-encrypting a supplied password, and append a PATCHED status.
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:update` on the path
+tenant; fetch-or-404; merge the patch over the existing row (`.copy`-style),
+re-encrypt a new password via `api_crypto`; `repository::update_ceph_cluster` → 200
+with `CephClusterView`.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +46,14 @@ Example:
 x-service: storage
 operationId: updateCephCluster
 */
-func Updatecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CephClusterPatch) client.Response[models.CephCluster] {
+func Updatecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CephClusterPatch) client.Response[models.CephClusterView] {
 	ctx, span := tracer.Start(ctx, "updateCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s", tenantId, clusterId)
 
 	// Make API call
-	response := client.Patch[models.CephCluster](ctx, c, path, requestBody)
+	response := client.Patch[models.CephClusterView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

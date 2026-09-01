@@ -12,16 +12,15 @@ import (
 )
 
 /*
-Createloadbalancer
-
-# Create a loadbalancer
+Createloadbalancer Row 15 — 201 for BOTH get-or-create branches; 429/507 per matrix. WP3:
+no address assignment (see service docs, G9 deferred).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
+  - regionId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +36,14 @@ Example:
 x-service: loadbalancer
 operationId: createLoadBalancer
 */
-func Createloadbalancer(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, requestBody *models.CreateLoadBalancerInput) client.Response[models.LoadBalancer] {
+func Createloadbalancer(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, requestBody *models.CreateLoadBalancerInput) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "createLoadBalancer", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers", tenantId, regionId)
 
 	// Make API call
-	response := client.Post[models.LoadBalancer](ctx, c, path, requestBody)
+	response := client.Post[models.LoadBalancerView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

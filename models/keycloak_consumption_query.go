@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// KeycloakConsumptionQuery
+// KeycloakConsumptionQuery Consumption query body for consumption endpoints.  Source: references/legacy/ovd/modules/keycloak...
 type KeycloakConsumptionQuery struct {
-	Since time.Time `json:"since"`
-	Until time.Time `json:"until"`
+	Since time.Time `json:"since"` // Start of the billing window (inclusive)
+	Until time.Time `json:"until"` // End of the billing window (exclusive)
 }

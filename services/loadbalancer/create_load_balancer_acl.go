@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Createloadbalanceracl
-
-# Create LoadBalancer ACL
+Createloadbalanceracl Row 37 — the ACL store is IPAM: validated LB, write-through, republish.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -38,14 +36,14 @@ Example:
 x-service: loadbalancer
 operationId: createLoadBalancerAcl
 */
-func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.AccessControlList) client.Response[models.ResourceACL] {
+func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.AccessControlListInput) client.Response[models.ResourceAclView] {
 	ctx, span := tracer.Start(ctx, "createLoadBalancerAcl", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/acl", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Post[models.ResourceACL](ctx, c, path, requestBody)
+	response := client.Post[models.ResourceAclView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

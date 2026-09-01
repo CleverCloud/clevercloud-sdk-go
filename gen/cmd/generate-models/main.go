@@ -362,8 +362,14 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 		return processObjectSchema(name, schema)
 	}
 
-	// Handle scalar types with titles (type aliases)
-	if len(schemaTypes) > 0 && getSchemaTitle(schema) != "" {
+	// Handle named scalar types (type aliases).
+	//
+	// A `title` used to be required here, which silently dropped every scalar component that
+	// documents itself with `description` instead — the AXO spec has 33 of them (`SemanticTag`,
+	// `Gpus`, `ScalingFactor`, …). They are named components and other schemas `$ref` them, so
+	// emitting nothing left the package referring to types that did not exist. Being a named
+	// component is what makes the alias necessary; the title never was.
+	if len(schemaTypes) > 0 {
 		return processTypeAliasSchema(name, schema)
 	}
 
@@ -749,9 +755,14 @@ func formatComment(description string) string {
 	desc := strings.TrimSpace(description)
 	desc = strings.ReplaceAll(desc, "\n", " ")
 
-	// Limit length
-	if len(desc) > 100 {
-		desc = desc[:97] + "..."
+	// Limit length, counting runes rather than bytes.
+	//
+	// Slicing a Go string by byte offset cuts a multi-byte character in half, and the result is
+	// not valid UTF-8 — `gofmt` then refuses the file and the model is silently dropped. Latent
+	// while descriptions were ASCII; the AXO spec's descriptions are the handlers' Rust doc
+	// comments, which use em-dashes and accented text, so `WannabeToken` disappeared this way.
+	if runes := []rune(desc); len(runes) > 100 {
+		desc = string(runes[:97]) + "..."
 	}
 
 	return desc
@@ -1002,7 +1013,6 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 		Return(Id("u").Dot("raw"), Nil()),
 	)
 	f.Line()
-
 
 	// UnmarshalJSON just stores the bytes — discriminator is read lazily.
 	// "null" / empty inputs are stored verbatim; Type()/As<Member>() handle

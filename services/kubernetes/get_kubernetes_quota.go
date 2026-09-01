@@ -12,13 +12,23 @@ import (
 )
 
 /*
-Getkubernetesquota
+Getkubernetesquota GET /v4/kubernetes/organisations/{owner_id}/quota — the tenant's ceiling.
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:259-265 — getQuota
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala:216-224 — getQuota
+Spec: references/legacy/ovd/modules/kubernetes/doc/quota-management.md §Quota API
+Issues: #1580 (M4)
+
+Get-or-create: a tenant with no row gets one persisted from the configured
+defaults on first read, and any missing kubernetes ceiling kind is backfilled,
+so this always returns a value. There is no write API — ops change a ceiling
+with the SQL that OVD's `scripts/set-kubernetes-quota.sh` generates.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
 
 # Returns the operation result or an error
 

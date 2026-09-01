@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Listoutboxmessages
-
-# Get all Outbox messages
+Listoutboxmessages Row 45 — the machine-only GLOBAL diagnostic outbox (tenant ignored), first
+100 rows, empty → 404; payloads decoded protobuf → JSON (undecodable → 500).
+User-bearing OAuth1 and Bearer callers receive the standard 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
 
 # Returns the operation result or an error
 
@@ -35,14 +35,14 @@ Example:
 x-service: pulsar
 operationId: listOutboxMessages
 */
-func Listoutboxmessages(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.LoadbalanceroutboxT] {
+func Listoutboxmessages(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.OutboxMessageView] {
 	ctx, span := tracer.Start(ctx, "listOutboxMessages", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/pulsar", tenantId)
 
 	// Make API call
-	response := client.Get[[]models.LoadbalanceroutboxT](ctx, c, path)
+	response := client.Get[[]models.OutboxMessageView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

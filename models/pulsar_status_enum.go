@@ -2,15 +2,15 @@
 
 package models
 
-// PulsarStatus represents
+// PulsarStatus represents Pulsar addon status enum.  Source: references/legacy/ovd/modules/pulsar/models/PulsarStatus.scala...
 type PulsarStatus string
 
 const (
 	PulsarStatusACTIVE             PulsarStatus = "ACTIVE"
-	PulsarStatusColdStorageDeleted PulsarStatus = "COLD_STORAGE_DELETED"
+	PulsarStatusToDelete           PulsarStatus = "TO_DELETE"
 	PulsarStatusDELETED            PulsarStatus = "DELETED"
 	PulsarStatusNamespaceDeleted   PulsarStatus = "NAMESPACE_DELETED"
-	PulsarStatusToDelete           PulsarStatus = "TO_DELETE"
+	PulsarStatusColdStorageDeleted PulsarStatus = "COLD_STORAGE_DELETED"
 )
 
 // String returns the underlying string value

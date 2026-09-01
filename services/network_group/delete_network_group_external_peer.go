@@ -11,9 +11,11 @@ import (
 )
 
 /*
-Deletenetworkgroupexternalpeer
+Deletenetworkgroupexternalpeer DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/external-peers/{peer_id}
 
-# Delete an External Peer from a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala deleteExternalPeer — same flow as deletePeer
+Behavior: same as `remove_peer`, including confirmed publication and 500.
+Issue: #313, #665, #676, #849, #1127, #2790
 
 Parameters:
   - ctx: context for the request

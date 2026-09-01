@@ -2,13 +2,13 @@
 
 package models
 
-// OtoroshiPlan represents
+// OtoroshiPlan represents Otoroshi addon plan identifiers.  Source: references/legacy/ovd/modules/otoroshi/models/Otoroshi....
 type OtoroshiPlan string
 
 const (
 	OtoroshiPlanALPHA OtoroshiPlan = "ALPHA"
-	OtoroshiPlanBASE  OtoroshiPlan = "BASE"
 	OtoroshiPlanBETA  OtoroshiPlan = "BETA"
+	OtoroshiPlanBASE  OtoroshiPlan = "BASE"
 )
 
 // String returns the underlying string value

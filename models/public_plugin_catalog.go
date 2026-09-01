@@ -2,8 +2,8 @@
 
 package models
 
-// PublicPluginCatalog
+// PublicPluginCatalog The catalog snapshot served by `GET /v4/kubernetes/plugins/catalog`.  Source: PluginCatalog.scala...
 type PublicPluginCatalog struct {
-	Bases      []PublicBaseEntry      `json:"bases,omitempty"`
-	Migrations []PublicMigrationEntry `json:"migrations,omitempty"`
+	Bases      []PublicBaseEntry      `json:"bases"`
+	Migrations []PublicMigrationEntry `json:"migrations"`
 }

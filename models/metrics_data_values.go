@@ -2,8 +2,8 @@
 
 package models
 
-// MetricsDataValues
+// MetricsDataValues A single data point in a metrics time series.  The OpenAPI component is named `MetricsDataValues`...
 type MetricsDataValues struct {
-	Timestamp *int   `json:"timestamp,omitempty"`
-	Value     string `json:"value"`
+	Timestamp *int   `json:"timestamp,omitempty"` // Timestamp in Warp10 microseconds (optional — absent for fill-0 entries).
+	Value     string `json:"value"`               // String-serialized value (e.g. "23.5", "0.0").
 }

@@ -12,16 +12,39 @@ import (
 )
 
 /*
-Createcephpool
+Createcephpool POST /v4/tenants/{tenantId}/ceph-pools -- create a Ceph pool.
 
-Create a new ceph pool.
+Source: ovd StorageController.scala:180 createCephPool()
+Behavior: calls Ceph Dashboard API to create a pool.
+
+	Generates a pool ID, returns the created pool view.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Create a Ceph pool via Dashboard API.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- Generate CephPoolId
+- POST /api/pool to Ceph Dashboard with pool name
+- Return CephPool view
+- Source: ovd StorageController.scala:180, CephAdmin.scala:270
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_x_op:create_pool` on the path tenant
+  - Generate UUID pool_id, call ceph.create_rbd_pool(pool_name) — creation
+    also runs `rbd pool init` (creation alone sets only the `rbd` application
+    tag; CSI needs the `rbd_info` marker the init writes). An init 404 —
+    unpatched dashboard, or pool not visible yet — logs a warning and the
+    creation stands; the optional body `init.force` tunes it (ovd!2170,
+    refs #2907)
+  - Return 201 with CephPoolView or 501 if not configured
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +60,14 @@ Example:
 x-service: storage
 operationId: createCephPool
 */
-func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephPool) client.Response[models.CephPool] {
+func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CreateCephPoolRequest) client.Response[models.CephPoolView] {
 	ctx, span := tracer.Start(ctx, "createCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-pools", tenantId, clusterId)
 
 	// Make API call
-	response := client.Post[models.CephPool](ctx, c, path, requestBody)
+	response := client.Post[models.CephPoolView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

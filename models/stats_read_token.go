@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// StatsReadToken
+// StatsReadToken Response body for the stats read-token endpoints.  Source: ovd modules/metrics/src/main/scala/com...
 type StatsReadToken struct {
-	Applications []PlatformApplication `json:"applications,omitempty"`
-	CreatedAt    time.Time             `json:"createdAt"`
-	ExpiresAt    time.Time             `json:"expiresAt"`
-	Scope        TokenScope            `json:"scope"`
-	Token        string                `json:"token"`
+	Applications []string  `json:"applications"` // Applications the token is scoped to (the **resolved** apps — defaults applied).
+	CreatedAt    time.Time `json:"createdAt"`    // Token creation timestamp.
+	ExpiresAt    time.Time `json:"expiresAt"`    // Token expiry timestamp (created_at + ttl).
+	Scope        string    `json:"scope"`        // Token scope — always [`TokenScope::Read`] for these endpoints (serialized `"READ"`).
+	Token        string    `json:"token"`        // The generated Warp10 read token.
 }

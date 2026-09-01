@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Updatecellarbucket
+Updatecellarbucket Update a bucket's settings
 
-update a bucket versioning
+Turns object versioning on or off for a bucket and returns its refreshed view: name, versioning status, and the object count, total size and timestamps read back from the cluster. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on or bucket answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -38,14 +38,14 @@ Example:
 x-service: cellar
 operationId: updateCellarBucket
 */
-func Updatecellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, requestBody *models.UpdateBucketRequest) client.Response[models.Bucket] {
+func Updatecellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, requestBody *models.UpdateBucketRequest) client.Response[models.BucketView] {
 	ctx, span := tracer.Start(ctx, "updateCellarBucket", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId), attribute.String("bucketName", bucketName)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets/%s", ownerId, CellarId, bucketName)
 
 	// Make API call
-	response := client.Patch[models.Bucket](ctx, c, path, requestBody)
+	response := client.Patch[models.BucketView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

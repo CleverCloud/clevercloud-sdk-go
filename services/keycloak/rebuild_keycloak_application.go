@@ -11,9 +11,10 @@ import (
 )
 
 /*
-Rebuildkeycloakapplication
+Rebuildkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/rebuild
 
-# Ask for reboot keycloak application
+Source: ovd AddonKeycloakAddonActor.scala:810 rebootAddonKeycloak(rebuild=true)
+Issue: #313
 
 Parameters:
   - ctx: context for the request

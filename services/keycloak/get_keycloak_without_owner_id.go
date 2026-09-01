@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Getkeycloakwithoutownerid
-
-get a keycloak
+Getkeycloakwithoutownerid GET /v4/addon-providers/addon-keycloak/addons/{keycloak_id}
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak instance ID
 
 # Returns the operation result or an error
 
@@ -35,14 +33,14 @@ Example:
 x-service: keycloak
 operationId: getKeycloakWithoutOwnerId
 */
-func Getkeycloakwithoutownerid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.Keycloak] {
+func Getkeycloakwithoutownerid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakView] {
 	ctx, span := tracer.Start(ctx, "getKeycloakWithoutOwnerId", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s", addonKeycloakId)
 
 	// Make API call
-	response := client.Get[models.Keycloak](ctx, c, path)
+	response := client.Get[models.KeycloakView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

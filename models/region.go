@@ -2,16 +2,16 @@
 
 package models
 
-// Region
+// Region Zone view returned by GET /v4/products/zones.  **Published as `Region`, not `ZoneView`.** Two thi...
 type Region struct {
-	City        string   `json:"city"`
-	Country     string   `json:"country"`
-	CountryCode string   `json:"countryCode"`
-	DisplayName *string  `json:"displayName,omitempty"`
-	ID          string   `json:"id"`
-	Lat         float64  `json:"lat"`
-	Lon         float64  `json:"lon"`
-	Name        string   `json:"name"`
-	OutboundIPs []string `json:"outboundIPs,omitempty"`
-	Tags        []string `json:"tags,omitempty"`
+	City        string   `json:"city"`                  // City name.
+	Country     string   `json:"country"`               // Country name.
+	CountryCode string   `json:"countryCode"`           // ISO country code.
+	DisplayName *string  `json:"displayName,omitempty"` // Optional display name override, serialized as `null` when unset.  Upstream types it `Option[Strin...
+	ID          string   `json:"id"`                    // Zone UUID.
+	Lat         float64  `json:"lat"`                   // Latitude.
+	Lon         float64  `json:"lon"`                   // Longitude.
+	Name        string   `json:"name"`                  // Zone short name (e.g. "par", "mtl").
+	OutboundIPs []string `json:"outboundIPs"`           // Outbound IP ranges (CIDR notation).  Spelled `outboundIPs`, not what `rename_all = "camelCase"` w...
+	Tags        []string `json:"tags"`                  // Zone tags (e.g. "infra:clever-cloud").
 }

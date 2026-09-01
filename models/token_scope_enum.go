@@ -2,7 +2,7 @@
 
 package models
 
-// TokenScope represents
+// TokenScope represents Token scope: READ or WRITE.  Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clev...
 type TokenScope string
 
 const (

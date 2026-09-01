@@ -11,17 +11,16 @@ import (
 )
 
 /*
-Deleteloadbalanceracl
-
-# Delete loadbalancer ACL
+Deleteloadbalanceracl Row 39 — validated LB, IPAM delete (404 arm verbatim), republish with
+the default ACL.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
 
 # Returns the operation result or an error
 

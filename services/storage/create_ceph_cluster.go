@@ -12,15 +12,24 @@ import (
 )
 
 /*
-Createcephcluster
+Createcephcluster POST /v4/tenants/{tenantId}/ceph-clusters -- register a Ceph cluster.
 
-Create a new ceph cluster.
+Source: ovd StorageController.scala createCephCluster().
+
+📥 **Algo Source (Legacy):** persist a new Ceph cluster (monitors + dashboard
+endpoint/username/password) with a PROVISIONED status; the password is stored
+encrypted (`SymmetricEncryption`).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:add` on the path
+tenant; AES/GCM-encrypt the dashboard password via `api_crypto`;
+`repository::insert_ceph_cluster` → 201 with `CephClusterView`.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +45,14 @@ Example:
 x-service: storage
 operationId: createCephCluster
 */
-func Createcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephCluster) client.Response[models.CephCluster] {
+func Createcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephCluster) client.Response[models.CephClusterView] {
 	ctx, span := tracer.Start(ctx, "createCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters", tenantId)
 
 	// Make API call
-	response := client.Post[models.CephCluster](ctx, c, path, requestBody)
+	response := client.Post[models.CephClusterView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

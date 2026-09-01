@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Getloadbalancer
-
-# Get specific loadbalancer
+Getloadbalancer Row 44 — ⚠️ the region is IGNORED (pinned quirk); config missing → 500.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
 
 # Returns the operation result or an error
 
@@ -37,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: getLoadBalancer
 */
-func Getloadbalancer(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[models.LoadBalancer] {
+func Getloadbalancer(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "getLoadBalancer", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Get[models.LoadBalancer](ctx, c, path)
+	response := client.Get[models.LoadBalancerView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

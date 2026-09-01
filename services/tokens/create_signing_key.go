@@ -14,14 +14,12 @@ import (
 /*
 Createsigningkey
 
-Create a signing key for a product/location.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
+  - tenantId: Tenant that owns the product
+  - productId: Product the key is scoped to
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +35,14 @@ Example:
 x-service: tokens
 operationId: createSigningKey
 */
-func Createsigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, requestBody *models.WannabeSigningKey) client.Response[models.SigningKey] {
+func Createsigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, requestBody *models.WannabeSigningKey) client.Response[models.SigningKeyView] {
 	ctx, span := tracer.Start(ctx, "createSigningKey", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("productId", productId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/products/%s/keys", tenantId, productId)
 
 	// Make API call
-	response := client.Post[models.SigningKey](ctx, c, path, requestBody)
+	response := client.Post[models.SigningKeyView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

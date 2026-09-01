@@ -13,16 +13,26 @@ import (
 )
 
 /*
-Listusers
+Listusers **Legacy**: ovd users.scala:35 getUsersData()
+**Algorithm**:
+  - Verify addon, SELECT users with optional userId filter
+  - Password returned as cipher text (decryption requires CryptoConfig)
 
-# Get users and their privileges for a given PostgreSQL addon
+**Conformity**: PARTIAL (password decryption deferred)
+
+GET /v4/postgresql/organisations/{ownerId}/postgresql/{postgreSQLId}/users
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — selectUsersPrivileges
+Source: ovd PostgreSQLUserService.scala — getUsers
+Behavior: returns all active users for the addon, optionally filtered by userId query param
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -38,7 +48,7 @@ Example:
 x-service: postgresql
 operationId: listUsers
 */
-func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgUserData] {
+func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgUserDataView] {
 	ctx, span := tracer.Start(ctx, "listUsers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
@@ -51,7 +61,7 @@ func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, owner
 	}
 
 	// Make API call
-	response := client.Get[[]models.PgUserData](ctx, c, path)
+	response := client.Get[[]models.PgUserDataView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

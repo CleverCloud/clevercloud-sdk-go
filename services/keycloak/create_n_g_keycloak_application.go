@@ -12,9 +12,11 @@ import (
 )
 
 /*
-Createngkeycloakapplication
+Createngkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/networkgroup
 
-# Ask for create a networkgroup
+Source: ovd AddonKeycloakAddonActor.scala:864 createNGAddonKeycloak
+Behavior: Create NG via HTTP, store ID, update scalability to 2/2, reboot.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -35,14 +37,14 @@ Example:
 x-service: keycloak
 operationId: createNGKeycloakApplication
 */
-func Createngkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.Keycloak] {
+func Createngkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakView] {
 	ctx, span := tracer.Start(ctx, "createNGKeycloakApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/networkgroup", addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.Keycloak](ctx, c, path, nil)
+	response := client.Post[models.KeycloakView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

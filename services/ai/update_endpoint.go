@@ -11,17 +11,29 @@ import (
 )
 
 /*
-Updateendpoint
+Updateendpoint **Legacy**: ovd AIProviderController.scala:132 updateEndpointEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, forward update to Otoroshi, deploy updated endpoint
 
-# Create endpoint to otoroshi cluster
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+POST /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id} — update endpoint.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — updateEndpointEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — updateEndpoint()
+Behavior: verifies addon + tenancy, forwards to otoroshiClient.updateEndpoint,
+
+	extracts uid from response, deploys the updated endpoint. Returns Otoroshi JSON.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
 
 # Returns the operation result or an error
 

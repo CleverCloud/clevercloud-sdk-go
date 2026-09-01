@@ -11,15 +11,23 @@ import (
 )
 
 /*
-Deletekms
+Deletekms DELETE /v2/providers/addon-kms/resources/{id} — deprovision a KMS addon.
 
-deprovision an existing Kms
+Legacy: ovd routes.scala:39 deprovisionKms
+Algorithm:
+  - UPDATE status=DELETED, deletion_date=now WHERE status!=DELETED
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/kms/api/routes.scala deprovisionRoute
+Behavior: marks addon as DELETED, returns 204
+Issue: #659
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKmsId:
+  - addonKmsId: KMS addon ID
 
 # Returns the operation result or an error
 

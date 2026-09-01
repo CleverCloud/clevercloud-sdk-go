@@ -12,9 +12,7 @@ import (
 )
 
 /*
-Getkeycloak
-
-get a keycloak
+Getkeycloak GET /v4/keycloaks/organisations/{owner_id}/keycloaks/{keycloak_id}
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +34,14 @@ Example:
 x-service: keycloak
 operationId: getKeycloak
 */
-func Getkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string) client.Response[models.Keycloak] {
+func Getkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string) client.Response[models.KeycloakView] {
 	ctx, span := tracer.Start(ctx, "getKeycloak", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/keycloaks/organisations/%s/keycloaks/%s", ownerId, addonKeycloakId)
 
 	// Make API call
-	response := client.Get[models.Keycloak](ctx, c, path)
+	response := client.Get[models.KeycloakView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

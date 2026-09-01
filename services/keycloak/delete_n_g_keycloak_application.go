@@ -11,9 +11,11 @@ import (
 )
 
 /*
-Deletengkeycloakapplication
+Deletengkeycloakapplication DELETE /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/networkgroup
 
-# Ask for deletion a networkgroup
+Source: ovd AddonKeycloakAddonActor.scala:836 deleteNGAddonKeycloak
+Behavior: Delete NG via HTTP, remove from DB, scalability back to 1/1, reboot.
+Issue: #313
 
 Parameters:
   - ctx: context for the request

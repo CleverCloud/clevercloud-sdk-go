@@ -12,13 +12,30 @@ import (
 )
 
 /*
-Getdeploymentprofile
+Getdeploymentprofile GET /v4/kubernetes/admin/deployment-profiles/{location_id}
+
+📥 **Algo Source (Legacy):**
+Return one location's deployment profile.
+- `requireBasicAuth` → 403 otherwise
+- `repository.findByLocationId(locationId)`; absent → 404 `DeploymentProfileError`
+- `DeploymentProfileView.from` (secrets redacted)
+- Source: ovd DeploymentProfileController.scala:78-97
+
+🔧 **Algo Rust (Implementation):**
+  - `AdminAccess` extractor → 403; `validate_location_id` → 400 on a malformed id
+    (OVD's tapir `path[LocationId]` codec rejects it before the handler)
+  - `find_by_location_id` → 404 when absent
+  - Return the redacted view with 200 OK
+
+Source: ovd controllers/DeploymentProfileController.scala:78-97
+Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
+Issue: #1625
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId:
+  - locationId: Location id (location_<uuid>)
 
 # Returns the operation result or an error
 

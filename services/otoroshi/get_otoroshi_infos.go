@@ -12,15 +12,16 @@ import (
 )
 
 /*
-Getotoroshiinfos
+Getotoroshiinfos GET /v4/otoroshi/{otoroshi_id} — get Otoroshi info (internal route, basic auth in prod).
 
-get all otoroshi info via internal path
+Source: references/legacy/ovd/modules/otoroshi/controllers/OtoroshiProviderController.scala — getOtoroshiInfosEndpoint
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 
@@ -35,14 +36,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiInfos
 */
-func Getotoroshiinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.Otoroshi] {
+func Getotoroshiinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.OtoroshiView] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiInfos", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/otoroshi/%s", OtoroshiId)
 
 	// Make API call
-	response := client.Get[models.Otoroshi](ctx, c, path)
+	response := client.Get[models.OtoroshiView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

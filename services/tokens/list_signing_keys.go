@@ -15,14 +15,12 @@ import (
 /*
 Listsigningkeys
 
-List signing keys for a product.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
+  - tenantId: Tenant that owns the product
+  - productId: Product to list keys for
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -38,7 +36,7 @@ Example:
 x-service: tokens
 operationId: listSigningKeys
 */
-func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, opts ...Option) client.Response[[]models.SigningKey] {
+func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, opts ...Option) client.Response[[]models.SigningKeyView] {
 	ctx, span := tracer.Start(ctx, "listSigningKeys", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("productId", productId)))
 	defer span.End()
 
@@ -51,7 +49,7 @@ func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer,
 	}
 
 	// Make API call
-	response := client.Get[[]models.SigningKey](ctx, c, path)
+	response := client.Get[[]models.SigningKeyView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

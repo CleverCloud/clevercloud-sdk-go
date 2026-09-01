@@ -12,15 +12,26 @@ import (
 )
 
 /*
-Getpulsarv2
+Getpulsarv2 GET /v2/providers/addon-pulsar/resources/{pulsar_id} — get Pulsar addon (v2 internal).
 
-# Get a Pulsar
+**Legacy**: ovd PulsarController.scala:170 getPulsarV2ServerEndpoint()
+**Algorithm**:
+  - Delegates to PulsarProvisioningService.getPulsar(pulsarId) (line 127)
+  - SELECT from addon WHERE id AND status=ACTIVE, return Pulsar view
+  - Internal endpoint (Basic Auth), no ownership check
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getPulsarV2ServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala getPulsarV2
+Behavior: returns full addon view; no ownership check (internal trusted endpoint).
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +46,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarV2
 */
-func Getpulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+func Getpulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
 	ctx, span := tracer.Start(ctx, "getPulsarV2", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-pulsar/resources/%s", pulsarId)
 
 	// Make API call
-	response := client.Get[models.Pulsar](ctx, c, path)
+	response := client.Get[models.PulsarView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

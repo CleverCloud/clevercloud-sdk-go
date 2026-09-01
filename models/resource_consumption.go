@@ -4,14 +4,12 @@ package models
 
 import "time"
 
-// ResourceConsumption
+// ResourceConsumption Resource consumption for a Metabase addon over a window.  Source: references/legacy/ovd/core — Re...
 type ResourceConsumption struct {
-	Consumptions []ConsumptionItem `json:"consumptions,omitempty"`
-	OwnerID      OwnerID           `json:"ownerId"`
-	ProductID    string            `json:"productId"`
-	RegionID     string            `json:"regionId"`
-	ResourceID   string            `json:"resourceId"`
-	Since        time.Time         `json:"since"`
-	Until        time.Time         `json:"until"`
-	Version      int               `json:"version"`
+	Consumptions []ConsumptionItem `json:"consumptions"` // Itemized consumption.
+	OwnerID      UserId            `json:"ownerId"`      // Owner (user or org) id.
+	ProductID    string            `json:"productId"`    // Product id (the Metabase product).
+	ResourceID   MetabaseId        `json:"resourceId"`   // Provider-internal resource id (`metabase_<uuid>`).
+	Since        time.Time         `json:"since"`        // Consumption window start.
+	Until        time.Time         `json:"until"`        // Consumption window end.
 }

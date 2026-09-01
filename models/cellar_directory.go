@@ -2,9 +2,9 @@
 
 package models
 
-// CellarDirectory
+// CellarDirectory A Cellar directory (common prefix) in a bucket.  Source: references/legacy/ovd/modules/cellar/mod...
 type CellarDirectory struct {
-	Key  string `json:"key"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Key  string `json:"key"`  // Full directory key
+	Name string `json:"name"` // Directory display name
+	Type string `json:"type"` // Object type ("directory")
 }

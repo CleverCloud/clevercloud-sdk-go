@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createcluster
+Createcluster Register a Cellar storage cluster
 
-create a new Cellar cluster
+Registers a storage cluster — its S3 endpoint host, availability zone, administrative credentials and whether it accepts new add-ons — and returns the created cluster as `{ id, host, zone, available }`; the administrative credentials are never echoed back. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. A blank host, username or password answers 400.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: createCluster
 */
-func Createcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.CreateClusterRequest) client.Response[models.CellarCluster] {
+func Createcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.CreateClusterRequest) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "createCluster", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters", ownerId)
 
 	// Make API call
-	response := client.Post[models.CellarCluster](ctx, c, path, requestBody)
+	response := client.Post[models.ClusterView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

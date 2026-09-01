@@ -12,13 +12,23 @@ import (
 )
 
 /*
-Getconfigurationprovider
+Getconfigurationprovider GET /v4/addon-providers/config-provider/addons/{addon_id} — get config-provider addon view (v4).
+
+Legacy: ovd routes.scala:50 getAddonV4
+Algorithm:
+  - Same as getAddonV2: SELECT + decrypt + build view
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala getAddonV4
+Behavior: returns addon view with current env vars, 404 if not found
+Issue: #2
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: ConfigProvider addon ID
 
 # Returns the operation result or an error
 
@@ -33,14 +43,14 @@ Example:
 x-service: configuration_provider
 operationId: getConfigurationProvider
 */
-func Getconfigurationprovider(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProvider] {
+func Getconfigurationprovider(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProviderAddonView] {
 	ctx, span := tracer.Start(ctx, "getConfigurationProvider", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s", addonId)
 
 	// Make API call
-	response := client.Get[models.ConfigProvider](ctx, c, path)
+	response := client.Get[models.ConfigProviderAddonView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

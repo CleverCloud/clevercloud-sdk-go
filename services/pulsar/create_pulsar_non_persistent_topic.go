@@ -4,7 +4,6 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -12,23 +11,41 @@ import (
 )
 
 /*
-Createpulsarnonpersistenttopic
+Createpulsarnonpersistenttopic POST /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics/{topic}
 
-# Create a non-persistent topic on this namespace
+	— create a non-persistent topic.
+
+**Legacy**: ovd PulsarController.scala:351 createNonPersistentTopicServerEndpoint()
+**Algorithm**:
+  - Ownership verified via withTopicOwner helper (line 80)
+  - Delegates to PulsarTopicService.createNonPersistentTopic (line 190)
+  - Scala calls HttpPulsarAdminClient.createNonPersistentTopic with optional partitions
+
+**Conformity**: FAITHFUL — proxies to
+
+	`PulsarAdminClient::create_non_persistent_topic` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createNonPersistentTopicServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala createNonPersistentTopic
+Behavior: creates the non-persistent topic on the cluster
+
+	(partitioned if `partitions_number` query param is set);
+	returns 201.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
-  - opts: optional query parameters
+  - pulsarId: Pulsar addon ID
+  - topic: Topic name
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Createpulsarnonpersistenttopic(ctx, client, tracer, pulsarId, topic, opts...)
+	response := pulsar.Createpulsarnonpersistenttopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,17 +54,11 @@ Example:
 x-service: pulsar
 operationId: createPulsarNonPersistentTopic
 */
-func Createpulsarnonpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string, opts ...Option) client.Response[client.Nothing] {
+func Createpulsarnonpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createPulsarNonPersistentTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics/%s", pulsarId, topic)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
 
 	// Make API call
 	response := client.Post[client.Nothing](ctx, c, path, nil)

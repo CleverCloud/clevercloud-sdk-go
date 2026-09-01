@@ -14,15 +14,13 @@ import (
 /*
 Replacesigningkey
 
-Rotate a signing key (creates new active key, old becomes rotated).
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
-  - keyId:
+  - tenantId: Tenant that owns the product
+  - productId: Product the key belongs to
+  - keyId: The active key to rotate
 
 # Returns the operation result or an error
 
@@ -37,14 +35,14 @@ Example:
 x-service: tokens
 operationId: replaceSigningKey
 */
-func Replacesigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, keyId string) client.Response[models.SigningKey] {
+func Replacesigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, keyId string) client.Response[models.SigningKeyView] {
 	ctx, span := tracer.Start(ctx, "replaceSigningKey", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("productId", productId), attribute.String("keyId", keyId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/products/%s/keys/%s/rotate", tenantId, productId, keyId)
 
 	// Make API call
-	response := client.Post[models.SigningKey](ctx, c, path, nil)
+	response := client.Post[models.SigningKeyView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

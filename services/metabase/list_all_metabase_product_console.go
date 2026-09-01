@@ -11,9 +11,10 @@ import (
 )
 
 /*
-Listallmetabaseproductconsole
+Listallmetabaseproductconsole POST /v4/metabase/consumptions — consumption for every addon active in the window.
 
-get all metabase product consumption
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getAllConsumptions
+Issue: #8
 
 Parameters:
   - ctx: context for the request

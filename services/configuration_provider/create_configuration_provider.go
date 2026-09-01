@@ -11,7 +11,19 @@ import (
 )
 
 /*
-Createconfigurationprovider
+Createconfigurationprovider POST /v2/providers/config-provider/resources — provision a new config-provider addon.
+
+Legacy: ovd routes.scala:28 createAddonV2 / AddonConfigProviderActor.scala
+Algorithm:
+  - Encrypt empty env with XSalsa20-Poly1305, INSERT with ACTIVE status
+  - Return ProvisionResponse with empty config HashMap
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala createAddonV2
+Source: references/legacy/ovd/modules/configprovider/models/AddonConfigProvider.scala ProvisionResponseBuilder
+Behavior: creates provision record with ACTIVE status and empty env, returns ProvisionResponse with env map
+Issue: #2
 
 Parameters:
   - ctx: context for the request

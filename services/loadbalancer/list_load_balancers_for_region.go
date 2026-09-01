@@ -12,16 +12,14 @@ import (
 )
 
 /*
-Listloadbalancersforregion
-
-# Get loadbalancers for region
+Listloadbalancersforregion Row 41 — empty → 404; no IPAM region existence check.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
+  - regionId:
 
 # Returns the operation result or an error
 

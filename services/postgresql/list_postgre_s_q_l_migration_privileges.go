@@ -12,15 +12,23 @@ import (
 )
 
 /*
-Listpostgresqlmigrationprivileges
+Listpostgresqlmigrationprivileges **Legacy**: ovd migration.scala:38 getPrivileges()
+**Algorithm**:
+  - Fetch addon, complex JOIN across privilege tables for full export
 
-# Get the privileges snapshot for a given PostgreSQL addon
+**Conformity**: STUB (complex join TODO, returns empty list)
+
+GET /v4/postgresql/{postgreSQLId}/migration/privileges
+
+Source: ovd PostgreSQLMigrationRepository.scala — selectPrivileges
+Behavior: returns aggregated privileges export for migration
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +43,14 @@ Example:
 x-service: postgresql
 operationId: listPostgreSQLMigrationPrivileges
 */
-func Listpostgresqlmigrationprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PostgreSQLDatabasePrivileges] {
+func Listpostgresqlmigrationprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PostgreSQLDatabasePrivilegesExport] {
 	ctx, span := tracer.Start(ctx, "listPostgreSQLMigrationPrivileges", trace.WithAttributes(attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/%s/migration/privileges", postgreSQLId)
 
 	// Make API call
-	response := client.Get[[]models.PostgreSQLDatabasePrivileges](ctx, c, path)
+	response := client.Get[[]models.PostgreSQLDatabasePrivilegesExport](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

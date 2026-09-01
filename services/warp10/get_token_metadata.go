@@ -12,16 +12,23 @@ import (
 )
 
 /*
-Gettokenmetadata
+Gettokenmetadata GET /v4/warp10/cluster/{cluster_id}/token/{revocation_id} — get a cluster token.
 
-# Get metadata for a Warp10 token by its revocation ID
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:157-171 getTokenMetadataLogic
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/services/Warp10Service.scala:429-458 getTokenMetadata
+Behavior:
+  - Accepts Basic or Bearer (biscuit) auth.
+  - Biscuit: requires GET_TOKEN_METADATA operation (no scope).
+  - Returns token metadata by revocation_id for the cluster. 404 if not found.
+
+Issue: #642, #764, #758
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
-  - revocationId: Token revocation identifier (16 hex characters)
+  - clusterId: Warp10 cluster ID
+  - revocationId: Token revocation ID (16 hex characters)
 
 # Returns the operation result or an error
 
@@ -36,14 +43,14 @@ Example:
 x-service: warp10
 operationId: getTokenMetadata
 */
-func Gettokenmetadata(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string, revocationId string) client.Response[models.TokenMetadataResponse] {
+func Gettokenmetadata(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string, revocationId string) client.Response[models.TokenMetadataView] {
 	ctx, span := tracer.Start(ctx, "getTokenMetadata", trace.WithAttributes(attribute.String("clusterId", clusterId), attribute.String("revocationId", revocationId)))
 	defer span.End()
 
 	path := utils.Path("/v4/warp10/cluster/%s/token/%s", clusterId, revocationId)
 
 	// Make API call
-	response := client.Get[models.TokenMetadataResponse](ctx, c, path)
+	response := client.Get[models.TokenMetadataView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

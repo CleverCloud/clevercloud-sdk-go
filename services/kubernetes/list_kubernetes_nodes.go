@@ -12,14 +12,26 @@ import (
 )
 
 /*
-Listkubernetesnodes
+Listkubernetesnodes **Legacy**: ovd StandaloneNodeController.scala:38 list()
+**Algorithm**:
+  - ClusterItemRepository.selectByCluster(clusterId, STANDALONE_NODE, ACTIVE)
+  - Returns StandaloneNodeView list from cluster_item table
+
+**Conformity**: YES
+
+GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes — list standalone nodes.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — list
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterItemRepository.scala — queries.selectByCluster
+Behavior: returns all standalone nodes (cluster_item with item_type='STANDALONE_NODE', status='ACTIVE')
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +46,14 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesNodes
 */
-func Listkubernetesnodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[[]models.StandaloneNode] {
+func Listkubernetesnodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[[]models.StandaloneNodeView] {
 	ctx, span := tracer.Start(ctx, "listKubernetesNodes", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes", ownerId, clusterId)
 
 	// Make API call
-	response := client.Get[[]models.StandaloneNode](ctx, c, path)
+	response := client.Get[[]models.StandaloneNodeView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

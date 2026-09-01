@@ -2,11 +2,10 @@
 
 package models
 
-// ConsumptionItem
+// ConsumptionItem A single consumption line item.  Source: references/legacy/ovd/core — ConsumptionItem Schema: cra...
 type ConsumptionItem struct {
-	Details    ConsumptionDetail `json:"details"`
-	Quantity   float64           `json:"quantity"`
-	Reference  string            `json:"reference"`
-	ResourceID *string           `json:"resourceId,omitempty"`
-	Unit       string            `json:"unit"`
+	Details   ConsumptionDetail `json:"details"`   // Per-interval detail.
+	Quantity  float64           `json:"quantity"`  // Total quantity over the window (active days).
+	Reference string            `json:"reference"` // Reference label (`"metabase.licence"`).
+	Unit      string            `json:"unit"`      // Unit of measurement (`"licence"`).
 }

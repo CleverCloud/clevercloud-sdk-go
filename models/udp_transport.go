@@ -2,7 +2,7 @@
 
 package models
 
-// UdpTransport
+// UdpTransport Frontend UDP transport (:417-421).
 type UdpTransport struct {
-	Transport Transport4 `json:"transport"`
+	Transport UdpTransportChoice `json:"transport"` // The composable inner transport.
 }

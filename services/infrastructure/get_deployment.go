@@ -6,20 +6,23 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Getdeployment
+Getdeployment GET /v4/infrastructure/deployments/{deployment_id}
 
-# Get a Deployment
+Source: references/legacy/ovd/modules/compute/routes/DeploymentController.scala getDeploymentLogic
+Behavior: read deployment from ZK, 404 if not found.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - deploymentId: a deployment id
+  - deploymentId: Deployment UUID
 
 # Returns the operation result or an error
 
@@ -31,17 +34,17 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: getDeployment
 */
-func Getdeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, deploymentId string) client.Response[client.Nothing] {
+func Getdeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, deploymentId string) client.Response[models.DeploymentOutput] {
 	ctx, span := tracer.Start(ctx, "getDeployment", trace.WithAttributes(attribute.String("deploymentId", deploymentId)))
 	defer span.End()
 
 	path := utils.Path("/v4/infrastructure/deployments/%s", deploymentId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.DeploymentOutput](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

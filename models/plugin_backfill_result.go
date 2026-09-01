@@ -2,10 +2,10 @@
 
 package models
 
-// PluginBackfillResult
+// PluginBackfillResult One cluster's backfill report.  `error` is always `null` on the per-cluster route — its failures ...
 type PluginBackfillResult struct {
 	ClusterID  string               `json:"clusterId"`
-	Drifted    []PluginDrift        `json:"drifted,omitempty"`
+	Drifted    []PluginDrift        `json:"drifted"`
 	Error      *string              `json:"error,omitempty"`
-	Registered []PluginBackfillItem `json:"registered,omitempty"`
+	Registered []PluginBackfillItem `json:"registered"`
 }

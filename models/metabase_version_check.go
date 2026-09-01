@@ -2,10 +2,11 @@
 
 package models
 
-// MetabaseVersionCheck
+// MetabaseVersionCheck Version-check result.  Source: references/legacy/ovd/modules/metabase/models/MetabaseView.scala —...
 type MetabaseVersionCheck struct {
-	Available  []string `json:"available,omitempty"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available                 []string `json:"available"`                 // All available versions.
+	Installed                 string   `json:"installed"`                 // Currently installed version (`CC_METABASE_VERSION`).
+	Latest                    string   `json:"latest"`                    // Latest available version.
+	NeedUpdate                bool     `json:"needUpdate"`                // Whether an update is available.
+	RequiresApplicationUpdate bool     `json:"requiresApplicationUpdate"` // Whether upgrading to `latest` also requires a CCAPI application update (flavor/scalability bump —...
 }

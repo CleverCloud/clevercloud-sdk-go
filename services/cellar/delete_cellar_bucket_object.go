@@ -11,18 +11,18 @@ import (
 )
 
 /*
-Deletecellarbucketobject
+Deletecellarbucketobject Delete an object
 
-delete an object from a bucket
+Deletes one object from a bucket and answers 200 with an empty body. The key is a single path segment, so a key containing `/` must be percent-encoded. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on, bucket or object answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
-  - objectKey:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
+  - objectKey: Object key
 
 # Returns the operation result or an error
 

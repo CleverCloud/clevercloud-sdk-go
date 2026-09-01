@@ -2,10 +2,11 @@
 
 package models
 
-// Cluster
+// Cluster A set of front-ends and back-ends (:62-66).
 type Cluster struct {
-	Backends Backends           `json:"backends"`
-	ID       StringMaxLength128 `json:"id"`
-	OwnerID  TenantID           `json:"ownerId"`
-	Router   *Router            `json:"router,omitempty"`
+	Backends Backends `json:"backends"`        // Backend servers and their transport.
+	ID       ConfigId `json:"id"`              // Cluster identifier (`StringMaxLength128`).
+	Label    *string  `json:"label,omitempty"` // Optional operator-facing label.
+	OwnerID  TenantId `json:"ownerId"`         // Owning tenant.
+	Router   *any     `json:"router,omitempty"`
 }

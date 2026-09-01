@@ -12,9 +12,10 @@ import (
 )
 
 /*
-Createkeycloakjavaapplication
+Createkeycloakjavaapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/application
 
-add a Java application to Keycloak
+Source: ovd AddonKeycloakAddonActor.scala:405 addAddonApplication
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +37,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloakJavaApplication
 */
-func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.KeycloakAddApplicationRequest) client.Response[models.KeycloakProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "createKeycloakJavaApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/application", addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[models.KeycloakProvisionResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

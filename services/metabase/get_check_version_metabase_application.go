@@ -12,15 +12,16 @@ import (
 )
 
 /*
-Getcheckversionmetabaseapplication
+Getcheckversionmetabaseapplication GET .../addons/{id}/version/check — installed vs latest version.
 
-# For the current addon check if the version is correct
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — checkVersion
+Issue: #994
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase addon ID
 
 # Returns the operation result or an error
 

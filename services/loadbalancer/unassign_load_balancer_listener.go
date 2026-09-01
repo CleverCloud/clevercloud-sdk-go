@@ -11,16 +11,15 @@ import (
 )
 
 /*
-Unassignloadbalancerlistener
-
-# Remove listener from loadbalancer
+Unassignloadbalancerlistener Row 27 — 204; listener absent → 404; `{listenerId}` > 128 UTF-16 units →
+400.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId:
   - listenerId:
 
 # Returns the operation result or an error

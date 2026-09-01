@@ -12,9 +12,11 @@ import (
 )
 
 /*
-Getcheckversionkeycloakapplication
+Getcheckversionkeycloakapplication GET /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/version/check
 
-# For the current addon check if the version is correct
+Source: ovd AddonKeycloakAddonActor.scala:998 checkVersionApplication
+Behavior: Reads CC_KEYCLOAK_VERSION from Java app env (via cc-api if available).
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -35,14 +37,14 @@ Example:
 x-service: keycloak
 operationId: getCheckVersionKeycloakApplication
 */
-func Getcheckversionkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakVersionChecker] {
+func Getcheckversionkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakVersionCheckView] {
 	ctx, span := tracer.Start(ctx, "getCheckVersionKeycloakApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/version/check", addonKeycloakId)
 
 	// Make API call
-	response := client.Get[models.KeycloakVersionChecker](ctx, c, path)
+	response := client.Get[models.KeycloakVersionCheckView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

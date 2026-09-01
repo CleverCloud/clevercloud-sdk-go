@@ -12,18 +12,27 @@ import (
 )
 
 /*
-Updatedatabasesprivileges
+Updatedatabasesprivileges **Legacy**: ovd users.scala:188 patchDatabasesPrivileges()
+**Algorithm**:
+  - Verify addon, UPSERT database privilege (ON CONFLICT DO UPDATE)
+  - GRANT/REVOKE on addon DB is deferred
 
-# Update the user's database privileges in the given PostgreSQL addon
+**Conformity**: YES (GRANT/REVOKE on addon DB + metadata UPSERT)
+
+PATCH .../users/{userId}/privileges/databases/{objectId}
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — updateDatabasePrivileges (UPSERT)
+Source: ovd PostgreSQLAccessController.scala — alterDatabasePrivileges (GRANT/REVOKE — stub)
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
-  - pgUserId: PostgreSQL User ID
-  - objectId: PostgreSQL Object ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
+  - pgUserId: PostgreSQL user ID
+  - objectId: Database OID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -39,14 +48,14 @@ Example:
 x-service: postgresql
 operationId: updateDatabasesPrivileges
 */
-func Updatedatabasesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadPrivilege) client.Response[models.PgDatabasePrivileges] {
+func Updatedatabasesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadPrivilegeRequest) client.Response[models.PgDatabasePrivilegesView] {
 	ctx, span := tracer.Start(ctx, "updateDatabasesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("objectId", objectId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s/privileges/databases/%s", ownerId, postgreSQLId, pgUserId, objectId)
 
 	// Make API call
-	response := client.Patch[models.PgDatabasePrivileges](ctx, c, path, requestBody)
+	response := client.Patch[models.PgDatabasePrivilegesView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

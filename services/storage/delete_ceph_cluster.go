@@ -12,16 +12,24 @@ import (
 )
 
 /*
-Deletecephcluster
+Deletecephcluster DELETE /v4/tenants/{tenantId}/ceph-clusters/{clusterId} -- soft-delete a cluster.
 
-Soft-delete an existing ceph cluster.
+Source: ovd StorageController.scala deleteCephCluster() (appends SOFT_DELETED).
+
+📥 **Algo Source (Legacy):** soft-delete a cluster by appending a SOFT_DELETED
+status (the row is retained; the cleanup service handles retention).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:remove` on the path
+tenant; fetch-or-404; append SOFT_DELETED and persist via the shared
+`update_cluster_and_respond` tail → 200.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
 
 # Returns the operation result or an error
 
@@ -36,14 +44,14 @@ Example:
 x-service: storage
 operationId: deleteCephCluster
 */
-func Deletecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephCluster] {
+func Deletecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephClusterView] {
 	ctx, span := tracer.Start(ctx, "deleteCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s", tenantId, clusterId)
 
 	// Make API call
-	response := client.Delete[models.CephCluster](ctx, c, path)
+	response := client.Delete[models.CephClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

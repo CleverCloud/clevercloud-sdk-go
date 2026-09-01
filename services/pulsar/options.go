@@ -13,33 +13,9 @@ type Option func(*Options)
 
 // Options holds query parameters for pulsar operations
 type Options struct {
-	Force            *bool     `url:"force,omitempty"`
-	Partitioned      *bool     `url:"partitioned,omitempty"`
-	Partitionsnumber *int      `url:"partitionsNumber,omitempty"`
-	Resourceid       *[]string `url:"resourceId,omitempty"`
-	Since            *string   `url:"since,omitempty"`
-	Until            *string   `url:"until,omitempty"`
-}
-
-// WithForce sets the force query parameter
-func WithForce(force bool) Option {
-	return func(o *Options) {
-		o.Force = &force
-	}
-}
-
-// WithPartitioned sets the partitioned query parameter
-func WithPartitioned(partitioned bool) Option {
-	return func(o *Options) {
-		o.Partitioned = &partitioned
-	}
-}
-
-// WithPartitionsnumber sets the partitionsNumber query parameter
-func WithPartitionsnumber(partitionsNumber int) Option {
-	return func(o *Options) {
-		o.Partitionsnumber = &partitionsNumber
-	}
+	Resourceid *[]string `url:"resourceId,omitempty"`
+	Since      *string   `url:"since,omitempty"`
+	Until      *string   `url:"until,omitempty"`
 }
 
 // WithResourceid sets the resourceId query parameter
@@ -71,15 +47,6 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
-	if options.Force != nil {
-		params = append(params, fmt.Sprintf("force=%t", *options.Force))
-	}
-	if options.Partitioned != nil {
-		params = append(params, fmt.Sprintf("partitioned=%t", *options.Partitioned))
-	}
-	if options.Partitionsnumber != nil {
-		params = append(params, fmt.Sprintf("partitionsNumber=%d", *options.Partitionsnumber))
-	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
 	}

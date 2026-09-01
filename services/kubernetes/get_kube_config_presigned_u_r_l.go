@@ -12,14 +12,44 @@ import (
 )
 
 /*
-Getkubeconfigpresignedurl
+Getkubeconfigpresignedurl GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/kubeconfig/presigned-url — presigned kubeconfig URL.
+
+Mints a **self-authenticating** download URL: the real `kubeconfig.yaml`
+route on this API, carrying a 60-minute capability Biscuit in
+`?authorization=`. The token is signed with the module's own
+`biscuit.root_key` and verified back by [`KubeconfigAccess`] on the
+download — so the link works with no session, which is the point of the
+surface (the console hands it to the user).
+
+The token carries axo's #1145 fail-closed capability contract
+(`allowed_op`/`allowed_tenant` + embedded checks) rather than OVD's weaker
+`right`/`contains` datalog — the approved divergence documented at
+`ovd_biscuit.rs:1023-1027`. Its **scope is tenant+op, not cluster**, exactly
+as OVD (auth-pki.md:245-247); see [`crate::kubeconfig_access::PresignedGrant::authorize`].
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — getKubeConfigPresignedURL
+Source: references/legacy/ovd/modules/kubernetes/services/KubeConfigService.scala:170-207 — generatePresignedURL
+Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/models/PresignedURL.scala:35-66 — generate
+Behavior: returns `{"url": …}` for downloading the kubeconfig. No
+
+	availability gate — OVD mints the link even while the cluster
+	deploys, and gates the download instead.
+
+Issues: #667, #2352
+
+**Legacy**: ovd ClusterController.scala getKubeConfigPresignedURL()
+**Algorithm**:
+  - Mints a 60-minute tenant+op-scoped capability Biscuit and embeds it in
+    the kubeconfig download URL
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +64,14 @@ Example:
 x-service: kubernetes
 operationId: getKubeConfigPresignedURL
 */
-func Getkubeconfigpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.PresignedURL] {
+func Getkubeconfigpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.PresignedUrl] {
 	ctx, span := tracer.Start(ctx, "getKubeConfigPresignedURL", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/kubeconfig/presigned-url", ownerId, clusterId)
 
 	// Make API call
-	response := client.Get[models.PresignedURL](ctx, c, path)
+	response := client.Get[models.PresignedUrl](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

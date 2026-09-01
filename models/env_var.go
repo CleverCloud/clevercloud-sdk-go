@@ -2,7 +2,7 @@
 
 package models
 
-// EnvVar
+// EnvVar Single environment variable (name/value pair).  Source: references/legacy/ovd/core/src/main/scala...
 type EnvVar struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`

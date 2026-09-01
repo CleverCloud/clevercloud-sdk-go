@@ -11,17 +11,35 @@ import (
 )
 
 /*
-Deletecephxuser
+Deletecephxuser DELETE /v4/tenants/{tenantId}/ceph-x-users/{entityId} -- delete a Ceph X user.
 
-Delete an existing ceph x user.
+Source: ovd StorageController.scala:165 deleteCephXUser()
+Behavior: calls Ceph Dashboard API to delete the CephX user.
+
+	Returns 204 on success.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Delete a CephX user from Ceph Dashboard.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- DELETE /api/cluster/user/{entity} to Ceph Dashboard
+- Return Unit (204 No Content)
+- Source: ovd StorageController.scala:165, CephAdmin.scala:383
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_x_op:remove_user` on the path tenant, **bound to the path entity**
+    (`cephx_user` scope fact, same as the GET; refs #2902)
+  - Call ceph.delete_ceph_x_user(entity_id) via reqwest
+  - Return 204 on success, 501 if not configured
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - entityId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - entityId: Ceph X entity identifier
 
 # Returns the operation result or an error
 

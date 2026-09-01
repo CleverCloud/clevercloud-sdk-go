@@ -12,17 +12,27 @@ import (
 )
 
 /*
-Updateuser
+Updateuser **Legacy**: ovd users.scala:138 patchUsers()
+**Algorithm**:
+  - Verify addon, build dynamic SET clause for login/createRole
+  - UPDATE provision_user privileges
 
-# Update the user's privileges in the given PostgreSQL addon
+**Conformity**: YES
+
+PATCH /v4/postgresql/organisations/{ownerId}/postgresql/{postgreSQLId}/users/{userId}
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — updateUser
+Source: ovd PostgreSQLUserService.scala — patchUsers
+Behavior: updates login and/or createRole privileges
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
-  - pgUserId: PostgreSQL User ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
+  - pgUserId: PostgreSQL user ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -38,14 +48,14 @@ Example:
 x-service: postgresql
 operationId: updateUser
 */
-func Updateuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, requestBody *models.PatchUser) client.Response[models.PgUserData] {
+func Updateuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, requestBody *models.PatchUserRequest) client.Response[models.PgUserDataView] {
 	ctx, span := tracer.Start(ctx, "updateUser", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s", ownerId, postgreSQLId, pgUserId)
 
 	// Make API call
-	response := client.Patch[models.PgUserData](ctx, c, path, requestBody)
+	response := client.Patch[models.PgUserDataView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

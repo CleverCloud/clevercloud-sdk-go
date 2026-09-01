@@ -11,9 +11,19 @@ import (
 )
 
 /*
-Createkms
+Createkms POST /v2/providers/addon-kms/resources — provision a new KMS addon.
 
-provision a new Kms instance
+Legacy: ovd routes.scala:30 provisionKms
+Algorithm:
+  - Generate kms_UUID, token (s.UUID), root_token (s.UUID)
+  - INSERT into addon_kms with ACTIVE status
+  - Return ProvisionResponse with CC_VAULT_TOKEN + CC_VAULT_ROOT_TOKEN
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/kms/api/routes.scala provisionRoute
+Behavior: creates addon_kms record with ACTIVE status, returns provision response
+Issue: #659
 
 Parameters:
   - ctx: context for the request

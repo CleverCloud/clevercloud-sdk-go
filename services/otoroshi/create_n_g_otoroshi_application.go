@@ -12,15 +12,26 @@ import (
 )
 
 /*
-Createngotoroshiapplication
+Createngotoroshiapplication POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/networkgroup
 
-request to link a the otoroshi's java application to a networkgroup
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — createNGForAddon()
+
+📥 **Algo Source (Legacy):**
+- Generate a new NetworkGroupId
+- Fetch addon from DB
+- Create NetworkGroup via NG API with java app as member
+- UPDATE addon with networkgroup_id in DB
+- Redeploy the addon (reboot without rebuild)
+- Return updated OtoroshiView
+- Source: ovd OtoroshiProviderService.scala:547 createNGForAddon()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 
@@ -35,14 +46,14 @@ Example:
 x-service: otoroshi
 operationId: createNGOtoroshiApplication
 */
-func Createngotoroshiapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.Otoroshi] {
+func Createngotoroshiapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.OtoroshiView] {
 	ctx, span := tracer.Start(ctx, "createNGOtoroshiApplication", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-otoroshi/addons/%s/networkgroup", OtoroshiId)
 
 	// Make API call
-	response := client.Post[models.Otoroshi](ctx, c, path, nil)
+	response := client.Post[models.OtoroshiView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

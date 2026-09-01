@@ -12,15 +12,43 @@ import (
 )
 
 /*
-Renewpulsartoken
+Renewpulsartoken PATCH /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/renew-biscuit — renew Biscuit token.
 
-# Revoke and generate the Pulsar authentication token
+**Legacy**: ovd PulsarController.scala:229 renewBiscuitServerEndpoint()
+**Algorithm**:
+  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
+  - Delegates to PulsarProvisioningService.renewBiscuit(ownerId, pulsarId) (line 159)
+  - Generates new Biscuit via AddonPulsarBiscuitHelper, UPDATE token in DB
+
+**Conformity**: FAITHFUL — ownership enforced (refs #1057), real Biscuit
+
+	minting wired (refs #1058), environment pushed back to
+	cc-api (refs #1057).
+
+An earlier revision of this block claimed the legacy also revokes the old
+token cluster-side and marked the route PARTIAL for not doing so. It does
+not: `renewBiscuitWithPulsar` is mint → `updateCCAPIEnvVars` → `updateBiscuit`
+and nothing else, `PulsarAdminClient` exposes no revocation call, and the
+only "revoke" in the legacy module is the word in this endpoint's own
+description. Attenuated Biscuits are not revocable that way — the old token
+simply stays valid until it expires, which is why the environment push
+matters. Refs #2875.
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala renewBiscuitServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/services/PulsarProvisioningService.scala:228 (`renewBiscuitWithPulsar`)
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala renewBiscuit
+Behavior: generates a new Biscuit token (attenuated from the cluster's root),
+
+	stores it, and pushes the addon's environment to cc-api so the
+	linked applications are redeployed with it. Returns updated view.
+
+Issue: #8, #1057, #1058, #2875
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +63,14 @@ Example:
 x-service: pulsar
 operationId: renewPulsarToken
 */
-func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
 	ctx, span := tracer.Start(ctx, "renewPulsarToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/renew-biscuit", pulsarId)
 
 	// Make API call
-	response := client.Patch[models.Pulsar](ctx, c, path, nil)
+	response := client.Patch[models.PulsarView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

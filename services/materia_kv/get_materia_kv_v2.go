@@ -12,15 +12,24 @@ import (
 )
 
 /*
-Getmateriakvv2
+Getmateriakvv2 GET /v2/providers/kv/resources/{kvId} — get Materia KV (v2 legacy, internal).
 
-# Get a MateriaKV
+HARDENING DIVERGENCE from OVD (`onUserAction` whitelists `Get` for user tokens here too):
+this broker-protocol route has no owner segment, so caller membership cannot be bound —
+OVD's posture exposed the live `MateriaDBView.token` to any valid user token knowing a
+kv_id (credential IDOR, P0 #1142). Internal-only now (`require_internal_only` on the
+sub-router); user-facing reads go through the v4 route, which binds membership.
+
+Source: references/legacy/ovd/modules/materia/db/api/routes.scala getMateriaDbV2
+Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala onUserAction (diverged, #1142)
+Behavior: internal cc-api Basic only — 401 for user tokens; MateriaDBView, 404 if not found
+Issue: #1142, #1260, #679
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kvId:
+  - kvId: Materia KV ID
 
 # Returns the operation result or an error
 
@@ -35,14 +44,14 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKvV2
 */
-func Getmateriakvv2(ctx context.Context, c *client.Client, tracer trace.Tracer, kvId string) client.Response[models.MateriaDB] {
+func Getmateriakvv2(ctx context.Context, c *client.Client, tracer trace.Tracer, kvId string) client.Response[models.MateriaDBView] {
 	ctx, span := tracer.Start(ctx, "getMateriaKvV2", trace.WithAttributes(attribute.String("kvId", kvId)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/kv/resources/%s", kvId)
 
 	// Make API call
-	response := client.Get[models.MateriaDB](ctx, c, path)
+	response := client.Get[models.MateriaDBView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

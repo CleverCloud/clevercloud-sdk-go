@@ -12,21 +12,24 @@ import (
 )
 
 /*
-Createnetwork
-
-# Allocate a network
+Createnetwork Row 9 — the live body validator ([`AllocateNetworkInput::validate`]:
+offset-without-CIDR and no-CIDR-at-all are **400**), then the 422 CIDR
+checks (v4 always, v6 only when prefix > 120), the NetworkGroup fetch that
+becomes `network.details` (503 on failure), then the insert. **201**
+`NetworkIdResponse`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: tenantId
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := loadbalancer.Createnetwork(ctx, client, tracer, tenantId)
+	response := loadbalancer.Createnetwork(ctx, client, tracer, tenantId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +38,14 @@ Example:
 x-service: loadbalancer
 operationId: createNetwork
 */
-func Createnetwork(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[models.NetworkIdResponse] {
+func Createnetwork(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.AllocateNetworkInput) client.Response[models.NetworkIdResponse] {
 	ctx, span := tracer.Start(ctx, "createNetwork", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/networks", tenantId)
 
 	// Make API call
-	response := client.Post[models.NetworkIdResponse](ctx, c, path, nil)
+	response := client.Post[models.NetworkIdResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

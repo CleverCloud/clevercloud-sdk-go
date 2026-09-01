@@ -12,14 +12,25 @@ import (
 )
 
 /*
-Triggerkubernetesclusterresume
+Triggerkubernetesclusterresume POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/resume — resume a failed cluster.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — triggerResume
+Behavior: resumes a failed cluster by resetting status to DEPLOYING.
+Issue: #667
+
+**Legacy**: ovd ClusterController.scala triggerKubernetesClusterResume()
+**Algorithm**:
+  - Only if current status is FAILED, set status=DEPLOYING
+  - Actual redeployment is async
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +45,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterResume
 */
-func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
+func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, nil)
+	response := client.Post[models.ClusterView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

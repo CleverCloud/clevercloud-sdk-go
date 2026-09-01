@@ -11,15 +11,16 @@ import (
 )
 
 /*
-Rebootmatomo
+Rebootmatomo POST .../addons/{id}/reboot — restart the PHP app **with** build cache.
 
-reboot Matomo application
+Source: references/legacy/ovd/modules/matomo/services/MatomoProviderService.scala — rebootAddon(rebuild=false)
+Issue: #660
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo addon ID
 
 # Returns the operation result or an error
 

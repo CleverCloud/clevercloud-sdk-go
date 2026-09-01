@@ -11,9 +11,11 @@ import (
 )
 
 /*
-Createinfrastructuredeployment
+Createinfrastructuredeployment POST /v4/infrastructure/deployments
 
-# Create a Deployment
+Source: references/legacy/ovd/modules/compute/routes/DeploymentController.scala createDeploymentLogic
+Behavior: create deployment ZK znode with Started status. Orchestrator picks it up.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
@@ -31,17 +33,17 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: createInfrastructureDeployment
 */
-func Createinfrastructuredeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.DeploymentInput) client.Response[client.Nothing] {
+func Createinfrastructuredeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.DeploymentInput) client.Response[models.DeploymentOutput] {
 	ctx, span := tracer.Start(ctx, "createInfrastructureDeployment")
 	defer span.End()
 
 	path := utils.Path("/v4/infrastructure/deployments")
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[models.DeploymentOutput](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

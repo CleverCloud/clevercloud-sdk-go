@@ -13,16 +13,25 @@ import (
 )
 
 /*
-Updatedatabase
+Updatedatabase **Legacy**: ovd databases.scala:48 patchDatabase()
+**Algorithm**:
+  - Verify addon, ALTER DATABASE on addon instance, UPDATE metadata DB
 
-Update the read/write mode of the database
+**Conformity**: YES (metadata update + ALTER DATABASE on addon instance)
+
+PATCH /v4/postgresql/organisations/{ownerId}/postgresql/{postgreSQLId}/databases/{databaseId}
+
+Source: ovd PostgreSQLDatabaseRepository.scala — updateDatabaseMode
+Source: ovd PostgreSQLDatabaseService.scala — patchPostgreSQLDatabase
+Behavior: updates the database read/write mode
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - databaseId: Database ID
   - requestBody: the request payload
   - opts: optional query parameters
@@ -40,7 +49,7 @@ Example:
 x-service: postgresql
 operationId: updateDatabase
 */
-func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string, requestBody *models.WannaPatchPostgreSQLDatabase, opts ...Option) client.Response[models.PostgreSQLDatabase] {
+func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, databaseId string, requestBody *models.PatchDatabaseRequest, opts ...Option) client.Response[models.PostgreSQLDatabaseView] {
 	ctx, span := tracer.Start(ctx, "updateDatabase", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("databaseId", databaseId)))
 	defer span.End()
 
@@ -53,7 +62,7 @@ func Updatedatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, 
 	}
 
 	// Make API call
-	response := client.Patch[models.PostgreSQLDatabase](ctx, c, path, requestBody)
+	response := client.Patch[models.PostgreSQLDatabaseView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

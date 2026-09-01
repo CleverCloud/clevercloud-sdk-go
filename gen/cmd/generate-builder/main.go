@@ -271,6 +271,13 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 // SERVICE_NAME_EXCEPTIONS maps x-service values to package names
 // Must match generate-services/main.go SERVICE_NAME_EXCEPTIONS
 var SERVICE_NAME_EXCEPTIONS = map[string]string{
+	// `internal` is reserved by Go: a package at services/internal is importable only from
+	// services/..., so builder.go at the module root cannot reach it. AXO publishes an
+	// `Internal` tag, hence the rename. Keep in step with generate-services/main.go — this
+	// table is duplicated between the two generators.
+	"internal": "internalapi",
+	"Internal": "internalapi",
+
 	"addon-pulsar":     "pulsar",
 	"addon-storage":    "storage",
 	"addon-cellar":     "storage",
@@ -489,6 +496,23 @@ func buildPathTree(operations []BuilderOperation) *BuilderNode {
 			var key string
 			var paramName string
 			var paramType string
+
+			// A compound segment mixes a parameter with literal text or holds two of them —
+			// `{bid}.pdf` and `{type}-{version}` are both real routes. The builder models one
+			// path slot per parameter and cannot express either, and the two cases do not even
+			// share a calling convention: `.pdf` is a suffix the caller should not type, while
+			// `{type}-{version}` is two values joined by a dash. Rather than invent a semantic,
+			// the route is left out of the fluent builder — it stays fully available through the
+			// level-1 services API, which formats the path correctly.
+			if strings.Count(segment, "{") > 1 ||
+				(strings.Contains(segment, "{") &&
+					!(strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}"))) {
+				log.Printf("Note: %s is not exposed in the fluent builder (compound path segment %q); use the services API",
+					op.Path, segment)
+				// Breaking before the last segment is what drops the route: the operation is
+				// only recorded once the walk reaches it.
+				break
+			}
 
 			if isParam {
 				// Extract parameter name from {paramName}
@@ -962,8 +986,14 @@ func parseModelTypeForResponse(typeName string) *Statement {
 }
 
 func toPascalCase(s string) string {
-	// Remove special characters
-	s = strings.Trim(s, "{}")
+	// Remove special characters.
+	//
+	// `Trim` only strips braces at the ends, which is not enough: a path segment can mix a
+	// parameter with a literal suffix — `/payments/billings/{bid}.pdf` is a real route — and the
+	// inner `}` survived into the identifier, yielding `Bid}Pdf` and a Go syntax error. Strip
+	// every brace instead.
+	s = strings.ReplaceAll(s, "{", "")
+	s = strings.ReplaceAll(s, "}", "")
 	s = strings.ReplaceAll(s, "-", "_")
 	s = strings.ReplaceAll(s, ".", "_")
 
@@ -1074,17 +1104,29 @@ func toCamelCase(s string) string {
 }
 
 func fixIDSuffixes(s string) string {
+	// Acronyms that Go spells in full caps. This table is duplicated in
+	// generate-services/main.go and generate-builder/main.go and MUST stay identical: the two
+	// generators derive the same function names independently, and a divergence produces a
+	// builder that calls a service function under a name the services package never emitted.
+	// It had drifted — services knew Ipam/Sql/Ttl/Uri/Uuid, the builder knew Yaml — and
+	// `builder.go` referenced `GetInternalBestAppForUri` where the package exports
+	// `GetInternalBestAppForURI`.
 	replacements := map[string]string{
-		"Id":   "ID",
-		"Ip":   "IP",
-		"Url":  "URL",
-		"Api":  "API",
-		"Tls":  "TLS",
-		"Http": "HTTP",
+		"Api":   "API",
+		"Http":  "HTTP",
 		"Https": "HTTPS",
-		"Json": "JSON",
-		"Xml":  "XML",
-		"Yaml": "YAML",
+		"Id":    "ID",
+		"Ip":    "IP",
+		"Ipam":  "IPAM",
+		"Json":  "JSON",
+		"Sql":   "SQL",
+		"Tls":   "TLS",
+		"Ttl":   "TTL",
+		"Uri":   "URI",
+		"Url":   "URL",
+		"Uuid":  "UUID",
+		"Xml":   "XML",
+		"Yaml":  "YAML",
 	}
 
 	for old, new := range replacements {

@@ -12,16 +12,31 @@ import (
 )
 
 /*
-Getstorage
+Getstorage GET /v4/tenants/{tenantId}/storages/{storageId} -- get a storage.
 
-Get an existing storage.
+Source: ovd StorageController.scala (getStorage implied by routes)
+Schema: V0__init_storage_table.sql — table storage
+Behavior: returns 404 if storage not found.
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Get a storage by ID.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- SELECT from storage WHERE id = storageId
+- Return StorageView or 404 Not Found
+- Source: ovd StorageRepository.scala:233-248
+
+🔧 **Algo Rust (Implementation):**
+- `OvdAuth` + `storage_op:get` on the path tenant
+- query_as optional StorageRow by id
+- Return 200 with StorageView or 404
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - storageId:
+  - tenantId: Tenant identifier
+  - storageId: Storage identifier
 
 # Returns the operation result or an error
 
@@ -36,14 +51,14 @@ Example:
 x-service: storage
 operationId: getStorage
 */
-func Getstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, storageId string) client.Response[models.Storage] {
+func Getstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, storageId string) client.Response[models.StorageView] {
 	ctx, span := tracer.Start(ctx, "getStorage", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("storageId", storageId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/storages/%s", tenantId, storageId)
 
 	// Make API call
-	response := client.Get[models.Storage](ctx, c, path)
+	response := client.Get[models.StorageView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

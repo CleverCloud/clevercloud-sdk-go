@@ -11,17 +11,35 @@ import (
 )
 
 /*
-Deletecephpool
+Deletecephpool DELETE /v4/tenants/{tenantId}/ceph-pools/{poolId} -- delete a Ceph pool.
 
-Delete an existing ceph pool.
+Source: ovd StorageController.scala:206 deleteCephPool()
+Behavior: calls Ceph Dashboard API to delete a pool.
+
+	Returns 204 on success.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Delete a Ceph pool via Dashboard API.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- DELETE /api/pool/{poolId} to Ceph Dashboard
+- Return Unit (204 No Content)
+- Source: ovd StorageController.scala:206, CephAdmin.scala:393
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_x_op:remove_pool` on the path tenant, **bound to the path pool**
+    (`cephPool` scope fact — OVD asserts `poolId.asFact` here; refs #2902)
+  - Call ceph.delete_pool(pool_id) via reqwest
+  - Return 204 on success, 501 if not configured
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - poolId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - poolId: Pool identifier
 
 # Returns the operation result or an error
 

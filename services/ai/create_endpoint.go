@@ -12,16 +12,37 @@ import (
 )
 
 /*
-Createendpoint
+Createendpoint **Legacy**: ovd AIProviderController.scala:80 createEndpointEndpoint()
+**Algorithm** (AIProviderService.scala:347-404 createEndpoint):
+  - Verify addon, create endpoint on Otoroshi, store ENDPOINT tenant
+  - Create apikey + deploy endpoint; partial failures return error field
+  - When the Otoroshi client cannot service the request, the legacy fails with a
+    proper error response — it never fabricates a synthetic endpoint/apikey.
 
-# Create endpoint to otoroshi cluster
+**Conformity**: YES — Otoroshi unavailable returns 503 (no fake data, no orphan tenant row)
+
+POST /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints — create an Otoroshi endpoint.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — createEndpointEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala:347-404 — createEndpoint()
+Behavior: verifies addon exists, creates endpoint on Otoroshi,
+
+	stores ENDPOINT tenant in addon_ai_tenancy, creates apikey on Otoroshi,
+	deploys endpoint on target. Returns aggregated response.
+	Partial failures return the creation response with an error field.
+	If Otoroshi is not reachable/configured, returns 503 (Cloud Versatile:
+	Otoroshi is an obligatory embedded dependency — its absence is an error,
+	not a no-op; no fake endpoint and no tenancy row are persisted).
+
+Schema: addon_ai_tenancy — INSERT (addon_id, otoroshi_id, type='ENDPOINT', otoroshi_target, creation_date)
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +58,14 @@ Example:
 x-service: ai
 operationId: createEndpoint
 */
-func Createendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, requestBody *models.CreateEndpointRequest) client.Response[models.AICreationResponse] {
+func Createendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, requestBody *models.CreateEndpointRequest) client.Response[models.AiCreationResponse] {
 	ctx, span := tracer.Start(ctx, "createEndpoint", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints", ownerId, aiId)
 
 	// Make API call
-	response := client.Post[models.AICreationResponse](ctx, c, path, requestBody)
+	response := client.Post[models.AiCreationResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,35 +12,47 @@ import (
 )
 
 /*
-Createregistry
+CreateRegistry POST /v4/tenants/{tenant_id}/container-registry/registries — create a new container registry.
 
-Create a new container registry backed by Cellar storage with optional initial tokens.
+Source: references/legacy/ovd/modules/container-registry/controllers/ContainerRegistryController.scala createRegistryServerEndpoint
+Source: references/legacy/ovd/modules/container-registry/services/ContainerRegistryProvisioningService.scala createRegistry
+Behavior: creates container_registry record with PENDING → PROVISIONED statuses,
+
+	optionally creates initial tokens, returns ContainerRegistryWithTokens
+
+Issue: #643
+
+**Legacy**: ovd ContainerRegistryController.scala:93 createRegistryServerEndpoint
+**Algorithm**:
+  - Validate plan, INSERT registry (PROVISIONED), create initial tokens if requested, return 201
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenant_id: Tenant ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := container_registry.Createregistry(ctx, client, tracer, tenantId, requestBody)
+	response := container_registry.CreateRegistry(ctx, client, tracer, tenant_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: container_registry
-operationId: createRegistry
+operationId: create_registry
 */
-func Createregistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeContainerRegistry) client.Response[models.ContainerRegistryWithTokens] {
-	ctx, span := tracer.Start(ctx, "createRegistry", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func CreateRegistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, requestBody *models.WannabeContainerRegistry) client.Response[models.ContainerRegistryWithTokens] {
+	ctx, span := tracer.Start(ctx, "create_registry", trace.WithAttributes(attribute.String("tenant_id", tenant_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/container-registry", tenantId)
+	path := utils.Path("/v4/tenants/%s/container-registry/registries", tenant_id)
 
 	// Make API call
 	response := client.Post[models.ContainerRegistryWithTokens](ctx, c, path, requestBody)

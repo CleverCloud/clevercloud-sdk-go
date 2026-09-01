@@ -2,7 +2,8 @@
 
 package models
 
-// DtlsTransport
+// DtlsTransport DTLS frontend transport — `alpn -> layer` (:410-414).
 type DtlsTransport struct {
-	Alpn MapTlstransportlayer `json:"alpn"`
+	Alpn       map[string]any `json:"alpn"` // ALPN protocol → TLS layer.
+	TLSOptions *any           `json:"tlsOptions,omitempty"`
 }

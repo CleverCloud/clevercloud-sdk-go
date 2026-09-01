@@ -2,8 +2,8 @@
 
 package models
 
-// HeaderRule
+// HeaderRule One header edit (:266-268).
 type HeaderRule struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  string `json:"name"`  // Header name.
+	Value string `json:"value"` // Header value.
 }

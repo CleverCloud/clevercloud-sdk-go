@@ -14,7 +14,7 @@ func TestGetNetworkGroup(t *testing.T) {
 	orgID := "orga_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" // Replace with actual org ID
 
 	// Use builder pattern to get a network group
-	response := s.V4().Kubernetes().Organisations().Ownerid(orgID).Clusters().Getclusters(ctx)
+	response := s.V4().Kubernetes().Organisations().Ownerid(orgID).Clusters().Listkubernetesclusters(ctx)
 	if response.HasError() {
 		t.Fatalf("Error: %v", response.Error())
 	}

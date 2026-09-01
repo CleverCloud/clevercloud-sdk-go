@@ -12,15 +12,22 @@ import (
 )
 
 /*
-Createversionupdatemetabase
+Createversionupdatemetabase POST .../addons/{id}/version/update — update the deployed Metabase version.
 
-update version
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — updateVersion
+Behaviour: verify the target is allowed (`400` otherwise) → require a Java app
+
+	(`409` otherwise) → if the target crosses the application-update threshold and
+	the app is still on the legacy `XS` flavor, bump it to `S` via `editApplication`
+	→ set `CC_METABASE_VERSION` → restart without cache → return the refreshed view.
+
+Issue: #994
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +43,14 @@ Example:
 x-service: metabase
 operationId: createVersionUpdateMetabase
 */
-func Createversionupdatemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string, requestBody *models.MetabasePatchRequest) client.Response[models.Metabase] {
+func Createversionupdatemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string, requestBody *models.PatchMetabase) client.Response[models.MetabaseView] {
 	ctx, span := tracer.Start(ctx, "createVersionUpdateMetabase", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-metabase/addons/%s/version/update", addonMetabaseId)
 
 	// Make API call
-	response := client.Post[models.Metabase](ctx, c, path, requestBody)
+	response := client.Post[models.MetabaseView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

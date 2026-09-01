@@ -13,15 +13,36 @@ import (
 )
 
 /*
-Liststatuscodedistribution
+Liststatuscodedistribution GET /v4/stats/organisations/{ownerId}/http-status-codes — status code distribution.
 
-get status code distribution over time
+📥 **Algo Source (Legacy):**
+`getStatusCodeDistribution` — HTTP status-code counts per hour over a date range.
+  - resolveDateRange(from, to); from > to → BadRequest.
+  - RequestPerHour(accesslogsToken, ownerId, applicationId|wildcard, from, to).toWarpScript →
+    application-request-count.mc2: FETCH `loadbalancer_server_http_request_count` over timespan =
+    to-from, 1h bucketize with ceil bucketCount, FILLVALUE [0.0 0.0 0 0.0], FILTER, then the in-WS
+    FOR/LMAP ISO8601 assembly → `{ date, statuses: [{ code, count }] }` ([] on empty).
+  - execStack → `stack.head[List[GetStatusCodeDistributionResponse]]`.
+  - Source: ovd .../actors/MetricsAPIActor.scala:529-559, RequestPerHour.scala, application-request-count.mc2
+
+🔧 **Algo Rust (Implementation):**
+  - `resolve_accesslogs_request` (the same preamble the heatmap runs, in the same order) → 400 on
+    a bad id or on from > to.
+  - render_application_request_count (verbatim template): from_us/to_us = ws_epoch_micros. The
+    token is the STATIC `accesslogsToken` ctor field (no per-request fetch), read from
+    `module.config().accesslogs_token`.
+  - exec → parse_status_distribution (top-of-stack list; maps the WS `code` label onto
+    `StatusCodeCount.status`, since the `code` wire rename lives in views.rs).
+  - Return `Vec<StatusCodeDistributionResponse>`.
+
+Source: ovd modules/metrics/.../actors/MetricsAPIActor.scala:529-559 (getStatusCodeDistribution)
+Issue: #767
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation/owner ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

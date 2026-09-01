@@ -2,17 +2,10 @@
 
 package models
 
-import "time"
-
-// Server
+// Server Source: ovd Server.scala
 type Server struct {
-	AvailabilityZone     string    `json:"availabilityZone"`
-	CreatedAt            time.Time `json:"createdAt"`
-	Drain                bool      `json:"drain"`
-	ID                   string    `json:"id"`
-	LoadbalancerCapacity int       `json:"loadbalancerCapacity"`
-	Maintenance          bool      `json:"maintenance"`
-	OwnerID              TenantID  `json:"ownerId"`
-	RegionID             RegionId  `json:"regionId"`
-	UpdatedAt            time.Time `json:"updatedAt"`
+	NetworkDevices []NetworkDevice `json:"networkDevices,omitempty"`
+	Spec           ServerSpec      `json:"spec"`
+	Status         ServerStatus    `json:"status"`
+	StorageDevices []StorageDevice `json:"storageDevices,omitempty"`
 }

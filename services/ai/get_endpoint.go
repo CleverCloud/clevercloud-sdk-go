@@ -12,17 +12,33 @@ import (
 )
 
 /*
-Getendpoint
+Getendpoint **Legacy**: ovd AIProviderController.scala:120 getEndpointEndpoint()
+**Algorithm**:
+  - Verify addon + tenant ownership, call Otoroshi getEndpoint
+  - Fallback: return tenant data if Otoroshi unavailable
 
-# Forward GET resource to otoroshi LLM cluster with the tenancy verifications
+**Conformity**: YES (Cloud Versatile: tenant data fallback when Otoroshi unavailable)
+
+GET /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id} — get endpoint.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getEndpointEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala:545-562 — getEndpoint()
+Behavior: verifies addon (getAIDbInfos), verifies tenant (getTenancy — endpoint must
+
+	belong to addon), then calls otoroshiClient.getEndpoint. The Scala flow is a
+	single `EitherT` for-comprehension whose `.leftMap(_.toOVDInvalidResponse)`
+	propagates ANY step's error to the HTTP layer. It NEVER synthesizes a fake JSON
+	body with marker fields — an Otoroshi failure surfaces as a real error response.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
 
 # Returns the operation result or an error
 
@@ -37,14 +53,14 @@ Example:
 x-service: ai
 operationId: getEndpoint
 */
-func Getendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string) client.Response[models.AIEndpointResponse] {
+func Getendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string) client.Response[models.AiEndpointResponse] {
 	ctx, span := tracer.Start(ctx, "getEndpoint", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s", ownerId, aiId, endpointId)
 
 	// Make API call
-	response := client.Get[models.AIEndpointResponse](ctx, c, path)
+	response := client.Get[models.AiEndpointResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

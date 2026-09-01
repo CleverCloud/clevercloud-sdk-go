@@ -11,36 +11,39 @@ import (
 )
 
 /*
-Dryrunplacement
+Dryrunplacement POST /v4/compute/placement/dry-run
 
-# Run the placement algorithm without actually scheduling anything
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala dryRunPlacement
+Behavior: run placement against cached hypervisors, return assignments.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := infrastructure.Dryrunplacement(ctx, client, tracer)
+	response := infrastructure.Dryrunplacement(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: dryRunPlacement
 */
-func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.MapHypervisor] {
+func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.PlacementDryRunInput) client.Response[models.PlacementDryRunResult] {
 	ctx, span := tracer.Start(ctx, "dryRunPlacement")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/placement/dry-run")
 
 	// Make API call
-	response := client.Post[models.MapHypervisor](ctx, c, path, nil)
+	response := client.Post[models.PlacementDryRunResult](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

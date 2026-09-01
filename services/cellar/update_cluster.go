@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Updatecluster
+Updatecluster Update a Cellar storage cluster
 
-update a Cellar cluster
+Applies a partial update to a storage cluster — any of host, availability zone, administrative credentials and availability — over the stored values and returns the refreshed `{ id, host, zone, available }`. Setting `available` to false stops the cluster taking new add-ons without touching those already on it. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. An update leaving the host, username or password blank answers 400, and an unknown cluster id answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - ClusterIndex:
+  - ownerId: Owner (org) ID
+  - ClusterIndex: Cluster numeric ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +37,14 @@ Example:
 x-service: cellar
 operationId: updateCluster
 */
-func Updatecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64, requestBody *models.UpdateClusterRequest) client.Response[models.CellarCluster] {
+func Updatecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64, requestBody *models.UpdateClusterRequest) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "updateCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.Int64("ClusterIndex", ClusterIndex)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters/%s", ownerId, ClusterIndex)
 
 	// Make API call
-	response := client.Put[models.CellarCluster](ctx, c, path, requestBody)
+	response := client.Put[models.ClusterView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

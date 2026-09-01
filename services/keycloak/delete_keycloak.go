@@ -11,15 +11,17 @@ import (
 )
 
 /*
-Deletekeycloak
+Deletekeycloak DELETE /v2/providers/addon-keycloak/resources/{keycloak_id}
 
-deprovision an existing Keycloak
+Source: ovd AddonKeycloakAddonActor.scala:1111 markToDelete()
+Behavior: Mark addon TO_DELETE in DB, spawn async cleanup (delete Java apps, DNS, PG, FS, NG).
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak instance ID
 
 # Returns the operation result or an error
 

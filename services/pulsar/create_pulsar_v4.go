@@ -11,9 +11,28 @@ import (
 )
 
 /*
-Createpulsarv4
+Createpulsarv4 POST /v4/addon-providers/addon-pulsar/addons — create Pulsar addon (v4 internal).
 
-# Create Pulsar product
+**Legacy**: ovd PulsarController.scala:191 createPulsarServerEndpoint()
+**Algorithm**:
+  - Ownership verified: token ownerId must match body.ownerId (403 if mismatch)
+  - Delegates to PulsarProvisioningService.createPulsar(wannabePulsar) (line 90)
+  - Finds cluster, INSERT addon, calls Pulsar admin to create tenant+namespace
+
+**Conformity**: FAITHFUL — ownership enforced (refs #1057); the tenant and
+
+	namespace are materialised on the broker through
+	`ensure_tenant_and_namespace` *before* the addon row is
+	inserted, with `compensate_private_namespace` unwinding it
+	when the insert fails (refs #1065)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createPulsarServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala createPulsar
+Behavior: creates addon from WannabePulsar body. Ownership verified by comparing
+
+	the OAuth1 user (or org membership) against `body.ownerId`.
+
+Issue: #8, #1057, #1065
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +53,14 @@ Example:
 x-service: pulsar
 operationId: createPulsarV4
 */
-func Createpulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabePulsar) client.Response[models.Pulsar] {
+func Createpulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabePulsar) client.Response[models.PulsarView] {
 	ctx, span := tracer.Start(ctx, "createPulsarV4")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons")
 
 	// Make API call
-	response := client.Post[models.Pulsar](ctx, c, path, requestBody)
+	response := client.Post[models.PulsarView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

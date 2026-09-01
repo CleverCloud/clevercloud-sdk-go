@@ -2,19 +2,19 @@
 
 package models
 
-// DeploymentEventOperation represents
+// DeploymentEventOperation represents Legacy wire vocabulary for [`DeploymentEventView::operation`].  Pure DTO — no Postgres binding (u...
 type DeploymentEventOperation string
 
 const (
 	DeploymentEventOperationCREATE            DeploymentEventOperation = "CREATE"
+	DeploymentEventOperationREDEPLOY          DeploymentEventOperation = "REDEPLOY"
+	DeploymentEventOperationUPGRADE           DeploymentEventOperation = "UPGRADE"
 	DeploymentEventOperationDELETE            DeploymentEventOperation = "DELETE"
 	DeploymentEventOperationNodegroupCreate   DeploymentEventOperation = "NODEGROUP_CREATE"
 	DeploymentEventOperationNodegroupDelete   DeploymentEventOperation = "NODEGROUP_DELETE"
-	DeploymentEventOperationNodegroupRedeploy DeploymentEventOperation = "NODEGROUP_REDEPLOY"
-	DeploymentEventOperationNodegroupResume   DeploymentEventOperation = "NODEGROUP_RESUME"
 	DeploymentEventOperationNodegroupScale    DeploymentEventOperation = "NODEGROUP_SCALE"
-	DeploymentEventOperationREDEPLOY          DeploymentEventOperation = "REDEPLOY"
-	DeploymentEventOperationUPGRADE           DeploymentEventOperation = "UPGRADE"
+	DeploymentEventOperationNodegroupResume   DeploymentEventOperation = "NODEGROUP_RESUME"
+	DeploymentEventOperationNodegroupRedeploy DeploymentEventOperation = "NODEGROUP_REDEPLOY"
 )
 
 // String returns the underlying string value

@@ -12,15 +12,36 @@ import (
 )
 
 /*
-Createreadtoken
+Createreadtoken POST /v4/warp10/cluster/{cluster_id}/token/read — create cluster read token.
 
-# Generate a Warp10 READ token for the specified cluster
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:131-143 createReadToken
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/auth/Warp10DualAuthenticator.scala
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Authorizer.scala dispatchAuth
+Behavior:
+  - Accepts Basic (service account) or Bearer (biscuit) auth.
+  - Biscuit: requires CREATE_SYSTEM_TOKEN operation + READ scope.
+  - Basic: service account with LowLevel access.
+  - creator_kind/creator_id persisted from auth context (ROBOT/IDENTITY for biscuit).
+
+📥 **Algo Source (Legacy):**
+dispatchAuth(clusterId, CREATE_SYSTEM_TOKEN, Some(READ)):
+  - Biscuit: validateBiscuitGrants(grants, clusterId, CREATE_SYSTEM_TOKEN, Some(READ))
+    then generateReadTokenBiscuit (also validates wildcard + attributes)
+  - Basic: generateReadToken(clusterId, userLogin, request)
+
+Source: Warp10Controller.scala:131-143 createReadToken + dispatchAuth
+
+🔧 **Algo Rust (Implementation):**
+- dispatch_warp10_auth(CREATE_SYSTEM_TOKEN, Some(Read)) → Warp10AuthContext or 401/403
+- create_read_token_for_cluster_authed(module, cluster_id, req, auth_ctx)
+
+Issue: #642, #758
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
+  - clusterId: Warp10 cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

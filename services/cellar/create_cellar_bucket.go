@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Createcellarbucket
+Createcellarbucket Create a bucket
 
-create a bucket for a Cellar account
+Creates a bucket in this add-on's storage and returns its view: name, versioning status, and the object count, total size and timestamps read back from the cluster. Set `versioning` in the body to turn on object versioning at creation. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on answers 404, and a bucket name already in use answers 409.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +37,14 @@ Example:
 x-service: cellar
 operationId: createCellarBucket
 */
-func Createcellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, requestBody *models.WannabeBucket) client.Response[models.Bucket] {
+func Createcellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, requestBody *models.CreateBucketRequest) client.Response[models.BucketView] {
 	ctx, span := tracer.Start(ctx, "createCellarBucket", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets", ownerId, CellarId)
 
 	// Make API call
-	response := client.Post[models.Bucket](ctx, c, path, requestBody)
+	response := client.Post[models.BucketView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

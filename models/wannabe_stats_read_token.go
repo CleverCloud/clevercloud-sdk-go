@@ -2,8 +2,8 @@
 
 package models
 
-// WannabeStatsReadToken
+// WannabeStatsReadToken Request body for POST /v4/stats/organisations/{ownerId}/tokens/read (and resource variant).  Sour...
 type WannabeStatsReadToken struct {
-	Applications []PlatformApplication `json:"applications,omitempty"`
-	TTL          *string               `json:"ttl,omitempty"`
+	Applications []string `json:"applications,omitempty"` // Applications the token grants read access to. **Optional**: omitted ⇒ falls back to [`DEFAULT_STA...
+	TTL          *string  `json:"ttl,omitempty"`          // Token lifespan as an ISO-8601 duration (e.g. `P7D`, `PT1H`). **Optional**: omitted ⇒ falls back t...
 }

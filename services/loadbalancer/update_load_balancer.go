@@ -12,17 +12,16 @@ import (
 )
 
 /*
-Updateloadbalancer
-
-Scale loadbalancer (upscale or downscale)
+Updateloadbalancer Row 36 — 204 (also for the same-flavor no-op); 412 downscale guard, 507
+upscale placement. WP3: upscale adds no servers (recorded gap).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
   - requestBody: the request payload
 
 # Returns the operation result or an error

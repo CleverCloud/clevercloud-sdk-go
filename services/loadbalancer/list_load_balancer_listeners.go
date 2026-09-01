@@ -12,16 +12,15 @@ import (
 )
 
 /*
-Listloadbalancerlisteners
-
-# Get loadbalancer listeners
+Listloadbalancerlisteners Row 29 — `200 []` when the LB exists with zero listeners; config row
+absent → 500.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId:
 
 # Returns the operation result or an error
 

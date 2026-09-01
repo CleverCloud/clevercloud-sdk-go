@@ -12,16 +12,47 @@ import (
 )
 
 /*
-Createstorage
+Createstorage POST /v4/tenants/{tenantId}/storages -- create a storage.
 
-Create a new storage.
+Source: ovd StorageController.scala:280 createStorage()
+Schema: V0__init_storage_table.sql — table storage + ceph_rbd_storage
+Behavior: for RBD kind, creates namespace in DB + Ceph, creates RBD image in Ceph,
+
+	then inserts storage + ceph_rbd_storage in DB. Returns the created storage view.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Create a storage resource (RBD or NFS).
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- Match on kind: REMOTE_BLOCK_DEVICE → handleRBDCreation, NETWORK_FILE_SYSTEM → NotImplemented
+- handleRBDCreation:
+ 1. Create CephRBDNamespace (DB + Ceph)
+ 2. Create CephRBDStorage model from config
+ 3. Create RBD image in Ceph
+ 4. INSERT storage + ceph_rbd_storage in DB
+ 5. Return StorageView
+
+- Source: ovd StorageController.scala:280-317
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `storage_op:add` on the path tenant
+  - NFS kind → 501 "NFS will be supported later." (legacy branch, refs #2900)
+  - RBD kind: extract + validate the configuration (nested legacy `pool.name`
+    or flat `poolName`; `size` as integer or the JSON double legacy emits) —
+    412 "Invalid storage configuration" when it does not carry a usable
+    size + pool (refs #2899)
+  - Create namespace (DB PENDING + Ceph + PROVISIONED), create RBD image (Ceph),
+    propagating a Ceph failure with its mapped status (refs #2901)
+  - Insert storage + ceph_rbd_storage in ONE transaction (refs #2904)
+  - Return 201 with StorageView
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +68,14 @@ Example:
 x-service: storage
 operationId: createStorage
 */
-func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeStorage) client.Response[models.Storage] {
+func Createstorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeStorage) client.Response[models.StorageView] {
 	ctx, span := tracer.Start(ctx, "createStorage", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/storages", tenantId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Storage](ctx, c, path, requestBody)
+	response := client.Post[models.StorageView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,37 +12,46 @@ import (
 )
 
 /*
-Listregistries
+ListRegistries GET /v4/tenants/{tenant_id}/container-registry/registries — list all registries for a tenant.
 
-List all container registries for a tenant.
+Source: references/legacy/ovd/modules/container-registry/controllers/ContainerRegistryController.scala listRegistriesServerEndpoint
+Source: references/legacy/ovd/modules/container-registry/repositories/ContainerRegistryRepository.scala findByTenantId
+Behavior: returns all registries for the given tenant
+Issue: #643
+
+**Legacy**: ovd ContainerRegistryController.scala:110 listRegistriesServerEndpoint
+**Algorithm**:
+  - SELECT all registries by tenant_id, return list of views
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenant_id: Tenant ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := container_registry.Listregistries(ctx, client, tracer, tenantId)
+	response := container_registry.ListRegistries(ctx, client, tracer, tenant_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: container_registry
-operationId: listRegistries
+operationId: list_registries
 */
-func Listregistries(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.ContainerRegistry] {
-	ctx, span := tracer.Start(ctx, "listRegistries", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func ListRegistries(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string) client.Response[[]models.ContainerRegistryView] {
+	ctx, span := tracer.Start(ctx, "list_registries", trace.WithAttributes(attribute.String("tenant_id", tenant_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/container-registry", tenantId)
+	path := utils.Path("/v4/tenants/%s/container-registry/registries", tenant_id)
 
 	// Make API call
-	response := client.Get[[]models.ContainerRegistry](ctx, c, path)
+	response := client.Get[[]models.ContainerRegistryView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

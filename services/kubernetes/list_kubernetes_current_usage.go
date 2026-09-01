@@ -12,13 +12,24 @@ import (
 )
 
 /*
-Listkubernetescurrentusage
+Listkubernetescurrentusage GET /v4/kubernetes/organisations/{owner_id}/usage — the tenant's current
+consumption, one view per active control-plane bundle and node group.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala:225-233 — listCurrentUsage
+Source: references/legacy/ovd/modules/kubernetes/services/QuotaService.scala:136-171 — getDetailedConsumptionByTenant
+Spec: references/legacy/ovd/modules/kubernetes/doc/quota-management.md §Quota API
+Issues: #667, #1580 (M4)
+
+This is the same computation the quota check runs, so what a tenant reads here
+is exactly what admission counts against their ceiling. It replaces a mapper
+that read only `data.flavor`, which reported every control plane as 0 CPU /
+0 RAM and ignored node counts entirely.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
 
 # Returns the operation result or an error
 
@@ -33,14 +44,14 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesCurrentUsage
 */
-func Listkubernetescurrentusage(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.ClusterItemUsage] {
+func Listkubernetescurrentusage(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.ClusterItemUsageView] {
 	ctx, span := tracer.Start(ctx, "listKubernetesCurrentUsage", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/usage", ownerId)
 
 	// Make API call
-	response := client.Get[[]models.ClusterItemUsage](ctx, c, path)
+	response := client.Get[[]models.ClusterItemUsageView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

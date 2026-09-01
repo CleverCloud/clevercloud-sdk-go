@@ -4,6 +4,7 @@ package base
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -12,8 +13,16 @@ type Option func(*Options)
 
 // Options holds query parameters for base operations
 type Options struct {
-	From *int `url:"from,omitempty"`
-	Size *int `url:"size,omitempty"`
+	Cluster *string `url:"cluster,omitempty"`
+	From    *int    `url:"from,omitempty"`
+	Size    *int    `url:"size,omitempty"`
+}
+
+// WithCluster sets the cluster query parameter
+func WithCluster(cluster string) Option {
+	return func(o *Options) {
+		o.Cluster = &cluster
+	}
 }
 
 // WithFrom sets the from query parameter
@@ -38,6 +47,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cluster != nil {
+		params = append(params, fmt.Sprintf("cluster=%s", url.QueryEscape(*options.Cluster)))
+	}
 	if options.From != nil {
 		params = append(params, fmt.Sprintf("from=%d", *options.From))
 	}

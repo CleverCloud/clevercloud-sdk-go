@@ -2,7 +2,7 @@
 
 package models
 
-// OIdSchemaPair
+// OIdSchemaPair OID-name pair for schemas.  Source: ovd OIdPair.scala — OIdSchemaPair
 type OIdSchemaPair struct {
 	Database string `json:"database"`
 	Name     string `json:"name"`

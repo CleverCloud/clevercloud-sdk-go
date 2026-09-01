@@ -12,13 +12,24 @@ import (
 )
 
 /*
-Listconfigurationproviderenv
+Listconfigurationproviderenv GET /v4/addon-providers/config-provider/addons/{addon_id}/env — get env vars.
+
+Legacy: ovd routes.scala:65 getAddonEnv
+Algorithm:
+  - SELECT row, decrypt config blob, return Vec of EnvVar from JSON
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala getAddonEnv
+Source: references/legacy/ovd/modules/configprovider/routes/AddonConfigProviderRoutes.scala getAddonEnv
+Behavior: returns current env vars for this addon, 404 if not found
+Issue: #2
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: ConfigProvider addon ID
 
 # Returns the operation result or an error
 

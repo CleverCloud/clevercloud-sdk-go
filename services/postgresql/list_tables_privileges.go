@@ -13,16 +13,23 @@ import (
 )
 
 /*
-Listtablesprivileges
+Listtablesprivileges **Legacy**: ovd users.scala:95 getTablesPrivileges()
+**Algorithm**:
+  - Verify addon, SELECT table privileges with dynamic WHERE (oid, schemaOId, databaseOId, userId)
 
-# Get users tables perivileges for a given PostgreSQL addon
+**Conformity**: YES
+
+GET .../users/privileges/tables — list all table-level privileges.
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — selectTablesPrivileges
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -38,7 +45,7 @@ Example:
 x-service: postgresql
 operationId: listTablesPrivileges
 */
-func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgTablePrivileges] {
+func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgTablePrivilegesView] {
 	ctx, span := tracer.Start(ctx, "listTablesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
@@ -51,7 +58,7 @@ func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tr
 	}
 
 	// Make API call
-	response := client.Get[[]models.PgTablePrivileges](ctx, c, path)
+	response := client.Get[[]models.PgTablePrivilegesView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

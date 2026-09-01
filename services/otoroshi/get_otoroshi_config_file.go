@@ -11,15 +11,25 @@ import (
 )
 
 /*
-Getotoroshiconfigfile
+Getotoroshiconfigfile GET /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/config.yaml
 
-get Otoroshi configuration file for otoroshictl
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getConfigurationFile()
+Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiCtlConfig.scala — from()
+
+📥 **Algo Source (Legacy):**
+- Get full OtoroshiView (includes env vars from cc-api)
+- Build OtoroshiCtlConfig from the view (hostname from api.url, credentials from api.user/secret)
+- Serialize to YAML using circe-yaml Printer(preserveOrder=true, explicitStart=true)
+- Return as text/yaml
+- Source: ovd OtoroshiProviderService.scala:714 getConfigurationFile()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

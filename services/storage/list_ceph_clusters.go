@@ -12,15 +12,23 @@ import (
 )
 
 /*
-Listcephclusters
+Listcephclusters GET /v4/tenants/{tenantId}/ceph-clusters -- list all Ceph clusters.
 
-List all ceph clusters.
+Source: ovd StorageController.scala listCephClusters().
+
+📥 **Algo Source (Legacy):** list every registered Ceph cluster
+(`StorageRepository.listCephClusters`) and project each to its public view
+(monitors + dashboard endpoint/username, never the password).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:list` on the path
+tenant; `repository::list_ceph_clusters` → `CephClusterView` list → 200.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant identifier
 
 # Returns the operation result or an error
 
@@ -35,14 +43,14 @@ Example:
 x-service: storage
 operationId: listCephClusters
 */
-func Listcephclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.CephCluster] {
+func Listcephclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.CephClusterView] {
 	ctx, span := tracer.Start(ctx, "listCephClusters", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters", tenantId)
 
 	// Make API call
-	response := client.Get[[]models.CephCluster](ctx, c, path)
+	response := client.Get[[]models.CephClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

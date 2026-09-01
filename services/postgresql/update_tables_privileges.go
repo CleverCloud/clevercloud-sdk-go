@@ -12,25 +12,35 @@ import (
 )
 
 /*
-Updatetablesprivileges
+Updatetablesprivileges **Legacy**: ovd users.scala:215 patchTablesPrivileges()
+**Algorithm**:
+  - Verify addon, UPSERT table privilege with read/write
+  - GRANT/REVOKE on addon DB is deferred
 
-# Update the user's table privileges in the given PostgreSQL addon
+**Conformity**: YES (GRANT/REVOKE on addon DB + metadata UPSERT)
+
+PATCH .../users/{userId}/privileges/databases/{databaseOid}/schemas/{schemaOid}/tables/{tableOid}
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — updateTablePrivileges (UPSERT)
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
-  - pgUserId: PostgreSQL User ID
-  - objectId: PostgreSQL Object ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
+  - pgUserId: PostgreSQL user ID
+  - databaseOid: Database OID
+  - schemaOid: Schema OID
+  - tableOid: Table OID
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql.Updatetablesprivileges(ctx, client, tracer, ownerId, postgreSQLId, pgUserId, objectId, requestBody)
+	response := postgresql.Updatetablesprivileges(ctx, client, tracer, ownerId, postgreSQLId, pgUserId, databaseOid, schemaOid, tableOid, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -39,14 +49,14 @@ Example:
 x-service: postgresql
 operationId: updateTablesPrivileges
 */
-func Updatetablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadWritePrivileges) client.Response[models.PgTablePrivileges] {
-	ctx, span := tracer.Start(ctx, "updateTablesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("objectId", objectId)))
+func Updatetablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, databaseOid int, schemaOid int, tableOid int, requestBody *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView] {
+	ctx, span := tracer.Start(ctx, "updateTablesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("databaseOid", databaseOid), attribute.Int("schemaOid", schemaOid), attribute.Int("tableOid", tableOid)))
 	defer span.End()
 
-	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s/privileges/databases/%s/schemas/%s/tables/%s", ownerId, postgreSQLId, pgUserId, objectId)
+	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s/privileges/databases/%s/schemas/%s/tables/%s", ownerId, postgreSQLId, pgUserId, databaseOid, schemaOid, tableOid)
 
 	// Make API call
-	response := client.Patch[models.PgTablePrivileges](ctx, c, path, requestBody)
+	response := client.Patch[models.PgTablePrivilegesView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

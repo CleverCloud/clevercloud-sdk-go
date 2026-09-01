@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// RevocationMetadata
+// RevocationMetadata Pagination metadata for revocations list.  Source: references/legacy/ovd/modules/warp10/src/main/...
 type RevocationMetadata struct {
-	HasMore   bool       `json:"hasMore"`
-	NextSince *time.Time `json:"nextSince,omitempty"`
+	HasMore   bool       `json:"hasMore"`             // Whether there are more results after this page.
+	NextSince *time.Time `json:"nextSince,omitempty"` // Cursor for the next page (revoked_at of last item).  Circe emits null for Option`[OffsetDateTime]...
 }

@@ -11,9 +11,18 @@ import (
 )
 
 /*
-Createmetabase
+Createmetabase POST /v2/providers/addon-metabase/resources — provision a new Metabase addon.
 
-provision a new metabase instance
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — provision
+Behaviour: insert (`PROVISIONING`) → create PG addon → create Java app (env set)
+
+	→ register DNS → remove the platform default vhost → set favourite vhost → restart.
+	On any partial failure the addon is marked `PROVISIONING_ERROR` and a degraded
+	success (`201`) is still returned (`handleFailedDeployment`).
+	The addon stays `PROVISIONING` after a fully-successful provision — the `ACTIVE`
+	transition is set later on deployment success, not by provision (legacy parity).
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request

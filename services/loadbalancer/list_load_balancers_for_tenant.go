@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Listloadbalancersfortenant
-
-# Get loadbalancers for owner
+Listloadbalancersfortenant Row 40 — ⚠️ empty → **404** (pinned quirk), owner-only scoping.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: tenantId
 
 # Returns the operation result or an error
 

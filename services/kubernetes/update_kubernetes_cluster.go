@@ -12,14 +12,24 @@ import (
 )
 
 /*
-Updatekubernetescluster
+Updatekubernetescluster PATCH /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id} — update cluster (OVD-compat alias).
+
+Update a cluster's metadata and features. A feature change requires the cluster to
+be active and is carried out in the background; the reported `features` reflect
+what is installed, not what was just requested. Disabling
+`features.nodeAutoprovisioning` is refused while any Karpenter NodePool,
+NodeClaim, NodeOverlay or CleverNodeClass still exists.
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:82-94 — org-scoped PATCH variant + its description (a19692084)
+Behavior: same as PUT /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}
+Issue: #667, #2990
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -35,14 +45,14 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesCluster
 */
-func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.ClusterPatchPayload) client.Response[models.Cluster1] {
+func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.ClusterPatchPayload) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
 
 	// Make API call
-	response := client.Patch[models.Cluster1](ctx, c, path, requestBody)
+	response := client.Patch[models.ClusterView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

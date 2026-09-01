@@ -11,15 +11,22 @@ import (
 )
 
 /*
-Deletematomo
+Deletematomo DELETE /v2/providers/addon-matomo/resources/{id} — deprovision a Matomo addon.
 
-deprovision an existing Matomo
+📥 Algo Source (Legacy): `deprovision` — delete PHP app → delete backend
+addon → delete MySQL addon → unregister DNS → repo `delete` sets `TO_DELETE`
++ `deletion_date` (only while `deletion_date IS NULL`). Repeat / unknown → 404.
+
+🔧 Algo Rust: same teardown then a single `UPDATE … SET status='TO_DELETE',
+deletion_date=now WHERE deletion_date IS NULL`. Internal endpoint — no guard.
+
+Issue: #660
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo addon ID
 
 # Returns the operation result or an error
 

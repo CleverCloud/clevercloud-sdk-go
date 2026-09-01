@@ -11,9 +11,11 @@ import (
 )
 
 /*
-Createkeycloak
+Createkeycloak POST /v2/providers/addon-keycloak/resources
 
-provision a new Keycloak instance
+Source: ovd AddonKeycloakAddonActor.scala:458 create()
+Behavior: Insert DB row + spawn async provisioning (PG, FS, Java app, DNS, NG).
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +36,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloak
 */
-func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.KeycloakProvisionRequest) client.Response[models.KeycloakProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "createKeycloak")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-keycloak/resources")
 
 	// Make API call
-	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[models.KeycloakProvisionResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

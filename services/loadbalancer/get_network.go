@@ -12,16 +12,14 @@ import (
 )
 
 /*
-Getnetwork
-
-# Get network
+Getnetwork Row 11 — owner-scoped read.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - networkId: Network ID
+  - networkId:
 
 # Returns the operation result or an error
 
@@ -36,14 +34,14 @@ Example:
 x-service: loadbalancer
 operationId: getNetwork
 */
-func Getnetwork(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, networkId string) client.Response[models.Network2] {
+func Getnetwork(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, networkId string) client.Response[models.NetworkView] {
 	ctx, span := tracer.Start(ctx, "getNetwork", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("networkId", networkId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/networks/%s", tenantId, networkId)
 
 	// Make API call
-	response := client.Get[models.Network2](ctx, c, path)
+	response := client.Get[models.NetworkView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

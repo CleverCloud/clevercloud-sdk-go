@@ -11,16 +11,32 @@ import (
 )
 
 /*
-Createpulsarnonpersistenttopictoken
+Createpulsarnonpersistenttopictoken POST /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics/{topic}/token
 
-# Craft a token with rights on a specific topic
+	— generate a non-persistent topic-scoped Biscuit token.
+
+**Legacy**: ovd PulsarController.scala:389 generateTokenNonPersistentTopicServerEndpoint()
+**Algorithm**:
+  - Ownership verified via withTopicOwner helper (line 80)
+  - Delegates to PulsarTopicService.generateNonPersistentTopicToken (line 244)
+  - Scala mints a Biscuit token scoped to the specific non-persistent topic
+
+**Conformity**: FAITHFUL — real Biscuit minting wired (refs #1058, #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala generateTokenNonPersistentTopicServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala generateTokenNonPersistentTopic
+Behavior: mints a topic-scoped Biscuit (same Datalog as persistent — legacy
+
+	does not differentiate).
+
+Issue: #8, #1058
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
+  - pulsarId: Pulsar addon ID
+  - topic: Topic name
 
 # Returns the operation result or an error
 

@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getcellarcredentials
+Getcellarcredentials Read the add-on's S3 credentials
 
-get Cellar credentials (host, keyId, keySecret)
+Returns this add-on's S3 endpoint host, access key id and secret access key. Because the response carries the secret access key, the caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on, or one whose credentials are not configured, answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
 
 # Returns the operation result or an error
 

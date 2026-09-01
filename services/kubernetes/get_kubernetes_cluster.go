@@ -12,14 +12,26 @@ import (
 )
 
 /*
-Getkubernetescluster
+Getkubernetescluster **Legacy**: ovd ClusterController.scala:74 getByTenant()
+**Algorithm**:
+  - ClusterCRUDService.getByTenant fetches by ID via ClusterRepository.selectById
+  - Returns ClusterView or 404
+
+**Conformity**: YES
+
+GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id} — get a Kubernetes cluster.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — getByTenant
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — selectById
+Behavior: returns cluster view, 404 if not found
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +46,14 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesCluster
 */
-func Getkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
+func Getkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "getKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
 
 	// Make API call
-	response := client.Get[models.Cluster1](ctx, c, path)
+	response := client.Get[models.ClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

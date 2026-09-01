@@ -2,12 +2,12 @@
 
 package models
 
-// Route
+// Route One route of the routing tree (:315-324).
 type Route struct {
-	Authentication *Authentication `json:"authentication,omitempty"`
-	HostRule       HostRule        `json:"hostRule"`
-	Method         *string         `json:"method,omitempty"`
-	PathRule       PathRule        `json:"pathRule"`
-	RewriteRule    *RewriteRule    `json:"rewriteRule,omitempty"`
-	Tags           MapString       `json:"tags"`
+	Authentication *any            `json:"authentication,omitempty"`
+	HostRule       HostRule        `json:"hostRule"`         // Hostname matching rule.
+	Method         *string         `json:"method,omitempty"` // Optional HTTP method restriction (:316).
+	PathRule       PathRule        `json:"pathRule"`         // Path matching rule.
+	RewriteRule    *any            `json:"rewriteRule,omitempty"`
+	Tags           *map[string]any `json:"tags,omitempty"` // Free-form tags (:321).
 }

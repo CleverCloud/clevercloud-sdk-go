@@ -12,15 +12,20 @@ import (
 )
 
 /*
-Getmatomo
+Getmatomo GET /v4/addon-providers/addon-matomo/addons/{id} — addon view.
 
-get a Matomo
+📥 Algo Source (Legacy): `getMatomoAddon` — load addon (`deletion_date IS
+NULL`) → read PHP app env + cc-api addon name → build the view.
+
+🔧 Algo Rust: `fetch_active_addon_row` → `build_view`. `.authenticated`.
+
+Issue: #660
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +40,14 @@ Example:
 x-service: matomo
 operationId: getMatomo
 */
-func Getmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.Matomo] {
+func Getmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.MatomoView] {
 	ctx, span := tracer.Start(ctx, "getMatomo", trace.WithAttributes(attribute.String("addonMatomoId", addonMatomoId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-matomo/addons/%s", addonMatomoId)
 
 	// Make API call
-	response := client.Get[models.Matomo](ctx, c, path)
+	response := client.Get[models.MatomoView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

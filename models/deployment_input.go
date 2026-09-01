@@ -2,9 +2,9 @@
 
 package models
 
-// DeploymentInput
+// DeploymentInput Source: references/legacy/ovd/modules/compute/routes/DeploymentInput.scala
 type DeploymentInput struct {
-	MaxAttempt *int           `json:"maxAttempt,omitempty"`
-	Spec       map[string]any `json:"spec"`
-	Timeout    *int           `json:"timeout,omitempty"`
+	MaxAttempt *int                `json:"maxAttempt,omitempty"`
+	Spec       DeploymentSpecInput `json:"spec"`
+	Timeout    *string             `json:"timeout,omitempty"`
 }

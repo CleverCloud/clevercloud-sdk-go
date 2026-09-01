@@ -11,16 +11,14 @@ import (
 )
 
 /*
-Deletenetwork
-
-# Delete network
+Deletenetwork Row 10 — 204; owner-scoped 404; 412 guards.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - networkId: Network ID
+  - networkId:
 
 # Returns the operation result or an error
 

@@ -12,17 +12,16 @@ import (
 )
 
 /*
-Updateserverdrain
-
-Drain or undrain a server. Drained servers are excluded from new load balancer placements.
+Updateserverdrain Row 4 — `drainServer`, the divergence WP3 closes (decision 6): drain is a
+placement exclusion, never a reassignment. 204 empty.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - serverId: Server ID
+  - regionId:
+  - serverId:
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -2,11 +2,13 @@
 
 package models
 
-// KmsPlanIdentifier represents
+// KmsPlanIdentifier represents KMS addon plan identifiers.  Source: references/legacy/ovd/modules/kms/models/AddonPlanIdentifier...
 type KmsPlanIdentifier string
 
 const (
-	KmsPlanIdentifierBASE KmsPlanIdentifier = "BASE"
+	KmsPlanIdentifierALPHA KmsPlanIdentifier = "ALPHA"
+	KmsPlanIdentifierBETA  KmsPlanIdentifier = "BETA"
+	KmsPlanIdentifierBASE  KmsPlanIdentifier = "BASE"
 )
 
 // String returns the underlying string value

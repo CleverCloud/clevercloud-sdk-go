@@ -13,14 +13,30 @@ import (
 )
 
 /*
-Listimagepackagesbyversion
+Listimagepackagesbyversion GET /v4/images/{image}/versions/{version} — the same, by label.
+
+📥 **Algo Source (Legacy):**
+  - No authentication
+  - `resolveImageByRuntime` builds `clevercloud-runtime-<runtime>:<version>`
+    and resolves it through the KV secondary index
+  - Source: ovd ImageController.scala:103-108 + routes.scala:53-61
+
+🔧 **Algo Rust (Implementation):**
+  - `MultiSlotsQuery::decode` → 400
+  - `ImageRepository::packages_by_label` on `images.name`, which is the same
+    `<runtime>:<version>` label; the 404 still quotes the KV key clients read
+  - `models::sorted_packages` → `Json(Vec<ExherboPackage>)`
+
+Source: ovd modules/image/api/routes.scala:53-61 (listImagePackagesByVersion)
+Behavior: public; the same listing, reached by label instead of identifier.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - image:
-  - version:
+  - image: Runtime name
+  - version: Image date, YYYYMMDD
   - opts: optional query parameters
 
 # Returns the operation result or an error

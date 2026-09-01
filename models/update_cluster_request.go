@@ -2,11 +2,11 @@
 
 package models
 
-// UpdateClusterRequest
+// UpdateClusterRequest Request body for updating a Cellar cluster.  Source: references/legacy/ovd/modules/cellar/models/...
 type UpdateClusterRequest struct {
-	Available *bool   `json:"available,omitempty"`
-	Host      *string `json:"host,omitempty"`
-	Password  *string `json:"password,omitempty"`
-	Username  *string `json:"username,omitempty"`
-	Zone      *string `json:"zone,omitempty"`
+	Available *bool   `json:"available,omitempty"` // Whether the cluster accepts new provisions
+	Host      *string `json:"host,omitempty"`      // S3 endpoint host
+	Password  *string `json:"password,omitempty"`  // Ceph admin password
+	Username  *string `json:"username,omitempty"`  // Ceph admin username
+	Zone      *string `json:"zone,omitempty"`      // Availability zone
 }

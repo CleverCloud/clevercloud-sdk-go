@@ -12,15 +12,28 @@ import (
 )
 
 /*
-Getai
+Getai **Legacy**: ovd AIProviderController.scala:63 getAIEndpoint()
+**Algorithm**:
+  - Fetch active addon by ID, return AIView (ownerId, id, plan)
 
-# Get AI Addon information
+**Conformity**: YES
+
+GET /v4/addon-providers/addon-ai/addons/{ai_id} — get AI addon (deprecated).
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getAIEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getAI()
+Behavior: returns AIView (ownerId, id, planIdentifier). 404 if not found.
+
+	This endpoint is marked deprecated in Scala (.deprecated()).
+
+Schema: addon_ai — SELECT by id WHERE deletion_date IS NULL
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - aiId:
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +48,14 @@ Example:
 x-service: ai
 operationId: getAI
 */
-func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[models.AI] {
+func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[models.AiAddonView] {
 	ctx, span := tracer.Start(ctx, "getAI", trace.WithAttributes(attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-ai/addons/%s", aiId)
 
 	// Make API call
-	response := client.Get[models.AI](ctx, c, path)
+	response := client.Get[models.AiAddonView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

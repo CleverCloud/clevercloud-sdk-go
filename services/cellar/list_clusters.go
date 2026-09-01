@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listclusters
+Listclusters List Cellar storage clusters
 
-list all Cellar clusters
+Returns the registered storage clusters as `{ id, host, zone, available }` entries; administrative credentials are never returned. Only clusters still accepting new add-ons are listed unless `includeUnavailable=true` is passed. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -37,7 +37,7 @@ Example:
 x-service: cellar
 operationId: listClusters
 */
-func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.CellarCluster] {
+func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "listClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ow
 	}
 
 	// Make API call
-	response := client.Get[[]models.CellarCluster](ctx, c, path)
+	response := client.Get[[]models.ClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

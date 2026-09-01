@@ -2,12 +2,12 @@
 
 package models
 
-// EndpointScope represents
+// EndpointScope represents Endpoint scope: PUBLIC (user-facing) or INTERNAL (private network).  Source: references/legacy/ov...
 type EndpointScope string
 
 const (
-	EndpointScopeINTERNAL EndpointScope = "INTERNAL"
 	EndpointScopePUBLIC   EndpointScope = "PUBLIC"
+	EndpointScopeINTERNAL EndpointScope = "INTERNAL"
 )
 
 // String returns the underlying string value

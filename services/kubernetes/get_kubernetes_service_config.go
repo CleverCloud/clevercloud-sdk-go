@@ -11,7 +11,17 @@ import (
 )
 
 /*
-Getkubernetesserviceconfig
+Getkubernetesserviceconfig GET /v4/kubernetes-product — Kubernetes service configuration (product info).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala — getServiceConfig
+Behavior: returns static service config (versions, topologies, replication factor bounds).
+Issue: #667
+
+**Legacy**: ovd KubernetesRoutes.scala getServiceConfig()
+**Algorithm**:
+  - Returns static KubernetesServiceConfig with available versions, topologies, replication bounds
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request

@@ -12,15 +12,19 @@ import (
 )
 
 /*
-Updatekubernetesnodegroup
+Updatekubernetesnodegroup PATCH /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-groups/{pool_id} — update node group (OVD-compat alias).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala — org-scoped PATCH node-groups variant
+Behavior: same as PUT /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-pools/{pool_id}
+Issue: #667
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
+  - nodeGroupId: Node group/pool ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +40,14 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesNodeGroup
 */
-func Updatekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
+func Updatekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, clusterId, nodeGroupId)
 
 	// Make API call
-	response := client.Patch[models.NodeGroup](ctx, c, path, requestBody)
+	response := client.Patch[models.NodeGroupView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

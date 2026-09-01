@@ -12,15 +12,40 @@ import (
 )
 
 /*
-Getclustermetadata
+Getclustermetadata GET /v4/warp10/clusters/{cluster_id} — get cluster metadata with resolved endpoints.
 
-Get public metadata for a Warp10 cluster (name, endpoints)
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:197-210 getClusterMetadataLogic
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/services/Warp10Service.scala:515-573 getClusterMetadata
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/auth/Warp10DualAuthenticator.scala
+Behavior:
+  - Accepts Basic or Bearer (biscuit) auth.
+  - Biscuit: requires GET_CLUSTER_METADATA operation (no scope).
+  - Basic: service account with LowLevel access.
+  - Loads cluster with endpoints JSONB, resolves to ClusterEndpoint (full URLs).
+
+Issue: #762, #758
+
+📥 **Algo Source (Legacy):**
+Get cluster metadata including resolved Warp10 endpoint URLs.
+- dispatchAuth(clusterId, GET_CLUSTER_METADATA, None)
+- Find cluster metadata by ID (name + endpoints JSONB)
+- Check cluster access (SA.clusterId == clusterId)
+- Convert StoredClusterEndpoint to ClusterEndpoint (resolve URLs)
+- Return ClusterMetadataResponse
+- Source: ovd Warp10Controller.scala:197 getClusterMetadataLogic() + Warp10Service.scala:515 getClusterMetadata()
+
+🔧 **Algo Rust (Implementation):**
+- dispatch_warp10_auth(GET_CLUSTER_METADATA, None) → Warp10AuthContext or 401/403
+- Basic path: validate LowLevel + resolve_cluster_and_service_account
+- Biscuit path: find_cluster_by_id only (cluster ID validated in dispatch)
+- cluster.to_metadata_response() — deserializes endpoints JSONB, resolves URLs (fallible: GAP-MODELS-06)
+- Return 200 with ClusterMetadataResponse (or 400 if any stored endpoint has invalid host)
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
+  - clusterId: Warp10 cluster ID
 
 # Returns the operation result or an error
 

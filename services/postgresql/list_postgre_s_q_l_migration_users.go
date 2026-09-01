@@ -12,15 +12,25 @@ import (
 )
 
 /*
-Listpostgresqlmigrationusers
+Listpostgresqlmigrationusers **Legacy**: ovd migration.scala:29 getUsers()
+**Algorithm**:
+  - Fetch addon (no owner check, migration uses addon credentials)
+  - SELECT all active users for addon
 
-# Get the users snapshot for a given PostgreSQL addon
+**Conformity**: PARTIAL (password decryption deferred)
+
+GET /v4/postgresql/{postgreSQLId}/migration/users
+
+Source: ovd PostgreSQLMigrationRoutes.scala — getUsers
+Source: ovd PostgreSQLMigrationService.scala — getUsers
+Behavior: returns users snapshot for migration (authenticated by addon credentials)
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +45,14 @@ Example:
 x-service: postgresql
 operationId: listPostgreSQLMigrationUsers
 */
-func Listpostgresqlmigrationusers(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PgUserData] {
+func Listpostgresqlmigrationusers(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PgUserDataView] {
 	ctx, span := tracer.Start(ctx, "listPostgreSQLMigrationUsers", trace.WithAttributes(attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/%s/migration/users", postgreSQLId)
 
 	// Make API call
-	response := client.Get[[]models.PgUserData](ctx, c, path)
+	response := client.Get[[]models.PgUserDataView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

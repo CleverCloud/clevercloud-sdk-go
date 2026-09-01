@@ -12,9 +12,7 @@ import (
 )
 
 /*
-Getkeycloakconsumption
-
-get keycloak resource consumption
+Getkeycloakconsumption POST /v4/keycloak/organisations/{owner_id}/keycloak/{keycloak_id}/consumption
 
 Parameters:
   - ctx: context for the request
@@ -37,14 +35,14 @@ Example:
 x-service: keycloak
 operationId: getKeycloakConsumption
 */
-func Getkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string, requestBody *models.KeycloakConsumptionQuery) client.Response[models.ResourceConsumption] {
+func Getkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string, requestBody *models.KeycloakConsumptionQuery) client.Response[models.KeycloakConsumptionView] {
 	ctx, span := tracer.Start(ctx, "getKeycloakConsumption", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/keycloak/organisations/%s/keycloak/%s/consumption", ownerId, addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.KeycloakConsumptionView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

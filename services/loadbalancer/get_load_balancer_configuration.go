@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Getloadbalancerconfiguration
-
-# Get loadbalancer configuration
+Getloadbalancerconfiguration Row 17 — config missing → **404** (contrast rows 18-20's 500).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
 
 # Returns the operation result or an error
 

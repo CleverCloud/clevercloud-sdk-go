@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Updateservermaintenance
-
-# Update server maintenance boolean
+Updateservermaintenance Row 2 — 204 empty.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - serverId: Server ID
+  - regionId:
+  - serverId:
   - requestBody: the request payload
 
 # Returns the operation result or an error

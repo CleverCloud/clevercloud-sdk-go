@@ -11,9 +11,15 @@ import (
 )
 
 /*
-Getmatomoproviderinformation
+Getmatomoproviderinformation GET /v4/addon-providers/addon-matomo — provider console view.
 
-retrieve the Matomo provider information
+📥 Algo Source (Legacy): `getProviderInformations` — `providerId="addon-matomo"`,
+`dedicated` = each available version → features `[materia-kv:true,
+access-domain:false]`, default = `availableVersions.last`.
+
+🔧 Algo Rust: same, built from config. `.authenticated`.
+
+Issue: #660
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +39,14 @@ Example:
 x-service: matomo
 operationId: getMatomoProviderInformation
 */
-func Getmatomoproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getmatomoproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMatomoProviderInformation")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-matomo")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

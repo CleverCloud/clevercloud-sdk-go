@@ -13,13 +13,13 @@ type Option func(*Options)
 
 // Options holds query parameters for loadbalancer operations
 type Options struct {
-	Resourceid *[]string `url:"resourceId,omitempty"`
-	Since      *string   `url:"since,omitempty"`
-	Until      *string   `url:"until,omitempty"`
+	Resourceid *string `url:"resourceId,omitempty"`
+	Since      *string `url:"since,omitempty"`
+	Until      *string `url:"until,omitempty"`
 }
 
 // WithResourceid sets the resourceId query parameter
-func WithResourceid(resourceId []string) Option {
+func WithResourceid(resourceId string) Option {
 	return func(o *Options) {
 		o.Resourceid = &resourceId
 	}
@@ -48,7 +48,7 @@ func buildQueryString(opts ...Option) string {
 
 	var params []string
 	if options.Resourceid != nil {
-		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
+		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))

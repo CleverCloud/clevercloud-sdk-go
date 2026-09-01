@@ -4,7 +4,6 @@ package cellar
 
 import (
 	"fmt"
-	"net/url"
 	"strings"
 )
 
@@ -13,26 +12,26 @@ type Option func(*Options)
 
 // Options holds query parameters for cellar operations
 type Options struct {
-	Count              *int      `url:"count,omitempty"`
-	Cursor             *string   `url:"cursor,omitempty"`
-	Includeunavailable *bool     `url:"includeUnavailable,omitempty"`
-	Prefix             *string   `url:"prefix,omitempty"`
-	Purgeobjects       *bool     `url:"purgeObjects,omitempty"`
-	Resourceid         *[]string `url:"resourceId,omitempty"`
-	Since              *string   `url:"since,omitempty"`
-	Until              *string   `url:"until,omitempty"`
-	Withmetadata       *bool     `url:"withMetadata,omitempty"`
+	Count              *any  `url:"count,omitempty"`
+	Cursor             *any  `url:"cursor,omitempty"`
+	Includeunavailable *bool `url:"includeUnavailable,omitempty"`
+	Objectkey          *any  `url:"objectKey,omitempty"`
+	Prefix             *any  `url:"prefix,omitempty"`
+	Purgeobjects       *bool `url:"purgeObjects,omitempty"`
+	Since              *any  `url:"since,omitempty"`
+	Until              *any  `url:"until,omitempty"`
+	Withmetadata       *any  `url:"withMetadata,omitempty"`
 }
 
 // WithCount sets the count query parameter
-func WithCount(count int) Option {
+func WithCount(count any) Option {
 	return func(o *Options) {
 		o.Count = &count
 	}
 }
 
 // WithCursor sets the cursor query parameter
-func WithCursor(cursor string) Option {
+func WithCursor(cursor any) Option {
 	return func(o *Options) {
 		o.Cursor = &cursor
 	}
@@ -45,8 +44,15 @@ func WithIncludeunavailable(includeUnavailable bool) Option {
 	}
 }
 
+// WithObjectkey sets the objectKey query parameter
+func WithObjectkey(objectKey any) Option {
+	return func(o *Options) {
+		o.Objectkey = &objectKey
+	}
+}
+
 // WithPrefix sets the prefix query parameter
-func WithPrefix(prefix string) Option {
+func WithPrefix(prefix any) Option {
 	return func(o *Options) {
 		o.Prefix = &prefix
 	}
@@ -59,29 +65,22 @@ func WithPurgeobjects(purgeObjects bool) Option {
 	}
 }
 
-// WithResourceid sets the resourceId query parameter
-func WithResourceid(resourceId []string) Option {
-	return func(o *Options) {
-		o.Resourceid = &resourceId
-	}
-}
-
 // WithSince sets the since query parameter
-func WithSince(since string) Option {
+func WithSince(since any) Option {
 	return func(o *Options) {
 		o.Since = &since
 	}
 }
 
 // WithUntil sets the until query parameter
-func WithUntil(until string) Option {
+func WithUntil(until any) Option {
 	return func(o *Options) {
 		o.Until = &until
 	}
 }
 
 // WithWithmetadata sets the withMetadata query parameter
-func WithWithmetadata(withMetadata bool) Option {
+func WithWithmetadata(withMetadata any) Option {
 	return func(o *Options) {
 		o.Withmetadata = &withMetadata
 	}
@@ -96,31 +95,31 @@ func buildQueryString(opts ...Option) string {
 
 	var params []string
 	if options.Count != nil {
-		params = append(params, fmt.Sprintf("count=%d", *options.Count))
+		params = append(params, fmt.Sprintf("count=%v", *options.Count))
 	}
 	if options.Cursor != nil {
-		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+		params = append(params, fmt.Sprintf("cursor=%v", *options.Cursor))
 	}
 	if options.Includeunavailable != nil {
 		params = append(params, fmt.Sprintf("includeUnavailable=%t", *options.Includeunavailable))
 	}
+	if options.Objectkey != nil {
+		params = append(params, fmt.Sprintf("objectKey=%v", *options.Objectkey))
+	}
 	if options.Prefix != nil {
-		params = append(params, fmt.Sprintf("prefix=%s", url.QueryEscape(*options.Prefix)))
+		params = append(params, fmt.Sprintf("prefix=%v", *options.Prefix))
 	}
 	if options.Purgeobjects != nil {
 		params = append(params, fmt.Sprintf("purgeObjects=%t", *options.Purgeobjects))
 	}
-	if options.Resourceid != nil {
-		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
-	}
 	if options.Since != nil {
-		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+		params = append(params, fmt.Sprintf("since=%v", *options.Since))
 	}
 	if options.Until != nil {
-		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+		params = append(params, fmt.Sprintf("until=%v", *options.Until))
 	}
 	if options.Withmetadata != nil {
-		params = append(params, fmt.Sprintf("withMetadata=%t", *options.Withmetadata))
+		params = append(params, fmt.Sprintf("withMetadata=%v", *options.Withmetadata))
 	}
 
 	if len(params) == 0 {

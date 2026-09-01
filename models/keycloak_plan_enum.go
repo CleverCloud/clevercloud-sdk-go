@@ -2,13 +2,13 @@
 
 package models
 
-// KeycloakPlan represents
+// KeycloakPlan represents Keycloak addon plan identifier.  Source: references/legacy/ovd/modules/keycloak/src/main/scala/co...
 type KeycloakPlan string
 
 const (
+	KeycloakPlanBETA  KeycloakPlan = "BETA"
 	KeycloakPlanALPHA KeycloakPlan = "ALPHA"
 	KeycloakPlanBASE  KeycloakPlan = "BASE"
-	KeycloakPlanBETA  KeycloakPlan = "BETA"
 )
 
 // String returns the underlying string value

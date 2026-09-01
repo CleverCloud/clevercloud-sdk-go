@@ -2,8 +2,8 @@
 
 package models
 
-// RevokedTokensResponse
+// RevokedTokensResponse Response for listing revoked tokens.  Source: references/legacy/ovd/modules/warp10/src/main/scala...
 type RevokedTokensResponse struct {
-	Metadata RevocationMetadata    `json:"metadata"`
-	Tokens   []RevokedTokenSummary `json:"tokens,omitempty"`
+	Metadata RevocationMetadata    `json:"metadata"` // Pagination metadata.
+	Tokens   []RevokedTokenSummary `json:"tokens"`   // List of revoked token summaries.
 }

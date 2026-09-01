@@ -12,15 +12,31 @@ import (
 )
 
 /*
-Listimagediff
+Listimagediff GET /v4/images/{image}/versions/{version}/diff/{newVersion}
+
+📥 **Algo Source (Legacy):**
+  - No authentication
+  - Resolve both images by label, older first
+  - `ImageDiff` unions the `(category, name)` keys, then the slot keys, and
+    emits only the slots whose raw version differs, `-` standing for absent
+  - Source: ovd ImageController.scala:120-129 + Image.scala:139-168
+
+🔧 **Algo Rust (Implementation):**
+- Two `require_by_label` calls in declaration order
+- `models::compute_diff` — same union, same `-`, same ordering
+- `Json(Vec<PackageDiff>)`
+
+Source: ovd modules/image/api/routes.scala:76-85 (listImageDiff)
+Behavior: public; lists the slots whose version moved between two images.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - image:
-  - version:
-  - newVersion:
+  - image: Runtime name
+  - version: Older image date
+  - newVersion: Newer image date
 
 # Returns the operation result or an error
 

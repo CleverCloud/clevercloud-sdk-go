@@ -12,17 +12,29 @@ import (
 )
 
 /*
-Createotoroshiapikey
+Createotoroshiapikey **Legacy**: ovd AIProviderController.scala:155 createApiKeys()
+**Algorithm**:
+  - Verify addon + endpoint tenancy, create apikey on Otoroshi, deploy
 
-# Create route APIKey
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+POST /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id}/apikeys — create API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — createApiKeys
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — createApiKeys()
+Behavior: verifies addon + endpoint tenancy, creates apikey on Otoroshi,
+
+	deploys apikey on target. Returns Otoroshi JSON.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

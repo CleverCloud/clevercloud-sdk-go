@@ -11,9 +11,14 @@ import (
 )
 
 /*
-Getmetabaseproviderinformation
+Getmetabaseproviderinformation GET /v4/addon-providers/metabase — provider console view.
 
-retrieve the Metabase provider information
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getProviderInformations
+Behaviour: `provider_id="metabase"`, dedicated map of every available version →
+
+	`access-domain` feature, default = configured default version.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +38,14 @@ Example:
 x-service: metabase
 operationId: getMetabaseProviderInformation
 */
-func Getmetabaseproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getmetabaseproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMetabaseProviderInformation")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/metabase")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

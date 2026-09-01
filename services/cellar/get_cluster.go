@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getcluster
+Getcluster Read a Cellar storage cluster
 
-get a Cellar cluster by ID
+Returns one storage cluster as `{ id, host, zone, available }`, whether or not it still accepts new add-ons; administrative credentials are never returned. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. An unknown cluster id answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - ClusterIndex:
+  - ownerId: Owner (org) ID
+  - ClusterIndex: Cluster numeric ID
 
 # Returns the operation result or an error
 
@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: getCluster
 */
-func Getcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[models.CellarCluster] {
+func Getcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "getCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.Int64("ClusterIndex", ClusterIndex)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters/%s", ownerId, ClusterIndex)
 
 	// Make API call
-	response := client.Get[models.CellarCluster](ctx, c, path)
+	response := client.Get[models.ClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

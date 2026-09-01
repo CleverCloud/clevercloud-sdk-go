@@ -12,16 +12,32 @@ import (
 )
 
 /*
-Getcephcluster
+Getcephcluster GET /v4/tenants/{tenantId}/ceph-clusters/{clusterId} -- get a Ceph cluster.
 
-Get ceph cluster.
+Source: ovd StorageController.scala:354 getCephCluster()
+Schema: V1__add_ceph_cluster_table.sql — table ceph_cluster
+Behavior: returns 404 if cluster not found.
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Get a Ceph cluster by ID from the database.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- SELECT from ceph_cluster WHERE id = clusterId
+- Parse monitors JSONB into `Set[SocketAddress]`
+- Return CephCluster or 404 Not Found
+- Source: ovd StorageController.scala:354, StorageRepository.scala:170
+
+🔧 **Algo Rust (Implementation):**
+- `OvdAuth` + `ceph_cluster_op:get` on the path tenant
+- query_as CephClusterRow from DB
+- Return 200 with CephClusterView or 404
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
 
 # Returns the operation result or an error
 
@@ -36,14 +52,14 @@ Example:
 x-service: storage
 operationId: getCephCluster
 */
-func Getcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephCluster] {
+func Getcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephClusterView] {
 	ctx, span := tracer.Start(ctx, "getCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s", tenantId, clusterId)
 
 	// Make API call
-	response := client.Get[models.CephCluster](ctx, c, path)
+	response := client.Get[models.CephClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

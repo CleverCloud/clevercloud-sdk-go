@@ -11,9 +11,20 @@ import (
 )
 
 /*
-Getpulsarproviderinfo
+Getpulsarproviderinfo GET /v4/addon-providers/addon-pulsar — get Pulsar provider console view.
 
-# Get Pulsar provider infos
+**Legacy**: ovd PulsarController.scala:100 getProviderInfosServerEndpoint()
+**Algorithm**:
+  - Delegates to PulsarProvisioningService.getProviderInfo (line 202)
+  - Lists all ACTIVE clusters, maps to ClusterConsoleView, returns ProviderConsoleView
+  - Public endpoint, no auth required
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getProviderInfosServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala getProviderInfos
+Behavior: returns static provider info for Console3 addon management UI.
+Issue: #8
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +44,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarProviderInfo
 */
-func Getpulsarproviderinfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getpulsarproviderinfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getPulsarProviderInfo")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

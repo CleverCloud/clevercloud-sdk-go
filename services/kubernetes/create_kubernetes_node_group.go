@@ -12,14 +12,18 @@ import (
 )
 
 /*
-Createkubernetesnodegroup
+Createkubernetesnodegroup POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-groups — create node group (legacy OVD alias for node-pools).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:123 — postNodeGroup
+Behavior: same as POST .../node-pools; the tenancy gate lives in `create_node_pool`.
+Issue: #667, #1481
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -35,14 +39,14 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNodeGroup
 */
-func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
+func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView] {
 	ctx, span := tracer.Start(ctx, "createKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.NodeGroup](ctx, c, path, requestBody)
+	response := client.Post[models.NodeGroupView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

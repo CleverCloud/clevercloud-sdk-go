@@ -13,13 +13,30 @@ import (
 )
 
 /*
-Listkubernetesclusters
+Listkubernetesclusters **Legacy**: ovd ClusterController.scala:60 listByTenantAndStatus()
+**Algorithm**:
+  - ClusterCRUDService.listByTenantAndStatus queries cluster table
+  - Excludes DELETED status by default (values.toSet - DELETED)
+
+**Conformity**: YES
+
+GET /v4/kubernetes/organisations/{owner_id}/clusters — list Kubernetes clusters.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — listByTenantAndStatus
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — queries.select
+Behavior: returns the path owner's clusters, optionally filtered by status.
+
+	Always scoped to `auth.raw_owner` (legacy `select` always binds ownerId —
+	no list-all-tenants variant), excluding DELETED by default (matches Scala:
+	values.toSet - DELETED).
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -35,7 +52,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesClusters
 */
-func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.Cluster1] {
+func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ClusterView] {
 	ctx, span := tracer.Start(ctx, "listKubernetesClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -48,7 +65,7 @@ func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.Cluster1](ctx, c, path)
+	response := client.Get[[]models.ClusterView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

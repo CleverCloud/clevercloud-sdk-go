@@ -2,8 +2,11 @@
 
 package models
 
-// WannabeCephCluster
+// WannabeCephCluster Request body for creating a Ceph cluster. Accepts BOTH wire shapes (refs #2919): - the axo flat f...
 type WannabeCephCluster struct {
-	Dashboard CephDashboard `json:"dashboard"`
-	Monitors  []string      `json:"monitors,omitempty"`
+	Dashboard *any    `json:"dashboard,omitempty"`
+	Endpoint  *string `json:"endpoint,omitempty"` // Dashboard API endpoint URL (flat form).
+	Monitors  *any    `json:"monitors,omitempty"` // Monitor addresses (array of host:port). Absent ⇒ `[]` (legacy's `monitors` is optional).
+	Password  *string `json:"password,omitempty"` // Dashboard API password (flat form; stored AES/GCM-encrypted, never returned).
+	Username  *string `json:"username,omitempty"` // Dashboard API username (flat form).
 }

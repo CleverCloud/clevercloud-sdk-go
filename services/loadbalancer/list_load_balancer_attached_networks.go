@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Listloadbalancerattachednetworks
-
-# Get loadbalancer attached networks
+Listloadbalancerattachednetworks Row 35 — `200 []` (LB must exist → 404); region not checked.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId:
-  - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - regionId:
+  - loadbalancerId:
 
 # Returns the operation result or an error
 
@@ -37,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: listLoadBalancerAttachedNetworks
 */
-func Listloadbalancerattachednetworks(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[[]models.LoadBalancerNetwork] {
+func Listloadbalancerattachednetworks(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[[]models.LoadBalancerNetworkView] {
 	ctx, span := tracer.Start(ctx, "listLoadBalancerAttachedNetworks", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/networks", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Get[[]models.LoadBalancerNetwork](ctx, c, path)
+	response := client.Get[[]models.LoadBalancerNetworkView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

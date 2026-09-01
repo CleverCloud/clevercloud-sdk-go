@@ -2,8 +2,8 @@
 
 package models
 
-// PathRule
+// PathRule Path rule (:244-249).
 type PathRule struct {
-	Kind string `json:"kind"`
-	Path Path   `json:"path"`
+	Kind PathKind     `json:"kind"` // What matching this path does.
+	Path PathRulePath `json:"path"` // The matcher.
 }

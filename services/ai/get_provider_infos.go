@@ -11,16 +11,28 @@ import (
 )
 
 /*
-Getproviderinfos
+Getproviderinfos **Legacy**: ovd AIProviderController.scala:71 getProviderInfosEndpoint()
+**Algorithm**:
+  - Verify addon exists, forward to otoroshiClient.getProvider()
 
-# Direct access to otoroshi cluster and request the providers information
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/organisations/{owner_id}/ai/{ai_id}/providers — get Otoroshi provider info.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getProviderInfosEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getProviderInfos()
+Behavior: Verifies addon exists, calls otoroshiClient.getProvider(addonId).
+
+	Returns 501 when Otoroshi client not configured (Cloud Versatile).
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 

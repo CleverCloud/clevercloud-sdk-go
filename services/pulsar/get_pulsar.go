@@ -12,15 +12,29 @@ import (
 )
 
 /*
-Getpulsar
+Getpulsar GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id} — get Pulsar addon.
 
-# Get Pulsar
+**Legacy**: ovd PulsarController.scala:206 getPulsarServerEndpoint()
+**Algorithm**:
+  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
+  - Delegates to PulsarProvisioningService.getPulsar(ownerId, pulsarId) (line 137)
+  - SELECT from addon WHERE id AND owner_id AND status=ACTIVE
+
+**Conformity**: FAITHFUL — ownership enforced via `verify_addon_owner` (refs #1057)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getPulsarServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala getPulsar
+Behavior: returns full addon view. 401 unauthenticated, 403 if the caller
+
+	neither owns the addon nor belongs to the owning org, 404 if not found.
+
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +49,14 @@ Example:
 x-service: pulsar
 operationId: getPulsar
 */
-func Getpulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+func Getpulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
 	ctx, span := tracer.Start(ctx, "getPulsar", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s", pulsarId)
 
 	// Make API call
-	response := client.Get[models.Pulsar](ctx, c, path)
+	response := client.Get[models.PulsarView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

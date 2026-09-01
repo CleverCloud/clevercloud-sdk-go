@@ -4,7 +4,6 @@ package tokens
 
 import (
 	"fmt"
-	"net/url"
 	"strings"
 )
 
@@ -13,77 +12,77 @@ type Option func(*Options)
 
 // Options holds query parameters for tokens operations
 type Options struct {
-	Limit        *int    `url:"limit,omitempty"`
-	Locationid   *string `url:"locationId,omitempty"`
-	Locationname *string `url:"locationName,omitempty"`
-	Productid    *string `url:"productId,omitempty"`
-	Productname  *string `url:"productName,omitempty"`
-	Since        *string `url:"since,omitempty"`
-	Status       *string `url:"status,omitempty"`
-	Tag          *string `url:"tag,omitempty"`
-	Typeparam    *string `url:"typeParam,omitempty"`
+	Cursor     *any  `url:"cursor,omitempty"`
+	Limit      *any  `url:"limit,omitempty"`
+	Locationid *any  `url:"locationId,omitempty"`
+	Paginate   *bool `url:"paginate,omitempty"`
+	Productid  *any  `url:"productId,omitempty"`
+	Since      *any  `url:"since,omitempty"`
+	Status     *any  `url:"status,omitempty"`
+	Tag        *any  `url:"tag,omitempty"`
+	Tokentype  *any  `url:"tokenType,omitempty"`
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor any) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit any) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}
 }
 
 // WithLocationid sets the locationId query parameter
-func WithLocationid(locationId string) Option {
+func WithLocationid(locationId any) Option {
 	return func(o *Options) {
 		o.Locationid = &locationId
 	}
 }
 
-// WithLocationname sets the locationName query parameter
-func WithLocationname(locationName string) Option {
+// WithPaginate sets the paginate query parameter
+func WithPaginate(paginate bool) Option {
 	return func(o *Options) {
-		o.Locationname = &locationName
+		o.Paginate = &paginate
 	}
 }
 
 // WithProductid sets the productId query parameter
-func WithProductid(productId string) Option {
+func WithProductid(productId any) Option {
 	return func(o *Options) {
 		o.Productid = &productId
 	}
 }
 
-// WithProductname sets the productName query parameter
-func WithProductname(productName string) Option {
-	return func(o *Options) {
-		o.Productname = &productName
-	}
-}
-
 // WithSince sets the since query parameter
-func WithSince(since string) Option {
+func WithSince(since any) Option {
 	return func(o *Options) {
 		o.Since = &since
 	}
 }
 
 // WithStatus sets the status query parameter
-func WithStatus(status string) Option {
+func WithStatus(status any) Option {
 	return func(o *Options) {
 		o.Status = &status
 	}
 }
 
 // WithTag sets the tag query parameter
-func WithTag(tag string) Option {
+func WithTag(tag any) Option {
 	return func(o *Options) {
 		o.Tag = &tag
 	}
 }
 
-// WithTypeparam sets the typeParam query parameter
-func WithTypeparam(typeParam string) Option {
+// WithTokentype sets the tokenType query parameter
+func WithTokentype(tokenType any) Option {
 	return func(o *Options) {
-		o.Typeparam = &typeParam
+		o.Tokentype = &tokenType
 	}
 }
 
@@ -95,32 +94,32 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%v", *options.Cursor))
+	}
 	if options.Limit != nil {
-		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+		params = append(params, fmt.Sprintf("limit=%v", *options.Limit))
 	}
 	if options.Locationid != nil {
-		params = append(params, fmt.Sprintf("locationId=%s", url.QueryEscape(*options.Locationid)))
+		params = append(params, fmt.Sprintf("locationId=%v", *options.Locationid))
 	}
-	if options.Locationname != nil {
-		params = append(params, fmt.Sprintf("locationName=%s", url.QueryEscape(*options.Locationname)))
+	if options.Paginate != nil {
+		params = append(params, fmt.Sprintf("paginate=%t", *options.Paginate))
 	}
 	if options.Productid != nil {
-		params = append(params, fmt.Sprintf("productId=%s", url.QueryEscape(*options.Productid)))
-	}
-	if options.Productname != nil {
-		params = append(params, fmt.Sprintf("productName=%s", url.QueryEscape(*options.Productname)))
+		params = append(params, fmt.Sprintf("productId=%v", *options.Productid))
 	}
 	if options.Since != nil {
-		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+		params = append(params, fmt.Sprintf("since=%v", *options.Since))
 	}
 	if options.Status != nil {
-		params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(*options.Status)))
+		params = append(params, fmt.Sprintf("status=%v", *options.Status))
 	}
 	if options.Tag != nil {
-		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
+		params = append(params, fmt.Sprintf("tag=%v", *options.Tag))
 	}
-	if options.Typeparam != nil {
-		params = append(params, fmt.Sprintf("typeParam=%s", url.QueryEscape(*options.Typeparam)))
+	if options.Tokentype != nil {
+		params = append(params, fmt.Sprintf("tokenType=%v", *options.Tokentype))
 	}
 
 	if len(params) == 0 {

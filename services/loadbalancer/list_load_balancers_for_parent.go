@@ -12,9 +12,8 @@ import (
 )
 
 /*
-Listloadbalancersforparent
-
-# Get loadbalancers for parent resource
+Listloadbalancersforparent Row 42 — cross-tenant for machine Basic (CCM compatibility), owner-scoped
+for every user scheme; `200 []`.
 
 Parameters:
   - ctx: context for the request
