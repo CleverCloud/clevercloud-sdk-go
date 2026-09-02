@@ -12,15 +12,26 @@ import (
 )
 
 /*
-Createngotoroshiapplication
+Createngotoroshiapplication POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/networkgroup
 
-request to link a the otoroshi's java application to a networkgroup
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — createNGForAddon()
+
+📥 **Algo Source (Legacy):**
+- Generate a new NetworkGroupId
+- Fetch addon from DB
+- Create NetworkGroup via NG API with java app as member
+- UPDATE addon with networkgroup_id in DB
+- Redeploy the addon (reboot without rebuild)
+- Return updated OtoroshiView
+- Source: ovd OtoroshiProviderService.scala:547 createNGForAddon()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

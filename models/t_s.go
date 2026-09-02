@@ -2,11 +2,11 @@
 
 package models
 
-// TS
+// TS TS addon view returned by GET /v4/addon-providers/addon-ts/addons/{id}.  Source: references/legac...
 type TS struct {
 	AddonID    string      `json:"addonId"`
-	OwnerID    OwnerID     `json:"ownerId"`
+	OwnerID    string      `json:"ownerId"`
 	Plan       TSPlan      `json:"plan"`
-	ResourceID string      `json:"resourceId"`
-	Resources  TSResources `json:"resources"`
+	ResourceID TsId        `json:"resourceId"`
+	Resources  TsResources `json:"resources"`
 }

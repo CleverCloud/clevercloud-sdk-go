@@ -12,15 +12,30 @@ import (
 )
 
 /*
-Getpulsarcluster
+Getpulsarcluster GET /v4/addon-providers/addon-pulsar/clusters/{cluster_id} — get a Pulsar cluster.
 
-# Get Pulsar cluster
+**Legacy**: ovd PulsarController.scala:118 getClusterServerEndpoint()
+**Algorithm**:
+  - Authenticated endpoint: any valid token passes, anonymous is 401 (the
+    tapir route is `.authenticated` — routes.scala `getCluster`; NO Biscuit
+    authorization check, per the legacy spec "allow access with any valid
+    authentication token"). An earlier revision of this handler was
+    mistakenly public — that was the divergence, not this gate.
+  - Delegates to PulsarClusterService.getCluster(clusterId)
+  - SELECT cluster by ID, return ClusterView or 404
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getClusterServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala getCluster
+Behavior: returns a single cluster by ID, 404 if not found.
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId:
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 

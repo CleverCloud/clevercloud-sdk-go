@@ -2,13 +2,14 @@
 
 package models
 
-// PlatformApplication represents
+// PlatformApplication represents Platform application enum with hardcoded UUIDs.  Source: references/legacy/ovd/modules/warp10/src...
 type PlatformApplication string
 
 const (
-	PlatformApplicationAddonApiCellar    PlatformApplication = "ADDON_API_CELLAR"
-	PlatformApplicationMETRICS           PlatformApplication = "METRICS"
-	PlatformApplicationMetricsAccesslogs PlatformApplication = "METRICS_ACCESSLOGS"
+	PlatformApplicationMetrics              PlatformApplication = "metrics"
+	PlatformApplicationMetricsDotAccesslogs PlatformApplication = "metrics.accesslogs"
+	PlatformApplicationAddonApiCellar       PlatformApplication = "addon-api-cellar"
+	PlatformApplicationAddonApiFsbucket     PlatformApplication = "addon-api-fsbucket"
 )
 
 // String returns the underlying string value

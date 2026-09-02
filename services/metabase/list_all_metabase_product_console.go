@@ -11,9 +11,10 @@ import (
 )
 
 /*
-Listallmetabaseproductconsole
+Listallmetabaseproductconsole POST /v4/metabase/consumptions — consumption for every addon active in the window.
 
-get all metabase product consumption
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getAllConsumptions
+Issue: #8
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +35,14 @@ Example:
 x-service: metabase
 operationId: listAllMetabaseProductConsole
 */
-func Listallmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.MetabaseConsumptionQuery) client.Response[[]models.ResourceConsumption] {
+func Listallmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.MetabaseConsumptionQuery) client.Response[[]models.MetabaseResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listAllMetabaseProductConsole")
 	defer span.End()
 
 	path := utils.Path("/v4/metabase/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.ResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[[]models.MetabaseResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

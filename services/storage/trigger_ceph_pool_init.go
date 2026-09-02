@@ -11,17 +11,29 @@ import (
 )
 
 /*
-Triggercephpoolinit
+Triggercephpoolinit POST .../ceph-pools/{poolId}/init -- initialize a pool for RBD use (idempotent).
 
-Initialize a ceph pool for RBD usage. Idempotent.
+Source: ovd StorageController.scala initCephPool() / CephAdminService.initPool().
+
+📥 **Algo Source (Legacy):** `rbd pool init` via the Dashboard
+(`POST /pool/{id}/init`, `{force:false}`); idempotent.
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_x_op:init_pool` on the path
+tenant, **bound to the path pool** (`cephPool` scope fact) — exactly the grant OVD
+authorizes (`CephXOp.INIT_POOL` + `poolId.asFact`, StorageController.scala:288).
+This endpoint took `create_pool` until #2902, which both denied
+`init_pool`-only tokens and handed init to every `create_pool` holder.
+Resolve the cluster client (`ceph_for_cluster`);
+`ceph.init_pool(pool_id, force=false)` → 204.
+Issue: #774, #2902
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - poolId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - poolId: Pool identifier
 
 # Returns the operation result or an error
 

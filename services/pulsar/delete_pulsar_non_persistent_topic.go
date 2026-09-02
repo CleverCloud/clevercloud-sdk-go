@@ -4,7 +4,6 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -12,23 +11,40 @@ import (
 )
 
 /*
-Deletepulsarnonpersistenttopic
+Deletepulsarnonpersistenttopic DELETE /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics/{topic}
 
-# Delete a non-persistent topic on this namespace
+	— delete a non-persistent topic.
+
+**Legacy**: ovd PulsarController.scala:364 deleteNonPersistentTopicServerEndpoint()
+**Algorithm**:
+  - Ownership verified via withTopicOwner helper (line 80)
+  - Delegates to PulsarTopicService.deleteNonPersistentTopic (line 208)
+  - Scala calls HttpPulsarAdminClient.deleteNonPersistentTopic with partitioned+force flags
+
+**Conformity**: FAITHFUL — proxies to
+
+	`PulsarAdminClient::delete_non_persistent_topic` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deleteNonPersistentTopicServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala deleteNonPersistentTopic
+Behavior: deletes the non-persistent topic on the cluster,
+
+	propagating `partitioned`/`force` query params; 204.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
-  - opts: optional query parameters
+  - pulsarId: Pulsar addon ID
+  - topic: Topic name
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Deletepulsarnonpersistenttopic(ctx, client, tracer, pulsarId, topic, opts...)
+	response := pulsar.Deletepulsarnonpersistenttopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,17 +53,11 @@ Example:
 x-service: pulsar
 operationId: deletePulsarNonPersistentTopic
 */
-func Deletepulsarnonpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string, opts ...Option) client.Response[client.Nothing] {
+func Deletepulsarnonpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deletePulsarNonPersistentTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics/%s", pulsarId, topic)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

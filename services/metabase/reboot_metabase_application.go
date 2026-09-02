@@ -11,15 +11,16 @@ import (
 )
 
 /*
-Rebootmetabaseapplication
+Rebootmetabaseapplication POST .../addons/{id}/reboot — restart the Java app **with** build cache.
 
-# Ask for reboot metabase application
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — rebootAddon(rebuild=false)
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase addon ID
 
 # Returns the operation result or an error
 

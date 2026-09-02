@@ -11,18 +11,47 @@ import (
 )
 
 /*
-Deletecephrbdnamespace
+Deletecephrbdnamespace DELETE /v4/tenants/{tenantId}/ceph-pools/{poolId}/namespaces/{namespaceId} -- soft-delete a Ceph RBD namespace.
 
-Delete an existing ceph rbd namespace.
+Source: ovd StorageController.scala:251 deleteCephRBDNamespace()
+Schema: V3__add_ceph_rbd_namespace_table.sql — table ceph_rbd_namespace
+Behavior: marks namespace as SOFT_DELETED in DB. Actual Ceph deletion happens
+
+	after 3 days via the cleanup service.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Soft-delete a Ceph RBD namespace.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- GET namespace from DB, return 404 if not found
+- Append SOFT_DELETED status to statuses
+- UPDATE ceph_rbd_namespace in DB
+- Actual deletion from Ceph happens after 3 days via cleanup task
+- Source: ovd StorageController.scala:251
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_rbd_op:remove_namespace` **bound to the path pool and namespace**
+    (`cephPool` / `cephRBDNamespace` scope facts)
+  - Fetch namespace from DB; 404 unless it is owned by the path tenant and lives
+    on the path (cluster_id, pool_id) — guards against cross-tenant IDOR
+  - Append SOFT_DELETED to statuses array, UPDATE in DB
+  - Return 204 No Content
+
+Like the scoped CephX mint, OVD routes this through
+`notStoredAuthorizedResourceEndpoint` (`BiscuitAuthorizer.scala:231`), authorizing
+`{pool.asFact, namespace.asFact}` + `CephRBDOp.REMOVE_NAMESPACE`. Both scope facts are
+now asserted, and the DB ownership check is retained on top for the tenant/cluster
+dimension OVD's facts omit.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - poolId:
-  - namespaceId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - poolId: Pool identifier
+  - namespaceId: Namespace identifier
 
 # Returns the operation result or an error
 

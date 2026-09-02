@@ -11,9 +11,12 @@ import (
 )
 
 /*
-Deletenetworkgroupmember
+Deletenetworkgroupmember DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members/{member_id}
 
-# Delete a Member of a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala deleteMember → `MembershipCMD(DELETE)`
+Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG
+or member.
+Issue: #313, #665, #676, #849, #1127, #2790
 
 Parameters:
   - ctx: context for the request

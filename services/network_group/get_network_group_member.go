@@ -12,9 +12,11 @@ import (
 )
 
 /*
-Getnetworkgroupmember
+Getnetworkgroupmember GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members/{member_id}
 
-# Get a Member of a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala getMember — find by id in `ng.members`
+Behavior: 200 with the member; 404 unknown NG or member; 403 owner mismatch.
+Issue: #313, #665, #676, #849, #1127
 
 Parameters:
   - ctx: context for the request

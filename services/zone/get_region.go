@@ -13,15 +13,29 @@ import (
 )
 
 /*
-Getregion
+Getregion Get a given region.
 
-# Get given region
+**Public, and authentication only ever widens** — same three authentication
+branches as [`list_zones`], same owner set. The zone is looked up in the ACTIVE
+set the caller is allowed to see, so a zone that exists but is granted through
+a `zone_access` row answers 200 to a member of a granted organisation and 404 —
+exactly as an unknown name does — to everyone else, an anonymous caller
+included.
+
+The 404 body is upstream's repository-miss envelope, byte-identical to what
+production returns (measured 2026-08-25):
+`{"apiRequestId":"request_http_…","code":"clever.core.not-found","context":{"operation":"Find","kind":"Zone","name":"<name>","type":"Operation"},"error":"<name> not found, operation=[Find]"}`.
+
+Source: ovd ZoneActor.scala:120-129 findZone + queries.selectZone
+Source: ovd RepositoryProtocols.scala:97 (the NotFound arm)
+Source: live capture api.clever-cloud.com /v4/products/zones/zzz-unknown (2026-08-25)
+Issues: #313, #1266, #3069
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - zoneName:
+  - zoneName: Zone name (e.g. 'par', 'mtl')
   - opts: optional query parameters
 
 # Returns the operation result or an error

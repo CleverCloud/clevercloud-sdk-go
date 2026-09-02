@@ -2,7 +2,7 @@
 
 package models
 
-// CellarTag
+// CellarTag A tag attached to a Cellar object.  Source: references/legacy/ovd/modules/cellar/models/package.s...
 type CellarTag struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`

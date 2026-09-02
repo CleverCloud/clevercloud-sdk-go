@@ -12,9 +12,16 @@ import (
 )
 
 /*
-Getvalidatematomokeycloaktoken
+Getvalidatematomokeycloaktoken GET /v4/addon-providers/addon-matomo/token/validate?keycloakToken=… — validate.
 
-validate a Matomo Keycloak token
+📥 Algo Source (Legacy): `validateToken` — AES-CBC/Base32 decrypt the token
+into `Info{ownerId,addonId}`, load the addon, require its PHP application id,
+return `InfoWithPHPApp`.
+
+🔧 Algo Rust: `keycloak::decrypt` → `fetch_active_addon_row` → require
+`php_application_id`. Internal endpoint — no per-user guard.
+
+Issue: #660
 
 Parameters:
   - ctx: context for the request

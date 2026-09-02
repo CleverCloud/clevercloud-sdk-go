@@ -2,12 +2,12 @@
 
 package models
 
-// ClusterStandaloneNodeGroup
+// ClusterStandaloneNodeGroup A standalone (single-node) node group, as embedded in the aggregate cluster view.  Source: refere...
 type ClusterStandaloneNodeGroup struct {
 	CurrentNodeCount int                 `json:"currentNodeCount"`
 	Flavor           NodeFlavor          `json:"flavor"`
 	ID               string              `json:"id"`
-	Name             string              `json:"name"`
+	Name             NodeGroupName       `json:"name"`
 	Status           NodeGroupStatusType `json:"status"`
-	TargetNodeCount  int                 `json:"targetNodeCount"`
+	TargetNodeCount  NodeGroupNodeCount  `json:"targetNodeCount"`
 }

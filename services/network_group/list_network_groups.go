@@ -13,15 +13,23 @@ import (
 )
 
 /*
-Listnetworkgroups
+Listnetworkgroups GET /v4/networkgroups/organisations/{owner_id}/networkgroups
 
-# List NetworkGroups
+Algo Source: ovd NetworkGroupRoutes.scala getNetworkGroups — actor query
+against in-memory `ngMap` filtered by `ownerId`, optionally tag-filtered.
+
+Algo Rust: serve from [`crate::cache::NgCache::list_by_owner`] (hydrated from compacted
+`networkgroups.events`). Apply tag intersection client-side. No DB, no ZK round-trip.
+
+Source: references/legacy/ovd/modules/networkgroup/routes/NetworkGroupRoutes.scala — getNetworkGroups
+Behavior: 200 with the owner's NGs (possibly empty); 403 if not an org member.
+Issue: #313, #665, #676, #849, #1127
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -37,7 +45,7 @@ Example:
 x-service: network_group
 operationId: listNetworkGroups
 */
-func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup1] {
+func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroups", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +58,7 @@ func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Get[[]models.NetworkGroup1](ctx, c, path)
+	response := client.Get[[]models.NetworkGroup](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

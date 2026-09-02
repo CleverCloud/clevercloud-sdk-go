@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Getserver
-
-# Get server
+Getserver Row 8 — 404 on absent.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - serverId: Server ID
 
@@ -37,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: getServer
 */
-func Getserver(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string) client.Response[models.Server] {
+func Getserver(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string) client.Response[models.ServerView] {
 	ctx, span := tracer.Start(ctx, "getServer", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("serverId", serverId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/servers/%s", tenantId, regionId, serverId)
 
 	// Make API call
-	response := client.Get[models.Server](ctx, c, path)
+	response := client.Get[models.ServerView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,14 +2,14 @@
 
 package models
 
-// CreateWriteTokenRequest
+// CreateWriteTokenRequest Create WRITE token request body.  Source: references/legacy/ovd/modules/warp10/src/main/scala/com...
 type CreateWriteTokenRequest struct {
-	Application string     `json:"application"`
-	Attributes  *MapString `json:"attributes,omitempty"`
-	Labels      *MapString `json:"labels,omitempty"`
-	Owner       string     `json:"owner"`
-	Producer    string     `json:"producer"`
-	Resource    string     `json:"resource"`
-	TTL         string     `json:"ttl"`
-	Tenant      TenantID   `json:"tenant"`
+	Application Warp10ApplicationName `json:"application"`          // Application string — REQUIRED for WRITE tokens.  Source: endpoints.scala CreateWriteTokenRequest....
+	Attributes  *map[string]any       `json:"attributes,omitempty"` // Optional Warp10 token attributes (dot-prefixed keys).  DEC-1 (WP-J): deserialized as IndexMap to ...
+	Labels      *map[string]any       `json:"labels,omitempty"`     // Optional labels for metric filtering.  DEC-1 (WP-J): deserialized from JSON as IndexMap to preser...
+	Owner       string                `json:"owner"`                // Owner UUID — REQUIRED for WRITE tokens.  Source: endpoints.scala CreateWriteTokenRequest.owner: U...
+	Producer    string                `json:"producer"`             // Producer UUID — REQUIRED for WRITE tokens.  Source: endpoints.scala CreateWriteTokenRequest.produ...
+	Resource    Warp10ResourceParam   `json:"resource"`             // Resource identifier (e.g. application ID).
+	TTL         TokenTtl              `json:"ttl"`                  // TTL as ISO-8601 interval string, e.g. "PT1H".  Source: endpoints.scala CreateWriteTokenRequest.tt...
+	Tenant      Warp10Tenant          `json:"tenant"`               // Tenant identifier (owner).
 }

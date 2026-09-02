@@ -2,14 +2,14 @@
 
 package models
 
-// CreateReadTokenRequest
+// CreateReadTokenRequest Create READ token request body.  Source: references/legacy/ovd/modules/warp10/src/main/scala/com/...
 type CreateReadTokenRequest struct {
-	Applications []string   `json:"applications,omitempty"`
-	Attributes   *MapString `json:"attributes,omitempty"`
-	Labels       *MapString `json:"labels,omitempty"`
-	Owners       []string   `json:"owners,omitempty"`
-	Producers    []string   `json:"producers,omitempty"`
-	Resource     string     `json:"resource"`
-	TTL          string     `json:"ttl"`
-	Tenant       TenantID   `json:"tenant"`
+	Applications []Warp10ApplicationName `json:"applications,omitempty"` // Applications list (empty = wildcard). None → wildcard (must have allowWildcardApplications).
+	Attributes   *map[string]any         `json:"attributes,omitempty"`   // Optional Warp10 token attributes (dot-prefixed keys).  DEC-1 (WP-J): deserialized as IndexMap to ...
+	Labels       *map[string]any         `json:"labels,omitempty"`       // Optional labels for metric filtering.  DEC-1 (WP-J): deserialized from JSON as IndexMap to preser...
+	Owners       []string                `json:"owners,omitempty"`       // Owner UUIDs. None → wildcard (must have allowWildcardOwners).
+	Producers    []string                `json:"producers,omitempty"`    // Producer UUIDs. None → wildcard (must have allowWildcardProducers).
+	Resource     Warp10ResourceParam     `json:"resource"`               // Resource identifier (e.g. application ID).
+	TTL          TokenTtl                `json:"ttl"`                    // TTL as ISO-8601 interval string, e.g. "PT1H".  Source: endpoints.scala CreateReadTokenRequest.ttl...
+	Tenant       Warp10Tenant            `json:"tenant"`                 // Tenant identifier (owner).
 }

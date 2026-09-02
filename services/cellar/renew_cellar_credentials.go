@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Renewcellarcredentials
+Renewcellarcredentials Rotate the add-on's S3 secret key
 
-renew Cellar secret (generates new keySecret, keyId stays the same)
+Generates a fresh secret access key for this add-on, keeping the same endpoint and access key id, and returns the refreshed credentials. The new value is recorded once on the add-on's own `CELLAR_ADDON_*` environment variables before the call returns, so a failure to record it fails the whole call rather than handing back a key nothing else knows about. The previous secret stops working, so any client still holding it must be updated. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
 
 # Returns the operation result or an error
 

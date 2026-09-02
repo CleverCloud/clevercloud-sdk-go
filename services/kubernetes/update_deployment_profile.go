@@ -12,13 +12,31 @@ import (
 )
 
 /*
-Updatedeploymentprofile
+Updatedeploymentprofile PUT /v4/kubernetes/admin/deployment-profiles/{location_id}
+
+📥 **Algo Source (Legacy):**
+Replace a location's deployment profile.
+  - `requireBasicAuth` → 403 otherwise
+  - The body's `locationId` must equal the path one, else 400
+    `DeploymentProfileInvalid`
+  - `validateProfileData` → 400
+  - `repository.update`; 0 affected rows → 404
+  - Source: ovd DeploymentProfileController.scala:141-168
+
+🔧 **Algo Rust (Implementation):**
+- `AdminAccess` extractor → 403; `validate_location_id` (path) → 400
+- Path/body mismatch → 400; `DeploymentProfile::decode` → 400
+- `update` → 0 rows ⇒ 404; else 200 + redacted view
+
+Source: ovd controllers/DeploymentProfileController.scala:141-168
+Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
+Issue: #1625
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId:
+  - locationId: Location id (location_<uuid>)
   - requestBody: the request payload
 
 # Returns the operation result or an error

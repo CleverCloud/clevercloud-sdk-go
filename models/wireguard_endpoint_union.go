@@ -2,13 +2,10 @@
 
 package models
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "encoding/json"
 
-// WireguardEndpoint
-// Tagged union - can hold one of: ClientEndpoint, ServerEndpoint
+// WireguardEndpoint Where a stored peer sits in the mesh: a CLIENT has its mesh address (`ngIp`), a SERVER additional...
+// Tagged union - can hold one of: map[string]any, map[string]any
 type WireguardEndpoint struct {
 	raw json.RawMessage
 }
@@ -33,75 +30,4 @@ func (u WireguardEndpoint) MarshalJSON() ([]byte, error) {
 func (u *WireguardEndpoint) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
-}
-
-// Format implements fmt.Formatter: dispatches the verb to the concrete
-// variant currently held, falling back to the raw JSON bytes for unknown
-// or empty values. Lets %+v on a parent struct render this field as the
-// matching concrete type instead of a byte slice.
-func (u WireguardEndpoint) Format(f fmt.State, verb rune) {
-	switch u.Type() {
-	case ClientEndpointType:
-		v, _ := u.AsClientEndpoint()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case ServerEndpointType:
-		v, _ := u.AsServerEndpoint()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	default:
-		if u.raw == nil {
-			f.Write([]byte("null"))
-			return
-		}
-		f.Write(u.raw)
-	}
-}
-
-// WireguardEndpointVariant is satisfied by every concrete type that can be wrapped into a WireguardEndpoint.
-// Lets generic code accept any variant without naming each one.
-type WireguardEndpointVariant interface {
-	ToWireguardEndpoint() WireguardEndpoint
-}
-
-// AsClientEndpoint decodes the held payload as a ClientEndpoint. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u WireguardEndpoint) AsClientEndpoint() (ClientEndpoint, bool) {
-	var v ClientEndpoint
-	if t, err := peekType(u.raw); err != nil || t != ClientEndpointType {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewWireguardEndpointFromClientEndpoint wraps a ClientEndpoint into a WireguardEndpoint ready to be JSON-encoded.
-func NewWireguardEndpointFromClientEndpoint(v ClientEndpoint) (WireguardEndpoint, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return WireguardEndpoint{}, err
-	}
-	return WireguardEndpoint{raw: raw}, nil
-}
-
-// AsServerEndpoint decodes the held payload as a ServerEndpoint. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u WireguardEndpoint) AsServerEndpoint() (ServerEndpoint, bool) {
-	var v ServerEndpoint
-	if t, err := peekType(u.raw); err != nil || t != ServerEndpointType {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewWireguardEndpointFromServerEndpoint wraps a ServerEndpoint into a WireguardEndpoint ready to be JSON-encoded.
-func NewWireguardEndpointFromServerEndpoint(v ServerEndpoint) (WireguardEndpoint, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return WireguardEndpoint{}, err
-	}
-	return WireguardEndpoint{raw: raw}, nil
 }

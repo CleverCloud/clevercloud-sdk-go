@@ -13,16 +13,42 @@ import (
 )
 
 /*
-Listmetrics
+Listmetrics GET /v4/stats/organisations/{ownerId}/resources/{resourceId}/metrics
 
-get Metrics data
+📥 **Algo Source (Legacy):**
+`getOverview`/`getMetricsOverview` — fetch CPU/MEM/LOAD1 for a resource.
+  - Default Range.Full: interval 30m, span 2m, end now(UTC), fill true.
+  - isSpanCorrect: reject (400 SpanBadRequest) iff `span * 300 < interval`.
+  - Selected metrics: empty → [cpu, mem, load1]; match EXACTLY (`case CPU.name` …), else BadRequest.
+  - createReadToken(ownerId) → Warp10 read token.
+  - Per metric, compose: application_cpu.mc2 → aggregator → (cpuOps|toPercentage) → rename →
+    sample_and_fill_0.mc2; wrap the list in `[ … ] FLATTEN` and `warpClient.exec`.
+  - `MetricsDataResponse(gts)`: name=classname, unit/resource from labels, value=dp.value.serialize.
+  - Source: ovd .../actors/MetricsAPIActor.scala:491-661, MetricsAPISeries.scala
+
+🔧 **Algo Rust (Implementation):**
+  - Parse query params (only, interval, span, end, fill) with the same defaults.
+  - `end_us = ws_epoch_micros(end)` (toEpochMilli * 1000).
+  - Reject iff `span_us * factor < interval_us`, `factor` = config `limit.duration.orderOfMagnitude` (default 300).
+  - Selected: empty → `MetricsSeries::ALL`; else each `only` value through
+    `MetricsSeries::from_name` (exact match), unknown → 400.
+  - `internal_read_token(module, owner_id)` → the internal Warp10 read token via
+    `create_tenant_read_token` over `PlatformApplication.all` + `internalConfig.defaultTtl`
+    (faithful to `MetricsAPITokenRequestActor`); Backend→502, Transport→500, Disabled→501.
+  - build_{cpu,mem,load1}_warpscript render the verbatim templates + fragments; join in
+    `[ … ] FLATTEN`; exec; `parse_gts_to_metrics` (faithful GTSValue.serialize).
+  - Return `Vec<MetricsDataResponse>`.
+
+Source: ovd modules/metrics/.../actors/MetricsAPIActor.scala:491-661 (getMetricsOverview/getOverview)
+Source: ovd modules/metrics/.../api/routes.scala (getMetrics endpoint)
+Issue: #767
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - resourceId:
+  - ownerId: Organisation/owner ID
+  - resourceId: Resource/application ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

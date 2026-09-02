@@ -2,13 +2,13 @@
 
 package models
 
-// KeycloakPlan represents
+// KeycloakPlan represents Commercial plan of a Keycloak addon.  📥 **Algo Source (Legacy):** `Keycloak.scala:36` matches the...
 type KeycloakPlan string
 
 const (
 	KeycloakPlanALPHA KeycloakPlan = "ALPHA"
-	KeycloakPlanBASE  KeycloakPlan = "BASE"
 	KeycloakPlanBETA  KeycloakPlan = "BETA"
+	KeycloakPlanBASE  KeycloakPlan = "BASE"
 )
 
 // String returns the underlying string value

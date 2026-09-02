@@ -12,16 +12,24 @@ import (
 )
 
 /*
-Listdatabaseoids
+Listdatabaseoids **Legacy**: ovd oids.scala:36 getDatabases()
+**Algorithm**:
+  - Verify addon, query pg_database catalog for OID+name pairs
 
-# Get databases OIDs for a given PostgreSQL addon
+**Conformity**: STUB (requires direct connection to addon DB instance)
+
+GET .../oids/databases — list database OIDs.
+
+Source: ovd PostgreSQLAccessController.scala — selectDatabases
+Behavior: STUB — returns empty list. Requires direct addon DB connection.
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 

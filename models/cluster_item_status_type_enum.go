@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterItemStatusType represents
+// ClusterItemStatusType represents Cluster item lifecycle status.  Source: references/legacy/ovd/modules/kubernetes/models/types/sta...
 type ClusterItemStatusType string
 
 const (

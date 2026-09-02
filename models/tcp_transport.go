@@ -2,7 +2,7 @@
 
 package models
 
-// TcpTransport
+// TcpTransport Frontend TCP transport (:445-449).
 type TcpTransport struct {
-	Transport Transport5 `json:"transport"`
+	Transport TcpTransportChoice `json:"transport"` // The composable inner transport.
 }

@@ -2,13 +2,13 @@
 
 package models
 
-// NodeGroupPatchPayload
+// NodeGroupPatchPayload Node group patch payload (update).  Source: references/legacy/ovd/modules/kubernetes/models/NodeG...
 type NodeGroupPatchPayload struct {
-	AutoscalingEnabled *bool                `json:"autoscalingEnabled,omitempty"`
-	Description        *StringMaxLength4096 `json:"description,omitempty"`
-	MaxNodeCount       *int                 `json:"maxNodeCount,omitempty"`
-	MinNodeCount       *int                 `json:"minNodeCount,omitempty"`
-	Name               NodeGroupName        `json:"name"`
-	Tag                *StringMaxLength1024 `json:"tag,omitempty"`
-	TargetNodeCount    int                  `json:"targetNodeCount"`
+	AutoscalingEnabled *bool              `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled
+	Description        *string            `json:"description,omitempty"`        // Optional description
+	MaxNodeCount       *any               `json:"maxNodeCount,omitempty"`
+	MinNodeCount       *any               `json:"minNodeCount,omitempty"`
+	Name               NodeGroupName      `json:"name"`            // Node group name
+	Tag                *string            `json:"tag,omitempty"`   // Optional tag
+	TargetNodeCount    NodeGroupNodeCount `json:"targetNodeCount"` // Target number of nodes
 }

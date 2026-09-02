@@ -12,15 +12,16 @@ import (
 )
 
 /*
-Getotoroshiinfos
+Getotoroshiinfos GET /v4/otoroshi/{otoroshi_id} — get Otoroshi info (internal route, basic auth in prod).
 
-get all otoroshi info via internal path
+Source: references/legacy/ovd/modules/otoroshi/controllers/OtoroshiProviderController.scala — getOtoroshiInfosEndpoint
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

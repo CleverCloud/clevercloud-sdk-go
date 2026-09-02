@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeEnvVar
+// WannabeEnvVar Single environment variable (name/value pair).  Source: references/legacy/ovd/core/src/main/scala...
 type WannabeEnvVar struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`

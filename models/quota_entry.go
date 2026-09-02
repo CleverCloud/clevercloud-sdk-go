@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// QuotaEntry
+// QuotaEntry Quota entry for a single TS addon.  Source: references/legacy/ovd/modules/ts/models/QuotaEntry.sc...
 type QuotaEntry struct {
 	AddonID            string    `json:"addonId"`
-	CreationDate       time.Time `json:"creationDate"`
+	CreationDate       time.Time `json:"creationDate"` // ISO 8601 creation timestamp.
 	MaxMonthlyGtsCount int       `json:"maxMonthlyGtsCount"`
 	MaxPointsPerDay    int       `json:"maxPointsPerDay"`
-	ProducerUUID       string    `json:"producerUuid"`
+	ProducerUUID       string    `json:"producerUuid"` // Token owner UUID (OVD `producerUuid: UUID`). Always present (column is NOT NULL).
 }

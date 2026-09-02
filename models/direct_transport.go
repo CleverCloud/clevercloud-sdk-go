@@ -2,8 +2,8 @@
 
 package models
 
-// DirectTransport
+// DirectTransport Direct frontend leaf (:374-379).
 type DirectTransport struct {
-	ClusterID StringMaxLength128 `json:"clusterId"`
-	Tags      []string           `json:"tags,omitempty"`
+	ClusterID ConfigId `json:"clusterId"`      // Cluster receiving the traffic.
+	Tags      []string `json:"tags,omitempty"` // Semantic tags (`Set[SemanticTag]` — plain `key:value` strings, SemanticTag.scala:21-29). Determin...
 }

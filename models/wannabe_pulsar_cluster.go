@@ -2,19 +2,19 @@
 
 package models
 
-// WannabePulsarCluster
+// WannabePulsarCluster Request to create/update a Pulsar cluster.  Source: references/legacy/ovd/modules/pulsar/models/p...
 type WannabePulsarCluster struct {
-	Available          bool               `json:"available"`
-	ID                 string             `json:"id"`
-	LocationID         string             `json:"locationId"`
-	LocationName       StringMaxLength128 `json:"locationName"`
-	PulsarPort         int                `json:"pulsarPort"`
-	PulsarTLSPort      int                `json:"pulsarTlsPort"`
-	RootToken          string             `json:"rootToken"`
-	SupportColdStorage bool               `json:"supportColdStorage"`
-	SupportedPlans     []PulsarPlan       `json:"supportedPlans,omitempty"`
-	URL                string             `json:"url"`
-	Version            string             `json:"version"`
-	WebPort            int                `json:"webPort"`
-	WebTLSPort         int                `json:"webTlsPort"`
+	Available          bool     `json:"available"`               // Whether available for provisioning
+	ID                 string   `json:"id"`                      // Cluster identifier
+	LocationID         string   `json:"locationId"`              // Zone/location identifier
+	LocationName       string   `json:"locationName"`            // Location display name
+	PulsarPort         int      `json:"pulsarPort"`              // Pulsar binary protocol port
+	PulsarTLSPort      *int     `json:"pulsarTlsPort,omitempty"` // Pulsar TLS binary protocol port
+	RootToken          string   `json:"rootToken"`               // Root Biscuit token for admin operations
+	SupportColdStorage bool     `json:"supportColdStorage"`      // Whether cold storage offload is supported
+	SupportedPlans     []string `json:"supportedPlans"`          // Plans available on this cluster
+	URL                string   `json:"url"`                     // Cluster hostname/URL
+	Version            string   `json:"version"`                 // Pulsar version
+	WebPort            *int     `json:"webPort,omitempty"`       // HTTP admin port
+	WebTLSPort         *int     `json:"webTlsPort,omitempty"`    // HTTPS admin port
 }

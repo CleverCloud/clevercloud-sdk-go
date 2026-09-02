@@ -2,8 +2,8 @@
 
 package models
 
-// HeaderRules
+// HeaderRules Header edits (:274-276).
 type HeaderRules struct {
-	Add    []HeaderRule `json:"add,omitempty"`
-	Remove []HeaderRule `json:"remove,omitempty"`
+	Add    []HeaderRule `json:"add,omitempty"`    // Headers to add.
+	Remove []HeaderRule `json:"remove,omitempty"` // Headers to remove.
 }

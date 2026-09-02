@@ -12,15 +12,34 @@ import (
 )
 
 /*
-Createwritetoken
+Createwritetoken POST /v4/warp10/cluster/{cluster_id}/token/write — create cluster write token.
 
-# Generate a Warp10 WRITE token for the specified cluster
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:144-156 createWriteToken
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/auth/Warp10DualAuthenticator.scala
+Behavior:
+  - Accepts Basic (service account) or Bearer (biscuit) auth.
+  - Biscuit: requires CREATE_SYSTEM_TOKEN operation + WRITE scope.
+  - Basic: service account with LowLevel access.
+  - creator_kind/creator_id persisted from auth context.
+
+📥 **Algo Source (Legacy):**
+dispatchAuth(clusterId, CREATE_SYSTEM_TOKEN, Some(WRITE)):
+  - Biscuit: validateBiscuitGrants then generateWriteTokenBiscuit (validates attributes)
+  - Basic: generateWriteToken(clusterId, userLogin, request)
+
+Source: Warp10Controller.scala:144-156 createWriteToken + dispatchAuth
+
+🔧 **Algo Rust (Implementation):**
+- dispatch_warp10_auth(CREATE_SYSTEM_TOKEN, Some(Write)) → Warp10AuthContext or 401/403
+- create_write_token_for_cluster_authed(module, cluster_id, req, auth_ctx)
+
+Issue: #642, #758
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
+  - clusterId: Warp10 cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

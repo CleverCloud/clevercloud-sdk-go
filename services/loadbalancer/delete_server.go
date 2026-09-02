@@ -11,15 +11,14 @@ import (
 )
 
 /*
-Deleteserver
-
-# Unregister server from region
+Deleteserver Row 5 — 204; 404 → **423** (the module's only 423) → 412 guards, in
+OVD's order.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - serverId: Server ID
 

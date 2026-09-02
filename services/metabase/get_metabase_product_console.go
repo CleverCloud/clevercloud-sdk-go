@@ -12,16 +12,17 @@ import (
 )
 
 /*
-Getmetabaseproductconsole
+Getmetabaseproductconsole POST /v4/metabase/organisations/{owner_id}/metabase/{addon_metabase_id}/consumption
 
-get metabase product consumption
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getConsumption
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonMetabaseId:
+  - ownerId: Owner (user or org) ID
+  - addonMetabaseId: Metabase addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +38,14 @@ Example:
 x-service: metabase
 operationId: getMetabaseProductConsole
 */
-func Getmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonMetabaseId string, requestBody *models.MetabaseConsumptionQuery) client.Response[models.ResourceConsumption] {
+func Getmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonMetabaseId string, requestBody *models.MetabaseConsumptionQuery) client.Response[models.MetabaseResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "getMetabaseProductConsole", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/metabase/organisations/%s/metabase/%s/consumption", ownerId, addonMetabaseId)
 
 	// Make API call
-	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.MetabaseResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

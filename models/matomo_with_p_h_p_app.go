@@ -2,9 +2,9 @@
 
 package models
 
-// MatomoWithPHPApp
+// MatomoWithPHPApp Keycloak token-validation response.  Source: references/legacy/ovd/modules/matomo/services/keyclo...
 type MatomoWithPHPApp struct {
-	AddonID  string  `json:"addonId"`
-	OwnerID  OwnerID `json:"ownerId"`
-	PhpAppID string  `json:"phpAppId"`
+	AddonID  MatomoId `json:"addonId"`  // Matomo addon id.
+	OwnerID  UserId   `json:"ownerId"`  // Owner (user or org) id.
+	PhpAppID AppId    `json:"phpAppId"` // PHP application id hosting the Matomo instance.
 }

@@ -13,16 +13,23 @@ import (
 )
 
 /*
-Listtablesprivileges
+Listtablesprivileges **Legacy**: ovd users.scala:95 getTablesPrivileges()
+**Algorithm**:
+  - Verify addon, SELECT table privileges with dynamic WHERE (oid, schemaOId, databaseOId, userId)
 
-# Get users tables perivileges for a given PostgreSQL addon
+**Conformity**: YES
+
+GET .../users/privileges/tables — list all table-level privileges.
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — selectTablesPrivileges
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

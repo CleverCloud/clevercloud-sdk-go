@@ -2,7 +2,7 @@
 
 package models
 
-// NetworkGroupOrigin represents
+// NetworkGroupOrigin represents Origin of a cluster's network group.  Source: references/legacy/ovd/modules/kubernetes/models/typ...
 type NetworkGroupOrigin string
 
 const (

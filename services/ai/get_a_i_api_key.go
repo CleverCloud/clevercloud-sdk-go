@@ -11,18 +11,27 @@ import (
 )
 
 /*
-Getaiapikey
+Getaiapikey **Legacy**: ovd AIProviderController.scala:181 getApiKeyEndpoint()
+**Algorithm**:
+  - Verify addon + endpoint tenancy, call Otoroshi getApiKey
 
-get Apikey information
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/.../endpoints/{endpoint_id}/apikeys/{apikey_id} — get API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getApiKeyEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getApiKey()
+Behavior: verifies addon + tenancy, calls otoroshiClient.getApiKey.
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - apikeyId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - apikeyId: Otoroshi API key ID
 
 # Returns the operation result or an error
 

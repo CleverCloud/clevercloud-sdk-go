@@ -2,10 +2,10 @@
 
 package models
 
-// OtoroshiVersionChecker
+// OtoroshiVersionChecker Otoroshi version check result.  Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiVie...
 type OtoroshiVersionChecker struct {
-	Available  []string `json:"available,omitempty"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available  []string `json:"available"`  // All available versions for this plan.
+	Installed  string   `json:"installed"`  // Currently installed version.
+	Latest     string   `json:"latest"`     // Latest available version.
+	NeedUpdate bool     `json:"needUpdate"` // Whether an update is required.
 }

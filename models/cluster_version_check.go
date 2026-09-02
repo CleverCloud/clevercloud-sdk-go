@@ -2,10 +2,10 @@
 
 package models
 
-// ClusterVersionCheck
+// ClusterVersionCheck Cluster version check result.  Source: references/legacy/ovd/modules/kubernetes/models/ClusterVer...
 type ClusterVersionCheck struct {
-	Available  []string `json:"available"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available  []Version `json:"available"`  // Available Kubernetes versions
+	Installed  Version   `json:"installed"`  // Currently installed version
+	Latest     Version   `json:"latest"`     // Latest available version
+	NeedUpdate bool      `json:"needUpdate"` // Whether an update is available
 }

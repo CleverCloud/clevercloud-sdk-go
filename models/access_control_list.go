@@ -2,7 +2,7 @@
 
 package models
 
-// AccessControlList
+// AccessControlList OVD `AccessControlList` (ipam types) — row 37 request body.
 type AccessControlList struct {
 	Allow []string `json:"allow,omitempty"`
 	Deny  []string `json:"deny,omitempty"`

@@ -12,16 +12,61 @@ import (
 )
 
 /*
-Getmateriakv
+Getmateriakv GET /v4/materia/organisations/{ownerId}/materia/databases/{kvId} — get Materia KV (v4).
 
-# Get a MateriaKV
+The one user-facing materia route (#1639), restoring OVD's `onUserAction` whitelist of `Get`
+for OAuth callers — the console reads its database through it. Mounted OUTSIDE the broker
+gates behind `basic_broker_or_user`:
+
+  - **Broker (`Basic`)**: validated by the delegated `require_provider_auth`, which injects the
+    almighty `Internal` token — the handler then runs the exact pre-#1639 broker read.
+  - **End user (OAuth1)**: validated by the `Auth` extractor against the ccapi pool
+    (`AuthState`), then authorized in-process — replacing OVD's HTTP delegation to cc-api.
+    That delegation was NOT credentials-only: OVD forwards the ORIGINAL request URI
+    (`CCAPIAuthActor` → `RequestAuthorization`) and cc-api `/authorize` path-dispatches it into
+    per-route rules, so legacy DID authorize this exact route (cc-api f0011ff12, 2024-03): the
+    `access_organisations` right + membership of the path org (`authorize_v4_organisation`),
+    then the `manage_organisations_services` right + membership of the addon's real owner + a
+    `canAccessRepositories` role floor (`authorize_v4_organisation_materia_db`), every failure
+    answered 403 (→ OVD's CCAPIForbidden arm). This handler enforces the same rights,
+    membership, and role floor, rendered as (the !734-review split):
+  - rights failure → 403 `clever.auth.forbidden`, legacy-exact — it depends only on the
+    token, fires before any lookup, and so discloses nothing about any org or database;
+  - non-member / role below floor → the repository 404 — DELIBERATE DIVERGENCE from legacy's
+    403 (ORGA_ACCESS), keeping org existence/membership undisclosed.
+    Unlike `OrgAuth<ReadAccess>` there is NO almighty-OAuth1 bypass of membership — and legacy's
+    materia rule had none either (`hasAccessToOrg` is a real member lookup, no ccadmin arm):
+    `is_almighty()` reflects the OAuth *consumer*'s rights, and the web console holds an
+    almighty consumer, so bypassing on it would let every console user read any org's live KV
+    token (the #1142 class; cellar `require_internal_rejects_almighty_oauth1_consumer` pins the
+    same rule). The only trusted cross-owner path is the `Basic`→`Internal` broker arm above.
+  - Session/Biscuit/anonymous callers were never user contexts on this surface
+    (`OVDRequestContext` admits exactly Basic and OAuth) → 401 envelope.
+
+The SQL scopes by the path `owner_id` VERBATIM (faithful to OVD's `select(ownerId, id)`), so
+wrong owner / unknown owner / missing row / non-PROVISIONED status all return 404 —
+indistinguishable, exactly like OVD. (Legacy bound membership to the addon's REAL owner
+resolved from the kvId; binding to the path owner is equivalent because the SQL scope then
+ties the kvId to that same owner.) The 200 body is the same `MateriaDBView` (incl. the live
+`token`) OVD served.
+
+Source: references/legacy/ovd/modules/materia/db/api/routes.scala getMateriaDbV4
+Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala get(ownerId, id) / onUserAction
+Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/actors/CCAPIAuthActor.scala:71-103 (forwards the original URI)
+Source: references/legacy/cc-api/src/main/java/com/clevercloud/ccapi/helpers/auth/AuthorizationHelper.java:1373-1378 (org gate), 1756-1787 (materia rule)
+Behavior: broker Basic → unscoped-trust read; user OAuth1 → rights(403) + membership/role(404)
+
+	gated read; 200 MateriaDBView, 401/403 auth envelopes, 404 on
+	non-member/role-floor/owner-mismatch/not-found/not-PROVISIONED
+
+Issue: #1639, #1260, #1142, #679
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - kvId:
+  - ownerId: Owner/organisation ID
+  - kvId: Materia KV ID
 
 # Returns the operation result or an error
 

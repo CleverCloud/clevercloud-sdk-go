@@ -12,16 +12,17 @@ import (
 )
 
 /*
-Getkms
+Getkms `GET /v4/kms/organisations/{owner_id}/kms/{addon_kms_id}`
 
-get a Kms
+Naming `OrgAuth<KmsAccess>` is the authorization: the extractor has no public constructor, so
+the handler body cannot run without membership and role having been proven first.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonKmsId:
+  - ownerId: Owner organisation (`orga_*`, `user_*` or `tenant_*`)
+  - addonKmsId: KMS resource identifier (`kms_<uuid>`)
 
 # Returns the operation result or an error
 

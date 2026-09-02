@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Getloadbalancercluster
-
-# Get specific loadbalancer cluster
+Getloadbalancercluster Row 32 — cluster absent → 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - loadbalancerId: LoadBalancer ID
-  - clusterId:
+  - tenantId: Organisation/tenant ID
+  - loadbalancerId: Load balancer ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -37,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: getLoadBalancerCluster
 */
-func Getloadbalancercluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, clusterId string) client.Response[models.Cluster] {
+func Getloadbalancercluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, clusterId string) client.Response[models.PublicCluster] {
 	ctx, span := tracer.Start(ctx, "getLoadBalancerCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/clusters/%s", tenantId, loadbalancerId, clusterId)
 
 	// Make API call
-	response := client.Get[models.Cluster](ctx, c, path)
+	response := client.Get[models.PublicCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

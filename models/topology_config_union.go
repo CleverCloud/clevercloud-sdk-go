@@ -2,13 +2,10 @@
 
 package models
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "encoding/json"
 
-// TopologyConfig
-// Tagged union - can hold one of: AllInOne, DedicatedCompute, Distributed
+// TopologyConfig Cluster control-plane topology configuration (stored as JSONB in `cluster.topology_config`).  Sou...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type TopologyConfig struct {
 	raw json.RawMessage
 }
@@ -33,100 +30,4 @@ func (u TopologyConfig) MarshalJSON() ([]byte, error) {
 func (u *TopologyConfig) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
-}
-
-// Format implements fmt.Formatter: dispatches the verb to the concrete
-// variant currently held, falling back to the raw JSON bytes for unknown
-// or empty values. Lets %+v on a parent struct render this field as the
-// matching concrete type instead of a byte slice.
-func (u TopologyConfig) Format(f fmt.State, verb rune) {
-	switch u.Type() {
-	case AllInOneTopologyDiscriminator:
-		v, _ := u.AsAllInOne()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case DedicatedComputeTopologyDiscriminator:
-		v, _ := u.AsDedicatedCompute()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case DistributedTopologyDiscriminator:
-		v, _ := u.AsDistributed()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	default:
-		if u.raw == nil {
-			f.Write([]byte("null"))
-			return
-		}
-		f.Write(u.raw)
-	}
-}
-
-// TopologyConfigVariant is satisfied by every concrete type that can be wrapped into a TopologyConfig.
-// Lets generic code accept any variant without naming each one.
-type TopologyConfigVariant interface {
-	ToTopologyConfig() TopologyConfig
-}
-
-// AsAllInOne decodes the held payload as a AllInOne. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u TopologyConfig) AsAllInOne() (AllInOne, bool) {
-	var v AllInOne
-	if t, err := peekType(u.raw); err != nil || t != AllInOneTopologyDiscriminator {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewTopologyConfigFromAllInOne wraps a AllInOne into a TopologyConfig ready to be JSON-encoded.
-func NewTopologyConfigFromAllInOne(v AllInOne) (TopologyConfig, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return TopologyConfig{}, err
-	}
-	return TopologyConfig{raw: raw}, nil
-}
-
-// AsDedicatedCompute decodes the held payload as a DedicatedCompute. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u TopologyConfig) AsDedicatedCompute() (DedicatedCompute, bool) {
-	var v DedicatedCompute
-	if t, err := peekType(u.raw); err != nil || t != DedicatedComputeTopologyDiscriminator {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewTopologyConfigFromDedicatedCompute wraps a DedicatedCompute into a TopologyConfig ready to be JSON-encoded.
-func NewTopologyConfigFromDedicatedCompute(v DedicatedCompute) (TopologyConfig, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return TopologyConfig{}, err
-	}
-	return TopologyConfig{raw: raw}, nil
-}
-
-// AsDistributed decodes the held payload as a Distributed. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u TopologyConfig) AsDistributed() (Distributed, bool) {
-	var v Distributed
-	if t, err := peekType(u.raw); err != nil || t != DistributedTopologyDiscriminator {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewTopologyConfigFromDistributed wraps a Distributed into a TopologyConfig ready to be JSON-encoded.
-func NewTopologyConfigFromDistributed(v Distributed) (TopologyConfig, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return TopologyConfig{}, err
-	}
-	return TopologyConfig{raw: raw}, nil
 }

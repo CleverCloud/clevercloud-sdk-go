@@ -2,10 +2,12 @@
 
 package models
 
-// WannabeCephPool
+// WannabeCephPool Request body for creating a Ceph pool — a superset of legacy `WannabeCephPool`, so the cctf runbo...
 type WannabeCephPool struct {
-	CrushRule    *CephCrushRule `json:"crushRule,omitempty"`
-	PgNum        *int           `json:"pgNum,omitempty"`
-	PoolType     *CephPoolType  `json:"poolType,omitempty"`
-	ReplicaCount *int           `json:"replicaCount,omitempty"`
+	CrushRule    *any    `json:"crushRule,omitempty"`
+	Init         *any    `json:"init,omitempty"`
+	Name         *string `json:"name,omitempty"`  // Desired pool name; absent ⇒ the server generates `cephPool_<uuid>` (legacy behaviour — the runboo...
+	PgNum        *int    `json:"pgNum,omitempty"` // Placement-group count, 1..=32768 (legacy Iron bound); absent ⇒ 32.
+	PoolType     *any    `json:"poolType,omitempty"`
+	ReplicaCount *int    `json:"replicaCount,omitempty"` // Replica count, 1..=10 (legacy Iron bound); absent ⇒ 3.
 }

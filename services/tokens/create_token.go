@@ -14,13 +14,11 @@ import (
 /*
 Createtoken
 
-Create a new token.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant the token belongs to
   - requestBody: the request payload
 
 # Returns the operation result or an error

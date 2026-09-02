@@ -12,13 +12,23 @@ import (
 )
 
 /*
-Getconfigurationprovider
+Getconfigurationprovider GET /v4/addon-providers/config-provider/addons/{addon_id} — get config-provider addon view (v4).
+
+Legacy: ovd routes.scala:50 getAddonV4
+Algorithm:
+  - Same as getAddonV2: SELECT + decrypt + build view
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala getAddonV4
+Behavior: returns addon view with current env vars, 404 if not found
+Issue: #2
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: ConfigProvider addon ID
 
 # Returns the operation result or an error
 

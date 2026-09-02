@@ -4,8 +4,8 @@ package models
 
 import "encoding/json"
 
-// NetworkDetails
-// Tagged union - can hold one of: NetworkGroup
+// NetworkDetails The `details` discriminated union of an allocation request.  OVD `NetworkDetailsInput` — `{"type"...
+// Tagged union - can hold one of: map[string]any
 type NetworkDetails struct {
 	raw json.RawMessage
 }

@@ -2,10 +2,10 @@
 
 package models
 
-// HttpRouter
+// HttpRouter HTTP routing table (:327-334).
 type HttpRouter struct {
-	Authentication *Authentication `json:"authentication,omitempty"`
-	RedirectHTTPS  bool            `json:"redirectHttps"`
-	Routes         []Route         `json:"routes,omitempty"`
-	Templates      MapIntString    `json:"templates"`
+	Authentication *any            `json:"authentication,omitempty"`
+	RedirectHTTPS  bool            `json:"redirectHttps"`       // Redirect plain HTTP to HTTPS.
+	Routes         []Route         `json:"routes,omitempty"`    // The routes, in order (:330).
+	Templates      *map[string]any `json:"templates,omitempty"` // Status-code → error template. `Map[Int, String]` in OVD — JSON object keys are stringified intege...
 }

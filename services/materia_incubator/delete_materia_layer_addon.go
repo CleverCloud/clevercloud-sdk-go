@@ -11,16 +11,19 @@ import (
 )
 
 /*
-Deletematerialayeraddon
+Deletematerialayeraddon DELETE /v2/providers/materia/{layerId}/resources/{addonId} — deprovision (sync part).
 
-Deprovision an existing Materia layer addon (sync part)
+Source: ovd materia-incubator api/routes.scala deprovisionEndpoint (deleteMateriaLayerAddon)
+Behavior: auth → revoke token (failure → 502, row stays PROVISIONED) → mark
+
+	TO_DELETE → 204 empty. The LogicalDB is drained later by the purge worker.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - layerId:
-  - addonId:
+  - layerId: Configured Materia layer id
+  - addonId: Addon id (prefix_ULID)
 
 # Returns the operation result or an error
 

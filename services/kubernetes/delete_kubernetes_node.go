@@ -12,15 +12,27 @@ import (
 )
 
 /*
-Deletekubernetesnode
+Deletekubernetesnode **Legacy**: ovd StandaloneNodeController.scala:88 delete()
+**Algorithm**:
+  - ClusterItemRepository.updateFrag sets status=DELETED, deactivated_at=now
+  - Actual drain+delete is async via deployment pipeline
+
+**Conformity**: YES
+
+DELETE /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes/{node_id} — delete a standalone node.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — delete
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterItemRepository.scala — queries.updateFrag
+Behavior: marks cluster_item as DELETED, sets deactivated_at. Actual drain+delete is async.
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeId: A standalone node identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
+  - nodeId: Node ID
 
 # Returns the operation result or an error
 

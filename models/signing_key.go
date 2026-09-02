@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// SigningKey
+// SigningKey The public projection of a signing key. **The private key is never here** — this type carries no ...
 type SigningKey struct {
 	CreatedAt  time.Time           `json:"createdAt"`
 	ID         string              `json:"id"`
 	LocationID string              `json:"locationId"`
 	ProductID  string              `json:"productId"`
-	PublicKey  StringMaxLength1024 `json:"publicKey"`
+	PublicKey  string              `json:"publicKey"` // Ed25519 public key (hex) — published so verifiers can check signatures.
 	RevokedAt  *time.Time          `json:"revokedAt,omitempty"`
 	RotatedAt  *time.Time          `json:"rotatedAt,omitempty"`
 	Status     SigningKeyStateType `json:"status"`

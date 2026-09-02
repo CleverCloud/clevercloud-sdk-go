@@ -2,7 +2,7 @@
 
 package models
 
-// TokenCreationError
+// TokenCreationError Error from a token creation attempt during registry provisioning.  Source: references/legacy/ovd/...
 type TokenCreationError struct {
 	Error string `json:"error"`
 	Index int    `json:"index"`

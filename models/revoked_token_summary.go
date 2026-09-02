@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// RevokedTokenSummary
+// RevokedTokenSummary Summary of a revoked token in the revocations list.  Source: references/legacy/ovd/modules/warp10...
 type RevokedTokenSummary struct {
-	CreatorID    string      `json:"creatorId"` // Identifier of the token creator: service account ('sa_<UUID>'), robot ('robot_<UUID>'), or identi...
-	CreatorKind  CreatorKind `json:"creatorKind"`
-	RevocationID string      `json:"revocationId"`
-	RevokedAt    time.Time   `json:"revokedAt"`
-	Scope        string      `json:"scope"`
+	CreatorID    string       `json:"creatorId"`    // Creator identifier, prefixed by kind.  Source: endpoints.scala RevokedTokenSummary.creatorId: Cre...
+	CreatorKind  CreatorKind  `json:"creatorKind"`  // Issuer kind.  Source: endpoints.scala RevokedTokenSummary.creatorKind: CreatorKind
+	RevocationID RevocationId `json:"revocationId"` // Revocation ID.
+	RevokedAt    time.Time    `json:"revokedAt"`    // Revocation timestamp.
+	Scope        TokenScope   `json:"scope"`        // Token scope: "READ" or "WRITE".
 }

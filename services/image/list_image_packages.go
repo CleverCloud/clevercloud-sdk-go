@@ -13,13 +13,27 @@ import (
 )
 
 /*
-Listimagepackages
+Listimagepackages GET /v4/images/{imageId} — the image's packages.
+
+📥 **Algo Source (Legacy):**
+- No authentication: the route is public
+- `repository.get[Image](imageId)`, then `sortedPackages(multiSlots)`
+- Source: ovd ImageController.scala:100-101 getImage + routes.scala:43-51
+
+🔧 **Algo Rust (Implementation):**
+- `ImageId::parse` → 400, `MultiSlotsQuery::decode` → 400
+- `ImageRepository::packages_by_id` → the not-found envelope quoting the id
+- `models::sorted_packages` → `Json(Vec<ExherboPackage>)`
+
+Source: ovd modules/image/api/routes.scala:43-51 (listImagePackages)
+Behavior: public; lists an image's packages, sorted, optionally filtered.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - imageId:
+  - imageId: Image identifier, `image_<ULID>`
   - opts: optional query parameters
 
 # Returns the operation result or an error

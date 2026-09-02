@@ -12,16 +12,15 @@ import (
 )
 
 /*
-Listloadbalancersforparent
-
-# Get loadbalancers for parent resource
+Listloadbalancersforparent Row 42 — cross-tenant for machine Basic (CCM compatibility), owner-scoped
+for every user scheme; `200 []`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - parentId:
+  - tenantId: Organisation/tenant ID
+  - parentId: Parent resource ID
 
 # Returns the operation result or an error
 

@@ -12,13 +12,24 @@ import (
 )
 
 /*
-Listconfigurationproviderenv
+Listconfigurationproviderenv GET /v4/addon-providers/config-provider/addons/{addon_id}/env — get env vars.
+
+Legacy: ovd routes.scala:65 getAddonEnv
+Algorithm:
+  - SELECT row, decrypt config blob, return Vec of EnvVar from JSON
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala getAddonEnv
+Source: references/legacy/ovd/modules/configprovider/routes/AddonConfigProviderRoutes.scala getAddonEnv
+Behavior: returns current env vars for this addon, 404 if not found
+Issue: #2
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: ConfigProvider addon ID
 
 # Returns the operation result or an error
 
@@ -33,14 +44,14 @@ Example:
 x-service: configuration_provider
 operationId: listConfigurationProviderEnv
 */
-func Listconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[[]models.EnvVar] {
+func Listconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[[]models.WannabeEnvVar] {
 	ctx, span := tracer.Start(ctx, "listConfigurationProviderEnv", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s/env", addonId)
 
 	// Make API call
-	response := client.Get[[]models.EnvVar](ctx, c, path)
+	response := client.Get[[]models.WannabeEnvVar](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

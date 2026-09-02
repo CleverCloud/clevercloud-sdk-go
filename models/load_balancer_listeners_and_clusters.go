@@ -2,8 +2,9 @@
 
 package models
 
-// LoadBalancerListenersAndClusters
+// LoadBalancerListenersAndClusters The listeners/clusters halves of a stored configuration (:19-24). Decoding applies the Set semant...
 type LoadBalancerListenersAndClusters struct {
-	Clusters  []Cluster  `json:"clusters,omitempty"`
-	Listeners []Listener `json:"listeners,omitempty"`
+	Certificates *map[string]any `json:"certificates,omitempty"` // SHA-256 leaf fingerprint to certificate and private key.
+	Clusters     []Cluster       `json:"clusters"`               // Cluster set — structurally deduplicated, first-occurrence order.
+	Listeners    []Listener      `json:"listeners"`              // Ordered listener sequence — order preserved verbatim (decision 6).
 }

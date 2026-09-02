@@ -2,8 +2,7 @@
 
 package models
 
-// WannabeSigningKey
+// WannabeSigningKey Body of a signing-key create. `locationId` is optional and defaults to `"default"` at the core.
 type WannabeSigningKey struct {
-	LocationID string `json:"locationId"`
-	ProductID  string `json:"productId"`
+	LocationID *string `json:"locationId,omitempty"`
 }

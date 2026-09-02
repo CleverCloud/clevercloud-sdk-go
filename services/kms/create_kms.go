@@ -11,9 +11,10 @@ import (
 )
 
 /*
-Createkms
+Createkms `POST /v2/providers/addon-kms/resources`
 
-provision a new Kms instance
+`RequireUser` rejects an anonymous caller with 401 **before the body is parsed**, so an
+unauthenticated call with a malformed body still answers 401 rather than leaking a parse error.
 
 Parameters:
   - ctx: context for the request

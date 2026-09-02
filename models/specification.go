@@ -2,13 +2,13 @@
 
 package models
 
-// Specification
+// Specification Load balancer specification — hardware capabilities + user-configurable settings.  Source: refere...
 type Specification struct {
-	Ciphers       *Ciphers               `json:"ciphers,omitempty"`
-	Connections   int                    `json:"connections"`
-	Loadbalancing *LoadBalancingStrategy `json:"loadbalancing,omitempty"`
-	Memory        int                    `json:"memory"`
-	StickyName    *string                `json:"stickyName,omitempty"`
-	Timeouts      *Timeouts              `json:"timeouts,omitempty"`
-	Vcpus         int                    `json:"vcpus"`
+	Ciphers       *any    `json:"ciphers,omitempty"`
+	Connections   int     `json:"connections"`
+	Loadbalancing *any    `json:"loadbalancing,omitempty"`
+	Memory        int     `json:"memory"` // Memory in MB.
+	StickyName    *string `json:"stickyName,omitempty"`
+	Timeouts      *any    `json:"timeouts,omitempty"`
+	Vcpus         int     `json:"vcpus"`
 }

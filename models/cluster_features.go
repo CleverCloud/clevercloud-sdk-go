@@ -2,9 +2,10 @@
 
 package models
 
-// ClusterFeatures
+// ClusterFeatures Cluster feature flags.  Source: references/legacy/ovd/modules/kubernetes/models/Cluster.scala — C...
 type ClusterFeatures struct {
-	AutoscalingEnabled *bool   `json:"autoscalingEnabled,omitempty"`
-	Csi                *bool   `json:"csi,omitempty"`
-	Registries         *string `json:"registries,omitempty"`
+	AutoscalingEnabled   *bool `json:"autoscalingEnabled,omitempty"`   // Whether node autoscaling (cluster-autoscaler) is enabled
+	Csi                  *bool `json:"csi,omitempty"`                  // Whether CSI (Container Storage Interface) is enabled
+	NodeAutoprovisioning *bool `json:"nodeAutoprovisioning,omitempty"` // Whether node autoprovisioning (Karpenter) is enabled.  Source: ovd Cluster.scala:69 — `nodeAutopr...
+	Registries           *any  `json:"registries,omitempty"`
 }

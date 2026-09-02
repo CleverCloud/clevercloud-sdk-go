@@ -2,21 +2,24 @@
 
 package models
 
-// ClusterStatusType represents
+// ClusterStatusType represents Cluster status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/Clus...
 type ClusterStatusType string
 
 const (
-	ClusterStatusTypeACTIVE      ClusterStatusType = "ACTIVE"
-	ClusterStatusTypeDELETED     ClusterStatusType = "DELETED"
-	ClusterStatusTypeDELETING    ClusterStatusType = "DELETING"
-	ClusterStatusTypeDEPLOYING   ClusterStatusType = "DEPLOYING"
-	ClusterStatusTypeFAILED      ClusterStatusType = "FAILED"
-	ClusterStatusTypeREDEPLOYING ClusterStatusType = "REDEPLOYING"
-	ClusterStatusTypeToDelete    ClusterStatusType = "TO_DELETE"
-	ClusterStatusTypeToDeploy    ClusterStatusType = "TO_DEPLOY"
-	ClusterStatusTypeToRedeploy  ClusterStatusType = "TO_REDEPLOY"
-	ClusterStatusTypeToUpgrade   ClusterStatusType = "TO_UPGRADE"
-	ClusterStatusTypeUPDATING    ClusterStatusType = "UPDATING"
+	ClusterStatusTypeToDeploy            ClusterStatusType = "TO_DEPLOY"
+	ClusterStatusTypeDEPLOYING           ClusterStatusType = "DEPLOYING"
+	ClusterStatusTypeACTIVE              ClusterStatusType = "ACTIVE"
+	ClusterStatusTypeToRedeploy          ClusterStatusType = "TO_REDEPLOY"
+	ClusterStatusTypeREDEPLOYING         ClusterStatusType = "REDEPLOYING"
+	ClusterStatusTypeToUpgrade           ClusterStatusType = "TO_UPGRADE"
+	ClusterStatusTypeUPDATING            ClusterStatusType = "UPDATING"
+	ClusterStatusTypeToReconcile         ClusterStatusType = "TO_RECONCILE"
+	ClusterStatusTypeRECONCILING         ClusterStatusType = "RECONCILING"
+	ClusterStatusTypeWaitingOnDependency ClusterStatusType = "WAITING_ON_DEPENDENCY"
+	ClusterStatusTypeToDelete            ClusterStatusType = "TO_DELETE"
+	ClusterStatusTypeDELETING            ClusterStatusType = "DELETING"
+	ClusterStatusTypeDELETED             ClusterStatusType = "DELETED"
+	ClusterStatusTypeFAILED              ClusterStatusType = "FAILED"
 )
 
 // String returns the underlying string value

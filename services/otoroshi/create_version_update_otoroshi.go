@@ -12,15 +12,26 @@ import (
 )
 
 /*
-Createversionupdateotoroshi
+Createversionupdateotoroshi POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/version/update — update version.
 
-update version
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — updateVersion()
+
+📥 **Algo Source (Legacy):**
+- Fetch addon from DB
+- Verify targetVersion is in config.availableVersions
+- Get java_application_id
+- Update CC_OTOROSHI_VERSION env var on Java app via cc-api
+- Reboot Java app via PaaS
+- Return updated OtoroshiView
+- Source: ovd OtoroshiProviderService.scala:614 updateVersion()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

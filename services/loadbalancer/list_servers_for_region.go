@@ -12,15 +12,14 @@ import (
 )
 
 /*
-Listserversforregion
-
-# Get servers for region
+Listserversforregion Row 7 — machine Basic keeps the global region listing; user callers see
+only path-tenant rows.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
 
 # Returns the operation result or an error
@@ -36,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: listServersForRegion
 */
-func Listserversforregion(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string) client.Response[[]models.Server] {
+func Listserversforregion(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string) client.Response[[]models.ServerView] {
 	ctx, span := tracer.Start(ctx, "listServersForRegion", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/servers", tenantId, regionId)
 
 	// Make API call
-	response := client.Get[[]models.Server](ctx, c, path)
+	response := client.Get[[]models.ServerView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

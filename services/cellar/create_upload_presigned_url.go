@@ -12,18 +12,18 @@ import (
 )
 
 /*
-Createuploadpresignedurl
+Createuploadpresignedurl Issue a self-authenticating upload link
 
-generate a Biscuit presigned URL for uploading an object through OVD
+Returns `{ url }`: a short-lived, self-authenticating link whose holder uploads the object by POSTing the raw bytes to it. Unlike the sibling `objects/upload-url` route, the link points back at this API's own streaming upload route rather than at the storage cluster, so redeeming it needs no S3 client and no S3 credential — POST the body to the URL as it stands. The link is valid only for the exact add-on, bucket and object key it was issued for, and its expiry is carried inside the link, which is why the response has no `expiresAt` field. Treat the link as a secret. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path: 401 without a usable authentication, 403 for a caller outside that owner, and 404 when the organisation in the path does not own the add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
-  - objectKey:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
+  - objectKey: Object key
 
 # Returns the operation result or an error
 
@@ -38,14 +38,14 @@ Example:
 x-service: cellar
 operationId: createUploadPresignedUrl
 */
-func Createuploadpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, objectKey string) client.Response[models.PresignedURL] {
+func Createuploadpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, objectKey string) client.Response[models.PresignedUrl] {
 	ctx, span := tracer.Start(ctx, "createUploadPresignedUrl", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId), attribute.String("bucketName", bucketName), attribute.String("objectKey", objectKey)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets/%s/objects/%s/presigned-url", ownerId, CellarId, bucketName, objectKey)
 
 	// Make API call
-	response := client.Post[models.PresignedURL](ctx, c, path, nil)
+	response := client.Post[models.PresignedUrl](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

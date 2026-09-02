@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Listcellarbuckets
+Listcellarbuckets List the add-on's buckets
 
-list all buckets with storage statistics for a Cellar account
+Returns every bucket of this add-on with its object count, total size and timestamps, along with the total number of buckets. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
 
 # Returns the operation result or an error
 

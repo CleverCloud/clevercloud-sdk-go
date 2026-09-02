@@ -2,13 +2,13 @@
 
 package models
 
-// Storage
+// Storage Storage view returned by GET /v4/tenants/{tenantId}/storages.  Source: references/legacy/ovd/modu...
 type Storage struct {
-	Configuration StorageConfiguration      `json:"configuration"`
-	ID            string                    `json:"id"`
-	Kind          StorageKind               `json:"kind"`
-	Label         string                    `json:"label"`
-	Statuses      []DefaultIdentifiedStatus `json:"statuses,omitempty"`
-	Tags          []string                  `json:"tags,omitempty"`
-	TenantID      TenantID                  `json:"tenantId"`
+	Configuration any             `json:"configuration"` // Free-form configuration blob (Ceph pool, image, mount options, etc.).
+	ID            string          `json:"id"`            // Unique storage identifier.
+	Kind          StorageKindType `json:"kind"`          // Storage kind (RBD or NFS).
+	Label         string          `json:"label"`         // Human-readable label.
+	Statuses      []StatusEntry   `json:"statuses"`      // Ordered list of status entries.
+	Tags          []string        `json:"tags"`          // Arbitrary tags.
+	TenantID      string          `json:"tenantId"`      // Tenant (owner) identifier.
 }

@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Listnetworks
-
-# Get networks for owner
+Listnetworks Row 12 — `200 []` on empty.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
 
 # Returns the operation result or an error
 
@@ -35,14 +33,14 @@ Example:
 x-service: loadbalancer
 operationId: listNetworks
 */
-func Listnetworks(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.Network2] {
+func Listnetworks(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.NetworkView] {
 	ctx, span := tracer.Start(ctx, "listNetworks", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/networks", tenantId)
 
 	// Make API call
-	response := client.Get[[]models.Network2](ctx, c, path)
+	response := client.Get[[]models.NetworkView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,8 +2,8 @@
 
 package models
 
-// SignedUrlRequest
+// SignedUrlRequest Request body for the org-scoped `upload-url` / `download-url` endpoints.  The object key comes fr...
 type SignedUrlRequest struct {
-	ExpiresIn *int   `json:"expiresIn,omitempty"`
-	ObjectKey string `json:"objectKey"`
+	ExpiresIn *int   `json:"expiresIn,omitempty"` // Expiry in seconds. Defaults to 300 and is passed through with **no clamp** (1:1 with legacy `expi...
+	ObjectKey string `json:"objectKey"`           // Object key to presign.
 }

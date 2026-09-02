@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// SignedUrlResponse
+// SignedUrlResponse Response of the org-scoped `upload-url` / `download-url` endpoints.  Source: references/legacy/ov...
 type SignedUrlResponse struct {
-	ExpiresAt time.Time `json:"expiresAt"`
-	URL       string    `json:"url"`
+	ExpiresAt time.Time `json:"expiresAt"` // Absolute expiry instant (ISO-8601), `now + expiresIn`.
+	URL       string    `json:"url"`       // The presigned URL.
 }

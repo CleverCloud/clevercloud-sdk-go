@@ -12,15 +12,56 @@ import (
 )
 
 /*
-Getrequestslive
+Getrequestslive GET /v4/stats/organisations/{ownerId}/requests-live — SSE stream of live request locations.
 
-# Stream live request locations aggregated by geographic cells
+📥 **Algo Source (Legacy):**
+`MetricsAPIActor.getRequestsLive` (MetricsAPIActor.scala:264-471): stream geo-aggregated live
+request locations as Server-Sent Events.
+  - `applicationId=Some(app)` → `createStreamForApplication`: `topic = persistent://{ownerId}/
+    accesslogs/{app}`; `persistentTopicExists` — `Left(err)` → 500 LiveStreamError "Failed to verify
+    access logs availability." Resource("accesslogs-topic", topic); `false` → 404 NotFound "No access
+    logs available yet for application {app}. …" Resource("accesslogs-topic", topic); `true` →
+    `subscribeToApplicationStream` — IncompatibleSchemaException → 422 UnprocessableEntity
+    "Application {app} uses an incompatible access log schema. …"; other → 500 LiveStreamError
+    "Failed to create live request stream." Resource("accesslogs-topic", topic); ok → 200 SSE.
+  - `applicationId=None` → `createStreamForOwner`: `listOwnerTopics(tenant, "accesslogs",
+    partitioned)` — PulsarNotFound → 404 NotFound "No access logs available yet for this
+    organisation. …" Resource("accesslogs-namespace", "{tenant}/accesslogs"); other → 500
+    InternalError "Failed to list topics for owner"; empty → 404 (same message)
+    Resource("accesslogs-topic", "{tenant}/accesslogs") — NO persistent:// prefix; else subscribe
+    each topic, skip-on-error (warn per topic) — all skipped → 422 UnprocessableEntity "All access
+    log topics for organisation {ownerId} use an incompatible schema. …"; ≥1 ok → merge → 200 SSE.
+  - SSE body: `AccessLogStreams.fromAccessLog` — filter located logs, groupedWithin(10000, 5s),
+    aggregateByGeoHash → `data: {json}\nevent: REQUESTS_LIVE\n\n`, keepAlive(2s) HEARTBEAT.
+  - Source: ovd modules/metrics/.../actors/MetricsAPIActor.scala:264-471, utils/AccessLogStreams.scala,
+    api/routes.scala:130-136, routes/MetricsRoutes.scala:111-118.
+
+🔧 **Algo Rust (Implementation):**
+  - `StatsAuth` runs the ovd#831 role gate (401/403/404/500) BEFORE this handler (same extractor as
+    the other stats GETs); `ReqId` carries the per-request id for every envelope.
+  - `params.application_id` `Some` → `create_stream_for_application`, `None` →
+    `create_stream_for_owner` — each maps the `module.live` admin/subscribe outcomes to the OVD
+    envelope via `live_error_response`, exactly as the Scala state machine (no `.recover` wrap;
+    each failure mapped at its site).
+  - 200 → `sse_response`: `Content-Type: text/event-stream` + `Body::from_stream(
+    crate::streams::live_sse_body(receivers, guards, config.sse_keep_alive_period))`; the guards ride
+    inside the stream (client disconnect → guard drop → last-out reader teardown). The
+    `with_request_ids` middleware stamps `Api-Request-Id` / `Sozu-Id` on this response like any other.
+  - Divergence from OVD (#858 bug a): `MODULE_PRODUCT_STATS__PULSAR__{BINARY,WEB}__URL` are
+    `config::REQUIRED`, so a deployment that has not configured the access-log Pulsar cluster
+    fails to BOOT and this endpoint never silently streams from `pulsar://localhost`. OVD defaults
+    both to localhost and has no such guard.
+
+Source: ovd modules/metrics/src/main/scala/com/clevercloud/metrics/actors/MetricsAPIActor.scala:264-471 (getRequestsLive)
+Source: ovd modules/metrics/src/main/scala/com/clevercloud/metrics/api/routes.scala:130-136 (getRequestsLive endpoint)
+Behavior: 200 text/event-stream (REQUESTS_LIVE / HEARTBEAT frames); 401 (auth) / 404 / 422 / 500 / 503 OVD envelopes
+Issue: #313, #858
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation/owner ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

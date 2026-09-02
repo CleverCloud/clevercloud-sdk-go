@@ -2,10 +2,11 @@
 
 package models
 
-// Listener
+// Listener An open port with its transport tree (:27-34).
 type Listener struct {
-	ID        StringMaxLength128 `json:"id"`
-	Port      int                `json:"port"`
-	Timeouts  *Timeouts          `json:"timeouts,omitempty"`
-	Transport Transport          `json:"transport"`
+	ID        ConfigId          `json:"id"`              // Listener identifier (`StringMaxLength128`).
+	Label     *string           `json:"label,omitempty"` // Optional operator-facing label. Added by the SDK after the legacy OVD model; absence remains the ...
+	Port      int               `json:"port"`            // Listening port.
+	Timeouts  *any              `json:"timeouts,omitempty"`
+	Transport ListenerTransport `json:"transport"` // Frontend transport tree.
 }

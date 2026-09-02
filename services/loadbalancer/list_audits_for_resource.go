@@ -12,16 +12,15 @@ import (
 )
 
 /*
-Listauditsforresource
-
-# Get audits for resource
+Listauditsforresource Row 14 — machine Basic retains OVD's resource-only lookup; user callers
+are owner-scoped. No format validation on `{resourceId}` (E:680).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - resourceId:
+  - tenantId: Organisation/tenant ID
+  - resourceId: Resource ID
 
 # Returns the operation result or an error
 

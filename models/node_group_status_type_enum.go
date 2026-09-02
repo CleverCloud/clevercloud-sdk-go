@@ -2,21 +2,21 @@
 
 package models
 
-// NodeGroupStatusType represents
+// NodeGroupStatusType represents Node group status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/N...
 type NodeGroupStatusType string
 
 const (
-	NodeGroupStatusTypeCREATED     NodeGroupStatusType = "CREATED"
-	NodeGroupStatusTypeDELETED     NodeGroupStatusType = "DELETED"
-	NodeGroupStatusTypeDEPLOYED    NodeGroupStatusType = "DEPLOYED"
-	NodeGroupStatusTypeDEPLOYING   NodeGroupStatusType = "DEPLOYING"
-	NodeGroupStatusTypeFAILED      NodeGroupStatusType = "FAILED"
 	NodeGroupStatusTypePENDING     NodeGroupStatusType = "PENDING"
-	NodeGroupStatusTypeREADY       NodeGroupStatusType = "READY"
-	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
-	NodeGroupStatusTypeTERMINATING NodeGroupStatusType = "TERMINATING"
+	NodeGroupStatusTypeCREATED     NodeGroupStatusType = "CREATED"
+	NodeGroupStatusTypeDEPLOYING   NodeGroupStatusType = "DEPLOYING"
+	NodeGroupStatusTypeDEPLOYED    NodeGroupStatusType = "DEPLOYED"
 	NodeGroupStatusTypeToResize    NodeGroupStatusType = "TO_RESIZE"
+	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
+	NodeGroupStatusTypeREADY       NodeGroupStatusType = "READY"
+	NodeGroupStatusTypeFAILED      NodeGroupStatusType = "FAILED"
 	NodeGroupStatusTypeToTerminate NodeGroupStatusType = "TO_TERMINATE"
+	NodeGroupStatusTypeTERMINATING NodeGroupStatusType = "TERMINATING"
+	NodeGroupStatusTypeDELETED     NodeGroupStatusType = "DELETED"
 )
 
 // String returns the underlying string value

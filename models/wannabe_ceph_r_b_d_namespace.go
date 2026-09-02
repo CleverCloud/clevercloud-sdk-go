@@ -2,7 +2,8 @@
 
 package models
 
-// WannabeCephRBDNamespace
+// WannabeCephRBDNamespace Request body for creating a Ceph RBD namespace.  Accepts BOTH wire shapes (refs #2918): - the axo...
 type WannabeCephRBDNamespace struct {
-	Pool CephPool `json:"pool"`
+	Name   *string `json:"name,omitempty"` // Ignored: the namespace id is server-generated. Kept for wire compatibility with earlier axo calle...
+	PoolID string  `json:"poolId"`         // Pool ID in which to create the namespace.
 }

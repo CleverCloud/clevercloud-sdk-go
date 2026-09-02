@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Getloadbalancerlistener
-
-# Get specific loadbalancer listener
+Getloadbalancerlistener Row 30 — listener absent → 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - loadbalancerId: LoadBalancer ID
-  - listenerId:
+  - tenantId: Organisation/tenant ID
+  - loadbalancerId: Load balancer ID
+  - listenerId: Listener ID
 
 # Returns the operation result or an error
 

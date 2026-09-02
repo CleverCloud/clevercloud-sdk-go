@@ -2,12 +2,12 @@
 
 package models
 
-// WannabeStandaloneNode
+// WannabeStandaloneNode Standalone node creation payload.  Source: references/legacy/ovd/modules/kubernetes/models/Standa...
 type WannabeStandaloneNode struct {
-	Description *string                `json:"description,omitempty"`
-	Flavor      NodeFlavor             `json:"flavor"`
-	Labels      *MapLabelkeyLabelvalue `json:"labels,omitempty"`
-	Name        string                 `json:"name"`
-	Tag         *string                `json:"tag,omitempty"`
-	Taints      []KubernetesTaint      `json:"taints,omitempty"`
+	Description *string           `json:"description,omitempty"` // Optional description
+	Flavor      NodeFlavor        `json:"flavor"`                // Node flavor (VM size)
+	Labels      *map[string]any   `json:"labels,omitempty"`      // Kubernetes labels
+	Name        NodeGroupName     `json:"name"`                  // Node name (kubernetes resource name format)
+	Tag         *string           `json:"tag,omitempty"`         // Optional tag
+	Taints      []KubernetesTaint `json:"taints,omitempty"`      // Kubernetes taints
 }

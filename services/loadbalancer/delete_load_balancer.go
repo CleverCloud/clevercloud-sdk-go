@@ -11,17 +11,16 @@ import (
 )
 
 /*
-Deleteloadbalancer
-
-# Delete loadbalancer
+Deleteloadbalancer Row 16 — 204; visibility + region enforced; external cleanups skipped
+(OVD swallows their failures — recorded gap).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
 
 # Returns the operation result or an error
 

@@ -2,10 +2,10 @@
 
 package models
 
-// PgDatabasePrivileges
+// PgDatabasePrivileges Database-level privileges for a user.  Source: ovd PrivilegeData.scala — PgDatabasePrivileges Iss...
 type PgDatabasePrivileges struct {
-	ID         string     `json:"id"`
-	Oid        int        `json:"oid"`
-	Privileges Privileges `json:"privileges"`
-	UserID     string     `json:"userId"`
+	ID         string     `json:"id"`         // Privilege row ID
+	Oid        int        `json:"oid"`        // Database OID
+	Privileges Privileges `json:"privileges"` // Privileges
+	UserID     string     `json:"userId"`     // User ID
 }

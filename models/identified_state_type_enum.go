@@ -2,18 +2,18 @@
 
 package models
 
-// IdentifiedStateType represents
+// IdentifiedStateType represents Resource lifecycle state — 1:1 with ovd `framework.resource.IdentifiedStateType` (serialized SCRE...
 type IdentifiedStateType string
 
 const (
+	IdentifiedStateTypeQUEUED      IdentifiedStateType = "QUEUED"
+	IdentifiedStateTypePENDING     IdentifiedStateType = "PENDING"
+	IdentifiedStateTypePATCHED     IdentifiedStateType = "PATCHED"
+	IdentifiedStateTypeVALIDATED   IdentifiedStateType = "VALIDATED"
+	IdentifiedStateTypePROVISIONED IdentifiedStateType = "PROVISIONED"
+	IdentifiedStateTypeSoftDeleted IdentifiedStateType = "SOFT_DELETED"
 	IdentifiedStateTypeDELETED     IdentifiedStateType = "DELETED"
 	IdentifiedStateTypeMODERATED   IdentifiedStateType = "MODERATED"
-	IdentifiedStateTypePATCHED     IdentifiedStateType = "PATCHED"
-	IdentifiedStateTypePENDING     IdentifiedStateType = "PENDING"
-	IdentifiedStateTypePROVISIONED IdentifiedStateType = "PROVISIONED"
-	IdentifiedStateTypeQUEUED      IdentifiedStateType = "QUEUED"
-	IdentifiedStateTypeSoftDeleted IdentifiedStateType = "SOFT_DELETED"
-	IdentifiedStateTypeVALIDATED   IdentifiedStateType = "VALIDATED"
 )
 
 // String returns the underlying string value

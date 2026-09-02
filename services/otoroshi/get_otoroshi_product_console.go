@@ -12,16 +12,18 @@ import (
 )
 
 /*
-Getotoroshiproductconsole
+Getotoroshiproductconsole POST /v4/otoroshi/organisations/{owner_id}/otoroshi/{otoroshi_id}/consumption
 
-get otoroshi product consumption
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getConsumption()
+Behavior: Fetch addon by ID+owner, compute active days in `[since,until]`, return consumption view.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - OtoroshiId:
+  - ownerId: Organisation or user owner ID
+  - OtoroshiId: Otoroshi instance ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +39,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiProductConsole
 */
-func Getotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, OtoroshiId string, requestBody *models.OtoroshiConsumptionQuery) client.Response[models.ResourceConsumption] {
+func Getotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, OtoroshiId string, requestBody *models.OtoroshiConsumptionQuery) client.Response[models.OtoroshiResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiProductConsole", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/otoroshi/organisations/%s/otoroshi/%s/consumption", ownerId, OtoroshiId)
 
 	// Make API call
-	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.OtoroshiResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

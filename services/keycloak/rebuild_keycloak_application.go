@@ -11,15 +11,25 @@ import (
 )
 
 /*
-Rebuildkeycloakapplication
+Rebuildkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/rebuild
 
-# Ask for reboot keycloak application
+📥 **Algo Source (Legacy):** the same `rebootAddonKeycloak` with
+`rebuild = true` (`A:871`) — redeploys **without** the build cache, so the
+FSBucket themes/plugins are copied again.
+
+⚠ reboot and rebuild differ **only** by this boolean, and the legacy suite never
+varies it — a port that swapped it would pass every legacy test
+(`01-legacy-tests.md`, SMOKE-ONLY finding). The dedicated regression test for
+this pair is in `tests/provision_tests.rs`.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:871
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
 
 # Returns the operation result or an error
 

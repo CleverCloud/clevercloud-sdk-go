@@ -12,15 +12,41 @@ import (
 )
 
 /*
-Createorganizationstatsreadtoken
+Createorganizationstatsreadtoken POST /v4/stats/organisations/{owner_id}/tokens/read — generate an org-scoped Warp10 read token.
 
-Generate a Warp10 READ token scoped to an organization (tenant-wide)
+📥 **Algo Source (Legacy):**
+ovd `UserTokenService.generateOrganizationReadToken` → `doGenerateToken`:
+  - effectiveTtl = request.ttl orElse defaultTtl (P5D); effectiveApps = request.applications orElse
+    defaultApplications ({METRICS, METRICS_ACCESSLOGS}).
+  - Validate ttl FIRST (positive, ≤ maxTtl = P20D), then applications (non-empty, ⊆ allowedApplications).
+  - `client.createTenantReadToken(ownerId, {clusterId, applications, lifespan})` → real Warp10 token.
+  - Return 201 StatsReadTokenOutput{token, expiresAt, createdAt, scope, applications}; on failure
+    emit OVDInvalidResponseBody{apiRequestId, code, context, error}.
+  - Source: ovd modules/metrics/.../services/UserTokenService.scala:37-214, config/UserTokenConfig.scala:12-17,
+    routes/UserTokenRoutes.scala + api/UserTokenEndpoints.scala
+
+🔧 **Algo Rust (Implementation):**
+  - `WannabeStatsReadToken::validate(maxTtl=P20D, defaultTtl=P5D, allowedApps)` resolves defaults
+    (empty `{}` body → {metrics, metrics.accesslogs} / P5D) and returns the resolved applications;
+    ttl validated before apps.
+  - `build_stats_read_token(.., None, ..)` → `module.metrics().create_tenant_read_token(owner_id,
+    &applications, &lifespan_iso)` (`lifespan_iso` = the effective TTL's `Interval.toISO8601`)
+    mints the REAL lifespan-honouring `PlatformTokenOutput`.
+  - mapResponse → 201 StatsReadTokenOutput {token, expiresAt, createdAt, scope, applications} from the
+    backend's REAL metadata, DROPPING revocationId + labels.
+  - mapHttpError: Backend{code} substring → 401/403/404, else 502; Transport → 502; Disabled →
+    401 (mapHttpError's unauthorized arm — an unusable service account is what OVD saw as a warp10
+    401, #2175). The 400 validation + the mapped 4xx/5xx emit the OVD envelope; sendMetrics tags
+    2xx/4xx/5xx.
+
+Source: ovd modules/metrics/src/main/scala/com/clevercloud/metrics/api/UserTokenEndpoints.scala:24-31 (createOrganizationStatsReadToken)
+Issue: #1046
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner ID (orga_ or user_ prefix)
   - requestBody: the request payload
 
 # Returns the operation result or an error

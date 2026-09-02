@@ -4,30 +4,45 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listpulsarpersistenttopics
+Listpulsarpersistenttopics GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/topics — list persistent topics.
 
-# List Pulsar topics
+**Legacy**: ovd PulsarController.scala:313 listPersistentTopicsServerEndpoint()
+**Algorithm**:
+  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
+  - Delegates to PulsarTopicService.listPersistentTopics (line 160)
+  - Scala queries HttpPulsarAdminClient.listPersistentTopics, returns `Set[Topic]`
+
+**Conformity**: FAITHFUL — proxies to
+
+	`PulsarAdminClient::list_persistent_topics` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala listPersistentTopicsServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala listPersistentTopics
+Behavior: returns the cluster's topic list for the addon's
+
+	tenant/namespace, mapped into `Vec<TopicView>`.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - opts: optional query parameters
+  - pulsarId: Pulsar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Listpulsarpersistenttopics(ctx, client, tracer, pulsarId, opts...)
+	response := pulsar.Listpulsarpersistenttopics(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,20 +51,14 @@ Example:
 x-service: pulsar
 operationId: listPulsarPersistentTopics
 */
-func Listpulsarpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, opts ...Option) client.Response[client.Nothing] {
+func Listpulsarpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[[]models.TopicView] {
 	ctx, span := tracer.Start(ctx, "listPulsarPersistentTopics", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics", pulsarId)
 
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
-
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.TopicView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

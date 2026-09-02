@@ -2,9 +2,9 @@
 
 package models
 
-// CreatedToken
+// CreatedToken The create-only response. The **raw token is present here and nowhere else** (FR-005); every late...
 type CreatedToken struct {
-	Metadata     Token   `json:"metadata"`
-	RefreshToken *string `json:"refreshToken,omitempty"`
-	Token        string  `json:"token"`
+	Metadata     TokenView `json:"metadata"`               // The token's metadata view.
+	RefreshToken *string   `json:"refreshToken,omitempty"` // The raw refresh credential opening this token's rotation family — populated on every mint since s...
+	Token        string    `json:"token"`                  // The raw serialized base64url Biscuit — shown **once**, then unrecoverable.
 }

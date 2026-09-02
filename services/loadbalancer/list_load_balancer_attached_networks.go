@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Listloadbalancerattachednetworks
-
-# Get loadbalancer attached networks
+Listloadbalancerattachednetworks Row 35 — `200 []` (LB must exist → 404); region not checked.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
 
 # Returns the operation result or an error
 

@@ -12,14 +12,18 @@ import (
 )
 
 /*
-Createkubernetesnodegroup
+Createkubernetesnodegroup POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-groups — create node group (legacy OVD alias for node-pools).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:123 — postNodeGroup
+Behavior: same as POST .../node-pools; the tenancy gate lives in `create_node_pool`.
+Issue: #667, #1481
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

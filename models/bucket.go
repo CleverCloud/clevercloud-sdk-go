@@ -4,12 +4,12 @@ package models
 
 import "time"
 
-// Bucket
+// Bucket Bucket view returned by bucket endpoints.  Source: references/legacy/ovd/modules/cellar/models/pa...
 type Bucket struct {
-	CreatedAt    time.Time              `json:"createdAt"`
-	Name         string                 `json:"name"`
-	ObjectsCount int                    `json:"objectsCount"`
-	SizeInBytes  int                    `json:"sizeInBytes"`
-	UpdatedAt    time.Time              `json:"updatedAt"`
-	Versioning   BucketVersioningStatus `json:"versioning"`
+	CreatedAt    time.Time `json:"createdAt"`    // Creation timestamp
+	Name         string    `json:"name"`         // Bucket name
+	ObjectsCount int       `json:"objectsCount"` // Number of objects in the bucket
+	SizeInBytes  int       `json:"sizeInBytes"`  // Total size in bytes
+	UpdatedAt    time.Time `json:"updatedAt"`    // Last update timestamp
+	Versioning   string    `json:"versioning"`   // Versioning status
 }
