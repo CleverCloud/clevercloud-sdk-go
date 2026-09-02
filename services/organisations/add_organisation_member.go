@@ -4,6 +4,7 @@ package organisations
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -12,18 +13,20 @@ import (
 )
 
 /*
-Addorganisationmember POST /v2/organisations/{id}/members — add a member to an organisation.
+Addorganisationmember POST /v2/organisations/{id}/members — invite a member, or accept an invitation.
 
 Source: cc-api OrganisationMembersAPI.java addOrganisationMember()
-Note: Simplified — skips invitation flow (Phase 2), directly adds member.
-Issue: #103
+Issue: #103, #3092
 
 📥 **Algo Source (Legacy):**
-Verify AddMember permission (ADMIN, MANAGER only), validate WannabeMember (email + role), check role assignability vs caller role, generate invitation key (UUID), build signup URL with invitationKey + email, send InvitationCCMail to wm.email, store invitation in cache (ch.putInvite). The target user does NOT need to exist yet — they sign up via the invitation link and accept it via replyToInvite (which is where getByEmail is finally called).
-- Legacy: cc-api OrganisationMemberHelper.java addUnchecked() lines 179-240
+Dual-purpose endpoint (OrganisationMemberHelper.add():249-261): when the `invitationKey` query param is present, dispatch to replyToInvite() — the authenticated caller accepts the invitation, and the body is NEVER read (the console's `/join` page POSTs with an empty body). Otherwise: verify AddMember permission (ADMIN, MANAGER only), validate WannabeMember (email + role), check role assignability vs caller role, generate invitation key (UUID), build signup URL with invitationKey + email, send InvitationCCMail to wm.email, store the invitation. The target user does NOT need to exist yet — they sign up via the invitation link and accept it via replyToInvite (which is where getByEmail is finally called).
+- Legacy: cc-api OrganisationMemberHelper.java add() lines 249-279, addUnchecked() lines 179-240, replyToInvite() lines 281-334
 
 🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+  - Conformity: faithful. The body is taken raw (legacy takes a `String` too) and
+    parsed only in the invite branch, AFTER the permission gate — a `Json<...>`
+    extractor here used to 400 the body-less accept flow before the handler ran
+    (refs #3092).
 
 Parameters:
   - ctx: context for the request
@@ -31,12 +34,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
   - requestBody: the request payload
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := organisations.Addorganisationmember(ctx, client, tracer, id, requestBody)
+	response := organisations.Addorganisationmember(ctx, client, tracer, id, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -45,14 +49,20 @@ Example:
 x-service: organisations
 operationId: addOrganisationMember
 */
-func Addorganisationmember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeMember) client.Response[models.InvitationView] {
+func Addorganisationmember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeMember, opts ...Option) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "addOrganisationMember", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/members", id)
 
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
+
 	// Make API call
-	response := client.Post[models.InvitationView](ctx, c, path, requestBody)
+	response := client.Post[models.Message](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

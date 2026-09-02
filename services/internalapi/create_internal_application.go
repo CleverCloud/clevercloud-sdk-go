@@ -14,7 +14,7 @@ CreateInternalApplication Legacy: cc-api InternalApplicationsAPI.java:68 createA
 Algorithm: authInternal; org lookup; fail-early 409 on taken domains (:2588-2608); create with awaited ADD_APP (save(creation=true), :2610/:3216-3227); env; default cleverapps vhost + creation event (:3233/:3247); per-domain _addVhost with return-on-failure (:2637-2647); addons; view serialised last (:2670-2673).
 Conformity: faithful on the domains flow and on the status each refusal carries.
 Residual divergences against createFromInternal, ALL pre-existing — none introduced by #2768:
-- legacy also demands `canManageOrganisationsApplications && isAddonAPI` (:2557-2560); we gate on `is_internal()` alone, so any internal credential passes (refs #2792).
+- the `almighty` shortcut: legacy's `canManageOrganisationsApplications()` is `almighty || manage_organisations_applications` (OAuthRightsCache.java:83-85), while `has_permission` applies no `almighty ||` shortcut on an internal token (refs #2371) — the stricter reading. This is what remains of the missing claim rung: the pair itself (:2557-2560, `canManageOrganisationsApplications && isAddonAPI`) is enforced here since #2792.
 - the organisation is looked up before `app` is parsed; legacy parses the wrapper first, so the 400 and 404 arms can swap.
 - env vars and addon links are written BEFORE the awaited ADD_APP, addons before domains; legacy runs both after save() returns, domains first.
 - an env write failure is logged, not answered (legacy returns it, :2621-2627).
@@ -25,7 +25,8 @@ Residual divergences against createFromInternal, ALL pre-existing — none intro
 POST /v2/internal/applications — create application from internal.
 
 Returns, in THIS handler's evaluation order (each status is legacy createFromInternal's, ApplicationHelper.java:2540-2673):
-- 403 — no internal credential, an unverifiable one, or a token that is not internal (:2545-2560). DIVERGENCE: legacy answers 401 for the first two; this family gates on a bare `is_internal()` and answers 403 throughout (refs #2233, which is why `internal_auth_conformity.rs` excludes these twelve paths).
+- 403 — no internal credential, an unverifiable one, or a token that is not internal (:2545-2555); then, bodyless, an internal credential missing `manage_organisations_applications` or not named `<x>-addon-api` (:2557-2560, fixes #2792). DIVERGENCE: legacy answers 401 for the first two; this family answers 403 throughout (refs #2233, which is why `internal_auth_conformity.rs` still excludes these paths — the claim half is discharged, the status half is not).
+- 400 / 415 — a body axum cannot deserialise, or a wrong content-type: answered by the `Json` extractor BEFORE the claim rung, where legacy answers the 403 above (its rung at :2557 precedes the parse at :2564-2566). DIVERGENCE of ordering only — no field of the body is read before the rung either way.
 - 400 id 4000 — `ownerId` missing (part of legacy's BAD_JSON parse, :2566-2570).
 - 404 id 4004 — owning organisation not found (:2578-2584).
 - 400 id 4000 — `app` missing or not a valid WannabeApplication (:2566-2570). Answered AFTER the organisation lookup — see the order divergence below.
@@ -38,10 +39,11 @@ Returns, in THIS handler's evaluation order (each status is legacy createFromInt
 
 Source: cc-api InternalApplicationsAPI.java:68 createApplication()
 Source: cc-api ApplicationHelper.java:2540-2673 createFromInternal()
-Behavior: creates application without OAuth access checks, internal auth required.
+Source: cc-api ApplicationHelper.java:2557-2560 — the canManageOrganisationsApplications() && isAddonAPI() rung, refused bodyless
+Behavior: no OAuth access check; internal auth PLUS the addon-api claim pair. Refs #2792
 Addons: each entry is linked into `applications_linked_to_addons` (legacy `linkAddonUnchecked`, ApplicationHelper.java:2650-2659 → :3481-3488). Each id is resolved BEFORE the application is created, so a refusal leaves no application row; an id that is unknown OR owned by another organisation answers 404 ADDON_NOT_FOUND (11001). Refs #2769, #2909
 Domains: each entry runs the full legacy `_addVhost` chain ([`add_vhost_full_chain`] — row, DNS CNAME, ADC ADD_ACL) after the awaited ADD_APP; a refusal is answered to the caller, never skipped. Refs #2768
-Issue: #159, refs #2768, #2769
+Issue: #159, refs #2768, #2769, fixes #2792
 
 Parameters:
   - ctx: context for the request

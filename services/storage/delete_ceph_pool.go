@@ -31,7 +31,7 @@ Delete a Ceph pool via Dashboard API.
   - `OvdAuth` + `ceph_x_op:remove_pool` on the path tenant, **bound to the path pool**
     (`cephPool` scope fact — OVD asserts `poolId.asFact` here; refs #2902)
   - Call ceph.delete_pool(pool_id) via reqwest
-  - Return 204 on success, 501 if not configured
+  - Return 204 on success, else the mapped Ceph status (see `ceph_error_response`)
 
 Parameters:
   - ctx: context for the request

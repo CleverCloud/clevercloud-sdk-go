@@ -17,7 +17,7 @@ type RedisAddonView struct {
 	Plan         RedisPlanType  `json:"plan"`
 	Port         int            `json:"port"`
 	Role         RoleType       `json:"role"`
-	Status       DbStatus       `json:"status"`
+	Status       RedisDbStatus  `json:"status"`
 	Version      string         `json:"version"`
 	Zone         string         `json:"zone"`
 }

@@ -6,7 +6,7 @@ package models
 type MetabaseVersionCheck struct {
 	Available                 []string `json:"available"`                 // All available versions.
 	Installed                 string   `json:"installed"`                 // Currently installed version (`CC_METABASE_VERSION`).
-	Latest                    string   `json:"latest"`                    // Latest available version.
+	Latest                    string   `json:"latest"`                    // Newest version on offer: the catalog's rolling tag when it declares one (`latest`, `lts`), otherw...
 	NeedUpdate                bool     `json:"needUpdate"`                // Whether an update is available.
-	RequiresApplicationUpdate bool     `json:"requiresApplicationUpdate"` // Whether upgrading to `latest` also requires a CCAPI application update (flavor/scalability bump —...
+	RequiresApplicationUpdate bool     `json:"requiresApplicationUpdate"` // Whether moving to `latest` also requires a CCAPI application update (flavor/scalability bump). Al...
 }

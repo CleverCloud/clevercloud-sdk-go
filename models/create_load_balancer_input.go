@@ -4,10 +4,10 @@ package models
 
 // CreateLoadBalancerInput OVD `CreateLoadBalancerInput` (LoadBalancer.scala:95-103).
 type CreateLoadBalancerInput struct {
-	CoOwners                     []string        `json:"coOwners"`
-	Configuration                *any            `json:"configuration,omitempty"`
-	Flavor                       string          `json:"flavor"`
-	LoadbalancerParentResourceID *string         `json:"loadbalancerParentResourceId,omitempty"` // `LoadBalancerParentResourceId` — `kubernetes_` followed by a 26-character ULID (Airframe base32: ...
-	Specification                *map[string]any `json:"specification,omitempty"`
-	Tags                         []string        `json:"tags,omitempty"`
+	CoOwners                     []string `json:"coOwners"`
+	Configuration                *any     `json:"configuration,omitempty"`
+	Flavor                       string   `json:"flavor"`
+	LoadbalancerParentResourceID *string  `json:"loadbalancerParentResourceId,omitempty"` // `LoadBalancerParentResourceId` — `kubernetes_` followed by a 26-character ULID (Airframe base32: ...
+	Specification                *any     `json:"specification,omitempty"`
+	Tags                         []string `json:"tags,omitempty"`
 }

@@ -37,7 +37,7 @@ Create a Ceph pool via Dashboard API.
     unpatched dashboard, or pool not visible yet — logs a warning and the
     creation stands; the optional body `init.force` tunes it (ovd!2170,
     refs #2907)
-  - Return 201 with CephPoolView or 501 if not configured
+  - Return 201 with CephPoolView, else the mapped Ceph status (see `ceph_error_response`)
 
 Parameters:
   - ctx: context for the request

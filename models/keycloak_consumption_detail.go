@@ -2,8 +2,8 @@
 
 package models
 
-// KeycloakConsumptionDetail Consumption detail with interval granularity.  Source: references/legacy/ovd/modules/keycloak/src...
+// KeycloakConsumptionDetail Per-interval breakdown of a consumption item.  Source: references/legacy/ovd/core/src/main/scala/...
 type KeycloakConsumptionDetail struct {
-	Interval   string `json:"interval"`   // Interval type (e.g. "daily")
-	Quantities []int  `json:"quantities"` // Per-interval quantities (filled with 1s for keycloak licence)
+	Interval   string    `json:"interval"`   // ISO-8601 period. `Interval.daily` encodes via `toISO8601` to **"P1D"** — the Scala symbol name `d...
+	Quantities []float64 `json:"quantities"` // One `1.0` per active day.
 }

@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// AbsoluteConstraint Absolute placement constraint (where to place).  Source: references/legacy/ovd/modules/compute/pl...
+// AbsoluteConstraint Absolute placement constraint (where to place).  This and the placement/affinity enums below keep...
 // Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any
 type AbsoluteConstraint struct {
 	raw json.RawMessage

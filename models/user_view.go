@@ -4,24 +4,25 @@ package models
 
 // UserView User view returned by GET /v2/self. Matches cc-api's UserView JSON shape exactly.  Source: cc-api...
 type UserView struct {
-	Address           *string  `json:"address,omitempty"`
-	Admin             bool     `json:"admin"`
-	Avatar            *string  `json:"avatar,omitempty"`
-	CanPay            bool     `json:"canPay"`
-	City              *string  `json:"city,omitempty"`
-	Country           *string  `json:"country,omitempty"`
-	CreationDate      *int     `json:"creationDate,omitempty"`
-	Email             *string  `json:"email,omitempty"`
-	EmailValidated    bool     `json:"emailValidated"`
-	HasPassword       bool     `json:"hasPassword"`
-	ID                string   `json:"id"`
-	Lang              *string  `json:"lang,omitempty"`
-	Name              *string  `json:"name,omitempty"`
-	OauthApps         []string `json:"oauthApps"`
-	PartnerConsoleURL *string  `json:"partnerConsoleUrl,omitempty"`
-	PartnerID         *string  `json:"partnerId,omitempty"`
-	PartnerName       *string  `json:"partnerName,omitempty"`
-	Phone             *string  `json:"phone,omitempty"`
-	PreferredMFA      string   `json:"preferredMFA"`
-	Zipcode           *string  `json:"zipcode,omitempty"`
+	Address           *string       `json:"address,omitempty"`
+	Admin             bool          `json:"admin"`
+	Avatar            *string       `json:"avatar,omitempty"`
+	CanPay            bool          `json:"canPay"`
+	City              *string       `json:"city,omitempty"`
+	ContextFlags      []PartnerFlag `json:"contextFlags,omitempty"` // The flags of the user's partner — `Partner.getContextFlags()`. Always serialized (an empty array,...
+	Country           *string       `json:"country,omitempty"`
+	CreationDate      *int          `json:"creationDate,omitempty"`
+	Email             *string       `json:"email,omitempty"`
+	EmailValidated    bool          `json:"emailValidated"`
+	HasPassword       bool          `json:"hasPassword"`
+	ID                string        `json:"id"`
+	Lang              *string       `json:"lang,omitempty"`
+	Name              *string       `json:"name,omitempty"`
+	OauthApps         []string      `json:"oauthApps"`
+	PartnerConsoleURL *string       `json:"partnerConsoleUrl,omitempty"`
+	PartnerID         *string       `json:"partnerId,omitempty"`
+	PartnerName       *string       `json:"partnerName,omitempty"`
+	Phone             *string       `json:"phone,omitempty"`
+	PreferredMFA      string        `json:"preferredMFA"`
+	Zipcode           *string       `json:"zipcode,omitempty"`
 }

@@ -54,14 +54,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterRedeploy
 */
-func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.ClusterView] {
+func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.ClusterView](ctx, c, path, nil)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

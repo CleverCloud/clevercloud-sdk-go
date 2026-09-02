@@ -2,7 +2,7 @@
 
 package models
 
-// KeycloakPatchRequest Patch request body for POST /v4/addon-providers/addon-keycloak/addons/{id}/version/update.  Sourc...
+// KeycloakPatchRequest Body of the "apply a version update" request.  Source: references/legacy/ovd/modules/keycloak/src...
 type KeycloakPatchRequest struct {
-	TargetVersion string `json:"targetVersion"` // Target Keycloak version to upgrade to
+	TargetVersion string `json:"targetVersion"` // Target version. Must be one the provider offers.  The wire key is `targetVersion`, not `version`:...
 }

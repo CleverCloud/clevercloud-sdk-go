@@ -37,14 +37,14 @@ Example:
 x-service: cellar
 operationId: updateCluster
 */
-func Updatecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64, requestBody *models.UpdateClusterRequest) client.Response[models.ClusterView] {
+func Updatecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64, requestBody *models.UpdateClusterRequest) client.Response[models.CellarCluster] {
 	ctx, span := tracer.Start(ctx, "updateCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.Int64("ClusterIndex", ClusterIndex)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters/%s", ownerId, ClusterIndex)
 
 	// Make API call
-	response := client.Put[models.ClusterView](ctx, c, path, requestBody)
+	response := client.Put[models.CellarCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

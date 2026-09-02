@@ -4,15 +4,12 @@ package models
 
 import "time"
 
-// KeycloakApplicationView Application sub-resource view within a Keycloak addon.  Source: references/legacy/ovd/modules/key...
+// KeycloakApplicationView A Java application attached to a Keycloak addon.  Source: references/legacy/ovd/modules/keycloak/...
 type KeycloakApplicationView struct {
-	AddonKeycloakID   string         `json:"addonKeycloakId"`        // Internal Keycloak addon ID
-	CallbackURL       *string        `json:"callbackUrl,omitempty"`  // Provisioning callback URL
-	CreationDate      time.Time      `json:"creationDate"`           // Creation timestamp
-	DeletionDate      *time.Time     `json:"deletionDate,omitempty"` // Deletion timestamp
-	Host              string         `json:"host"`                   // Keycloak host
-	JavaApplicationID string         `json:"javaApplicationId"`      // Java application ID (cc-api app hosting Keycloak)
-	Plan              KeycloakPlan   `json:"plan"`                   // Plan identifier — addon_plan ENUM (BETA, ALPHA, BASE)
-	Status            KeycloakStatus `json:"status"`                 // Lifecycle status
-	UpdatedDate       time.Time      `json:"updatedDate"`            // Last update timestamp
+	AddonKeycloakID   string         `json:"addonKeycloakId"`
+	CreationDate      time.Time      `json:"creationDate"`
+	Host              string         `json:"host"`
+	JavaApplicationID string         `json:"javaApplicationId"`
+	Plan              string         `json:"plan"`
+	Status            KeycloakStatus `json:"status"`
 }

@@ -44,7 +44,7 @@ Example:
 x-service: redis_addon
 operationId: redis_migrate
 */
-func RedisMigrate(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string, requestBody *models.MigrationRequest) client.Response[models.MigrationView] {
+func RedisMigrate(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string, requestBody *models.RedisMigrationRequest) client.Response[models.MigrationView] {
 	ctx, span := tracer.Start(ctx, "redis_migrate", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 

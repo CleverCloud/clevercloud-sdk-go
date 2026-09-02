@@ -14,15 +14,17 @@ import (
 /*
 Createversionupdatekeycloak POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/version/update
 
-Source: ovd AddonKeycloakAddonActor.scala:355 applyKeycloakVersion
-Behavior: Update CC_KEYCLOAK_VERSION env var on all Java apps via cc-api, then reboot.
-Issue: #313
+📥 **Algo Source (Legacy):** `applyKeycloakVersion` (`A:372`) sets the target
+version on the Java application and redeploys. Returns the addon view (200).
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:372
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -2,22 +2,19 @@
 
 package models
 
-import "time"
-
-// KeycloakView Keycloak addon view returned by GET/POST endpoints.  Source: references/legacy/ovd/modules/keyclo...
+// KeycloakView Console view of a Keycloak addon — the legacy `KeycloakAddonView.AddonView`.  ⚠ Field-for-field p...
 type KeycloakView struct {
-	Applications    []KeycloakApplicationView `json:"applications"`              // Keycloak application sub-resources
-	CallbackURL     *string                   `json:"callbackUrl,omitempty"`     // Provisioning callback URL
-	CcapiAddonID    string                    `json:"ccapiAddonId"`              // cc-api addon ID (external reference)
-	CreationDate    time.Time                 `json:"creationDate"`              // Creation timestamp
-	DeletionDate    *time.Time                `json:"deletionDate,omitempty"`    // Deletion timestamp
-	Error           *string                   `json:"error,omitempty"`           // Error message if status is PROVISIONING_ERROR
-	FsbucketAddonID *string                   `json:"fsbucketAddonId,omitempty"` // Optional linked FSBucket addon ID
-	ID              string                    `json:"id"`                        // Provider-internal Keycloak instance ID
-	NetworkgroupID  *string                   `json:"networkgroupId,omitempty"`  // Optional linked NetworkGroup ID
-	OwnerID         string                    `json:"ownerId"`                   // Owner (user or org) ID
-	Plan            KeycloakPlan              `json:"plan"`                      // Plan identifier — addon_plan ENUM (BETA, ALPHA, BASE)
-	PostgresAddonID *string                   `json:"postgresAddonId,omitempty"` // Optional linked PostgreSQL addon ID
-	Status          KeycloakStatus            `json:"status"`                    // Lifecycle status
-	UpdatedDate     time.Time                 `json:"updatedDate"`               // Last update timestamp
+	AccessURL          string            `json:"accessUrl"`
+	AddonID            string            `json:"addonId"`
+	AvailableVersions  []string          `json:"availableVersions"`
+	EnvVars            map[string]any    `json:"envVars"`
+	Features           KeycloakFeatures  `json:"features"`
+	InitialCredentials BasicCredentials  `json:"initialCredentials"`
+	JavaVersion        string            `json:"javaVersion"`
+	Name               string            `json:"name"`
+	OwnerID            string            `json:"ownerId"`
+	Plan               string            `json:"plan"`
+	ResourceID         string            `json:"resourceId"`
+	Resources          KeycloakResources `json:"resources"`
+	Version            string            `json:"version"`
 }

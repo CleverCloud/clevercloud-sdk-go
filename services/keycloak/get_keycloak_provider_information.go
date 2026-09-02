@@ -11,10 +11,14 @@ import (
 )
 
 /*
-GetKeycloakProviderInformation GET /v4/addon-providers/addon-keycloak
+Getkeycloakproviderinformation GET /v4/addon-providers/keycloak
 
-Source: ovd AddonKeycloakAddonActor.scala:1317 getProviderInformation
-Issue: #313
+📥 **Algo Source (Legacy):** `getProviderInformation` (`A:1385`) returns the
+provider console view: the dedicated version map and the default version.
+⚠ This route has **zero legacy tests** — fully ASSUMED (`01-legacy-tests.md`).
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:1385
+Issues: #313
 
 Parameters:
   - ctx: context for the request
@@ -25,23 +29,23 @@ Parameters:
 
 Example:
 
-	response := keycloak.GetKeycloakProviderInformation(ctx, client, tracer)
+	response := keycloak.Getkeycloakproviderinformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: keycloak
-operationId: get_keycloak_provider_information
+operationId: getKeycloakProviderInformation
 */
-func GetKeycloakProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.KeycloakProviderView] {
-	ctx, span := tracer.Start(ctx, "get_keycloak_provider_information")
+func Getkeycloakproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
+	ctx, span := tracer.Start(ctx, "getKeycloakProviderInformation")
 	defer span.End()
 
-	path := utils.Path("/v4/addon-providers/addon-keycloak")
+	path := utils.Path("/v4/addon-providers/keycloak")
 
 	// Make API call
-	response := client.Get[models.KeycloakProviderView](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

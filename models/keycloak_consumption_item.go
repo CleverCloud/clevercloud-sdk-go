@@ -2,10 +2,11 @@
 
 package models
 
-// KeycloakConsumptionItem A single consumption item within a ResourceConsumption.  Source: references/legacy/ovd/modules/ke...
+// KeycloakConsumptionItem One billed item inside a consumption line.  Source: references/legacy/ovd/modules/keycloak/src/ma...
 type KeycloakConsumptionItem struct {
-	Details   KeycloakConsumptionDetail `json:"details"`   // Details with interval and per-day quantities
-	Quantity  int                       `json:"quantity"`  // Total quantity consumed (number of active days)
-	Reference string                    `json:"reference"` // Reference label (e.g. "keycloak.licence")
-	Unit      string                    `json:"unit"`      // Unit of measurement (e.g. "licence")
+	Details    KeycloakConsumptionDetail `json:"details"`
+	Quantity   float64                   `json:"quantity"` // Whole DAYS the addon was active — `ChronoUnit.DAYS.between`, not seconds.
+	Reference  string                    `json:"reference"`
+	ResourceID *string                   `json:"resourceId,omitempty"` // Always `null` for keycloak, but legacy emits the key.  Source: references/legacy/ovd/core/src/mai...
+	Unit       string                    `json:"unit"`
 }

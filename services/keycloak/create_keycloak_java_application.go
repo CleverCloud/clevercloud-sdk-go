@@ -14,14 +14,24 @@ import (
 /*
 Createkeycloakjavaapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/application
 
-Source: ovd AddonKeycloakAddonActor.scala:405 addAddonApplication
-Issue: #313
+📥 **Algo Source (Legacy):** `addAddonApplication` (`A:422`) attaches a second
+Java application to an existing Keycloak addon and returns **201 Created**.
+
+⚠ **Deliberate deviation.** Legacy discards the `{keycloak_id}` path segment and
+takes the parent addon from `provision_request.addon_id` in the **body**
+(`AddonKeycloakRoutes.scala:248-257`, `A:435`). This port uses the **path** id,
+which is what the URL means and what every client sends. Recorded as a scope
+decision; a body-vs-path mismatch under legacy silently attaches the application
+to a different addon.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:422
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +47,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloakJavaApplication
 */
-func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.KeycloakAddApplicationRequest) client.Response[models.KeycloakProvisionResponse] {
+func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.ProvisionRequest) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createKeycloakJavaApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/application", addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.KeycloakProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

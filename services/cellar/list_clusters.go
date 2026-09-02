@@ -37,7 +37,7 @@ Example:
 x-service: cellar
 operationId: listClusters
 */
-func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ClusterView] {
+func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.CellarCluster] {
 	ctx, span := tracer.Start(ctx, "listClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Listclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ow
 	}
 
 	// Make API call
-	response := client.Get[[]models.ClusterView](ctx, c, path)
+	response := client.Get[[]models.CellarCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

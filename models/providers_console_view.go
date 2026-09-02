@@ -4,8 +4,8 @@ package models
 
 // ProvidersConsoleView `GET /v4/addon-providers/mysql-addon` body.  Source: AddonProvider.scala — ProvidersConsoleView
 type ProvidersConsoleView struct {
-	Clusters                []ClusterConsoleView `json:"clusters"`
-	Dedicated               map[string]any       `json:"dedicated"`
-	DefaultDedicatedVersion string               `json:"defaultDedicatedVersion"`
-	ProviderID              string               `json:"providerId"`
+	Clusters                []MysqlClusterConsole `json:"clusters"`
+	Dedicated               map[string]any        `json:"dedicated"`
+	DefaultDedicatedVersion string                `json:"defaultDedicatedVersion"`
+	ProviderID              string                `json:"providerId"`
 }

@@ -53,14 +53,14 @@ Example:
 x-service: kubernetes
 operationId: k8s_upgrade_cluster
 */
-func K8sUpgradeCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, cluster_id string, requestBody *models.PatchClusterVersion) client.Response[models.ClusterView] {
+func K8sUpgradeCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, cluster_id string, requestBody *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "k8s_upgrade_cluster", trace.WithAttributes(attribute.String("owner_id", owner_id), attribute.String("cluster_id", cluster_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/upgrade", owner_id, cluster_id)
 
 	// Make API call
-	response := client.Post[models.ClusterView](ctx, c, path, requestBody)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

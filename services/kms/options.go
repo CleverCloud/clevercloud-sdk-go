@@ -2,11 +2,26 @@
 
 package kms
 
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+
 // Option defines a functional option for kms operations
 type Option func(*Options)
 
 // Options holds query parameters for kms operations
-type Options struct{}
+type Options struct {
+	Zone *string `url:"zone,omitempty"`
+}
+
+// WithZone sets the zone query parameter
+func WithZone(zone string) Option {
+	return func(o *Options) {
+		o.Zone = &zone
+	}
+}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -14,5 +29,14 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-	return ""
+
+	var params []string
+	if options.Zone != nil {
+		params = append(params, fmt.Sprintf("zone=%s", url.QueryEscape(*options.Zone)))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+	return strings.Join(params, "&")
 }

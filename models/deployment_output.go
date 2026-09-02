@@ -4,16 +4,15 @@ package models
 
 import "time"
 
-// DeploymentOutput Source: references/legacy/ovd/modules/compute/routes/DeploymentOutput.scala
+// DeploymentOutput Source: references/legacy/ovd/modules/compute/routes/DeploymentOutput.scala Schema: N/A — project...
 type DeploymentOutput struct {
-	Attempt    int             `json:"attempt"`
-	FinishedAt *time.Time      `json:"finishedAt,omitempty"`
-	ID         string          `json:"id"`
-	MaxAttempt *int            `json:"maxAttempt,omitempty"`
-	Spec       any             `json:"spec"`
-	StartedAt  time.Time       `json:"startedAt"`
-	Status     string          `json:"status"`
-	Timeout    *string         `json:"timeout,omitempty"`
-	UpdatedAt  time.Time       `json:"updatedAt"`
-	VmStatus   *map[string]any `json:"vmStatus,omitempty"` // Per-VM boot echo keyed by VM name. Empty until per-VM placement lands; absent on payloads predati...
+	Attempt    int                    `json:"attempt"`
+	FinishedAt *time.Time             `json:"finishedAt,omitempty"`
+	ID         string                 `json:"id"`
+	MaxAttempt *int                   `json:"maxAttempt,omitempty"`
+	Spec       DeploymentSpec         `json:"spec"`
+	StartedAt  time.Time              `json:"startedAt"`
+	Status     DeploymentStatusOutput `json:"status"`            // Nested exactly as OVD emits it (`status: DeploymentStatus`, `DeploymentOutput.scala:17`); the per...
+	Timeout    *int                   `json:"timeout,omitempty"` // OVD wire: `Option[FiniteDuration]` encoded as **nanoseconds** (a JSON number) — core `codecs/fini...
+	UpdatedAt  time.Time              `json:"updatedAt"`
 }

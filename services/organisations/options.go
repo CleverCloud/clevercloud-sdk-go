@@ -4,6 +4,7 @@ package organisations
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -12,8 +13,16 @@ type Option func(*Options)
 
 // Options holds query parameters for organisations operations
 type Options struct {
-	Limit  *int64 `url:"limit,omitempty"`
-	Offset *any   `url:"offset,omitempty"`
+	Invitationkey *string `url:"invitationKey,omitempty"`
+	Limit         *int64  `url:"limit,omitempty"`
+	Offset        *any    `url:"offset,omitempty"`
+}
+
+// WithInvitationkey sets the invitationKey query parameter
+func WithInvitationkey(invitationKey string) Option {
+	return func(o *Options) {
+		o.Invitationkey = &invitationKey
+	}
 }
 
 // WithLimit sets the limit query parameter
@@ -38,6 +47,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Invitationkey != nil {
+		params = append(params, fmt.Sprintf("invitationKey=%s", url.QueryEscape(*options.Invitationkey)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}

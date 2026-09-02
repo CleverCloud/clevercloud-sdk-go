@@ -10,17 +10,22 @@ import (
 )
 
 /*
-Getselfclitokens GET /v2/self/cli_tokens — get CLI tokens for the user.
+Getselfclitokens GET /v2/self/cli_tokens — poll for a CLI-paired access token. PUBLIC (unauthenticated).
 
 📥 **Algo Source (Legacy):**
-If cli_token query param provided, verify it exists for user in oauth1_access_tokens; return token or null
-- Legacy note: cc-api SelfCliTokensAPI.java getCliTokens(); cc-api filters by CLI consumer key (simplified here)
+SelfOAuth1CliTokensHelper.get(cli_token): reads the CLI_TOKENS Redis cache entry
+keyed by cli_token, returns the pairing view {token, secret, expirationDate} (404 if
+absent), then DELETES the entry — a one-shot read. No authentication: `clever login`
+polls this endpoint before it holds any credentials at all.
 
 🔧 **Algo Rust (Implementation):**
-- Conformity: enhanced
-Source: cc-api SelfCliTokensAPI.java getCliTokens()
-Returns tokens created for CLI tools.
-Issue: #102
+- Conformity: faithful
+Source: cc-api SelfOAuth1CliTokensHelper.java get()
+Was wrongly gated behind `Authenticated` and looked the token up in
+oauth1_access_tokens by DB query instead of the CLI_TOKENS cache — every poll
+401'd, so `clever login` could never complete. Fixed to the public,
+cache-backed one-shot read legacy actually implements.
+Issue: #102, #3100
 
 Parameters:
   - ctx: context for the request

@@ -11,19 +11,10 @@ import (
 )
 
 /*
-Createkms POST /v2/providers/addon-kms/resources — provision a new KMS addon.
+Createkms `POST /v2/providers/addon-kms/resources`
 
-Legacy: ovd routes.scala:30 provisionKms
-Algorithm:
-  - Generate kms_UUID, token (s.UUID), root_token (s.UUID)
-  - INSERT into addon_kms with ACTIVE status
-  - Return ProvisionResponse with CC_VAULT_TOKEN + CC_VAULT_ROOT_TOKEN
-
-Conformity: YES
-
-Source: references/legacy/ovd/modules/kms/api/routes.scala provisionRoute
-Behavior: creates addon_kms record with ACTIVE status, returns provision response
-Issue: #659
+`RequireUser` rejects an anonymous caller with 401 **before the body is parsed**, so an
+unauthenticated call with a malformed body still answers 401 rather than leaking a parse error.
 
 Parameters:
   - ctx: context for the request

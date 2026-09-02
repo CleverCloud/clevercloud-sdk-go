@@ -14,15 +14,18 @@ import (
 /*
 Createngkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/networkgroup
 
-Source: ovd AddonKeycloakAddonActor.scala:864 createNGAddonKeycloak
-Behavior: Create NG via HTTP, store ID, update scalability to 2/2, reboot.
-Issue: #313
+📥 **Algo Source (Legacy):** `createNGAddonKeycloak` (`A:925`) creates the
+network group, stores its id, and scales the application. Returns **202
+Accepted** with the full addon view — not 201.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:925
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
 
 # Returns the operation result or an error
 

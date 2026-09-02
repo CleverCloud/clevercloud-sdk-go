@@ -13,15 +13,17 @@ import (
 /*
 Deletengkeycloakapplication DELETE /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/networkgroup
 
-Source: ovd AddonKeycloakAddonActor.scala:836 deleteNGAddonKeycloak
-Behavior: Delete NG via HTTP, remove from DB, scalability back to 1/1, reboot.
-Issue: #313
+A network group the module no longer knows about answers 404, after the
+addon has been walked back regardless.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:897
+Issues: #313, #3133
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
 
 # Returns the operation result or an error
 

@@ -33,7 +33,7 @@ Create a CephX authentication user via Ceph Dashboard API.
 - `OvdAuth` + `ceph_x_op:create_admin_user` on the path tenant
 - Call ceph.create_ceph_x_user(entity_id, caps) via reqwest HTTP
 - Return 201 with CephXUserView (entity, tenant, key, caps)
-- Return 501 if Ceph not configured (Cloud Versatile)
+- Return the mapped Ceph status on failure (ovd `CephHTTPError`, see `ceph_error_response`)
 
 ⚠️ **Takes `create_admin_user`, not `create_user`.** `caps` is forwarded to Ceph verbatim, so
 this endpoint can mint a cluster-admin key. See [`CephXOp::CreateAdminUser`] for why it does

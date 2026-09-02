@@ -32,7 +32,7 @@ Example:
 x-service: redis_addon
 operationId: redis_provision
 */
-func RedisProvision(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func RedisProvision(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.RedisProvisionRequest) client.Response[models.ProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "redis_provision")
 	defer span.End()
 

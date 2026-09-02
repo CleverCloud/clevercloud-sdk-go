@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// NetworkDetailsInput OVD `NetworkDetailsInput` — `{"type":"NETWORK_GROUP","id":…}` (Network.scala:97-111, discriminato...
+// NetworkDetailsInput The `details` discriminated union of an allocation request.  OVD `NetworkDetailsInput` — `{"type"...
 // Tagged union - can hold one of: map[string]any
 type NetworkDetailsInput struct {
 	raw json.RawMessage

@@ -35,7 +35,7 @@ Get a CephX user by entity ID from Ceph Dashboard.
     with `cephXUserId.asFact`, so an entity-scoped token works; refs #2902)
   - Call ceph.get_ceph_x_user(entity_id) via reqwest
   - Return 200 with CephXUserView or 404
-  - Return 501 if Ceph not configured
+  - Return the mapped Ceph status on failure (ovd `CephHTTPError`, see `ceph_error_response`)
 
 Parameters:
   - ctx: context for the request

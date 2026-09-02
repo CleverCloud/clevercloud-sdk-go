@@ -2,12 +2,12 @@
 
 package models
 
-// KeycloakPlan represents Keycloak addon plan identifier.  Source: references/legacy/ovd/modules/keycloak/src/main/scala/co...
+// KeycloakPlan represents Commercial plan of a Keycloak addon.  📥 **Algo Source (Legacy):** `Keycloak.scala:36` matches the...
 type KeycloakPlan string
 
 const (
-	KeycloakPlanBETA  KeycloakPlan = "BETA"
 	KeycloakPlanALPHA KeycloakPlan = "ALPHA"
+	KeycloakPlanBETA  KeycloakPlan = "BETA"
 	KeycloakPlanBASE  KeycloakPlan = "BASE"
 )
 

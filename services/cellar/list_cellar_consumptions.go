@@ -37,7 +37,7 @@ Example:
 x-service: cellar
 operationId: listCellarConsumptions
 */
-func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumption] {
+func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.CellarResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listCellarConsumptions", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.ResourceConsumption](ctx, c, path)
+	response := client.Get[[]models.CellarResourceConsumption](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

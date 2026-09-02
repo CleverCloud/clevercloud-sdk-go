@@ -12,5 +12,5 @@ type VirtualMachineSpecInput struct {
 	Name         string             `json:"name"`
 	ResourceID   *string            `json:"resourceId,omitempty"`
 	Resources    ResourcesSpecInput `json:"resources"`
-	Tags         map[string]any     `json:"tags"`
+	Tags         Vec                `json:"tags"`
 }

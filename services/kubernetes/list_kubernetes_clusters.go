@@ -52,7 +52,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesClusters
 */
-func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ClusterView] {
+func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "listKubernetesClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -65,7 +65,7 @@ func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.ClusterView](ctx, c, path)
+	response := client.Get[[]models.KubernetesCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -31,7 +31,7 @@ Delete a CephX user from Ceph Dashboard.
   - `OvdAuth` + `ceph_x_op:remove_user` on the path tenant, **bound to the path entity**
     (`cephx_user` scope fact, same as the GET; refs #2902)
   - Call ceph.delete_ceph_x_user(entity_id) via reqwest
-  - Return 204 on success, 501 if not configured
+  - Return 204 on success, else the mapped Ceph status (see `ceph_error_response`)
 
 Parameters:
   - ctx: context for the request

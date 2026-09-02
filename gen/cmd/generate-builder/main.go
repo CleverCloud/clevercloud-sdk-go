@@ -338,8 +338,28 @@ func mapServiceToPackage(xService string) string {
 		return pkg
 	}
 
-	// Default: replace hyphens with underscores
-	return strings.ReplaceAll(xService, "-", "_")
+	// Snake-case, exactly as generate-services does — the two derive package names
+	// independently, and only that generator writes the directories. Replacing hyphens alone
+	// left a tag like `NetworkGroup` untouched, so `builder.go` imported
+	// `services/NetworkGroup` while the package on disk was `services/network_group`. Go
+	// package names are lower-case anyway.
+	return toSnakeCasePackage(xService)
+}
+
+// toSnakeCasePackage mirrors `toSnakeCase` in generate-services/main.go. Keep them in step: a
+// divergence produces a builder that imports a package the services generator never wrote.
+func toSnakeCasePackage(s string) string {
+	if s == "" {
+		return ""
+	}
+	var result strings.Builder
+	for i, r := range s {
+		if i > 0 && r >= 'A' && r <= 'Z' {
+			result.WriteRune('_')
+		}
+		result.WriteRune(r)
+	}
+	return strings.ToLower(strings.ReplaceAll(result.String(), "-", "_"))
 }
 
 // getPackageForOperation returns the package for a specific operation, checking exceptions first
@@ -1129,8 +1149,20 @@ func fixIDSuffixes(s string) string {
 		"Yaml":  "YAML",
 	}
 
+	// Same application as generate-services, not just the same table. A blanket `ReplaceAll`
+	// rewrites `Ids` into `IDs` and `Idle` into `IDle`; the services generator replaces only at
+	// the end of a word or before another capital, which is why the two produced
+	// `PostgresqlInternalIDsByOwner` and `PostgresqlInternalIdsByOwner` for one operation.
+	// Unifying the tables was not enough — the code that applies them has to match too.
 	for old, new := range replacements {
-		s = strings.ReplaceAll(s, old, new)
+		if strings.HasSuffix(s, old) {
+			s = strings.TrimSuffix(s, old) + new
+			continue
+		}
+		for i := 'A'; i <= 'Z'; i++ {
+			next := string(i)
+			s = strings.ReplaceAll(s, old+next, new+next)
+		}
 	}
 
 	return s

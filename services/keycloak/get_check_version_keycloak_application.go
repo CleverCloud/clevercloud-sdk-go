@@ -14,15 +14,17 @@ import (
 /*
 Getcheckversionkeycloakapplication GET /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/version/check
 
-Source: ovd AddonKeycloakAddonActor.scala:998 checkVersionApplication
-Behavior: Reads CC_KEYCLOAK_VERSION from Java app env (via cc-api if available).
-Issue: #313
+📥 **Algo Source (Legacy):** `checkVersionApplication` (`A:1059`) compares the
+version the instance runs against the newest the provider offers.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:1059
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
 
 # Returns the operation result or an error
 

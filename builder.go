@@ -41,6 +41,7 @@ import (
 	otoroshi "go.clever-cloud.dev/sdk/services/otoroshi"
 	payments "go.clever-cloud.dev/sdk/services/payments"
 	postgresql "go.clever-cloud.dev/sdk/services/postgresql"
+	postgresqladdon "go.clever-cloud.dev/sdk/services/postgresql_addon"
 	products "go.clever-cloud.dev/sdk/services/products"
 	pulsar "go.clever-cloud.dev/sdk/services/pulsar"
 	redisaddon "go.clever-cloud.dev/sdk/services/redis_addon"
@@ -6668,7 +6669,7 @@ func (b *v2OrganisationsIDInstancesBuilderImpl) Listorganisationinstances(ctx co
 type V2OrganisationsIDMembersBuilder interface {
 	Userid(userid string) V2OrganisationsIDMembersUseridBuilder
 	Listorganisationmembers(ctx context.Context) client.Response[[]models.MemberView]
-	Addorganisationmember(ctx context.Context, request *models.WannabeMember) client.Response[models.InvitationView]
+	Addorganisationmember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message]
 }
 
 // v2OrganisationsIDMembersBuilderImpl implements V2OrganisationsIDMembersBuilder
@@ -6696,8 +6697,8 @@ func (b *v2OrganisationsIDMembersBuilderImpl) Listorganisationmembers(ctx contex
 }
 
 // Addorganisationmember calls organisations.Addorganisationmember
-func (b *v2OrganisationsIDMembersBuilderImpl) Addorganisationmember(ctx context.Context, request *models.WannabeMember) client.Response[models.InvitationView] {
-	return organisations.Addorganisationmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+func (b *v2OrganisationsIDMembersBuilderImpl) Addorganisationmember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message] {
+	return organisations.Addorganisationmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request, opts...)
 }
 
 // V2OrganisationsIDMembersUseridBuilder provides access to operations
@@ -8331,6 +8332,7 @@ type V2ProvidersBuilder interface {
 	Kv() V2ProvidersKvBuilder
 	Materia() V2ProvidersMateriaBuilder
 	MysqlAddon() V2ProvidersMysqlAddonBuilder
+	PostgresqlAddon() V2ProvidersPostgresqlAddonBuilder
 	RedisAddon() V2ProvidersRedisAddonBuilder
 }
 
@@ -8417,6 +8419,11 @@ func (b *v2ProvidersBuilderImpl) Materia() V2ProvidersMateriaBuilder {
 // MysqlAddon returns MysqlAddon builder
 func (b *v2ProvidersBuilderImpl) MysqlAddon() V2ProvidersMysqlAddonBuilder {
 	return newV2ProvidersMysqlAddonBuilder(b.sdk)
+}
+
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v2ProvidersBuilderImpl) PostgresqlAddon() V2ProvidersPostgresqlAddonBuilder {
+	return newV2ProvidersPostgresqlAddonBuilder(b.sdk)
 }
 
 // RedisAddon returns RedisAddon builder
@@ -8657,7 +8664,7 @@ func (b *v2ProvidersAddonKeycloakBuilderImpl) Resources() V2ProvidersAddonKeyclo
 // V2ProvidersAddonKeycloakResourcesBuilder provides access to operations
 type V2ProvidersAddonKeycloakResourcesBuilder interface {
 	Addonkeycloakid(addonkeycloakid string) V2ProvidersAddonKeycloakResourcesAddonkeycloakidBuilder
-	Createkeycloak(ctx context.Context, request *models.KeycloakProvisionRequest) client.Response[models.KeycloakProvisionResponse]
+	Createkeycloak(ctx context.Context, request *models.ProvisionRequest) client.Response[client.Nothing]
 }
 
 // v2ProvidersAddonKeycloakResourcesBuilderImpl implements V2ProvidersAddonKeycloakResourcesBuilder
@@ -8676,7 +8683,7 @@ func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Addonkeycloakid(addonkeyc
 }
 
 // Createkeycloak calls keycloak.Createkeycloak
-func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Createkeycloak(ctx context.Context, request *models.KeycloakProvisionRequest) client.Response[models.KeycloakProvisionResponse] {
+func (b *v2ProvidersAddonKeycloakResourcesBuilderImpl) Createkeycloak(ctx context.Context, request *models.ProvisionRequest) client.Response[client.Nothing] {
 	return keycloak.Createkeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -10076,6 +10083,1722 @@ func (b *v2ProvidersMysqlAddonSsoBuilderImpl) MysqlSsoEntryPoint(ctx context.Con
 	return mysqladdon.MysqlSsoEntryPoint(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
+// V2ProvidersPostgresqlAddonBuilder provides access to operations
+type V2ProvidersPostgresqlAddonBuilder interface {
+	Dashboard() V2ProvidersPostgresqlAddonDashboardBuilder
+	Internal() V2ProvidersPostgresqlAddonInternalBuilder
+	Resources() V2ProvidersPostgresqlAddonResourcesBuilder
+	Sso() V2ProvidersPostgresqlAddonSsoBuilder
+}
+
+// v2ProvidersPostgresqlAddonBuilderImpl implements V2ProvidersPostgresqlAddonBuilder
+type v2ProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonBuilder creates a new V2ProvidersPostgresqlAddonBuilder
+func newV2ProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonBuilder {
+	return &v2ProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Dashboard returns Dashboard builder
+func (b *v2ProvidersPostgresqlAddonBuilderImpl) Dashboard() V2ProvidersPostgresqlAddonDashboardBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardBuilder(b.sdk)
+}
+
+// Internal returns Internal builder
+func (b *v2ProvidersPostgresqlAddonBuilderImpl) Internal() V2ProvidersPostgresqlAddonInternalBuilder {
+	return newV2ProvidersPostgresqlAddonInternalBuilder(b.sdk)
+}
+
+// Resources returns Resources builder
+func (b *v2ProvidersPostgresqlAddonBuilderImpl) Resources() V2ProvidersPostgresqlAddonResourcesBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesBuilder(b.sdk)
+}
+
+// Sso returns Sso builder
+func (b *v2ProvidersPostgresqlAddonBuilderImpl) Sso() V2ProvidersPostgresqlAddonSsoBuilder {
+	return newV2ProvidersPostgresqlAddonSsoBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonDashboardBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardBuilder interface {
+	Activateextension() V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder
+	Addreadonlyuser() V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder
+	Backups() V2ProvidersPostgresqlAddonDashboardBackupsBuilder
+	Bypasssdc() V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder
+	Genpwd() V2ProvidersPostgresqlAddonDashboardGenpwdBuilder
+	Killconn() V2ProvidersPostgresqlAddonDashboardKillconnBuilder
+	Promotereplica() V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder
+	Rebootinstance() V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder
+	Resetdb() V2ProvidersPostgresqlAddonDashboardResetdbBuilder
+	Setencryptionpassphrase() V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder
+	PostgresqlDashboard(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonDashboardBuilderImpl implements V2ProvidersPostgresqlAddonDashboardBuilder
+type v2ProvidersPostgresqlAddonDashboardBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardBuilder creates a new V2ProvidersPostgresqlAddonDashboardBuilder
+func newV2ProvidersPostgresqlAddonDashboardBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardBuilderImpl{sdk: sdk}
+}
+
+// Activateextension returns Activateextension builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Activateextension() V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardActivateextensionBuilder(b.sdk)
+}
+
+// Addreadonlyuser returns Addreadonlyuser builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Addreadonlyuser() V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder(b.sdk)
+}
+
+// Backups returns Backups builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Backups() V2ProvidersPostgresqlAddonDashboardBackupsBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardBackupsBuilder(b.sdk)
+}
+
+// Bypasssdc returns Bypasssdc builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Bypasssdc() V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardBypasssdcBuilder(b.sdk)
+}
+
+// Genpwd returns Genpwd builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Genpwd() V2ProvidersPostgresqlAddonDashboardGenpwdBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardGenpwdBuilder(b.sdk)
+}
+
+// Killconn returns Killconn builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Killconn() V2ProvidersPostgresqlAddonDashboardKillconnBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardKillconnBuilder(b.sdk)
+}
+
+// Promotereplica returns Promotereplica builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Promotereplica() V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder(b.sdk)
+}
+
+// Rebootinstance returns Rebootinstance builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Rebootinstance() V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder(b.sdk)
+}
+
+// Resetdb returns Resetdb builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Resetdb() V2ProvidersPostgresqlAddonDashboardResetdbBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardResetdbBuilder(b.sdk)
+}
+
+// Setencryptionpassphrase returns Setencryptionpassphrase builder
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) Setencryptionpassphrase() V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder {
+	return newV2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder(b.sdk)
+}
+
+// PostgresqlDashboard calls postgresql_addon.PostgresqlDashboard
+func (b *v2ProvidersPostgresqlAddonDashboardBuilderImpl) PostgresqlDashboard(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlDashboard(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder interface {
+	PostgresqlDashboardActivateExtension(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardActivateextensionBuilderImpl implements V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder
+type v2ProvidersPostgresqlAddonDashboardActivateextensionBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardActivateextensionBuilder creates a new V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder
+func newV2ProvidersPostgresqlAddonDashboardActivateextensionBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardActivateextensionBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardActivateextensionBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardActivateExtension calls postgresql_addon.PostgresqlDashboardActivateExtension
+func (b *v2ProvidersPostgresqlAddonDashboardActivateextensionBuilderImpl) PostgresqlDashboardActivateExtension(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardActivateExtension(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder interface {
+	PostgresqlDashboardAddReadOnlyUser(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilderImpl implements V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder
+type v2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder creates a new V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder
+func newV2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardAddReadOnlyUser calls postgresql_addon.PostgresqlDashboardAddReadOnlyUser
+func (b *v2ProvidersPostgresqlAddonDashboardAddreadonlyuserBuilderImpl) PostgresqlDashboardAddReadOnlyUser(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardAddReadOnlyUser(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardBackupsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardBackupsBuilder interface {
+	PostgresqlDashboardBackupsList(ctx context.Context) client.Response[any]
+	PostgresqlDashboardStartPit(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardBackupsBuilderImpl implements V2ProvidersPostgresqlAddonDashboardBackupsBuilder
+type v2ProvidersPostgresqlAddonDashboardBackupsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardBackupsBuilder creates a new V2ProvidersPostgresqlAddonDashboardBackupsBuilder
+func newV2ProvidersPostgresqlAddonDashboardBackupsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardBackupsBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardBackupsBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardBackupsList calls postgresql_addon.PostgresqlDashboardBackupsList
+func (b *v2ProvidersPostgresqlAddonDashboardBackupsBuilderImpl) PostgresqlDashboardBackupsList(ctx context.Context) client.Response[any] {
+	return postgresqladdon.PostgresqlDashboardBackupsList(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// PostgresqlDashboardStartPit calls postgresql_addon.PostgresqlDashboardStartPit
+func (b *v2ProvidersPostgresqlAddonDashboardBackupsBuilderImpl) PostgresqlDashboardStartPit(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardStartPit(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder interface {
+	PostgresqlDashboardBypassSdc(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardBypasssdcBuilderImpl implements V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder
+type v2ProvidersPostgresqlAddonDashboardBypasssdcBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardBypasssdcBuilder creates a new V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder
+func newV2ProvidersPostgresqlAddonDashboardBypasssdcBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardBypasssdcBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardBypasssdcBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardBypassSdc calls postgresql_addon.PostgresqlDashboardBypassSdc
+func (b *v2ProvidersPostgresqlAddonDashboardBypasssdcBuilderImpl) PostgresqlDashboardBypassSdc(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardBypassSdc(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardGenpwdBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardGenpwdBuilder interface {
+	PostgresqlDashboardGeneratePassword(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardGenpwdBuilderImpl implements V2ProvidersPostgresqlAddonDashboardGenpwdBuilder
+type v2ProvidersPostgresqlAddonDashboardGenpwdBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardGenpwdBuilder creates a new V2ProvidersPostgresqlAddonDashboardGenpwdBuilder
+func newV2ProvidersPostgresqlAddonDashboardGenpwdBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardGenpwdBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardGenpwdBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardGeneratePassword calls postgresql_addon.PostgresqlDashboardGeneratePassword
+func (b *v2ProvidersPostgresqlAddonDashboardGenpwdBuilderImpl) PostgresqlDashboardGeneratePassword(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardGeneratePassword(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardKillconnBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardKillconnBuilder interface {
+	PostgresqlDashboardKillConnections(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardKillconnBuilderImpl implements V2ProvidersPostgresqlAddonDashboardKillconnBuilder
+type v2ProvidersPostgresqlAddonDashboardKillconnBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardKillconnBuilder creates a new V2ProvidersPostgresqlAddonDashboardKillconnBuilder
+func newV2ProvidersPostgresqlAddonDashboardKillconnBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardKillconnBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardKillconnBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardKillConnections calls postgresql_addon.PostgresqlDashboardKillConnections
+func (b *v2ProvidersPostgresqlAddonDashboardKillconnBuilderImpl) PostgresqlDashboardKillConnections(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardKillConnections(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder interface {
+	PostgresqlDashboardPromoteReplica(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardPromotereplicaBuilderImpl implements V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder
+type v2ProvidersPostgresqlAddonDashboardPromotereplicaBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder creates a new V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder
+func newV2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardPromotereplicaBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardPromotereplicaBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardPromoteReplica calls postgresql_addon.PostgresqlDashboardPromoteReplica
+func (b *v2ProvidersPostgresqlAddonDashboardPromotereplicaBuilderImpl) PostgresqlDashboardPromoteReplica(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardPromoteReplica(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder interface {
+	PostgresqlDashboardRebootInstance(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonDashboardRebootinstanceBuilderImpl implements V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder
+type v2ProvidersPostgresqlAddonDashboardRebootinstanceBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder creates a new V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder
+func newV2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardRebootinstanceBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardRebootinstanceBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardRebootInstance calls postgresql_addon.PostgresqlDashboardRebootInstance
+func (b *v2ProvidersPostgresqlAddonDashboardRebootinstanceBuilderImpl) PostgresqlDashboardRebootInstance(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlDashboardRebootInstance(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardResetdbBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardResetdbBuilder interface {
+	PostgresqlDashboardResetDatabase(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardResetdbBuilderImpl implements V2ProvidersPostgresqlAddonDashboardResetdbBuilder
+type v2ProvidersPostgresqlAddonDashboardResetdbBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardResetdbBuilder creates a new V2ProvidersPostgresqlAddonDashboardResetdbBuilder
+func newV2ProvidersPostgresqlAddonDashboardResetdbBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardResetdbBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardResetdbBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardResetDatabase calls postgresql_addon.PostgresqlDashboardResetDatabase
+func (b *v2ProvidersPostgresqlAddonDashboardResetdbBuilderImpl) PostgresqlDashboardResetDatabase(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardResetDatabase(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder provides access to operations
+type V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder interface {
+	PostgresqlDashboardSetEncryptionPassphrase(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilderImpl implements V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder
+type v2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder creates a new V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder
+func newV2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilder {
+	return &v2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlDashboardSetEncryptionPassphrase calls postgresql_addon.PostgresqlDashboardSetEncryptionPassphrase
+func (b *v2ProvidersPostgresqlAddonDashboardSetencryptionpassphraseBuilderImpl) PostgresqlDashboardSetEncryptionPassphrase(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlDashboardSetEncryptionPassphrase(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonInternalBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalBuilder interface {
+	ID(id string) V2ProvidersPostgresqlAddonInternalIDBuilder
+	AddonProviders() V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder
+	Bydb() V2ProvidersPostgresqlAddonInternalBydbBuilder
+	Ferretdb() V2ProvidersPostgresqlAddonInternalFerretdbBuilder
+	Migrations() V2ProvidersPostgresqlAddonInternalMigrationsBuilder
+	Shared() V2ProvidersPostgresqlAddonInternalSharedBuilder
+	Versions() V2ProvidersPostgresqlAddonInternalVersionsBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalBuilderImpl implements V2ProvidersPostgresqlAddonInternalBuilder
+type v2ProvidersPostgresqlAddonInternalBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalBuilder creates a new V2ProvidersPostgresqlAddonInternalBuilder
+func newV2ProvidersPostgresqlAddonInternalBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalBuilder {
+	return &v2ProvidersPostgresqlAddonInternalBuilderImpl{sdk: sdk}
+}
+
+// ID returns builder for id
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) ID(id string) V2ProvidersPostgresqlAddonInternalIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDBuilder(b.sdk, id)
+}
+
+// AddonProviders returns AddonProviders builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) AddonProviders() V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersBuilder(b.sdk)
+}
+
+// Bydb returns Bydb builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) Bydb() V2ProvidersPostgresqlAddonInternalBydbBuilder {
+	return newV2ProvidersPostgresqlAddonInternalBydbBuilder(b.sdk)
+}
+
+// Ferretdb returns Ferretdb builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) Ferretdb() V2ProvidersPostgresqlAddonInternalFerretdbBuilder {
+	return newV2ProvidersPostgresqlAddonInternalFerretdbBuilder(b.sdk)
+}
+
+// Migrations returns Migrations builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) Migrations() V2ProvidersPostgresqlAddonInternalMigrationsBuilder {
+	return newV2ProvidersPostgresqlAddonInternalMigrationsBuilder(b.sdk)
+}
+
+// Shared returns Shared builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) Shared() V2ProvidersPostgresqlAddonInternalSharedBuilder {
+	return newV2ProvidersPostgresqlAddonInternalSharedBuilder(b.sdk)
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersPostgresqlAddonInternalBuilderImpl) Versions() V2ProvidersPostgresqlAddonInternalVersionsBuilder {
+	return newV2ProvidersPostgresqlAddonInternalVersionsBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDBuilder interface {
+	Backupauth() V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder
+	Configuration() V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder
+	Encryptionpassphrase() V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder
+	Instruction() V2ProvidersPostgresqlAddonInternalIDInstructionBuilder
+	Lastbackupurl() V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder
+	Promotereplica() V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder
+	Reapplyenv() V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder
+	Redeploy() V2ProvidersPostgresqlAddonInternalIDRedeployBuilder
+	Registerbackup() V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder
+	Signature() V2ProvidersPostgresqlAddonInternalIDSignatureBuilder
+	Updateconfig() V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDBuilder
+type v2ProvidersPostgresqlAddonInternalIDBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDBuilder creates a new V2ProvidersPostgresqlAddonInternalIDBuilder
+func newV2ProvidersPostgresqlAddonInternalIDBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Backupauth returns Backupauth builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Backupauth() V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDBackupauthBuilder(b.sdk, b.id)
+}
+
+// Configuration returns Configuration builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Configuration() V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDConfigurationBuilder(b.sdk, b.id)
+}
+
+// Encryptionpassphrase returns Encryptionpassphrase builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Encryptionpassphrase() V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder(b.sdk, b.id)
+}
+
+// Instruction returns Instruction builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Instruction() V2ProvidersPostgresqlAddonInternalIDInstructionBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDInstructionBuilder(b.sdk, b.id)
+}
+
+// Lastbackupurl returns Lastbackupurl builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Lastbackupurl() V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder(b.sdk, b.id)
+}
+
+// Promotereplica returns Promotereplica builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Promotereplica() V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder(b.sdk, b.id)
+}
+
+// Reapplyenv returns Reapplyenv builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Reapplyenv() V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder(b.sdk, b.id)
+}
+
+// Redeploy returns Redeploy builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Redeploy() V2ProvidersPostgresqlAddonInternalIDRedeployBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDRedeployBuilder(b.sdk, b.id)
+}
+
+// Registerbackup returns Registerbackup builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Registerbackup() V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder(b.sdk, b.id)
+}
+
+// Signature returns Signature builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Signature() V2ProvidersPostgresqlAddonInternalIDSignatureBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDSignatureBuilder(b.sdk, b.id)
+}
+
+// Updateconfig returns Updateconfig builder
+func (b *v2ProvidersPostgresqlAddonInternalIDBuilderImpl) Updateconfig() V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder(b.sdk, b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder interface {
+	PostgresqlBackupAuth(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDBackupauthBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder
+type v2ProvidersPostgresqlAddonInternalIDBackupauthBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDBackupauthBuilder creates a new V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder
+func newV2ProvidersPostgresqlAddonInternalIDBackupauthBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDBackupauthBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDBackupauthBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupAuth calls postgresql_addon.PostgresqlBackupAuth
+func (b *v2ProvidersPostgresqlAddonInternalIDBackupauthBuilderImpl) PostgresqlBackupAuth(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupAuth(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder interface {
+	Full() V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder
+	PostgresqlGetConfiguration(ctx context.Context) client.Response[client.Nothing]
+	PostgresqlPutConfiguration(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder
+type v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDConfigurationBuilder creates a new V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder
+func newV2ProvidersPostgresqlAddonInternalIDConfigurationBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDConfigurationBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Full returns Full builder
+func (b *v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl) Full() V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder(b.sdk, b.id)
+}
+
+// PostgresqlGetConfiguration calls postgresql_addon.PostgresqlGetConfiguration
+func (b *v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl) PostgresqlGetConfiguration(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlGetConfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// PostgresqlPutConfiguration calls postgresql_addon.PostgresqlPutConfiguration
+func (b *v2ProvidersPostgresqlAddonInternalIDConfigurationBuilderImpl) PostgresqlPutConfiguration(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlPutConfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder interface {
+	PostgresqlGetFullConfiguration(ctx context.Context) client.Response[models.PostgresqlFullConfigurationView]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder
+type v2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder creates a new V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder
+func newV2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlGetFullConfiguration calls postgresql_addon.PostgresqlGetFullConfiguration
+func (b *v2ProvidersPostgresqlAddonInternalIDConfigurationFullBuilderImpl) PostgresqlGetFullConfiguration(ctx context.Context) client.Response[models.PostgresqlFullConfigurationView] {
+	return postgresqladdon.PostgresqlGetFullConfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder interface {
+	PostgresqlBackupEncryptionPassphrase(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder
+type v2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder creates a new V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder
+func newV2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupEncryptionPassphrase calls postgresql_addon.PostgresqlBackupEncryptionPassphrase
+func (b *v2ProvidersPostgresqlAddonInternalIDEncryptionpassphraseBuilderImpl) PostgresqlBackupEncryptionPassphrase(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupEncryptionPassphrase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDInstructionBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDInstructionBuilder interface {
+	PostgresqlDeployInstruction(ctx context.Context) client.Response[models.PostgresqlBdsInstruction]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDInstructionBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDInstructionBuilder
+type v2ProvidersPostgresqlAddonInternalIDInstructionBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDInstructionBuilder creates a new V2ProvidersPostgresqlAddonInternalIDInstructionBuilder
+func newV2ProvidersPostgresqlAddonInternalIDInstructionBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDInstructionBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDInstructionBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlDeployInstruction calls postgresql_addon.PostgresqlDeployInstruction
+func (b *v2ProvidersPostgresqlAddonInternalIDInstructionBuilderImpl) PostgresqlDeployInstruction(ctx context.Context) client.Response[models.PostgresqlBdsInstruction] {
+	return postgresqladdon.PostgresqlDeployInstruction(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder interface {
+	PostgresqlBackupLastURL(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder
+type v2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder creates a new V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder
+func newV2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupLastURL calls postgresql_addon.PostgresqlBackupLastURL
+func (b *v2ProvidersPostgresqlAddonInternalIDLastbackupurlBuilderImpl) PostgresqlBackupLastURL(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupLastURL(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder interface {
+	PostgresqlPromoteReplicaInternal(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder
+type v2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder creates a new V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder
+func newV2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlPromoteReplicaInternal calls postgresql_addon.PostgresqlPromoteReplicaInternal
+func (b *v2ProvidersPostgresqlAddonInternalIDPromotereplicaBuilderImpl) PostgresqlPromoteReplicaInternal(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlPromoteReplicaInternal(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder interface {
+	PostgresqlReapplyEnv(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDReapplyenvBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder
+type v2ProvidersPostgresqlAddonInternalIDReapplyenvBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder creates a new V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder
+func newV2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDReapplyenvBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDReapplyenvBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlReapplyEnv calls postgresql_addon.PostgresqlReapplyEnv
+func (b *v2ProvidersPostgresqlAddonInternalIDReapplyenvBuilderImpl) PostgresqlReapplyEnv(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlReapplyEnv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDRedeployBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDRedeployBuilder interface {
+	PostgresqlRedeployDedicated(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDRedeployBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDRedeployBuilder
+type v2ProvidersPostgresqlAddonInternalIDRedeployBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDRedeployBuilder creates a new V2ProvidersPostgresqlAddonInternalIDRedeployBuilder
+func newV2ProvidersPostgresqlAddonInternalIDRedeployBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDRedeployBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDRedeployBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlRedeployDedicated calls postgresql_addon.PostgresqlRedeployDedicated
+func (b *v2ProvidersPostgresqlAddonInternalIDRedeployBuilderImpl) PostgresqlRedeployDedicated(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlRedeployDedicated(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder interface {
+	PostgresqlBackupRegister(ctx context.Context) client.Response[models.AddonNotFoundView]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder
+type v2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder creates a new V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder
+func newV2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupRegister calls postgresql_addon.PostgresqlBackupRegister
+func (b *v2ProvidersPostgresqlAddonInternalIDRegisterbackupBuilderImpl) PostgresqlBackupRegister(ctx context.Context) client.Response[models.AddonNotFoundView] {
+	return postgresqladdon.PostgresqlBackupRegister(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDSignatureBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDSignatureBuilder interface {
+	Fn(fn string) V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder
+	PostgresqlBackupSignature(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDSignatureBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDSignatureBuilder
+type v2ProvidersPostgresqlAddonInternalIDSignatureBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDSignatureBuilder creates a new V2ProvidersPostgresqlAddonInternalIDSignatureBuilder
+func newV2ProvidersPostgresqlAddonInternalIDSignatureBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDSignatureBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDSignatureBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Fn returns builder for fn
+func (b *v2ProvidersPostgresqlAddonInternalIDSignatureBuilderImpl) Fn(fn string) V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder {
+	return newV2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder(b.sdk, b.id, fn)
+}
+
+// PostgresqlBackupSignature calls postgresql_addon.PostgresqlBackupSignature
+func (b *v2ProvidersPostgresqlAddonInternalIDSignatureBuilderImpl) PostgresqlBackupSignature(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupSignature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder interface {
+	PostgresqlBackupSignatureLegacy(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDSignatureFnBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder
+type v2ProvidersPostgresqlAddonInternalIDSignatureFnBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+	fn  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder creates a new V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder
+func newV2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder(sdk *sdkImpl, id string, fn string) V2ProvidersPostgresqlAddonInternalIDSignatureFnBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDSignatureFnBuilderImpl{
+		fn:  fn,
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupSignatureLegacy calls postgresql_addon.PostgresqlBackupSignatureLegacy
+func (b *v2ProvidersPostgresqlAddonInternalIDSignatureFnBuilderImpl) PostgresqlBackupSignatureLegacy(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupSignatureLegacy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.fn)
+}
+
+// V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder interface {
+	PostgresqlUpdateConfigurationOnCcapi(ctx context.Context) client.Response[models.AddonNotFoundView]
+}
+
+// v2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilderImpl implements V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder
+type v2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder creates a new V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder
+func newV2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilder {
+	return &v2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlUpdateConfigurationOnCcapi calls postgresql_addon.PostgresqlUpdateConfigurationOnCcapi
+func (b *v2ProvidersPostgresqlAddonInternalIDUpdateconfigBuilderImpl) PostgresqlUpdateConfigurationOnCcapi(ctx context.Context) client.Response[models.AddonNotFoundView] {
+	return postgresqladdon.PostgresqlUpdateConfigurationOnCcapi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder interface {
+	PostgresqlAddon() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersBuilderImpl) PostgresqlAddon() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder interface {
+	Addons() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder
+	Idsbyownerid() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder
+	RandomIds() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Addons returns Addons builder
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl) Addons() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder(b.sdk)
+}
+
+// Idsbyownerid returns Idsbyownerid builder
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl) Idsbyownerid() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder(b.sdk)
+}
+
+// RandomIds returns RandomIds builder
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonBuilderImpl) RandomIds() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder interface {
+	AppID(appID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder
+	Confighost() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilderImpl{sdk: sdk}
+}
+
+// AppID returns builder for appID
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilderImpl) AppID(appID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder(b.sdk, appID)
+}
+
+// Confighost returns Confighost builder
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsBuilderImpl) Confighost() V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder interface {
+	PostgresqlInternalGetAddon(ctx context.Context) client.Response[models.PostgresqlAddonView]
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl struct {
+	sdk   *sdkImpl
+	appID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder(sdk *sdkImpl, appID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl{
+		appID: appID,
+		sdk:   sdk,
+	}
+}
+
+// PostgresqlInternalGetAddon calls postgresql_addon.PostgresqlInternalGetAddon
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl) PostgresqlInternalGetAddon(ctx context.Context) client.Response[models.PostgresqlAddonView] {
+	return postgresqladdon.PostgresqlInternalGetAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appID)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder interface {
+	ConfigHost(configHost string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilderImpl{sdk: sdk}
+}
+
+// ConfigHost returns builder for configHost
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostBuilderImpl) ConfigHost(configHost string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder(b.sdk, configHost)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder interface {
+	PostgresqlInternalGetAddonByConfigHost(ctx context.Context) client.Response[models.PostgresqlAddonFullView]
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilderImpl struct {
+	sdk        *sdkImpl
+	configHost string
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder(sdk *sdkImpl, configHost string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilderImpl{
+		configHost: configHost,
+		sdk:        sdk,
+	}
+}
+
+// PostgresqlInternalGetAddonByConfigHost calls postgresql_addon.PostgresqlInternalGetAddonByConfigHost
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonAddonsConfighostConfigHostBuilderImpl) PostgresqlInternalGetAddonByConfigHost(ctx context.Context) client.Response[models.PostgresqlAddonFullView] {
+	return postgresqladdon.PostgresqlInternalGetAddonByConfigHost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.configHost)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder interface {
+	OwnerID(ownerID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilderImpl{sdk: sdk}
+}
+
+// OwnerID returns builder for ownerID
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridBuilderImpl) OwnerID(ownerID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder(b.sdk, ownerID)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder interface {
+	PostgresqlInternalIdsByOwner(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder(sdk *sdkImpl, ownerID string) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilderImpl{
+		ownerID: ownerID,
+		sdk:     sdk,
+	}
+}
+
+// PostgresqlInternalIdsByOwner calls postgresql_addon.PostgresqlInternalIdsByOwner
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonIdsbyowneridOwnerIDBuilderImpl) PostgresqlInternalIdsByOwner(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlInternalIdsByOwner(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
+}
+
+// V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder interface {
+	PostgresqlInternalRandomIds(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilderImpl implements V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder
+type v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder creates a new V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder
+func newV2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilder {
+	return &v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlInternalRandomIds calls postgresql_addon.PostgresqlInternalRandomIds
+func (b *v2ProvidersPostgresqlAddonInternalAddonProvidersPostgresqlAddonRandomIdsBuilderImpl) PostgresqlInternalRandomIds(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlInternalRandomIds(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+}
+
+// V2ProvidersPostgresqlAddonInternalBydbBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalBydbBuilder interface {
+	ID(id string) V2ProvidersPostgresqlAddonInternalBydbIDBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalBydbBuilderImpl implements V2ProvidersPostgresqlAddonInternalBydbBuilder
+type v2ProvidersPostgresqlAddonInternalBydbBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalBydbBuilder creates a new V2ProvidersPostgresqlAddonInternalBydbBuilder
+func newV2ProvidersPostgresqlAddonInternalBydbBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalBydbBuilder {
+	return &v2ProvidersPostgresqlAddonInternalBydbBuilderImpl{sdk: sdk}
+}
+
+// ID returns builder for id
+func (b *v2ProvidersPostgresqlAddonInternalBydbBuilderImpl) ID(id string) V2ProvidersPostgresqlAddonInternalBydbIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalBydbIDBuilder(b.sdk, id)
+}
+
+// V2ProvidersPostgresqlAddonInternalBydbIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalBydbIDBuilder interface {
+	Lastbackupurl() V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder
+	Signature() V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalBydbIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalBydbIDBuilder
+type v2ProvidersPostgresqlAddonInternalBydbIDBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalBydbIDBuilder creates a new V2ProvidersPostgresqlAddonInternalBydbIDBuilder
+func newV2ProvidersPostgresqlAddonInternalBydbIDBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalBydbIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalBydbIDBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Lastbackupurl returns Lastbackupurl builder
+func (b *v2ProvidersPostgresqlAddonInternalBydbIDBuilderImpl) Lastbackupurl() V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder {
+	return newV2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder(b.sdk, b.id)
+}
+
+// Signature returns Signature builder
+func (b *v2ProvidersPostgresqlAddonInternalBydbIDBuilderImpl) Signature() V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder {
+	return newV2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder(b.sdk, b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder interface {
+	PostgresqlBackupLastURLByDb(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilderImpl implements V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder
+type v2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder creates a new V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder
+func newV2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilder {
+	return &v2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupLastURLByDb calls postgresql_addon.PostgresqlBackupLastURLByDb
+func (b *v2ProvidersPostgresqlAddonInternalBydbIDLastbackupurlBuilderImpl) PostgresqlBackupLastURLByDb(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupLastURLByDb(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder interface {
+	PostgresqlBackupSignatureByDb(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilderImpl implements V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder
+type v2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder creates a new V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder
+func newV2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder(sdk *sdkImpl, id string) V2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilder {
+	return &v2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// PostgresqlBackupSignatureByDb calls postgresql_addon.PostgresqlBackupSignatureByDb
+func (b *v2ProvidersPostgresqlAddonInternalBydbIDSignatureBuilderImpl) PostgresqlBackupSignatureByDb(ctx context.Context, opts ...postgresqladdon.Option) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupSignatureByDb(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
+}
+
+// V2ProvidersPostgresqlAddonInternalFerretdbBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalFerretdbBuilder interface {
+	AddonID(addonID string) V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalFerretdbBuilderImpl implements V2ProvidersPostgresqlAddonInternalFerretdbBuilder
+type v2ProvidersPostgresqlAddonInternalFerretdbBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalFerretdbBuilder creates a new V2ProvidersPostgresqlAddonInternalFerretdbBuilder
+func newV2ProvidersPostgresqlAddonInternalFerretdbBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalFerretdbBuilder {
+	return &v2ProvidersPostgresqlAddonInternalFerretdbBuilderImpl{sdk: sdk}
+}
+
+// AddonID returns builder for addonID
+func (b *v2ProvidersPostgresqlAddonInternalFerretdbBuilderImpl) AddonID(addonID string) V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder(b.sdk, addonID)
+}
+
+// V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder interface {
+	Retry() V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder
+	State() V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder
+type v2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder creates a new V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder
+func newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// Retry returns Retry builder
+func (b *v2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilderImpl) Retry() V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder {
+	return newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder(b.sdk, b.addonID)
+}
+
+// State returns State builder
+func (b *v2ProvidersPostgresqlAddonInternalFerretdbAddonIDBuilderImpl) State() V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder {
+	return newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder(b.sdk, b.addonID)
+}
+
+// V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder interface {
+	PostgresqlFerretdbRetry(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlFerretDbRetryResponseView]
+}
+
+// v2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilderImpl implements V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder
+type v2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder creates a new V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder
+func newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilder {
+	return &v2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// PostgresqlFerretdbRetry calls postgresql_addon.PostgresqlFerretdbRetry
+func (b *v2ProvidersPostgresqlAddonInternalFerretdbAddonIDRetryBuilderImpl) PostgresqlFerretdbRetry(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlFerretDbRetryResponseView] {
+	return postgresqladdon.PostgresqlFerretdbRetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID, opts...)
+}
+
+// V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder interface {
+	PostgresqlFerretdbState(ctx context.Context) client.Response[models.PostgresqlFerretDbStateView]
+}
+
+// v2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilderImpl implements V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder
+type v2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder creates a new V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder
+func newV2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilder {
+	return &v2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// PostgresqlFerretdbState calls postgresql_addon.PostgresqlFerretdbState
+func (b *v2ProvidersPostgresqlAddonInternalFerretdbAddonIDStateBuilderImpl) PostgresqlFerretdbState(ctx context.Context) client.Response[models.PostgresqlFerretDbStateView] {
+	return postgresqladdon.PostgresqlFerretdbState(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+}
+
+// V2ProvidersPostgresqlAddonInternalMigrationsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalMigrationsBuilder interface {
+	MigrationID(migrationID string) V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalMigrationsBuilderImpl implements V2ProvidersPostgresqlAddonInternalMigrationsBuilder
+type v2ProvidersPostgresqlAddonInternalMigrationsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalMigrationsBuilder creates a new V2ProvidersPostgresqlAddonInternalMigrationsBuilder
+func newV2ProvidersPostgresqlAddonInternalMigrationsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalMigrationsBuilder {
+	return &v2ProvidersPostgresqlAddonInternalMigrationsBuilderImpl{sdk: sdk}
+}
+
+// MigrationID returns builder for migrationID
+func (b *v2ProvidersPostgresqlAddonInternalMigrationsBuilderImpl) MigrationID(migrationID string) V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder(b.sdk, migrationID)
+}
+
+// V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder interface {
+	PostgresqlMigrationUpdate(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder
+type v2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilderImpl struct {
+	sdk         *sdkImpl
+	migrationID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder creates a new V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder
+func newV2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder(sdk *sdkImpl, migrationID string) V2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilderImpl{
+		migrationID: migrationID,
+		sdk:         sdk,
+	}
+}
+
+// PostgresqlMigrationUpdate calls postgresql_addon.PostgresqlMigrationUpdate
+func (b *v2ProvidersPostgresqlAddonInternalMigrationsMigrationIDBuilderImpl) PostgresqlMigrationUpdate(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlMigrationUpdate(ctx, b.sdk.Client(), b.sdk.Tracer(), b.migrationID)
+}
+
+// V2ProvidersPostgresqlAddonInternalSharedBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalSharedBuilder interface {
+	Bycluster() V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder
+	Byregion() V2ProvidersPostgresqlAddonInternalSharedByregionBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalSharedBuilderImpl implements V2ProvidersPostgresqlAddonInternalSharedBuilder
+type v2ProvidersPostgresqlAddonInternalSharedBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalSharedBuilder creates a new V2ProvidersPostgresqlAddonInternalSharedBuilder
+func newV2ProvidersPostgresqlAddonInternalSharedBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalSharedBuilder {
+	return &v2ProvidersPostgresqlAddonInternalSharedBuilderImpl{sdk: sdk}
+}
+
+// Bycluster returns Bycluster builder
+func (b *v2ProvidersPostgresqlAddonInternalSharedBuilderImpl) Bycluster() V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder {
+	return newV2ProvidersPostgresqlAddonInternalSharedByclusterBuilder(b.sdk)
+}
+
+// Byregion returns Byregion builder
+func (b *v2ProvidersPostgresqlAddonInternalSharedBuilderImpl) Byregion() V2ProvidersPostgresqlAddonInternalSharedByregionBuilder {
+	return newV2ProvidersPostgresqlAddonInternalSharedByregionBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder interface {
+	ClusterID(clusterID string) V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalSharedByclusterBuilderImpl implements V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder
+type v2ProvidersPostgresqlAddonInternalSharedByclusterBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalSharedByclusterBuilder creates a new V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder
+func newV2ProvidersPostgresqlAddonInternalSharedByclusterBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalSharedByclusterBuilder {
+	return &v2ProvidersPostgresqlAddonInternalSharedByclusterBuilderImpl{sdk: sdk}
+}
+
+// ClusterID returns builder for clusterID
+func (b *v2ProvidersPostgresqlAddonInternalSharedByclusterBuilderImpl) ClusterID(clusterID string) V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder {
+	return newV2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder(b.sdk, clusterID)
+}
+
+// V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder interface {
+	PostgresqlBackupSharedByCluster(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilderImpl implements V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder
+type v2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilderImpl struct {
+	sdk       *sdkImpl
+	clusterID string
+}
+
+// newV2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder creates a new V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder
+func newV2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder(sdk *sdkImpl, clusterID string) V2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilder {
+	return &v2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilderImpl{
+		clusterID: clusterID,
+		sdk:       sdk,
+	}
+}
+
+// PostgresqlBackupSharedByCluster calls postgresql_addon.PostgresqlBackupSharedByCluster
+func (b *v2ProvidersPostgresqlAddonInternalSharedByclusterClusterIDBuilderImpl) PostgresqlBackupSharedByCluster(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupSharedByCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterID)
+}
+
+// V2ProvidersPostgresqlAddonInternalSharedByregionBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalSharedByregionBuilder interface {
+	Region(region string) V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder
+}
+
+// v2ProvidersPostgresqlAddonInternalSharedByregionBuilderImpl implements V2ProvidersPostgresqlAddonInternalSharedByregionBuilder
+type v2ProvidersPostgresqlAddonInternalSharedByregionBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalSharedByregionBuilder creates a new V2ProvidersPostgresqlAddonInternalSharedByregionBuilder
+func newV2ProvidersPostgresqlAddonInternalSharedByregionBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalSharedByregionBuilder {
+	return &v2ProvidersPostgresqlAddonInternalSharedByregionBuilderImpl{sdk: sdk}
+}
+
+// Region returns builder for region
+func (b *v2ProvidersPostgresqlAddonInternalSharedByregionBuilderImpl) Region(region string) V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder {
+	return newV2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder(b.sdk, region)
+}
+
+// V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder interface {
+	PostgresqlBackupSharedByRegion(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilderImpl implements V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder
+type v2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilderImpl struct {
+	sdk    *sdkImpl
+	region string
+}
+
+// newV2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder creates a new V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder
+func newV2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder(sdk *sdkImpl, region string) V2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilder {
+	return &v2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilderImpl{
+		region: region,
+		sdk:    sdk,
+	}
+}
+
+// PostgresqlBackupSharedByRegion calls postgresql_addon.PostgresqlBackupSharedByRegion
+func (b *v2ProvidersPostgresqlAddonInternalSharedByregionRegionBuilderImpl) PostgresqlBackupSharedByRegion(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlBackupSharedByRegion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.region)
+}
+
+// V2ProvidersPostgresqlAddonInternalVersionsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalVersionsBuilder interface {
+	Version(version string) V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder
+	Available() V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder
+	PostgresqlInternalAllVersions(ctx context.Context) client.Response[[]models.PostgresqlVersion]
+}
+
+// v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl implements V2ProvidersPostgresqlAddonInternalVersionsBuilder
+type v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalVersionsBuilder creates a new V2ProvidersPostgresqlAddonInternalVersionsBuilder
+func newV2ProvidersPostgresqlAddonInternalVersionsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalVersionsBuilder {
+	return &v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl{sdk: sdk}
+}
+
+// Version returns builder for version
+func (b *v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl) Version(version string) V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder {
+	return newV2ProvidersPostgresqlAddonInternalVersionsVersionBuilder(b.sdk, version)
+}
+
+// Available returns Available builder
+func (b *v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl) Available() V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder {
+	return newV2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder(b.sdk)
+}
+
+// PostgresqlInternalAllVersions calls postgresql_addon.PostgresqlInternalAllVersions
+func (b *v2ProvidersPostgresqlAddonInternalVersionsBuilderImpl) PostgresqlInternalAllVersions(ctx context.Context) client.Response[[]models.PostgresqlVersion] {
+	return postgresqladdon.PostgresqlInternalAllVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder interface {
+	Deactivate() V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder
+	Reactivate() V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder
+	PostgresqlInternalGetVersion(ctx context.Context) client.Response[models.PostgresqlVersion]
+}
+
+// v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl implements V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder
+type v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl struct {
+	sdk     *sdkImpl
+	version string
+}
+
+// newV2ProvidersPostgresqlAddonInternalVersionsVersionBuilder creates a new V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder
+func newV2ProvidersPostgresqlAddonInternalVersionsVersionBuilder(sdk *sdkImpl, version string) V2ProvidersPostgresqlAddonInternalVersionsVersionBuilder {
+	return &v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl{
+		sdk:     sdk,
+		version: version,
+	}
+}
+
+// Deactivate returns Deactivate builder
+func (b *v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl) Deactivate() V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder {
+	return newV2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder(b.sdk, b.version)
+}
+
+// Reactivate returns Reactivate builder
+func (b *v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl) Reactivate() V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder {
+	return newV2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder(b.sdk, b.version)
+}
+
+// PostgresqlInternalGetVersion calls postgresql_addon.PostgresqlInternalGetVersion
+func (b *v2ProvidersPostgresqlAddonInternalVersionsVersionBuilderImpl) PostgresqlInternalGetVersion(ctx context.Context) client.Response[models.PostgresqlVersion] {
+	return postgresqladdon.PostgresqlInternalGetVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+}
+
+// V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder interface {
+	PostgresqlInternalDeactivateVersion(ctx context.Context) client.Response[models.VersionActivationView]
+}
+
+// v2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilderImpl implements V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder
+type v2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilderImpl struct {
+	sdk     *sdkImpl
+	version string
+}
+
+// newV2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder creates a new V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder
+func newV2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder(sdk *sdkImpl, version string) V2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilder {
+	return &v2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilderImpl{
+		sdk:     sdk,
+		version: version,
+	}
+}
+
+// PostgresqlInternalDeactivateVersion calls postgresql_addon.PostgresqlInternalDeactivateVersion
+func (b *v2ProvidersPostgresqlAddonInternalVersionsVersionDeactivateBuilderImpl) PostgresqlInternalDeactivateVersion(ctx context.Context) client.Response[models.VersionActivationView] {
+	return postgresqladdon.PostgresqlInternalDeactivateVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+}
+
+// V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder interface {
+	PostgresqlInternalReactivateVersion(ctx context.Context) client.Response[models.VersionActivationView]
+}
+
+// v2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilderImpl implements V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder
+type v2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilderImpl struct {
+	sdk     *sdkImpl
+	version string
+}
+
+// newV2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder creates a new V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder
+func newV2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder(sdk *sdkImpl, version string) V2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilder {
+	return &v2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilderImpl{
+		sdk:     sdk,
+		version: version,
+	}
+}
+
+// PostgresqlInternalReactivateVersion calls postgresql_addon.PostgresqlInternalReactivateVersion
+func (b *v2ProvidersPostgresqlAddonInternalVersionsVersionReactivateBuilderImpl) PostgresqlInternalReactivateVersion(ctx context.Context) client.Response[models.VersionActivationView] {
+	return postgresqladdon.PostgresqlInternalReactivateVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+}
+
+// V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder provides access to operations
+type V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder interface {
+	PostgresqlInternalAvailableVersions(ctx context.Context) client.Response[models.AvailableVersionsView]
+}
+
+// v2ProvidersPostgresqlAddonInternalVersionsAvailableBuilderImpl implements V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder
+type v2ProvidersPostgresqlAddonInternalVersionsAvailableBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder creates a new V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder
+func newV2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonInternalVersionsAvailableBuilder {
+	return &v2ProvidersPostgresqlAddonInternalVersionsAvailableBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlInternalAvailableVersions calls postgresql_addon.PostgresqlInternalAvailableVersions
+func (b *v2ProvidersPostgresqlAddonInternalVersionsAvailableBuilderImpl) PostgresqlInternalAvailableVersions(ctx context.Context) client.Response[models.AvailableVersionsView] {
+	return postgresqladdon.PostgresqlInternalAvailableVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonResourcesBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesBuilder interface {
+	AddonID(addonID string) V2ProvidersPostgresqlAddonResourcesAddonIDBuilder
+	Providerinfos() V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+	Versions() V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+	PostgresqlProvision(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonResourcesBuilderImpl implements V2ProvidersPostgresqlAddonResourcesBuilder
+type v2ProvidersPostgresqlAddonResourcesBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesBuilder creates a new V2ProvidersPostgresqlAddonResourcesBuilder
+func newV2ProvidersPostgresqlAddonResourcesBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesBuilderImpl{sdk: sdk}
+}
+
+// AddonID returns builder for addonID
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) AddonID(addonID string) V2ProvidersPostgresqlAddonResourcesAddonIDBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesAddonIDBuilder(b.sdk, addonID)
+}
+
+// Providerinfos returns Providerinfos builder
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) Providerinfos() V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder(b.sdk)
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) Versions() V2ProvidersPostgresqlAddonResourcesVersionsBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesVersionsBuilder(b.sdk)
+}
+
+// PostgresqlProvision calls postgresql_addon.PostgresqlProvision
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) PostgresqlProvision(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlProvision(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonResourcesAddonIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesAddonIDBuilder interface {
+	Encrypt() V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder
+	Migrations() V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder
+	PostgresqlDeprovision(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl implements V2ProvidersPostgresqlAddonResourcesAddonIDBuilder
+type v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonResourcesAddonIDBuilder creates a new V2ProvidersPostgresqlAddonResourcesAddonIDBuilder
+func newV2ProvidersPostgresqlAddonResourcesAddonIDBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonResourcesAddonIDBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// Encrypt returns Encrypt builder
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl) Encrypt() V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder(b.sdk, b.addonID)
+}
+
+// Migrations returns Migrations builder
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl) Migrations() V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder(b.sdk, b.addonID)
+}
+
+// PostgresqlDeprovision calls postgresql_addon.PostgresqlDeprovision
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDBuilderImpl) PostgresqlDeprovision(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlDeprovision(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+}
+
+// V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder interface {
+	PostgresqlEncryptAddon(ctx context.Context) client.Response[models.PostgresqlProvisionResponse]
+}
+
+// v2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilderImpl implements V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder
+type v2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder creates a new V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder
+func newV2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// PostgresqlEncryptAddon calls postgresql_addon.PostgresqlEncryptAddon
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDEncryptBuilderImpl) PostgresqlEncryptAddon(ctx context.Context) client.Response[models.PostgresqlProvisionResponse] {
+	return postgresqladdon.PostgresqlEncryptAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+}
+
+// V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder interface {
+	MigrationID(migrationID string) V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder
+	PostgresqlListMigrations(ctx context.Context) client.Response[[]models.PostgresqlMigrationConsoleView]
+	PostgresqlMigrate(ctx context.Context) client.Response[models.PostgresqlMigrationConsoleView]
+}
+
+// v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl implements V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder
+type v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl struct {
+	sdk     *sdkImpl
+	addonID string
+}
+
+// newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder creates a new V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder
+func newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder(sdk *sdkImpl, addonID string) V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl{
+		addonID: addonID,
+		sdk:     sdk,
+	}
+}
+
+// MigrationID returns builder for migrationID
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl) MigrationID(migrationID string) V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder(b.sdk, b.addonID, migrationID)
+}
+
+// PostgresqlListMigrations calls postgresql_addon.PostgresqlListMigrations
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl) PostgresqlListMigrations(ctx context.Context) client.Response[[]models.PostgresqlMigrationConsoleView] {
+	return postgresqladdon.PostgresqlListMigrations(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+}
+
+// PostgresqlMigrate calls postgresql_addon.PostgresqlMigrate
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsBuilderImpl) PostgresqlMigrate(ctx context.Context) client.Response[models.PostgresqlMigrationConsoleView] {
+	return postgresqladdon.PostgresqlMigrate(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+}
+
+// V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder interface {
+	PostgresqlGetMigration(ctx context.Context) client.Response[models.PostgresqlMigrationConsoleView]
+}
+
+// v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilderImpl implements V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder
+type v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilderImpl struct {
+	sdk         *sdkImpl
+	addonID     string
+	migrationID string
+}
+
+// newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder creates a new V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder
+func newV2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder(sdk *sdkImpl, addonID string, migrationID string) V2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilderImpl{
+		addonID:     addonID,
+		migrationID: migrationID,
+		sdk:         sdk,
+	}
+}
+
+// PostgresqlGetMigration calls postgresql_addon.PostgresqlGetMigration
+func (b *v2ProvidersPostgresqlAddonResourcesAddonIDMigrationsMigrationIDBuilderImpl) PostgresqlGetMigration(ctx context.Context) client.Response[models.PostgresqlMigrationConsoleView] {
+	return postgresqladdon.PostgresqlGetMigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID, b.migrationID)
+}
+
+// V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder interface {
+	PostgresqlResourcesProviderInfos(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2]
+}
+
+// v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl implements V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+type v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder creates a new V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+func newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlResourcesProviderInfos calls postgresql_addon.PostgresqlResourcesProviderInfos
+func (b *v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl) PostgresqlResourcesProviderInfos(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2] {
+	return postgresqladdon.PostgresqlResourcesProviderInfos(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonResourcesVersionsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesVersionsBuilder interface {
+	PostgresqlResourcesVersions(ctx context.Context) client.Response[models.PostgresqlVersionsView]
+}
+
+// v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl implements V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+type v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesVersionsBuilder creates a new V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+func newV2ProvidersPostgresqlAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesVersionsBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlResourcesVersions calls postgresql_addon.PostgresqlResourcesVersions
+func (b *v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl) PostgresqlResourcesVersions(ctx context.Context) client.Response[models.PostgresqlVersionsView] {
+	return postgresqladdon.PostgresqlResourcesVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonSsoBuilder provides access to operations
+type V2ProvidersPostgresqlAddonSsoBuilder interface {
+	PostgresqlSsoEntryPoint(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v2ProvidersPostgresqlAddonSsoBuilderImpl implements V2ProvidersPostgresqlAddonSsoBuilder
+type v2ProvidersPostgresqlAddonSsoBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonSsoBuilder creates a new V2ProvidersPostgresqlAddonSsoBuilder
+func newV2ProvidersPostgresqlAddonSsoBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonSsoBuilder {
+	return &v2ProvidersPostgresqlAddonSsoBuilderImpl{sdk: sdk}
+}
+
+// PostgresqlSsoEntryPoint calls postgresql_addon.PostgresqlSsoEntryPoint
+func (b *v2ProvidersPostgresqlAddonSsoBuilderImpl) PostgresqlSsoEntryPoint(ctx context.Context) client.Response[client.Nothing] {
+	return postgresqladdon.PostgresqlSsoEntryPoint(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
 // V2ProvidersRedisAddonBuilder provides access to operations
 type V2ProvidersRedisAddonBuilder interface {
 	Dashboard() V2ProvidersRedisAddonDashboardBuilder
@@ -10564,7 +12287,7 @@ func (b *v2ProvidersRedisAddonInternalRegionRestrictionsRegionBuilderImpl) Redis
 type V2ProvidersRedisAddonResourcesBuilder interface {
 	AddonID(addonID string) V2ProvidersRedisAddonResourcesAddonIDBuilder
 	Versions() V2ProvidersRedisAddonResourcesVersionsBuilder
-	RedisProvision(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse]
+	RedisProvision(ctx context.Context, request *models.RedisProvisionRequest) client.Response[models.ProvisionResponse]
 }
 
 // v2ProvidersRedisAddonResourcesBuilderImpl implements V2ProvidersRedisAddonResourcesBuilder
@@ -10588,7 +12311,7 @@ func (b *v2ProvidersRedisAddonResourcesBuilderImpl) Versions() V2ProvidersRedisA
 }
 
 // RedisProvision calls redis_addon.RedisProvision
-func (b *v2ProvidersRedisAddonResourcesBuilderImpl) RedisProvision(ctx context.Context, request *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func (b *v2ProvidersRedisAddonResourcesBuilderImpl) RedisProvision(ctx context.Context, request *models.RedisProvisionRequest) client.Response[models.ProvisionResponse] {
 	return redisaddon.RedisProvision(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -10656,7 +12379,7 @@ func (b *v2ProvidersRedisAddonResourcesAddonIDEncryptBuilderImpl) RedisEncryptAd
 type V2ProvidersRedisAddonResourcesAddonIDMigrationsBuilder interface {
 	MigrationID(migrationID string) V2ProvidersRedisAddonResourcesAddonIDMigrationsMigrationIDBuilder
 	RedisListMigrations(ctx context.Context) client.Response[[]models.MigrationView]
-	RedisMigrate(ctx context.Context, request *models.MigrationRequest) client.Response[models.MigrationView]
+	RedisMigrate(ctx context.Context, request *models.RedisMigrationRequest) client.Response[models.MigrationView]
 }
 
 // v2ProvidersRedisAddonResourcesAddonIDMigrationsBuilderImpl implements V2ProvidersRedisAddonResourcesAddonIDMigrationsBuilder
@@ -10684,7 +12407,7 @@ func (b *v2ProvidersRedisAddonResourcesAddonIDMigrationsBuilderImpl) RedisListMi
 }
 
 // RedisMigrate calls redis_addon.RedisMigrate
-func (b *v2ProvidersRedisAddonResourcesAddonIDMigrationsBuilderImpl) RedisMigrate(ctx context.Context, request *models.MigrationRequest) client.Response[models.MigrationView] {
+func (b *v2ProvidersRedisAddonResourcesAddonIDMigrationsBuilderImpl) RedisMigrate(ctx context.Context, request *models.RedisMigrationRequest) client.Response[models.MigrationView] {
 	return redisaddon.RedisMigrate(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID, request)
 }
 
@@ -14040,6 +15763,7 @@ type V4Builder interface {
 	Infrastructure() V4InfrastructureBuilder
 	Keycloak() V4KeycloakBuilder
 	Keycloaks() V4KeycloaksBuilder
+	Kms() V4KmsBuilder
 	Kubernetes() V4KubernetesBuilder
 	KubernetesProduct() V4KubernetesProductBuilder
 	Loadbalancer() V4LoadbalancerBuilder
@@ -14048,6 +15772,7 @@ type V4Builder interface {
 	Materia() V4MateriaBuilder
 	Metabase() V4MetabaseBuilder
 	Monitoring() V4MonitoringBuilder
+	Networkgroup() V4NetworkgroupBuilder
 	Networkgroups() V4NetworkgroupsBuilder
 	Orchestration() V4OrchestrationBuilder
 	Otoroshi() V4OtoroshiBuilder
@@ -14124,6 +15849,11 @@ func (b *v4BuilderImpl) Keycloaks() V4KeycloaksBuilder {
 	return newV4KeycloaksBuilder(b.sdk)
 }
 
+// Kms returns Kms builder
+func (b *v4BuilderImpl) Kms() V4KmsBuilder {
+	return newV4KmsBuilder(b.sdk)
+}
+
 // Kubernetes returns Kubernetes builder
 func (b *v4BuilderImpl) Kubernetes() V4KubernetesBuilder {
 	return newV4KubernetesBuilder(b.sdk)
@@ -14162,6 +15892,11 @@ func (b *v4BuilderImpl) Metabase() V4MetabaseBuilder {
 // Monitoring returns Monitoring builder
 func (b *v4BuilderImpl) Monitoring() V4MonitoringBuilder {
 	return newV4MonitoringBuilder(b.sdk)
+}
+
+// Networkgroup returns Networkgroup builder
+func (b *v4BuilderImpl) Networkgroup() V4NetworkgroupBuilder {
+	return newV4NetworkgroupBuilder(b.sdk)
 }
 
 // Networkgroups returns Networkgroups builder
@@ -14240,7 +15975,6 @@ type V4AddonProvidersBuilder interface {
 	AddonAi() V4AddonProvidersAddonAiBuilder
 	AddonContainerRegistry() V4AddonProvidersAddonContainerRegistryBuilder
 	AddonKeycloak() V4AddonProvidersAddonKeycloakBuilder
-	AddonKms() V4AddonProvidersAddonKmsBuilder
 	AddonMatomo() V4AddonProvidersAddonMatomoBuilder
 	AddonMetabase() V4AddonProvidersAddonMetabaseBuilder
 	AddonOtoroshi() V4AddonProvidersAddonOtoroshiBuilder
@@ -14248,10 +15982,12 @@ type V4AddonProvidersBuilder interface {
 	AddonTardis() V4AddonProvidersAddonTardisBuilder
 	AddonTs() V4AddonProvidersAddonTsBuilder
 	ConfigProvider() V4AddonProvidersConfigProviderBuilder
+	Keycloak() V4AddonProvidersKeycloakBuilder
 	Kv() V4AddonProvidersKvBuilder
 	Metabase() V4AddonProvidersMetabaseBuilder
 	MysqlAddon() V4AddonProvidersMysqlAddonBuilder
 	Otoroshi() V4AddonProvidersOtoroshiBuilder
+	PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder
 	RedisAddon() V4AddonProvidersRedisAddonBuilder
 }
 
@@ -14283,11 +16019,6 @@ func (b *v4AddonProvidersBuilderImpl) AddonContainerRegistry() V4AddonProvidersA
 // AddonKeycloak returns AddonKeycloak builder
 func (b *v4AddonProvidersBuilderImpl) AddonKeycloak() V4AddonProvidersAddonKeycloakBuilder {
 	return newV4AddonProvidersAddonKeycloakBuilder(b.sdk)
-}
-
-// AddonKms returns AddonKms builder
-func (b *v4AddonProvidersBuilderImpl) AddonKms() V4AddonProvidersAddonKmsBuilder {
-	return newV4AddonProvidersAddonKmsBuilder(b.sdk)
 }
 
 // AddonMatomo returns AddonMatomo builder
@@ -14325,6 +16056,11 @@ func (b *v4AddonProvidersBuilderImpl) ConfigProvider() V4AddonProvidersConfigPro
 	return newV4AddonProvidersConfigProviderBuilder(b.sdk)
 }
 
+// Keycloak returns Keycloak builder
+func (b *v4AddonProvidersBuilderImpl) Keycloak() V4AddonProvidersKeycloakBuilder {
+	return newV4AddonProvidersKeycloakBuilder(b.sdk)
+}
+
 // Kv returns Kv builder
 func (b *v4AddonProvidersBuilderImpl) Kv() V4AddonProvidersKvBuilder {
 	return newV4AddonProvidersKvBuilder(b.sdk)
@@ -14345,6 +16081,11 @@ func (b *v4AddonProvidersBuilderImpl) Otoroshi() V4AddonProvidersOtoroshiBuilder
 	return newV4AddonProvidersOtoroshiBuilder(b.sdk)
 }
 
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v4AddonProvidersBuilderImpl) PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder {
+	return newV4AddonProvidersPostgresqlAddonBuilder(b.sdk)
+}
+
 // RedisAddon returns RedisAddon builder
 func (b *v4AddonProvidersBuilderImpl) RedisAddon() V4AddonProvidersRedisAddonBuilder {
 	return newV4AddonProvidersRedisAddonBuilder(b.sdk)
@@ -14354,6 +16095,7 @@ func (b *v4AddonProvidersBuilderImpl) RedisAddon() V4AddonProvidersRedisAddonBui
 type V4AddonProvidersProviderIDBuilder interface {
 	Addons() V4AddonProvidersProviderIDAddonsBuilder
 	Clusters() V4AddonProvidersProviderIDClustersBuilder
+	PostgresqlV4ProviderInfo(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsoleView]
 }
 
 // v4AddonProvidersProviderIDBuilderImpl implements V4AddonProvidersProviderIDBuilder
@@ -14378,6 +16120,11 @@ func (b *v4AddonProvidersProviderIDBuilderImpl) Addons() V4AddonProvidersProvide
 // Clusters returns Clusters builder
 func (b *v4AddonProvidersProviderIDBuilderImpl) Clusters() V4AddonProvidersProviderIDClustersBuilder {
 	return newV4AddonProvidersProviderIDClustersBuilder(b.sdk, b.providerID)
+}
+
+// PostgresqlV4ProviderInfo calls postgresql_addon.PostgresqlV4ProviderInfo
+func (b *v4AddonProvidersProviderIDBuilderImpl) PostgresqlV4ProviderInfo(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsoleView] {
+	return postgresqladdon.PostgresqlV4ProviderInfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID, opts...)
 }
 
 // V4AddonProvidersProviderIDAddonsBuilder provides access to operations
@@ -14777,7 +16524,6 @@ func (b *v4AddonProvidersAddonContainerRegistryAddonsAddonIDTokensTokenIDBuilder
 // V4AddonProvidersAddonKeycloakBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakBuilder interface {
 	Addons() V4AddonProvidersAddonKeycloakAddonsBuilder
-	GetKeycloakProviderInformation(ctx context.Context) client.Response[models.KeycloakProviderView]
 }
 
 // v4AddonProvidersAddonKeycloakBuilderImpl implements V4AddonProvidersAddonKeycloakBuilder
@@ -14795,15 +16541,9 @@ func (b *v4AddonProvidersAddonKeycloakBuilderImpl) Addons() V4AddonProvidersAddo
 	return newV4AddonProvidersAddonKeycloakAddonsBuilder(b.sdk)
 }
 
-// GetKeycloakProviderInformation calls keycloak.GetKeycloakProviderInformation
-func (b *v4AddonProvidersAddonKeycloakBuilderImpl) GetKeycloakProviderInformation(ctx context.Context) client.Response[models.KeycloakProviderView] {
-	return keycloak.GetKeycloakProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
-}
-
 // V4AddonProvidersAddonKeycloakAddonsBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsBuilder interface {
 	Addonkeycloakid(addonkeycloakid string) V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder
-	ListKeycloaks(ctx context.Context, opts ...keycloak.Option) client.Response[[]models.KeycloakView]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsBuilder
@@ -14819,11 +16559,6 @@ func newV4AddonProvidersAddonKeycloakAddonsBuilder(sdk *sdkImpl) V4AddonProvider
 // Addonkeycloakid returns builder for addonkeycloakid
 func (b *v4AddonProvidersAddonKeycloakAddonsBuilderImpl) Addonkeycloakid(addonkeycloakid string) V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder {
 	return newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder(b.sdk, addonkeycloakid)
-}
-
-// ListKeycloaks calls keycloak.ListKeycloaks
-func (b *v4AddonProvidersAddonKeycloakAddonsBuilderImpl) ListKeycloaks(ctx context.Context, opts ...keycloak.Option) client.Response[[]models.KeycloakView] {
-	return keycloak.ListKeycloaks(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder provides access to operations
@@ -14882,7 +16617,7 @@ func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilderImpl) Getkeycl
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilder interface {
-	Createkeycloakjavaapplication(ctx context.Context, request *models.KeycloakAddApplicationRequest) client.Response[models.KeycloakProvisionResponse]
+	Createkeycloakjavaapplication(ctx context.Context, request *models.ProvisionRequest) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilder
@@ -14900,7 +16635,7 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilder(sdk
 }
 
 // Createkeycloakjavaapplication calls keycloak.Createkeycloakjavaapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilderImpl) Createkeycloakjavaapplication(ctx context.Context, request *models.KeycloakAddApplicationRequest) client.Response[models.KeycloakProvisionResponse] {
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidApplicationBuilderImpl) Createkeycloakjavaapplication(ctx context.Context, request *models.ProvisionRequest) client.Response[client.Nothing] {
 	return keycloak.Createkeycloakjavaapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid, request)
 }
 
@@ -15058,70 +16793,6 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilder(s
 // Createversionupdatekeycloak calls keycloak.Createversionupdatekeycloak
 func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilderImpl) Createversionupdatekeycloak(ctx context.Context, request *models.KeycloakPatchRequest) client.Response[models.KeycloakView] {
 	return keycloak.Createversionupdatekeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid, request)
-}
-
-// V4AddonProvidersAddonKmsBuilder provides access to operations
-type V4AddonProvidersAddonKmsBuilder interface {
-	Addons() V4AddonProvidersAddonKmsAddonsBuilder
-}
-
-// v4AddonProvidersAddonKmsBuilderImpl implements V4AddonProvidersAddonKmsBuilder
-type v4AddonProvidersAddonKmsBuilderImpl struct {
-	sdk *sdkImpl
-}
-
-// newV4AddonProvidersAddonKmsBuilder creates a new V4AddonProvidersAddonKmsBuilder
-func newV4AddonProvidersAddonKmsBuilder(sdk *sdkImpl) V4AddonProvidersAddonKmsBuilder {
-	return &v4AddonProvidersAddonKmsBuilderImpl{sdk: sdk}
-}
-
-// Addons returns Addons builder
-func (b *v4AddonProvidersAddonKmsBuilderImpl) Addons() V4AddonProvidersAddonKmsAddonsBuilder {
-	return newV4AddonProvidersAddonKmsAddonsBuilder(b.sdk)
-}
-
-// V4AddonProvidersAddonKmsAddonsBuilder provides access to operations
-type V4AddonProvidersAddonKmsAddonsBuilder interface {
-	AddonKmsID(addonKmsID string) V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder
-}
-
-// v4AddonProvidersAddonKmsAddonsBuilderImpl implements V4AddonProvidersAddonKmsAddonsBuilder
-type v4AddonProvidersAddonKmsAddonsBuilderImpl struct {
-	sdk *sdkImpl
-}
-
-// newV4AddonProvidersAddonKmsAddonsBuilder creates a new V4AddonProvidersAddonKmsAddonsBuilder
-func newV4AddonProvidersAddonKmsAddonsBuilder(sdk *sdkImpl) V4AddonProvidersAddonKmsAddonsBuilder {
-	return &v4AddonProvidersAddonKmsAddonsBuilderImpl{sdk: sdk}
-}
-
-// AddonKmsID returns builder for addonKmsID
-func (b *v4AddonProvidersAddonKmsAddonsBuilderImpl) AddonKmsID(addonKmsID string) V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder {
-	return newV4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder(b.sdk, addonKmsID)
-}
-
-// V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder provides access to operations
-type V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder interface {
-	GetKmsAddon(ctx context.Context) client.Response[models.KmsAddonView]
-}
-
-// v4AddonProvidersAddonKmsAddonsAddonKmsIDBuilderImpl implements V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder
-type v4AddonProvidersAddonKmsAddonsAddonKmsIDBuilderImpl struct {
-	sdk        *sdkImpl
-	addonKmsID string
-}
-
-// newV4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder creates a new V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder
-func newV4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder(sdk *sdkImpl, addonKmsID string) V4AddonProvidersAddonKmsAddonsAddonKmsIDBuilder {
-	return &v4AddonProvidersAddonKmsAddonsAddonKmsIDBuilderImpl{
-		addonKmsID: addonKmsID,
-		sdk:        sdk,
-	}
-}
-
-// GetKmsAddon calls kms.GetKmsAddon
-func (b *v4AddonProvidersAddonKmsAddonsAddonKmsIDBuilderImpl) GetKmsAddon(ctx context.Context) client.Response[models.KmsAddonView] {
-	return kms.GetKmsAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonKmsID)
 }
 
 // V4AddonProvidersAddonMatomoBuilder provides access to operations
@@ -15786,6 +17457,7 @@ func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilderImpl) 
 type V4AddonProvidersAddonPulsarBuilder interface {
 	Addons() V4AddonProvidersAddonPulsarAddonsBuilder
 	Clusters() V4AddonProvidersAddonPulsarClustersBuilder
+	Placement() V4AddonProvidersAddonPulsarPlacementBuilder
 	Getpulsarproviderinfo(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
@@ -15807,6 +17479,11 @@ func (b *v4AddonProvidersAddonPulsarBuilderImpl) Addons() V4AddonProvidersAddonP
 // Clusters returns Clusters builder
 func (b *v4AddonProvidersAddonPulsarBuilderImpl) Clusters() V4AddonProvidersAddonPulsarClustersBuilder {
 	return newV4AddonProvidersAddonPulsarClustersBuilder(b.sdk)
+}
+
+// Placement returns Placement builder
+func (b *v4AddonProvidersAddonPulsarBuilderImpl) Placement() V4AddonProvidersAddonPulsarPlacementBuilder {
+	return newV4AddonProvidersAddonPulsarPlacementBuilder(b.sdk)
 }
 
 // Getpulsarproviderinfo calls pulsar.Getpulsarproviderinfo
@@ -16326,6 +18003,26 @@ func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Getpulsarclust
 // Updatepulsarcluster calls pulsar.Updatepulsarcluster
 func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Updatepulsarcluster(ctx context.Context, request *models.WannabePulsarCluster) client.Response[models.PulsarCluster] {
 	return pulsar.Updatepulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid, request)
+}
+
+// V4AddonProvidersAddonPulsarPlacementBuilder provides access to operations
+type V4AddonProvidersAddonPulsarPlacementBuilder interface {
+	PulsarGetPlacement(ctx context.Context) client.Response[models.PulsarPlacement]
+}
+
+// v4AddonProvidersAddonPulsarPlacementBuilderImpl implements V4AddonProvidersAddonPulsarPlacementBuilder
+type v4AddonProvidersAddonPulsarPlacementBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersAddonPulsarPlacementBuilder creates a new V4AddonProvidersAddonPulsarPlacementBuilder
+func newV4AddonProvidersAddonPulsarPlacementBuilder(sdk *sdkImpl) V4AddonProvidersAddonPulsarPlacementBuilder {
+	return &v4AddonProvidersAddonPulsarPlacementBuilderImpl{sdk: sdk}
+}
+
+// PulsarGetPlacement calls pulsar.PulsarGetPlacement
+func (b *v4AddonProvidersAddonPulsarPlacementBuilderImpl) PulsarGetPlacement(ctx context.Context) client.Response[models.PulsarPlacement] {
+	return pulsar.PulsarGetPlacement(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersAddonTardisBuilder provides access to operations
@@ -16988,6 +18685,26 @@ func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) Replaceconfi
 	return configurationprovider.Replaceconfigurationproviderenv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
 }
 
+// V4AddonProvidersKeycloakBuilder provides access to operations
+type V4AddonProvidersKeycloakBuilder interface {
+	Getkeycloakproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
+}
+
+// v4AddonProvidersKeycloakBuilderImpl implements V4AddonProvidersKeycloakBuilder
+type v4AddonProvidersKeycloakBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersKeycloakBuilder creates a new V4AddonProvidersKeycloakBuilder
+func newV4AddonProvidersKeycloakBuilder(sdk *sdkImpl) V4AddonProvidersKeycloakBuilder {
+	return &v4AddonProvidersKeycloakBuilderImpl{sdk: sdk}
+}
+
+// Getkeycloakproviderinformation calls keycloak.Getkeycloakproviderinformation
+func (b *v4AddonProvidersKeycloakBuilderImpl) Getkeycloakproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return keycloak.Getkeycloakproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
 // V4AddonProvidersKvBuilder provides access to operations
 type V4AddonProvidersKvBuilder interface {
 	Getmateriakvprovider(ctx context.Context) client.Response[models.ProviderConsoleView]
@@ -17116,6 +18833,70 @@ func newV4AddonProvidersOtoroshiBuilder(sdk *sdkImpl) V4AddonProvidersOtoroshiBu
 // Getotoroshiproviderinformation calls otoroshi.Getotoroshiproviderinformation
 func (b *v4AddonProvidersOtoroshiBuilderImpl) Getotoroshiproviderinformation(ctx context.Context) client.Response[models.OtoroshiProviderInfoView] {
 	return otoroshi.Getotoroshiproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersPostgresqlAddonBuilder provides access to operations
+type V4AddonProvidersPostgresqlAddonBuilder interface {
+	Addons() V4AddonProvidersPostgresqlAddonAddonsBuilder
+}
+
+// v4AddonProvidersPostgresqlAddonBuilderImpl implements V4AddonProvidersPostgresqlAddonBuilder
+type v4AddonProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersPostgresqlAddonBuilder creates a new V4AddonProvidersPostgresqlAddonBuilder
+func newV4AddonProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersPostgresqlAddonBuilder {
+	return &v4AddonProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Addons returns Addons builder
+func (b *v4AddonProvidersPostgresqlAddonBuilderImpl) Addons() V4AddonProvidersPostgresqlAddonAddonsBuilder {
+	return newV4AddonProvidersPostgresqlAddonAddonsBuilder(b.sdk)
+}
+
+// V4AddonProvidersPostgresqlAddonAddonsBuilder provides access to operations
+type V4AddonProvidersPostgresqlAddonAddonsBuilder interface {
+	AppID(appID string) V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder
+}
+
+// v4AddonProvidersPostgresqlAddonAddonsBuilderImpl implements V4AddonProvidersPostgresqlAddonAddonsBuilder
+type v4AddonProvidersPostgresqlAddonAddonsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersPostgresqlAddonAddonsBuilder creates a new V4AddonProvidersPostgresqlAddonAddonsBuilder
+func newV4AddonProvidersPostgresqlAddonAddonsBuilder(sdk *sdkImpl) V4AddonProvidersPostgresqlAddonAddonsBuilder {
+	return &v4AddonProvidersPostgresqlAddonAddonsBuilderImpl{sdk: sdk}
+}
+
+// AppID returns builder for appID
+func (b *v4AddonProvidersPostgresqlAddonAddonsBuilderImpl) AppID(appID string) V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder {
+	return newV4AddonProvidersPostgresqlAddonAddonsAppIDBuilder(b.sdk, appID)
+}
+
+// V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder provides access to operations
+type V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder interface {
+	PostgresqlV4GetAddon(ctx context.Context) client.Response[models.PostgresqlAddonView]
+}
+
+// v4AddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl implements V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder
+type v4AddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl struct {
+	sdk   *sdkImpl
+	appID string
+}
+
+// newV4AddonProvidersPostgresqlAddonAddonsAppIDBuilder creates a new V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder
+func newV4AddonProvidersPostgresqlAddonAddonsAppIDBuilder(sdk *sdkImpl, appID string) V4AddonProvidersPostgresqlAddonAddonsAppIDBuilder {
+	return &v4AddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl{
+		appID: appID,
+		sdk:   sdk,
+	}
+}
+
+// PostgresqlV4GetAddon calls postgresql_addon.PostgresqlV4GetAddon
+func (b *v4AddonProvidersPostgresqlAddonAddonsAppIDBuilderImpl) PostgresqlV4GetAddon(ctx context.Context) client.Response[models.PostgresqlAddonView] {
+	return postgresqladdon.PostgresqlV4GetAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appID)
 }
 
 // V4AddonProvidersRedisAddonBuilder provides access to operations
@@ -17298,7 +19079,7 @@ func (b *v4AiOrganisationsOwneridAiAiidEndpointsBuilderImpl) Createendpoint(ctx 
 
 // V4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilder provides access to operations
 type V4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilder interface {
-	APIkeys() V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder
+	Apikeys() V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder
 	Budgets() V4AiOrganisationsOwneridAiAiidEndpointsEndpointidBudgetsBuilder
 	Deleteaiendpoint(ctx context.Context) client.Response[client.Nothing]
 	Getendpoint(ctx context.Context) client.Response[models.AiEndpointResponse]
@@ -17323,9 +19104,9 @@ func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilder(sdk *sdkImpl, o
 	}
 }
 
-// APIkeys returns APIkeys builder
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilderImpl) APIkeys() V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder {
-	return newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder(b.sdk, b.ownerid, b.aiid, b.endpointid)
+// Apikeys returns Apikeys builder
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilderImpl) Apikeys() V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder {
+	return newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder(b.sdk, b.ownerid, b.aiid, b.endpointid)
 }
 
 // Budgets returns Budgets builder
@@ -17348,24 +19129,24 @@ func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidBuilderImpl) Updateend
 	return ai.Updateendpoint(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid)
 }
 
-// V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder provides access to operations
-type V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder interface {
-	APIkeyid(apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder
+// V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder provides access to operations
+type V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder interface {
+	Apikeyid(apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder
 	Getaiapikeys(ctx context.Context) client.Response[client.Nothing]
 	Createotoroshiapikey(ctx context.Context, request *models.CreateApiKeyRequest) client.Response[client.Nothing]
 }
 
-// v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl implements V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder
-type v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl struct {
+// v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl implements V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder
+type v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl struct {
 	sdk        *sdkImpl
 	ownerid    string
 	aiid       string
 	endpointid string
 }
 
-// newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder creates a new V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder
-func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder(sdk *sdkImpl, ownerid string, aiid string, endpointid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder {
-	return &v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl{
+// newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder creates a new V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder
+func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder(sdk *sdkImpl, ownerid string, aiid string, endpointid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilder {
+	return &v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl{
 		aiid:       aiid,
 		endpointid: endpointid,
 		ownerid:    ownerid,
@@ -17373,30 +19154,30 @@ func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilder(sdk *sdk
 	}
 }
 
-// APIkeyid returns builder for apikeyid
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl) APIkeyid(apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder {
-	return newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder(b.sdk, b.ownerid, b.aiid, b.endpointid, apikeyid)
+// Apikeyid returns builder for apikeyid
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl) Apikeyid(apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder {
+	return newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder(b.sdk, b.ownerid, b.aiid, b.endpointid, apikeyid)
 }
 
 // Getaiapikeys calls ai.Getaiapikeys
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl) Getaiapikeys(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl) Getaiapikeys(ctx context.Context) client.Response[client.Nothing] {
 	return ai.Getaiapikeys(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid)
 }
 
 // Createotoroshiapikey calls ai.Createotoroshiapikey
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysBuilderImpl) Createotoroshiapikey(ctx context.Context, request *models.CreateApiKeyRequest) client.Response[client.Nothing] {
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysBuilderImpl) Createotoroshiapikey(ctx context.Context, request *models.CreateApiKeyRequest) client.Response[client.Nothing] {
 	return ai.Createotoroshiapikey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid, request)
 }
 
-// V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder provides access to operations
-type V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder interface {
+// V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder provides access to operations
+type V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder interface {
 	Deleteotoroshiapikey(ctx context.Context) client.Response[models.ApiKeyDeletionResult]
 	Getaiapikey(ctx context.Context) client.Response[client.Nothing]
 	Updateotoroshiapikey(ctx context.Context) client.Response[client.Nothing]
 }
 
-// v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl implements V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder
-type v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl struct {
+// v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl implements V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder
+type v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl struct {
 	sdk        *sdkImpl
 	ownerid    string
 	aiid       string
@@ -17404,9 +19185,9 @@ type v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl
 	apikeyid   string
 }
 
-// newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder creates a new V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder
-func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder(sdk *sdkImpl, ownerid string, aiid string, endpointid string, apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder {
-	return &v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl{
+// newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder creates a new V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder
+func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder(sdk *sdkImpl, ownerid string, aiid string, endpointid string, apikeyid string) V4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilder {
+	return &v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl{
 		aiid:       aiid,
 		apikeyid:   apikeyid,
 		endpointid: endpointid,
@@ -17416,17 +19197,17 @@ func newV4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilder(
 }
 
 // Deleteotoroshiapikey calls ai.Deleteotoroshiapikey
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl) Deleteotoroshiapikey(ctx context.Context) client.Response[models.ApiKeyDeletionResult] {
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl) Deleteotoroshiapikey(ctx context.Context) client.Response[models.ApiKeyDeletionResult] {
 	return ai.Deleteotoroshiapikey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid, b.apikeyid)
 }
 
 // Getaiapikey calls ai.Getaiapikey
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl) Getaiapikey(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl) Getaiapikey(ctx context.Context) client.Response[client.Nothing] {
 	return ai.Getaiapikey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid, b.apikeyid)
 }
 
 // Updateotoroshiapikey calls ai.Updateotoroshiapikey
-func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidAPIkeysAPIkeyidBuilderImpl) Updateotoroshiapikey(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AiOrganisationsOwneridAiAiidEndpointsEndpointidApikeysApikeyidBuilderImpl) Updateotoroshiapikey(ctx context.Context) client.Response[client.Nothing] {
 	return ai.Updateotoroshiapikey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.aiid, b.endpointid, b.apikeyid)
 }
 
@@ -18104,7 +19885,7 @@ func (b *v4CellarOrganisationsOwneridCellarCellaridCredentialsCfgBuilderImpl) Ge
 
 // V4CellarOrganisationsOwneridCellarConsumptionsBuilder provides access to operations
 type V4CellarOrganisationsOwneridCellarConsumptionsBuilder interface {
-	Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ResourceConsumption]
+	Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.CellarResourceConsumption]
 }
 
 // v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl implements V4CellarOrganisationsOwneridCellarConsumptionsBuilder
@@ -18122,15 +19903,15 @@ func newV4CellarOrganisationsOwneridCellarConsumptionsBuilder(sdk *sdkImpl, owne
 }
 
 // Listcellarconsumptions calls cellar.Listcellarconsumptions
-func (b *v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl) Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ResourceConsumption] {
+func (b *v4CellarOrganisationsOwneridCellarConsumptionsBuilderImpl) Listcellarconsumptions(ctx context.Context, opts ...cellar.Option) client.Response[[]models.CellarResourceConsumption] {
 	return cellar.Listcellarconsumptions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
 // V4CellarOrganisationsOwneridClustersBuilder provides access to operations
 type V4CellarOrganisationsOwneridClustersBuilder interface {
 	Clusterindex(clusterindex int64) V4CellarOrganisationsOwneridClustersClusterindexBuilder
-	Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ClusterView]
-	Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.ClusterView]
+	Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.CellarCluster]
+	Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.CellarCluster]
 }
 
 // v4CellarOrganisationsOwneridClustersBuilderImpl implements V4CellarOrganisationsOwneridClustersBuilder
@@ -18153,20 +19934,20 @@ func (b *v4CellarOrganisationsOwneridClustersBuilderImpl) Clusterindex(clusterin
 }
 
 // Listclusters calls cellar.Listclusters
-func (b *v4CellarOrganisationsOwneridClustersBuilderImpl) Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.ClusterView] {
+func (b *v4CellarOrganisationsOwneridClustersBuilderImpl) Listclusters(ctx context.Context, opts ...cellar.Option) client.Response[[]models.CellarCluster] {
 	return cellar.Listclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
 // Createcluster calls cellar.Createcluster
-func (b *v4CellarOrganisationsOwneridClustersBuilderImpl) Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.ClusterView] {
+func (b *v4CellarOrganisationsOwneridClustersBuilderImpl) Createcluster(ctx context.Context, request *models.CreateClusterRequest) client.Response[models.CellarCluster] {
 	return cellar.Createcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
 }
 
 // V4CellarOrganisationsOwneridClustersClusterindexBuilder provides access to operations
 type V4CellarOrganisationsOwneridClustersClusterindexBuilder interface {
 	Deletecluster(ctx context.Context) client.Response[client.Nothing]
-	Getcluster(ctx context.Context) client.Response[models.ClusterView]
-	Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.ClusterView]
+	Getcluster(ctx context.Context) client.Response[models.CellarCluster]
+	Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.CellarCluster]
 }
 
 // v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl implements V4CellarOrganisationsOwneridClustersClusterindexBuilder
@@ -18191,12 +19972,12 @@ func (b *v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl) Deleteclus
 }
 
 // Getcluster calls cellar.Getcluster
-func (b *v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl) Getcluster(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl) Getcluster(ctx context.Context) client.Response[models.CellarCluster] {
 	return cellar.Getcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterindex)
 }
 
 // Updatecluster calls cellar.Updatecluster
-func (b *v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl) Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.ClusterView] {
+func (b *v4CellarOrganisationsOwneridClustersClusterindexBuilderImpl) Updatecluster(ctx context.Context, request *models.UpdateClusterRequest) client.Response[models.CellarCluster] {
 	return cellar.Updatecluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterindex, request)
 }
 
@@ -18932,7 +20713,7 @@ func (b *v4InfrastructureBuilderImpl) VirtualMachines() V4InfrastructureVirtualM
 type V4InfrastructureDeploymentsBuilder interface {
 	Deploymentid(deploymentid string) V4InfrastructureDeploymentsDeploymentidBuilder
 	ListDeployments(ctx context.Context, opts ...infrastructure.Option) client.Response[[]models.DeploymentOutput]
-	Createinfrastructuredeployment(ctx context.Context, request *models.DeploymentInput) client.Response[models.DeploymentOutput]
+	Createinfrastructuredeployment(ctx context.Context, request *models.DeploymentInput) client.Response[client.Nothing]
 }
 
 // v4InfrastructureDeploymentsBuilderImpl implements V4InfrastructureDeploymentsBuilder
@@ -18956,7 +20737,7 @@ func (b *v4InfrastructureDeploymentsBuilderImpl) ListDeployments(ctx context.Con
 }
 
 // Createinfrastructuredeployment calls infrastructure.Createinfrastructuredeployment
-func (b *v4InfrastructureDeploymentsBuilderImpl) Createinfrastructuredeployment(ctx context.Context, request *models.DeploymentInput) client.Response[models.DeploymentOutput] {
+func (b *v4InfrastructureDeploymentsBuilderImpl) Createinfrastructuredeployment(ctx context.Context, request *models.DeploymentInput) client.Response[client.Nothing] {
 	return infrastructure.Createinfrastructuredeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -19306,6 +21087,382 @@ func newV4KeycloaksOrganisationsOwneridKeycloaksAddonkeycloakidBuilder(sdk *sdkI
 // Getkeycloak calls keycloak.Getkeycloak
 func (b *v4KeycloaksOrganisationsOwneridKeycloaksAddonkeycloakidBuilderImpl) Getkeycloak(ctx context.Context) client.Response[models.KeycloakView] {
 	return keycloak.Getkeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonkeycloakid)
+}
+
+// V4KmsBuilder provides access to operations
+type V4KmsBuilder interface {
+	Clusters() V4KmsClustersBuilder
+	Organisations() V4KmsOrganisationsBuilder
+	Regions() V4KmsRegionsBuilder
+}
+
+// v4KmsBuilderImpl implements V4KmsBuilder
+type v4KmsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4KmsBuilder creates a new V4KmsBuilder
+func newV4KmsBuilder(sdk *sdkImpl) V4KmsBuilder {
+	return &v4KmsBuilderImpl{sdk: sdk}
+}
+
+// Clusters returns Clusters builder
+func (b *v4KmsBuilderImpl) Clusters() V4KmsClustersBuilder {
+	return newV4KmsClustersBuilder(b.sdk)
+}
+
+// Organisations returns Organisations builder
+func (b *v4KmsBuilderImpl) Organisations() V4KmsOrganisationsBuilder {
+	return newV4KmsOrganisationsBuilder(b.sdk)
+}
+
+// Regions returns Regions builder
+func (b *v4KmsBuilderImpl) Regions() V4KmsRegionsBuilder {
+	return newV4KmsRegionsBuilder(b.sdk)
+}
+
+// V4KmsClustersBuilder provides access to operations
+type V4KmsClustersBuilder interface {
+	ClusterKmsID(clusterKmsID string) V4KmsClustersClusterKmsIDBuilder
+	Kmsclusterid(kmsclusterid string) V4KmsClustersKmsclusteridBuilder
+	ListKmsClusters(ctx context.Context, opts ...kms.Option) client.Response[[]models.KmsClusterView]
+}
+
+// v4KmsClustersBuilderImpl implements V4KmsClustersBuilder
+type v4KmsClustersBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4KmsClustersBuilder creates a new V4KmsClustersBuilder
+func newV4KmsClustersBuilder(sdk *sdkImpl) V4KmsClustersBuilder {
+	return &v4KmsClustersBuilderImpl{sdk: sdk}
+}
+
+// ClusterKmsID returns builder for clusterKmsID
+func (b *v4KmsClustersBuilderImpl) ClusterKmsID(clusterKmsID string) V4KmsClustersClusterKmsIDBuilder {
+	return newV4KmsClustersClusterKmsIDBuilder(b.sdk, clusterKmsID)
+}
+
+// Kmsclusterid returns builder for kmsclusterid
+func (b *v4KmsClustersBuilderImpl) Kmsclusterid(kmsclusterid string) V4KmsClustersKmsclusteridBuilder {
+	return newV4KmsClustersKmsclusteridBuilder(b.sdk, kmsclusterid)
+}
+
+// ListKmsClusters calls kms.ListKmsClusters
+func (b *v4KmsClustersBuilderImpl) ListKmsClusters(ctx context.Context, opts ...kms.Option) client.Response[[]models.KmsClusterView] {
+	return kms.ListKmsClusters(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+}
+
+// V4KmsClustersClusterKmsIDBuilder provides access to operations
+type V4KmsClustersClusterKmsIDBuilder interface {
+	Default() V4KmsClustersClusterKmsIDDefaultBuilder
+	Drain() V4KmsClustersClusterKmsIDDrainBuilder
+	DeleteKmsCluster(ctx context.Context) client.Response[client.Nothing]
+	GetKmsCluster(ctx context.Context) client.Response[models.KmsClusterView]
+	PatchKmsCluster(ctx context.Context, request *models.KmsUpdateClusterRequest) client.Response[client.Nothing]
+	PutKmsCluster(ctx context.Context, request *models.KmsRegisterClusterRequest) client.Response[client.Nothing]
+}
+
+// v4KmsClustersClusterKmsIDBuilderImpl implements V4KmsClustersClusterKmsIDBuilder
+type v4KmsClustersClusterKmsIDBuilderImpl struct {
+	sdk          *sdkImpl
+	clusterKmsID string
+}
+
+// newV4KmsClustersClusterKmsIDBuilder creates a new V4KmsClustersClusterKmsIDBuilder
+func newV4KmsClustersClusterKmsIDBuilder(sdk *sdkImpl, clusterKmsID string) V4KmsClustersClusterKmsIDBuilder {
+	return &v4KmsClustersClusterKmsIDBuilderImpl{
+		clusterKmsID: clusterKmsID,
+		sdk:          sdk,
+	}
+}
+
+// Default returns Default builder
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) Default() V4KmsClustersClusterKmsIDDefaultBuilder {
+	return newV4KmsClustersClusterKmsIDDefaultBuilder(b.sdk, b.clusterKmsID)
+}
+
+// Drain returns Drain builder
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) Drain() V4KmsClustersClusterKmsIDDrainBuilder {
+	return newV4KmsClustersClusterKmsIDDrainBuilder(b.sdk, b.clusterKmsID)
+}
+
+// DeleteKmsCluster calls kms.DeleteKmsCluster
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) DeleteKmsCluster(ctx context.Context) client.Response[client.Nothing] {
+	return kms.DeleteKmsCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID)
+}
+
+// GetKmsCluster calls kms.GetKmsCluster
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) GetKmsCluster(ctx context.Context) client.Response[models.KmsClusterView] {
+	return kms.GetKmsCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID)
+}
+
+// PatchKmsCluster calls kms.PatchKmsCluster
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) PatchKmsCluster(ctx context.Context, request *models.KmsUpdateClusterRequest) client.Response[client.Nothing] {
+	return kms.PatchKmsCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID, request)
+}
+
+// PutKmsCluster calls kms.PutKmsCluster
+func (b *v4KmsClustersClusterKmsIDBuilderImpl) PutKmsCluster(ctx context.Context, request *models.KmsRegisterClusterRequest) client.Response[client.Nothing] {
+	return kms.PutKmsCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID, request)
+}
+
+// V4KmsClustersClusterKmsIDDefaultBuilder provides access to operations
+type V4KmsClustersClusterKmsIDDefaultBuilder interface {
+	DesignateKmsDefaultCluster(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v4KmsClustersClusterKmsIDDefaultBuilderImpl implements V4KmsClustersClusterKmsIDDefaultBuilder
+type v4KmsClustersClusterKmsIDDefaultBuilderImpl struct {
+	sdk          *sdkImpl
+	clusterKmsID string
+}
+
+// newV4KmsClustersClusterKmsIDDefaultBuilder creates a new V4KmsClustersClusterKmsIDDefaultBuilder
+func newV4KmsClustersClusterKmsIDDefaultBuilder(sdk *sdkImpl, clusterKmsID string) V4KmsClustersClusterKmsIDDefaultBuilder {
+	return &v4KmsClustersClusterKmsIDDefaultBuilderImpl{
+		clusterKmsID: clusterKmsID,
+		sdk:          sdk,
+	}
+}
+
+// DesignateKmsDefaultCluster calls kms.DesignateKmsDefaultCluster
+func (b *v4KmsClustersClusterKmsIDDefaultBuilderImpl) DesignateKmsDefaultCluster(ctx context.Context) client.Response[client.Nothing] {
+	return kms.DesignateKmsDefaultCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID)
+}
+
+// V4KmsClustersClusterKmsIDDrainBuilder provides access to operations
+type V4KmsClustersClusterKmsIDDrainBuilder interface {
+	DrainKmsCluster(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v4KmsClustersClusterKmsIDDrainBuilderImpl implements V4KmsClustersClusterKmsIDDrainBuilder
+type v4KmsClustersClusterKmsIDDrainBuilderImpl struct {
+	sdk          *sdkImpl
+	clusterKmsID string
+}
+
+// newV4KmsClustersClusterKmsIDDrainBuilder creates a new V4KmsClustersClusterKmsIDDrainBuilder
+func newV4KmsClustersClusterKmsIDDrainBuilder(sdk *sdkImpl, clusterKmsID string) V4KmsClustersClusterKmsIDDrainBuilder {
+	return &v4KmsClustersClusterKmsIDDrainBuilderImpl{
+		clusterKmsID: clusterKmsID,
+		sdk:          sdk,
+	}
+}
+
+// DrainKmsCluster calls kms.DrainKmsCluster
+func (b *v4KmsClustersClusterKmsIDDrainBuilderImpl) DrainKmsCluster(ctx context.Context) client.Response[client.Nothing] {
+	return kms.DrainKmsCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterKmsID)
+}
+
+// V4KmsClustersKmsclusteridBuilder provides access to operations
+type V4KmsClustersKmsclusteridBuilder interface {
+	Endpoints() V4KmsClustersKmsclusteridEndpointsBuilder
+}
+
+// v4KmsClustersKmsclusteridBuilderImpl implements V4KmsClustersKmsclusteridBuilder
+type v4KmsClustersKmsclusteridBuilderImpl struct {
+	sdk          *sdkImpl
+	kmsclusterid string
+}
+
+// newV4KmsClustersKmsclusteridBuilder creates a new V4KmsClustersKmsclusteridBuilder
+func newV4KmsClustersKmsclusteridBuilder(sdk *sdkImpl, kmsclusterid string) V4KmsClustersKmsclusteridBuilder {
+	return &v4KmsClustersKmsclusteridBuilderImpl{
+		kmsclusterid: kmsclusterid,
+		sdk:          sdk,
+	}
+}
+
+// Endpoints returns Endpoints builder
+func (b *v4KmsClustersKmsclusteridBuilderImpl) Endpoints() V4KmsClustersKmsclusteridEndpointsBuilder {
+	return newV4KmsClustersKmsclusteridEndpointsBuilder(b.sdk, b.kmsclusterid)
+}
+
+// V4KmsClustersKmsclusteridEndpointsBuilder provides access to operations
+type V4KmsClustersKmsclusteridEndpointsBuilder interface {
+	Getkmsclusterendpoints(ctx context.Context) client.Response[models.KmsClusterEndpoints]
+}
+
+// v4KmsClustersKmsclusteridEndpointsBuilderImpl implements V4KmsClustersKmsclusteridEndpointsBuilder
+type v4KmsClustersKmsclusteridEndpointsBuilderImpl struct {
+	sdk          *sdkImpl
+	kmsclusterid string
+}
+
+// newV4KmsClustersKmsclusteridEndpointsBuilder creates a new V4KmsClustersKmsclusteridEndpointsBuilder
+func newV4KmsClustersKmsclusteridEndpointsBuilder(sdk *sdkImpl, kmsclusterid string) V4KmsClustersKmsclusteridEndpointsBuilder {
+	return &v4KmsClustersKmsclusteridEndpointsBuilderImpl{
+		kmsclusterid: kmsclusterid,
+		sdk:          sdk,
+	}
+}
+
+// Getkmsclusterendpoints calls kms.Getkmsclusterendpoints
+func (b *v4KmsClustersKmsclusteridEndpointsBuilderImpl) Getkmsclusterendpoints(ctx context.Context) client.Response[models.KmsClusterEndpoints] {
+	return kms.Getkmsclusterendpoints(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kmsclusterid)
+}
+
+// V4KmsOrganisationsBuilder provides access to operations
+type V4KmsOrganisationsBuilder interface {
+	Ownerid(ownerid string) V4KmsOrganisationsOwneridBuilder
+}
+
+// v4KmsOrganisationsBuilderImpl implements V4KmsOrganisationsBuilder
+type v4KmsOrganisationsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4KmsOrganisationsBuilder creates a new V4KmsOrganisationsBuilder
+func newV4KmsOrganisationsBuilder(sdk *sdkImpl) V4KmsOrganisationsBuilder {
+	return &v4KmsOrganisationsBuilderImpl{sdk: sdk}
+}
+
+// Ownerid returns builder for ownerid
+func (b *v4KmsOrganisationsBuilderImpl) Ownerid(ownerid string) V4KmsOrganisationsOwneridBuilder {
+	return newV4KmsOrganisationsOwneridBuilder(b.sdk, ownerid)
+}
+
+// V4KmsOrganisationsOwneridBuilder provides access to operations
+type V4KmsOrganisationsOwneridBuilder interface {
+	Kms() V4KmsOrganisationsOwneridKmsBuilder
+}
+
+// v4KmsOrganisationsOwneridBuilderImpl implements V4KmsOrganisationsOwneridBuilder
+type v4KmsOrganisationsOwneridBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KmsOrganisationsOwneridBuilder creates a new V4KmsOrganisationsOwneridBuilder
+func newV4KmsOrganisationsOwneridBuilder(sdk *sdkImpl, ownerid string) V4KmsOrganisationsOwneridBuilder {
+	return &v4KmsOrganisationsOwneridBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Kms returns Kms builder
+func (b *v4KmsOrganisationsOwneridBuilderImpl) Kms() V4KmsOrganisationsOwneridKmsBuilder {
+	return newV4KmsOrganisationsOwneridKmsBuilder(b.sdk, b.ownerid)
+}
+
+// V4KmsOrganisationsOwneridKmsBuilder provides access to operations
+type V4KmsOrganisationsOwneridKmsBuilder interface {
+	Addonkmsid(addonkmsid string) V4KmsOrganisationsOwneridKmsAddonkmsidBuilder
+}
+
+// v4KmsOrganisationsOwneridKmsBuilderImpl implements V4KmsOrganisationsOwneridKmsBuilder
+type v4KmsOrganisationsOwneridKmsBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4KmsOrganisationsOwneridKmsBuilder creates a new V4KmsOrganisationsOwneridKmsBuilder
+func newV4KmsOrganisationsOwneridKmsBuilder(sdk *sdkImpl, ownerid string) V4KmsOrganisationsOwneridKmsBuilder {
+	return &v4KmsOrganisationsOwneridKmsBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Addonkmsid returns builder for addonkmsid
+func (b *v4KmsOrganisationsOwneridKmsBuilderImpl) Addonkmsid(addonkmsid string) V4KmsOrganisationsOwneridKmsAddonkmsidBuilder {
+	return newV4KmsOrganisationsOwneridKmsAddonkmsidBuilder(b.sdk, b.ownerid, addonkmsid)
+}
+
+// V4KmsOrganisationsOwneridKmsAddonkmsidBuilder provides access to operations
+type V4KmsOrganisationsOwneridKmsAddonkmsidBuilder interface {
+	Getkms(ctx context.Context) client.Response[models.Kms]
+}
+
+// v4KmsOrganisationsOwneridKmsAddonkmsidBuilderImpl implements V4KmsOrganisationsOwneridKmsAddonkmsidBuilder
+type v4KmsOrganisationsOwneridKmsAddonkmsidBuilderImpl struct {
+	sdk        *sdkImpl
+	ownerid    string
+	addonkmsid string
+}
+
+// newV4KmsOrganisationsOwneridKmsAddonkmsidBuilder creates a new V4KmsOrganisationsOwneridKmsAddonkmsidBuilder
+func newV4KmsOrganisationsOwneridKmsAddonkmsidBuilder(sdk *sdkImpl, ownerid string, addonkmsid string) V4KmsOrganisationsOwneridKmsAddonkmsidBuilder {
+	return &v4KmsOrganisationsOwneridKmsAddonkmsidBuilderImpl{
+		addonkmsid: addonkmsid,
+		ownerid:    ownerid,
+		sdk:        sdk,
+	}
+}
+
+// Getkms calls kms.Getkms
+func (b *v4KmsOrganisationsOwneridKmsAddonkmsidBuilderImpl) Getkms(ctx context.Context) client.Response[models.Kms] {
+	return kms.Getkms(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonkmsid)
+}
+
+// V4KmsRegionsBuilder provides access to operations
+type V4KmsRegionsBuilder interface {
+	RegionID(regionID string) V4KmsRegionsRegionIDBuilder
+	ListKmsRegions(ctx context.Context) client.Response[[]models.KmsRegionView]
+}
+
+// v4KmsRegionsBuilderImpl implements V4KmsRegionsBuilder
+type v4KmsRegionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4KmsRegionsBuilder creates a new V4KmsRegionsBuilder
+func newV4KmsRegionsBuilder(sdk *sdkImpl) V4KmsRegionsBuilder {
+	return &v4KmsRegionsBuilderImpl{sdk: sdk}
+}
+
+// RegionID returns builder for regionID
+func (b *v4KmsRegionsBuilderImpl) RegionID(regionID string) V4KmsRegionsRegionIDBuilder {
+	return newV4KmsRegionsRegionIDBuilder(b.sdk, regionID)
+}
+
+// ListKmsRegions calls kms.ListKmsRegions
+func (b *v4KmsRegionsBuilderImpl) ListKmsRegions(ctx context.Context) client.Response[[]models.KmsRegionView] {
+	return kms.ListKmsRegions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4KmsRegionsRegionIDBuilder provides access to operations
+type V4KmsRegionsRegionIDBuilder interface {
+	DeleteKmsRegion(ctx context.Context) client.Response[client.Nothing]
+	GetKmsRegion(ctx context.Context) client.Response[models.KmsRegionView]
+	PatchKmsRegion(ctx context.Context, request *models.KmsUpdateRegionRequest) client.Response[client.Nothing]
+	PutKmsRegion(ctx context.Context, request *models.KmsRegisterRegionRequest) client.Response[client.Nothing]
+}
+
+// v4KmsRegionsRegionIDBuilderImpl implements V4KmsRegionsRegionIDBuilder
+type v4KmsRegionsRegionIDBuilderImpl struct {
+	sdk      *sdkImpl
+	regionID string
+}
+
+// newV4KmsRegionsRegionIDBuilder creates a new V4KmsRegionsRegionIDBuilder
+func newV4KmsRegionsRegionIDBuilder(sdk *sdkImpl, regionID string) V4KmsRegionsRegionIDBuilder {
+	return &v4KmsRegionsRegionIDBuilderImpl{
+		regionID: regionID,
+		sdk:      sdk,
+	}
+}
+
+// DeleteKmsRegion calls kms.DeleteKmsRegion
+func (b *v4KmsRegionsRegionIDBuilderImpl) DeleteKmsRegion(ctx context.Context) client.Response[client.Nothing] {
+	return kms.DeleteKmsRegion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.regionID)
+}
+
+// GetKmsRegion calls kms.GetKmsRegion
+func (b *v4KmsRegionsRegionIDBuilderImpl) GetKmsRegion(ctx context.Context) client.Response[models.KmsRegionView] {
+	return kms.GetKmsRegion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.regionID)
+}
+
+// PatchKmsRegion calls kms.PatchKmsRegion
+func (b *v4KmsRegionsRegionIDBuilderImpl) PatchKmsRegion(ctx context.Context, request *models.KmsUpdateRegionRequest) client.Response[client.Nothing] {
+	return kms.PatchKmsRegion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.regionID, request)
+}
+
+// PutKmsRegion calls kms.PutKmsRegion
+func (b *v4KmsRegionsRegionIDBuilderImpl) PutKmsRegion(ctx context.Context, request *models.KmsRegisterRegionRequest) client.Response[client.Nothing] {
+	return kms.PutKmsRegion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.regionID, request)
 }
 
 // V4KubernetesBuilder provides access to operations
@@ -19757,8 +21914,8 @@ func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Usage() V4KubernetesOrgani
 // V4KubernetesOrganisationsOwneridClustersBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersBuilder interface {
 	Clusterid(clusterid string) V4KubernetesOrganisationsOwneridClustersClusteridBuilder
-	Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView]
-	Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView]
+	Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster]
+	Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersBuilderImpl implements V4KubernetesOrganisationsOwneridClustersBuilder
@@ -19781,12 +21938,12 @@ func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Clusterid(clusteri
 }
 
 // Listkubernetesclusters calls kubernetes.Listkubernetesclusters
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster] {
 	return kubernetes.Listkubernetesclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
 // Createkubernetescluster calls kubernetes.Createkubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster] {
 	return kubernetes.Createkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
 }
 
@@ -19801,9 +21958,9 @@ type V4KubernetesOrganisationsOwneridClustersClusteridBuilder interface {
 	Redeploy() V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
 	Resume() V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder
 	Version() V4KubernetesOrganisationsOwneridClustersClusteridVersionBuilder
-	Deletekubernetescluster(ctx context.Context) client.Response[models.ClusterView]
-	Getkubernetescluster(ctx context.Context) client.Response[models.ClusterView]
-	Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.ClusterView]
+	Deletekubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster]
+	Getkubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster]
+	Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridBuilder
@@ -19868,17 +22025,17 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Version()
 }
 
 // Deletekubernetescluster calls kubernetes.Deletekubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Deletekubernetescluster(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Deletekubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.Deletekubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
 // Getkubernetescluster calls kubernetes.Getkubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Getkubernetescluster(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Getkubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.Getkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
 // Updatekubernetescluster calls kubernetes.Updatekubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridBuilderImpl) Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
 	return kubernetes.Updatekubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid, request)
 }
 
@@ -19910,7 +22067,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiBuilderImpl) Ceph()
 
 // V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder interface {
-	Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.ClusterView]
+	Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder
@@ -19930,7 +22087,7 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilder(sdk *sdk
 }
 
 // Assignkubernetescephcsiplugin calls kubernetes.Assignkubernetescephcsiplugin
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl) Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridCsiCephBuilderImpl) Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.Assignkubernetescephcsiplugin(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
@@ -20206,7 +22363,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersClusteridNodesNodeidBuilderImpl
 
 // V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder interface {
-	Triggerkubernetesclusterredeploy(ctx context.Context) client.Response[models.ClusterView]
+	Triggerkubernetesclusterredeploy(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder
@@ -20226,13 +22383,13 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilder(sdk *sd
 }
 
 // Triggerkubernetesclusterredeploy calls kubernetes.Triggerkubernetesclusterredeploy
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl) Triggerkubernetesclusterredeploy(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridRedeployBuilderImpl) Triggerkubernetesclusterredeploy(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.Triggerkubernetesclusterredeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder interface {
-	Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.ClusterView]
+	Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl implements V4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder
@@ -20252,7 +22409,7 @@ func newV4KubernetesOrganisationsOwneridClustersClusteridResumeBuilder(sdk *sdkI
 }
 
 // Triggerkubernetesclusterresume calls kubernetes.Triggerkubernetesclusterresume
-func (b *v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl) Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwneridClustersClusteridResumeBuilderImpl) Triggerkubernetesclusterresume(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.Triggerkubernetesclusterresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.clusterid)
 }
 
@@ -20838,7 +22995,7 @@ func (b *v4KubernetesOrganisationsOwnerIDClustersClusterIDStatusBuilderImpl) K8s
 
 // V4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilder provides access to operations
 type V4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilder interface {
-	K8sUpgradeCluster(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.ClusterView]
+	K8sUpgradeCluster(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilderImpl implements V4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilder
@@ -20858,7 +23015,7 @@ func newV4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilder(sdk *sdk
 }
 
 // K8sUpgradeCluster calls kubernetes.K8sUpgradeCluster
-func (b *v4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilderImpl) K8sUpgradeCluster(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.ClusterView] {
+func (b *v4KubernetesOrganisationsOwnerIDClustersClusterIDUpgradeBuilderImpl) K8sUpgradeCluster(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
 	return kubernetes.K8sUpgradeCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.clusterID, request)
 }
 
@@ -22620,7 +24777,7 @@ func (b *v4MetabaseBuilderImpl) Organisations() V4MetabaseOrganisationsBuilder {
 
 // V4MetabaseConsumptionsBuilder provides access to operations
 type V4MetabaseConsumptionsBuilder interface {
-	Listallmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[[]models.ResourceConsumption]
+	Listallmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[[]models.MetabaseResourceConsumption]
 }
 
 // v4MetabaseConsumptionsBuilderImpl implements V4MetabaseConsumptionsBuilder
@@ -22634,7 +24791,7 @@ func newV4MetabaseConsumptionsBuilder(sdk *sdkImpl) V4MetabaseConsumptionsBuilde
 }
 
 // Listallmetabaseproductconsole calls metabase.Listallmetabaseproductconsole
-func (b *v4MetabaseConsumptionsBuilderImpl) Listallmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[[]models.ResourceConsumption] {
+func (b *v4MetabaseConsumptionsBuilderImpl) Listallmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[[]models.MetabaseResourceConsumption] {
 	return metabase.Listallmetabaseproductconsole(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -22734,7 +24891,7 @@ func (b *v4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidBuilderImpl) Consu
 
 // V4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilder provides access to operations
 type V4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilder interface {
-	Getmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[models.ResourceConsumption]
+	Getmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[models.MetabaseResourceConsumption]
 }
 
 // v4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilderImpl implements V4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilder
@@ -22754,7 +24911,7 @@ func newV4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilder(
 }
 
 // Getmetabaseproductconsole calls metabase.Getmetabaseproductconsole
-func (b *v4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilderImpl) Getmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[models.ResourceConsumption] {
+func (b *v4MetabaseOrganisationsOwneridMetabaseAddonmetabaseidConsumptionBuilderImpl) Getmetabaseproductconsole(ctx context.Context, request *models.MetabaseConsumptionQuery) client.Response[models.MetabaseResourceConsumption] {
 	return metabase.Getmetabaseproductconsole(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonmetabaseid, request)
 }
 
@@ -23044,6 +25201,76 @@ func newV4MonitoringTenantsTenantidResourcesResourceidEventsBuilder(sdk *sdkImpl
 // Listmonitoringresourceevents calls monitoring.Listmonitoringresourceevents
 func (b *v4MonitoringTenantsTenantidResourcesResourceidEventsBuilderImpl) Listmonitoringresourceevents(ctx context.Context, opts ...monitoring.Option) client.Response[models.PaginatedEvents] {
 	return monitoring.Listmonitoringresourceevents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantid, b.resourceid, opts...)
+}
+
+// V4NetworkgroupBuilder provides access to operations
+type V4NetworkgroupBuilder interface {
+	Health() V4NetworkgroupHealthBuilder
+}
+
+// v4NetworkgroupBuilderImpl implements V4NetworkgroupBuilder
+type v4NetworkgroupBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4NetworkgroupBuilder creates a new V4NetworkgroupBuilder
+func newV4NetworkgroupBuilder(sdk *sdkImpl) V4NetworkgroupBuilder {
+	return &v4NetworkgroupBuilderImpl{sdk: sdk}
+}
+
+// Health returns Health builder
+func (b *v4NetworkgroupBuilderImpl) Health() V4NetworkgroupHealthBuilder {
+	return newV4NetworkgroupHealthBuilder(b.sdk)
+}
+
+// V4NetworkgroupHealthBuilder provides access to operations
+type V4NetworkgroupHealthBuilder interface {
+	Constraintname(constraintname string) V4NetworkgroupHealthConstraintnameBuilder
+	Getnetworkgrouphealth(ctx context.Context) client.Response[models.ApiHealthReport]
+}
+
+// v4NetworkgroupHealthBuilderImpl implements V4NetworkgroupHealthBuilder
+type v4NetworkgroupHealthBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4NetworkgroupHealthBuilder creates a new V4NetworkgroupHealthBuilder
+func newV4NetworkgroupHealthBuilder(sdk *sdkImpl) V4NetworkgroupHealthBuilder {
+	return &v4NetworkgroupHealthBuilderImpl{sdk: sdk}
+}
+
+// Constraintname returns builder for constraintname
+func (b *v4NetworkgroupHealthBuilderImpl) Constraintname(constraintname string) V4NetworkgroupHealthConstraintnameBuilder {
+	return newV4NetworkgroupHealthConstraintnameBuilder(b.sdk, constraintname)
+}
+
+// Getnetworkgrouphealth calls network_group.Getnetworkgrouphealth
+func (b *v4NetworkgroupHealthBuilderImpl) Getnetworkgrouphealth(ctx context.Context) client.Response[models.ApiHealthReport] {
+	return networkgroup.Getnetworkgrouphealth(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4NetworkgroupHealthConstraintnameBuilder provides access to operations
+type V4NetworkgroupHealthConstraintnameBuilder interface {
+	Getnetworkgrouphealthconstraint(ctx context.Context) client.Response[models.ApiHealthConstraintResult]
+}
+
+// v4NetworkgroupHealthConstraintnameBuilderImpl implements V4NetworkgroupHealthConstraintnameBuilder
+type v4NetworkgroupHealthConstraintnameBuilderImpl struct {
+	sdk            *sdkImpl
+	constraintname string
+}
+
+// newV4NetworkgroupHealthConstraintnameBuilder creates a new V4NetworkgroupHealthConstraintnameBuilder
+func newV4NetworkgroupHealthConstraintnameBuilder(sdk *sdkImpl, constraintname string) V4NetworkgroupHealthConstraintnameBuilder {
+	return &v4NetworkgroupHealthConstraintnameBuilderImpl{
+		constraintname: constraintname,
+		sdk:            sdk,
+	}
+}
+
+// Getnetworkgrouphealthconstraint calls network_group.Getnetworkgrouphealthconstraint
+func (b *v4NetworkgroupHealthConstraintnameBuilderImpl) Getnetworkgrouphealthconstraint(ctx context.Context) client.Response[models.ApiHealthConstraintResult] {
+	return networkgroup.Getnetworkgrouphealthconstraint(ctx, b.sdk.Client(), b.sdk.Tracer(), b.constraintname)
 }
 
 // V4NetworkgroupsBuilder provides access to operations
@@ -23922,7 +26149,7 @@ func (b *v4OtoroshiOtoroshiidBuilderImpl) Getotoroshiinfos(ctx context.Context) 
 
 // V4OtoroshiConsumptionsBuilder provides access to operations
 type V4OtoroshiConsumptionsBuilder interface {
-	Listallotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[[]models.ResourceConsumptionView]
+	Listallotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[[]models.OtoroshiResourceConsumption]
 }
 
 // v4OtoroshiConsumptionsBuilderImpl implements V4OtoroshiConsumptionsBuilder
@@ -23936,7 +26163,7 @@ func newV4OtoroshiConsumptionsBuilder(sdk *sdkImpl) V4OtoroshiConsumptionsBuilde
 }
 
 // Listallotoroshiproductconsole calls otoroshi.Listallotoroshiproductconsole
-func (b *v4OtoroshiConsumptionsBuilderImpl) Listallotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[[]models.ResourceConsumptionView] {
+func (b *v4OtoroshiConsumptionsBuilderImpl) Listallotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[[]models.OtoroshiResourceConsumption] {
 	return otoroshi.Listallotoroshiproductconsole(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -24036,7 +26263,7 @@ func (b *v4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidBuilderImpl) Consumptio
 
 // V4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilder provides access to operations
 type V4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilder interface {
-	Getotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[models.ResourceConsumptionView]
+	Getotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[models.OtoroshiResourceConsumption]
 }
 
 // v4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilderImpl implements V4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilder
@@ -24056,7 +26283,7 @@ func newV4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilder(sdk *
 }
 
 // Getotoroshiproductconsole calls otoroshi.Getotoroshiproductconsole
-func (b *v4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilderImpl) Getotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[models.ResourceConsumptionView] {
+func (b *v4OtoroshiOrganisationsOwneridOtoroshiOtoroshiidConsumptionBuilderImpl) Getotoroshiproductconsole(ctx context.Context, request *models.OtoroshiConsumptionQuery) client.Response[models.OtoroshiResourceConsumption] {
 	return otoroshi.Getotoroshiproductconsole(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.otoroshiid, request)
 }
 
@@ -24903,7 +27130,7 @@ func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPriv
 // V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilder provides access to operations
 type V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilder interface {
 	Tables() V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesBuilder
-	Updateschemasprivileges(ctx context.Context, request *models.SchemaPrivilegePatchRequest) client.Response[models.PgSchemaPrivilegesView]
+	PgPatchSchemasPrivileges(ctx context.Context, request *models.SchemaPrivilegePatchRequest) client.Response[models.PgSchemaPrivilegesView]
 }
 
 // v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilderImpl implements V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilder
@@ -24933,9 +27160,9 @@ func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPriv
 	return newV4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesBuilder(b.sdk, b.ownerid, b.postgresqlid, b.pguserid, b.databaseoid, b.schemaoid)
 }
 
-// Updateschemasprivileges calls postgresql.Updateschemasprivileges
-func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilderImpl) Updateschemasprivileges(ctx context.Context, request *models.SchemaPrivilegePatchRequest) client.Response[models.PgSchemaPrivilegesView] {
-	return postgresql.Updateschemasprivileges(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.postgresqlid, b.pguserid, b.databaseoid, b.schemaoid, request)
+// PgPatchSchemasPrivileges calls postgresql.PgPatchSchemasPrivileges
+func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidBuilderImpl) PgPatchSchemasPrivileges(ctx context.Context, request *models.SchemaPrivilegePatchRequest) client.Response[models.PgSchemaPrivilegesView] {
+	return postgresql.PgPatchSchemasPrivileges(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.postgresqlid, b.pguserid, b.databaseoid, b.schemaoid, request)
 }
 
 // V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesBuilder provides access to operations
@@ -24972,7 +27199,7 @@ func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPriv
 
 // V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilder provides access to operations
 type V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilder interface {
-	Updatetablesprivileges(ctx context.Context, request *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView]
+	PgPatchTablesPrivileges(ctx context.Context, request *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView]
 }
 
 // v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilderImpl implements V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilder
@@ -24999,9 +27226,9 @@ func newV4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivi
 	}
 }
 
-// Updatetablesprivileges calls postgresql.Updatetablesprivileges
-func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilderImpl) Updatetablesprivileges(ctx context.Context, request *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView] {
-	return postgresql.Updatetablesprivileges(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.postgresqlid, b.pguserid, b.databaseoid, b.schemaoid, b.tableoid, request)
+// PgPatchTablesPrivileges calls postgresql.PgPatchTablesPrivileges
+func (b *v4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesDatabaseoidSchemasSchemaoidTablesTableoidBuilderImpl) PgPatchTablesPrivileges(ctx context.Context, request *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView] {
+	return postgresql.PgPatchTablesPrivileges(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.postgresqlid, b.pguserid, b.databaseoid, b.schemaoid, b.tableoid, request)
 }
 
 // V4PostgresqlOrganisationsOwneridPostgresqlPostgresqlidUsersPguseridPrivilegesDatabasesObjectidBuilder provides access to operations
@@ -27159,6 +29386,7 @@ type V4TenantsTenantIDBuilder interface {
 	ContainerRegistry() V4TenantsTenantIDContainerRegistryBuilder
 	Opentelemetry() V4TenantsTenantIDOpentelemetryBuilder
 	OpentelemetryGateways() V4TenantsTenantIDOpentelemetryGatewaysBuilder
+	Products() V4TenantsTenantIDProductsBuilder
 	Tokens() V4TenantsTenantIDTokensBuilder
 }
 
@@ -27189,6 +29417,11 @@ func (b *v4TenantsTenantIDBuilderImpl) Opentelemetry() V4TenantsTenantIDOpentele
 // OpentelemetryGateways returns OpentelemetryGateways builder
 func (b *v4TenantsTenantIDBuilderImpl) OpentelemetryGateways() V4TenantsTenantIDOpentelemetryGatewaysBuilder {
 	return newV4TenantsTenantIDOpentelemetryGatewaysBuilder(b.sdk, b.tenantID)
+}
+
+// Products returns Products builder
+func (b *v4TenantsTenantIDBuilderImpl) Products() V4TenantsTenantIDProductsBuilder {
+	return newV4TenantsTenantIDProductsBuilder(b.sdk, b.tenantID)
 }
 
 // Tokens returns Tokens builder
@@ -27612,6 +29845,108 @@ func (b *v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl) DeleteOpent
 // GetOpentelemetryGateway calls open_telemetry.GetOpentelemetryGateway
 func (b *v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl) GetOpentelemetryGateway(ctx context.Context) client.Response[models.OpenTelemetryGatewayView] {
 	return opentelemetry.GetOpentelemetryGateway(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.gatewayID)
+}
+
+// V4TenantsTenantIDProductsBuilder provides access to operations
+type V4TenantsTenantIDProductsBuilder interface {
+	ProductID(productID string) V4TenantsTenantIDProductsProductIDBuilder
+}
+
+// v4TenantsTenantIDProductsBuilderImpl implements V4TenantsTenantIDProductsBuilder
+type v4TenantsTenantIDProductsBuilderImpl struct {
+	sdk      *sdkImpl
+	tenantID string
+}
+
+// newV4TenantsTenantIDProductsBuilder creates a new V4TenantsTenantIDProductsBuilder
+func newV4TenantsTenantIDProductsBuilder(sdk *sdkImpl, tenantID string) V4TenantsTenantIDProductsBuilder {
+	return &v4TenantsTenantIDProductsBuilderImpl{
+		sdk:      sdk,
+		tenantID: tenantID,
+	}
+}
+
+// ProductID returns builder for productID
+func (b *v4TenantsTenantIDProductsBuilderImpl) ProductID(productID string) V4TenantsTenantIDProductsProductIDBuilder {
+	return newV4TenantsTenantIDProductsProductIDBuilder(b.sdk, b.tenantID, productID)
+}
+
+// V4TenantsTenantIDProductsProductIDBuilder provides access to operations
+type V4TenantsTenantIDProductsProductIDBuilder interface {
+	Keys() V4TenantsTenantIDProductsProductIDKeysBuilder
+}
+
+// v4TenantsTenantIDProductsProductIDBuilderImpl implements V4TenantsTenantIDProductsProductIDBuilder
+type v4TenantsTenantIDProductsProductIDBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantID  string
+	productID string
+}
+
+// newV4TenantsTenantIDProductsProductIDBuilder creates a new V4TenantsTenantIDProductsProductIDBuilder
+func newV4TenantsTenantIDProductsProductIDBuilder(sdk *sdkImpl, tenantID string, productID string) V4TenantsTenantIDProductsProductIDBuilder {
+	return &v4TenantsTenantIDProductsProductIDBuilderImpl{
+		productID: productID,
+		sdk:       sdk,
+		tenantID:  tenantID,
+	}
+}
+
+// Keys returns Keys builder
+func (b *v4TenantsTenantIDProductsProductIDBuilderImpl) Keys() V4TenantsTenantIDProductsProductIDKeysBuilder {
+	return newV4TenantsTenantIDProductsProductIDKeysBuilder(b.sdk, b.tenantID, b.productID)
+}
+
+// V4TenantsTenantIDProductsProductIDKeysBuilder provides access to operations
+type V4TenantsTenantIDProductsProductIDKeysBuilder interface {
+	Active() V4TenantsTenantIDProductsProductIDKeysActiveBuilder
+}
+
+// v4TenantsTenantIDProductsProductIDKeysBuilderImpl implements V4TenantsTenantIDProductsProductIDKeysBuilder
+type v4TenantsTenantIDProductsProductIDKeysBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantID  string
+	productID string
+}
+
+// newV4TenantsTenantIDProductsProductIDKeysBuilder creates a new V4TenantsTenantIDProductsProductIDKeysBuilder
+func newV4TenantsTenantIDProductsProductIDKeysBuilder(sdk *sdkImpl, tenantID string, productID string) V4TenantsTenantIDProductsProductIDKeysBuilder {
+	return &v4TenantsTenantIDProductsProductIDKeysBuilderImpl{
+		productID: productID,
+		sdk:       sdk,
+		tenantID:  tenantID,
+	}
+}
+
+// Active returns Active builder
+func (b *v4TenantsTenantIDProductsProductIDKeysBuilderImpl) Active() V4TenantsTenantIDProductsProductIDKeysActiveBuilder {
+	return newV4TenantsTenantIDProductsProductIDKeysActiveBuilder(b.sdk, b.tenantID, b.productID)
+}
+
+// V4TenantsTenantIDProductsProductIDKeysActiveBuilder provides access to operations
+type V4TenantsTenantIDProductsProductIDKeysActiveBuilder interface {
+	TokenHasActiveSigningKey(ctx context.Context, opts ...tokens.Option) client.Response[models.ActiveSigningKeyView]
+}
+
+// v4TenantsTenantIDProductsProductIDKeysActiveBuilderImpl implements V4TenantsTenantIDProductsProductIDKeysActiveBuilder
+type v4TenantsTenantIDProductsProductIDKeysActiveBuilderImpl struct {
+	sdk       *sdkImpl
+	tenantID  string
+	productID string
+}
+
+// newV4TenantsTenantIDProductsProductIDKeysActiveBuilder creates a new V4TenantsTenantIDProductsProductIDKeysActiveBuilder
+func newV4TenantsTenantIDProductsProductIDKeysActiveBuilder(sdk *sdkImpl, tenantID string, productID string) V4TenantsTenantIDProductsProductIDKeysActiveBuilder {
+	return &v4TenantsTenantIDProductsProductIDKeysActiveBuilderImpl{
+		productID: productID,
+		sdk:       sdk,
+		tenantID:  tenantID,
+	}
+}
+
+// TokenHasActiveSigningKey calls tokens.TokenHasActiveSigningKey
+func (b *v4TenantsTenantIDProductsProductIDKeysActiveBuilderImpl) TokenHasActiveSigningKey(ctx context.Context, opts ...tokens.Option) client.Response[models.ActiveSigningKeyView] {
+	return tokens.TokenHasActiveSigningKey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.productID, opts...)
 }
 
 // V4TenantsTenantIDTokensBuilder provides access to operations

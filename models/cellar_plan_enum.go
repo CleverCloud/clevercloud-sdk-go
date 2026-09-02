@@ -9,6 +9,7 @@ const (
 	CellarPlanS                 CellarPlan = "S"
 	CellarPlanBACKUP            CellarPlan = "BACKUP"
 	CellarPlanPulsarColdStorage CellarPlan = "PULSAR_COLD_STORAGE"
+	CellarPlanContainerRegistry CellarPlan = "CONTAINER_REGISTRY"
 )
 
 // String returns the underlying string value

@@ -2,7 +2,7 @@
 
 package models
 
-// KeycloakStatus represents Keycloak addon lifecycle status.  Source: references/legacy/ovd/modules/keycloak/src/main/scala/c...
+// KeycloakStatus represents Lifecycle status of a Keycloak addon.  Source: references/legacy/ovd/modules/keycloak/src/main/sc...
 type KeycloakStatus string
 
 const (
@@ -11,6 +11,7 @@ const (
 	KeycloakStatusToDelete          KeycloakStatus = "TO_DELETE"
 	KeycloakStatusDELETED           KeycloakStatus = "DELETED"
 	KeycloakStatusProvisioningError KeycloakStatus = "PROVISIONING_ERROR"
+	KeycloakStatusDeletionError     KeycloakStatus = "DELETION_ERROR"
 )
 
 // String returns the underlying string value

@@ -18,7 +18,7 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId: tenantId
+  - tenantId: Organisation/tenant ID
 
 # Returns the operation result or an error
 

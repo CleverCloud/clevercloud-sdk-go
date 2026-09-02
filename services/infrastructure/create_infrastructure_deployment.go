@@ -36,14 +36,14 @@ Example:
 x-service: infrastructure
 operationId: createInfrastructureDeployment
 */
-func Createinfrastructuredeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.DeploymentInput) client.Response[models.DeploymentOutput] {
+func Createinfrastructuredeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.DeploymentInput) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createInfrastructureDeployment")
 	defer span.End()
 
 	path := utils.Path("/v4/infrastructure/deployments")
 
 	// Make API call
-	response := client.Post[models.DeploymentOutput](ctx, c, path, requestBody)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

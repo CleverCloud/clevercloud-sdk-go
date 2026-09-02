@@ -17,10 +17,10 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - regionId:
-  - loadbalancerId:
-  - networkId:
+  - tenantId: Organisation/tenant ID
+  - regionId: regionId
+  - loadbalancerId: loadbalancerId
+  - networkId: networkId
 
 # Returns the operation result or an error
 

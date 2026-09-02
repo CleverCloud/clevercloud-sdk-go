@@ -4,12 +4,14 @@ package models
 
 import "time"
 
-// KeycloakConsumptionView Resource consumption view returned by consumption endpoints.  Source: references/legacy/ovd/modul...
+// KeycloakConsumptionView One consumption line for a Keycloak addon.  Source: references/legacy/ovd/modules/keycloak/src/ma...
 type KeycloakConsumptionView struct {
-	Consumptions []KeycloakConsumptionItem `json:"consumptions"` // Consumption items
-	OwnerID      string                    `json:"ownerId"`      // Owner ID
-	ProductID    string                    `json:"productId"`    // Product ID (e.g. "addon-keycloak")
-	ResourceID   string                    `json:"resourceId"`   // Resource (addon) ID
-	Since        time.Time                 `json:"since"`        // Billing period start
-	Until        time.Time                 `json:"until"`        // Billing period end
+	Consumptions []KeycloakConsumptionItem `json:"consumptions"`
+	OwnerID      string                    `json:"ownerId"`
+	ProductID    string                    `json:"productId"` // `ProductId.zero` — the all-zero PREFIXED uuid, not the digit `0`. Inventing a product id changes ...
+	RegionID     string                    `json:"regionId"`
+	ResourceID   string                    `json:"resourceId"`
+	Since        time.Time                 `json:"since"`
+	Until        time.Time                 `json:"until"`
+	Version      int                       `json:"version"` // Envelope version — legacy defaults it to 1.
 }

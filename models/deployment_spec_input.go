@@ -5,6 +5,6 @@ package models
 // DeploymentSpecInput Source: references/legacy/ovd/modules/compute/routes/DeploymentInput.scala DeploymentSpecInput
 type DeploymentSpecInput struct {
 	Labels          map[string]any            `json:"labels"`
-	Tags            map[string]any            `json:"tags"`
+	Tags            Vec                       `json:"tags"`
 	VirtualMachines []VirtualMachineSpecInput `json:"virtualMachines"`
 }

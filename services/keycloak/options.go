@@ -2,25 +2,11 @@
 
 package keycloak
 
-import (
-	"fmt"
-	"strings"
-)
-
 // Option defines a functional option for keycloak operations
 type Option func(*Options)
 
 // Options holds query parameters for keycloak operations
-type Options struct {
-	Ownerid *any `url:"ownerId,omitempty"`
-}
-
-// WithOwnerid sets the ownerId query parameter
-func WithOwnerid(ownerId any) Option {
-	return func(o *Options) {
-		o.Ownerid = &ownerId
-	}
-}
+type Options struct{}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -28,14 +14,5 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-
-	var params []string
-	if options.Ownerid != nil {
-		params = append(params, fmt.Sprintf("ownerId=%v", *options.Ownerid))
-	}
-
-	if len(params) == 0 {
-		return ""
-	}
-	return strings.Join(params, "&")
+	return ""
 }

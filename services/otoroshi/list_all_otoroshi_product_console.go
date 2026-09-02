@@ -35,14 +35,14 @@ Example:
 x-service: otoroshi
 operationId: listAllOtoroshiProductConsole
 */
-func Listallotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.OtoroshiConsumptionQuery) client.Response[[]models.ResourceConsumptionView] {
+func Listallotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.OtoroshiConsumptionQuery) client.Response[[]models.OtoroshiResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listAllOtoroshiProductConsole")
 	defer span.End()
 
 	path := utils.Path("/v4/otoroshi/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.ResourceConsumptionView](ctx, c, path, requestBody)
+	response := client.Post[[]models.OtoroshiResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

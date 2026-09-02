@@ -13,14 +13,17 @@ import (
 /*
 Rebootkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/reboot
 
-Source: ovd AddonKeycloakAddonActor.scala:810 rebootAddonKeycloak(rebuild=false)
-Issue: #313
+📥 **Algo Source (Legacy):** `rebootAddonKeycloak(_, rebuild = false)` (`A:871`)
+— restarts the Java application **with** the build cache.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:871
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak addon id
 
 # Returns the operation result or an error
 

@@ -13,6 +13,13 @@ import (
 /*
 Listallkeycloakconsumption POST /v4/keycloak/consumptions
 
+📥 **Algo Source (Legacy):** `getAllResourceConsumption` (`A:261`) reports every
+addon in the window, **including soft-deleted ones** — that is how the final
+period gets invoiced.
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:261
+Issues: #313
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client

@@ -4,6 +4,6 @@ package models
 
 // VersionsView Cluster console view — returned by GET /resources/versions.  Source: references/legacy/addon-api/...
 type VersionsView struct {
-	Clusters          []ClusterConsoleView `json:"clusters"`
-	DedicatedVersions []string             `json:"dedicatedVersions"`
+	Clusters          []RedisClusterConsole `json:"clusters"`
+	DedicatedVersions []string              `json:"dedicatedVersions"`
 }

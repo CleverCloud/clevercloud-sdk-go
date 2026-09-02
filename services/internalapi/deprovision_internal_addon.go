@@ -24,10 +24,11 @@ Source: cc-api AddonHelper.java:322-323 deprovisionFromRealIdFromInternal() → 
 Behavior: 401 when the caller is not an internal service, 403 for an internal
 
 	service without `manage_organisations_services`, 404 when no live addon
-	of the org carries that real id. Bodyless: legacy signs
-	`authInternal(crc, null)`, so the route takes no payload layer.
+	of the org carries that real id, 412 when it carries SYSTEM ownership.
+	Bodyless: legacy signs `authInternal(crc, null)`, so the route takes no
+	payload layer.
 
-Issues: #709, #1956, #2018
+Issues: #709, #1956, #2018, #1061, #2974
 
 Algorithm: Internal auth, find addon by real_id within org, soft-delete + provider deprovision
 Legacy: cc-api InternalOrganisationAddonsAPI.java:51 deprovisionAddonInternal()

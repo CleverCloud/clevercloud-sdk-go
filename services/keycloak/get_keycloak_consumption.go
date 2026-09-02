@@ -14,12 +14,21 @@ import (
 /*
 Getkeycloakconsumption POST /v4/keycloak/organisations/{owner_id}/keycloak/{keycloak_id}/consumption
 
+📥 **Algo Source (Legacy):** `getResourceConsumption` (`A:328`) returns the
+consumption of one addon over the window. **404s for a deleted addon**, whereas
+the list route (below) includes deleted rows — an asymmetry preserved here.
+`product_id` is `ProductId.zero` on every line and `region_id` is the hardcoded
+default; both are carried over verbatim (scope decisions SD-12/SD-13).
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:328
+Issues: #313
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonKeycloakId:
+  - ownerId: Owner id
+  - addonKeycloakId: Keycloak addon id
   - requestBody: the request payload
 
 # Returns the operation result or an error
