@@ -6,11 +6,12 @@ package models
 type PartnerFlag string
 
 const (
-	PartnerFlagDenyOrgaCreation     PartnerFlag = "DENY_ORGA_CREATION"
-	PartnerFlagDenyOrgaUpdate       PartnerFlag = "DENY_ORGA_UPDATE"
-	PartnerFlagDenyOrgaDeletion     PartnerFlag = "DENY_ORGA_DELETION"
-	PartnerFlagDenyOrgaMemberUpdate PartnerFlag = "DENY_ORGA_MEMBER_UPDATE"
-	PartnerFlagDenyOrgaMemberList   PartnerFlag = "DENY_ORGA_MEMBER_LIST"
+	PartnerFlagDenyOrgaCreation        PartnerFlag = "DENY_ORGA_CREATION"
+	PartnerFlagDenyOrgaUpdate          PartnerFlag = "DENY_ORGA_UPDATE"
+	PartnerFlagDenyOrgaDeletion        PartnerFlag = "DENY_ORGA_DELETION"
+	PartnerFlagDenyOrgaMemberUpdate    PartnerFlag = "DENY_ORGA_MEMBER_UPDATE"
+	PartnerFlagDenyOrgaMemberList      PartnerFlag = "DENY_ORGA_MEMBER_LIST"
+	PartnerFlagDenySelfAccountDeletion PartnerFlag = "DENY_SELF_ACCOUNT_DELETION"
 )
 
 // String returns the underlying string value

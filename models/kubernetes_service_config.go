@@ -2,9 +2,8 @@
 
 package models
 
-// KubernetesServiceConfig Kubernetes service configuration (product info).  Source: references/legacy/ovd/modules/kubernete...
+// KubernetesServiceConfig Kubernetes service configuration (product info) — OVD's shape.  The previous flat `{replicationFa...
 type KubernetesServiceConfig struct {
-	ReplicationFactor ReplicationFactorConfig `json:"replicationFactor"` // Replication factor bounds
-	Topology          []ClusterTopology       `json:"topology"`          // Available topologies
-	Versions          []Version               `json:"versions"`          // Available Kubernetes versions
+	Topologies []TopologyConstraints `json:"topologies"` // The three topologies with their constraints.
+	Versions   VersionsConfig        `json:"versions"`   // The configured version policy.
 }

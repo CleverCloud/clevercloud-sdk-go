@@ -20,7 +20,7 @@ Issue: #667
 
 **Legacy**: ovd ClusterController.scala checkVersion()
 **Algorithm**:
-  - Fetch cluster, compare installed version with AVAILABLE_K8S_VERSIONS
+  - Fetch cluster, compare installed version with the configured set
   - Return ClusterVersionCheck with installed/available/latest/need_update
 
 **Conformity**: YES

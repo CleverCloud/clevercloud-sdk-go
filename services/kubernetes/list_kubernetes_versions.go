@@ -12,15 +12,18 @@ import (
 /*
 ListKubernetesVersions **Legacy**: ovd ClusterController.scala:261 getServiceConfig() (versions subset)
 **Algorithm**:
-  - Returns static AVAILABLE_K8S_VERSIONS list from config
+  - Returns the configured version set, descending
 
 **Conformity**: YES
 
 GET /v4/kubernetes/versions — list available Kubernetes versions.
 
 Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala — getServiceConfig
-Behavior: returns static list of available K8s versions
-Issue: #8
+Behavior: returns the operator-configured set of available K8s versions,
+
+	newest first (`MODULE_PRODUCT_KUBERNETES__VERSION__AVAILABLE`)
+
+Issue: #8, #3149
 
 Parameters:
   - ctx: context for the request

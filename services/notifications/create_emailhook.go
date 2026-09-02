@@ -16,9 +16,9 @@ CreateEmailhook POST /v2/notifications/emailhooks/{owner_id} — create an email
 
 Source: notification-api POST /emailhooks/{ownerId}
 Issue: #262
-Algorithm: Verify notification access, rate-limit, validate name non-empty and at least one notified target, convert events/notified to the typed Mongo model (unknown keys → 422), insert an Emailhook document (bare UUID id, createdAt now) into the `emailhooks` collection, return 201 Created with EmailHookView.
+Algorithm: Verify notification access, rate-limit, validate name non-empty and at least one notified target, convert events/notified to the typed Mongo model (unknown keys → 422), reject a duplicate (owner, name) with 409 Conflict (fixes #3232), insert an Emailhook document (bare UUID id, createdAt now) into the `emailhooks` collection, return 201 Created with EmailHookView.
 Legacy: notification-api Emailhook.create mints a bare UUID and EmailhookController returns 201 Created.
-Conformity: faithful (status 201, refs #1053; MongoDB backend #1054)
+Conformity: faithful (status 201, refs #1053; MongoDB backend #1054) except the 409 duplicate guard — a deliberate deviation (legacy's bare insert is what duplicated every user's default hook, #3232) matching the PG store's UNIQUE (owner_id, name) (#3210).
 
 Parameters:
   - ctx: context for the request
