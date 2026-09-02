@@ -42,14 +42,14 @@ Example:
 x-service: self
 operationId: getSelfBackupCodes
 */
-func Getselfbackupcodes(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string) client.Response[[]models.MfaRecoveryCodeView] {
+func Getselfbackupcodes(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string) client.Response[[]models.MFARecoveryCode] {
 	ctx, span := tracer.Start(ctx, "getSelfBackupCodes", trace.WithAttributes(attribute.String("kind", kind)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/mfa/%s/backupcodes", kind)
 
 	// Make API call
-	response := client.Get[[]models.MfaRecoveryCodeView](ctx, c, path)
+	response := client.Get[[]models.MFARecoveryCode](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

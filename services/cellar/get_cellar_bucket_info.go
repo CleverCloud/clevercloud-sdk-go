@@ -37,14 +37,14 @@ Example:
 x-service: cellar
 operationId: getCellarBucketInfo
 */
-func Getcellarbucketinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string) client.Response[models.BucketView] {
+func Getcellarbucketinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string) client.Response[models.Bucket] {
 	ctx, span := tracer.Start(ctx, "getCellarBucketInfo", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId), attribute.String("bucketName", bucketName)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets/%s", ownerId, CellarId, bucketName)
 
 	// Make API call
-	response := client.Get[models.BucketView](ctx, c, path)
+	response := client.Get[models.Bucket](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

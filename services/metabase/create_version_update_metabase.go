@@ -43,14 +43,14 @@ Example:
 x-service: metabase
 operationId: createVersionUpdateMetabase
 */
-func Createversionupdatemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string, requestBody *models.PatchMetabase) client.Response[models.MetabaseView] {
+func Createversionupdatemetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string, requestBody *models.MetabasePatchRequest) client.Response[models.Metabase] {
 	ctx, span := tracer.Start(ctx, "createVersionUpdateMetabase", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-metabase/addons/%s/version/update", addonMetabaseId)
 
 	// Make API call
-	response := client.Post[models.MetabaseView](ctx, c, path, requestBody)
+	response := client.Post[models.Metabase](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

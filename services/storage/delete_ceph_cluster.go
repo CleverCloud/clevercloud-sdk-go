@@ -44,14 +44,14 @@ Example:
 x-service: storage
 operationId: deleteCephCluster
 */
-func Deletecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephClusterView] {
+func Deletecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string) client.Response[models.CephCluster] {
 	ctx, span := tracer.Start(ctx, "deleteCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s", tenantId, clusterId)
 
 	// Make API call
-	response := client.Delete[models.CephClusterView](ctx, c, path)
+	response := client.Delete[models.CephCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

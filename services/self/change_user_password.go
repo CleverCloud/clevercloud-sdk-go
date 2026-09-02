@@ -43,7 +43,7 @@ Example:
 x-service: self
 operationId: changeUserPassword
 */
-func Changeuserpassword(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ChangePasswordInput) client.Response[models.Message] {
+func Changeuserpassword(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabePassword) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "changeUserPassword")
 	defer span.End()
 

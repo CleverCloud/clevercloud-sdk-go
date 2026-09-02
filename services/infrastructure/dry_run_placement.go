@@ -36,14 +36,14 @@ Example:
 x-service: infrastructure
 operationId: dryRunPlacement
 */
-func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.PlacementDryRunInput) client.Response[models.PlacementDryRunResult] {
+func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.PlacementDryRunInput) client.Response[models.MapHypervisor] {
 	ctx, span := tracer.Start(ctx, "dryRunPlacement")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/placement/dry-run")
 
 	// Make API call
-	response := client.Post[models.PlacementDryRunResult](ctx, c, path, requestBody)
+	response := client.Post[models.MapHypervisor](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

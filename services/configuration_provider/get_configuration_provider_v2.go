@@ -43,14 +43,14 @@ Example:
 x-service: configuration_provider
 operationId: getConfigurationProviderV2
 */
-func Getconfigurationproviderv2(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProviderAddonView] {
+func Getconfigurationproviderv2(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProvider] {
 	ctx, span := tracer.Start(ctx, "getConfigurationProviderV2", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/config-provider/resources/%s", addonId)
 
 	// Make API call
-	response := client.Get[models.ConfigProviderAddonView](ctx, c, path)
+	response := client.Get[models.ConfigProvider](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

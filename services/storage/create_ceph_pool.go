@@ -60,7 +60,7 @@ Example:
 x-service: storage
 operationId: createCephPool
 */
-func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CreateCephPoolRequest) client.Response[models.CephPoolView] {
+func Createcephpool(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephPool) client.Response[models.CephPoolView] {
 	ctx, span := tracer.Start(ctx, "createCephPool", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 

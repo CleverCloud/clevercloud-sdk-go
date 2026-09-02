@@ -61,14 +61,14 @@ Example:
 x-service: storage
 operationId: createCephRBDNamespace
 */
-func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CreateCephRBDNamespaceRequest) client.Response[models.CephRBDNamespaceView] {
+func Createcephrbdnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.WannabeCephRBDNamespace) client.Response[models.CephRBDNamespace] {
 	ctx, span := tracer.Start(ctx, "createCephRBDNamespace", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-rbd-namespaces", tenantId, clusterId)
 
 	// Make API call
-	response := client.Post[models.CephRBDNamespaceView](ctx, c, path, requestBody)
+	response := client.Post[models.CephRBDNamespace](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -19,8 +19,8 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - regionId: regionId
-  - loadbalancerId: loadbalancerId
+  - regionId: Region ID
+  - loadbalancerId: Load balancer ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

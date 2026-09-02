@@ -42,7 +42,7 @@ Example:
 x-service: matomo
 operationId: getValidateMatomoKeycloakToken
 */
-func Getvalidatematomokeycloaktoken(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.InfoWithPHPApp] {
+func Getvalidatematomokeycloaktoken(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.MatomoWithPHPApp] {
 	ctx, span := tracer.Start(ctx, "getValidateMatomoKeycloakToken")
 	defer span.End()
 
@@ -55,7 +55,7 @@ func Getvalidatematomokeycloaktoken(ctx context.Context, c *client.Client, trace
 	}
 
 	// Make API call
-	response := client.Get[models.InfoWithPHPApp](ctx, c, path)
+	response := client.Get[models.MatomoWithPHPApp](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -36,7 +36,7 @@ Example:
 x-service: tokens
 operationId: listSigningKeys
 */
-func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, opts ...Option) client.Response[[]models.SigningKeyView] {
+func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, opts ...Option) client.Response[[]models.SigningKey] {
 	ctx, span := tracer.Start(ctx, "listSigningKeys", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("productId", productId)))
 	defer span.End()
 
@@ -49,7 +49,7 @@ func Listsigningkeys(ctx context.Context, c *client.Client, tracer trace.Tracer,
 	}
 
 	// Make API call
-	response := client.Get[[]models.SigningKeyView](ctx, c, path)
+	response := client.Get[[]models.SigningKey](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

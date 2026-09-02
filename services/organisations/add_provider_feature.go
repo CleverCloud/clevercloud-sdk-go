@@ -45,7 +45,7 @@ Example:
 x-service: organisations
 operationId: addProviderFeature
 */
-func Addproviderfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, requestBody *models.WannabeFeature) client.Response[models.AddonProviderFeatureView] {
+func Addproviderfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, requestBody *models.WannabeAddonFeature) client.Response[models.AddonProviderFeatureView] {
 	ctx, span := tracer.Start(ctx, "addProviderFeature", trace.WithAttributes(attribute.String("id", id), attribute.String("providerId", providerId)))
 	defer span.End()
 

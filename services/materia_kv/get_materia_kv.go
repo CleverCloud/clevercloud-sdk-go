@@ -81,14 +81,14 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKv
 */
-func Getmateriakv(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string) client.Response[models.MateriaDBView] {
+func Getmateriakv(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string) client.Response[models.MateriaDB] {
 	ctx, span := tracer.Start(ctx, "getMateriaKv", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kvId", kvId)))
 	defer span.End()
 
 	path := utils.Path("/v4/materia/organisations/%s/materia/databases/%s", ownerId, kvId)
 
 	// Make API call
-	response := client.Get[models.MateriaDBView](ctx, c, path)
+	response := client.Get[models.MateriaDB](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

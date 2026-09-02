@@ -39,14 +39,14 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNodeGroup
 */
-func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroupView] {
+func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "createKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.NodeGroupView](ctx, c, path, requestBody)
+	response := client.Post[models.NodeGroup](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

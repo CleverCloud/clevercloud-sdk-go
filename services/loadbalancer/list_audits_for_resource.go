@@ -20,7 +20,7 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - resourceId: resourceId
+  - resourceId: Resource ID
 
 # Returns the operation result or an error
 
@@ -35,14 +35,14 @@ Example:
 x-service: loadbalancer
 operationId: listAuditsForResource
 */
-func Listauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[[]models.LoadBalancerAuditView] {
+func Listauditsforresource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[[]models.LoadBalancerAudit] {
 	ctx, span := tracer.Start(ctx, "listAuditsForResource", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("resourceId", resourceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/audit/%s", tenantId, resourceId)
 
 	// Make API call
-	response := client.Get[[]models.LoadBalancerAuditView](ctx, c, path)
+	response := client.Get[[]models.LoadBalancerAudit](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

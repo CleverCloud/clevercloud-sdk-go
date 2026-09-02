@@ -45,14 +45,14 @@ Example:
 x-service: postgresql
 operationId: listDatabases
 */
-func Listdatabases(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string) client.Response[[]models.PostgreSQLDatabaseView] {
+func Listdatabases(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string) client.Response[[]models.PostgreSQLDatabase] {
 	ctx, span := tracer.Start(ctx, "listDatabases", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/databases", ownerId, postgreSQLId)
 
 	// Make API call
-	response := client.Get[[]models.PostgreSQLDatabaseView](ctx, c, path)
+	response := client.Get[[]models.PostgreSQLDatabase](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

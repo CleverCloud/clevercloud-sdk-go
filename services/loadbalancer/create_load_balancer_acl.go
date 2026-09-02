@@ -19,8 +19,8 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - regionId: regionId
-  - loadbalancerId: loadbalancerId
+  - regionId: Region ID
+  - loadbalancerId: Load balancer ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +36,14 @@ Example:
 x-service: loadbalancer
 operationId: createLoadBalancerAcl
 */
-func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.AccessControlListInput) client.Response[models.ResourceAclView] {
+func Createloadbalanceracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.AccessControlList) client.Response[models.ResourceACL] {
 	ctx, span := tracer.Start(ctx, "createLoadBalancerAcl", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/acl", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Post[models.ResourceAclView](ctx, c, path, requestBody)
+	response := client.Post[models.ResourceACL](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

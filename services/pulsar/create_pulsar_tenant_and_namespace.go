@@ -55,14 +55,14 @@ Example:
 x-service: pulsar
 operationId: createPulsarTenantAndNamespace
 */
-func Createpulsartenantandnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
+func Createpulsartenantandnamespace(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "createPulsarTenantAndNamespace", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/create-tenant-and-namespace", pulsarId)
 
 	// Make API call
-	response := client.Post[models.PulsarView](ctx, c, path, nil)
+	response := client.Post[models.Pulsar](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

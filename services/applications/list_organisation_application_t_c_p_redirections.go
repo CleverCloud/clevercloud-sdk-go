@@ -41,14 +41,14 @@ Example:
 x-service: applications
 operationId: listOrganisationApplicationTCPRedirections
 */
-func Listorganisationapplicationtcpredirections(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string) client.Response[[]models.RedirectionView] {
+func Listorganisationapplicationtcpredirections(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string) client.Response[[]models.TcpRedirView] {
 	ctx, span := tracer.Start(ctx, "listOrganisationApplicationTCPRedirections", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/applications/%s/tcpRedirs", id, appId)
 
 	// Make API call
-	response := client.Get[[]models.RedirectionView](ctx, c, path)
+	response := client.Get[[]models.TcpRedirView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

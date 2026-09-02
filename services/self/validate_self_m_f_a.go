@@ -44,7 +44,7 @@ Example:
 x-service: self
 operationId: validateSelfMFA
 */
-func Validateselfmfa(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string, requestBody *models.MfaConfirmationInput) client.Response[models.Message] {
+func Validateselfmfa(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string, requestBody *models.WannabeMFACreds) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "validateSelfMFA", trace.WithAttributes(attribute.String("kind", kind)))
 	defer span.End()
 

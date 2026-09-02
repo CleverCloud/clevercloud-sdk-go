@@ -35,14 +35,14 @@ Example:
 x-service: pulsar
 operationId: listOutboxMessages
 */
-func Listoutboxmessages(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.OutboxMessageView] {
+func Listoutboxmessages(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.LoadbalanceroutboxT] {
 	ctx, span := tracer.Start(ctx, "listOutboxMessages", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/pulsar", tenantId)
 
 	// Make API call
-	response := client.Get[[]models.OutboxMessageView](ctx, c, path)
+	response := client.Get[[]models.LoadbalanceroutboxT](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -45,14 +45,14 @@ Example:
 x-service: postgresql
 operationId: listPostgreSQLMigrationUsers
 */
-func Listpostgresqlmigrationusers(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PgUserDataView] {
+func Listpostgresqlmigrationusers(ctx context.Context, c *client.Client, tracer trace.Tracer, postgreSQLId string) client.Response[[]models.PgUserData] {
 	ctx, span := tracer.Start(ctx, "listPostgreSQLMigrationUsers", trace.WithAttributes(attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/%s/migration/users", postgreSQLId)
 
 	// Make API call
-	response := client.Get[[]models.PgUserDataView](ctx, c, path)
+	response := client.Get[[]models.PgUserData](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -41,14 +41,14 @@ Example:
 x-service: metabase
 operationId: getMetabase
 */
-func Getmetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.MetabaseView] {
+func Getmetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.Metabase] {
 	ctx, span := tracer.Start(ctx, "getMetabase", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-metabase/addons/%s", addonMetabaseId)
 
 	// Make API call
-	response := client.Get[models.MetabaseView](ctx, c, path)
+	response := client.Get[models.Metabase](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

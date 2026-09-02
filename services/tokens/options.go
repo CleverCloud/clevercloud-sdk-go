@@ -4,6 +4,7 @@ package tokens
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -12,15 +13,15 @@ type Option func(*Options)
 
 // Options holds query parameters for tokens operations
 type Options struct {
-	Cursor     *any  `url:"cursor,omitempty"`
-	Limit      *any  `url:"limit,omitempty"`
-	Locationid *any  `url:"locationId,omitempty"`
-	Paginate   *bool `url:"paginate,omitempty"`
-	Productid  *any  `url:"productId,omitempty"`
-	Since      *any  `url:"since,omitempty"`
-	Status     *any  `url:"status,omitempty"`
-	Tag        *any  `url:"tag,omitempty"`
-	Tokentype  *any  `url:"tokenType,omitempty"`
+	Cursor     *any    `url:"cursor,omitempty"`
+	Limit      *any    `url:"limit,omitempty"`
+	Locationid *string `url:"locationId,omitempty"`
+	Paginate   *bool   `url:"paginate,omitempty"`
+	Productid  *any    `url:"productId,omitempty"`
+	Since      *any    `url:"since,omitempty"`
+	Status     *any    `url:"status,omitempty"`
+	Tag        *any    `url:"tag,omitempty"`
+	Tokentype  *any    `url:"tokenType,omitempty"`
 }
 
 // WithCursor sets the cursor query parameter
@@ -38,7 +39,7 @@ func WithLimit(limit any) Option {
 }
 
 // WithLocationid sets the locationId query parameter
-func WithLocationid(locationId any) Option {
+func WithLocationid(locationId string) Option {
 	return func(o *Options) {
 		o.Locationid = &locationId
 	}
@@ -101,7 +102,7 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("limit=%v", *options.Limit))
 	}
 	if options.Locationid != nil {
-		params = append(params, fmt.Sprintf("locationId=%v", *options.Locationid))
+		params = append(params, fmt.Sprintf("locationId=%s", url.QueryEscape(*options.Locationid)))
 	}
 	if options.Paginate != nil {
 		params = append(params, fmt.Sprintf("paginate=%t", *options.Paginate))

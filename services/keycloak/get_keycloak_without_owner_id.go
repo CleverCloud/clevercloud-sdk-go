@@ -44,14 +44,14 @@ Example:
 x-service: keycloak
 operationId: getKeycloakWithoutOwnerId
 */
-func Getkeycloakwithoutownerid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakView] {
+func Getkeycloakwithoutownerid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.Keycloak] {
 	ctx, span := tracer.Start(ctx, "getKeycloakWithoutOwnerId", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s", addonKeycloakId)
 
 	// Make API call
-	response := client.Get[models.KeycloakView](ctx, c, path)
+	response := client.Get[models.Keycloak](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

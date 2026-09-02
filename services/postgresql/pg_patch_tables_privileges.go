@@ -49,14 +49,14 @@ Example:
 x-service: postgresql
 operationId: pg_patch_tables_privileges
 */
-func PgPatchTablesPrivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, databaseOid int, schemaOid int, tableOid int, requestBody *models.ReadWritePrivilegeRequest) client.Response[models.PgTablePrivilegesView] {
+func PgPatchTablesPrivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, databaseOid int, schemaOid int, tableOid int, requestBody *models.ReadWritePrivileges) client.Response[models.PgTablePrivileges] {
 	ctx, span := tracer.Start(ctx, "pg_patch_tables_privileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("databaseOid", databaseOid), attribute.Int("schemaOid", schemaOid), attribute.Int("tableOid", tableOid)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s/privileges/databases/%s/schemas/%s/tables/%s", ownerId, postgreSQLId, pgUserId, databaseOid, schemaOid, tableOid)
 
 	// Make API call
-	response := client.Patch[models.PgTablePrivilegesView](ctx, c, path, requestBody)
+	response := client.Patch[models.PgTablePrivileges](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

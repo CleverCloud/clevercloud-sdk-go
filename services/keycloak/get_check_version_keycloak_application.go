@@ -39,14 +39,14 @@ Example:
 x-service: keycloak
 operationId: getCheckVersionKeycloakApplication
 */
-func Getcheckversionkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakVersionCheckView] {
+func Getcheckversionkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakVersionChecker] {
 	ctx, span := tracer.Start(ctx, "getCheckVersionKeycloakApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/version/check", addonKeycloakId)
 
 	// Make API call
-	response := client.Get[models.KeycloakVersionCheckView](ctx, c, path)
+	response := client.Get[models.KeycloakVersionChecker](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

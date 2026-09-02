@@ -63,14 +63,14 @@ Example:
 x-service: configuration_provider
 operationId: replaceConfigurationProviderEnv
 */
-func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.EnvVar) client.Response[[]models.EnvVar] {
+func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar] {
 	ctx, span := tracer.Start(ctx, "replaceConfigurationProviderEnv", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s/env", addonId)
 
 	// Make API call
-	response := client.Put[[]models.EnvVar](ctx, c, path, requestBody)
+	response := client.Put[[]models.WannabeEnvVar](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

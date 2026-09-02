@@ -65,14 +65,14 @@ Example:
 x-service: storage
 operationId: createScopedCephXUser
 */
-func Createscopedcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, poolId string, namespaceId string) client.Response[models.CephXUserView] {
+func Createscopedcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, poolId string, namespaceId string) client.Response[models.JustCreatedCephXUser] {
 	ctx, span := tracer.Start(ctx, "createScopedCephXUser", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId), attribute.String("poolId", poolId), attribute.String("namespaceId", namespaceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-pools/%s/ceph-rbd-namespaces/%s/ceph-x-users", tenantId, clusterId, poolId, namespaceId)
 
 	// Make API call
-	response := client.Post[models.CephXUserView](ctx, c, path, nil)
+	response := client.Post[models.JustCreatedCephXUser](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

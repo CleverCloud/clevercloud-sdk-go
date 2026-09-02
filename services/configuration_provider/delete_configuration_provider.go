@@ -45,14 +45,14 @@ Example:
 x-service: configuration_provider
 operationId: deleteConfigurationProvider
 */
-func Deleteconfigurationprovider(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProviderAddonView] {
+func Deleteconfigurationprovider(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.ConfigProvider] {
 	ctx, span := tracer.Start(ctx, "deleteConfigurationProvider", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/config-provider/resources/%s", addonId)
 
 	// Make API call
-	response := client.Delete[models.ConfigProviderAddonView](ctx, c, path)
+	response := client.Delete[models.ConfigProvider](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

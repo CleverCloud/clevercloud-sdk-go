@@ -20,8 +20,8 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - regionId: regionId
-  - serverId: serverId
+  - regionId: Region ID
+  - serverId: Server ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,7 +37,7 @@ Example:
 x-service: loadbalancer
 operationId: updateServerDrain
 */
-func Updateserverdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string, requestBody *models.DrainInput) client.Response[client.Nothing] {
+func Updateserverdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string, requestBody *models.Drain) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "updateServerDrain", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("serverId", serverId)))
 	defer span.End()
 

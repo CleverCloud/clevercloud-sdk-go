@@ -49,7 +49,7 @@ Example:
 x-service: addons
 operationId: preorderMigration
 */
-func Preordermigration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, opts ...Option) client.Response[models.PreorderView] {
+func Preordermigration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, opts ...Option) client.Response[models.InvoiceRendering] {
 	ctx, span := tracer.Start(ctx, "preorderMigration", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId)))
 	defer span.End()
 
@@ -62,7 +62,7 @@ func Preordermigration(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Get[models.PreorderView](ctx, c, path)
+	response := client.Get[models.InvoiceRendering](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

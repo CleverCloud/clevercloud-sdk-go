@@ -53,14 +53,14 @@ Example:
 x-service: ai
 operationId: getEndpoint
 */
-func Getendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string) client.Response[models.AiEndpointResponse] {
+func Getendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string) client.Response[models.AIEndpointResponse] {
 	ctx, span := tracer.Start(ctx, "getEndpoint", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s", ownerId, aiId, endpointId)
 
 	// Make API call
-	response := client.Get[models.AiEndpointResponse](ctx, c, path)
+	response := client.Get[models.AIEndpointResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

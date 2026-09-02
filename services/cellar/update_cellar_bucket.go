@@ -38,14 +38,14 @@ Example:
 x-service: cellar
 operationId: updateCellarBucket
 */
-func Updatecellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, requestBody *models.UpdateBucketRequest) client.Response[models.BucketView] {
+func Updatecellarbucket(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, requestBody *models.UpdateBucketRequest) client.Response[models.Bucket] {
 	ctx, span := tracer.Start(ctx, "updateCellarBucket", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId), attribute.String("bucketName", bucketName)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets/%s", ownerId, CellarId, bucketName)
 
 	// Make API call
-	response := client.Patch[models.BucketView](ctx, c, path, requestBody)
+	response := client.Patch[models.Bucket](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

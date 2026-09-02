@@ -48,14 +48,14 @@ Example:
 x-service: materia_timeseries
 operationId: getMateriaTS
 */
-func Getmateriats(ctx context.Context, c *client.Client, tracer trace.Tracer, addonTsId string) client.Response[models.TsAddonView] {
+func Getmateriats(ctx context.Context, c *client.Client, tracer trace.Tracer, addonTsId string) client.Response[models.TS] {
 	ctx, span := tracer.Start(ctx, "getMateriaTS", trace.WithAttributes(attribute.String("addonTsId", addonTsId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-ts/addons/%s", addonTsId)
 
 	// Make API call
-	response := client.Get[models.TsAddonView](ctx, c, path)
+	response := client.Get[models.TS](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -35,14 +35,14 @@ Example:
 x-service: tokens
 operationId: replaceSigningKey
 */
-func Replacesigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, keyId string) client.Response[models.SigningKeyView] {
+func Replacesigningkey(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, productId string, keyId string) client.Response[models.SigningKey] {
 	ctx, span := tracer.Start(ctx, "replaceSigningKey", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("productId", productId), attribute.String("keyId", keyId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/products/%s/keys/%s/rotate", tenantId, productId, keyId)
 
 	// Make API call
-	response := client.Post[models.SigningKeyView](ctx, c, path, nil)
+	response := client.Post[models.SigningKey](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

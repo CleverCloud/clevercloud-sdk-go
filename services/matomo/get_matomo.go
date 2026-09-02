@@ -40,14 +40,14 @@ Example:
 x-service: matomo
 operationId: getMatomo
 */
-func Getmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.MatomoView] {
+func Getmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.Matomo] {
 	ctx, span := tracer.Start(ctx, "getMatomo", trace.WithAttributes(attribute.String("addonMatomoId", addonMatomoId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-matomo/addons/%s", addonMatomoId)
 
 	// Make API call
-	response := client.Get[models.MatomoView](ctx, c, path)
+	response := client.Get[models.Matomo](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

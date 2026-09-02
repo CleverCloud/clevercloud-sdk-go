@@ -56,14 +56,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesNodeGroupResume
 */
-func Triggerkubernetesnodegroupresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string) client.Response[models.NodeGroupView] {
+func Triggerkubernetesnodegroupresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "triggerKubernetesNodeGroupResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s/resume", ownerId, clusterId, nodeGroupId)
 
 	// Make API call
-	response := client.Post[models.NodeGroupView](ctx, c, path, nil)
+	response := client.Post[models.NodeGroup](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

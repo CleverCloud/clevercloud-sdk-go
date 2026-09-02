@@ -4,8 +4,8 @@ package models
 
 // QuotaView OVD `Quota` response for the LoadBalancer tenant quota route.  Source: ovd@47f130b5a75cd9e9b9b9b3...
 type QuotaView struct {
-	ID       string          `json:"id"`
-	Quotas   []QuotaItemView `json:"quotas"`
-	Tags     []string        `json:"tags"`
-	TenantID string          `json:"tenantId"`
+	ID       string      `json:"id"`
+	Quotas   []QuotaItem `json:"quotas"`
+	Tags     []string    `json:"tags"`
+	TenantID string      `json:"tenantId"`
 }

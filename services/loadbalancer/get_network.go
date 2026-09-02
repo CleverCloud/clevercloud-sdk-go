@@ -19,7 +19,7 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - networkId: networkId
+  - networkId: Network ID
 
 # Returns the operation result or an error
 

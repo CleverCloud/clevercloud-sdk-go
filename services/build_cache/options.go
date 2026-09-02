@@ -14,7 +14,7 @@ type Option func(*Options)
 // Options holds query parameters for build_cache operations
 type Options struct {
 	Instance *string `url:"instance,omitempty"`
-	JSON     *any    `url:"json,omitempty"`
+	JSON     *string `url:"json,omitempty"`
 	PushOnly *bool   `url:"push_only,omitempty"`
 }
 
@@ -26,7 +26,7 @@ func WithInstance(instance string) Option {
 }
 
 // WithJSON sets the json query parameter
-func WithJSON(json any) Option {
+func WithJSON(json string) Option {
 	return func(o *Options) {
 		o.JSON = &json
 	}
@@ -51,7 +51,7 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("instance=%s", url.QueryEscape(*options.Instance)))
 	}
 	if options.JSON != nil {
-		params = append(params, fmt.Sprintf("json=%v", *options.JSON))
+		params = append(params, fmt.Sprintf("json=%s", url.QueryEscape(*options.JSON)))
 	}
 	if options.PushOnly != nil {
 		params = append(params, fmt.Sprintf("push_only=%t", *options.PushOnly))

@@ -41,14 +41,14 @@ Example:
 x-service: addons
 operationId: preorderSelfAddon
 */
-func Preorderselfaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeAddonProvision) client.Response[models.PreorderView] {
+func Preorderselfaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
 	ctx, span := tracer.Start(ctx, "preorderSelfAddon")
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/preorders")
 
 	// Make API call
-	response := client.Post[models.PreorderView](ctx, c, path, requestBody)
+	response := client.Post[models.InvoiceRendering](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

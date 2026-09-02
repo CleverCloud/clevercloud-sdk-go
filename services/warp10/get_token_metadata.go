@@ -43,14 +43,14 @@ Example:
 x-service: warp10
 operationId: getTokenMetadata
 */
-func Gettokenmetadata(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string, revocationId string) client.Response[models.TokenMetadataView] {
+func Gettokenmetadata(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string, revocationId string) client.Response[models.TokenMetadataResponse] {
 	ctx, span := tracer.Start(ctx, "getTokenMetadata", trace.WithAttributes(attribute.String("clusterId", clusterId), attribute.String("revocationId", revocationId)))
 	defer span.End()
 
 	path := utils.Path("/v4/warp10/cluster/%s/token/%s", clusterId, revocationId)
 
 	// Make API call
-	response := client.Get[models.TokenMetadataView](ctx, c, path)
+	response := client.Get[models.TokenMetadataResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

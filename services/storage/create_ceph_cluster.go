@@ -45,14 +45,14 @@ Example:
 x-service: storage
 operationId: createCephCluster
 */
-func Createcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephCluster) client.Response[models.CephClusterView] {
+func Createcephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, requestBody *models.WannabeCephCluster) client.Response[models.CephCluster] {
 	ctx, span := tracer.Start(ctx, "createCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters", tenantId)
 
 	// Make API call
-	response := client.Post[models.CephClusterView](ctx, c, path, requestBody)
+	response := client.Post[models.CephCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

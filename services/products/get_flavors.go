@@ -38,7 +38,7 @@ Example:
 x-service: products
 operationId: getFlavors
 */
-func Getflavors(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.FlavorView] {
+func Getflavors(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.Flavor] {
 	ctx, span := tracer.Start(ctx, "getFlavors")
 	defer span.End()
 
@@ -51,7 +51,7 @@ func Getflavors(ctx context.Context, c *client.Client, tracer trace.Tracer, opts
 	}
 
 	// Make API call
-	response := client.Get[[]models.FlavorView](ctx, c, path)
+	response := client.Get[[]models.Flavor](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

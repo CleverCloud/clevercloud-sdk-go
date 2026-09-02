@@ -63,14 +63,14 @@ Example:
 x-service: pulsar
 operationId: renewPulsarToken
 */
-func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
+func Renewpulsartoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "renewPulsarToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/renew-biscuit", pulsarId)
 
 	// Make API call
-	response := client.Patch[models.PulsarView](ctx, c, path, nil)
+	response := client.Patch[models.Pulsar](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

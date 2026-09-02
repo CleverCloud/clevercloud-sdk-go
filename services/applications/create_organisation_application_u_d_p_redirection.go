@@ -44,14 +44,14 @@ Example:
 x-service: applications
 operationId: createOrganisationApplicationUDPRedirection
 */
-func Createorganisationapplicationudpredirection(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, requestBody *models.WannabeRedirection) client.Response[models.RedirectionView] {
+func Createorganisationapplicationudpredirection(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, requestBody *models.WannabeNamespace) client.Response[models.TcpRedirView] {
 	ctx, span := tracer.Start(ctx, "createOrganisationApplicationUDPRedirection", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/applications/%s/udpRedirs", id, appId)
 
 	// Make API call
-	response := client.Post[models.RedirectionView](ctx, c, path, requestBody)
+	response := client.Post[models.TcpRedirView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -43,7 +43,7 @@ Example:
 x-service: internal
 operationId: create_internal_udp_redir
 */
-func CreateInternalUdpRedir(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string, requestBody *models.WannabeRedirection) client.Response[client.Nothing] {
+func CreateInternalUdpRedir(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string, requestBody *models.WannabeNamespace) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "create_internal_udp_redir", trace.WithAttributes(attribute.String("app_id", app_id)))
 	defer span.End()
 

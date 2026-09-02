@@ -56,14 +56,14 @@ Example:
 x-service: kubernetes
 operationId: k8s_update_node_pool
 */
-func K8sUpdateNodePool(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, cluster_id string, pool_id string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroupView] {
+func K8sUpdateNodePool(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, cluster_id string, pool_id string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "k8s_update_node_pool", trace.WithAttributes(attribute.String("owner_id", owner_id), attribute.String("cluster_id", cluster_id), attribute.String("pool_id", pool_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-pools/%s", owner_id, cluster_id, pool_id)
 
 	// Make API call
-	response := client.Put[models.NodeGroupView](ctx, c, path, requestBody)
+	response := client.Put[models.NodeGroup](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

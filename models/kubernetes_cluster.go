@@ -6,19 +6,19 @@ import "time"
 
 // KubernetesCluster Cluster view returned by Kubernetes API endpoints (aggregate).  Source: references/legacy/ovd/mod...
 type KubernetesCluster struct {
-	CreationDate         time.Time                        `json:"creationDate"`          // Creation date
-	Description          *string                          `json:"description,omitempty"` // Optional description
-	Features             *any                             `json:"features,omitempty"`
-	ID                   string                           `json:"id"`                             // Kubernetes cluster ID (kube_xxx)
-	LoadBalancers        []ClusterLoadBalancerView        `json:"loadBalancers,omitempty"`        // Load balancers (empty in the base view)
-	LocationID           string                           `json:"locationId"`                     // Geographic / failure-domain location
-	Name                 string                           `json:"name"`                           // Cluster name
-	NodeGroups           []ClusterNodeGroupView           `json:"nodeGroups,omitempty"`           // Node groups (empty in the base view; assembled by the detail endpoint)
-	StandaloneNodeGroups []ClusterStandaloneNodeGroupView `json:"standaloneNodeGroups,omitempty"` // Standalone node groups (empty in the base view)
-	Status               ClusterStatusType                `json:"status"`                         // Cluster status
-	StorageUsageBytes    *int                             `json:"storageUsageBytes,omitempty"`    // Total storage usage in bytes (if known)
-	Tags                 []SemanticTag                    `json:"tags"`                           // Semantic tags
-	TenantID             string                           `json:"tenantId"`                       // Owner (organisation) ID
-	TopologyConfig       TopologyConfig                   `json:"topologyConfig"`                 // Control-plane topology configuration
-	Version              Version                          `json:"version"`                        // Kubernetes version
+	CreationDate         time.Time                    `json:"creationDate"`          // Creation date
+	Description          *string                      `json:"description,omitempty"` // Optional description
+	Features             *any                         `json:"features,omitempty"`
+	ID                   string                       `json:"id"`                             // Kubernetes cluster ID (kube_xxx)
+	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`        // Load balancers (empty in the base view)
+	LocationID           string                       `json:"locationId"`                     // Geographic / failure-domain location
+	Name                 string                       `json:"name"`                           // Cluster name
+	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitempty"`           // Node groups (empty in the base view; assembled by the detail endpoint)
+	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitempty"` // Standalone node groups (empty in the base view)
+	Status               ClusterStatusType            `json:"status"`                         // Cluster status
+	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`    // Total storage usage in bytes (if known)
+	Tags                 []SemanticTag                `json:"tags"`                           // Semantic tags
+	TenantID             string                       `json:"tenantId"`                       // Owner (organisation) ID
+	TopologyConfig       TopologyConfig               `json:"topologyConfig"`                 // Control-plane topology configuration
+	Version              Version                      `json:"version"`                        // Kubernetes version
 }

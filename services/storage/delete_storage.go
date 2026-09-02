@@ -62,14 +62,14 @@ Example:
 x-service: storage
 operationId: deleteStorage
 */
-func Deletestorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, storageId string) client.Response[models.StorageView] {
+func Deletestorage(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, storageId string) client.Response[models.Storage] {
 	ctx, span := tracer.Start(ctx, "deleteStorage", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("storageId", storageId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/storages/%s", tenantId, storageId)
 
 	// Make API call
-	response := client.Delete[models.StorageView](ctx, c, path)
+	response := client.Delete[models.Storage](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -5,7 +5,7 @@ package models
 // InstanceView InstanceView (app-level) — matches cc-api openapi/ccapiv3.json InstanceView schema.  Source: cc-a...
 type InstanceView struct {
 	DefaultEnv          map[string]any      `json:"defaultEnv"`
-	Flavors             []FlavorView        `json:"flavors"`
+	Flavors             []Flavor            `json:"flavors"`
 	InstanceAndVersion  string              `json:"instanceAndVersion"`
 	KernelName          *string             `json:"kernelName,omitempty"` // Guest kernel image the VM boots with — a TOP-LEVEL instance field, fed from the VARIANT's column,...
 	Lifetime            string              `json:"lifetime"`

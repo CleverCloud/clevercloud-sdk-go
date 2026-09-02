@@ -43,14 +43,14 @@ Example:
 x-service: container_registry
 operationId: list_registry_tokens_legacy
 */
-func ListRegistryTokensLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[[]models.ContainerRegistryTokenView] {
+func ListRegistryTokensLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[[]models.ContainerRegistryToken] {
 	ctx, span := tracer.Start(ctx, "list_registry_tokens_legacy", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-container-registry/addons/%s/tokens", addon_id)
 
 	// Make API call
-	response := client.Get[[]models.ContainerRegistryTokenView](ctx, c, path)
+	response := client.Get[[]models.ContainerRegistryToken](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

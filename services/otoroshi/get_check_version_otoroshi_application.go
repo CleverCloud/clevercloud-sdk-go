@@ -45,14 +45,14 @@ Example:
 x-service: otoroshi
 operationId: getCheckVersionOtoroshiApplication
 */
-func Getcheckversionotoroshiapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.VersionCheckView] {
+func Getcheckversionotoroshiapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.OtoroshiVersionChecker] {
 	ctx, span := tracer.Start(ctx, "getCheckVersionOtoroshiApplication", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-otoroshi/addons/%s/version/check", OtoroshiId)
 
 	// Make API call
-	response := client.Get[models.VersionCheckView](ctx, c, path)
+	response := client.Get[models.OtoroshiVersionChecker](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

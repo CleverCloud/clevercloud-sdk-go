@@ -46,14 +46,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarV2
 */
-func Getpulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
+func Getpulsarv2(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "getPulsarV2", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-pulsar/resources/%s", pulsarId)
 
 	// Make API call
-	response := client.Get[models.PulsarView](ctx, c, path)
+	response := client.Get[models.Pulsar](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

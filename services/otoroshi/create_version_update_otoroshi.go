@@ -47,14 +47,14 @@ Example:
 x-service: otoroshi
 operationId: createVersionUpdateOtoroshi
 */
-func Createversionupdateotoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string, requestBody *models.PatchOtoroshiRequest) client.Response[models.OtoroshiView] {
+func Createversionupdateotoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string, requestBody *models.OtoroshiPatchRequest) client.Response[models.Otoroshi] {
 	ctx, span := tracer.Start(ctx, "createVersionUpdateOtoroshi", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-otoroshi/addons/%s/version/update", OtoroshiId)
 
 	// Make API call
-	response := client.Post[models.OtoroshiView](ctx, c, path, requestBody)
+	response := client.Post[models.Otoroshi](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

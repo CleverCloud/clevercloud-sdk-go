@@ -44,14 +44,14 @@ Example:
 x-service: container_registry
 operationId: list_registries
 */
-func ListRegistries(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string) client.Response[[]models.ContainerRegistryView] {
+func ListRegistries(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string) client.Response[[]models.ContainerRegistry] {
 	ctx, span := tracer.Start(ctx, "list_registries", trace.WithAttributes(attribute.String("tenant_id", tenant_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/container-registry/registries", tenant_id)
 
 	// Make API call
-	response := client.Get[[]models.ContainerRegistryView](ctx, c, path)
+	response := client.Get[[]models.ContainerRegistry](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

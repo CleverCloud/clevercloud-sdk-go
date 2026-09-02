@@ -44,14 +44,14 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesCurrentUsage
 */
-func Listkubernetescurrentusage(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.ClusterItemUsageView] {
+func Listkubernetescurrentusage(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.ClusterItemUsage] {
 	ctx, span := tracer.Start(ctx, "listKubernetesCurrentUsage", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/usage", ownerId)
 
 	// Make API call
-	response := client.Get[[]models.ClusterItemUsageView](ctx, c, path)
+	response := client.Get[[]models.ClusterItemUsage](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

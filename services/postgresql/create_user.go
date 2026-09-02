@@ -47,14 +47,14 @@ Example:
 x-service: postgresql
 operationId: createUser
 */
-func Createuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string) client.Response[models.PgUserDataView] {
+func Createuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string) client.Response[models.PgUserData] {
 	ctx, span := tracer.Start(ctx, "createUser", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users", ownerId, postgreSQLId)
 
 	// Make API call
-	response := client.Post[models.PgUserDataView](ctx, c, path, nil)
+	response := client.Post[models.PgUserData](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

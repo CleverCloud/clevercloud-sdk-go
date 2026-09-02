@@ -43,14 +43,14 @@ Example:
 x-service: addons
 operationId: preorderAddonByOrgaId
 */
-func Preorderaddonbyorgaid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAddonProvision) client.Response[models.PreorderView] {
+func Preorderaddonbyorgaid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
 	ctx, span := tracer.Start(ctx, "preorderAddonByOrgaId", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/preorders", id)
 
 	// Make API call
-	response := client.Post[models.PreorderView](ctx, c, path, requestBody)
+	response := client.Post[models.InvoiceRendering](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

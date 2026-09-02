@@ -48,14 +48,14 @@ Example:
 x-service: postgresql
 operationId: updateUser
 */
-func Updateuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, requestBody *models.PatchUserRequest) client.Response[models.PgUserDataView] {
+func Updateuser(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, requestBody *models.PatchUser) client.Response[models.PgUserData] {
 	ctx, span := tracer.Start(ctx, "updateUser", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s", ownerId, postgreSQLId, pgUserId)
 
 	// Make API call
-	response := client.Patch[models.PgUserDataView](ctx, c, path, requestBody)
+	response := client.Patch[models.PgUserData](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

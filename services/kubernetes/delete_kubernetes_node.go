@@ -47,14 +47,14 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesNode
 */
-func Deletekubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeId string) client.Response[models.StandaloneNodeView] {
+func Deletekubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeId string) client.Response[models.StandaloneNode] {
 	ctx, span := tracer.Start(ctx, "deleteKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeId", nodeId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes/%s", ownerId, clusterId, nodeId)
 
 	// Make API call
-	response := client.Delete[models.StandaloneNodeView](ctx, c, path)
+	response := client.Delete[models.StandaloneNode](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

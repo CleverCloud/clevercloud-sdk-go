@@ -48,14 +48,14 @@ Example:
 x-service: postgresql
 operationId: updateDatabasesPrivileges
 */
-func Updatedatabasesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadPrivilegeRequest) client.Response[models.PgDatabasePrivilegesView] {
+func Updatedatabasesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, pgUserId string, objectId int, requestBody *models.ReadPrivilege) client.Response[models.PgDatabasePrivileges] {
 	ctx, span := tracer.Start(ctx, "updateDatabasesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId), attribute.String("pgUserId", pgUserId), attribute.Int("objectId", objectId)))
 	defer span.End()
 
 	path := utils.Path("/v4/postgresql/organisations/%s/postgresql/%s/users/%s/privileges/databases/%s", ownerId, postgreSQLId, pgUserId, objectId)
 
 	// Make API call
-	response := client.Patch[models.PgDatabasePrivilegesView](ctx, c, path, requestBody)
+	response := client.Patch[models.PgDatabasePrivileges](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

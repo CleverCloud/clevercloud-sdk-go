@@ -48,7 +48,7 @@ Example:
 x-service: postgresql
 operationId: listUsers
 */
-func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgUserDataView] {
+func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgUserData] {
 	ctx, span := tracer.Start(ctx, "listUsers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
@@ -61,7 +61,7 @@ func Listusers(ctx context.Context, c *client.Client, tracer trace.Tracer, owner
 	}
 
 	// Make API call
-	response := client.Get[[]models.PgUserDataView](ctx, c, path)
+	response := client.Get[[]models.PgUserData](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -48,14 +48,14 @@ Example:
 x-service: ai
 operationId: getAI
 */
-func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[models.AiAddonView] {
+func Getai(ctx context.Context, c *client.Client, tracer trace.Tracer, aiId string) client.Response[models.AI] {
 	ctx, span := tracer.Start(ctx, "getAI", trace.WithAttributes(attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-ai/addons/%s", aiId)
 
 	// Make API call
-	response := client.Get[models.AiAddonView](ctx, c, path)
+	response := client.Get[models.AI](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

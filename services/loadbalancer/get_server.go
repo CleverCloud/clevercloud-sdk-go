@@ -19,8 +19,8 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - tenantId: Organisation/tenant ID
-  - regionId: regionId
-  - serverId: serverId
+  - regionId: Region ID
+  - serverId: Server ID
 
 # Returns the operation result or an error
 

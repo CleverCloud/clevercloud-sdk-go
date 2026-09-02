@@ -45,7 +45,7 @@ Example:
 x-service: postgresql
 operationId: listTablesPrivileges
 */
-func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgTablePrivilegesView] {
+func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, postgreSQLId string, opts ...Option) client.Response[[]models.PgTablePrivileges] {
 	ctx, span := tracer.Start(ctx, "listTablesPrivileges", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("postgreSQLId", postgreSQLId)))
 	defer span.End()
 
@@ -58,7 +58,7 @@ func Listtablesprivileges(ctx context.Context, c *client.Client, tracer trace.Tr
 	}
 
 	// Make API call
-	response := client.Get[[]models.PgTablePrivilegesView](ctx, c, path)
+	response := client.Get[[]models.PgTablePrivileges](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -10,7 +10,7 @@ type AvailableInstanceView struct {
 	Deployments   []string            `json:"deployments"`
 	Description   string              `json:"description"`
 	Enabled       bool                `json:"enabled"`
-	Flavors       []FlavorView        `json:"flavors"`
+	Flavors       []Flavor            `json:"flavors"`
 	MaxInstances  InstanceCount       `json:"maxInstances"`
 	Name          string              `json:"name"`
 	Tags          []SemanticTag       `json:"tags"`

@@ -40,14 +40,14 @@ Example:
 x-service: keycloak
 operationId: createNGKeycloakApplication
 */
-func Createngkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.KeycloakView] {
+func Createngkeycloakapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string) client.Response[models.Keycloak] {
 	ctx, span := tracer.Start(ctx, "createNGKeycloakApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/networkgroup", addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.KeycloakView](ctx, c, path, nil)
+	response := client.Post[models.Keycloak](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

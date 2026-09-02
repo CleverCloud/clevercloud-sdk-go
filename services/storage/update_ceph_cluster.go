@@ -46,14 +46,14 @@ Example:
 x-service: storage
 operationId: updateCephCluster
 */
-func Updatecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CephClusterPatch) client.Response[models.CephClusterView] {
+func Updatecephcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, requestBody *models.CephClusterPatch) client.Response[models.CephCluster] {
 	ctx, span := tracer.Start(ctx, "updateCephCluster", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s", tenantId, clusterId)
 
 	// Make API call
-	response := client.Patch[models.CephClusterView](ctx, c, path, requestBody)
+	response := client.Patch[models.CephCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

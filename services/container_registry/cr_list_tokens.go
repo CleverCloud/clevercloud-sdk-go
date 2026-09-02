@@ -45,14 +45,14 @@ Example:
 x-service: container_registry
 operationId: cr_list_tokens
 */
-func CrListTokens(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, registry_id string) client.Response[[]models.ContainerRegistryTokenView] {
+func CrListTokens(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, registry_id string) client.Response[[]models.ContainerRegistryToken] {
 	ctx, span := tracer.Start(ctx, "cr_list_tokens", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("registry_id", registry_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/container-registry/registries/%s/tokens", tenant_id, registry_id)
 
 	// Make API call
-	response := client.Get[[]models.ContainerRegistryTokenView](ctx, c, path)
+	response := client.Get[[]models.ContainerRegistryToken](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

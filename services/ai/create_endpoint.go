@@ -58,14 +58,14 @@ Example:
 x-service: ai
 operationId: createEndpoint
 */
-func Createendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, requestBody *models.CreateEndpointRequest) client.Response[models.AiCreationResponse] {
+func Createendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, requestBody *models.CreateEndpointRequest) client.Response[models.AICreationResponse] {
 	ctx, span := tracer.Start(ctx, "createEndpoint", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints", ownerId, aiId)
 
 	// Make API call
-	response := client.Post[models.AiCreationResponse](ctx, c, path, requestBody)
+	response := client.Post[models.AICreationResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

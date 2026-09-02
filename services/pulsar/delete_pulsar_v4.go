@@ -46,14 +46,14 @@ Example:
 x-service: pulsar
 operationId: deletePulsarV4
 */
-func Deletepulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.PulsarView] {
+func Deletepulsarv4(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "deletePulsarV4", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s", pulsarId)
 
 	// Make API call
-	response := client.Delete[models.PulsarView](ctx, c, path)
+	response := client.Delete[models.Pulsar](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
