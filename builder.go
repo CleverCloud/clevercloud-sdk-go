@@ -51,7 +51,7 @@ import (
 	tardis "go.clever-cloud.dev/sdk/services/tardis"
 	tokens "go.clever-cloud.dev/sdk/services/tokens"
 	users "go.clever-cloud.dev/sdk/services/users"
-	vendor "go.clever-cloud.dev/sdk/services/vendor"
+	vendorapi "go.clever-cloud.dev/sdk/services/vendorapi"
 	warp10 "go.clever-cloud.dev/sdk/services/warp10"
 	zone "go.clever-cloud.dev/sdk/services/zone"
 )
@@ -15600,9 +15600,9 @@ func newV2VendorAddonsBuilder(sdk *sdkImpl) V2VendorAddonsBuilder {
 	return &v2VendorAddonsBuilderImpl{sdk: sdk}
 }
 
-// Provisionotheraddon calls vendor.Provisionotheraddon
+// Provisionotheraddon calls vendorapi.Provisionotheraddon
 func (b *v2VendorAddonsBuilderImpl) Provisionotheraddon(ctx context.Context, request *models.WannabeInterAddonProvision) client.Response[models.AddonView] {
-	return vendor.Provisionotheraddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+	return vendorapi.Provisionotheraddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2VendorAppsBuilder provides access to operations
@@ -15626,9 +15626,9 @@ func (b *v2VendorAppsBuilderImpl) Addonid(addonid string) V2VendorAppsAddonidBui
 	return newV2VendorAppsAddonidBuilder(b.sdk, addonid)
 }
 
-// Listapps calls vendor.Listapps
+// Listapps calls vendorapi.Listapps
 func (b *v2VendorAppsBuilderImpl) Listapps(ctx context.Context) client.Response[[]models.VendorAppView] {
-	return vendor.Listapps(ctx, b.sdk.Client(), b.sdk.Tracer())
+	return vendorapi.Listapps(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2VendorAppsAddonidBuilder provides access to operations
@@ -15669,14 +15669,14 @@ func (b *v2VendorAppsAddonidBuilderImpl) MigrationCallback() V2VendorAppsAddonid
 	return newV2VendorAppsAddonidMigrationCallbackBuilder(b.sdk, b.addonid)
 }
 
-// Getapplicationinfo calls vendor.Getapplicationinfo
+// Getapplicationinfo calls vendorapi.Getapplicationinfo
 func (b *v2VendorAppsAddonidBuilderImpl) Getapplicationinfo(ctx context.Context) client.Response[models.VendorAppView] {
-	return vendor.Getapplicationinfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+	return vendorapi.Getapplicationinfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
-// Editapplicationconfiguration calls vendor.Editapplicationconfiguration
+// Editapplicationconfiguration calls vendorapi.Editapplicationconfiguration
 func (b *v2VendorAppsAddonidBuilderImpl) Editapplicationconfiguration(ctx context.Context) client.Response[models.Message] {
-	return vendor.Editapplicationconfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+	return vendorapi.Editapplicationconfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2VendorAppsAddonidConsumptionsBuilder provides access to operations
@@ -15698,9 +15698,9 @@ func newV2VendorAppsAddonidConsumptionsBuilder(sdk *sdkImpl, addonid string) V2V
 	}
 }
 
-// Billowner calls vendor.Billowner
+// Billowner calls vendorapi.Billowner
 func (b *v2VendorAppsAddonidConsumptionsBuilderImpl) Billowner(ctx context.Context) client.Response[any] {
-	return vendor.Billowner(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+	return vendorapi.Billowner(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2VendorAppsAddonidLogscollectorBuilder provides access to operations
@@ -15722,14 +15722,14 @@ func newV2VendorAppsAddonidLogscollectorBuilder(sdk *sdkImpl, addonid string) V2
 	}
 }
 
-// Logscollector calls vendor.Logscollector
+// Logscollector calls vendorapi.Logscollector
 func (b *v2VendorAppsAddonidLogscollectorBuilderImpl) Logscollector(ctx context.Context) client.Response[models.AddonLogsCollectorView] {
-	return vendor.Logscollector(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+	return vendorapi.Logscollector(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2VendorAppsAddonidMigrationCallbackBuilder provides access to operations
 type V2VendorAppsAddonidMigrationCallbackBuilder interface {
-	Endaddonmigration(ctx context.Context, opts ...vendor.Option) client.Response[models.Message]
+	Endaddonmigration(ctx context.Context, opts ...vendorapi.Option) client.Response[models.Message]
 }
 
 // v2VendorAppsAddonidMigrationCallbackBuilderImpl implements V2VendorAppsAddonidMigrationCallbackBuilder
@@ -15746,9 +15746,9 @@ func newV2VendorAppsAddonidMigrationCallbackBuilder(sdk *sdkImpl, addonid string
 	}
 }
 
-// Endaddonmigration calls vendor.Endaddonmigration
-func (b *v2VendorAppsAddonidMigrationCallbackBuilderImpl) Endaddonmigration(ctx context.Context, opts ...vendor.Option) client.Response[models.Message] {
-	return vendor.Endaddonmigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, opts...)
+// Endaddonmigration calls vendorapi.Endaddonmigration
+func (b *v2VendorAppsAddonidMigrationCallbackBuilderImpl) Endaddonmigration(ctx context.Context, opts ...vendorapi.Option) client.Response[models.Message] {
+	return vendorapi.Endaddonmigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, opts...)
 }
 
 // V4Builder provides access to operations

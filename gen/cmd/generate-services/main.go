@@ -43,6 +43,12 @@ var SERVICE_NAME_EXCEPTIONS = map[string]string{
 	"internal": "internalapi",
 	"Internal": "internalapi",
 
+	// `vendor` is reserved by the go command: directories of that name are stripped from a
+	// module zip, so `go get` of this SDK yields a module with no services/vendor package at
+	// all and every consumer fails to build. AXO publishes a `Vendor` tag, hence the rename.
+	"vendor": "vendorapi",
+	"Vendor": "vendorapi",
+
 	// Example of consolidating related services
 	// "keycloak":        "product", // Move keycloak operations to product package
 	// "matomo":          "product", // Move matomo operations to product package
