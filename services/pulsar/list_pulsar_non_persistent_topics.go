@@ -4,30 +4,47 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listpulsarnonpersistenttopics
+Listpulsarnonpersistenttopics GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics
 
-# List Pulsar non-persistent topics
+	— list non-persistent topics.
+
+**Legacy**: ovd PulsarController.scala:377 listNonPersistentTopicsServerEndpoint()
+**Algorithm**:
+  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
+  - Delegates to PulsarTopicService.listNonPersistentTopics (line 228)
+  - Scala queries HttpPulsarAdminClient.listNonPersistentTopics, returns `Set[Topic]`
+
+**Conformity**: FAITHFUL — proxies to
+
+	`PulsarAdminClient::list_non_persistent_topics` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala listNonPersistentTopicsServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala listNonPersistentTopics
+Behavior: returns the cluster's non-persistent topic list for the
+
+	addon's tenant/namespace, mapped into `Vec<TopicView>`.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - opts: optional query parameters
+  - pulsarId: Pulsar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Listpulsarnonpersistenttopics(ctx, client, tracer, pulsarId, opts...)
+	response := pulsar.Listpulsarnonpersistenttopics(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,20 +53,14 @@ Example:
 x-service: pulsar
 operationId: listPulsarNonPersistentTopics
 */
-func Listpulsarnonpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, opts ...Option) client.Response[client.Nothing] {
+func Listpulsarnonpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[[]models.TopicView] {
 	ctx, span := tracer.Start(ctx, "listPulsarNonPersistentTopics", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics", pulsarId)
 
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
-
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.TopicView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

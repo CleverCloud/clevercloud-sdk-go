@@ -2,7 +2,7 @@
 
 package models
 
-// UpdateBucketRequest
+// UpdateBucketRequest Request body for updating a bucket (e.g., versioning toggle).  Source: references/legacy/ovd/modu...
 type UpdateBucketRequest struct {
-	Versioning bool `json:"versioning"`
+	Versioning bool `json:"versioning"` // Whether to enable versioning
 }

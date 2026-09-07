@@ -2,7 +2,7 @@
 
 package models
 
-// TlsTransportLayer
+// TlsTransportLayer Per-ALPN TLS layer (:382-386).
 type TlsTransportLayer struct {
-	Layer Layer1 `json:"layer"`
+	Layer TlsLayerChoice `json:"layer"` // The layer under TLS.
 }

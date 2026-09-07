@@ -13,16 +13,24 @@ type Option func(*Options)
 
 // Options holds query parameters for kubernetes operations
 type Options struct {
-	Limit      *int      `url:"limit,omitempty"`
-	Resourceid *[]string `url:"resourceId,omitempty"`
-	Since      *string   `url:"since,omitempty"`
-	Status     *[]string `url:"status,omitempty"`
-	Typeparam  *string   `url:"typeParam,omitempty"`
-	Until      *string   `url:"until,omitempty"`
+	Authorization *string   `url:"authorization,omitempty"`
+	Limit         *int64    `url:"limit,omitempty"`
+	Resourceid    *[]string `url:"resourceId,omitempty"`
+	Since         *string   `url:"since,omitempty"`
+	Status        *string   `url:"status,omitempty"`
+	Typeparam     *string   `url:"typeParam,omitempty"`
+	Until         *string   `url:"until,omitempty"`
+}
+
+// WithAuthorization sets the authorization query parameter
+func WithAuthorization(authorization string) Option {
+	return func(o *Options) {
+		o.Authorization = &authorization
+	}
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}
@@ -43,7 +51,7 @@ func WithSince(since string) Option {
 }
 
 // WithStatus sets the status query parameter
-func WithStatus(status []string) Option {
+func WithStatus(status string) Option {
 	return func(o *Options) {
 		o.Status = &status
 	}
@@ -71,6 +79,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Authorization != nil {
+		params = append(params, fmt.Sprintf("authorization=%s", url.QueryEscape(*options.Authorization)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
@@ -81,7 +92,7 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
 	}
 	if options.Status != nil {
-		params = append(params, fmt.Sprintf("status=%v", *options.Status))
+		params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(*options.Status)))
 	}
 	if options.Typeparam != nil {
 		params = append(params, fmt.Sprintf("typeParam=%s", url.QueryEscape(*options.Typeparam)))

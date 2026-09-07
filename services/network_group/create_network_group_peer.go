@@ -12,9 +12,27 @@ import (
 )
 
 /*
-Createnetworkgrouppeer
+Createnetworkgrouppeer POST /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/peers
 
-# Add a Peer to a Member of a NetworkGroup
+Source: ovd NetworkGroupActionsActor.addServerPeerNg / wannaAddPeer → `PeerCreationCMD`
+Source: ovd NetworkGroupActionsActor.handleCleverPeerType — registry key lookup,
+deferred SERVER creation via the action-executor (`PendingPubKeyActor`)
+Behavior: 201 Created + `{"peerId": ...}` (OVD `createNetworkGroupPeer` status). For an external caller, a CLEVER peer's `id` must be a running instance of `parentMember` (404 otherwise) and its `hv`/`ip` are the platform's, not the body's.
+
+	Routing follows OVD's (member kind, peer kind) pair: (APPLICATION|ADDON,
+	CLEVER) takes the clever path (registry key or deferred creation; ip+hv
+	required); (EXTERNAL, EXTERNAL) and (LOADBALANCER, CLEVER) take the
+	external-style path (publicKey required; the stored kind is EXTERNAL,
+	as OVD's handlePeerType hardcodes); any other pair is 400.
+	400 also on invalid role/kind/id, invalid IPv4, missing parentMember, or
+	SERVER without ip+port; 404 unknown NG or unknown parentMember; 403
+	owner mismatch; 409 duplicate peer id; 500 publish failure, non-SERVER
+	CLEVER peer, or a key request that could not be sent.
+	A CLEVER SERVER peer whose key is not yet registered answers 201
+	optimistically: the creation is deferred until the action-executor
+	reports the key (refs #2805).
+
+Issue: #313, #665, #676, #849, #1127, #2790, #2805
 
 Parameters:
   - ctx: context for the request

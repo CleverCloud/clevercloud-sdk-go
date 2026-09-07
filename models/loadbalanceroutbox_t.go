@@ -2,10 +2,10 @@
 
 package models
 
-// LoadbalanceroutboxT
+// LoadbalanceroutboxT OVD `LoadBalancerOutbox` (LoadBalancerOutbox.scala:25-30) — row 45. `payload` is the protobuf dec...
 type LoadbalanceroutboxT struct {
-	LoadbalancerID LoadBalancerId                  `json:"loadbalancerId"`
-	OutboxOffset   int                             `json:"outboxOffset"`
-	Payload        *LoadBalancerProtoConfiguration `json:"payload,omitempty"`
-	ServerID       string                          `json:"serverId"`
+	LoadbalancerID string         `json:"loadbalancerId"`
+	OutboxOffset   int            `json:"outboxOffset"`
+	Payload        map[string]any `json:"payload"`
+	ServerID       string         `json:"serverId"`
 }

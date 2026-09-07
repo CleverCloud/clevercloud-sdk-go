@@ -11,16 +11,19 @@ import (
 )
 
 /*
-Deletenetworkgroup
+Deletenetworkgroup DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}
 
-# Delete a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala deleteNetworkGroup → `NetworkGroupDeletionCMD`
+Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG;
+403 owner mismatch.
+Issue: #313, #665, #676, #849, #1127, #2790
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID
+  - networkGroupId: Network group ID
 
 # Returns the operation result or an error
 

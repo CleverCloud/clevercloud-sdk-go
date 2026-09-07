@@ -2,8 +2,8 @@
 
 package models
 
-// FieldError
+// FieldError One field's failure inside [`ErrorContext`].
 type FieldError struct {
-	Reason *string `json:"reason,omitempty"`
-	Value  string  `json:"value"`
+	Code  string `json:"code"`
+	Error string `json:"error"`
 }

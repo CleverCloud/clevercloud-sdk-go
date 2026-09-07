@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// GetStatusCodeDistributionResponse
+// GetStatusCodeDistributionResponse Response for GET /v4/stats/organisations/{ownerId}/http-status-codes.  The OpenAPI component is n...
 type GetStatusCodeDistributionResponse struct {
-	Date     time.Time                `json:"date"`
-	Statuses []StatusCodeDistribution `json:"statuses,omitempty"`
+	Date     time.Time                `json:"date"`     // Bucket timestamp.
+	Statuses []StatusCodeDistribution `json:"statuses"` // Status code counts for this time bucket.
 }

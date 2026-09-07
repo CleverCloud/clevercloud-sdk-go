@@ -2,7 +2,7 @@
 
 package models
 
-// ContainerRegistryTokenRights represents
+// ContainerRegistryTokenRights represents Token rights enum matching the `container_registry_token_rights` PostgreSQL enum.  Source: refere...
 type ContainerRegistryTokenRights string
 
 const (

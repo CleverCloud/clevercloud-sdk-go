@@ -11,7 +11,22 @@ import (
 )
 
 /*
-Getkubernetesserviceconfig
+Getkubernetesserviceconfig GET /v4/kubernetes-product — Kubernetes service configuration (product info).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala — getServiceConfig
+Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/models/KubernetesServiceConfig.scala:47-70
+Behavior: returns the service config — the three topologies with their flavor
+
+	sets and replication bounds, plus the configured version policy
+	(available descending, and the default).
+
+Issue: #667, #3149
+
+**Legacy**: ovd KubernetesRoutes.scala getServiceConfig()
+**Algorithm**:
+  - Returns `KubernetesServiceConfig.build` over the configured version set
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request

@@ -12,9 +12,18 @@ import (
 )
 
 /*
-Createnetworkgroupmember
+Createnetworkgroupmember POST /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members
 
-# Add a Member to a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala postMember → `MembershipCMD(CREATE)`
+Source: ovd NetworkGroupActionsActor.scala addMember — domain-name validation/derivation,
+re-registration compared on id+kind (`Member.isSameResourceAs`)
+Behavior: 202 after broker confirmation, or immediately when the member is
+already registered (same id and kind — a legacy domain name never turns a
+re-registration into a conflict); 500 publish failure; 400 invalid kind/id
+or a domain name outside the configured DNS suffix
+(`clever.network-group.bad-request.invalid-domain-name`); 404 unknown NG;
+403 owner mismatch; 409 when the member id exists with a different kind.
+Issue: #313, #665, #676, #849, #1127, #2790, #2801
 
 Parameters:
   - ctx: context for the request

@@ -2,9 +2,9 @@
 
 package models
 
-// OIdPairs
+// OIdPairs Combined OID pairs (databases + schemas + tables).  Source: ovd OIdPair.scala — OIdPairs
 type OIdPairs struct {
-	Databases []OIdDatabasePair `json:"databases,omitempty"`
-	Schemas   []OIdSchemaPair   `json:"schemas,omitempty"`
-	Tables    []OIdTablePair    `json:"tables,omitempty"`
+	Databases []OIdDatabasePair `json:"databases"`
+	Schemas   []OIdSchemaPair   `json:"schemas"`
+	Tables    []OIdTablePair    `json:"tables"`
 }

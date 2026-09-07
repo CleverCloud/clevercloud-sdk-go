@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listclusters
+Listclusters List Cellar storage clusters
 
-list all Cellar clusters
+Returns the registered storage clusters as `{ id, host, zone, available }` entries; administrative credentials are never returned. Only clusters still accepting new add-ons are listed unless `includeUnavailable=true` is passed. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

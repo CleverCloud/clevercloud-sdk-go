@@ -2,19 +2,25 @@
 
 package models
 
-// Otoroshi
+import "time"
+
+// Otoroshi Otoroshi addon full view.  Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiView.sca...
 type Otoroshi struct {
-	API                OtoroshiApi       `json:"api"`
-	AccessURL          string            `json:"accessUrl"` // Absolute URL
-	AddonID            string            `json:"addonId"`
-	AvailableVersions  []string          `json:"availableVersions,omitempty"`
-	Features           OtoroshiFeatures  `json:"features"`
-	InitialCredentials BasicCredentials  `json:"initialCredentials"`
-	JavaVersion        string            `json:"javaVersion"`
-	Name               string            `json:"name"`
-	OwnerID            OwnerID           `json:"ownerId"`
-	Plan               OtoroshiPlan      `json:"plan"`
-	ResourceID         string            `json:"resourceId"`
-	Resources          OtoroshiResources `json:"resources"`
-	Version            string            `json:"version"`
+	APIHost           string     `json:"apiHost"`                     // API host for the Otoroshi admin API.
+	AddonID           string     `json:"addonId"`                     // CCAPI addon ID (from provision request).
+	AdminTargethost   string     `json:"adminTargethost"`             // Admin target host for routing.
+	BackofficeHost    string     `json:"backofficeHost"`              // Backoffice/UI host for the Otoroshi instance.
+	CreationDate      time.Time  `json:"creationDate"`                // Creation timestamp.
+	DeletionDate      *time.Time `json:"deletionDate,omitempty"`      // Deletion timestamp (None = not deleted).
+	Error             *string    `json:"error,omitempty"`             // Error message from failed provisioning (optional).  Source: references/legacy/ovd/modules/otorosh...
+	JavaApplicationID *string    `json:"javaApplicationId,omitempty"` // Associated Java application ID (optional).
+	Name              string     `json:"name"`                        // Human-readable name for the addon.
+	NetworkgroupID    *string    `json:"networkgroupId,omitempty"`    // Associated NetworkGroup ID (optional).
+	OwnerID           string     `json:"ownerId"`                     // Owner ID (organisation or user).
+	Plan              string     `json:"plan"`                        // Subscribed plan (ALPHA, BETA, BASE).
+	PrivateHost       string     `json:"privateHost"`                 // Private/SSO apps host.
+	RedisAddonID      *string    `json:"redisAddonId,omitempty"`      // Associated Redis addon ID (optional).
+	ResourceID        string     `json:"resourceId"`                  // Otoroshi instance resource ID (provider-assigned).
+	Status            string     `json:"status"`                      // Current lifecycle status.
+	UpdatedDate       *time.Time `json:"updatedDate,omitempty"`       // Last update timestamp (optional).
 }

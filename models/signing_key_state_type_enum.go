@@ -2,13 +2,13 @@
 
 package models
 
-// SigningKeyStateType represents
+// SigningKeyStateType represents A signing key's lifecycle state — **computed** from the row's timestamps, never stored.  `REVOKED...
 type SigningKeyStateType string
 
 const (
 	SigningKeyStateTypeACTIVE  SigningKeyStateType = "ACTIVE"
-	SigningKeyStateTypeREVOKED SigningKeyStateType = "REVOKED"
 	SigningKeyStateTypeROTATED SigningKeyStateType = "ROTATED"
+	SigningKeyStateTypeREVOKED SigningKeyStateType = "REVOKED"
 )
 
 // String returns the underlying string value

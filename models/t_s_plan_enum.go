@@ -2,12 +2,12 @@
 
 package models
 
-// TSPlan represents
+// TSPlan represents TS addon plan.  Source: references/legacy/ovd/modules/ts/src/main/scala/com/clevercloud/ts/config...
 type TSPlan string
 
 const (
-	TSPlanBASE TSPlan = "BASE"
 	TSPlanBETA TSPlan = "BETA"
+	TSPlanBASE TSPlan = "BASE"
 )
 
 // String returns the underlying string value

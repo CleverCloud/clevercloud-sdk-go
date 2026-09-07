@@ -4,14 +4,14 @@ package models
 
 import "time"
 
-// LoadBalancerNetwork
+// LoadBalancerNetwork OVD `LoadBalancerNetwork` (LoadBalancerNetwork.scala:24-34).
 type LoadBalancerNetwork struct {
 	Cidrv4         *string        `json:"cidrv4,omitempty"`
 	Cidrv6         *string        `json:"cidrv6,omitempty"`
 	CreatedAt      time.Time      `json:"createdAt"`
-	LoadbalancerID LoadBalancerId `json:"loadbalancerId"`
-	NetworkDetails NetworkDetails `json:"networkDetails"`
-	NetworkID      NetworkId      `json:"networkId"`
+	LoadbalancerID string         `json:"loadbalancerId"`
+	NetworkDetails map[string]any `json:"networkDetails"`
+	NetworkID      string         `json:"networkId"`
 	Offsetv4       *int           `json:"offsetv4,omitempty"`
 	Offsetv6       *int           `json:"offsetv6,omitempty"`
 	UpdatedAt      time.Time      `json:"updatedAt"`

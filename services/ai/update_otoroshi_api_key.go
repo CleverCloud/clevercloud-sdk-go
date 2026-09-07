@@ -11,18 +11,27 @@ import (
 )
 
 /*
-Updateotoroshiapikey
+Updateotoroshiapikey **Legacy**: ovd AIProviderController.scala:194 updateApiKeyEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, call Otoroshi updateApiKey + deployApiKey
 
-updateOtoroshiApiKey
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+POST /v4/ai/.../endpoints/{endpoint_id}/apikeys/{apikey_id} — update API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — updateApiKeyEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — updateApiKey()
+Behavior: verifies addon + tenancy, calls otoroshiClient.updateApiKey + deployApiKey.
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - apikeyId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - apikeyId: Otoroshi API key ID
 
 # Returns the operation result or an error
 

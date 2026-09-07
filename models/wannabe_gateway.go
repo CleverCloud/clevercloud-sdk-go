@@ -2,9 +2,9 @@
 
 package models
 
-// WannabeGateway
+// WannabeGateway `POST /v4/otel/gateways` request body — OVD `WannabeGateway`. `Debug` is hand-written so a traced...
 type WannabeGateway struct {
-	Endpoint string `json:"endpoint"` // Absolute URL
-	Location string `json:"location"`
-	Token    string `json:"token"`
+	Endpoint string `json:"endpoint"` // gRPC endpoint URL (`AbsoluteUrl`).
+	Location string `json:"location"` // Deployment location the gateway serves (`Not[Empty] & MaxLength[50]`).
+	Token    string `json:"token"`    // Admin bearer token the control-plane client authenticates with (`MinLength[16]`). Stored, never e...
 }

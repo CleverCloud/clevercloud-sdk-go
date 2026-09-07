@@ -2,9 +2,9 @@
 
 package models
 
-// AICreationResponse
+// AICreationResponse Endpoint creation response — aggregates endpoint + apikey JSON from Otoroshi.  Source: references...
 type AICreationResponse struct {
-	APIKey   map[string]any `json:"apiKey"`   // JSON payload forwarded from Otoroshi
-	Endpoint map[string]any `json:"endpoint"` // JSON payload forwarded from Otoroshi
-	Error    *string        `json:"error,omitempty"`
+	APIKey   any     `json:"apiKey"`          // Otoroshi apikey JSON
+	Endpoint any     `json:"endpoint"`        // Otoroshi endpoint JSON
+	Error    *string `json:"error,omitempty"` // Error description if partial failure
 }

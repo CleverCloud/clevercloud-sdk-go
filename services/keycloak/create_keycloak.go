@@ -11,9 +11,30 @@ import (
 )
 
 /*
-Createkeycloak
+Createkeycloak POST /v2/providers/addon-keycloak/resources
 
-provision a new Keycloak instance
+📥 **Algo Source (Legacy):** `create` (`AddonKeycloakAddonActor.scala:475-557`)
+resolves the host (`options["access-domain"]` verbatim, else a generated vhost),
+mints the id / admin password / realm, then runs a long `EitherT`
+for-comprehension: insert row `PROVISIONING` → create the PostgreSQL addon →
+create the FSBucket → create the Java application → register DNS → store the
+application row → optional network group → reboot with `rebuild = true`.
+**Every failure — including an uncaught exception — is converted into a
+`201 Created` with a degraded body** (`A:550-556`), and the row is marked
+`PROVISIONING_ERROR` with the message stored in `error`. Deliberate: a failure
+status makes the addon a ghost cc-api can neither show nor delete.
+
+🔧 **Algo Rust (Implementation):**
+  - resolve host / plan (`parse_lenient`, unknown ⇒ `BETA`) / version from `options`
+  - insert the row as `PROVISIONING`
+  - when a PaaS client is configured, create the sub-resources; in airgap mode the
+    row is created and the external steps are skipped
+  - on any error: `status = PROVISIONING_ERROR`, `error = <msg>`, and a degraded
+    **201** carrying `config = {"CC_KEYCLOAK_ID": id}` and the cause in `message`
+  - on success: 201 with `message = "Created"` and an **empty** config map
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:475
+Issues: #313
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +55,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloak
 */
-func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createKeycloak")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-keycloak/resources")
 
 	// Make API call
-	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

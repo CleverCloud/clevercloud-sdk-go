@@ -2,7 +2,7 @@
 
 package models
 
-// PublicMigrationEntry
+// PublicMigrationEntry One catalog migration entry as served by the public catalog endpoint.  Source: PluginCatalog.scal...
 type PublicMigrationEntry struct {
 	FromK8s  string               `json:"fromK8s"`
 	Plugin   PluginName           `json:"plugin"`

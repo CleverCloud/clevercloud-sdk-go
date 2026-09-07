@@ -15,13 +15,11 @@ import (
 /*
 Listtokens
 
-List tokens for a tenant.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant to list tokens for
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -37,7 +35,7 @@ Example:
 x-service: tokens
 operationId: listTokens
 */
-func Listtokens(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, opts ...Option) client.Response[[]models.Token] {
+func Listtokens(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, opts ...Option) client.Response[models.ListTokensResponse] {
 	ctx, span := tracer.Start(ctx, "listTokens", trace.WithAttributes(attribute.String("tenantId", tenantId)))
 	defer span.End()
 
@@ -50,7 +48,7 @@ func Listtokens(ctx context.Context, c *client.Client, tracer trace.Tracer, tena
 	}
 
 	// Make API call
-	response := client.Get[[]models.Token](ctx, c, path)
+	response := client.Get[models.ListTokensResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

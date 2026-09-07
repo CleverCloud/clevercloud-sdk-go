@@ -11,9 +11,41 @@ import (
 )
 
 /*
-Createmateriats
+Createmateriats POST /v2/providers/addon-ts/resources — provision a new TS addon.
 
-provision a MateriaTS
+Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:152-244 create()/storeAddon()
+Source: references/legacy/ovd/modules/ts/services/TSTokenManagementService.scala:70-238 createInitialAddonTokens()
+Source: references/legacy/ovd/modules/ts/models/Addon.scala:55-70 asProvisionResponse()
+Behavior:
+  - 400 on invalid plan (BETA/BASE) or owner id
+  - Create real read+write Warp10 tokens via the Token API (TTL = config, ISO-8601)
+  - INSERT addon_ts (ACTIVE) with token metadata, quota from config, and the FDB tenant
+  - Retry with a fresh FDB tenant on a unique-violation conflict (config.maxCreationRetries)
+  - Return the 10-key ProvisionResponse config (tokens, dates, revocation ids, host/url)
+
+Issue: #313, #765
+
+📥 **Algo Source (Legacy):**
+Provision a TS addon with real Warp10 tokens.
+  - Generate MateriaTSId + tokenOwnerUuid (once); generate a random Warp10Tenant per attempt
+  - Extract ownerId, validate plan (BETA/BASE)
+  - createInitialAddonTokens: read+write via Token API, ttl = config.tokenValidityPeriod,
+    token tenant = TenantId.upcastOwnerId(ownerId), `.fdbtp` attribute = OPB64(tenant)
+  - storeAddon: INSERT with token metadata, quota from config, tenant
+  - On AlreadyExists (tenant conflict) and retries left: regenerate tenant, retry
+  - publishTenantList() then return asProvisionResponse(config.egressHost, config.egressUrl)
+  - Source: ovd AddonTSAddonActor.scala:152 create()
+
+🔧 **Algo Rust (Implementation):**
+  - id = MateriaTsId::generate(), token_owner_uuid = Uuid::new_v4(), now = now_utc()
+  - token_tenant = token_tenant_from_owner(owner_id); validate plan → 400 on mismatch
+  - quota / max_retries / egress from module.ts_configuration (ttl + `.fdbtp` encoding now
+    live in TsTokenManagementService)
+  - loop: create_initial_addon_tokens(&id, &token_tenant, &tenant, token_owner_uuid) then INSERT
+    incl. the `tenant` BYTEA; on unique violation regenerate FdbTenant and retry
+  - publish_tenant_list(&module): re-publish the active-tenant list to Warp10 (best-effort;
+    errors logged, never fails the 201)
+  - Return 201 with the 10-key ProvisionResponse config
 
 Parameters:
   - ctx: context for the request

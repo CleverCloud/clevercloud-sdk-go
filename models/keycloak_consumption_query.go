@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// KeycloakConsumptionQuery
+// KeycloakConsumptionQuery Query window for a consumption report.  Source: references/legacy/ovd/modules/keycloak/src/main/s...
 type KeycloakConsumptionQuery struct {
-	Since time.Time `json:"since"`
-	Until time.Time `json:"until"`
+	Since time.Time `json:"since"` // Wire key is `since`, not `from` — legacy's `KeycloakConsumptionQuery` (`models/KeycloakProduction...
+	Until time.Time `json:"until"` // Wire key is `until`, not `to`.
 }

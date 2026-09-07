@@ -4,14 +4,14 @@ package models
 
 import "time"
 
-// ClusterItemUsage
+// ClusterItemUsage Cluster item usage view (quota/billing).  Source: references/legacy/ovd/modules/kubernetes/models...
 type ClusterItemUsage struct {
-	ClusterID     string     `json:"clusterId"`
-	CpuMillicores int        `json:"cpuMillicores"`
-	CreatedAt     *time.Time `json:"createdAt,omitempty"`
-	DeactivatedAt *time.Time `json:"deactivatedAt,omitempty"`
-	ID            string     `json:"id"`
-	ItemType      string     `json:"itemType"`
-	OwnerID       OwnerID    `json:"ownerId"`
-	RamBytes      int        `json:"ramBytes"`
+	ClusterID     string     `json:"clusterId"`               // Parent cluster ID
+	CpuMillicores int        `json:"cpuMillicores"`           // CPU in millicores
+	CreatedAt     *time.Time `json:"createdAt,omitempty"`     // When the item was created
+	DeactivatedAt *time.Time `json:"deactivatedAt,omitempty"` // When the item was deactivated
+	ID            string     `json:"id"`                      // Cluster item ID
+	ItemType      string     `json:"itemType"`                // Item type (e.g. "CONTROL_PLANE", "NODE")
+	OwnerID       string     `json:"ownerId"`                 // Owner (tenant) ID
+	RamBytes      int        `json:"ramBytes"`                // RAM in bytes
 }

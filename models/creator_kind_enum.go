@@ -2,13 +2,13 @@
 
 package models
 
-// CreatorKind represents
+// CreatorKind represents Discriminator for the issuer of a warp10 token.  Stored in `warp10_tokens.creator_kind`, backed b...
 type CreatorKind string
 
 const (
-	CreatorKindIDENTITY       CreatorKind = "IDENTITY"
-	CreatorKindROBOT          CreatorKind = "ROBOT"
 	CreatorKindServiceAccount CreatorKind = "SERVICE_ACCOUNT"
+	CreatorKindROBOT          CreatorKind = "ROBOT"
+	CreatorKindIDENTITY       CreatorKind = "IDENTITY"
 )
 
 // String returns the underlying string value

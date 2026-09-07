@@ -2,9 +2,9 @@
 
 package models
 
-// ContainerRegistryWithTokens
+// ContainerRegistryWithTokens Response for createRegistry — includes registry view, created tokens, and any token creation erro...
 type ContainerRegistryWithTokens struct {
-	Errors   []TokenCreationError                `json:"errors,omitempty"`
-	Registry ContainerRegistry                   `json:"registry"`
-	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens,omitempty"`
+	Errors   []TokenCreationError                `json:"errors,omitempty"` // Errors from token creation attempts
+	Registry ContainerRegistry                   `json:"registry"`         // Registry view
+	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens"`           // Successfully created tokens (with biscuit)
 }

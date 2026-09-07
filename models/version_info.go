@@ -2,8 +2,8 @@
 
 package models
 
-// VersionInfo
+// VersionInfo One slot's version: the string as uploaded, plus its SemVer projection when the raw version happe...
 type VersionInfo struct {
-	Raw    string  `json:"raw"`
-	SemVer *string `json:"semVer,omitempty"` // SemVer
+	Raw    string  `json:"raw"`              // The version exactly as it appeared in the uploaded package list.
+	SemVer *string `json:"semVer,omitempty"` // `null` when the raw version is not SemVer — which is a quarter of a typical image. See [`crate::m...
 }

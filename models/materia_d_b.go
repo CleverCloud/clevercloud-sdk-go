@@ -2,16 +2,16 @@
 
 package models
 
-// MateriaDB
+// MateriaDB Materia KV database view returned by GET endpoints.  Source: references/legacy/ovd/modules/materi...
 type MateriaDB struct {
-	ClusterID string  `json:"clusterId"`
-	Host      string  `json:"host"`
-	ID        string  `json:"id"`
-	Kind      Kind    `json:"kind"`
-	OwnerID   OwnerID `json:"ownerId"`
-	Plan      Plan    `json:"plan"`
-	Port      int     `json:"port"`
-	Status    Status  `json:"status"`
-	Token     string  `json:"token"`
-	TokenID   string  `json:"tokenId"`
+	ClusterID string `json:"clusterId"`
+	Host      string `json:"host"`
+	ID        string `json:"id"`
+	Kind      string `json:"kind"`
+	OwnerID   string `json:"ownerId"`
+	Plan      string `json:"plan"`
+	Port      int    `json:"port"`
+	Status    string `json:"status"`
+	Token     string `json:"token"` // Live KV bearer token — deliberately on the wire (OVD parity, internal-only GET); the `serialize_w...
+	TokenID   string `json:"tokenId"`
 }

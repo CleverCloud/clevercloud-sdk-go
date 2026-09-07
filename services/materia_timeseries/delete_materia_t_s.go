@@ -11,15 +11,40 @@ import (
 )
 
 /*
-Deletemateriats
+Deletemateriats DELETE /v2/providers/addon-ts/resources/{addon_ts_id} — deprovision a TS addon.
 
-deprovision a MateriaTS
+Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:274-284 markToDelete()
+Source: references/legacy/ovd/modules/ts/repositories/AddonTSAddonRepository.scala:153-170 setDeletedAt()
+Behavior:
+  - 404 if the addon doesn't exist or is already being deleted (deletion_date set)
+  - Soft-delete: stamp deletion_date = NOW() and mark status = TO_DELETE
+  - Best-effort revoke both tokens via the Token API + re-publish the active-tenant list
+  - Return 204
+
+Issue: #313, #765
+
+📥 **Algo Source (Legacy):** markToDelete
+  - getAddonFromDatabaseTS (selectActiveAddonByID: WHERE id AND deletion_date IS NULL) → NotFound → 404
+  - deleteAddon → setDeletedAt: UPDATE deletion_date = NOW(), status = 'TO_DELETE' WHERE deletion_date IS NULL
+  - revokeTokensImmediately(addon) — best-effort token revocation
+  - publishTenantList() — best-effort tenant-list push
+  - return Done (route → 204). The TO_DELETE → DELETED transition + Warp10 data purge are the
+    background TSDataDeletionService, not markToDelete.
+  - Source: ovd AddonTSAddonActor.scala:274 markToDelete()
+
+🔧 **Algo Rust (Implementation):**
+  - SELECT existence WHERE id AND deletion_date IS NULL → 404 if absent
+  - UPDATE deletion_date = NOW(), status = 'TO_DELETE' WHERE id AND deletion_date IS NULL
+  - revoke_tokens_for_deletion(addon): best-effort revoke both tokens via the Token API +
+    setRevokedAt (errors logged, never fails the 204)
+  - publish_tenant_list(&module): best-effort re-publish of the active-tenant list (errors logged)
+  - Return 204
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId:
+  - addonTsId: TS addon ID
 
 # Returns the operation result or an error
 

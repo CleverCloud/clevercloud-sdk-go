@@ -11,9 +11,12 @@ import (
 )
 
 /*
-Deletenetworkgrouppeer
+Deletenetworkgrouppeer DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/peers/{peer_id}
 
-# Delete a Peer of a NetworkGroup by its id
+Source: ovd NetworkGroupRoutes.scala deletePeer → `PeerCMD(DELETE)`
+Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG
+or peer; 401 for a Clever peer (OVD `wannaDeletePeer` without `force`).
+Issue: #313, #665, #676, #849, #1127, #2790
 
 Parameters:
   - ctx: context for the request

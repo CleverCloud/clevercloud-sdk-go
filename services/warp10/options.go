@@ -13,13 +13,22 @@ type Option func(*Options)
 
 // Options holds query parameters for warp10 operations
 type Options struct {
-	Limit *int    `url:"limit,omitempty"`
-	Scope *string `url:"scope,omitempty"`
-	Since *string `url:"since,omitempty"`
+	Cursor *string `url:"cursor,omitempty"`
+	Limit  *int64  `url:"limit,omitempty"`
+	Scope  *string `url:"scope,omitempty"`
+	Since  *string `url:"since,omitempty"`
+	Until  *string `url:"until,omitempty"`
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}
@@ -39,6 +48,13 @@ func WithSince(since string) Option {
 	}
 }
 
+// WithUntil sets the until query parameter
+func WithUntil(until string) Option {
+	return func(o *Options) {
+		o.Until = &until
+	}
+}
+
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
 	options := &Options{}
@@ -47,6 +63,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
@@ -55,6 +74,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Until != nil {
+		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
 	}
 
 	if len(params) == 0 {

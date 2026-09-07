@@ -12,16 +12,42 @@ import (
 )
 
 /*
-Deletestorage
+Deletestorage DELETE /v4/tenants/{tenantId}/storages/{storageId} -- soft-delete a storage.
 
-Delete an existing storage.
+Source: ovd StorageController.scala:331 deleteStorage()
+Schema: V0__init_storage_table.sql — table storage
+Behavior: marks storage as SOFT_DELETED (does NOT hard-delete). Actual Ceph deletion
+
+	happens after 3 days via the cleanup service.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Soft-delete a storage resource.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- GET storage from DB, return 404 if not found
+- GET ceph_rbd_storage from DB, return 404 if not found
+- Append SOFT_DELETED status to storage.statuses
+- UPDATE storage + ceph_rbd_storage in DB
+- Actual Ceph deletion after 3 days via cleanup task
+- Source: ovd StorageController.scala:331-352
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `storage_op:remove` on the path tenant, bound to the path storage
+    (`storage` scope fact)
+  - Lock the storage row (`FOR UPDATE`) and its ceph_rbd_storage child in one
+    transaction, 404 if the storage is absent; a missing child degrades to a
+    metadata-only soft-delete (axo tolerance for pre-#2900 childless rows —
+    legacy 404s "CephRBD not found", but childless rows cannot exist there)
+  - Append SOFT_DELETED to statuses, UPDATE both rows, commit
+  - Return 200 with updated StorageView (matching Scala which returns the view)
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - storageId:
+  - tenantId: Tenant identifier
+  - storageId: Storage identifier
 
 # Returns the operation result or an error
 

@@ -12,15 +12,30 @@ import (
 )
 
 /*
-Liststorages
+Liststorages GET /v4/tenants/{tenantId}/storages -- list storages for a tenant.
 
-List all storages.
+Source: ovd StorageController.scala (listStorages implied by routes)
+Schema: V0__init_storage_table.sql — table storage
+Behavior: returns all storages belonging to the given tenant.
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+List all storages for a tenant.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- SELECT from storage WHERE tenant_id = tenantId
+- Map each row to StorageView
+- Source: ovd StorageRepository.scala:293-308
+
+🔧 **Algo Rust (Implementation):**
+- `OvdAuth` + `storage_op:get` on the path tenant
+- query_as StorageRow with tenant_id filter, ORDER BY id
+- Map to `Vec<StorageView>`, return 200
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant identifier
 
 # Returns the operation result or an error
 

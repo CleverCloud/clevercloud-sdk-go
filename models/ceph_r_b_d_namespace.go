@@ -2,7 +2,10 @@
 
 package models
 
-// CephRBDNamespace
+// CephRBDNamespace Ceph RBD namespace view.  Source: references/legacy/ovd/modules/storage/models/CephRbdNamespace.s...
 type CephRBDNamespace struct {
-	ID string `json:"id"`
+	ID       string        `json:"id"`       // Namespace identifier.
+	PoolID   string        `json:"poolId"`   // Pool that contains this namespace.
+	Statuses []StatusEntry `json:"statuses"` // Ordered status entries.
+	TenantID string        `json:"tenantId"` // Tenant that owns this namespace.
 }

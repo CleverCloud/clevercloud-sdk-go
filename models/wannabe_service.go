@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeService
+// WannabeService `POST …/services` request body — OVD `WannabeService`.
 type WannabeService struct {
-	Name string `json:"name"`
+	Name string `json:"name"` // Service name, unique within the namespace (`Not[Empty] & MaxLength[255]`).
 }

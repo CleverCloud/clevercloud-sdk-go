@@ -12,16 +12,40 @@ import (
 )
 
 /*
-Updatestorage
+Updatestorage PATCH /v4/tenants/{tenantId}/storages/{storageId} -- update a storage.
 
-Update an existing storage.
+Source: ovd StorageController.scala updateStorage (patch semantics from Scala StoragePatch)
+Schema: V0__init_storage_table.sql — table storage
+Behavior: merges patch fields into existing storage. Returns 404 if not found.
+
+	Note: Scala StoragePatch only has label field. Our API also supports configuration
+	and tags for forward compatibility. `statuses` is deliberately NOT patchable —
+	server-controlled lifecycle state (reaper marker + verified instigators).
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Patch a storage resource.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- Scala StoragePatch has only label: Option[String]
+- UPDATE storage SET label = newLabel WHERE id = storageId
+- Source: ovd StorageController.scala (updateStorage route)
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `storage_op:update` on the path tenant, bound to the path storage
+    (`storage` scope fact)
+  - Lock the storage row (`FOR UPDATE`) and its ceph_rbd_storage child in one
+    transaction, 404 if the storage is absent; a missing child degrades to a
+    metadata-only patch (axo tolerance for pre-#2900 childless rows)
+  - Merge the patch over the locked row, write both rows, commit
+  - Return 200 with updated StorageView or 404
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - storageId:
+  - tenantId: Tenant identifier
+  - storageId: Storage identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error

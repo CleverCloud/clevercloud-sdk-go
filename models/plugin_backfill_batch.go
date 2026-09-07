@@ -2,7 +2,7 @@
 
 package models
 
-// PluginBackfillBatch
+// PluginBackfillBatch Fleet-wide wrapper — an object, so a POST never returns a bare JSON array.  Source: ovd models/Pl...
 type PluginBackfillBatch struct {
-	Results []PluginBackfillResult `json:"results,omitempty"`
+	Results []PluginBackfillResult `json:"results"`
 }

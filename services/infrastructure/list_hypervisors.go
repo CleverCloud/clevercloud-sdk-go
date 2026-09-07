@@ -7,13 +7,16 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listhypervisors
+Listhypervisors GET /v4/compute/hypervisors
 
-# List hypervisors
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala listHypervisors
+Behavior: list hypervisors from cache with optional filters.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
@@ -31,10 +34,10 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: listHypervisors
 */
-func Listhypervisors(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Listhypervisors(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.Hypervisor] {
 	ctx, span := tracer.Start(ctx, "listHypervisors")
 	defer span.End()
 
@@ -47,7 +50,7 @@ func Listhypervisors(ctx context.Context, c *client.Client, tracer trace.Tracer,
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.Hypervisor](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

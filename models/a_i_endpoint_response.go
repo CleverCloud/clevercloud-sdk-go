@@ -2,8 +2,8 @@
 
 package models
 
-// AIEndpointResponse
+// AIEndpointResponse Endpoint detail response — endpoint JSON + deployment target info.  Source: references/legacy/ovd...
 type AIEndpointResponse struct {
-	Endpoint       map[string]any `json:"endpoint"` // JSON payload forwarded from Otoroshi
-	OtoroshiTarget string         `json:"otoroshiTarget"`
+	Endpoint       any    `json:"endpoint"`       // Otoroshi endpoint JSON
+	OtoroshiTarget string `json:"otoroshiTarget"` // Otoroshi deployment target
 }

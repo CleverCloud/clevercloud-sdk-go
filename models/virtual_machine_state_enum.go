@@ -2,25 +2,25 @@
 
 package models
 
-// VirtualMachineState represents
+// VirtualMachineState represents Source: ovd VirtualMachine.scala — VirtualMachineState (15 variants) Serde: Scala uses `.toString...
 type VirtualMachineState string
 
 const (
-	VirtualMachineStateReserved            VirtualMachineState = "reserved"
-	VirtualMachineStatePlaced              VirtualMachineState = "placed"
-	VirtualMachineStateStarted             VirtualMachineState = "started"
-	VirtualMachineStateRunning             VirtualMachineState = "running"
-	VirtualMachineStateUp                  VirtualMachineState = "up"
-	VirtualMachineStateReady               VirtualMachineState = "ready"
-	VirtualMachineStateStarting            VirtualMachineState = "starting"
-	VirtualMachineStateBooting             VirtualMachineState = "booting"
-	VirtualMachineStateGhost               VirtualMachineState = "ghost"
-	VirtualMachineStateDeploying           VirtualMachineState = "deploying"
-	VirtualMachineStateStopping            VirtualMachineState = "stopping"
-	VirtualMachineStateDeleted             VirtualMachineState = "deleted"
-	VirtualMachineStateMigrationInProgress VirtualMachineState = "migration_in_progress"
-	VirtualMachineStateRebooting           VirtualMachineState = "rebooting"
-	VirtualMachineStateImporting           VirtualMachineState = "importing"
+	VirtualMachineStateReserved            VirtualMachineState = "Reserved"
+	VirtualMachineStatePlaced              VirtualMachineState = "Placed"
+	VirtualMachineStateStarted             VirtualMachineState = "Started"
+	VirtualMachineStateRunning             VirtualMachineState = "Running"
+	VirtualMachineStateUP                  VirtualMachineState = "UP"
+	VirtualMachineStateREADY               VirtualMachineState = "READY"
+	VirtualMachineStateSTARTING            VirtualMachineState = "STARTING"
+	VirtualMachineStateBOOTING             VirtualMachineState = "BOOTING"
+	VirtualMachineStateGHOST               VirtualMachineState = "GHOST"
+	VirtualMachineStateDEPLOYING           VirtualMachineState = "DEPLOYING"
+	VirtualMachineStateSTOPPING            VirtualMachineState = "STOPPING"
+	VirtualMachineStateDELETED             VirtualMachineState = "DELETED"
+	VirtualMachineStateMigrationInProgress VirtualMachineState = "MIGRATION_IN_PROGRESS"
+	VirtualMachineStateREBOOTING           VirtualMachineState = "REBOOTING"
+	VirtualMachineStateIMPORTING           VirtualMachineState = "IMPORTING"
 )
 
 // String returns the underlying string value

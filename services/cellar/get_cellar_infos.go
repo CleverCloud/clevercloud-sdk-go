@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getcellarinfos
+Getcellarinfos Read a Cellar add-on
 
-get Cellar informations
+Returns the console view of one Cellar add-on: id, name, owner, plan, status, creation date, its inbound and outbound traffic over the last 30 days, and its bucket counts. The S3 credentials are not part of this view — read them from the `credentials` route. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path; an add-on that owner does not own answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
 
 # Returns the operation result or an error
 
@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: getCellarInfos
 */
-func Getcellarinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.Cellar] {
+func Getcellarinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.CellarView] {
 	ctx, span := tracer.Start(ctx, "getCellarInfos", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s", ownerId, CellarId)
 
 	// Make API call
-	response := client.Get[models.Cellar](ctx, c, path)
+	response := client.Get[models.CellarView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,9 +2,9 @@
 
 package models
 
-// MateriaProvisionResponse
+// MateriaProvisionResponse Provision/get response: `message` is exactly `"Created"` on provision and `"Addon found"` on get ...
 type MateriaProvisionResponse struct {
-	Config  MapString `json:"config"`
-	ID      string    `json:"id"`
-	Message string    `json:"message"`
+	Config  map[string]any `json:"config"`
+	ID      string         `json:"id"`
+	Message string         `json:"message"`
 }

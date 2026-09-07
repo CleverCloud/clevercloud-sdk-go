@@ -11,9 +11,34 @@ import (
 )
 
 /*
-Createotoroshi
+Createotoroshi POST /v2/providers/addon-otoroshi/resources — provision a new Otoroshi instance.
 
-provision a new Otoroshi instance
+Source: references/legacy/ovd/modules/otoroshi/controllers/OtoroshiProviderController.scala — createOtoroshi
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — provision()
+
+📥 **Algo Source (Legacy):**
+Full multi-step provisioning of an Otoroshi reverse proxy instance:
+- Generate OtoroshiId, compute 4 vhosts (ui/api/sso/admin) from NanoId
+- Extract plan from request, get "jar" product instance from cc-api
+- INSERT addon_otoroshi row in PROVISIONING state
+- Provision Redis addon via cc-api (plan from config)
+- UPDATE addon with redis_addon_id
+- Create Java application via cc-api with 30+ env vars (secrets, domains, version)
+- UPDATE addon with java_application_id
+- Register 4 DNS CNAME records (api, admin, ui, sso)
+- Set OTOROSHI_ROUTE_BASE_DOMAIN env var + cleanup default domain
+- Set favourite vhost to ui domain
+- Reboot Java app via PaaS
+- Create NetworkGroup if requested
+- On ANY failure: mark addon PROVISIONING_ERROR, store error message, still return 201
+- Source: ovd OtoroshiProviderService.scala:166 provision()
+
+🔧 **Algo Rust (Implementation):**
+- Same multi-step flow using OtoroshiPaasClient for external HTTP calls
+- Falls back to DB-only provisioning if paas_client is None (Cloud Versatile)
+- Error handling matches Scala: handleFailedDeployment returns 201 even on partial failure
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request

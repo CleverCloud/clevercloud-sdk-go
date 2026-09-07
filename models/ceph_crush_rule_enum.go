@@ -2,12 +2,12 @@
 
 package models
 
-// CephCrushRule represents
+// CephCrushRule represents CRUSH placement rule — 1:1 with ovd `CephCrushRule` (`models/Ceph.scala:248-259`, SCREAM_CASE on ...
 type CephCrushRule string
 
 const (
-	CephCrushRuleErasureDatacenter    CephCrushRule = "ERASURE_DATACENTER"
 	CephCrushRuleReplicatedDatacenter CephCrushRule = "REPLICATED_DATACENTER"
+	CephCrushRuleErasureDatacenter    CephCrushRule = "ERASURE_DATACENTER"
 )
 
 // String returns the underlying string value

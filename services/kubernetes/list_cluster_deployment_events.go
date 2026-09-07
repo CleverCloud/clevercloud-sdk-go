@@ -13,14 +13,24 @@ import (
 )
 
 /*
-Listclusterdeploymentevents
+Listclusterdeploymentevents GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/deployment-events
+
+The **legacy** wire format, folded out of the unified stream by
+[`to_legacy_views`]. Note the fold runs *after* the SQL `LIMIT`, so the
+reported `operation` depends on `?limit` — faithful to OVD.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala:234 — getDeploymentEvents (toLegacyViews projection)
+Source: references/legacy/ovd/modules/kubernetes/services/LegacyDeploymentEventAdapter.scala:54 — toLegacyViews
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:183 — getDeploymentEvents
+Behavior: 404 when the cluster is not in the caller's tenant (no existence leak).
+Issue: #993, #1481, #1584
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

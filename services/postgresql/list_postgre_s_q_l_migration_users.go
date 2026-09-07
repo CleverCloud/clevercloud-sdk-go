@@ -12,15 +12,25 @@ import (
 )
 
 /*
-Listpostgresqlmigrationusers
+Listpostgresqlmigrationusers **Legacy**: ovd migration.scala:29 getUsers()
+**Algorithm**:
+  - Fetch addon (no owner check, migration uses addon credentials)
+  - SELECT all active users for addon
 
-# Get the users snapshot for a given PostgreSQL addon
+**Conformity**: PARTIAL (password decryption deferred)
+
+GET /v4/postgresql/{postgreSQLId}/migration/users
+
+Source: ovd PostgreSQLMigrationRoutes.scala — getUsers
+Source: ovd PostgreSQLMigrationService.scala — getUsers
+Behavior: returns users snapshot for migration (authenticated by addon credentials)
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 

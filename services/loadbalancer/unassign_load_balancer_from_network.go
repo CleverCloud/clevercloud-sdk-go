@@ -11,17 +11,15 @@ import (
 )
 
 /*
-Unassignloadbalancerfromnetwork
-
-# Detach loadbalancer from network
+Unassignloadbalancerfromnetwork Row 34 — 404 not-attached (verbatim), then 503 at NG `deleteMember`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
   - networkId: Network ID
 
 # Returns the operation result or an error

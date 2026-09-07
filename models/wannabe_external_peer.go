@@ -2,14 +2,14 @@
 
 package models
 
-// WannabeExternalPeer
+// WannabeExternalPeer Input to add an external peer to a network group.  Source: references/legacy/ovd/modules/networkg...
 type WannabeExternalPeer struct {
-	Hostname     *string  `json:"hostname,omitempty"`
-	IP           *string  `json:"ip,omitempty"`
-	Label        string   `json:"label"`
-	ParentEvent  *string  `json:"parentEvent,omitempty"`
-	ParentMember string   `json:"parentMember"`
-	PeerRole     PeerRole `json:"peerRole"`
-	Port         *int     `json:"port,omitempty"`
-	PublicKey    string   `json:"publicKey"`
+	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname.
+	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).
+	Label        string  `json:"label"`                 // Human-readable label.
+	ParentEvent  *string `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
+	ParentMember string  `json:"parentMember"`          // Parent member this external peer belongs to.
+	PeerRole     string  `json:"peerRole"`              // Peer role: CLIENT | SERVER
+	Port         *int    `json:"port,omitempty"`        // Public port (SERVER peers).
+	PublicKey    string  `json:"publicKey"`             // WireGuard public key (base64, required for external peers).
 }

@@ -2,13 +2,13 @@
 
 package models
 
-// ClusterEndpoint
+// ClusterEndpoint Resolved cluster endpoint with full URLs.  Source: references/legacy/ovd/modules/warp10/src/main/...
 type ClusterEndpoint struct {
-	Delete   string        `json:"delete"`
-	Exec     string        `json:"exec"`
-	Fetch    string        `json:"fetch"`
-	Meta     string        `json:"meta"`
-	Priority int           `json:"priority"`
-	Scope    EndpointScope `json:"scope"`
-	Update   string        `json:"update"`
+	Delete   string        `json:"delete"`   // Full URL for /api/v0/delete
+	Exec     string        `json:"exec"`     // Full URL for /api/v0/exec
+	Fetch    string        `json:"fetch"`    // Full URL for /api/v0/fetch
+	Meta     string        `json:"meta"`     // Full URL for /api/v0/meta
+	Priority int           `json:"priority"` // Priority (lower = higher priority)
+	Scope    EndpointScope `json:"scope"`    // Scope: PUBLIC or INTERNAL
+	Update   string        `json:"update"`   // Full URL for /api/v0/update
 }

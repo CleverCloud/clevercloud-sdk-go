@@ -2,8 +2,8 @@
 
 package models
 
-// CephDashboard
+// CephDashboard Dashboard coordinates exposed in a cluster view — 1:1 with ovd `CephDashboardView` (endpoint + us...
 type CephDashboard struct {
-	Credentials BasicCredentials `json:"credentials"`
-	Endpoint    string           `json:"endpoint"` // Absolute URL
+	Endpoint string `json:"endpoint"` // Ceph Dashboard API endpoint URL.
+	Username string `json:"username"` // Ceph Dashboard API username.
 }

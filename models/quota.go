@@ -2,10 +2,10 @@
 
 package models
 
-// Quota
+// Quota A tenant's quota row.  Source: Quota.scala:21-52 Schema: V2.1.0__create_quota_reservations_table....
 type Quota struct {
-	ID       string      `json:"id"`
-	Quotas   []QuotaItem `json:"quotas,omitempty"`
-	Tags     []string    `json:"tags,omitempty"`
-	TenantID TenantID    `json:"tenantId"`
+	ID       string           `json:"id"`     // `quota_<uuid>` (QuotaId.scala:24).
+	Quotas   []KnownQuotaItem `json:"quotas"` // The two kubernetes ceiling kinds a consumer reads. The runtime type is [`QuotaItem`], which also ...
+	Tags     []string         `json:"tags"`
+	TenantID string           `json:"tenantId"`
 }

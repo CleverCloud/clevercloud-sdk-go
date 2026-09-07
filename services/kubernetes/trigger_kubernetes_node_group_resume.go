@@ -12,15 +12,36 @@ import (
 )
 
 /*
-Triggerkubernetesnodegroupresume
+Triggerkubernetesnodegroupresume POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-groups/{pool_id}/resume — resume a stuck DEPLOYING node group.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/NodeGroupController.scala — triggerResume
+Source: references/legacy/ovd/modules/kubernetes/services/NodeGroupCRUDService.scala:296-316 — resume
+Behavior: fire-and-forget re-drive of a stuck/interrupted deploy; the node group must be DEPLOYING.
+Issues: #667, #1481 (M8), #1535
+
+**Legacy**: ovd NodeGroupController.scala triggerKubernetesNodeGroupResume()
+**Algorithm** (NodeGroupCRUDService.scala:296-316):
+  - `requireClusterActive` — cluster display status is not ACTIVE ⇒ 409 Conflict
+  - Node group status must be DEPLOYING (`can_resume_node_group`), else 412
+    Precondition Failed ("Cannot resume node group `<id>`: status is
+    `<status>`, expected DEPLOYING"). FAILED is NOT API-resumable — the
+    reconciler auto-retries FAILED (C1, `NgAction::CleanFailedThenDeploy`)
+  - Fire-and-forget (the OVD `.start`): `deployers.node_group.resume_node_group`,
+    then release the `node-group:<id>` creation reservation ONLY on success
+    (`Ok(true)`); an absorbed failure (`Ok(false)`) holds it, matching OVD's
+    `resumeNodeGroup *> releaseLinkedReservation` short-circuit (the
+    reconciler C1 retry releases it once the deploy succeeds)
+  - Return the node group immediately (200) — no status write here
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
+  - nodeGroupId: Node group ID
 
 # Returns the operation result or an error
 

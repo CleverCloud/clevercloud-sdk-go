@@ -2,12 +2,12 @@
 
 package models
 
-// Ownership represents
+// Ownership represents Who a network group belongs to: a customer, or the platform itself. Lowercase on the wire, decode...
 type Ownership string
 
 const (
-	OwnershipCUSTOMER Ownership = "CUSTOMER"
-	OwnershipPLATFORM Ownership = "PLATFORM"
+	OwnershipCustomer Ownership = "customer"
+	OwnershipPlatform Ownership = "platform"
 )
 
 // String returns the underlying string value

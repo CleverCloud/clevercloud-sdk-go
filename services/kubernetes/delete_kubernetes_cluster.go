@@ -12,14 +12,30 @@ import (
 )
 
 /*
-Deletekubernetescluster
+Deletekubernetescluster **Legacy**: ovd ClusterController.scala:98 delete()
+**Algorithm**:
+  - ClusterCRUDService.delete sets flag_for_deletion=true
+  - Actual infra cleanup handled by AsyncDeletionService (async)
+
+**Conformity**: YES
+
+DELETE /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id} — delete a Kubernetes cluster.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — delete
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — updateFlagForDeletion
+Behavior: marks cluster for deletion (flag_for_deletion=true, updated_at=now).
+
+	Returns view with DELETING display status. Actual cleanup is async (AsyncDeletionService).
+	Scala: clusterService.delete -> updateFlagForDeletion(id, true)
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +50,14 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesCluster
 */
-func Deletekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
+func Deletekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "deleteKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
 
 	// Make API call
-	response := client.Delete[models.Cluster1](ctx, c, path)
+	response := client.Delete[models.KubernetesCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
