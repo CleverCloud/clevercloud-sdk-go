@@ -600,9 +600,15 @@ func unwrapNullable(schema Schema) (Schema, bool) {
 }
 
 func getGoType(schema Schema, isRequired bool) (string, bool, error) {
-	// A nullable reference is the referenced type, always behind a pointer.
+	// A nullable reference is the referenced type, behind a pointer — except for
+	// slices and maps, which carry their own nil and would otherwise become the
+	// unusable `*map[string]any`.
 	if inner, ok := unwrapNullable(schema); ok {
-		return getGoType(inner, false)
+		goType, isPointer, err := getGoType(inner, false)
+		if strings.HasPrefix(goType, "[]") || strings.HasPrefix(goType, "map[") {
+			isPointer = false
+		}
+		return goType, isPointer, err
 	}
 
 	// Handle $ref types
