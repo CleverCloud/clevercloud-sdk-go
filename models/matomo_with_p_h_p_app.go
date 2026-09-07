@@ -2,7 +2,7 @@
 
 package models
 
-// MatomoWithPHPApp Keycloak token-validation response.  Source: references/legacy/ovd/modules/matomo/services/keyclo...
+// MatomoWithPHPApp Keycloak token-validation response.  Source: references/legacy/ovd/modules/matomo/src/main/scala/...
 type MatomoWithPHPApp struct {
 	AddonID  MatomoId `json:"addonId"`  // Matomo addon id.
 	OwnerID  UserId   `json:"ownerId"`  // Owner (user or org) id.

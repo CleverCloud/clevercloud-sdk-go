@@ -18,7 +18,7 @@ Getvalidatematomokeycloaktoken GET /v4/addon-providers/addon-matomo/token/valida
 into `Info{ownerId,addonId}`, load the addon, require its PHP application id,
 return `InfoWithPHPApp`.
 
-🔧 Algo Rust: `keycloak::decrypt` → `fetch_active_addon_row` → require
+🔧 Algo Rust: `keycloak::decrypt` → `repository::find` → require
 `php_application_id`. Internal endpoint — no per-user guard.
 
 Issue: #660

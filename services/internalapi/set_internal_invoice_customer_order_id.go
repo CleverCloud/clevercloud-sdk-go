@@ -26,7 +26,7 @@ Set the customer_order_id field on an invoice (used for purchase order tracking)
 
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth
-- ccapi_db::billing::set_invoice_customer_order_id(pool, inv_id, order_id)
+- ccapi::db::billing::set_invoice_customer_order_id(pool, inv_id, order_id)
 - Return 200 or 404
 Conformity: real -- pure PG update, billing-api absorbed
 

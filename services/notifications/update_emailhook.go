@@ -16,9 +16,9 @@ UpdateEmailhook PUT /v2/notifications/emailhooks/{owner_id}/{id} — update an e
 
 Source: notification-api PUT /emailhooks/{ownerId}/{id}
 Issue: #262
-Algorithm: Verify notification access, rate-limit, load the Emailhook from the `emailhooks` collection (404 if missing or owned by another owner), apply the input fields (name/notified/events/scope) preserving createdAt, replace the document, then echo the validated input (legacy parity — no id/owner_id).
+Algorithm: Verify notification access, rate-limit, load the emailhook (404 if missing or owned by another owner), apply the input fields (name/notified/events/scope) preserving createdAt, replace the row, then echo the validated input (legacy parity — no id/owner_id).
 Legacy: notification-api EmailhookController.update returns Json.toJson(hook) — the input, not the stored entity.
-Conformity: faithful (input echo, refs #1053)
+Conformity: faithful (input echo, refs #1053) except the 409 when the new name is already taken by another hook of the owner — the schema's UNIQUE (owner_id, name) reported as a conflict (#3232)
 
 Parameters:
   - ctx: context for the request

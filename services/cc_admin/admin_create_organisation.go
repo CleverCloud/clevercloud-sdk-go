@@ -19,7 +19,7 @@ AdminCreateOrganisation **Legacy**: cc-api InternalOrganisationsAPI.java:113 cre
     OrganisationPersistHelper.java:86 — was "org_", a conformity bug)
   - Transaction: INSERT owner_info (with uuid_suffix), INSERT organisations,
     INSERT member_info (ADMIN role), INSERT organisation_members — via the
-    shared ccapi_db::organisations_create::create_with_owner (also used by
+    shared ccapi::db::organisations_create::create_with_owner (also used by
     the SCA portal's in-process Clever provisioner)
   - vat_state defaults to PENDING if VAT provided, NOT_APPLICABLE otherwise
 

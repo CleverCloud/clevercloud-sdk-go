@@ -23,7 +23,7 @@ Verify EditOrg permission (ADMIN, MANAGER only), Validate name (required, max 25
 - Legacy note: cc-api OrganisationHelper.java:248 edit() -> Organisation.java:300 absorb()
 
 🔧 **Algo Rust (Implementation):**
-  - country is normalised through ccapi_db::country::country_code_safe before the
+  - country is normalised through ccapi::db::country::country_code_safe before the
     owner_info UPDATE — absorb()'s getCountryCodeSafe, Organisation.java:291-295;
     an identity behind the validateCountryCode gate above (refs #2620)
   - Conformity: faithful

@@ -16,7 +16,7 @@ Updateorganisationapplication PUT /v2/organisations/{id}/applications/{app_id} �
 
 Legacy: cc-api ApplicationHelper.java:2304 edit() -> :2728 save()
 Algorithm: Auth canAddApp; Validate zone, name length, instance variant; Update, tri...
-Conformity: shape S10 — scope bit and canAddApp both 8103, 403 APPLICATION_BAD_OWNER on the app miss; nothing gates `archived`; rescale-on-edit ported bug-for-bug (refs #2666); still missing zone relocation
+Conformity: shape S10 — scope bit and canAddApp both 8103, 403 APPLICATION_BAD_OWNER on the app miss; nothing gates `archived`; rescale-on-edit ported bug-for-bug (refs #2666); zone relocation and the FTP folder rename ported (refs #3251, #3252)
 
 The `ApplicationEdition` publish fires only for a CUSTOMER-owned application (ownership
 NULL or not SYSTEM), matching save()'s own gate (ApplicationHelper.java:3388).

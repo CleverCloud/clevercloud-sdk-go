@@ -23,7 +23,7 @@ List all invoices with status PENDING and payment_provider = 'transfer'.
 
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth
-- ccapi_db::billing::list_invoices_pending_transfer(pool)
+- ccapi::db::billing::list_invoices_pending_transfer(pool)
 - Return serialized invoice rows
 Conformity: real -- pure PG query, billing-api absorbed
 

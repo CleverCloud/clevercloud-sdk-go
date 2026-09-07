@@ -26,7 +26,7 @@ Set vat_declaration_id on multiple invoices at once.
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth
 - Parse body (invoice_numbers array, vat_declaration_id)
-- ccapi_db::billing::batch_set_vat_declaration_id(pool, numbers, id) in transaction
+- ccapi::db::billing::batch_set_vat_declaration_id(pool, numbers, id) in transaction
 - Return count of updated rows
 Conformity: real -- pure PG batch update, billing-api absorbed
 

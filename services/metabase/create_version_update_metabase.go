@@ -15,7 +15,7 @@ import (
 Createversionupdatemetabase POST .../addons/{id}/version/update — update the deployed Metabase version.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — updateVersion
-Behaviour: verify the target is allowed (`400` otherwise) → require a Java app
+Behavior: verify the target is allowed (`400` otherwise) → require a Java app
 
 	(`409` otherwise) → if the target crosses the application-update threshold and
 	the app is still on the legacy `XS` flavor, bump it to `S` via `editApplication`

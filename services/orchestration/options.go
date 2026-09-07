@@ -13,16 +13,43 @@ type Option func(*Options)
 
 // Options holds query parameters for orchestration operations
 type Options struct {
-	Deploymentid *string `url:"deploymentId,omitempty"`
-	Limit        *int64  `url:"limit,omitempty"`
-	Offset       *int64  `url:"offset,omitempty"`
-	Withdeleted  *string `url:"withDeleted,omitempty"`
+	Deploymentid                    *string `url:"deploymentId,omitempty"`
+	Excludestate                    *string `url:"excludeState,omitempty"`
+	Includeapplicationconfiguration *string `url:"includeApplicationConfiguration,omitempty"`
+	Includestate                    *string `url:"includeState,omitempty"`
+	Limit                           *int64  `url:"limit,omitempty"`
+	Offset                          *int64  `url:"offset,omitempty"`
+	Order                           *string `url:"order,omitempty"`
+	Since                           *string `url:"since,omitempty"`
+	Until                           *string `url:"until,omitempty"`
+	Withdeleted                     *string `url:"withDeleted,omitempty"`
 }
 
 // WithDeploymentid sets the deploymentId query parameter
 func WithDeploymentid(deploymentId string) Option {
 	return func(o *Options) {
 		o.Deploymentid = &deploymentId
+	}
+}
+
+// WithExcludestate sets the excludeState query parameter
+func WithExcludestate(excludeState string) Option {
+	return func(o *Options) {
+		o.Excludestate = &excludeState
+	}
+}
+
+// WithIncludeapplicationconfiguration sets the includeApplicationConfiguration query parameter
+func WithIncludeapplicationconfiguration(includeApplicationConfiguration string) Option {
+	return func(o *Options) {
+		o.Includeapplicationconfiguration = &includeApplicationConfiguration
+	}
+}
+
+// WithIncludestate sets the includeState query parameter
+func WithIncludestate(includeState string) Option {
+	return func(o *Options) {
+		o.Includestate = &includeState
 	}
 }
 
@@ -37,6 +64,27 @@ func WithLimit(limit int64) Option {
 func WithOffset(offset int64) Option {
 	return func(o *Options) {
 		o.Offset = &offset
+	}
+}
+
+// WithOrder sets the order query parameter
+func WithOrder(order string) Option {
+	return func(o *Options) {
+		o.Order = &order
+	}
+}
+
+// WithSince sets the since query parameter
+func WithSince(since string) Option {
+	return func(o *Options) {
+		o.Since = &since
+	}
+}
+
+// WithUntil sets the until query parameter
+func WithUntil(until string) Option {
+	return func(o *Options) {
+		o.Until = &until
 	}
 }
 
@@ -58,11 +106,29 @@ func buildQueryString(opts ...Option) string {
 	if options.Deploymentid != nil {
 		params = append(params, fmt.Sprintf("deploymentId=%s", url.QueryEscape(*options.Deploymentid)))
 	}
+	if options.Excludestate != nil {
+		params = append(params, fmt.Sprintf("excludeState=%s", url.QueryEscape(*options.Excludestate)))
+	}
+	if options.Includeapplicationconfiguration != nil {
+		params = append(params, fmt.Sprintf("includeApplicationConfiguration=%s", url.QueryEscape(*options.Includeapplicationconfiguration)))
+	}
+	if options.Includestate != nil {
+		params = append(params, fmt.Sprintf("includeState=%s", url.QueryEscape(*options.Includestate)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
 	if options.Offset != nil {
 		params = append(params, fmt.Sprintf("offset=%d", *options.Offset))
+	}
+	if options.Order != nil {
+		params = append(params, fmt.Sprintf("order=%s", url.QueryEscape(*options.Order)))
+	}
+	if options.Since != nil {
+		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Until != nil {
+		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
 	}
 	if options.Withdeleted != nil {
 		params = append(params, fmt.Sprintf("withDeleted=%s", url.QueryEscape(*options.Withdeleted)))

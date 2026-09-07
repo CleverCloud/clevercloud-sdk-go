@@ -2,7 +2,7 @@
 
 package models
 
-// MatomoResources Resource references backing a Matomo addon.  Source: references/legacy/ovd/modules/matomo/models/...
+// MatomoResources Resource references backing a Matomo addon.  Source: references/legacy/ovd/modules/matomo/src/mai...
 type MatomoResources struct {
 	Entrypoint *any `json:"entrypoint,omitempty"`
 	KvID       *any `json:"kvId,omitempty"`

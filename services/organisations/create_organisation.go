@@ -23,7 +23,7 @@ Check canManageOrganisations + isOrgaCreationEnabled config, Require email_valid
 - Legacy note: cc-api OrganisationsAPI.java:83 createOrganisation() -> OrganisationHelper.java:196 create()
 
 🔧 **Algo Rust (Implementation):**
-  - country is normalised through ccapi_db::country::country_code_safe before the
+  - country is normalised through ccapi::db::country::country_code_safe before the
     owner_info INSERT — the getCountryCodeSafe of Organisation.java:236 (refs #2620)
   - Conformity: faithful
 

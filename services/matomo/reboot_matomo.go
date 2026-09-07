@@ -13,7 +13,7 @@ import (
 /*
 Rebootmatomo POST .../addons/{id}/reboot — restart the PHP app **with** build cache.
 
-Source: references/legacy/ovd/modules/matomo/services/MatomoProviderService.scala — rebootAddon(rebuild=false)
+Source: references/legacy/ovd/modules/matomo/src/main/scala/com/clevercloud/matomo/services/MatomoProviderService.scala — rebootAddon(rebuild=false)
 Issue: #660
 
 Parameters:

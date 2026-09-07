@@ -14,7 +14,7 @@ type V4InstanceView struct {
 	Index         *int    `json:"index,omitempty"`
 	IsBuildVm     bool    `json:"isBuildVm"`
 	Name          *string `json:"name,omitempty"`
-	Network       *any    `json:"network,omitempty"`
+	Network       *string `json:"network,omitempty"`
 	OwnerID       *string `json:"ownerId,omitempty"`
 	ResourceID    string  `json:"resourceId"`
 	State         string  `json:"state"`

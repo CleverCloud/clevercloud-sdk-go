@@ -16,9 +16,9 @@ UpdateWebhook PUT /v2/notifications/webhooks/{owner_id}/{id} — update a webhoo
 
 Source: notification-api PUT /webhooks/{ownerId}/{id}
 Issue: #262
-Algorithm: Verify notification access, load the Webhook from the `hooks` collection (404 if missing or owned by another owner), apply the input fields (name/urls/events/scope) preserving createdAt/failures/state, replace the document, then echo the validated input (legacy parity — no id/owner_id).
+Algorithm: Verify notification access, load the webhook (404 if missing or owned by another owner), apply the input fields (name/urls/events/scope) preserving createdAt/state, replace the row and its URL list, then echo the validated input (legacy parity — no id/owner_id).
 Legacy: notification-api WebhookController.update returns Json.toJson(validHook) — the input, not the stored entity.
-Conformity: faithful (input echo, refs #1053)
+Conformity: faithful (input echo, refs #1053) except the 409 when the new name is already taken by another hook of the owner — the schema's UNIQUE (owner_id, name) reported as a conflict (#3232)
 
 Parameters:
   - ctx: context for the request

@@ -48,7 +48,7 @@ Source: cc-api ConfInternalAuth.java:19 @Table("conf_internal_auth_creds"),
 
 Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
 Spec: references/legacy/cc-api/doc/internal.md §WannabeInternalCreds
-Schema: crates/utils/api/ccapi-db/migrations/00001_initial_schema.sql:585 conf_internal_auth_creds,
+Schema: crates/api/ccapi/migrations/00001_initial_schema.sql:585 conf_internal_auth_creds,
 
 	:1314 oauth_rights, :1485 seq_gen_sequence
 

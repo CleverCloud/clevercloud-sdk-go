@@ -14,6 +14,11 @@ import (
 Rebuildmetabaseapplication POST .../addons/{id}/rebuild — restart the Java app **without** build cache.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — rebootAddon(rebuild=true)
+Behavior: identical to the reboot route above — same 404/403 resolution, same
+
+	404 on a missing Java application, same 204 — except the restart is asked
+	for **without** the build cache, so the app is rebuilt from source.
+
 Issue: #8
 
 Parameters:

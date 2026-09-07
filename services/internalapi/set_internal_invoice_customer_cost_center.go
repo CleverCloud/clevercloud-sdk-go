@@ -26,7 +26,7 @@ Set the customer_cost_center on the invoice's address record.
 
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth
-- ccapi_db::billing::set_invoice_customer_cost_center(pool, inv_id, cost_center)
+- ccapi::db::billing::set_invoice_customer_cost_center(pool, inv_id, cost_center)
 - Return 200 or 404
 Conformity: real -- pure PG update, billing-api absorbed
 

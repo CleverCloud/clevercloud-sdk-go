@@ -4,6 +4,7 @@ package orchestration
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -33,12 +34,13 @@ Parameters:
   - id: Organisation ID
   - app_id: Application ID
   - deployment_id: Deployment ID
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := orchestration.V4GetOrgApplicationDeployment(ctx, client, tracer, id, app_id, deployment_id)
+	response := orchestration.V4GetOrgApplicationDeployment(ctx, client, tracer, id, app_id, deployment_id, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -47,11 +49,17 @@ Example:
 x-service: orchestration
 operationId: v4_get_org_application_deployment
 */
-func V4GetOrgApplicationDeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, app_id string, deployment_id string) client.Response[models.V4DeploymentView] {
+func V4GetOrgApplicationDeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, app_id string, deployment_id string, opts ...Option) client.Response[models.V4DeploymentView] {
 	ctx, span := tracer.Start(ctx, "v4_get_org_application_deployment", trace.WithAttributes(attribute.String("id", id), attribute.String("app_id", app_id), attribute.String("deployment_id", deployment_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/orchestration/organisations/%s/applications/%s/deployments/%s", id, app_id, deployment_id)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[models.V4DeploymentView](ctx, c, path)

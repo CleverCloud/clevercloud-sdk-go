@@ -16,9 +16,9 @@ ListWebhooks GET /v2/notifications/webhooks/{owner_id} — list webhooks for an 
 
 Source: notification-api GET /webhooks/{ownerId}
 Issue: #262
-Algorithm: Verify notification access (self or org ADMIN/MANAGER/DEVELOPER), then MongoNotificationStore.list_webhooks_owned_by (collection `hooks`, filter {ownerId}); map each document to a WebhookView.
+Algorithm: Verify notification access (self or org ADMIN/MANAGER/DEVELOPER), then PgNotificationStore.list_webhooks_owned_by (collection `hooks`, filter {ownerId}); map each document to a WebhookView.
 Legacy: notification-api WebhookDAOMongoDB.getOwnedBy reads the `hooks` collection by ownerId.
-Conformity: faithful (same MongoDB collection as notification-api, #1054)
+Conformity: faithful behaviour, served from the module's own PostgreSQL (#3210; the migrated legacy data, superseding the #1054 shared Mongo)
 
 Parameters:
   - ctx: context for the request

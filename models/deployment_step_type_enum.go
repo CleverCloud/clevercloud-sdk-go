@@ -12,6 +12,7 @@ const (
 	DeploymentStepTypeOtelConfig                  DeploymentStepType = "OTEL_CONFIG"
 	DeploymentStepTypeControlPlaneDeployment      DeploymentStepType = "CONTROL_PLANE_DEPLOYMENT"
 	DeploymentStepTypeLoadBalancerConfiguration   DeploymentStepType = "LOAD_BALANCER_CONFIGURATION"
+	DeploymentStepTypeApiserverReachability       DeploymentStepType = "APISERVER_REACHABILITY"
 	DeploymentStepTypePluginInstallation          DeploymentStepType = "PLUGIN_INSTALLATION"
 	DeploymentStepTypeFeatureProvision            DeploymentStepType = "FEATURE_PROVISION"
 	DeploymentStepTypePluginReconcile             DeploymentStepType = "PLUGIN_RECONCILE"

@@ -2,7 +2,7 @@
 
 package models
 
-// MetabaseConsumptionItem A single consumption line item.  Source: references/legacy/ovd/core — ConsumptionItem Schema: cra...
+// MetabaseConsumptionItem A single consumption line item.  Legacy's `ConsumptionItem` also carried an optional `resourceId`...
 type MetabaseConsumptionItem struct {
 	Details   ConsumptionDetail `json:"details"`   // Per-interval detail.
 	Quantity  float64           `json:"quantity"`  // Total quantity over the window (active days).

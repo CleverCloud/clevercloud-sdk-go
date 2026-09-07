@@ -15,7 +15,7 @@ DeleteWebhook DELETE /v2/notifications/webhooks/{owner_id}/{id} — delete a web
 
 Source: notification-api DELETE /webhooks/{ownerId}/{id}
 Issue: #262
-Algorithm: Verify notification access, load the Webhook from the `hooks` collection (404 if missing or owned by another owner), delete it by id, return 204 No Content (legacy parity — notification-api WebhookController returns NoContent).
+Algorithm: Verify notification access, load the webhook (404 if missing or owned by another owner), delete it by id (URL and delivery rows cascade), return 204 No Content (legacy parity — notification-api WebhookController returns NoContent).
 Legacy: notification-api returned 204 NoContent on delete.
 Conformity: faithful (status 204, refs #1053)
 

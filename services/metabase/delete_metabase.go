@@ -14,7 +14,7 @@ import (
 Deletemetabase DELETE /v2/providers/addon-metabase/resources/{addon_metabase_id} — deprovision.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — deprovision
-Behaviour: delete Java app + PG addon (ignore 404) + unregister DNS, then
+Behavior: delete Java app + PG addon (ignore 404) + unregister DNS, then
 
 	`setToDelete` → status `TO_DELETE` + `deletion_date`. Returns 204, or 404
 	when no active addon was updated.

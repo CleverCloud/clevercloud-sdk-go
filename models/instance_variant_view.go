@@ -2,16 +2,11 @@
 
 package models
 
-// InstanceVariantView Instance variant view returned after creation.  Source: cc-api InstanceVariant entity — serialize...
+// InstanceVariantView InstanceVariantView — matches cc-api openapi/ccapiv3.json InstanceVariantView schema.  Exactly fi...
 type InstanceVariantView struct {
-	DefaultLifetime string  `json:"default_lifetime"`           // Default lifetime.
-	DeployType      string  `json:"deploy_type"`                // Deployment type.
-	DeploymentFlags *string `json:"deployment_flags,omitempty"` // Deployment flags.
-	InstanceType    string  `json:"instance_type"`              // Instance type name.
-	Internal        bool    `json:"internal"`                   // Whether this variant is internal-only.
-	KernelName      string  `json:"kernel_name"`                // Kernel image name supernova uses to boot VMs of this variant. Source: cc-api !551 — refs #955
-	Logo            *string `json:"logo,omitempty"`             // Logo URL.
-	VariantID       string  `json:"variant_id"`                 // Variant UUID.
-	VariantName     string  `json:"variant_name"`               // Human-readable variant name.
-	VariantSlug     string  `json:"variant_slug"`               // URL-safe slug.
+	DeployType string  `json:"deployType"`
+	ID         string  `json:"id"`
+	Logo       *string `json:"logo,omitempty"`
+	Name       string  `json:"name"`
+	Slug       string  `json:"slug"`
 }

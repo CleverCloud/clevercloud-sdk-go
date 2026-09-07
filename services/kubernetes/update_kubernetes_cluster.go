@@ -18,9 +18,12 @@ Update a cluster's metadata and features. A feature change requires the cluster 
 be active and is carried out in the background; the reported `features` reflect
 what is installed, not what was just requested. Disabling
 `features.nodeAutoprovisioning` is refused while any Karpenter NodePool,
-NodeClaim, NodeOverlay or CleverNodeClass still exists.
+NodeClaim, NodeOverlay or CleverNodeClass still exists. Disabling `features.csi`
+removes the storage driver and is refused while the cluster still carries a
+volume it manages (a PersistentVolume provisioned by `rbd.csi.ceph.com`, a
+PersistentVolumeClaim on `csi-rbd-sc`, or a VolumeSnapshot).
 
-Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:82-94 — org-scoped PATCH variant + its description (a19692084)
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:82-96 — org-scoped PATCH variant + its description (c37341c3d)
 Behavior: same as PUT /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}
 Issue: #667, #2990
 

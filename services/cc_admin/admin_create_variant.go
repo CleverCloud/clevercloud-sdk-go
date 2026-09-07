@@ -62,14 +62,14 @@ Example:
 x-service: cc_admin
 operationId: admin_create_variant
 */
-func AdminCreateVariant(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.CreateVariantRequest) client.Response[models.InstanceVariantView] {
+func AdminCreateVariant(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.CreateVariantRequest) client.Response[models.ProductsInstanceVariantView] {
 	ctx, span := tracer.Start(ctx, "admin_create_variant")
 	defer span.End()
 
 	path := utils.Path("/v2/internal/instances/variants")
 
 	// Make API call
-	response := client.Post[models.InstanceVariantView](ctx, c, path, requestBody)
+	response := client.Post[models.ProductsInstanceVariantView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

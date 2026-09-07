@@ -25,7 +25,7 @@ each serialised through Organisation.toView(), which computes both billing flags
 🔧 **Algo Rust (Implementation):**
   - One JOIN over organisation_members + organisation_member_info + organisations +
     owner_info, WHERE user_id AND deletion_date IS NULL
-  - canPay/canSEPA from the shared ccapi-db formulas (OrganisationPaymentIdentity,
+  - canPay/canSEPA from the shared ccapi::db formulas (OrganisationPaymentIdentity,
     organisation_can_sepa) — the same home /v2/organisations and /v2/summary use
   - role and job come from the membership row — an axo extension over the legacy
     OrganisationView, which carries neither

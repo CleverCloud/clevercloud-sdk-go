@@ -16,7 +16,7 @@ Editselfapplicationbyappid PUT /v2/self/applications/{app_id} — update a perso
 
 Legacy: SelfApplicationsHelper.java:117-121 edit() -> ApplicationHelper.java:2303-2328 edit() -> :2728 save()
 Algorithm: Shape S10 with the caller's personal organisation as the owner — scope bit and canAddApp both 8103, 403 APPLICATION_BAD_OWNER on the application miss, then save().
-Conformity: faithful prologue — rescale-on-edit ported bug-for-bug (refs #2666); still missing zone relocation inside save(). Refs #2228
+Conformity: faithful prologue — rescale-on-edit ported bug-for-bug (refs #2666); zone relocation and the FTP folder rename ported (refs #3251, #3252). Refs #2228
 
 The `ApplicationEdition` publish fires only for a CUSTOMER-owned application (ownership
 NULL or not SYSTEM), matching save()'s own gate (ApplicationHelper.java:3388).

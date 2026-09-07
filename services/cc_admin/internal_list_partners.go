@@ -29,7 +29,7 @@ Source: cc-api InternalPartnerAPI.java:44 `authInternal(crc, null)` — bodyless
 	`!isCCAdmin() && !isBillingAPI()` → bare 403 FORBIDDEN
 
 Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Schema: crates/utils/api/ccapi-db/migrations/00001_initial_schema.sql:1432 — table partner
+Schema: crates/api/ccapi/migrations/00001_initial_schema.sql:1432 — table partner
 Behavior: 401 when the caller is not an internal service, 403 for an internal
 
 	service that is neither ccadmin nor billing-api, 200 list

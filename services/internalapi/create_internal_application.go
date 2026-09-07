@@ -18,7 +18,7 @@ Residual divergences against createFromInternal, ALL pre-existing — none intro
 - the organisation is looked up before `app` is parsed; legacy parses the wrapper first, so the 400 and 404 arms can swap.
 - env vars and addon links are written BEFORE the awaited ADD_APP, addons before domains; legacy runs both after save() returns, domains first.
 - an env write failure is logged, not answered (legacy returns it, :2621-2627).
-- `exportedEnv` (:2628-2635), `autostart` (:2662-2666) and `ownership` (:2572-2575) are read by nothing here.
+- `exportedEnv` (:2628-2635) and `ownership` (:2572-2575) are read by nothing here. `autostart` (:2662-2666) WAS in that list until 2026-09-04 and is now honoured — see the branch at the end of this handler, and refs #714 for what its silence cost.
 - the fail-early check compares `path_begin` case-sensitively; legacy uses `equalsIgnoreCase` (:2597-2600). A non-string `domains` entry is skipped where legacy answers 400 BAD_JSON.
 - a serialisation failure answers the pre-attachment view with a warning; legacy answers 500 SERIALIZATION_FAIL (:2672-2673).
 

@@ -16,9 +16,9 @@ ListEmailhooks GET /v2/notifications/emailhooks/{owner_id} — list email hooks.
 
 Source: notification-api GET /emailhooks/{ownerId}
 Issue: #262
-Algorithm: Verify notification access (self or org ADMIN/MANAGER/DEVELOPER), then MongoNotificationStore.list_emailhooks_owned_by (collection `emailhooks`, filter {ownerId}); map each document to an EmailHookView.
+Algorithm: Verify notification access (self or org ADMIN/MANAGER/DEVELOPER), then PgNotificationStore.list_emailhooks_owned_by (collection `emailhooks`, filter {ownerId}); map each document to an EmailHookView.
 Legacy: notification-api EmailhookDAOMongoDB.getOwnedBy reads the `emailhooks` collection by ownerId.
-Conformity: faithful (same MongoDB collection as notification-api, #1054)
+Conformity: faithful behaviour, served from the module's own PostgreSQL (#3210; the migrated legacy data, superseding the #1054 shared Mongo)
 
 Parameters:
   - ctx: context for the request

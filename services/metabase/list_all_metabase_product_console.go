@@ -14,6 +14,16 @@ import (
 Listallmetabaseproductconsole POST /v4/metabase/consumptions — consumption for every addon active in the window.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getAllConsumptions
+Behavior: enforce the same internal Basic credential (401), then list every
+
+	addon alive at any point in `[since, until]` — soft-deleted rows included,
+	up to their deletion date — and answer 200 with one `ResourceConsumption`
+	per row, each attributed to its **stored** owner (legacy
+	`getAllConsumptions`), never to a path owner. A window matching nothing is
+	an empty array, not a 404; the rows are decoded in a single `fetch_all`, so
+	one row carrying an id the typed decode rejects 500s the whole listing
+	(refs #2397).
+
 Issue: #8
 
 Parameters:

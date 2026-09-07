@@ -29,7 +29,7 @@ Update invoice status to a new value (PAID, CANCELED, WONTPAY, LOSS, etc.).
 - Verify internal auth
 - Parse body for status field
 - Validate status is known: PENDING, PROCESSING, PAID, CANCELED, REFUNDED, WONTPAY, PAYMENTHELD, LOSS
-- ccapi_db::billing::update_invoice_status(pool, inv_id, status)
+- ccapi::db::billing::update_invoice_status(pool, inv_id, status)
 - Return 200 or 404
 Conformity: real -- pure PG update, billing-api absorbed
 

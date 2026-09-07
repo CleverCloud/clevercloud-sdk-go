@@ -2,7 +2,7 @@
 
 package models
 
-// SecretView Consumer secret view.  Source: cc-api output/oauth/SecretView.java Issue: #102
+// SecretView Consumer secret view.  Source: cc-api output/oauth/SecretView.java Schema: V1__Initial_schema.sql...
 type SecretView struct {
 	Secret string `json:"secret"`
 }

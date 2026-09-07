@@ -16,9 +16,9 @@ CreateWebhook POST /v2/notifications/webhooks/{owner_id} — create a webhook.
 
 Source: notification-api POST /webhooks/{ownerId}
 Issue: #262
-Algorithm: Verify notification access, validate name non-empty and at least one URL, convert events/urls to the typed Mongo model (unknown keys/formats → 422), insert a Webhook document (bare UUID id, state ENABLED, createdAt now) into the `hooks` collection, return 201 Created with WebhookView.
+Algorithm: Verify notification access, validate name non-empty and at least one URL, convert events/urls to the typed model (unknown keys/formats → 422), insert the webhook row (bare UUID id, state ENABLED, createdAt now) with its ordered URL rows, return 201 Created with WebhookView.
 Legacy: notification-api Webhook.create mints a bare UUID and WebhookController returns 201 Created.
-Conformity: faithful (status 201, refs #1053; MongoDB backend #1054)
+Conformity: faithful (status 201, refs #1053; own-PostgreSQL backend #3210) except the 409 on a duplicate (owner, name) — the schema's UNIQUE constraint reported as a conflict (#3232)
 
 Parameters:
   - ctx: context for the request

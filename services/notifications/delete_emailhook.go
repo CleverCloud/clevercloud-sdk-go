@@ -15,7 +15,7 @@ DeleteEmailhook DELETE /v2/notifications/emailhooks/{owner_id}/{id} — delete a
 
 Source: notification-api DELETE /emailhooks/{ownerId}/{id}
 Issue: #262
-Algorithm: Verify notification access, load the Emailhook from the `emailhooks` collection (404 if missing or owned by another owner), delete it by id, return 204 No Content (legacy parity — notification-api EmailhookController returns NoContent).
+Algorithm: Verify notification access, load the emailhook (404 if missing or owned by another owner), delete it by id, return 204 No Content (legacy parity — notification-api EmailhookController returns NoContent).
 Legacy: notification-api returned 204 NoContent on delete.
 Conformity: faithful (status 204, refs #1053)
 

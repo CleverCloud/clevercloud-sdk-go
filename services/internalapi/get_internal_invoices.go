@@ -27,7 +27,7 @@ Query billing DB for invoices, optionally filtered by owner_id.
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth token
 - Extract optional `owner` query param
-- ccapi_db::billing::list_invoices_filtered_by_owner(pool, owner)
+- ccapi::db::billing::list_invoices_filtered_by_owner(pool, owner)
 - Return `Vec<InvoiceRow>` serialized to JSON
 Conformity: real -- pure PG query, billing-api absorbed
 

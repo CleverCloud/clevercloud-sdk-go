@@ -1846,7 +1846,7 @@ func (b *v2InternalInstancesBuilderImpl) Variants() V2InternalInstancesVariantsB
 // V2InternalInstancesVariantsBuilder provides access to operations
 type V2InternalInstancesVariantsBuilder interface {
 	VariantID(variantID string) V2InternalInstancesVariantsVariantIDBuilder
-	AdminCreateVariant(ctx context.Context, request *models.CreateVariantRequest) client.Response[models.InstanceVariantView]
+	AdminCreateVariant(ctx context.Context, request *models.CreateVariantRequest) client.Response[models.ProductsInstanceVariantView]
 }
 
 // v2InternalInstancesVariantsBuilderImpl implements V2InternalInstancesVariantsBuilder
@@ -1865,7 +1865,7 @@ func (b *v2InternalInstancesVariantsBuilderImpl) VariantID(variantID string) V2I
 }
 
 // AdminCreateVariant calls cc_admin.AdminCreateVariant
-func (b *v2InternalInstancesVariantsBuilderImpl) AdminCreateVariant(ctx context.Context, request *models.CreateVariantRequest) client.Response[models.InstanceVariantView] {
+func (b *v2InternalInstancesVariantsBuilderImpl) AdminCreateVariant(ctx context.Context, request *models.CreateVariantRequest) client.Response[models.ProductsInstanceVariantView] {
 	return ccadmin.AdminCreateVariant(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
@@ -15775,6 +15775,7 @@ type V4Builder interface {
 	Networkgroup() V4NetworkgroupBuilder
 	Networkgroups() V4NetworkgroupsBuilder
 	Orchestration() V4OrchestrationBuilder
+	Otel() V4OtelBuilder
 	Otoroshi() V4OtoroshiBuilder
 	Paas() V4PaasBuilder
 	Postgresql() V4PostgresqlBuilder
@@ -15907,6 +15908,11 @@ func (b *v4BuilderImpl) Networkgroups() V4NetworkgroupsBuilder {
 // Orchestration returns Orchestration builder
 func (b *v4BuilderImpl) Orchestration() V4OrchestrationBuilder {
 	return newV4OrchestrationBuilder(b.sdk)
+}
+
+// Otel returns Otel builder
+func (b *v4BuilderImpl) Otel() V4OtelBuilder {
+	return newV4OtelBuilder(b.sdk)
 }
 
 // Otoroshi returns Otoroshi builder
@@ -25894,6 +25900,7 @@ func (b *v4OrchestrationOrganisationsBuilderImpl) ID(id string) V4OrchestrationO
 // V4OrchestrationOrganisationsIDBuilder provides access to operations
 type V4OrchestrationOrganisationsIDBuilder interface {
 	Applications() V4OrchestrationOrganisationsIDApplicationsBuilder
+	Resources() V4OrchestrationOrganisationsIDResourcesBuilder
 }
 
 // v4OrchestrationOrganisationsIDBuilderImpl implements V4OrchestrationOrganisationsIDBuilder
@@ -25913,6 +25920,11 @@ func newV4OrchestrationOrganisationsIDBuilder(sdk *sdkImpl, id string) V4Orchest
 // Applications returns Applications builder
 func (b *v4OrchestrationOrganisationsIDBuilderImpl) Applications() V4OrchestrationOrganisationsIDApplicationsBuilder {
 	return newV4OrchestrationOrganisationsIDApplicationsBuilder(b.sdk, b.id)
+}
+
+// Resources returns Resources builder
+func (b *v4OrchestrationOrganisationsIDBuilderImpl) Resources() V4OrchestrationOrganisationsIDResourcesBuilder {
+	return newV4OrchestrationOrganisationsIDResourcesBuilder(b.sdk, b.id)
 }
 
 // V4OrchestrationOrganisationsIDApplicationsBuilder provides access to operations
@@ -26005,7 +26017,7 @@ func (b *v4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsBuilderImpl) 
 
 // V4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilder provides access to operations
 type V4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilder interface {
-	V4GetOrgApplicationDeployment(ctx context.Context) client.Response[models.V4DeploymentView]
+	V4GetOrgApplicationDeployment(ctx context.Context, opts ...orchestration.Option) client.Response[models.V4DeploymentView]
 }
 
 // v4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilderImpl implements V4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilder
@@ -26027,8 +26039,8 @@ func newV4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBu
 }
 
 // V4GetOrgApplicationDeployment calls orchestration.V4GetOrgApplicationDeployment
-func (b *v4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilderImpl) V4GetOrgApplicationDeployment(ctx context.Context) client.Response[models.V4DeploymentView] {
-	return orchestration.V4GetOrgApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appID, b.deploymentID)
+func (b *v4OrchestrationOrganisationsIDApplicationsAppIDDeploymentsDeploymentIDBuilderImpl) V4GetOrgApplicationDeployment(ctx context.Context, opts ...orchestration.Option) client.Response[models.V4DeploymentView] {
+	return orchestration.V4GetOrgApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appID, b.deploymentID, opts...)
 }
 
 // V4OrchestrationOrganisationsIDApplicationsAppIDInstancesBuilder provides access to operations
@@ -26089,6 +26101,272 @@ func newV4OrchestrationOrganisationsIDApplicationsAppIDInstancesInstanceIDBuilde
 // V4GetOrgApplicationInstance calls orchestration.V4GetOrgApplicationInstance
 func (b *v4OrchestrationOrganisationsIDApplicationsAppIDInstancesInstanceIDBuilderImpl) V4GetOrgApplicationInstance(ctx context.Context) client.Response[models.V4InstanceView] {
 	return orchestration.V4GetOrgApplicationInstance(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appID, b.instanceID)
+}
+
+// V4OrchestrationOrganisationsIDResourcesBuilder provides access to operations
+type V4OrchestrationOrganisationsIDResourcesBuilder interface {
+	ResourceID(resourceID string) V4OrchestrationOrganisationsIDResourcesResourceIDBuilder
+}
+
+// v4OrchestrationOrganisationsIDResourcesBuilderImpl implements V4OrchestrationOrganisationsIDResourcesBuilder
+type v4OrchestrationOrganisationsIDResourcesBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV4OrchestrationOrganisationsIDResourcesBuilder creates a new V4OrchestrationOrganisationsIDResourcesBuilder
+func newV4OrchestrationOrganisationsIDResourcesBuilder(sdk *sdkImpl, id string) V4OrchestrationOrganisationsIDResourcesBuilder {
+	return &v4OrchestrationOrganisationsIDResourcesBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// ResourceID returns builder for resourceID
+func (b *v4OrchestrationOrganisationsIDResourcesBuilderImpl) ResourceID(resourceID string) V4OrchestrationOrganisationsIDResourcesResourceIDBuilder {
+	return newV4OrchestrationOrganisationsIDResourcesResourceIDBuilder(b.sdk, b.id, resourceID)
+}
+
+// V4OrchestrationOrganisationsIDResourcesResourceIDBuilder provides access to operations
+type V4OrchestrationOrganisationsIDResourcesResourceIDBuilder interface {
+	Instances() V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder
+}
+
+// v4OrchestrationOrganisationsIDResourcesResourceIDBuilderImpl implements V4OrchestrationOrganisationsIDResourcesResourceIDBuilder
+type v4OrchestrationOrganisationsIDResourcesResourceIDBuilderImpl struct {
+	sdk        *sdkImpl
+	id         string
+	resourceID string
+}
+
+// newV4OrchestrationOrganisationsIDResourcesResourceIDBuilder creates a new V4OrchestrationOrganisationsIDResourcesResourceIDBuilder
+func newV4OrchestrationOrganisationsIDResourcesResourceIDBuilder(sdk *sdkImpl, id string, resourceID string) V4OrchestrationOrganisationsIDResourcesResourceIDBuilder {
+	return &v4OrchestrationOrganisationsIDResourcesResourceIDBuilderImpl{
+		id:         id,
+		resourceID: resourceID,
+		sdk:        sdk,
+	}
+}
+
+// Instances returns Instances builder
+func (b *v4OrchestrationOrganisationsIDResourcesResourceIDBuilderImpl) Instances() V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder {
+	return newV4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder(b.sdk, b.id, b.resourceID)
+}
+
+// V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder provides access to operations
+type V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder interface {
+	V4GetOrgResourceInstances(ctx context.Context, opts ...orchestration.Option) client.Response[[]models.V4InstanceView]
+}
+
+// v4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilderImpl implements V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder
+type v4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilderImpl struct {
+	sdk        *sdkImpl
+	id         string
+	resourceID string
+}
+
+// newV4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder creates a new V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder
+func newV4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder(sdk *sdkImpl, id string, resourceID string) V4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilder {
+	return &v4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilderImpl{
+		id:         id,
+		resourceID: resourceID,
+		sdk:        sdk,
+	}
+}
+
+// V4GetOrgResourceInstances calls orchestration.V4GetOrgResourceInstances
+func (b *v4OrchestrationOrganisationsIDResourcesResourceIDInstancesBuilderImpl) V4GetOrgResourceInstances(ctx context.Context, opts ...orchestration.Option) client.Response[[]models.V4InstanceView] {
+	return orchestration.V4GetOrgResourceInstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.resourceID, opts...)
+}
+
+// V4OtelBuilder provides access to operations
+type V4OtelBuilder interface {
+	Gateways() V4OtelGatewaysBuilder
+	Organisations() V4OtelOrganisationsBuilder
+}
+
+// v4OtelBuilderImpl implements V4OtelBuilder
+type v4OtelBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4OtelBuilder creates a new V4OtelBuilder
+func newV4OtelBuilder(sdk *sdkImpl) V4OtelBuilder {
+	return &v4OtelBuilderImpl{sdk: sdk}
+}
+
+// Gateways returns Gateways builder
+func (b *v4OtelBuilderImpl) Gateways() V4OtelGatewaysBuilder {
+	return newV4OtelGatewaysBuilder(b.sdk)
+}
+
+// Organisations returns Organisations builder
+func (b *v4OtelBuilderImpl) Organisations() V4OtelOrganisationsBuilder {
+	return newV4OtelOrganisationsBuilder(b.sdk)
+}
+
+// V4OtelGatewaysBuilder provides access to operations
+type V4OtelGatewaysBuilder interface {
+	Listotelgateways(ctx context.Context) client.Response[[]models.OtelGateway]
+	Createotelgateway(ctx context.Context, request *models.WannabeGateway) client.Response[models.OtelGateway]
+}
+
+// v4OtelGatewaysBuilderImpl implements V4OtelGatewaysBuilder
+type v4OtelGatewaysBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4OtelGatewaysBuilder creates a new V4OtelGatewaysBuilder
+func newV4OtelGatewaysBuilder(sdk *sdkImpl) V4OtelGatewaysBuilder {
+	return &v4OtelGatewaysBuilderImpl{sdk: sdk}
+}
+
+// Listotelgateways calls open_telemetry.Listotelgateways
+func (b *v4OtelGatewaysBuilderImpl) Listotelgateways(ctx context.Context) client.Response[[]models.OtelGateway] {
+	return opentelemetry.Listotelgateways(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// Createotelgateway calls open_telemetry.Createotelgateway
+func (b *v4OtelGatewaysBuilderImpl) Createotelgateway(ctx context.Context, request *models.WannabeGateway) client.Response[models.OtelGateway] {
+	return opentelemetry.Createotelgateway(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+}
+
+// V4OtelOrganisationsBuilder provides access to operations
+type V4OtelOrganisationsBuilder interface {
+	OwnerID(ownerID string) V4OtelOrganisationsOwnerIDBuilder
+}
+
+// v4OtelOrganisationsBuilderImpl implements V4OtelOrganisationsBuilder
+type v4OtelOrganisationsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4OtelOrganisationsBuilder creates a new V4OtelOrganisationsBuilder
+func newV4OtelOrganisationsBuilder(sdk *sdkImpl) V4OtelOrganisationsBuilder {
+	return &v4OtelOrganisationsBuilderImpl{sdk: sdk}
+}
+
+// OwnerID returns builder for ownerID
+func (b *v4OtelOrganisationsBuilderImpl) OwnerID(ownerID string) V4OtelOrganisationsOwnerIDBuilder {
+	return newV4OtelOrganisationsOwnerIDBuilder(b.sdk, ownerID)
+}
+
+// V4OtelOrganisationsOwnerIDBuilder provides access to operations
+type V4OtelOrganisationsOwnerIDBuilder interface {
+	Namespaces() V4OtelOrganisationsOwnerIDNamespacesBuilder
+}
+
+// v4OtelOrganisationsOwnerIDBuilderImpl implements V4OtelOrganisationsOwnerIDBuilder
+type v4OtelOrganisationsOwnerIDBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerID string
+}
+
+// newV4OtelOrganisationsOwnerIDBuilder creates a new V4OtelOrganisationsOwnerIDBuilder
+func newV4OtelOrganisationsOwnerIDBuilder(sdk *sdkImpl, ownerID string) V4OtelOrganisationsOwnerIDBuilder {
+	return &v4OtelOrganisationsOwnerIDBuilderImpl{
+		ownerID: ownerID,
+		sdk:     sdk,
+	}
+}
+
+// Namespaces returns Namespaces builder
+func (b *v4OtelOrganisationsOwnerIDBuilderImpl) Namespaces() V4OtelOrganisationsOwnerIDNamespacesBuilder {
+	return newV4OtelOrganisationsOwnerIDNamespacesBuilder(b.sdk, b.ownerID)
+}
+
+// V4OtelOrganisationsOwnerIDNamespacesBuilder provides access to operations
+type V4OtelOrganisationsOwnerIDNamespacesBuilder interface {
+	OtelID(otelID string) V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder
+	Listotelnamespaces(ctx context.Context) client.Response[[]models.OtelNamespace]
+	Createotelnamespace(ctx context.Context, request *models.WannabeNamespace) client.Response[models.OtelNamespace]
+}
+
+// v4OtelOrganisationsOwnerIDNamespacesBuilderImpl implements V4OtelOrganisationsOwnerIDNamespacesBuilder
+type v4OtelOrganisationsOwnerIDNamespacesBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerID string
+}
+
+// newV4OtelOrganisationsOwnerIDNamespacesBuilder creates a new V4OtelOrganisationsOwnerIDNamespacesBuilder
+func newV4OtelOrganisationsOwnerIDNamespacesBuilder(sdk *sdkImpl, ownerID string) V4OtelOrganisationsOwnerIDNamespacesBuilder {
+	return &v4OtelOrganisationsOwnerIDNamespacesBuilderImpl{
+		ownerID: ownerID,
+		sdk:     sdk,
+	}
+}
+
+// OtelID returns builder for otelID
+func (b *v4OtelOrganisationsOwnerIDNamespacesBuilderImpl) OtelID(otelID string) V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder {
+	return newV4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder(b.sdk, b.ownerID, otelID)
+}
+
+// Listotelnamespaces calls open_telemetry.Listotelnamespaces
+func (b *v4OtelOrganisationsOwnerIDNamespacesBuilderImpl) Listotelnamespaces(ctx context.Context) client.Response[[]models.OtelNamespace] {
+	return opentelemetry.Listotelnamespaces(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
+}
+
+// Createotelnamespace calls open_telemetry.Createotelnamespace
+func (b *v4OtelOrganisationsOwnerIDNamespacesBuilderImpl) Createotelnamespace(ctx context.Context, request *models.WannabeNamespace) client.Response[models.OtelNamespace] {
+	return opentelemetry.Createotelnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, request)
+}
+
+// V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder provides access to operations
+type V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder interface {
+	Services() V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder
+	Deleteotelnamespace(ctx context.Context) client.Response[client.Nothing]
+}
+
+// v4OtelOrganisationsOwnerIDNamespacesOtelIDBuilderImpl implements V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder
+type v4OtelOrganisationsOwnerIDNamespacesOtelIDBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerID string
+	otelID  string
+}
+
+// newV4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder creates a new V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder
+func newV4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder(sdk *sdkImpl, ownerID string, otelID string) V4OtelOrganisationsOwnerIDNamespacesOtelIDBuilder {
+	return &v4OtelOrganisationsOwnerIDNamespacesOtelIDBuilderImpl{
+		otelID:  otelID,
+		ownerID: ownerID,
+		sdk:     sdk,
+	}
+}
+
+// Services returns Services builder
+func (b *v4OtelOrganisationsOwnerIDNamespacesOtelIDBuilderImpl) Services() V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder {
+	return newV4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder(b.sdk, b.ownerID, b.otelID)
+}
+
+// Deleteotelnamespace calls open_telemetry.Deleteotelnamespace
+func (b *v4OtelOrganisationsOwnerIDNamespacesOtelIDBuilderImpl) Deleteotelnamespace(ctx context.Context) client.Response[client.Nothing] {
+	return opentelemetry.Deleteotelnamespace(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.otelID)
+}
+
+// V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder provides access to operations
+type V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder interface {
+	Createotelservice(ctx context.Context, request *models.WannabeService) client.Response[models.OtelService]
+}
+
+// v4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilderImpl implements V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder
+type v4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerID string
+	otelID  string
+}
+
+// newV4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder creates a new V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder
+func newV4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder(sdk *sdkImpl, ownerID string, otelID string) V4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilder {
+	return &v4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilderImpl{
+		otelID:  otelID,
+		ownerID: ownerID,
+		sdk:     sdk,
+	}
+}
+
+// Createotelservice calls open_telemetry.Createotelservice
+func (b *v4OtelOrganisationsOwnerIDNamespacesOtelIDServicesBuilderImpl) Createotelservice(ctx context.Context, request *models.WannabeService) client.Response[models.OtelService] {
+	return opentelemetry.Createotelservice(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.otelID, request)
 }
 
 // V4OtoroshiBuilder provides access to operations
@@ -29384,8 +29662,6 @@ func (b *v4TenantsTenantidTokensTokenidRefreshBuilderImpl) Renewtoken(ctx contex
 // V4TenantsTenantIDBuilder provides access to operations
 type V4TenantsTenantIDBuilder interface {
 	ContainerRegistry() V4TenantsTenantIDContainerRegistryBuilder
-	Opentelemetry() V4TenantsTenantIDOpentelemetryBuilder
-	OpentelemetryGateways() V4TenantsTenantIDOpentelemetryGatewaysBuilder
 	Products() V4TenantsTenantIDProductsBuilder
 	Tokens() V4TenantsTenantIDTokensBuilder
 }
@@ -29407,16 +29683,6 @@ func newV4TenantsTenantIDBuilder(sdk *sdkImpl, tenantID string) V4TenantsTenantI
 // ContainerRegistry returns ContainerRegistry builder
 func (b *v4TenantsTenantIDBuilderImpl) ContainerRegistry() V4TenantsTenantIDContainerRegistryBuilder {
 	return newV4TenantsTenantIDContainerRegistryBuilder(b.sdk, b.tenantID)
-}
-
-// Opentelemetry returns Opentelemetry builder
-func (b *v4TenantsTenantIDBuilderImpl) Opentelemetry() V4TenantsTenantIDOpentelemetryBuilder {
-	return newV4TenantsTenantIDOpentelemetryBuilder(b.sdk, b.tenantID)
-}
-
-// OpentelemetryGateways returns OpentelemetryGateways builder
-func (b *v4TenantsTenantIDBuilderImpl) OpentelemetryGateways() V4TenantsTenantIDOpentelemetryGatewaysBuilder {
-	return newV4TenantsTenantIDOpentelemetryGatewaysBuilder(b.sdk, b.tenantID)
 }
 
 // Products returns Products builder
@@ -29625,226 +29891,6 @@ func newV4TenantsTenantIDContainerRegistryRegistriesRegistryIDTokensTokenIDRenew
 // RenewToken calls container_registry.RenewToken
 func (b *v4TenantsTenantIDContainerRegistryRegistriesRegistryIDTokensTokenIDRenewBuilderImpl) RenewToken(ctx context.Context, request *models.RenewContainerRegistryTokenRequest) client.Response[models.ContainerRegistryTokenWithBiscuit] {
 	return containerregistry.RenewToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.registryID, b.tokenID, request)
-}
-
-// V4TenantsTenantIDOpentelemetryBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryBuilder interface {
-	OpentelemetryID(opentelemetryID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder
-	ListOpentelemetry(ctx context.Context) client.Response[[]models.OpenTelemetryView]
-	CreateOpentelemetry(ctx context.Context, request *models.WannabeOpenTelemetry) client.Response[models.OpenTelemetryView]
-}
-
-// v4TenantsTenantIDOpentelemetryBuilderImpl implements V4TenantsTenantIDOpentelemetryBuilder
-type v4TenantsTenantIDOpentelemetryBuilderImpl struct {
-	sdk      *sdkImpl
-	tenantID string
-}
-
-// newV4TenantsTenantIDOpentelemetryBuilder creates a new V4TenantsTenantIDOpentelemetryBuilder
-func newV4TenantsTenantIDOpentelemetryBuilder(sdk *sdkImpl, tenantID string) V4TenantsTenantIDOpentelemetryBuilder {
-	return &v4TenantsTenantIDOpentelemetryBuilderImpl{
-		sdk:      sdk,
-		tenantID: tenantID,
-	}
-}
-
-// OpentelemetryID returns builder for opentelemetryID
-func (b *v4TenantsTenantIDOpentelemetryBuilderImpl) OpentelemetryID(opentelemetryID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder {
-	return newV4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder(b.sdk, b.tenantID, opentelemetryID)
-}
-
-// ListOpentelemetry calls open_telemetry.ListOpentelemetry
-func (b *v4TenantsTenantIDOpentelemetryBuilderImpl) ListOpentelemetry(ctx context.Context) client.Response[[]models.OpenTelemetryView] {
-	return opentelemetry.ListOpentelemetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID)
-}
-
-// CreateOpentelemetry calls open_telemetry.CreateOpentelemetry
-func (b *v4TenantsTenantIDOpentelemetryBuilderImpl) CreateOpentelemetry(ctx context.Context, request *models.WannabeOpenTelemetry) client.Response[models.OpenTelemetryView] {
-	return opentelemetry.CreateOpentelemetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, request)
-}
-
-// V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder interface {
-	Indexes() V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder
-	DeleteOpentelemetry(ctx context.Context) client.Response[models.OpenTelemetryView]
-	GetOpentelemetry(ctx context.Context) client.Response[models.OpenTelemetryView]
-	UpdateOpentelemetry(ctx context.Context, request *models.OpenTelemetryPatch) client.Response[models.OpenTelemetryView]
-}
-
-// v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl implements V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder
-type v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl struct {
-	sdk             *sdkImpl
-	tenantID        string
-	opentelemetryID string
-}
-
-// newV4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder creates a new V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder
-func newV4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder(sdk *sdkImpl, tenantID string, opentelemetryID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDBuilder {
-	return &v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl{
-		opentelemetryID: opentelemetryID,
-		sdk:             sdk,
-		tenantID:        tenantID,
-	}
-}
-
-// Indexes returns Indexes builder
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl) Indexes() V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder {
-	return newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder(b.sdk, b.tenantID, b.opentelemetryID)
-}
-
-// DeleteOpentelemetry calls open_telemetry.DeleteOpentelemetry
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl) DeleteOpentelemetry(ctx context.Context) client.Response[models.OpenTelemetryView] {
-	return opentelemetry.DeleteOpentelemetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID)
-}
-
-// GetOpentelemetry calls open_telemetry.GetOpentelemetry
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl) GetOpentelemetry(ctx context.Context) client.Response[models.OpenTelemetryView] {
-	return opentelemetry.GetOpentelemetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID)
-}
-
-// UpdateOpentelemetry calls open_telemetry.UpdateOpentelemetry
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDBuilderImpl) UpdateOpentelemetry(ctx context.Context, request *models.OpenTelemetryPatch) client.Response[models.OpenTelemetryView] {
-	return opentelemetry.UpdateOpentelemetry(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID, request)
-}
-
-// V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder interface {
-	OtelIndexID(otelIndexID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder
-	ListOtelIndexes(ctx context.Context) client.Response[[]models.OtelIndexView]
-}
-
-// v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilderImpl implements V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder
-type v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilderImpl struct {
-	sdk             *sdkImpl
-	tenantID        string
-	opentelemetryID string
-}
-
-// newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder creates a new V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder
-func newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder(sdk *sdkImpl, tenantID string, opentelemetryID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilder {
-	return &v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilderImpl{
-		opentelemetryID: opentelemetryID,
-		sdk:             sdk,
-		tenantID:        tenantID,
-	}
-}
-
-// OtelIndexID returns builder for otelIndexID
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilderImpl) OtelIndexID(otelIndexID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder {
-	return newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder(b.sdk, b.tenantID, b.opentelemetryID, otelIndexID)
-}
-
-// ListOtelIndexes calls open_telemetry.ListOtelIndexes
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesBuilderImpl) ListOtelIndexes(ctx context.Context) client.Response[[]models.OtelIndexView] {
-	return opentelemetry.ListOtelIndexes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID)
-}
-
-// V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder interface {
-	DeleteOtelIndex(ctx context.Context) client.Response[models.OtelIndexView]
-	GetOtelIndex(ctx context.Context) client.Response[models.OtelIndexView]
-	UpdateOtelIndex(ctx context.Context, request *models.OtelIndexPatch) client.Response[models.OtelIndexView]
-}
-
-// v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl implements V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder
-type v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl struct {
-	sdk             *sdkImpl
-	tenantID        string
-	opentelemetryID string
-	otelIndexID     string
-}
-
-// newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder creates a new V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder
-func newV4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder(sdk *sdkImpl, tenantID string, opentelemetryID string, otelIndexID string) V4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilder {
-	return &v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl{
-		opentelemetryID: opentelemetryID,
-		otelIndexID:     otelIndexID,
-		sdk:             sdk,
-		tenantID:        tenantID,
-	}
-}
-
-// DeleteOtelIndex calls open_telemetry.DeleteOtelIndex
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl) DeleteOtelIndex(ctx context.Context) client.Response[models.OtelIndexView] {
-	return opentelemetry.DeleteOtelIndex(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID, b.otelIndexID)
-}
-
-// GetOtelIndex calls open_telemetry.GetOtelIndex
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl) GetOtelIndex(ctx context.Context) client.Response[models.OtelIndexView] {
-	return opentelemetry.GetOtelIndex(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID, b.otelIndexID)
-}
-
-// UpdateOtelIndex calls open_telemetry.UpdateOtelIndex
-func (b *v4TenantsTenantIDOpentelemetryOpentelemetryIDIndexesOtelIndexIDBuilderImpl) UpdateOtelIndex(ctx context.Context, request *models.OtelIndexPatch) client.Response[models.OtelIndexView] {
-	return opentelemetry.UpdateOtelIndex(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.opentelemetryID, b.otelIndexID, request)
-}
-
-// V4TenantsTenantIDOpentelemetryGatewaysBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryGatewaysBuilder interface {
-	GatewayID(gatewayID string) V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder
-	ListOpentelemetryGateways(ctx context.Context) client.Response[[]models.OpenTelemetryGatewayView]
-	CreateOpentelemetryGateway(ctx context.Context, request *models.WannabeOpenTelemetryGateway) client.Response[models.OpenTelemetryGatewayView]
-}
-
-// v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl implements V4TenantsTenantIDOpentelemetryGatewaysBuilder
-type v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl struct {
-	sdk      *sdkImpl
-	tenantID string
-}
-
-// newV4TenantsTenantIDOpentelemetryGatewaysBuilder creates a new V4TenantsTenantIDOpentelemetryGatewaysBuilder
-func newV4TenantsTenantIDOpentelemetryGatewaysBuilder(sdk *sdkImpl, tenantID string) V4TenantsTenantIDOpentelemetryGatewaysBuilder {
-	return &v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl{
-		sdk:      sdk,
-		tenantID: tenantID,
-	}
-}
-
-// GatewayID returns builder for gatewayID
-func (b *v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl) GatewayID(gatewayID string) V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder {
-	return newV4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder(b.sdk, b.tenantID, gatewayID)
-}
-
-// ListOpentelemetryGateways calls open_telemetry.ListOpentelemetryGateways
-func (b *v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl) ListOpentelemetryGateways(ctx context.Context) client.Response[[]models.OpenTelemetryGatewayView] {
-	return opentelemetry.ListOpentelemetryGateways(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID)
-}
-
-// CreateOpentelemetryGateway calls open_telemetry.CreateOpentelemetryGateway
-func (b *v4TenantsTenantIDOpentelemetryGatewaysBuilderImpl) CreateOpentelemetryGateway(ctx context.Context, request *models.WannabeOpenTelemetryGateway) client.Response[models.OpenTelemetryGatewayView] {
-	return opentelemetry.CreateOpentelemetryGateway(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, request)
-}
-
-// V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder provides access to operations
-type V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder interface {
-	DeleteOpentelemetryGateway(ctx context.Context) client.Response[client.Nothing]
-	GetOpentelemetryGateway(ctx context.Context) client.Response[models.OpenTelemetryGatewayView]
-}
-
-// v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl implements V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder
-type v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl struct {
-	sdk       *sdkImpl
-	tenantID  string
-	gatewayID string
-}
-
-// newV4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder creates a new V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder
-func newV4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder(sdk *sdkImpl, tenantID string, gatewayID string) V4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilder {
-	return &v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl{
-		gatewayID: gatewayID,
-		sdk:       sdk,
-		tenantID:  tenantID,
-	}
-}
-
-// DeleteOpentelemetryGateway calls open_telemetry.DeleteOpentelemetryGateway
-func (b *v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl) DeleteOpentelemetryGateway(ctx context.Context) client.Response[client.Nothing] {
-	return opentelemetry.DeleteOpentelemetryGateway(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.gatewayID)
-}
-
-// GetOpentelemetryGateway calls open_telemetry.GetOpentelemetryGateway
-func (b *v4TenantsTenantIDOpentelemetryGatewaysGatewayIDBuilderImpl) GetOpentelemetryGateway(ctx context.Context) client.Response[models.OpenTelemetryGatewayView] {
-	return opentelemetry.GetOpentelemetryGateway(ctx, b.sdk.Client(), b.sdk.Tracer(), b.tenantID, b.gatewayID)
 }
 
 // V4TenantsTenantIDProductsBuilder provides access to operations

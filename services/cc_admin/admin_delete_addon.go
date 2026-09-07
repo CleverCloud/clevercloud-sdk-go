@@ -32,7 +32,7 @@ Source: cc-api InternalAddonsAPI.java:121 authInternal(crc, "") then :124-126 is
 
 Source: cc-api AddonHelper.java:378 deprovisionUnchecked() — rh.event(new AddonDeletionEvent(...))
 Source: cc-api Addon.java:255 getEventPayload() → AddonEventPayload(id, ownerId, provider.id)
-Schema: crates/utils/api/ccapi-db/migrations/00001_initial_schema.sql — table addons
+Schema: crates/api/ccapi/migrations/00001_initial_schema.sql — table addons
 
 	(id, owner_id, provider_id, real_id, deletion_date)
 

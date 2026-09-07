@@ -15,7 +15,7 @@ import (
 Getmetabase GET /v4/addon-providers/addon-metabase/addons/{addon_metabase_id} — addon view.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getMetabaseAddon
-Behaviour: fetch row; when a PaaS client is available, read the Java app env
+Behavior: fetch row; when a PaaS client is available, read the Java app env
 
 	(`CC_METABASE_VERSION` / `CC_JAVA_VERSION` / `MB_SITE_URL`) and the addon name;
 	otherwise fall back to configured defaults.

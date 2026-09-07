@@ -25,7 +25,7 @@ Return list of invoice links (number, owner, status, emission date, button_id).
 
 🔧 **Algo Rust (Implementation):**
 - Verify internal auth
-- ccapi_db::billing::list_invoice_links(pool, owner)
+- ccapi::db::billing::list_invoice_links(pool, owner)
 - Return `Vec<InvoiceLinkRow>` as JSON
 Conformity: real -- pure PG query, billing-api absorbed
 

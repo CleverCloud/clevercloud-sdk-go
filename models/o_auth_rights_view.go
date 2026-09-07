@@ -2,7 +2,7 @@
 
 package models
 
-// OAuthRightsView OAuth rights view.  Source: cc-api output/oauth/OAuthRightsView.java Source: cc-api CleverCloudOA...
+// OAuthRightsView OAuth rights view.  Twelve booleans, all snake_case on the wire. `almighty` is the only one absen...
 type OAuthRightsView struct {
 	AccessOrganisations                      bool `json:"access_organisations"`
 	AccessOrganisationsBills                 bool `json:"access_organisations_bills"`

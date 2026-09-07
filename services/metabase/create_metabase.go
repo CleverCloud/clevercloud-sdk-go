@@ -14,7 +14,7 @@ import (
 Createmetabase POST /v2/providers/addon-metabase/resources — provision a new Metabase addon.
 
 Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — provision
-Behaviour: insert (`PROVISIONING`) → create PG addon → create Java app (env set)
+Behavior: insert (`PROVISIONING`) → create PG addon → create Java app (env set)
 
 	→ register DNS → remove the platform default vhost → set favourite vhost → restart.
 	On any partial failure the addon is marked `PROVISIONING_ERROR` and a degraded
