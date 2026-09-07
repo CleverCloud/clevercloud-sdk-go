@@ -9,7 +9,7 @@ type Alert struct {
 	CreatedAt     time.Time       `json:"created_at"`        // `created_at`.
 	DriverEventID string          `json:"driver_event_id"`   // `driver_event_id` — the alert's own id, what `?driverEventId=` filters on (#2103).
 	Kind          DriverAlertKind `json:"kind"`              // `kind`.
-	Payload       *map[string]any `json:"payload,omitempty"` // `payload`.
+	Payload       map[string]any  `json:"payload,omitempty"` // `payload`.
 	ResourceID    string          `json:"resource_id"`       // `resource_id`.
 	Source        string          `json:"source"`            // `source`.
 	TenantID      string          `json:"tenant_id"`         // `tenant_id`.

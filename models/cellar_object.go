@@ -6,12 +6,12 @@ import "time"
 
 // CellarObject A Cellar object (file) in a bucket.  Source: references/legacy/ovd/modules/cellar/models/package....
 type CellarObject struct {
-	ContentLength int             `json:"contentLength"`         // Size in bytes
-	ContentType   *string         `json:"contentType,omitempty"` // MIME content type
-	ETag          string          `json:"eTag"`                  // ETag hash
-	Key           string          `json:"key"`                   // Full object key
-	Metadata      *map[string]any `json:"metadata,omitempty"`    // User metadata
-	Name          string          `json:"name"`                  // Object display name
-	Type          string          `json:"type"`                  // Object type ("file" or "directory")
-	UpdatedAt     time.Time       `json:"updatedAt"`             // Last modification timestamp
+	ContentLength int            `json:"contentLength"`         // Size in bytes
+	ContentType   *string        `json:"contentType,omitempty"` // MIME content type
+	ETag          string         `json:"eTag"`                  // ETag hash
+	Key           string         `json:"key"`                   // Full object key
+	Metadata      map[string]any `json:"metadata,omitempty"`    // User metadata
+	Name          string         `json:"name"`                  // Object display name
+	Type          string         `json:"type"`                  // Object type ("file" or "directory")
+	UpdatedAt     time.Time      `json:"updatedAt"`             // Last modification timestamp
 }

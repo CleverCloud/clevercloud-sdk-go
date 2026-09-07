@@ -7,7 +7,7 @@ type NodeGroupCreationPayload struct {
 	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscaling_e...
 	Description        *string             `json:"description,omitempty"`        // Optional description
 	Flavor             NodeFlavor          `json:"flavor"`                       // Node flavor (VM size)
-	Labels             *map[string]any     `json:"labels,omitempty"`             // Kubernetes labels
+	Labels             map[string]any      `json:"labels,omitempty"`             // Kubernetes labels
 	MaxNodeCount       *NodeGroupNodeCount `json:"maxNodeCount,omitempty"`
 	MinNodeCount       *NodeGroupNodeCount `json:"minNodeCount,omitempty"`
 	Name               NodeGroupName       `json:"name"`             // Node group name

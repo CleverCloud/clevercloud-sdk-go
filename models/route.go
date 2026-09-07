@@ -9,5 +9,5 @@ type Route struct {
 	Method         *string         `json:"method,omitempty"` // Optional HTTP method restriction (:316).
 	PathRule       PathRule        `json:"pathRule"`         // Path matching rule.
 	RewriteRule    *RewriteRule    `json:"rewriteRule,omitempty"`
-	Tags           *map[string]any `json:"tags,omitempty"` // Free-form tags (:321).
+	Tags           map[string]any  `json:"tags,omitempty"` // Free-form tags (:321).
 }

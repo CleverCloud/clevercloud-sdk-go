@@ -4,7 +4,7 @@ package models
 
 // DeploymentStatusOutput Deployment status exactly as OVD's `DeploymentOutput` nests it.  `step` decodes strictly into [`D...
 type DeploymentStatusOutput struct {
-	PlacementHypothesis *map[string]any `json:"placementHypothesis,omitempty"`
-	Step                DeploymentStep  `json:"step"`
-	VmStatus            *map[string]any `json:"vmStatus,omitempty"`
+	PlacementHypothesis map[string]any `json:"placementHypothesis,omitempty"`
+	Step                DeploymentStep `json:"step"`
+	VmStatus            map[string]any `json:"vmStatus,omitempty"`
 }

@@ -4,7 +4,7 @@ package models
 
 // ReplaceLoadBalancerConfigurationInput Complete replacement body for the listeners, clusters, and certificate store.
 type ReplaceLoadBalancerConfigurationInput struct {
-	Certificates *map[string]any `json:"certificates,omitempty"`
-	Clusters     []Cluster       `json:"clusters,omitempty"`
-	Listeners    []Listener      `json:"listeners,omitempty"`
+	Certificates map[string]any `json:"certificates,omitempty"`
+	Clusters     []Cluster      `json:"clusters,omitempty"`
+	Listeners    []Listener     `json:"listeners,omitempty"`
 }

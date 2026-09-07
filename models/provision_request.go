@@ -4,17 +4,17 @@ package models
 
 // ProvisionRequest Heroku addon provision request (POST /resources).  This is the standard Heroku addon protocol req...
 type ProvisionRequest struct {
-	AddonID       string          `json:"addon_id"`                 // Addon ID from cc-api's point of view
-	AddonName     *string         `json:"addon_name,omitempty"`     // Human-facing addon name chosen by the user (cc-api `addon_name`). Optional: providers that surfac...
-	CallbackURL   *string         `json:"callback_url,omitempty"`   // Callback URL for async status updates to cc-api
-	HerokuID      *string         `json:"heroku_id,omitempty"`      // Heroku resource ID (cc-api resource identifier)
-	LogplexToken  *string         `json:"logplex_token,omitempty"`  // Heroku logplex token for log forwarding
-	LogsCollector *string         `json:"logs_collector,omitempty"` // Logs collector endpoint
-	Options       *map[string]any `json:"options,omitempty"`        // Additional options from cc-api (provider-specific, e.g. encryption, version). null treated as emp...
-	OwnerID       string          `json:"owner_id"`                 // Owner (user or org) ID
-	Plan          string          `json:"plan"`                     // Requested plan slug
-	Region        *string         `json:"region,omitempty"`         // Region/zone for provisioning
-	Tags          []Tag           `json:"tags,omitempty"`           // Tags for constraints (e.g. contract:hds)
-	UserID        *string         `json:"user_id,omitempty"`        // User ID (optional, provided by cc-api when available)
-	Version       *string         `json:"version,omitempty"`        // Dedicated version to boot (e.g. PostgreSQL 16, Redis 7)
+	AddonID       string         `json:"addon_id"`                 // Addon ID from cc-api's point of view
+	AddonName     *string        `json:"addon_name,omitempty"`     // Human-facing addon name chosen by the user (cc-api `addon_name`). Optional: providers that surfac...
+	CallbackURL   *string        `json:"callback_url,omitempty"`   // Callback URL for async status updates to cc-api
+	HerokuID      *string        `json:"heroku_id,omitempty"`      // Heroku resource ID (cc-api resource identifier)
+	LogplexToken  *string        `json:"logplex_token,omitempty"`  // Heroku logplex token for log forwarding
+	LogsCollector *string        `json:"logs_collector,omitempty"` // Logs collector endpoint
+	Options       map[string]any `json:"options,omitempty"`        // Additional options from cc-api (provider-specific, e.g. encryption, version). null treated as emp...
+	OwnerID       string         `json:"owner_id"`                 // Owner (user or org) ID
+	Plan          string         `json:"plan"`                     // Requested plan slug
+	Region        *string        `json:"region,omitempty"`         // Region/zone for provisioning
+	Tags          []Tag          `json:"tags,omitempty"`           // Tags for constraints (e.g. contract:hds)
+	UserID        *string        `json:"user_id,omitempty"`        // User ID (optional, provided by cc-api when available)
+	Version       *string        `json:"version,omitempty"`        // Dedicated version to boot (e.g. PostgreSQL 16, Redis 7)
 }

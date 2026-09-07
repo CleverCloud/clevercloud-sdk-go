@@ -4,9 +4,9 @@ package models
 
 // LoadBalancerConfigurationInput OVD `LoadBalancerConfigurationInput` (LoadBalancer.scala:86-93).
 type LoadBalancerConfigurationInput struct {
-	Certificates   *map[string]any `json:"certificates,omitempty"`
-	Clusters       []Cluster       `json:"clusters,omitempty"`
-	Listeners      []Listener      `json:"listeners,omitempty"`
-	LoadbalancerID string          `json:"loadbalancerId"`
-	Version        int             `json:"version"`
+	Certificates   map[string]any `json:"certificates,omitempty"`
+	Clusters       []Cluster      `json:"clusters,omitempty"`
+	Listeners      []Listener     `json:"listeners,omitempty"`
+	LoadbalancerID string         `json:"loadbalancerId"`
+	Version        int            `json:"version"`
 }

@@ -4,10 +4,10 @@ package models
 
 // WannabeOAuth1Consumer Request body for POST/PUT /v2/self/consumers.  `rights` is the caller-supplied `Map<String, Boole...
 type WannabeOAuth1Consumer struct {
-	BaseURL     *string         `json:"baseUrl,omitempty"`
-	Description *string         `json:"description,omitempty"`
-	Name        *string         `json:"name,omitempty"`
-	Picture     *string         `json:"picture,omitempty"`
-	Rights      *map[string]any `json:"rights,omitempty"` // OAuth1 rights the consumer should be granted (snake_case keys → bool). Required + non-empty in th...
-	URL         *string         `json:"url,omitempty"`
+	BaseURL     *string        `json:"baseUrl,omitempty"`
+	Description *string        `json:"description,omitempty"`
+	Name        *string        `json:"name,omitempty"`
+	Picture     *string        `json:"picture,omitempty"`
+	Rights      map[string]any `json:"rights,omitempty"` // OAuth1 rights the consumer should be granted (snake_case keys → bool). Required + non-empty in th...
+	URL         *string        `json:"url,omitempty"`
 }

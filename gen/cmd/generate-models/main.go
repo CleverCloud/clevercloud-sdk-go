@@ -565,7 +565,12 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 	}
 
 	field.Type = goType
-	field.IsPointer = isPointer
+	// Slices and maps carry their own nil, so a pointer adds a dereference before
+	// every len, range and index and expresses nothing extra. `*map[string]any` is
+	// what the Terraform provider could neither range over nor index.
+	field.IsPointer = isPointer &&
+		!strings.HasPrefix(goType, "[]") &&
+		!strings.HasPrefix(goType, "map[")
 
 	return field, nil
 }

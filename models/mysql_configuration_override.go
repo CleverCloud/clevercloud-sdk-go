@@ -4,6 +4,6 @@ package models
 
 // MysqlConfigurationOverride The `[mysql]` / `[mysqld]` override maps. Both default to empty so a partial body (only `mysqld`,...
 type MysqlConfigurationOverride struct {
-	Mysql  *map[string]any `json:"mysql,omitempty"`
-	Mysqld *map[string]any `json:"mysqld,omitempty"`
+	Mysql  map[string]any `json:"mysql,omitempty"`
+	Mysqld map[string]any `json:"mysqld,omitempty"`
 }

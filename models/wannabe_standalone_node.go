@@ -6,7 +6,7 @@ package models
 type WannabeStandaloneNode struct {
 	Description *string           `json:"description,omitempty"` // Optional description
 	Flavor      NodeFlavor        `json:"flavor"`                // Node flavor (VM size)
-	Labels      *map[string]any   `json:"labels,omitempty"`      // Kubernetes labels
+	Labels      map[string]any    `json:"labels,omitempty"`      // Kubernetes labels
 	Name        NodeGroupName     `json:"name"`                  // Node name (kubernetes resource name format)
 	Tag         *string           `json:"tag,omitempty"`         // Optional tag
 	Taints      []KubernetesTaint `json:"taints,omitempty"`      // Kubernetes taints

@@ -9,7 +9,7 @@ type Event struct {
 	DriverEventID     string          `json:"driver_event_id"`     // `driver_event_id` — the alert this event belongs to (#2103, not in OVD).
 	Kind              DriverAlertKind `json:"kind"`                // `kind`.
 	MonitoringEventID string          `json:"monitoring_event_id"` // `monitoring_event_id`.
-	Payload           *map[string]any `json:"payload,omitempty"`   // `payload` — opaque JSON value (the base64 string wrapped as `Json.fromString`).
+	Payload           map[string]any  `json:"payload,omitempty"`   // `payload` — opaque JSON value (the base64 string wrapped as `Json.fromString`).
 	ReceivedAt        time.Time       `json:"received_at"`         // `received_at` — the DB receive time (the `date` column).
 	ResourceID        string          `json:"resource_id"`         // `resource_id`.
 	Source            string          `json:"source"`              // `source`.
