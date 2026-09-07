@@ -4,7 +4,7 @@ package models
 
 // PublicBackendDtlsTransport
 type PublicBackendDtlsTransport struct {
-	ClientCertificate *any           `json:"clientCertificate,omitempty"`
-	Dtls              map[string]any `json:"dtls"`
-	Verification      *any           `json:"verification,omitempty"`
+	ClientCertificate *PublicTlsClientCertificate `json:"clientCertificate,omitempty"`
+	Dtls              map[string]any              `json:"dtls"`
+	Verification      *TlsVerification            `json:"verification,omitempty"`
 }

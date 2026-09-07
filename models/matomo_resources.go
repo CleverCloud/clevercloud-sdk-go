@@ -4,8 +4,8 @@ package models
 
 // MatomoResources Resource references backing a Matomo addon.  Source: references/legacy/ovd/modules/matomo/src/mai...
 type MatomoResources struct {
-	Entrypoint *any `json:"entrypoint,omitempty"`
-	KvID       *any `json:"kvId,omitempty"`
-	MysqlID    *any `json:"mysqlId,omitempty"`
-	RedisID    *any `json:"redisId,omitempty"`
+	Entrypoint *AppId   `json:"entrypoint,omitempty"`
+	KvID       *KvId    `json:"kvId,omitempty"`
+	MysqlID    *MysqlId `json:"mysqlId,omitempty"`
+	RedisID    *RedisId `json:"redisId,omitempty"`
 }

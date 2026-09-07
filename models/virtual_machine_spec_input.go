@@ -4,7 +4,7 @@ package models
 
 // VirtualMachineSpecInput Source: references/legacy/ovd/modules/compute/routes/DeploymentInput.scala VirtualMachineSpecInpu...
 type VirtualMachineSpecInput struct {
-	Constraints  any                `json:"constraints"`
+	Constraints  *Expression        `json:"constraints"`
 	Image        string             `json:"image"`
 	Instructions any                `json:"instructions"`
 	Kernel       VmKernel           `json:"kernel"`

@@ -8,5 +8,5 @@ type PublicCluster struct {
 	ID       ConfigId       `json:"id"`
 	Label    *string        `json:"label,omitempty"`
 	OwnerID  TenantId       `json:"ownerId"`
-	Router   *any           `json:"router,omitempty"`
+	Router   *PublicRouter  `json:"router,omitempty"`
 }

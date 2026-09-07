@@ -4,7 +4,7 @@ package models
 
 // BackendDtlsTransport Backend DTLS transport — `alpn -> direct` (`BackendDTLSTransport`, :130-134).
 type BackendDtlsTransport struct {
-	ClientCertificate *any           `json:"clientCertificate,omitempty"`
-	Dtls              map[string]any `json:"dtls"` // ALPN protocol → direct leaf.
-	Verification      *any           `json:"verification,omitempty"`
+	ClientCertificate *TlsClientCertificate `json:"clientCertificate,omitempty"`
+	Dtls              map[string]any        `json:"dtls"` // ALPN protocol → direct leaf.
+	Verification      *TlsVerification      `json:"verification,omitempty"`
 }

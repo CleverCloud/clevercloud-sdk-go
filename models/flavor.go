@@ -6,13 +6,13 @@ package models
 type Flavor struct {
 	Available            bool          `json:"available"`
 	CpuFactor            ScalingFactor `json:"cpuFactor"`
-	Cpus                 *any          `json:"cpus,omitempty"`
+	Cpus                 *Vcpus        `json:"cpus,omitempty"`
 	Disk                 *int          `json:"disk,omitempty"`
 	Gpus                 Gpus          `json:"gpus"`
 	MachineLearning      bool          `json:"machine_learning"`
 	Mem                  *int          `json:"mem,omitempty"`
 	MemFactor            ScalingFactor `json:"memFactor"`
-	Memory               *any          `json:"memory,omitempty"`
+	Memory               *FlavorMemory `json:"memory,omitempty"`
 	Microservice         bool          `json:"microservice"`
 	Name                 *string       `json:"name,omitempty"`
 	Nice                 NiceValue     `json:"nice"`

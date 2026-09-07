@@ -6,8 +6,8 @@ import "time"
 
 // MigrationView Migration console view returned by GET/POST .../migrations endpoints.  Source: references/legacy/...
 type MigrationView struct {
-	MigrationID string     `json:"migrationId"`
-	RequestDate *time.Time `json:"requestDate,omitempty"`
-	Status      *any       `json:"status,omitempty"`
-	Steps       *any       `json:"steps,omitempty"`
+	MigrationID string           `json:"migrationId"`
+	RequestDate *time.Time       `json:"requestDate,omitempty"`
+	Status      *MigrationStatus `json:"status,omitempty"`
+	Steps       *any             `json:"steps,omitempty"`
 }

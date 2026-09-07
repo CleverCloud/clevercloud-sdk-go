@@ -4,6 +4,6 @@ package models
 
 // VolumesSpec Source: ovd VolumeSpec.scala — VolumesSpec
 type VolumesSpec struct {
-	RootVolume *any         `json:"rootVolume,omitempty"`
+	RootVolume *VolumeSpec  `json:"rootVolume,omitempty"`
 	Volumes    []VolumeSpec `json:"volumes,omitempty"`
 }

@@ -4,5 +4,5 @@ package models
 
 // PartnerInfoView Partner info view for GET /internal/organisations/{id}/partner-info.  Source: cc-api Partner.java...
 type PartnerInfoView struct {
-	Partner *any `json:"partner,omitempty"`
+	Partner *PartnerTemplateContext `json:"partner,omitempty"`
 }

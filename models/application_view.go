@@ -7,7 +7,7 @@ type ApplicationView struct {
 	Appliance      *string                `json:"appliance,omitempty"`
 	Archived       bool                   `json:"archived"`
 	Branch         *string                `json:"branch,omitempty"` // RAW `applications.branch` column — legacy `toView()` passes `this.branch` verbatim (Application.j...
-	BuildFlavor    *any                   `json:"buildFlavor,omitempty"`
+	BuildFlavor    *Flavor                `json:"buildFlavor,omitempty"`
 	CancelOnPush   bool                   `json:"cancelOnPush"`
 	CommitID       *string                `json:"commitId,omitempty"`
 	CreationDate   int                    `json:"creationDate"`

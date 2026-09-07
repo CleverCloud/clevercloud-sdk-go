@@ -570,7 +570,41 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 	return field, nil
 }
 
+// unwrapNullable returns the meaningful half of OpenAPI 3.1's nullable idiom,
+// `oneOf: [{"type": "null"}, X]`, and whether the schema was of that shape.
+//
+// 3.0 spelled a nullable property `$ref` plus `nullable: true`; 3.1 has no
+// `nullable` keyword and unions with the null type instead. Without this, such a
+// property carries neither `$ref` nor `type`, so getGoType fell through to `any`
+// and every nullable reference in the document lost its type — 109 fields across
+// 70 models, where the previous document produced none.
+func unwrapNullable(schema Schema) (Schema, bool) {
+	members := getSchemaOneOf(schema)
+	if len(members) != 2 {
+		return nil, false
+	}
+	var inner Schema
+	var sawNull bool
+	for _, member := range members {
+		types := getSchemaType(member)
+		if len(types) == 1 && types[0] == "null" {
+			sawNull = true
+			continue
+		}
+		inner = member
+	}
+	if !sawNull || inner == nil {
+		return nil, false
+	}
+	return inner, true
+}
+
 func getGoType(schema Schema, isRequired bool) (string, bool, error) {
+	// A nullable reference is the referenced type, always behind a pointer.
+	if inner, ok := unwrapNullable(schema); ok {
+		return getGoType(inner, false)
+	}
+
 	// Handle $ref types
 	if ref := getSchemaRef(schema); ref != "" {
 		refName := strings.TrimPrefix(ref, "#/components/schemas/")

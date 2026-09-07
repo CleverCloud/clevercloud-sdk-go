@@ -4,6 +4,6 @@ package models
 
 // LoadBalancingStrategy Load balancing strategy.  Both fields are emitted even when `None`, as circe's derived encoder do...
 type LoadBalancingStrategy struct {
-	Algorithm *any `json:"algorithm,omitempty"`
-	Metric    *any `json:"metric,omitempty"`
+	Algorithm *Algorithm  `json:"algorithm,omitempty"`
+	Metric    *LoadMetric `json:"metric,omitempty"`
 }

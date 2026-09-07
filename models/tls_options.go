@@ -4,8 +4,8 @@ package models
 
 // TlsOptions TLS options for a frontend TLS-terminating transport.
 type TlsOptions struct {
-	CertificateFingerprints       *map[string]any `json:"certificateFingerprints,omitempty"` // Normalized SNI name to certificate fingerprint.
-	Ciphers                       *any            `json:"ciphers,omitempty"`
-	ClientAuth                    *any            `json:"clientAuth,omitempty"`
-	DefaultCertificateFingerprint string          `json:"defaultCertificateFingerprint"` // Fallback certificate fingerprint.
+	CertificateFingerprints       *map[string]any        `json:"certificateFingerprints,omitempty"` // Normalized SNI name to certificate fingerprint.
+	Ciphers                       *TlsCiphers            `json:"ciphers,omitempty"`
+	ClientAuth                    *ClientCertificateAuth `json:"clientAuth,omitempty"`
+	DefaultCertificateFingerprint string                 `json:"defaultCertificateFingerprint"` // Fallback certificate fingerprint.
 }

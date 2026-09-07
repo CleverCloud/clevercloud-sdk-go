@@ -4,6 +4,6 @@ package models
 
 // StoragePolicies Storage policies view for namespace retention + offload configuration.  Two nested halves, matchi...
 type StoragePolicies struct {
-	OffloadPolicies   *any `json:"offloadPolicies,omitempty"`
-	RetentionPolicies *any `json:"retentionPolicies,omitempty"`
+	OffloadPolicies   *StorageConfigurationPolicies `json:"offloadPolicies,omitempty"`
+	RetentionPolicies *StorageConfigurationPolicies `json:"retentionPolicies,omitempty"`
 }

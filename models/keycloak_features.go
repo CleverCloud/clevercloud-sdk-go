@@ -4,5 +4,5 @@ package models
 
 // KeycloakFeatures Optional per-addon features.  Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/c...
 type KeycloakFeatures struct {
-	NetworkGroup *any `json:"networkGroup,omitempty"`
+	NetworkGroup *NetworkGroupView `json:"networkGroup,omitempty"`
 }

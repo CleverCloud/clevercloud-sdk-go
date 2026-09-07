@@ -4,8 +4,8 @@ package models
 
 // WannabeAddonProviderApi `api` on [`WannabeAddonProvider`].  `test` and `production` are OBJECTS, not URLs. cc-api binds e...
 type WannabeAddonProviderApi struct {
-	Password   *string `json:"password,omitempty"`
-	Production *any    `json:"production,omitempty"`
-	SsoSalt    *string `json:"sso_salt,omitempty"`
-	Test       *any    `json:"test,omitempty"`
+	Password   *string                     `json:"password,omitempty"`
+	Production *WannabeAddonProviderApiUrl `json:"production,omitempty"`
+	SsoSalt    *string                     `json:"sso_salt,omitempty"`
+	Test       *WannabeAddonProviderApiUrl `json:"test,omitempty"`
 }

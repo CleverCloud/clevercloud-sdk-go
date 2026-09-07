@@ -4,6 +4,6 @@ package models
 
 // SchemaPrivilegePatch Schema privilege patch request.  Source: ovd users.scala — SchemaPrivilegePatch
 type SchemaPrivilegePatch struct {
-	AllTables *any  `json:"allTables,omitempty"`
-	Read      *bool `json:"read,omitempty"`
+	AllTables *ReadWritePrivileges `json:"allTables,omitempty"`
+	Read      *bool                `json:"read,omitempty"`
 }

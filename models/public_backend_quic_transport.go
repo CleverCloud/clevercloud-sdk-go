@@ -4,7 +4,7 @@ package models
 
 // PublicBackendQuicTransport
 type PublicBackendQuicTransport struct {
-	ClientCertificate *any           `json:"clientCertificate,omitempty"`
-	Quic              map[string]any `json:"quic"`
-	Verification      *any           `json:"verification,omitempty"`
+	ClientCertificate *PublicTlsClientCertificate `json:"clientCertificate,omitempty"`
+	Quic              map[string]any              `json:"quic"`
+	Verification      *TlsVerification            `json:"verification,omitempty"`
 }

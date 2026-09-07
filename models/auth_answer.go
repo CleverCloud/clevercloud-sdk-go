@@ -4,9 +4,9 @@ package models
 
 // AuthAnswer Authorization answer for POST /v2/authorize — legacy's `AuthAnswer` bean.  The five public fields...
 type AuthAnswer struct {
-	Answer  *any    `json:"answer,omitempty"`
-	Explain *string `json:"explain,omitempty"`
-	OrgaID  *string `json:"orgaId,omitempty"`
-	Path    *string `json:"path,omitempty"` // The URI path being authorized — `uri.getPath()`, so `null` whenever the URI failed to parse or wa...
-	UserID  *string `json:"userId,omitempty"`
+	Answer  *AuthAnswerType `json:"answer,omitempty"`
+	Explain *string         `json:"explain,omitempty"`
+	OrgaID  *string         `json:"orgaId,omitempty"`
+	Path    *string         `json:"path,omitempty"` // The URI path being authorized — `uri.getPath()`, so `null` whenever the URI failed to parse or wa...
+	UserID  *string         `json:"userId,omitempty"`
 }

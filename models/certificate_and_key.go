@@ -4,12 +4,12 @@ package models
 
 // CertificateAndKey One certificate-store entry. `Debug` deliberately redacts the private key; serde remains complete...
 type CertificateAndKey struct {
-	Certificate      string   `json:"certificate"`                // PEM leaf certificate.
-	CertificateChain []string `json:"certificateChain,omitempty"` // PEM intermediates, leaf-signed first.
-	ExpiresAt        *int     `json:"expiresAt,omitempty"`        // Unix expiry timestamp.
-	Key              string   `json:"key"`                        // PEM private key, returned only by the privileged configuration read.
-	MaxVersion       *any     `json:"maxVersion,omitempty"`
-	MinVersion       *any     `json:"minVersion,omitempty"`
-	Names            []string `json:"names,omitempty"`        // Optional name override.
-	OcspResponse     []int    `json:"ocspResponse,omitempty"` // DER OCSP response. JSON uses serde's byte-array representation, matching the SDK's generated serd...
+	Certificate      string      `json:"certificate"`                // PEM leaf certificate.
+	CertificateChain []string    `json:"certificateChain,omitempty"` // PEM intermediates, leaf-signed first.
+	ExpiresAt        *int        `json:"expiresAt,omitempty"`        // Unix expiry timestamp.
+	Key              string      `json:"key"`                        // PEM private key, returned only by the privileged configuration read.
+	MaxVersion       *TlsVersion `json:"maxVersion,omitempty"`
+	MinVersion       *TlsVersion `json:"minVersion,omitempty"`
+	Names            []string    `json:"names,omitempty"`        // Optional name override.
+	OcspResponse     []int       `json:"ocspResponse,omitempty"` // DER OCSP response. JSON uses serde's byte-array representation, matching the SDK's generated serd...
 }

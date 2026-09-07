@@ -4,9 +4,9 @@ package models
 
 // ClusterConsoleViewV2 `ClusterConsoleViewV2 { id, label, zone, version, dedicatedOptions? }` (versions + v2 provider vi...
 type ClusterConsoleViewV2 struct {
-	DedicatedOptions *any   `json:"dedicatedOptions,omitempty"`
-	ID               string `json:"id"`
-	Label            string `json:"label"`
-	Version          string `json:"version"`
-	Zone             string `json:"zone"`
+	DedicatedOptions *DedicatedOptions `json:"dedicatedOptions,omitempty"`
+	ID               string            `json:"id"`
+	Label            string            `json:"label"`
+	Version          string            `json:"version"`
+	Zone             string            `json:"zone"`
 }

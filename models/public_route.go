@@ -4,10 +4,10 @@ package models
 
 // PublicRoute
 type PublicRoute struct {
-	Authentication *any           `json:"authentication,omitempty"`
-	HostRule       HostRule       `json:"hostRule"`
-	Method         *string        `json:"method,omitempty"`
-	PathRule       PathRule       `json:"pathRule"`
-	RewriteRule    *any           `json:"rewriteRule,omitempty"`
-	Tags           map[string]any `json:"tags"`
+	Authentication *PublicAuthentication `json:"authentication,omitempty"`
+	HostRule       HostRule              `json:"hostRule"`
+	Method         *string               `json:"method,omitempty"`
+	PathRule       PathRule              `json:"pathRule"`
+	RewriteRule    *RewriteRule          `json:"rewriteRule,omitempty"`
+	Tags           map[string]any        `json:"tags"`
 }

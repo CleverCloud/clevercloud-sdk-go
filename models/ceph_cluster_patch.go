@@ -4,9 +4,9 @@ package models
 
 // CephClusterPatch Patch body for a Ceph cluster. Accepts axo's field-level form (`monitors?/endpoint?/username?/pas...
 type CephClusterPatch struct {
-	Dashboard *any    `json:"dashboard,omitempty"`
-	Endpoint  *string `json:"endpoint,omitempty"` // New dashboard endpoint.
-	Monitors  *any    `json:"monitors,omitempty"` // New monitor addresses.
-	Password  *string `json:"password,omitempty"` // New dashboard password (re-encrypted on write).
-	Username  *string `json:"username,omitempty"` // New dashboard username.
+	Dashboard *WannabeCephDashboard `json:"dashboard,omitempty"`
+	Endpoint  *string               `json:"endpoint,omitempty"` // New dashboard endpoint.
+	Monitors  *any                  `json:"monitors,omitempty"` // New monitor addresses.
+	Password  *string               `json:"password,omitempty"` // New dashboard password (re-encrypted on write).
+	Username  *string               `json:"username,omitempty"` // New dashboard username.
 }

@@ -4,5 +4,5 @@ package models
 
 // WannaPatchPostgreSQLDatabase Patch database mode request.  Source: ovd WannaPatchPostgreSQLDatabase.scala
 type WannaPatchPostgreSQLDatabase struct {
-	Mode *any `json:"mode,omitempty"`
+	Mode *DatabaseMode `json:"mode,omitempty"`
 }

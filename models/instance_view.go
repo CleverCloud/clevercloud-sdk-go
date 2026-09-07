@@ -10,9 +10,9 @@ type InstanceView struct {
 	KernelName          *string             `json:"kernelName,omitempty"` // Guest kernel image the VM boots with — a TOP-LEVEL instance field, fed from the VARIANT's column,...
 	Lifetime            string              `json:"lifetime"`
 	MaxAllowedInstances InstanceCount       `json:"maxAllowedInstances"`
-	MaxFlavor           *any                `json:"maxFlavor,omitempty"`
+	MaxFlavor           *Flavor             `json:"maxFlavor,omitempty"`
 	MaxInstances        InstanceCount       `json:"maxInstances"`
-	MinFlavor           *any                `json:"minFlavor,omitempty"`
+	MinFlavor           *Flavor             `json:"minFlavor,omitempty"`
 	MinInstances        InstanceCount       `json:"minInstances"`
 	Type                string              `json:"type"`
 	Variant             InstanceVariantView `json:"variant"`

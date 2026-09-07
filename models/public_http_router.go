@@ -4,8 +4,8 @@ package models
 
 // PublicHttpRouter
 type PublicHttpRouter struct {
-	Authentication *any           `json:"authentication,omitempty"`
-	RedirectHTTPS  bool           `json:"redirectHttps"`
-	Routes         []PublicRoute  `json:"routes"`
-	Templates      map[string]any `json:"templates"`
+	Authentication *PublicAuthentication `json:"authentication,omitempty"`
+	RedirectHTTPS  bool                  `json:"redirectHttps"`
+	Routes         []PublicRoute         `json:"routes"`
+	Templates      map[string]any        `json:"templates"`
 }

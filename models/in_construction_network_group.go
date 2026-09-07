@@ -4,13 +4,13 @@ package models
 
 // InConstructionNetworkGroup A network group still being constructed — no CIDR allocated yet. Produced by the API on receipt o...
 type InConstructionNetworkGroup struct {
-	Description       *string  `json:"description,omitempty"`
-	DnsSanitizedLabel *string  `json:"dnsSanitizedLabel,omitempty"`
-	ID                string   `json:"id"`
-	Label             string   `json:"label"`
-	Members           []Member `json:"members"`
-	OwnerID           string   `json:"ownerId"`
-	Ownership         *any     `json:"ownership,omitempty"`
-	Peers             []Peer   `json:"peers"`
-	Tags              []string `json:"tags"`
+	Description       *string    `json:"description,omitempty"`
+	DnsSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"`
+	ID                string     `json:"id"`
+	Label             string     `json:"label"`
+	Members           []Member   `json:"members"`
+	OwnerID           string     `json:"ownerId"`
+	Ownership         *Ownership `json:"ownership,omitempty"`
+	Peers             []Peer     `json:"peers"`
+	Tags              []string   `json:"tags"`
 }

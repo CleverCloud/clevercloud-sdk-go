@@ -12,12 +12,12 @@ type PostgresqlBdsInstruction struct {
 	Emails           []string                     `json:"emails"`
 	Env              map[string]any               `json:"env"`
 	InstanceID       *string                      `json:"instanceId,omitempty"`
-	InstanceLifetime *any                         `json:"instanceLifetime,omitempty"`
+	InstanceLifetime *PostgresqlInstanceLifetime  `json:"instanceLifetime,omitempty"`
 	LogsCollector    *string                      `json:"logsCollector,omitempty"`
 	MaxRetries       *int                         `json:"maxRetries,omitempty"`
 	Reason           string                       `json:"reason"`
 	Source           string                       `json:"source"`
 	Timestamp        int                          `json:"timestamp"`
 	Type             PostgresqlBdsInstructionType `json:"type"`
-	VmSizingFactors  *any                         `json:"vmSizingFactors,omitempty"`
+	VmSizingFactors  *PostgresqlVmSizingFactors   `json:"vmSizingFactors,omitempty"`
 }

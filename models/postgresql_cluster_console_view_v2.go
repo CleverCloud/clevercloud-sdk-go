@@ -4,9 +4,9 @@ package models
 
 // PostgresqlClusterConsoleViewV2 Source: rewrite/rust/src/provider/views.rs — PostgresqlClusterConsoleViewV2
 type PostgresqlClusterConsoleViewV2 struct {
-	DedicatedOptions *any   `json:"dedicatedOptions,omitempty"`
-	ID               string `json:"id"`
-	Label            string `json:"label"`
-	Version          string `json:"version"`
-	Zone             string `json:"zone"`
+	DedicatedOptions *PostgresqlDedicatedOptions `json:"dedicatedOptions,omitempty"`
+	ID               string                      `json:"id"`
+	Label            string                      `json:"label"`
+	Version          string                      `json:"version"`
+	Zone             string                      `json:"zone"`
 }

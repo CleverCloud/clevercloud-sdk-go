@@ -8,7 +8,7 @@ import "time"
 type KubernetesCluster struct {
 	CreationDate         time.Time                    `json:"creationDate"`          // Creation date
 	Description          *string                      `json:"description,omitempty"` // Optional description
-	Features             *any                         `json:"features,omitempty"`
+	Features             *ClusterFeatures             `json:"features,omitempty"`
 	ID                   string                       `json:"id"`                             // Kubernetes cluster ID (kube_xxx)
 	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`        // Load balancers (empty in the base view)
 	LocationID           string                       `json:"locationId"`                     // Geographic / failure-domain location

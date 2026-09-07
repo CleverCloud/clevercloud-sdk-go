@@ -13,10 +13,10 @@ type MysqlAddonView struct {
 	ID            string             `json:"id"`
 	OwnerID       *string            `json:"owner_id,omitempty"`
 	Password      string             `json:"password"`
-	Plan          *any               `json:"plan,omitempty"`
+	Plan          *MysqlPlanType     `json:"plan,omitempty"`
 	Port          int                `json:"port"`
 	ReadOnlyUsers []ReadOnlyUserView `json:"read_only_users"`
-	Status        *any               `json:"status,omitempty"`
+	Status        *MysqlDbStatus     `json:"status,omitempty"`
 	User          string             `json:"user"`
 	Version       string             `json:"version"`
 	Zone          string             `json:"zone"`

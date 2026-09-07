@@ -4,9 +4,9 @@ package models
 
 // AvailableInstanceView AvailableInstanceView — matches cc-api openapi/ccapiv3.json AvailableInstanceView schema.  Source...
 type AvailableInstanceView struct {
-	BuildFlavor   *any                `json:"buildFlavor,omitempty"`
+	BuildFlavor   *Flavor             `json:"buildFlavor,omitempty"`
 	ComingSoon    bool                `json:"comingSoon"`
-	DefaultFlavor *any                `json:"defaultFlavor,omitempty"`
+	DefaultFlavor *Flavor             `json:"defaultFlavor,omitempty"`
 	Deployments   []string            `json:"deployments"`
 	Description   string              `json:"description"`
 	Enabled       bool                `json:"enabled"`

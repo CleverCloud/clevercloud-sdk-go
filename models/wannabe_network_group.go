@@ -8,6 +8,6 @@ type WannabeNetworkGroup struct {
 	ID          *string                     `json:"id,omitempty"`          // Optional explicit ID; generated if absent.
 	Label       *string                     `json:"label,omitempty"`       // Human-readable label for the network group.
 	Members     []WannabeNetworkgroupMember `json:"members,omitempty"`     // Initial members to add upon creation.
-	Ownership   *any                        `json:"ownership,omitempty"`
+	Ownership   *Ownership                  `json:"ownership,omitempty"`
 	Tags        []string                    `json:"tags,omitempty"` // Semantic tags.
 }

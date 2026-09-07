@@ -4,8 +4,8 @@ package models
 
 // PublicBackendTlsTransportLayer Backend TLS layer exposed by non-secret reads.
 type PublicBackendTlsTransportLayer struct {
-	ClientCertificate *any                  `json:"clientCertificate,omitempty"`
-	Layer             BackendTlsLayerChoice `json:"layer"`
-	Sni               []string              `json:"sni"`
-	Verification      *any                  `json:"verification,omitempty"`
+	ClientCertificate *PublicTlsClientCertificate `json:"clientCertificate,omitempty"`
+	Layer             BackendTlsLayerChoice       `json:"layer"`
+	Sni               []string                    `json:"sni"`
+	Verification      *TlsVerification            `json:"verification,omitempty"`
 }

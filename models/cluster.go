@@ -8,5 +8,5 @@ type Cluster struct {
 	ID       ConfigId `json:"id"`              // Cluster identifier (`StringMaxLength128`).
 	Label    *string  `json:"label,omitempty"` // Optional operator-facing label.
 	OwnerID  TenantId `json:"ownerId"`         // Owning tenant.
-	Router   *any     `json:"router,omitempty"`
+	Router   *Router  `json:"router,omitempty"`
 }

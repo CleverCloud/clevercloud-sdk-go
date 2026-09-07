@@ -4,6 +4,6 @@ package models
 
 // ClientCertificateAuth Frontend mTLS trust anchors and verification mode.
 type ClientCertificateAuth struct {
-	CaCertificates []string `json:"caCertificates,omitempty"` // PEM-encoded trust anchors.
-	Verification   *any     `json:"verification,omitempty"`
+	CaCertificates []string                       `json:"caCertificates,omitempty"` // PEM-encoded trust anchors.
+	Verification   *ClientCertificateVerification `json:"verification,omitempty"`
 }

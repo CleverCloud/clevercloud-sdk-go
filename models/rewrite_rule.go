@@ -4,8 +4,8 @@ package models
 
 // RewriteRule Request rewriting (:282-286) — every field optional.
 type RewriteRule struct {
-	Headers *any    `json:"headers,omitempty"`
-	Host    *string `json:"host,omitempty"` // Replacement host.
-	Path    *string `json:"path,omitempty"` // Replacement path.
-	Port    *int    `json:"port,omitempty"` // Replacement port.
+	Headers *HeaderRules `json:"headers,omitempty"`
+	Host    *string      `json:"host,omitempty"` // Replacement host.
+	Path    *string      `json:"path,omitempty"` // Replacement path.
+	Port    *int         `json:"port,omitempty"` // Replacement port.
 }

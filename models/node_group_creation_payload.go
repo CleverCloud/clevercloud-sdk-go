@@ -4,14 +4,14 @@ package models
 
 // NodeGroupCreationPayload Node group creation payload.  Source: references/legacy/ovd/modules/kubernetes/models/NodeGroup.s...
 type NodeGroupCreationPayload struct {
-	AutoscalingEnabled *bool              `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscaling_e...
-	Description        *string            `json:"description,omitempty"`        // Optional description
-	Flavor             NodeFlavor         `json:"flavor"`                       // Node flavor (VM size)
-	Labels             *map[string]any    `json:"labels,omitempty"`             // Kubernetes labels
-	MaxNodeCount       *any               `json:"maxNodeCount,omitempty"`
-	MinNodeCount       *any               `json:"minNodeCount,omitempty"`
-	Name               NodeGroupName      `json:"name"`             // Node group name
-	Tag                *string            `json:"tag,omitempty"`    // Optional tag
-	Taints             []KubernetesTaint  `json:"taints,omitempty"` // Kubernetes taints
-	TargetNodeCount    NodeGroupNodeCount `json:"targetNodeCount"`  // Target number of nodes
+	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscaling_e...
+	Description        *string             `json:"description,omitempty"`        // Optional description
+	Flavor             NodeFlavor          `json:"flavor"`                       // Node flavor (VM size)
+	Labels             *map[string]any     `json:"labels,omitempty"`             // Kubernetes labels
+	MaxNodeCount       *NodeGroupNodeCount `json:"maxNodeCount,omitempty"`
+	MinNodeCount       *NodeGroupNodeCount `json:"minNodeCount,omitempty"`
+	Name               NodeGroupName       `json:"name"`             // Node group name
+	Tag                *string             `json:"tag,omitempty"`    // Optional tag
+	Taints             []KubernetesTaint   `json:"taints,omitempty"` // Kubernetes taints
+	TargetNodeCount    NodeGroupNodeCount  `json:"targetNodeCount"`  // Target number of nodes
 }
