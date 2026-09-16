@@ -2,17 +2,17 @@
 
 package models
 
-// PulsarCluster
+// PulsarCluster Cluster view returned by cluster management endpoints.  Source: references/legacy/ovd/modules/pul...
 type PulsarCluster struct {
-	Available          bool         `json:"available"`
-	ID                 string       `json:"id"`
-	PulsarPort         int          `json:"pulsar_port"`
-	PulsarTLSPort      *int         `json:"pulsar_tls_port,omitempty"`
-	SupportColdStorage bool         `json:"support_cold_storage"`
-	SupportedPlans     []PulsarPlan `json:"supported_plans,omitempty"`
-	URL                string       `json:"url"`
-	Version            string       `json:"version"`
-	WebPort            *int         `json:"web_port,omitempty"`
-	WebTLSPort         *int         `json:"web_tls_port,omitempty"`
-	Zone               string       `json:"zone"`
+	Available          bool     `json:"available"`                 // Whether this cluster is available for new addons
+	ID                 string   `json:"id"`                        // Cluster identifier
+	PulsarPort         int      `json:"pulsar_port"`               // Pulsar binary protocol port
+	PulsarTLSPort      *int     `json:"pulsar_tls_port,omitempty"` // Pulsar TLS binary protocol port
+	SupportColdStorage bool     `json:"support_cold_storage"`      // Whether cold storage (Cellar offload) is supported
+	SupportedPlans     []string `json:"supported_plans"`           // Plans available on this cluster
+	URL                string   `json:"url"`                       // Cluster hostname/URL
+	Version            string   `json:"version"`                   // Pulsar version running on this cluster
+	WebPort            *int     `json:"web_port,omitempty"`        // HTTP admin port
+	WebTLSPort         *int     `json:"web_tls_port,omitempty"`    // HTTPS admin port
+	Zone               string   `json:"zone"`                      // Zone/location identifier
 }

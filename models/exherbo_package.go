@@ -2,9 +2,9 @@
 
 package models
 
-// ExherboPackage
+// ExherboPackage A package and its slots.  Source: ovd modules/image/models/ExherboPackage.scala:18-26 (`ExherboPa...
 type ExherboPackage struct {
-	Category string         `json:"category"`
-	Name     string         `json:"name"`
-	Slots    MapVersioninfo `json:"slots"`
+	Category string         `json:"category"` // Exherbo category, e.g. `dev-libs`.
+	Name     string         `json:"name"`     // Package name, e.g. `openssl`.
+	Slots    map[string]any `json:"slots"`    // Slot name → version. Ordered, so the same image always serialises to the same bytes.
 }

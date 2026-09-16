@@ -12,15 +12,25 @@ import (
 )
 
 /*
-Createpostmigrationoids
+Createpostmigrationoids **Legacy**: ovd migration.scala:61 updatePostMigration()
+**Algorithm**:
+  - Fetch addon, UPDATE new_oid in provision_migration
+  - Propagate new OIDs to provision_user_database/schema/table via JOINed UPDATEs
 
-# Update databases, schemas and tables OIDs for a given PostgreSQL addon after migration with pairs created before migration
+**Conformity**: YES
+
+POST /v4/postgresql/{postgreSQLId}/migration/post — update OID pairs after migration.
+
+Source: ovd PostgreSQLMigrationRepository.scala — updateNewOidPairs + updateUserObjectsOid
+Source: ovd PostgreSQLMigrationService.scala — restoreOids
+Behavior: updates new_oid in provision_migration, then propagates to user privilege tables
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

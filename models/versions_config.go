@@ -2,8 +2,8 @@
 
 package models
 
-// VersionsConfig
+// VersionsConfig The advertised version set — OVD `VersionsConfig`.  Source: references/legacy/ovd/modules/kuberne...
 type VersionsConfig struct {
-	Available []string `json:"available,omitempty"`
-	Default   string   `json:"default"`
+	Available []Version `json:"available"` // Versions create and upgrade accept, **descending** — OVD renders this through `Ordering[Version]....
+	Default   Version   `json:"default"`   // Version a create payload gets when it names none.
 }

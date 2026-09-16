@@ -11,16 +11,15 @@ import (
 )
 
 /*
-Deleteloadbalancersforparent
-
-# Delete all loadbalancers for parent resource
+Deleteloadbalancersforparent Row 43 — 204, also when nothing matches; machine Basic is cross-tenant,
+user callers delete only path-owned rows.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - parentId:
+  - tenantId: Organisation/tenant ID
+  - parentId: Parent resource ID
 
 # Returns the operation result or an error
 

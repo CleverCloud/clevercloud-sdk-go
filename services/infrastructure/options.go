@@ -13,35 +13,18 @@ type Option func(*Options)
 
 // Options holds query parameters for infrastructure operations
 type Options struct {
-	Image       *string `url:"image,omitempty"`
-	Label       *string `url:"label,omitempty"`
-	Mode        *string `url:"mode,omitempty"`
-	Region      *string `url:"region,omitempty"`
-	Resourceid  *string `url:"resourceId,omitempty"`
-	Schedulable *bool   `url:"schedulable,omitempty"`
-	State       *string `url:"state,omitempty"`
-	Tag         *string `url:"tag,omitempty"`
-	Zone        *string `url:"zone,omitempty"`
+	Limit      *int64  `url:"limit,omitempty"`
+	Region     *string `url:"region,omitempty"`
+	ResourceID *string `url:"resource_id,omitempty"`
+	State      *string `url:"state,omitempty"`
+	Status     *string `url:"status,omitempty"`
+	Zone       *string `url:"zone,omitempty"`
 }
 
-// WithImage sets the image query parameter
-func WithImage(image string) Option {
+// WithLimit sets the limit query parameter
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
-		o.Image = &image
-	}
-}
-
-// WithLabel sets the label query parameter
-func WithLabel(label string) Option {
-	return func(o *Options) {
-		o.Label = &label
-	}
-}
-
-// WithMode sets the mode query parameter
-func WithMode(mode string) Option {
-	return func(o *Options) {
-		o.Mode = &mode
+		o.Limit = &limit
 	}
 }
 
@@ -52,17 +35,10 @@ func WithRegion(region string) Option {
 	}
 }
 
-// WithResourceid sets the resourceId query parameter
-func WithResourceid(resourceId string) Option {
+// WithResourceID sets the resource_id query parameter
+func WithResourceID(resource_id string) Option {
 	return func(o *Options) {
-		o.Resourceid = &resourceId
-	}
-}
-
-// WithSchedulable sets the schedulable query parameter
-func WithSchedulable(schedulable bool) Option {
-	return func(o *Options) {
-		o.Schedulable = &schedulable
+		o.ResourceID = &resource_id
 	}
 }
 
@@ -73,10 +49,10 @@ func WithState(state string) Option {
 	}
 }
 
-// WithTag sets the tag query parameter
-func WithTag(tag string) Option {
+// WithStatus sets the status query parameter
+func WithStatus(status string) Option {
 	return func(o *Options) {
-		o.Tag = &tag
+		o.Status = &status
 	}
 }
 
@@ -95,29 +71,20 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
-	if options.Image != nil {
-		params = append(params, fmt.Sprintf("image=%s", url.QueryEscape(*options.Image)))
-	}
-	if options.Label != nil {
-		params = append(params, fmt.Sprintf("label=%s", url.QueryEscape(*options.Label)))
-	}
-	if options.Mode != nil {
-		params = append(params, fmt.Sprintf("mode=%s", url.QueryEscape(*options.Mode)))
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
 	if options.Region != nil {
 		params = append(params, fmt.Sprintf("region=%s", url.QueryEscape(*options.Region)))
 	}
-	if options.Resourceid != nil {
-		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
-	}
-	if options.Schedulable != nil {
-		params = append(params, fmt.Sprintf("schedulable=%t", *options.Schedulable))
+	if options.ResourceID != nil {
+		params = append(params, fmt.Sprintf("resource_id=%s", url.QueryEscape(*options.ResourceID)))
 	}
 	if options.State != nil {
 		params = append(params, fmt.Sprintf("state=%s", url.QueryEscape(*options.State)))
 	}
-	if options.Tag != nil {
-		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
+	if options.Status != nil {
+		params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(*options.Status)))
 	}
 	if options.Zone != nil {
 		params = append(params, fmt.Sprintf("zone=%s", url.QueryEscape(*options.Zone)))

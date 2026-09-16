@@ -362,8 +362,14 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 		return processObjectSchema(name, schema)
 	}
 
-	// Handle scalar types with titles (type aliases)
-	if len(schemaTypes) > 0 && getSchemaTitle(schema) != "" {
+	// Handle named scalar types (type aliases).
+	//
+	// A `title` used to be required here, which silently dropped every scalar component that
+	// documents itself with `description` instead — the AXO spec has 33 of them (`SemanticTag`,
+	// `Gpus`, `ScalingFactor`, …). They are named components and other schemas `$ref` them, so
+	// emitting nothing left the package referring to types that did not exist. Being a named
+	// component is what makes the alias necessary; the title never was.
+	if len(schemaTypes) > 0 {
 		return processTypeAliasSchema(name, schema)
 	}
 
@@ -559,12 +565,57 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 	}
 
 	field.Type = goType
-	field.IsPointer = isPointer
+	// Slices and maps carry their own nil, so a pointer adds a dereference before
+	// every len, range and index and expresses nothing extra. `*map[string]any` is
+	// what the Terraform provider could neither range over nor index.
+	field.IsPointer = isPointer &&
+		!strings.HasPrefix(goType, "[]") &&
+		!strings.HasPrefix(goType, "map[")
 
 	return field, nil
 }
 
+// unwrapNullable returns the meaningful half of OpenAPI 3.1's nullable idiom,
+// `oneOf: [{"type": "null"}, X]`, and whether the schema was of that shape.
+//
+// 3.0 spelled a nullable property `$ref` plus `nullable: true`; 3.1 has no
+// `nullable` keyword and unions with the null type instead. Without this, such a
+// property carries neither `$ref` nor `type`, so getGoType fell through to `any`
+// and every nullable reference in the document lost its type — 109 fields across
+// 70 models, where the previous document produced none.
+func unwrapNullable(schema Schema) (Schema, bool) {
+	members := getSchemaOneOf(schema)
+	if len(members) != 2 {
+		return nil, false
+	}
+	var inner Schema
+	var sawNull bool
+	for _, member := range members {
+		types := getSchemaType(member)
+		if len(types) == 1 && types[0] == "null" {
+			sawNull = true
+			continue
+		}
+		inner = member
+	}
+	if !sawNull || inner == nil {
+		return nil, false
+	}
+	return inner, true
+}
+
 func getGoType(schema Schema, isRequired bool) (string, bool, error) {
+	// A nullable reference is the referenced type, behind a pointer — except for
+	// slices and maps, which carry their own nil and would otherwise become the
+	// unusable `*map[string]any`.
+	if inner, ok := unwrapNullable(schema); ok {
+		goType, isPointer, err := getGoType(inner, false)
+		if strings.HasPrefix(goType, "[]") || strings.HasPrefix(goType, "map[") {
+			isPointer = false
+		}
+		return goType, isPointer, err
+	}
+
 	// Handle $ref types
 	if ref := getSchemaRef(schema); ref != "" {
 		refName := strings.TrimPrefix(ref, "#/components/schemas/")
@@ -749,9 +800,14 @@ func formatComment(description string) string {
 	desc := strings.TrimSpace(description)
 	desc = strings.ReplaceAll(desc, "\n", " ")
 
-	// Limit length
-	if len(desc) > 100 {
-		desc = desc[:97] + "..."
+	// Limit length, counting runes rather than bytes.
+	//
+	// Slicing a Go string by byte offset cuts a multi-byte character in half, and the result is
+	// not valid UTF-8 — `gofmt` then refuses the file and the model is silently dropped. Latent
+	// while descriptions were ASCII; the AXO spec's descriptions are the handlers' Rust doc
+	// comments, which use em-dashes and accented text, so `WannabeToken` disappeared this way.
+	if runes := []rune(desc); len(runes) > 100 {
+		desc = string(runes[:97]) + "..."
 	}
 
 	return desc
@@ -1002,7 +1058,6 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 		Return(Id("u").Dot("raw"), Nil()),
 	)
 	f.Line()
-
 
 	// UnmarshalJSON just stores the bytes — discriminator is read lazily.
 	// "null" / empty inputs are stored verbatim; Type()/As<Member>() handle

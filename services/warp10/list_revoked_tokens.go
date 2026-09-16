@@ -13,15 +13,38 @@ import (
 )
 
 /*
-Listrevokedtokens
+Listrevokedtokens GET /v4/warp10/cluster/{cluster_id}/token/revocation — list revoked tokens for cluster.
 
-# List all revoked tokens for a cluster with cursor-based pagination and scope filtering
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:172-180 listRevokedTokensLogic
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/services/Warp10Service.scala:460-513 listRevokedTokens
+Behavior:
+  - Accepts Basic or Bearer (biscuit) auth.
+  - Biscuit: requires LIST_REVOKED_TOKENS operation (no scope).
+  - Returns paginated list of revoked tokens for the cluster, ordered by revoked_at ASC.
+  - Fetches limit+1 to determine hasMore.
+
+Issue: #642, #764, #758
+
+📥 **Algo Source (Legacy):**
+List revoked tokens for a cluster with cursor-based pagination.
+- Resolve cluster + auth from dispatch_auth(clusterId, LIST_REVOKED_TOKENS, None)
+- Fetch limit+1 revoked tokens from DB (cursor > since, scope filter, ORDER BY revoked_at ASC)
+- hasMore = tokens.length > limit, actualTokens = tokens.take(limit)
+- nextSince = last token's revoked_at if hasMore
+- Source: ovd Warp10TokenService.scala:460 listRevokedTokens()
+
+🔧 **Algo Rust (Implementation):**
+- dispatch_warp10_auth(LIST_REVOKED_TOKENS, None) → Warp10AuthContext or 401/403
+- Clamp limit, apply scope filter, fetch limit+1 from warp10_tokens
+- WHERE cluster_id AND revoked_at IS NOT NULL AND revoked_at > since [AND scope]
+- ORDER BY revoked_at ASC, hasMore, map to RevokedTokenSummary
+- Return RevokedTokensResponse with pagination metadata
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
+  - clusterId: Warp10 cluster ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

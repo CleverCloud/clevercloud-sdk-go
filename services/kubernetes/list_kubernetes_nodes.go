@@ -12,14 +12,26 @@ import (
 )
 
 /*
-Listkubernetesnodes
+Listkubernetesnodes **Legacy**: ovd StandaloneNodeController.scala:38 list()
+**Algorithm**:
+  - ClusterItemRepository.selectByCluster(clusterId, STANDALONE_NODE, ACTIVE)
+  - Returns StandaloneNodeView list from cluster_item table
+
+**Conformity**: YES
+
+GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes — list standalone nodes.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — list
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterItemRepository.scala — queries.selectByCluster
+Behavior: returns all standalone nodes (cluster_item with item_type='STANDALONE_NODE', status='ACTIVE')
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 

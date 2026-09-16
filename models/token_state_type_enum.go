@@ -2,7 +2,7 @@
 
 package models
 
-// TokenStateType represents
+// TokenStateType represents A token's lifecycle state — **computed** from timestamps against the current clock, never stored....
 type TokenStateType string
 
 const (

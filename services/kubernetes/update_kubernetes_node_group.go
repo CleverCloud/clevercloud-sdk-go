@@ -12,15 +12,19 @@ import (
 )
 
 /*
-Updatekubernetesnodegroup
+Updatekubernetesnodegroup PATCH /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-groups/{pool_id} — update node group (OVD-compat alias).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala — org-scoped PATCH node-groups variant
+Behavior: same as PUT /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/node-pools/{pool_id}
+Issue: #667
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
+  - nodeGroupId: Node group/pool ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

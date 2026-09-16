@@ -2,7 +2,7 @@
 
 package models
 
-// Router
+// Router Routing tree of a cluster (:345-349).
 type Router struct {
-	Protocol Protocol `json:"protocol"`
+	Protocol RouterProtocol `json:"protocol"` // The routed protocol.
 }

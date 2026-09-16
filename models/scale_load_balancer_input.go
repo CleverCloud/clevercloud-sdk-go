@@ -2,7 +2,7 @@
 
 package models
 
-// ScaleLoadBalancerInput
+// ScaleLoadBalancerInput OVD `ScaleLoadBalancerInput` (LoadBalancer.scala:105-109).
 type ScaleLoadBalancerInput struct {
-	Flavor Flavor `json:"flavor"`
+	Flavor string `json:"flavor"`
 }

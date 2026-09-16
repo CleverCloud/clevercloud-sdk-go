@@ -12,15 +12,14 @@ import (
 )
 
 /*
-Createserver
-
-# Provision a new server on this region
+Createserver Row 1 — 201 `ServerIdResponse`; machine Basic keeps OVD's body `ownerId`
+override while user callers are normalized to the path tenant.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - requestBody: the request payload
 

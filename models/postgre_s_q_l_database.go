@@ -4,15 +4,15 @@ package models
 
 import "time"
 
-// PostgreSQLDatabase
+// PostgreSQLDatabase PostgreSQL database view returned by the databases endpoints.  Source: ovd PostgreSQLDatabase.sca...
 type PostgreSQLDatabase struct {
-	AddonID      string       `json:"addonId"`
-	CreationDate time.Time    `json:"creationDate"`
-	DeletionDate *time.Time   `json:"deletionDate,omitempty"`
-	ID           string       `json:"id"`
-	Locale       string       `json:"locale"`
-	Mode         DatabaseMode `json:"mode"`
-	Name         string       `json:"name"`
-	OwnerID      string       `json:"ownerId"`
-	RealAddonID  string       `json:"realAddonId"`
+	AddonID      string       `json:"addonId"`                // Application ID (from cc-api)
+	CreationDate *time.Time   `json:"creationDate,omitempty"` // Creation timestamp
+	DeletionDate *time.Time   `json:"deletionDate,omitempty"` // Deletion timestamp (null if active)
+	ID           string       `json:"id"`                     // Database ID (prefixed)
+	Locale       string       `json:"locale"`                 // Database locale
+	Mode         DatabaseMode `json:"mode"`                   // Read/write mode
+	Name         string       `json:"name"`                   // Database name
+	OwnerID      string       `json:"ownerId"`                // Owner of the database record
+	RealAddonID  string       `json:"realAddonId"`            // Real addon ID (UUID, prefixed)
 }

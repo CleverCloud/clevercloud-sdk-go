@@ -11,9 +11,16 @@ import (
 )
 
 /*
-Getwireguardconfigurationstream
+Getwireguardconfigurationstream GET /v4/…/{network_group_id}/peers/{peer_id}/wireguard/configuration/stream
 
-# Stream real-time WireGuard configuration updates
+Source: ovd NetworkGroupController.scala wireguardConfigurationSSELogic → WireguardConfStreamer
+Behavior: `text/event-stream` of `WireGuardConfigurationB64` JSON (sorted
+
+	keys) whenever its `version` grew, polled every 15s; `HEARTBEAT` after
+	5s of silence; completes when the NG or the peer disappears. 404/403
+	before any streaming.
+
+Issue: #313, #849, #2805
 
 Parameters:
   - ctx: context for the request

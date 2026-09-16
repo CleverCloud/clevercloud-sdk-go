@@ -12,14 +12,32 @@ import (
 )
 
 /*
-Assignkubernetescephcsiplugin
+Assignkubernetescephcsiplugin POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/csi/ceph — assign Ceph CSI plugin.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — assignCephCSIPlugin
+Source: references/legacy/ovd/modules/kubernetes/services/ClusterCRUDService.scala:238 — installCephCSIPlugin
+Behavior: deprecated shim over `PATCH {"features":{"csi":true}}` — records the CSI
+
+	enablement through the cluster-features path and returns the updated view.
+
+Issue: #667, #2073, #2888
+
+**Legacy**: ovd ClusterController.scala assignKubernetesCephCSIPlugin()
+**Algorithm**:
+  - Delegates to the cluster PATCH core with a merge patch setting only
+    `features.csi` — stored `registries` and `autoscalingEnabled` are kept
+  - The features path validates the transition: 404 when the cluster does not
+    exist, 409 on a concurrent modification, 412 unless the cluster is ACTIVE
+  - Nothing is installed synchronously: a 200 reports the recorded intent, and
+    the install is carried out by the asynchronous TO_RECONCILE pass the
+    feature change dispatches
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 
@@ -34,14 +52,14 @@ Example:
 x-service: kubernetes
 operationId: assignKubernetesCephCSIPlugin
 */
-func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
+func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "assignKubernetesCephCSIPlugin", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/csi/ceph", ownerId, clusterId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, nil)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

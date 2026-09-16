@@ -4,15 +4,16 @@ package models
 
 import "time"
 
-// Cellar
+// Cellar Legacy `Cellar` DTO returned by `GET /v4/providers/addon-cellar/{cellarId}` (the OAuth1 provider-...
 type Cellar struct {
-	AddonID      string             `json:"addonId"`
-	Buckets      CellarBucketsCount `json:"buckets"`
-	CreationDate time.Time          `json:"creationDate"`
-	ID           string             `json:"id"`
-	Name         string             `json:"name"`
-	OwnerID      OwnerID            `json:"ownerId"`
-	Plan         CellarPlan         `json:"plan"`
-	Status       CellarStatus       `json:"status"`
-	Traffic      CellarTraffic      `json:"traffic"`
+	ClusterID    int        `json:"clusterId"`              // Numeric cluster index.
+	CreationDate time.Time  `json:"creationDate"`           // Creation timestamp.
+	DeletionDate *time.Time `json:"deletionDate,omitempty"` // Deletion timestamp (`null` while active).
+	Host         string     `json:"host"`                   // S3 endpoint host.
+	ID           string     `json:"id"`                     // Provider-internal resource id (`cellar_*`).
+	KeyID        string     `json:"keyId"`                  // S3 access key id.
+	KeySecret    string     `json:"keySecret"`              // S3 secret access key.
+	OwnerID      string     `json:"ownerId"`                // Owner (user or org) id.
+	Plan         string     `json:"plan"`                   // Plan slug (SCREAMING_SNAKE_CASE).
+	Status       string     `json:"status"`                 // Addon lifecycle status (SCREAMING_SNAKE_CASE).
 }

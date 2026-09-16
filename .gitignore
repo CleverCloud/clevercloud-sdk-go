@@ -1,2 +1,4 @@
 vendor/
 prompt
+# Debug dump the builder generator writes only when gofmt rejects its output.
+builder.go.unformatted

@@ -2,10 +2,10 @@
 
 package models
 
-// ClusterPatchPayload
+// ClusterPatchPayload Cluster patch payload (update).  Source: references/legacy/ovd/modules/kubernetes/models/Cluster....
 type ClusterPatchPayload struct {
-	Description *string               `json:"description,omitempty"`
+	Description *string               `json:"description,omitempty"` // New description
 	Features    *ClusterFeaturesPatch `json:"features,omitempty"`
-	Name        *string               `json:"name,omitempty"`
-	Tags        []string              `json:"tags,omitempty"`
+	Name        *string               `json:"name,omitempty"` // New cluster name
+	Tags        []SemanticTag         `json:"tags,omitempty"` // New tags
 }

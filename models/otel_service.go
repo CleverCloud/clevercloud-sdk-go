@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// OtelService
+// OtelService Service response — OVD `ServiceResponse`, `@encodedName("OtelService")`.  `writeToken` IS returne...
 type OtelService struct {
 	CreatedAt       time.Time `json:"createdAt"`
-	GatewayEndpoint string    `json:"gatewayEndpoint"` // Absolute URL
-	ID              string    `json:"id"`
+	GatewayEndpoint string    `json:"gatewayEndpoint"`
+	ID              string    `json:"id"` // `otelsrv_<uuid>`.
 	Name            string    `json:"name"`
-	NamespaceID     string    `json:"namespaceId"`
+	NamespaceID     string    `json:"namespaceId"` // `otel_<uuid>`.
 	UpdatedAt       time.Time `json:"updatedAt"`
 	WriteToken      string    `json:"writeToken"`
 }

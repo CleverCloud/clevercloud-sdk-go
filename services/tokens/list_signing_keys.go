@@ -15,14 +15,12 @@ import (
 /*
 Listsigningkeys
 
-List signing keys for a product.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
+  - tenantId: Tenant that owns the product
+  - productId: Product to list keys for
   - opts: optional query parameters
 
 # Returns the operation result or an error

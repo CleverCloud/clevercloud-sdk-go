@@ -12,18 +12,27 @@ import (
 )
 
 /*
-Updatedatabasesprivileges
+Updatedatabasesprivileges **Legacy**: ovd users.scala:188 patchDatabasesPrivileges()
+**Algorithm**:
+  - Verify addon, UPSERT database privilege (ON CONFLICT DO UPDATE)
+  - GRANT/REVOKE on addon DB is deferred
 
-# Update the user's database privileges in the given PostgreSQL addon
+**Conformity**: YES (GRANT/REVOKE on addon DB + metadata UPSERT)
+
+PATCH .../users/{userId}/privileges/databases/{objectId}
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — updateDatabasePrivileges (UPSERT)
+Source: ovd PostgreSQLAccessController.scala — alterDatabasePrivileges (GRANT/REVOKE — stub)
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
-  - pgUserId: PostgreSQL User ID
-  - objectId: PostgreSQL Object ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
+  - pgUserId: PostgreSQL user ID
+  - objectId: Database OID
   - requestBody: the request payload
 
 # Returns the operation result or an error

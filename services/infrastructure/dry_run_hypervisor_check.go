@@ -11,15 +11,20 @@ import (
 )
 
 /*
-Dryrunhypervisorcheck
+Dryrunhypervisorcheck POST /v4/compute/hypervisors/{hypervisor_name}/check
 
-# Evaluate a CEL expression against a single hypervisor and return a diagnostic report
+Source: references/legacy/ovd/modules/compute/api/routes.scala:278-288 (dryRunHypervisorCheck)
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:171-186 (checkHypervisor)
+Behavior: evaluate the CEL body against one hypervisor — with the affinity
+index built from the whole fleet — and render a plain-text report. 404 if
+the hypervisor is unknown.
+Issue: #1644
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - hypervisor_name:
+  - hypervisor_name: Hypervisor name
 
 # Returns the operation result or an error
 
@@ -31,7 +36,7 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: dryRunHypervisorCheck
 */
 func Dryrunhypervisorcheck(ctx context.Context, c *client.Client, tracer trace.Tracer, hypervisor_name string) client.Response[client.Nothing] {

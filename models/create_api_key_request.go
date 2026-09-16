@@ -2,7 +2,7 @@
 
 package models
 
-// CreateApiKeyRequest
+// CreateApiKeyRequest Request body for POST /v4/ai/.../endpoints/{endpointId}/apikeys — create API key.  Source: refere...
 type CreateApiKeyRequest struct {
-	APIKey *map[string]any `json:"apiKey,omitempty"` // JSON payload forwarded from Otoroshi
+	APIKey *any `json:"apiKey,omitempty"` // Optional apikey JSON
 }

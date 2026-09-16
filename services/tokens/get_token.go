@@ -14,14 +14,12 @@ import (
 /*
 Gettoken
 
-Get token metadata.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - tokenId:
+  - tenantId: Tenant the token belongs to
+  - tokenId: The token to fetch
 
 # Returns the operation result or an error
 
@@ -36,14 +34,14 @@ Example:
 x-service: tokens
 operationId: getToken
 */
-func Gettoken(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, tokenId string) client.Response[models.Token] {
+func Gettoken(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, tokenId string) client.Response[models.TokenView] {
 	ctx, span := tracer.Start(ctx, "getToken", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("tokenId", tokenId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/tokens/%s", tenantId, tokenId)
 
 	// Make API call
-	response := client.Get[models.Token](ctx, c, path)
+	response := client.Get[models.TokenView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

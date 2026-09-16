@@ -2,10 +2,10 @@
 
 package models
 
-// ImageOutput
+// ImageOutput The body `POST /v4/images` answers.  Source: ovd modules/image/models/Image.scala:116-123 (`Image...
 type ImageOutput struct {
-	ID       string             `json:"id"`
-	Name     StringMaxLength128 `json:"name"`
-	Packages []ExherboPackage   `json:"packages,omitempty"`
-	Tags     []string           `json:"tags,omitempty"`
+	ID       string           `json:"id"`       // `image_<ULID>`.
+	Name     string           `json:"name"`     // `<runtime>:<YYYYMMDD>`.
+	Packages []ExherboPackage `json:"packages"` // Every package in the image.
+	Tags     []string         `json:"tags"`     // Free-form semantic tags carried by the image.
 }

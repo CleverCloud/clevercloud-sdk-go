@@ -2,9 +2,9 @@
 
 package models
 
-// CreateEndpointRequest
+// CreateEndpointRequest Request body for POST /v4/ai/organisations/{ownerId}/ai/{aiId}/endpoints — create endpoint.  Sour...
 type CreateEndpointRequest struct {
-	APIKey         *map[string]any `json:"apiKey,omitempty"`   // JSON payload forwarded from Otoroshi
-	Endpoint       *map[string]any `json:"endpoint,omitempty"` // JSON payload forwarded from Otoroshi
-	OtoroshiTarget string          `json:"otoroshiTarget"`
+	APIKey         *any    `json:"apiKey,omitempty"`         // Optional apikey JSON to create alongside the endpoint
+	Endpoint       *any    `json:"endpoint,omitempty"`       // Optional endpoint JSON (Otoroshi route definition)
+	OtoroshiTarget *string `json:"otoroshiTarget,omitempty"` // Otoroshi deployment target ("default" or a specific OtoroshiId)
 }

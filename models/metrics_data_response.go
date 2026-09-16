@@ -2,10 +2,10 @@
 
 package models
 
-// MetricsDataResponse
+// MetricsDataResponse Response for GET /v4/stats/organisations/{ownerId}/resources/{resourceId}/metrics.  Source: refer...
 type MetricsDataResponse struct {
-	Data     []MetricsDataValues `json:"data,omitempty"`
-	Name     string              `json:"name"`
-	Resource string              `json:"resource"`
-	Unit     string              `json:"unit"`
+	Data     []MetricsDataValues `json:"data"`     // Data points with timestamp and value.
+	Name     string              `json:"name"`     // Metric name (e.g. "cpu", "mem", "load1").
+	Resource string              `json:"resource"` // Resource identifier (app_id).
+	Unit     string              `json:"unit"`     // Unit description (e.g. "CPU used percentage", "Ram used percentage").
 }

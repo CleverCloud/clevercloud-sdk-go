@@ -2,8 +2,8 @@
 
 package models
 
-// RevocationListResponse
+// RevocationListResponse Paginated list of revoked tokens.  Source: references/legacy/ovd/modules/ts/models/RevocationList...
 type RevocationListResponse struct {
-	Items    []string           `json:"items,omitempty"`
-	Metadata PaginationMetadata `json:"metadata"`
+	Metadata      PaginationMetadata `json:"metadata"`
+	RevokedTokens []RevocationEntry  `json:"revokedTokens"`
 }

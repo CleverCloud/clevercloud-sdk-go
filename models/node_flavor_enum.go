@@ -2,7 +2,7 @@
 
 package models
 
-// NodeFlavor represents
+// NodeFlavor represents Node flavor (VM size).  Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/cleve...
 type NodeFlavor string
 
 const (

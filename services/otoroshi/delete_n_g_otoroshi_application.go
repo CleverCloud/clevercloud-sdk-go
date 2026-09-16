@@ -11,15 +11,23 @@ import (
 )
 
 /*
-Deletengotoroshiapplication
+Deletengotoroshiapplication DELETE /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/networkgroup
 
-request to unlink a the otoroshi's java application to a networkgroup
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — deleteNGForAddon()
+
+📥 **Algo Source (Legacy):**
+- Fetch addon from DB
+- If networkgroup_id is present: delete NG via NG API, SET networkgroup_id=NULL in DB, redeploy
+- Return 204
+- Source: ovd OtoroshiProviderService.scala:559 deleteNGForAddon()
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

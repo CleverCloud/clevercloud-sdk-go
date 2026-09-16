@@ -2,17 +2,19 @@
 
 package models
 
-// PluginName represents
+// PluginName represents In-cluster plugin (addon) name.  Source: references/legacy/ovd/modules/kubernetes/models/ClusterI...
 type PluginName string
 
 const (
 	PluginNameCILIUM           PluginName = "CILIUM"
 	PluginNameCoreDns          PluginName = "CORE_DNS"
 	PluginNameCsrApprover      PluginName = "CSR_APPROVER"
-	PluginNameKONNECTIVITY     PluginName = "KONNECTIVITY"
-	PluginNameKubeStateMetrics PluginName = "KUBE_STATE_METRICS"
 	PluginNameMetricsServer    PluginName = "METRICS_SERVER"
+	PluginNameKONNECTIVITY     PluginName = "KONNECTIVITY"
 	PluginNameOtelCollector    PluginName = "OTEL_COLLECTOR"
+	PluginNameKubeStateMetrics PluginName = "KUBE_STATE_METRICS"
+	PluginNameCephCsi          PluginName = "CEPH_CSI"
+	PluginNameKARPENTER        PluginName = "KARPENTER"
 )
 
 // String returns the underlying string value

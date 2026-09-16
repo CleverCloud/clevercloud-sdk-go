@@ -11,7 +11,25 @@ import (
 )
 
 /*
-Triggerallclusterspluginsbackfill
+Triggerallclusterspluginsbackfill POST /v4/kubernetes/admin/clusters/plugins/backfill
+
+📥 **Algo Source (Legacy):**
+Backfill every ACTIVE cluster, best-effort.
+- `requireBasicAuth` → 403 otherwise
+- `findAllByStatuses(Set(ACTIVE))`, then `parTraverseN(8)`
+- a per-cluster failure becomes `results[].error`; it never fails the batch
+- only the enumeration read itself can fail the request
+- Source: ovd services/BackfillService.scala:103-130
+
+🔧 **Algo Rust (Implementation):**
+- `AdminAccess` extractor → 403
+- `SELECT id FROM cluster WHERE status = 'ACTIVE' ORDER BY id` → 500 on failure
+- `buffered(8)`: ≤8 backfills in flight, results in id order
+- 200 `PluginBackfillBatch` with per-cluster `error` populated
+
+Source: ovd controllers/AdminPluginBackfillController.scala:82-101
+Schema: cluster_item (V2.0.0; PLUGIN item type V2.29.0)
+Issue: #2355
 
 Parameters:
   - ctx: context for the request

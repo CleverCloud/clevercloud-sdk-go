@@ -12,9 +12,11 @@ import (
 )
 
 /*
-Listnetworkgroupmembers
+Listnetworkgroupmembers GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members
 
-# List Members of a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala getMembers — `ng.members` from `ngMap`
+Behavior: 200 with the member list; 404 unknown NG; 403 owner mismatch.
+Issue: #313, #665, #676, #849, #1127
 
 Parameters:
   - ctx: context for the request

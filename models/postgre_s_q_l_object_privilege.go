@@ -2,7 +2,7 @@
 
 package models
 
-// PostgreSQLObjectPrivilege
+// PostgreSQLObjectPrivilege Object-level privilege (user + read/write).  Source: ovd PrivilegesExport.scala — PostgreSQLObjec...
 type PostgreSQLObjectPrivilege struct {
 	Name  string `json:"name"`
 	Read  bool   `json:"read"`

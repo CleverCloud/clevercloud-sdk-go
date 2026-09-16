@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listcellarconsumptions
+Listcellarconsumptions Report Cellar usage over a billing window
 
-# List cellar consumptions
+Returns one consumption record per billable Cellar add-on the owner holds, each carrying the effective window, the product and resource ids, the region and the hourly consumption lines. `until` is required and `since` defaults to `2025-01-01T00:00:00Z`; both are RFC 3339 instants and `since` must not be after `until`, otherwise the answer is 400. Repeat `resourceId` to restrict the report to specific add-ons. An owner with no billable add-on over the window yields an empty list. This is an internal billing route with its own Basic credentials, separate from customer authentication: without them the answer is 401.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation/owner ID
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -37,7 +37,7 @@ Example:
 x-service: cellar
 operationId: listCellarConsumptions
 */
-func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumption] {
+func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.CellarResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listCellarConsumptions", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Listcellarconsumptions(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.ResourceConsumption](ctx, c, path)
+	response := client.Get[[]models.CellarResourceConsumption](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

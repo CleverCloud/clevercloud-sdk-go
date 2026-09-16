@@ -2,7 +2,7 @@
 
 package models
 
-// OIdTablePair
+// OIdTablePair OID-name pair for tables.  Source: ovd OIdPair.scala — OIdTablePair
 type OIdTablePair struct {
 	Database string `json:"database"`
 	Name     string `json:"name"`

@@ -2,7 +2,7 @@
 
 package models
 
-// PeerKind represents
+// PeerKind represents Peer kind — `ScreamCaseOps`, uppercase on the wire (the pulsar codec gives no override for it).  ...
 type PeerKind string
 
 const (

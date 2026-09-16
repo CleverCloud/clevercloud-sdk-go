@@ -2,11 +2,11 @@
 
 package models
 
-// WannabePulsar
+// WannabePulsar Request to create a Pulsar addon (v4 internal).  Source: references/legacy/ovd/modules/pulsar/mod...
 type WannabePulsar struct {
-	AuthorID  *string    `json:"authorId,omitempty"`
-	ClusterID string     `json:"clusterId"`
-	OwnerID   OwnerID    `json:"ownerId"`
-	Plan      PulsarPlan `json:"plan"`
-	Tenant    string     `json:"tenant"`
+	AuthorID  *string `json:"authorId,omitempty"` // Author ID (optional, for audit)
+	ClusterID string  `json:"clusterId"`          // Target cluster ID
+	OwnerID   string  `json:"ownerId"`            // Owner (user or org) ID
+	Plan      string  `json:"plan"`               // Plan identifier
+	Tenant    string  `json:"tenant"`             // Pulsar tenant name
 }

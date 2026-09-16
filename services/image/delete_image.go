@@ -11,13 +11,29 @@ import (
 )
 
 /*
-Deleteimage
+Deleteimage DELETE /v4/images/{imageId} — remove an image.
+
+📥 **Algo Source (Legacy):**
+- Decode the `imageId` path capture (`image_` + ULID) — a 400 when it fails
+- Authorize the Biscuit against `image_op("delete")`
+- Delete the primary key, the name key and the runtime key from Redis
+- Source: ovd ImageController.scala:89-98 deleteImage + routes.scala:36-41
+
+🔧 **Algo Rust (Implementation):**
+- `ImageId::parse` → the tapir path 400, before authentication
+- `authorize` → 401 without a verifiable Biscuit, 403 without `image_op("delete")`
+- `ImageRepository::delete` — one row, both lookup paths being columns of it
+- 204 when a row went, otherwise the not-found envelope quoting the id
+
+Source: ovd modules/image/api/routes.scala:36-41 (deleteImage)
+Behavior: deletes one image; 204 when a row went, 404 when none did.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - imageId:
+  - imageId: Image identifier, `image_<ULID>`
 
 # Returns the operation result or an error
 

@@ -11,9 +11,14 @@ import (
 )
 
 /*
-Getotoroshiproviderinformation
+Getotoroshiproviderinformation GET /v4/addon-providers/otoroshi — provider information for Console3 / CCAPI.
 
-retrieve the Otoroshi provider information
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getProviderInformations()
+Behavior: Returns ProviderConsoleView with provider ID, dedicated versions, features.
+
+	Uses config's availableVersions and defaultVersionDeployed.
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +38,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiProviderInformation
 */
-func Getotoroshiproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getotoroshiproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.OtoroshiProviderInfoView] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiProviderInformation")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/otoroshi")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.OtoroshiProviderInfoView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

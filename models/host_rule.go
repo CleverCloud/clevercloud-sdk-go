@@ -2,7 +2,7 @@
 
 package models
 
-// HostRule
+// HostRule Hostname rule (:224-228).
 type HostRule struct {
-	Host Host `json:"host"`
+	Host HostRuleHost `json:"host"` // The matcher.
 }

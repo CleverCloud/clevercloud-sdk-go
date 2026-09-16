@@ -4,16 +4,16 @@ package models
 
 import "time"
 
-// CellarObjectDetails
+// CellarObjectDetails Full details of a Cellar object: metadata + tags + ACLs.  Source: references/legacy/ovd/modules/c...
 type CellarObjectDetails struct {
-	Acl           []CellarAcl `json:"acl,omitempty"`
-	ContentLength int         `json:"contentLength"`
-	ContentType   string      `json:"contentType"`
-	ETag          string      `json:"eTag"`
-	Key           string      `json:"key"`
-	Metadata      MapString   `json:"metadata"` // S3 user-defined metadata key-value pairs from x-amz-meta-* headers
-	Name          string      `json:"name"`
-	Tags          []CellarTag `json:"tags,omitempty"`
-	Type          string      `json:"type"`
-	UpdatedAt     time.Time   `json:"updatedAt"`
+	Acl           []CellarAcl    `json:"acl"`           // Object ACL entries
+	ContentLength int            `json:"contentLength"` // Size in bytes
+	ContentType   string         `json:"contentType"`   // MIME content type (defaults to application/octet-stream)
+	ETag          string         `json:"eTag"`          // ETag hash (RFC 7232 quotes stripped)
+	Key           string         `json:"key"`           // Full object key
+	Metadata      map[string]any `json:"metadata"`      // User (x-amz-meta-*) metadata
+	Name          string         `json:"name"`          // Object display name (last key segment)
+	Tags          []CellarTag    `json:"tags"`          // Object tags
+	Type          string         `json:"type"`          // Object type (always "file")
+	UpdatedAt     time.Time      `json:"updatedAt"`     // Last modification timestamp
 }

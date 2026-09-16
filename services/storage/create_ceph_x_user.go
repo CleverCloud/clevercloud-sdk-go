@@ -12,16 +12,39 @@ import (
 )
 
 /*
-Createcephxuser
+Createcephxuser POST /v4/tenants/{tenantId}/ceph-x-users -- create a Ceph X user.
 
-Create a new ceph x user.
+Source: ovd StorageController.scala:120 createCephXUser()
+Behavior: calls Ceph Dashboard API to create a CephX user entity with capabilities.
+
+	Returns the entity ID, key, and caps from Ceph response.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Create a CephX authentication user via Ceph Dashboard API.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- Generate CephXUserId, build WannabeCephXUser with capabilities
+- POST /api/cluster/user to Ceph Dashboard
+- Return JustCreatedCephXUser (entity, key, caps)
+- Source: ovd StorageController.scala:120, CephAdmin.scala:141
+
+🔧 **Algo Rust (Implementation):**
+- `OvdAuth` + `ceph_x_op:create_admin_user` on the path tenant
+- Call ceph.create_ceph_x_user(entity_id, caps) via reqwest HTTP
+- Return 201 with CephXUserView (entity, tenant, key, caps)
+- Return the mapped Ceph status on failure (ovd `CephHTTPError`, see `ceph_error_response`)
+
+⚠️ **Takes `create_admin_user`, not `create_user`.** `caps` is forwarded to Ceph verbatim, so
+this endpoint can mint a cluster-admin key. See [`CephXOp::CreateAdminUser`] for why it does
+not share a grant with the scoped mint.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
   - requestBody: the request payload
 
 # Returns the operation result or an error

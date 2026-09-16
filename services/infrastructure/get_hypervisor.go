@@ -6,20 +6,23 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Gethypervisor
+Gethypervisor GET /v4/compute/hypervisors/{hypervisor_name}
 
-# Get hypervisor
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala getHypervisor
+Behavior: get hypervisor from cache, 404 if not found.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - hypervisor_name:
+  - hypervisor_name: Hypervisor name
 
 # Returns the operation result or an error
 
@@ -31,17 +34,17 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: getHypervisor
 */
-func Gethypervisor(ctx context.Context, c *client.Client, tracer trace.Tracer, hypervisor_name string) client.Response[client.Nothing] {
+func Gethypervisor(ctx context.Context, c *client.Client, tracer trace.Tracer, hypervisor_name string) client.Response[models.Hypervisor] {
 	ctx, span := tracer.Start(ctx, "getHypervisor", trace.WithAttributes(attribute.String("hypervisor_name", hypervisor_name)))
 	defer span.End()
 
 	path := utils.Path("/v4/compute/hypervisors/%s", hypervisor_name)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.Hypervisor](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

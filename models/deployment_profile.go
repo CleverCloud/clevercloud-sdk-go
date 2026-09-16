@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentProfile
+// DeploymentProfile The deployment profile as returned by the admin API — `profile_data` with every secret redacted. ...
 type DeploymentProfile struct {
 	LocationID  string `json:"locationId"`
 	ProfileData any    `json:"profileData"`

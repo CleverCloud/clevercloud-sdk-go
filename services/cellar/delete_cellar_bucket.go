@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Deletecellarbucket
+Deletecellarbucket Delete a bucket
 
-delete a bucket for a Cellar account
+Deletes a bucket from this add-on's storage and answers 200 with an empty body. The bucket must be empty unless `purgeObjects=true` is passed, which removes its objects first; a non-empty bucket without that flag answers 409. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on or bucket answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
   - opts: optional query parameters
 
 # Returns the operation result or an error

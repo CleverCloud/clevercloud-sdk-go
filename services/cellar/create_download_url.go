@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Createdownloadurl
+Createdownloadurl Presign a direct S3 download URL
 
-generate a presigned URL for downloading an object
+Returns `{ url, expiresAt }`: a presigned S3 URL the caller GETs the object bytes from, straight from the storage cluster. `expiresIn` sets its lifetime in seconds (300 by default) and is used as given, with no clamping. Both the bucket and the object must already exist. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on, bucket or object answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
   - requestBody: the request payload
 
 # Returns the operation result or an error

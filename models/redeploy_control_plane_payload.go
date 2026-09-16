@@ -2,8 +2,8 @@
 
 package models
 
-// RedeployControlPlanePayload
+// RedeployControlPlanePayload Redeploy control-plane payload — the optional base64 YAML hooks applied before and after the cont...
 type RedeployControlPlanePayload struct {
-	AfterYamls  []string `json:"afterYamls,omitempty"`
-	BeforeYamls []string `json:"beforeYamls,omitempty"`
+	AfterYamls  []string `json:"afterYamls,omitempty"`  // Base64-encoded YAML manifests applied AFTER the swing.
+	BeforeYamls []string `json:"beforeYamls,omitempty"` // Base64-encoded YAML manifests applied BEFORE the control-plane swing.
 }

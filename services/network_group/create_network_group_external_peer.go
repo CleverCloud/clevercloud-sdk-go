@@ -12,9 +12,16 @@ import (
 )
 
 /*
-Createnetworkgroupexternalpeer
+Createnetworkgroupexternalpeer POST /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/external-peers
 
-# Add an External Peer to a Member of a NetworkGroup
+Source: ovd NetworkGroupActionsActor (WannabeExternalPeer.toWannabePeer) → `PeerCreationCMD` (EXTERNAL kind)
+Behavior: 200 OK + `{"peerId": ...}` with a server-generated id (OVD
+
+	`createNetworkGroupExternalPeer` status); 400 invalid role, invalid IPv4,
+	missing parentMember, or SERVER without ip+port; 404 unknown NG or unknown
+	parentMember; 403 owner mismatch; 500 publish failure.
+
+Issue: #313, #665, #676, #849, #1127, #2790
 
 Parameters:
   - ctx: context for the request

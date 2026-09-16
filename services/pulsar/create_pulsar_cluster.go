@@ -11,9 +11,24 @@ import (
 )
 
 /*
-Createpulsarcluster
+Createpulsarcluster POST /v4/addon-providers/addon-pulsar/clusters — create a Pulsar cluster.
 
-# Create Pulsar cluster
+**Legacy**: ovd PulsarController.scala:120 createClusterServerEndpoint()
+**Algorithm**:
+  - Biscuit auth with PulsarClusterOp.CREATE check
+  - Delegates to PulsarClusterService.createCluster(wannabeCluster)
+  - INSERT cluster row (locationName stored as zone), SELECT back, return 201+ClusterView
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createClusterServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala createCluster
+Behavior: inserts a new cluster record, returns the created cluster view.
+
+	Requires a Biscuit with the `pulsar_cluster_op("create")` (or
+	`"root"`) fact.
+
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request

@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Listloadbalancertlsciphers
-
-# Get loadbalancer TLS Ciphers
+Listloadbalancertlsciphers Row 19 — `[]` when unset; config row missing → **500**.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
 
 # Returns the operation result or an error
 

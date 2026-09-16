@@ -7,13 +7,16 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listvirtualmachines
+Listvirtualmachines GET /v4/compute/virtual-machines
 
-# List virtual machines
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala listVirtualMachines
+Behavior: list VMs from cache, optionally filtered by state/resource_id.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
@@ -31,10 +34,10 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: listVirtualMachines
 */
-func Listvirtualmachines(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Listvirtualmachines(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.VirtualMachine] {
 	ctx, span := tracer.Start(ctx, "listVirtualMachines")
 	defer span.End()
 
@@ -47,7 +50,7 @@ func Listvirtualmachines(ctx context.Context, c *client.Client, tracer trace.Tra
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.VirtualMachine](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

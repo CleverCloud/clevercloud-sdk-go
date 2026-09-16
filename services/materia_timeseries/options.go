@@ -13,13 +13,13 @@ type Option func(*Options)
 
 // Options holds query parameters for materia_timeseries operations
 type Options struct {
-	Limit    *int    `url:"limit,omitempty"`
+	Limit    *int64  `url:"limit,omitempty"`
 	Location *string `url:"location,omitempty"`
 	Since    *string `url:"since,omitempty"`
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}

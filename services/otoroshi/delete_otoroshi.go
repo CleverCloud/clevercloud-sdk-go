@@ -11,15 +11,32 @@ import (
 )
 
 /*
-Deleteotoroshi
+Deleteotoroshi DELETE /v2/providers/addon-otoroshi/resources/{otoroshi_id} — deprovision an Otoroshi instance.
 
-deprovision an existing Otoroshi
+Source: references/legacy/ovd/modules/otoroshi/controllers/OtoroshiProviderController.scala — deleteOtoroshi
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — deprovision()
+
+📥 **Algo Source (Legacy):**
+Full teardown of an Otoroshi instance:
+- Fetch active addon from DB
+- Delete Java application via cc-api (if exists)
+- Delete Redis addon via cc-api (if exists, needs owner_id)
+- Unregister 4 DNS CNAME records (backoffice, api, admin, private)
+- Delete NetworkGroup via NG API (if exists, needs owner_id)
+- SET deletion_date + status=TO_DELETE in DB
+- Return 204
+- Source: ovd OtoroshiProviderService.scala:384 deprovision()
+
+🔧 **Algo Rust:**
+- Same steps with OtoroshiPaasClient; skips external calls if paas_client is None
+
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

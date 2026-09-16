@@ -2,9 +2,10 @@
 
 package models
 
-// WannabeStorage
+// WannabeStorage Request body for creating a storage.  Source: references/legacy/ovd/modules/storage/controller/St...
 type WannabeStorage struct {
-	Configuration StorageConfiguration `json:"configuration"`
-	Kind          StorageKind          `json:"kind"`
-	Label         string               `json:"label"`
+	Configuration any             `json:"configuration"`  // Free-form configuration blob.
+	Kind          StorageKindType `json:"kind"`           // Storage kind (RBD or NFS).
+	Label         string          `json:"label"`          // Human-readable label.
+	Tags          []string        `json:"tags,omitempty"` // Optional tags.
 }

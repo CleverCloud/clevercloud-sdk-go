@@ -2,8 +2,8 @@
 
 package models
 
-// StatusCodeDistribution
+// StatusCodeDistribution A single status code count entry.  The OpenAPI component is named `StatusCodeDistribution` (`#[sc...
 type StatusCodeDistribution struct {
-	Code  int `json:"code"`
-	Count int `json:"count"`
+	Code  int `json:"code"`  // HTTP status code (e.g. 200, 404, 500).  Serialized on the wire as `code` to match the Scala `Stat...
+	Count int `json:"count"` // Number of requests with this status (Scala `Int`).
 }

@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// TokenCreatedResponse
+// TokenCreatedResponse Token created response.  Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercl...
 type TokenCreatedResponse struct {
-	CreatedAt    time.Time `json:"createdAt"`
-	ExpiresAt    time.Time `json:"expiresAt"`
-	ID           string    `json:"id"`
-	RevocationID string    `json:"revocationId"`
-	Scope        string    `json:"scope"`
-	TTL          string    `json:"ttl"`
-	Token        string    `json:"token"`
+	CreatedAt    time.Time         `json:"createdAt"`    // Creation timestamp.
+	ExpiresAt    time.Time         `json:"expiresAt"`    // Expiration timestamp.
+	ID           string            `json:"id"`           // Token metadata ID (prefixed with "token_").
+	RevocationID RevocationId      `json:"revocationId"` // Revocation ID (16 hex characters).
+	Scope        TokenScope        `json:"scope"`        // Token scope: "READ" or "WRITE".
+	TTL          TokenTtl          `json:"ttl"`          // TTL as ISO-8601 interval string, e.g. "PT1H".  Source: endpoints.scala TokenCreatedResponse.ttl: ...
+	Token        Warp10TokenSecret `json:"token"`        // The generated Warp10 token string.
 }

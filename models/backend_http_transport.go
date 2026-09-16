@@ -2,5 +2,5 @@
 
 package models
 
-// BackendHttpTransport
+// BackendHttpTransport Backend HTTP leaf — an empty object on the wire (:99).
 type BackendHttpTransport struct{}

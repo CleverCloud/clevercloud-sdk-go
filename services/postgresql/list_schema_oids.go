@@ -13,16 +13,24 @@ import (
 )
 
 /*
-Listschemaoids
+Listschemaoids **Legacy**: ovd oids.scala:50 getSchemas()
+**Algorithm**:
+  - Verify addon, query pg_namespace catalog for schema OID+name pairs
 
-# Get schemas OIDs for a given PostgreSQL addon
+**Conformity**: STUB (requires direct connection to addon DB instance)
+
+GET .../oids/schemas — list schema OIDs.
+
+Source: ovd PostgreSQLAccessController.scala — selectSchemas
+Behavior: STUB — returns empty list. Requires direct addon DB connection.
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

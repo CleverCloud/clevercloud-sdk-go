@@ -2,7 +2,7 @@
 
 package models
 
-// Ciphers
+// Ciphers Ciphers configuration.  Source: references/legacy/ovd/modules/loadbalancer/types/configuration/Sp...
 type Ciphers struct {
 	Ciphers []Cipher `json:"ciphers,omitempty"`
 	Custom  []string `json:"custom,omitempty"`

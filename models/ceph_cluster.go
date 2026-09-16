@@ -2,10 +2,10 @@
 
 package models
 
-// CephCluster
+// CephCluster Ceph cluster view — 1:1 with ovd `CephClusterView`.  Source: references/legacy/ovd/modules/storag...
 type CephCluster struct {
-	Dashboard CephDashboardInfo         `json:"dashboard"`
-	ID        string                    `json:"id"`
-	Monitors  []string                  `json:"monitors,omitempty"`
-	Statuses  []DefaultIdentifiedStatus `json:"statuses,omitempty"`
+	Dashboard CephDashboard `json:"dashboard"` // Dashboard endpoint + username (no secret).
+	ID        string        `json:"id"`        // Cluster identifier.
+	Monitors  any           `json:"monitors"`  // Monitor addresses (array of host:port).
+	Statuses  []StatusEntry `json:"statuses"`  // Ordered lifecycle status entries.
 }

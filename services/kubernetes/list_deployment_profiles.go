@@ -11,7 +11,24 @@ import (
 )
 
 /*
-Listdeploymentprofiles
+Listdeploymentprofiles GET /v4/kubernetes/admin/deployment-profiles
+
+📥 **Algo Source (Legacy):**
+List every per-location deployment profile.
+- `requireBasicAuth` → 403 otherwise
+- `repository.findAll()` — ordered by `location_id`
+- Map each row through `DeploymentProfileView.from` (secrets redacted)
+- Source: ovd DeploymentProfileController.scala:67-76
+
+🔧 **Algo Rust (Implementation):**
+- `AdminAccess` extractor → 403 otherwise
+- `DeploymentProfileStore::find_all()` (`ORDER BY location_id`)
+- `DeploymentProfileView::from_row` redacts secrets recursively
+- Return `Json(Vec<DeploymentProfileView>)` with 200 OK
+
+Source: ovd controllers/DeploymentProfileController.scala:67-76
+Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
+Issue: #1625
 
 Parameters:
   - ctx: context for the request

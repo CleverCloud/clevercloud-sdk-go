@@ -12,18 +12,18 @@ import (
 )
 
 /*
-Getcellarbucketobject
+Getcellarbucketobject Read an object's details
 
-get object details from a bucket including tags, ACLs, and metadata
+Returns one object's full details: key, display name, size, ETag, content type, last-modified time, its tags, its access-control entries and its user metadata. The object's bytes are not returned — use a download link for those. The key is a single path segment, so a key containing `/` must be percent-encoded. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on, bucket or object answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
-  - objectKey:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
+  - objectKey: Object key
 
 # Returns the operation result or an error
 

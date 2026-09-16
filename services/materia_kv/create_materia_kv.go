@@ -11,9 +11,35 @@ import (
 )
 
 /*
-Createmateriakv
+Createmateriakv POST /v2/providers/kv/resources — provision a new Materia KV addon.
 
-# Provision a new MateriaKV
+📥 **Algo Source (Legacy):** ovd `MateriaDBActor.createFromProvisionRequest` → `create`
+  - extract optional authorId, ownerId, plan from the provision request
+  - generate `kv_<ULID>`; mint an IAM Biscuit token for `materia-db-kv/<kvId>`
+    (`generateIAMToken` → HTTP POST to the IAM service)
+  - build `MateriaDB` with host/port from the static cluster config, token + tokenId from IAM
+  - INSERT `service` + `service_status` (`PROVISIONED`) in one transaction
+  - return `ProvisionResponse(id, "Created", config = exposedEnvironmentVariables)`
+  - Source: ovd MateriaDBActor.scala:274-318 create/createFromProvisionRequest
+
+🔧 **Algo Rust:** internal-only gate (OVD `onUserAction` rejects Create from user tokens,
+401 envelope) → validate optional authorId (`user_*`/CCAPI/OVD/Jenkins, 400 `Field` envelope)
+→ validate ownerId (malformed → OVD's faithful catch-all 500: `IronError` has no
+`statusAndBody` arm) → validate plan ∈ {ALPHA, BASE} (unknown → catch-all 500 likewise:
+`PlanError` has no arm) → generate `kv_<ULID>`; then ONE transaction: mint the token via
+`crate::tokens::mint_materia_kv_biscuit` **in-process** (no HTTP) → token + tokenId, INSERT service +
+service_status PROVISIONED, commit; 201 + `ProvisionResponse{id, "Created", KV_* /REDIS_* env
+config}`. IAM mint failure (e.g. parent biscuit unseeded) → catch-all 500 envelope.
+DELIBERATE IMPROVEMENT over OVD: the biscuit INSERT is atomic with the service rows, so a
+failed provision rolls the mint back instead of leaking an active orphaned credential
+(OVD commits the token first and never compensates — MateriaDBActor.create).
+
+Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala createFromProvisionRequest/create
+Behavior: 201 with env config; 400 malformed authorID; 401 non-internal; 500 envelope on
+
+	bad owner/plan (OVD catch-all), IAM mint failure, or DB failure
+
+Issue: #1260, #679
 
 Parameters:
   - ctx: context for the request

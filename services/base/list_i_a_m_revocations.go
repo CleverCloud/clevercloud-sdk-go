@@ -11,9 +11,29 @@ import (
 )
 
 /*
-Listiamrevocations
+Listiamrevocations GET /v4/iam/tokens/revocations — global revocation list (not owner-scoped).
 
-# Get revocation list
+📥 **Algo Source (Legacy):** IAMService.getIAMRevocationList → findAllRevocationId
+  - validate from/size (>= 0)
+  - SELECT revocation_id WHERE revocation_date IS NOT NULL ORDER BY revocation_date ASC
+    LIMIT size OFFSET from → List[String]
+
+🔧 **Algo Rust:** TokenListQuery decode (404 EmptyContext on unparseable from/size/cluster,
+pre-auth) → TokenInternalAuth (OVD passes ownerId=None → only internal `BasicUsername`
+authorizes; authenticated non-internal incl. Biscuit→403, anonymous→401; failures in the OVD
+envelope) → validate (negative → 400) → service::list_revocation_ids → 200 `[string]`.
+
+`?cluster=` is AXO's own narrowing (the fleet is per-cluster since #1847), so a cluster's
+poller caches only the revocations that can be presented to it. It is purely additive: with
+the param absent the response is the fleet-wide list OVD served, which is what every
+pre-existing poller asks for.
+
+Source: ovd IAMService.getIAMRevocationList (global; authServerLogic None) / IAMAuthorizer
+Behavior: 200 array of revocation_id strings; 401 anonymous; 403 authenticated non-internal;
+
+	400 negative pagination; 404 unparseable pagination or malformed cluster
+
+Issue: #1220
 
 Parameters:
   - ctx: context for the request

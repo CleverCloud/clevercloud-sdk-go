@@ -2,15 +2,14 @@
 
 package models
 
-// HypervisorMetadata
+// HypervisorMetadata Source: ovd Hypervisor.scala — HypervisorMetadata
 type HypervisorMetadata struct {
-	Labels    MapString `json:"labels"`
-	Name      string    `json:"name"`
-	Owner     OwnerID   `json:"owner"`
-	Rack      string    `json:"rack"`
-	Region    string    `json:"region"`
-	Tags      []string  `json:"tags,omitempty"`
-	Uid       string    `json:"uid"`
-	ZkVersion *int      `json:"zkVersion,omitempty"`
-	Zone      string    `json:"zone"`
+	Labels HashMap `json:"labels"`
+	Name   string  `json:"name"`
+	Owner  string  `json:"owner"`
+	Rack   string  `json:"rack"`
+	Region string  `json:"region"`
+	Tags   Vec     `json:"tags"`
+	Uid    string  `json:"uid"`
+	Zone   string  `json:"zone"`
 }

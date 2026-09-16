@@ -11,9 +11,22 @@ import (
 )
 
 /*
-Creatematomo
+Creatematomo POST /v2/providers/addon-matomo/resources — provision a new Matomo addon.
 
-provision a new Matomo instance
+📥 Algo Source (Legacy): `MatomoProviderService.provision` — insert
+(`PROVISIONING`) → create MySQL → create backend (Redis|KV) → resolve the PHP
+product instance → create the PHP app (full env incl. Keycloak) → register
+DNS → delete the default cleverapps vhost → set the favourite vhost → restart
+without cache. Any partial failure marks the addon `PROVISIONING_ERROR` and
+still returns 201 (`handleFailedDeployement`).
+
+🔧 Algo Rust: same sequence in `orchestrate_provision`. On success the row
+stays `PROVISIONING` (legacy parity — the legacy service never sets `ACTIVE`);
+only a partial failure moves it to `PROVISIONING_ERROR`. Response `config` is
+empty and `message` is `"Created"` (or the degraded message). Internal
+endpoint — no per-user guard.
+
+Issue: #660
 
 Parameters:
   - ctx: context for the request

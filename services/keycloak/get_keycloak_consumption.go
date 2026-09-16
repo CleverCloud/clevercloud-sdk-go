@@ -12,16 +12,23 @@ import (
 )
 
 /*
-Getkeycloakconsumption
+Getkeycloakconsumption POST /v4/keycloak/organisations/{owner_id}/keycloak/{keycloak_id}/consumption
 
-get keycloak resource consumption
+📥 **Algo Source (Legacy):** `getResourceConsumption` (`A:328`) returns the
+consumption of one addon over the window. **404s for a deleted addon**, whereas
+the list route (below) includes deleted rows — an asymmetry preserved here.
+`product_id` is `ProductId.zero` on every line and `region_id` is the hardcoded
+default; both are carried over verbatim (scope decisions SD-12/SD-13).
+
+Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:328
+Issues: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonKeycloakId:
+  - ownerId: Owner id
+  - addonKeycloakId: Keycloak addon id
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +44,14 @@ Example:
 x-service: keycloak
 operationId: getKeycloakConsumption
 */
-func Getkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string, requestBody *models.KeycloakConsumptionQuery) client.Response[models.ResourceConsumption] {
+func Getkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonKeycloakId string, requestBody *models.KeycloakConsumptionQuery) client.Response[models.KeycloakConsumptionView] {
 	ctx, span := tracer.Start(ctx, "getKeycloakConsumption", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/keycloak/organisations/%s/keycloak/%s/consumption", ownerId, addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.KeycloakConsumptionView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

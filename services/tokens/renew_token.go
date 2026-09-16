@@ -14,20 +14,19 @@ import (
 /*
 Renewtoken
 
-Refresh an online token.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - tokenId:
+  - tenantId: Tenant the token belongs to
+  - tokenId: The token whose refresh credential is rotated
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := tokens.Renewtoken(ctx, client, tracer, tenantId, tokenId)
+	response := tokens.Renewtoken(ctx, client, tracer, tenantId, tokenId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,14 +35,14 @@ Example:
 x-service: tokens
 operationId: renewToken
 */
-func Renewtoken(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, tokenId string) client.Response[models.CreatedToken] {
+func Renewtoken(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, tokenId string, requestBody *models.RefreshTokenRequest) client.Response[models.CreatedToken] {
 	ctx, span := tracer.Start(ctx, "renewToken", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("tokenId", tokenId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/tokens/%s/refresh", tenantId, tokenId)
 
 	// Make API call
-	response := client.Put[models.CreatedToken](ctx, c, path, nil)
+	response := client.Put[models.CreatedToken](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

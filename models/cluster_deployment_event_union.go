@@ -2,13 +2,10 @@
 
 package models
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "encoding/json"
 
-// ClusterDeploymentEvent
-// Tagged union - can hold one of: ClusterItem, ClusterStatus, NodeLifecycle
+// ClusterDeploymentEvent A unified event log entry returned by `GET /v4/kubernetes/…/clusters/{id}/events`.  Each entry is...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type ClusterDeploymentEvent struct {
 	raw json.RawMessage
 }
@@ -33,100 +30,4 @@ func (u ClusterDeploymentEvent) MarshalJSON() ([]byte, error) {
 func (u *ClusterDeploymentEvent) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
-}
-
-// Format implements fmt.Formatter: dispatches the verb to the concrete
-// variant currently held, falling back to the raw JSON bytes for unknown
-// or empty values. Lets %+v on a parent struct render this field as the
-// matching concrete type instead of a byte slice.
-func (u ClusterDeploymentEvent) Format(f fmt.State, verb rune) {
-	switch u.Type() {
-	case ClusterItemEvent:
-		v, _ := u.AsClusterItem()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case ClusterStatusEvent:
-		v, _ := u.AsClusterStatus()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	case NodeLifecycleEvent:
-		v, _ := u.AsNodeLifecycle()
-		fmt.Fprintf(f, formatVerbSpec(f, verb), v)
-	default:
-		if u.raw == nil {
-			f.Write([]byte("null"))
-			return
-		}
-		f.Write(u.raw)
-	}
-}
-
-// ClusterDeploymentEventVariant is satisfied by every concrete type that can be wrapped into a ClusterDeploymentEvent.
-// Lets generic code accept any variant without naming each one.
-type ClusterDeploymentEventVariant interface {
-	ToClusterDeploymentEvent() ClusterDeploymentEvent
-}
-
-// AsClusterItem decodes the held payload as a ClusterItem. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u ClusterDeploymentEvent) AsClusterItem() (ClusterItem, bool) {
-	var v ClusterItem
-	if t, err := peekType(u.raw); err != nil || t != ClusterItemEvent {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewClusterDeploymentEventFromClusterItem wraps a ClusterItem into a ClusterDeploymentEvent ready to be JSON-encoded.
-func NewClusterDeploymentEventFromClusterItem(v ClusterItem) (ClusterDeploymentEvent, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return ClusterDeploymentEvent{}, err
-	}
-	return ClusterDeploymentEvent{raw: raw}, nil
-}
-
-// AsClusterStatus decodes the held payload as a ClusterStatus. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u ClusterDeploymentEvent) AsClusterStatus() (ClusterStatus, bool) {
-	var v ClusterStatus
-	if t, err := peekType(u.raw); err != nil || t != ClusterStatusEvent {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewClusterDeploymentEventFromClusterStatus wraps a ClusterStatus into a ClusterDeploymentEvent ready to be JSON-encoded.
-func NewClusterDeploymentEventFromClusterStatus(v ClusterStatus) (ClusterDeploymentEvent, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return ClusterDeploymentEvent{}, err
-	}
-	return ClusterDeploymentEvent{raw: raw}, nil
-}
-
-// AsNodeLifecycle decodes the held payload as a NodeLifecycle. The bool is false if the union
-// does not currently hold this variant or the payload fails to decode.
-func (u ClusterDeploymentEvent) AsNodeLifecycle() (NodeLifecycle, bool) {
-	var v NodeLifecycle
-	if t, err := peekType(u.raw); err != nil || t != NodeLifecycleEvent {
-		return v, false
-	}
-	if err := json.Unmarshal(u.raw, &v); err != nil {
-		return v, false
-	}
-	return v, true
-}
-
-// NewClusterDeploymentEventFromNodeLifecycle wraps a NodeLifecycle into a ClusterDeploymentEvent ready to be JSON-encoded.
-func NewClusterDeploymentEventFromNodeLifecycle(v NodeLifecycle) (ClusterDeploymentEvent, error) {
-	raw, err := json.Marshal(v)
-	if err != nil {
-		return ClusterDeploymentEvent{}, err
-	}
-	return ClusterDeploymentEvent{raw: raw}, nil
 }

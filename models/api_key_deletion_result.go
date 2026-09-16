@@ -2,9 +2,9 @@
 
 package models
 
-// ApiKeyDeletionResult
+// ApiKeyDeletionResult API key deletion result — reports whether undeploy and delete steps succeeded.  Source: reference...
 type ApiKeyDeletionResult struct {
-	Deleted    bool    `json:"deleted"`
-	Error      *string `json:"error,omitempty"`
-	Undeployed bool    `json:"undeployed"`
+	Deleted    bool    `json:"deleted"`         // Whether the apikey was deleted from Otoroshi
+	Error      *string `json:"error,omitempty"` // Error description if partial failure
+	Undeployed bool    `json:"undeployed"`      // Whether the apikey was undeployed from the target
 }

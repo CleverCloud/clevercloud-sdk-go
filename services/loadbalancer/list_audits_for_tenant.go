@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Listauditsfortenant
-
-# Get audits for owner
+Listauditsfortenant Row 13 — `200 []` on empty.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
 
 # Returns the operation result or an error
 

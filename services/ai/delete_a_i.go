@@ -11,15 +11,29 @@ import (
 )
 
 /*
-Deleteai
+Deleteai **Legacy**: ovd AIProviderController.scala:54 deprovisionEndpoint()
+**Algorithm**:
+  - Verify addon exists, check no ENDPOINT tenants remain (409 if any)
+  - Mark addon as TO_DELETE with deletion_date = NOW()
 
-# De-provision an existing AI dedicated endpoint for customers
+**Conformity**: YES
+
+DELETE /v2/providers/addon-ai/resources/{ai_id} — deprovision AI addon.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — deprovisionEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — deprovision()
+Behavior: checks that no ENDPOINT tenants remain (must be deleted first),
+
+	then marks addon as TO_DELETE with deletion_date = NOW().
+
+Schema: addon_ai — UPDATE status = 'TO_DELETE', deletion_date = NOW()
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - aiId:
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 

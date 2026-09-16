@@ -13,16 +13,23 @@ import (
 )
 
 /*
-Listschemasprivileges
+Listschemasprivileges **Legacy**: ovd users.scala:72 getSchemasPrivileges()
+**Algorithm**:
+  - Verify addon, SELECT schema privileges with dynamic WHERE (oid, databaseOId, userId)
 
-# Get users schemas privileges for a given PostgreSQL addon
+**Conformity**: YES
+
+GET .../users/privileges/schemas — list all schema-level privileges.
+
+Source: ovd PostgreSQLUserPrivilegeRepository.scala — selectSchemasPrivileges
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

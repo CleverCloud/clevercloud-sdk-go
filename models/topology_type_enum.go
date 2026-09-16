@@ -2,7 +2,7 @@
 
 package models
 
-// TopologyType represents
+// TopologyType represents Cluster control-plane topology discriminator.  Source: references/legacy/ovd/modules/kubernetes/m...
 type TopologyType string
 
 const (

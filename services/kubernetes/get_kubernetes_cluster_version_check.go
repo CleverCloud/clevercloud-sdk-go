@@ -12,14 +12,25 @@ import (
 )
 
 /*
-Getkubernetesclusterversioncheck
+Getkubernetesclusterversioncheck GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/version/check — check version upgrade.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — checkVersion
+Behavior: returns current installed version and whether an upgrade is available.
+Issue: #667
+
+**Legacy**: ovd ClusterController.scala checkVersion()
+**Algorithm**:
+  - Fetch cluster, compare installed version with the configured set
+  - Return ClusterVersionCheck with installed/available/latest/need_update
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 

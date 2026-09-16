@@ -4,8 +4,8 @@ package models
 
 import "encoding/json"
 
-// Algorithm
-// Tagged union - can hold one of: DestinationHashing, LeastLoaded, MaglevHashing, PowerOfTwo, RANDOM, RoundRobin, SourceHashing, Unrecognized
+// Algorithm Load-balancing algorithm (OVD `v1.loadbalancer.Algorithm`, circe ADT wire).  Source: references/l...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
 type Algorithm struct {
 	raw json.RawMessage
 }

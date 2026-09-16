@@ -2,7 +2,7 @@
 
 package models
 
-// PatchUser
+// PatchUser Patch user request (login, createRole).  Source: ovd users.scala — PatchUser
 type PatchUser struct {
 	CreateRole *bool `json:"createRole,omitempty"`
 	Login      *bool `json:"login,omitempty"`

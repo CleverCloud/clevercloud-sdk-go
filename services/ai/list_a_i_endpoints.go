@@ -6,21 +6,37 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listaiendpoints
+Listaiendpoints **Legacy**: ovd AIProviderController.scala:111 listEndpoint()
+**Algorithm**:
+  - Verify addon, fetch ENDPOINT tenants, search Otoroshi for details
+  - Fallback: return tenant list if Otoroshi unavailable
 
-# For an addon, return the list of otoroshi resources id that are assigned to it
+**Conformity**: YES (Cloud Versatile: tenant list fallback when Otoroshi unavailable)
+
+GET /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints — list Otoroshi endpoints.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — listEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getEndpointList()
+Behavior: fetches tenants of type ENDPOINT for this addon, then calls
+
+	otoroshiClient.search() to fetch endpoint details from Otoroshi.
+	Falls back to tenant list when Otoroshi unavailable.
+
+Schema: addon_ai_tenancy — SELECT WHERE addon_id = $1 AND type = 'ENDPOINT'
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +51,14 @@ Example:
 x-service: ai
 operationId: listAIEndpoints
 */
-func Listaiendpoints(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string) client.Response[client.Nothing] {
+func Listaiendpoints(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string) client.Response[[]models.AiTenantView] {
 	ctx, span := tracer.Start(ctx, "listAIEndpoints", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints", ownerId, aiId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.AiTenantView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

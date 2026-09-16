@@ -4,12 +4,5 @@ package models
 
 // Drain
 type Drain struct {
-	Backlog    *SubscriptionStats `json:"backlog,omitempty"`
-	Execution  DrainExecution     `json:"execution"`
-	ID         string             `json:"id"`
-	Kind       DrainKind          `json:"kind"`
-	Recipient  DrainRecipient     `json:"recipient"`
-	ResourceID *string            `json:"resourceId,omitempty"` // Resource identifier for drain target. Accepted prefixes: app_, cellar_, postgresql_, mysql_, mong...
-	Status     DrainStatus        `json:"status"`
-	TenantID   OwnerID            `json:"tenantId"`
+	Drain bool `json:"drain"`
 }
