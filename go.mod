@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/miton18/helper v0.0.1
-	go.clever-cloud.dev/client v0.1.1
+	go.clever-cloud.dev/client v0.1.9
 	go.opentelemetry.io/otel v1.24.0
 	go.opentelemetry.io/otel/trace v1.24.0
 )
