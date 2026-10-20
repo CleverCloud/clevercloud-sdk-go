@@ -2,6 +2,7 @@ package app
 
 import (
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -20,17 +21,6 @@ func TestLookupString(t *testing.T) {
 	}
 	if got := lookupString("def", false, "TEST_UNSET"); got != "def" {
 		t.Errorf("unset: got %q, want the default", got)
-	}
-}
-
-func TestLookupAliasFallback(t *testing.T) {
-	t.Setenv("TEST_OLD", "old")
-	if got := lookupString("", false, "TEST_NEW", "TEST_OLD"); got != "old" {
-		t.Errorf("alias only: got %q, want old", got)
-	}
-	t.Setenv("TEST_NEW", "new")
-	if got := lookupString("", false, "TEST_NEW", "TEST_OLD"); got != "new" {
-		t.Errorf("both set: got %q, want the canonical value", got)
 	}
 }
 
@@ -97,12 +87,12 @@ func TestLookupMultiple(t *testing.T) {
 	t.Setenv("TEST_PORT", "1194")
 	t.Setenv("TEST_PORT_10", "1300")
 	t.Setenv("TEST_PORT_2", "1200")
-	t.Setenv("TEST_OLD_PORT_1", "1100")
+	t.Setenv("TEST_PORT_1", "1100")
 	t.Setenv("TEST_PORTS", "0")          // another variable, not an occurrence
 	t.Setenv("TEST_PORT_X", "0")         // not an index
 	t.Setenv("TEST_PORT_2_EXTRA", "nan") // not an index either
 
-	entries, err := lookupMultiple(parseInt, "TEST_PORT", "TEST_OLD_PORT")
+	entries, err := lookupMultiple(parseInt, "TEST_PORT")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -123,25 +113,47 @@ func TestLookupMultiple(t *testing.T) {
 	}
 }
 
-// The generated getters wire the right parser, default and aliases.
+// The generated getters wire the right parser and default.
 func TestGeneratedGetters(t *testing.T) {
-	if got, err := GetJavaVersion(); err != nil || got != "21" {
-		t.Errorf("GetJavaVersion unset: got %q (%v), want the default 21", got, err)
+	if got := MustGetJavaVersion(); got != "21" {
+		t.Errorf("MustGetJavaVersion unset: got %q, want the default 21", got)
 	}
-	t.Setenv(JAVA_VERSION, "17")
-	if got, err := GetJavaVersion(); err != nil || got != "17" {
-		t.Errorf("GetJavaVersion from the deprecated alias: got %q (%v), want 17", got, err)
+	t.Setenv(CC_JAVA_VERSION, "17")
+	if got := MustGetJavaVersion(); got != "17" {
+		t.Errorf("MustGetJavaVersion: got %q, want 17", got)
+	}
+	t.Setenv("JAVA_VERSION", "11") // former name, ignored
+	if got := MustGetJavaVersion(); got != "17" {
+		t.Errorf("MustGetJavaVersion with the former name set: got %q, want 17", got)
 	}
 
 	t.Setenv(CC_NODE_DEV_DEPENDENCIES, "install")
-	if got, err := GetNodeDevDependencies(); err != nil || !got {
-		t.Errorf("GetNodeDevDependencies(install): got %v (%v), want true", got, err)
+	if got := MustGetNodeDevDependencies(); !got {
+		t.Errorf("MustGetNodeDevDependencies(install): got %v, want true", got)
 	}
 
 	t.Setenv(CC_RUST_FEATURES, "tls,metrics")
 	if got := GetRustFeatures(); got != "tls,metrics" {
 		t.Errorf("GetRustFeatures: got %q", got)
 	}
+
+	t.Setenv(CC_WORKER_COMMAND, "./worker")
+	if got := GetWorkerCommand(); len(got) != 1 || got[0].Value != "./worker" {
+		t.Errorf("GetWorkerCommand: got %+v", got)
+	}
+}
+
+func TestMustGetPanicsOnInvalidValue(t *testing.T) {
+	t.Setenv(CC_JAVA_VERSION, "9")
+	defer func() {
+		r := recover()
+		err, ok := r.(error)
+		if !ok || !strings.Contains(err.Error(), CC_JAVA_VERSION) {
+			t.Errorf("recovered %v, want an error naming %s", r, CC_JAVA_VERSION)
+		}
+	}()
+	MustGetJavaVersion()
+	t.Error("MustGetJavaVersion(9) should have panicked")
 }
 
 func TestScopes(t *testing.T) {

@@ -22,7 +22,6 @@ type Variable struct {
 	Description    string   `json:"description"`
 	Type           string   `json:"type"`
 	Scopes         []string `json:"scopes"`
-	Aliases        []string `json:"aliases"`
 	Default        any      `json:"default"`
 	Values         []string `json:"values"`
 	TrueValues     []string `json:"true_values"`
@@ -97,15 +96,6 @@ func generate(pkg string, vars map[string]Variable) (*File, error) {
 		f.Const().Id(name).Op("=").Lit(name)
 		f.Line()
 
-		for _, alias := range v.Aliases {
-			if _, ok := vars[alias]; ok {
-				return nil, fmt.Errorf("%s: alias %s is also a variable", name, alias)
-			}
-			comment(f, fmt.Sprintf("%s is the former name of [%s].\n\nDeprecated: use [%s].", alias, name, name))
-			f.Const().Id(alias).Op("=").Lit(alias)
-			f.Line()
-		}
-
 		if err := getter(f, name, v); err != nil {
 			return nil, fmt.Errorf("%s: %w", name, err)
 		}
@@ -166,14 +156,13 @@ func scopeIdent(scope string) string {
 	return "Scope" + camel(strings.FieldsFunc(scope, func(r rune) bool { return r == '-' || r == '_' }))
 }
 
-// getter writes the Get<Name> function reading the variable, its aliases as
-// a fallback.
+// getter writes the function reading the variable: Get<Name> when the value cannot be invalid (strings),
+// MustGet<Name> otherwise, which panics on a value it cannot parse.
 func getter(f *File, name string, v Variable) error {
-	lookupNames := []Code{Id(name)}
-	for _, alias := range v.Aliases {
-		lookupNames = append(lookupNames, Id(alias))
-	}
 	fn := getterName(name)
+	if canFail(v) {
+		fn = "Must" + fn
+	}
 	doc := getterComment(fn, name, v)
 
 	if v.Multiple {
@@ -188,8 +177,8 @@ func getter(f *File, name string, v Variable) error {
 			return fmt.Errorf("multiple %s variables are not supported", v.Type)
 		}
 		comment(f, doc)
-		f.Func().Id(fn).Params().Params(Index().Id("Entry").Types(elem), Error()).Block(
-			Return(Id("lookupMultiple").Call(append([]Code{parse}, lookupNames...)...)),
+		f.Func().Id(fn).Params().Index().Id("Entry").Types(elem).Block(
+			Return(Id("must").Call(Id("lookupMultiple").Call(parse, Id(name)))),
 		)
 		return nil
 	}
@@ -203,7 +192,7 @@ func getter(f *File, name string, v Variable) error {
 		canBeEmpty := v.Default != nil && def == ""
 		comment(f, doc)
 		f.Func().Id(fn).Params().String().Block(
-			Return(Id("lookupString").Call(append([]Code{Lit(def), Lit(canBeEmpty)}, lookupNames...)...)),
+			Return(Id("lookupString").Call(Lit(def), Lit(canBeEmpty), Id(name))),
 		)
 	case "boolean", "disabler":
 		def := false
@@ -216,12 +205,12 @@ func getter(f *File, name string, v Variable) error {
 		}
 		var call Code
 		if v.Type == "disabler" {
-			call = Id("lookupDisabler").Call(append([]Code{Lit(def)}, lookupNames...)...)
+			call = Id("lookupDisabler").Call(Lit(def), Id(name))
 		} else {
-			call = Id("lookupBool").Call(append([]Code{Lit(def), stringSlice(lower(v.TrueValues)), stringSlice(lower(v.FalseValues))}, lookupNames...)...)
+			call = Id("lookupBool").Call(Lit(def), stringSlice(lower(v.TrueValues)), stringSlice(lower(v.FalseValues)), Id(name))
 		}
 		comment(f, doc)
-		f.Func().Id(fn).Params().Params(Bool(), Error()).Block(Return(call))
+		f.Func().Id(fn).Params().Bool().Block(Return(Id("must").Call(call)))
 	case "integer":
 		def := 0
 		if v.Default != nil {
@@ -232,8 +221,8 @@ func getter(f *File, name string, v Variable) error {
 			def = int(n)
 		}
 		comment(f, doc)
-		f.Func().Id(fn).Params().Params(Int(), Error()).Block(
-			Return(Id("lookupInt").Call(append([]Code{Lit(def)}, lookupNames...)...)),
+		f.Func().Id(fn).Params().Int().Block(
+			Return(Id("must").Call(Id("lookupInt").Call(Lit(def), Id(name)))),
 		)
 	case "choice":
 		if len(v.Values) == 0 {
@@ -244,13 +233,18 @@ func getter(f *File, name string, v Variable) error {
 			return err
 		}
 		comment(f, doc)
-		f.Func().Id(fn).Params().Params(String(), Error()).Block(
-			Return(Id("lookupChoice").Call(append([]Code{Lit(strings.ToLower(def)), stringSlice(lower(v.Values))}, lookupNames...)...)),
+		f.Func().Id(fn).Params().String().Block(
+			Return(Id("must").Call(Id("lookupChoice").Call(Lit(strings.ToLower(def)), stringSlice(lower(v.Values)), Id(name)))),
 		)
 	default:
 		return fmt.Errorf("unknown type %q", v.Type)
 	}
 	return nil
+}
+
+// canFail tells whether a value of v can be invalid: anything but strings.
+func canFail(v Variable) bool {
+	return v.Type != "string" && v.Type != "alternative"
 }
 
 // constComment documents the variable above its constant: description, then
@@ -286,7 +280,7 @@ func constComment(name string, v Variable) string {
 }
 
 // getterComment says what the getter returns: type, accepted values, default
-// and aliases.
+// and whether it panics.
 func getterComment(fn, name string, v Variable) string {
 	var lines []string
 	if v.Multiple {
@@ -317,13 +311,8 @@ func getterComment(fn, name string, v Variable) string {
 	if v.Default != nil && !v.Multiple {
 		lines = append(lines, fmt.Sprintf("Default: %v.", v.Default))
 	}
-	if len(v.Aliases) > 0 {
-		aliases := strings.Join(v.Aliases, ", ")
-		if v.Multiple {
-			lines = append(lines, "The deprecated "+aliases+" variables are collected too.")
-		} else {
-			lines = append(lines, "When it is unset, the deprecated "+aliases+" is read instead.")
-		}
+	if canFail(v) {
+		lines = append(lines, "It panics if the value is invalid.")
 	}
 	return strings.Join(lines, "\n")
 }
