@@ -4,6 +4,7 @@ package network_group
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -11,9 +12,34 @@ import (
 )
 
 /*
-Getwireguardconfiguration
+Getwireguardconfiguration GET .../peers/{peer_id}/wireguard/configuration
 
-# Get wireguard configuration for a peer
+Algo Source: ovd WireguardConfiguratorRequestHandler.scala createWgConfigurationForPeer —
+builds the WireGuard INI (`[Interface]` for the target peer, one `[Peer]` per
+other peer with a public key); OVD's controller decodes the actor's base64
+answer back to the INI text and serves it as `text/plain` (`stringBody`).
+
+Algo Rust: re-ported against [`crate::cache::NgCache`] — peers/members come
+from the hydrated NG, then [`crate::views::generate_wireguard_config`]
+(refs #849).
+
+AuthZ (refs #3024): the caller is an [`NgCaller`] in the
+`NetworkGroupWireguardConfigOp` family — a presigned token (header bearer
+or raw `?authorization=`) **verified** against the module's root key and
+checked for `GET` on the path tenant, or an organisation principal on
+`readOnlyRoles`. Presence
+alone is not enough: this response is the full mesh config (every peer's
+IP, endpoint and public key).
+
+Source: references/legacy/ovd/modules/networkgroup/controllers/NetworkGroupWireguardController.scala getWireguardConfiguration
+Source: references/legacy/ovd/modules/networkgroup/actors/WireguardConfiguratorRequestHandler.scala createWgConfigurationForPeer
+Behavior: 200 `text/plain` INI whatever `Accept` says; 401 no credentials,
+
+	or a token that does not parse or verify; 403 a token for another
+	tenant or operation, expired, or an organisation principal that is not
+	the path owner; 404 unknown NG or peer.
+
+Issue: #849, #3024
 
 Parameters:
   - ctx: context for the request
@@ -22,12 +48,13 @@ Parameters:
   - ownerId:
   - networkGroupId:
   - peerId:
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := network_group.Getwireguardconfiguration(ctx, client, tracer, ownerId, networkGroupId, peerId)
+	response := network_group.Getwireguardconfiguration(ctx, client, tracer, ownerId, networkGroupId, peerId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +63,17 @@ Example:
 x-service: network_group
 operationId: getWireguardConfiguration
 */
-func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[client.Nothing] {
+func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "getWireguardConfiguration", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/peers/%s/wireguard/configuration", ownerId, networkGroupId, peerId)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

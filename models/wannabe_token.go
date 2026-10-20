@@ -2,15 +2,15 @@
 
 package models
 
-// WannabeToken
+// WannabeToken Body of a token create. `productId`/`locationId` are typed `Option` but **required in effect** — ...
 type WannabeToken struct {
-	Datalog     string               `json:"datalog"`
-	Description *StringMaxLength1024 `json:"description,omitempty"`
-	LocationID  *string              `json:"locationId,omitempty"`
-	Name        *StringMaxLength128  `json:"name,omitempty"`
-	ProductID   *string              `json:"productId,omitempty"`
-	ResourceID  *string              `json:"resourceId,omitempty"`
-	TTLSeconds  *int                 `json:"ttlSeconds,omitempty"`
-	Tags        []string             `json:"tags,omitempty"`
-	TokenType   TokenType            `json:"tokenType"`
+	Datalog     *string   `json:"datalog,omitempty"` // Caller datalog for the minted Biscuit's authority block. Absent → empty.
+	Description *string   `json:"description,omitempty"`
+	LocationID  *string   `json:"locationId,omitempty"`
+	Name        *string   `json:"name,omitempty"`
+	ProductID   *string   `json:"productId,omitempty"`
+	ResourceID  *string   `json:"resourceId,omitempty"`
+	TTLSeconds  *int      `json:"ttlSeconds,omitempty"` // TTL in seconds → `expired_at = created_at + ttl`; absent means a non-expiring token.
+	Tags        []string  `json:"tags,omitempty"`
+	TokenType   TokenType `json:"tokenType"`
 }

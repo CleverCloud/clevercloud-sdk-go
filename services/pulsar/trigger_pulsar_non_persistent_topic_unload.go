@@ -11,16 +11,34 @@ import (
 )
 
 /*
-Triggerpulsarnonpersistenttopicunload
+Triggerpulsarnonpersistenttopicunload PUT /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics/{topic}/unload
 
-# Unload a non-persistent topic from Pulsar broker
+	— unload a non-persistent topic from broker.
+
+**Legacy**: ovd PulsarController.scala:402 unloadNonPersistentTopicServerEndpoint()
+**Algorithm**:
+  - Ownership verified via withTopicOwner helper (line 80)
+  - Delegates to PulsarTopicService.unloadTopic(persistent=false) (line 258)
+  - Scala calls HttpPulsarAdminClient.unloadTopic to trigger broker offloading
+
+**Conformity**: FAITHFUL — proxies to `PulsarAdminClient::unload_topic`
+
+	with `persistent=false` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala unloadNonPersistentTopicServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala unloadNonPersistentTopic
+Behavior: instructs the broker to unload the non-persistent topic;
+
+	returns 204.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
+  - pulsarId: Pulsar addon ID
+  - topic: Topic name
 
 # Returns the operation result or an error
 

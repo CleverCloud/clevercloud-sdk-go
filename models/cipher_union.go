@@ -4,8 +4,8 @@ package models
 
 import "encoding/json"
 
-// Cipher
-// Tagged union - can hold one of: Tls13Aes128GcmSha256, Tls13Aes256GcmSha384, Tls13Chacha20Poly1305Sha256, TlsEcdheEcdsaWithAes128GcmSha256, TlsEcdheEcdsaWithAes256GcmSha384, TlsEcdheEcdsaWithChacha20Poly1305Sha256, TlsEcdheRsaWithAes128GcmSha256, TlsEcdheRsaWithAes256GcmSha384, TlsEcdheRsaWithChacha20Poly1305Sha256
+// Cipher TLS cipher suite supported by load balancers.  Encoded the way OVD's circe derives it — externall...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
 type Cipher struct {
 	raw json.RawMessage
 }

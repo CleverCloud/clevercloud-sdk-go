@@ -11,15 +11,17 @@ import (
 )
 
 /*
-Rebuildapplication
+Rebuildapplication POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/rebuild — rebuild Otoroshi.
 
-# Ask for rebuild Otoroshi application
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — redeployAddon(id, rebuild=true)
+Behavior: Fetches addon, calls PaaS restart with useCache=false (full rebuild)
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

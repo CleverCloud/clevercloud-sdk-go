@@ -6,15 +6,16 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listnetworkgrouppeers
+Listnetworkgrouppeers GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/peers
 
-# Get Peers of a NetworkGroup
+Source: ovd NetworkGroupRoutes.scala getPeers — `ng.peers` from `ngMap`
+Behavior: 200 with the polymorphic peer list; 404 unknown NG; 403 owner mismatch.
+Issue: #313, #665, #676, #849, #1127
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +37,14 @@ Example:
 x-service: network_group
 operationId: listNetworkGroupPeers
 */
-func Listnetworkgrouppeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Peer] {
+func Listnetworkgrouppeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroupPeers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/peers", ownerId, networkGroupId)
 
 	// Make API call
-	response := client.Get[[]models.Peer](ctx, c, path)
+	response := client.Get[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,16 +12,25 @@ import (
 )
 
 /*
-Listdatabases
+Listdatabases **Legacy**: ovd databases.scala:30 getAllDatabases()
+**Algorithm**:
+  - Verify addon ownership, SELECT all non-deleted databases for addon
 
-# Get databases information in a given PostgreSQL addon
+**Conformity**: YES
+
+GET /v4/postgresql/organisations/{ownerId}/postgresql/{postgreSQLId}/databases
+
+Source: ovd PostgreSQLDatabaseRepository.scala — selectActiveAddonDatabases
+Source: ovd PostgreSQLDatabaseService.scala — getPostgreSQLDatabases
+Behavior: returns all non-deleted databases for the given addon
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 

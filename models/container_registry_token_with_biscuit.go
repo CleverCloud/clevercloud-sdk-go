@@ -2,9 +2,9 @@
 
 package models
 
-// ContainerRegistryTokenWithBiscuit
+// ContainerRegistryTokenWithBiscuit Token view with the biscuit token string (returned only at creation time).  Source: references/le...
 type ContainerRegistryTokenWithBiscuit struct {
-	BiscuitToken string                 `json:"biscuitToken"`
-	Index        int                    `json:"index"`
-	Token        ContainerRegistryToken `json:"token"`
+	BiscuitToken string                 `json:"biscuitToken"` // Biscuit token string (shown only at creation time)
+	Index        int                    `json:"index"`        // Index in the initial token creation batch (0 for single-token creation)
+	Token        ContainerRegistryToken `json:"token"`        // Token metadata
 }

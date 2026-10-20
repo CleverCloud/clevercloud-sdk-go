@@ -12,9 +12,26 @@ import (
 )
 
 /*
-Getmateriatsrevocationlist
+Getmateriatsrevocationlist GET /v4/addon-providers/addon-ts/token/revocation — list revoked tokens.
 
-get revocation list for deleted MateriaTS tokens
+Legacy: ovd AddonTSAddonActor.scala:369 getRevocationList
+Algorithm:
+  - `location` must equal the configured location, else 400 (AddonTSBadRequest)
+  - `addonsToFetch = (limit + 1) / 2 + 1` (2 tokens per addon; +1 addon to detect has_more)
+  - Cursor on `deletion_date`: WHERE deletion_date IS NOT NULL AND deletion_date > since
+    ORDER BY deletion_date ASC LIMIT addonsToFetch (selectDeletedAddonsSince)
+  - Emit 2 RevocationEntry per addon (read + write), revocationDate = deletion_date,
+    addonId = addon id (MateriaTsId); has_more ⟺ the extra addon came back; sort by revocationDate
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:369-443 getRevocationList
+Source: references/legacy/ovd/modules/ts/repositories/AddonTSAddonRepository.scala:68-71 selectDeletedAddonsSince
+Behavior: cursor-based pagination via `since` (deletion_date) + `limit`; scoped by `location`.
+
+	Returns read+write revocation entries for deleted addons.
+
+Issue: #313, #765
 
 Parameters:
   - ctx: context for the request
@@ -35,7 +52,7 @@ Example:
 x-service: materia_timeseries
 operationId: getMateriaTSRevocationList
 */
-func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse1] {
+func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse] {
 	ctx, span := tracer.Start(ctx, "getMateriaTSRevocationList")
 	defer span.End()
 
@@ -48,7 +65,7 @@ func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer tr
 	}
 
 	// Make API call
-	response := client.Get[models.RevocationListResponse1](ctx, c, path)
+	response := client.Get[models.RevocationListResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -4,20 +4,20 @@ package models
 
 import "time"
 
-// Pulsar
+// Pulsar Full Pulsar addon view returned by GET endpoints.  Source: references/legacy/ovd/modules/pulsar/m...
 type Pulsar struct {
-	AskForDeletionDate        *time.Time   `json:"ask_for_deletion_date,omitempty"`
-	ClusterID                 string       `json:"cluster_id"`
-	ColdStorageID             *string      `json:"cold_storage_id,omitempty"`
-	ColdStorageLinked         bool         `json:"cold_storage_linked"`
-	ColdStorageMustBeProvided bool         `json:"cold_storage_must_be_provided"`
-	CreationDate              time.Time    `json:"creation_date"`
-	DeletionDate              *time.Time   `json:"deletion_date,omitempty"`
-	ID                        string       `json:"id"`
-	Namespace                 string       `json:"namespace"`
-	OwnerID                   OwnerID      `json:"owner_id"`
-	Plan                      PulsarPlan   `json:"plan"`
-	Status                    PulsarStatus `json:"status"`
-	Tenant                    string       `json:"tenant"`
-	Token                     string       `json:"token"`
+	AskForDeletionDate        *time.Time   `json:"ask_for_deletion_date,omitempty"` // When deletion was requested
+	ClusterID                 string       `json:"cluster_id"`                      // Cluster ID the addon is deployed on
+	ColdStorageID             *string      `json:"cold_storage_id,omitempty"`       // Cellar cold storage addon ID (if configured)
+	ColdStorageLinked         bool         `json:"cold_storage_linked"`             // Whether cold storage offload is linked
+	ColdStorageMustBeProvided bool         `json:"cold_storage_must_be_provided"`   // Whether cold storage must be provisioned for this plan
+	CreationDate              time.Time    `json:"creation_date"`                   // Creation timestamp
+	DeletionDate              *time.Time   `json:"deletion_date,omitempty"`         // When deletion was completed
+	ID                        string       `json:"id"`                              // Provider-internal resource ID (pulsar_*)
+	Namespace                 string       `json:"namespace"`                       // Pulsar namespace name
+	OwnerID                   string       `json:"owner_id"`                        // Owner (user or org) ID
+	Plan                      string       `json:"plan"`                            // Plan identifier
+	Status                    PulsarStatus `json:"status"`                          // Addon lifecycle status
+	Tenant                    string       `json:"tenant"`                          // Pulsar tenant name
+	Token                     string       `json:"token"`                           // Biscuit authentication token (base64url)
 }

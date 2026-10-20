@@ -2,14 +2,14 @@
 
 package models
 
-// MemberKind represents
+// MemberKind represents Member kind. Lowercase on the wire (`PulsarMessageCodecs.lowercaseEncoder`) and decoded case-inse...
 type MemberKind string
 
 const (
-	MemberKindADDON        MemberKind = "ADDON"
-	MemberKindAPPLICATION  MemberKind = "APPLICATION"
-	MemberKindEXTERNAL     MemberKind = "EXTERNAL"
-	MemberKindLOADBALANCER MemberKind = "LOADBALANCER"
+	MemberKindApplication  MemberKind = "application"
+	MemberKindAddon        MemberKind = "addon"
+	MemberKindExternal     MemberKind = "external"
+	MemberKindLoadbalancer MemberKind = "loadbalancer"
 )
 
 // String returns the underlying string value

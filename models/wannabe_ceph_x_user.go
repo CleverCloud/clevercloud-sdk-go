@@ -2,7 +2,8 @@
 
 package models
 
-// WannabeCephXUser
+// WannabeCephXUser Request body for creating a Ceph X user.  Source: references/legacy/ovd/modules/storage/controlle...
 type WannabeCephXUser struct {
-	Capabilities []CephCapability `json:"capabilities,omitempty"`
+	Caps     any    `json:"caps"`     // Capabilities to grant.
+	EntityID string `json:"entityId"` // Entity ID for the new Ceph auth user.
 }

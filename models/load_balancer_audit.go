@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// LoadBalancerAudit
+// LoadBalancerAudit OVD `LoadBalancerAudit` (LoadBalancerAudit.scala:16-25).
 type LoadBalancerAudit struct {
-	Context    any              `json:"context"`
-	CreatedAt  time.Time        `json:"createdAt"`
-	Kind       WriteActionType1 `json:"kind"`
-	OwnerID    TenantID         `json:"ownerId"`
-	ResourceID string           `json:"resourceId"`
+	Context    map[string]any `json:"context"`
+	CreatedAt  time.Time      `json:"createdAt"`
+	Kind       string         `json:"kind"`
+	OwnerID    string         `json:"ownerId"`
+	ResourceID string         `json:"resourceId"`
 }

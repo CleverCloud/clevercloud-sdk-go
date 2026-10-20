@@ -2,7 +2,7 @@
 
 package models
 
-// PackageDiff
+// PackageDiff One slot that moved between two images. `-` stands for a slot absent on that side, which is how a...
 type PackageDiff struct {
 	Category   string `json:"category"`
 	Name       string `json:"name"`

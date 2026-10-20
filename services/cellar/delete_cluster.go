@@ -6,22 +6,21 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Deletecluster
+Deletecluster Retire a Cellar storage cluster
 
-soft delete a Cellar cluster (sets available=false)
+Retires a storage cluster by marking it unavailable, so it takes no new add-ons; the add-ons already placed on it keep working and the record is kept. A cluster that still carries live add-ons is refused rather than retired. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. An unknown cluster id answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - ClusterIndex:
+  - ownerId: Owner (org) ID
+  - ClusterIndex: Cluster numeric ID
 
 # Returns the operation result or an error
 
@@ -36,14 +35,14 @@ Example:
 x-service: cellar
 operationId: deleteCluster
 */
-func Deletecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[models.CellarCluster] {
+func Deletecluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, ClusterIndex int64) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.Int64("ClusterIndex", ClusterIndex)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/clusters/%s", ownerId, ClusterIndex)
 
 	// Make API call
-	response := client.Delete[models.CellarCluster](ctx, c, path)
+	response := client.Delete[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

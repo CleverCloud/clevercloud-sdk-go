@@ -2,17 +2,17 @@
 
 package models
 
-// Metabase
+// Metabase Full Metabase addon view.  Returned by `GET /v4/addon-providers/addon-metabase/addons/{id}` and t...
 type Metabase struct {
-	AccessURL         string                 `json:"accessUrl"`
-	AddonID           string                 `json:"addonId"`
-	AvailableVersions []string               `json:"availableVersions,omitempty"`
-	EnvVars           MapString              `json:"envVars"`
-	JavaVersion       string                 `json:"javaVersion"`
-	Name              string                 `json:"name"`
-	OwnerID           OwnerID                `json:"ownerId"`
-	Plan              MetabasePlanIdentifier `json:"plan"`
-	ResourceID        string                 `json:"resourceId"`
-	Resources         MetabaseResources      `json:"resources"`
-	Version           string                 `json:"version"`
+	AccessURL         string                 `json:"accessUrl"`         // Public access URL (`MB_SITE_URL` env).
+	AddonID           AddonId                `json:"addonId"`           // cc-api addon id (`addon_<uuid>`).
+	AvailableVersions []string               `json:"availableVersions"` // Versions offered for upgrade.
+	EnvVars           map[string]any         `json:"envVars"`           // All env vars exposed for the CLI view.
+	JavaVersion       string                 `json:"javaVersion"`       // Java runtime version (`CC_JAVA_VERSION` env).
+	Name              string                 `json:"name"`              // Human-readable addon name (from cc-api `getAddon`).
+	OwnerID           UserId                 `json:"ownerId"`           // Owner (user or org) id.
+	Plan              MetabasePlanIdentifier `json:"plan"`              // Plan identifier (ALPHA/BETA/BASE).
+	ResourceID        MetabaseId             `json:"resourceId"`        // Provider-internal resource id (`metabase_<uuid>`).
+	Resources         MetabaseResources      `json:"resources"`         // Underlying infrastructure resource ids.
+	Version           string                 `json:"version"`           // Deployed Metabase version (`CC_METABASE_VERSION` env).
 }

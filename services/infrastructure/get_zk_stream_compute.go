@@ -10,9 +10,11 @@ import (
 )
 
 /*
-Getzkstreamcompute
+Getzkstreamcompute GET /v4/compute/events/stream
 
-# Stream real-time Zookeeper compute cluster data and events
+Source: references/legacy/ovd/modules/compute/api/ZookeeperStreamController.scala
+Behavior: stub 501 — requires ZK stream infrastructure (deferred)
+Issue: #664
 
 Parameters:
   - ctx: context for the request
@@ -29,17 +31,17 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: getZkStreamCompute
 */
-func Getzkstreamcompute(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getzkstreamcompute(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getZkStreamCompute")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/events/stream")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

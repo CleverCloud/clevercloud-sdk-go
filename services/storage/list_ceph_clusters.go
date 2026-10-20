@@ -12,15 +12,23 @@ import (
 )
 
 /*
-Listcephclusters
+Listcephclusters GET /v4/tenants/{tenantId}/ceph-clusters -- list all Ceph clusters.
 
-List all ceph clusters.
+Source: ovd StorageController.scala listCephClusters().
+
+📥 **Algo Source (Legacy):** list every registered Ceph cluster
+(`StorageRepository.listCephClusters`) and project each to its public view
+(monitors + dashboard endpoint/username, never the password).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:list` on the path
+tenant; `repository::list_ceph_clusters` → `CephClusterView` list → 200.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Tenant identifier
 
 # Returns the operation result or an error
 

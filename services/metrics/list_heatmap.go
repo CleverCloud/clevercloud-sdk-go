@@ -13,15 +13,35 @@ import (
 )
 
 /*
-Listheatmap
+Listheatmap GET /v4/stats/organisations/{ownerId}/requests — request heatmap.
 
-get Metrics requests data
+📥 **Algo Source (Legacy):**
+`getHeatmap` — geo request heatmap over a date range.
+  - resolveDateRange(from, to) → (resolvedFrom, resolvedTo); from > to → BadRequest.
+  - RequestHeatmap(accesslogsToken, ownerId, applicationId|wildcard, from, to).toWarpScript →
+    heatmap.mc2: FETCH `loadbalancer_client_http_request_location_count` over timespan = to-from,
+    single-bucket BUCKETIZE, REDUCE ['geo_cell'], HHCODE-> decode (lon then lat) →
+    `{ lat, long, accessCount }`.
+  - execStack → stack.head[List[MetricsHeatmapResponse]].
+  - Source: ovd .../actors/MetricsAPIActor.scala:458-489, RequestHeatmap.scala, heatmap.mc2
+
+🔧 **Algo Rust (Implementation):**
+  - `resolve_accesslogs_request` (ownerId, applicationId, then the from/to + since/until range) →
+    400 on a bad id or on from > to.
+  - render_heatmap (verbatim heatmap.mc2): from_us/to_us = ws_epoch_micros, double-quoted
+    token/owner/app. The token is the STATIC `accesslogsToken` ctor field (no per-request fetch),
+    read from `module.config().accesslogs_token`.
+  - exec → parse_heatmap (top-of-stack `{ lat, long, accessCount }` list).
+  - Return `Vec<MetricsHeatmapResponse>`.
+
+Source: ovd modules/metrics/.../actors/MetricsAPIActor.scala:458-489 (getHeatmap)
+Issue: #767
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation/owner ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

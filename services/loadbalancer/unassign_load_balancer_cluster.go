@@ -11,17 +11,15 @@ import (
 )
 
 /*
-Unassignloadbalancercluster
-
-# Remove cluster from loadbalancer
+Unassignloadbalancercluster Row 28 — 204; cluster absent → 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - loadbalancerId: LoadBalancer ID
-  - clusterId:
+  - tenantId: Organisation/tenant ID
+  - loadbalancerId: Load balancer ID
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 

@@ -2,7 +2,7 @@
 
 package models
 
-// PostgreSQLSchemaObjectPrivilege
+// PostgreSQLSchemaObjectPrivilege Schema object privilege with allTables support.  Source: ovd PrivilegesExport.scala — PostgreSQLS...
 type PostgreSQLSchemaObjectPrivilege struct {
 	Name           string `json:"name"`
 	Read           bool   `json:"read"`

@@ -2,7 +2,7 @@
 
 package models
 
-// PatchClusterVersion
+// PatchClusterVersion Patch cluster version payload.  Source: references/legacy/ovd/modules/kubernetes/models/PatchClus...
 type PatchClusterVersion struct {
-	TargetVersion string `json:"targetVersion"`
+	TargetVersion Version `json:"targetVersion"` // Target Kubernetes version to upgrade to
 }

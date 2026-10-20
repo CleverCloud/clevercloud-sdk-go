@@ -2,5 +2,5 @@
 
 package models
 
-// BackendDirectTransport
+// BackendDirectTransport Backend direct leaf — an empty object on the wire (:96).
 type BackendDirectTransport struct{}

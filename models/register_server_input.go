@@ -2,11 +2,11 @@
 
 package models
 
-// RegisterServerInput
+// RegisterServerInput OVD `RegisterServerInput` (Server.scala:50-58).
 type RegisterServerInput struct {
-	AvailabilityZone     string    `json:"availabilityZone"`
-	LoadbalancerCapacity int       `json:"loadbalancerCapacity"`
-	Maintenance          bool      `json:"maintenance"`
-	OwnerID              *TenantID `json:"ownerId,omitempty"`
-	ServerID             string    `json:"serverId"`
+	AvailabilityZone     string  `json:"availabilityZone"`
+	LoadbalancerCapacity int     `json:"loadbalancerCapacity"`
+	Maintenance          bool    `json:"maintenance"`
+	OwnerID              *string `json:"ownerId,omitempty"` // ⚠️ Overrides the path tenant for the row owner (S:180, pinned quirk).
+	ServerID             string  `json:"serverId"`
 }

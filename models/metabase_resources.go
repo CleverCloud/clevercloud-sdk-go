@@ -2,8 +2,8 @@
 
 package models
 
-// MetabaseResources
+// MetabaseResources Resource references backing a Metabase addon.  Source: references/legacy/ovd/modules/metabase/mod...
 type MetabaseResources struct {
-	Entrypoint *string `json:"entrypoint,omitempty"`
-	PgsqlID    *string `json:"pgsqlId,omitempty"`
+	Entrypoint *AppId        `json:"entrypoint,omitempty"`
+	PgsqlID    *PostgresqlId `json:"pgsqlId,omitempty"`
 }

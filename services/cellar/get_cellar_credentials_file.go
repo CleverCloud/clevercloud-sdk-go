@@ -11,16 +11,16 @@ import (
 )
 
 /*
-Getcellarcredentialsfile
+Getcellarcredentialsfile Download the add-on's s3cmd configuration file
 
-get Cellar credentials as s3cfg file (supports OAuth or presigned token)
+Returns this add-on's S3 credentials rendered as an s3cmd `.s3cfg` file, served as `text/plain` with an attachment filename. Two ways in. Either an authenticated caller who is the add-on's owner (personal add-ons) or a member of the organisation owning it; or the holder of a download link issued by the `credentials/presigned-url` route, whose token travels in the `authorization` query parameter or a `Bearer` header. Such a link authenticates on its own and is honoured for whoever holds it, checked against its expiry and the add-on it was issued for rather than against organisation membership. Presenting neither answers 401; a link that has expired or was issued for another add-on answers 403; an add-on the organisation in the path does not own answers 404; and a request whose `Accept` header rules out `text/plain` answers 406.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
 
 # Returns the operation result or an error
 

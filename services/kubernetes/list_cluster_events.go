@@ -13,14 +13,23 @@ import (
 )
 
 /*
-Listclusterevents
+Listclusterevents GET /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/events
+
+The **unified** event stream: an `event`-discriminated union over
+`CLUSTER_STATUS`, `CLUSTER_ITEM` and `NODE_LIFECYCLE`, ordered
+`(event_date DESC, event_id DESC)`.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala:248 — getClusterEvents (identity projection)
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:197 — getClusterEvents
+Behavior: 404 when the cluster is not in the caller's tenant (no existence leak).
+Issue: #993, #1481, #1584
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

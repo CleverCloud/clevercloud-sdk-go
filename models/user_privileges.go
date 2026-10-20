@@ -2,7 +2,7 @@
 
 package models
 
-// UserPrivileges
+// UserPrivileges User privileges (login + createRole).  Source: ovd UserPrivileges.scala
 type UserPrivileges struct {
 	CreateRole bool `json:"createRole"`
 	Login      bool `json:"login"`

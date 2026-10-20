@@ -2,8 +2,8 @@
 
 package models
 
-// ConsumptionDetail
+// ConsumptionDetail Per-interval consumption breakdown.  Source: references/legacy/ovd/core — ConsumptionDetail Schem...
 type ConsumptionDetail struct {
-	Interval   string    `json:"interval"`
-	Quantities []float64 `json:"quantities,omitempty"`
+	Interval   string    `json:"interval"`   // Interval granularity (legacy uses `"hourly"`).
+	Quantities []float64 `json:"quantities"` // Quantity per interval period (`[1.0; days]`).
 }

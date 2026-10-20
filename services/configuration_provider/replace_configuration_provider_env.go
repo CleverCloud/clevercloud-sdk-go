@@ -12,13 +12,42 @@ import (
 )
 
 /*
-Replaceconfigurationproviderenv
+Replaceconfigurationproviderenv PUT /v4/addon-providers/config-provider/addons/{addon_id}/env — replace env vars.
+
+Legacy: ovd routes.scala:57 putAddonEnv / AddonConfigProviderActor.scala
+
+📥 **Algo Source (Legacy):**
+Replace all env vars for a config-provider addon.
+  - Validate env vars: checkDuplicates -> checkNamePattern -> checkSize
+    (WannabeEnvVarOps.scala, name pattern `^[a-zA-Z0-9-_.]+$`, limits from config)
+  - Fetch addon to verify existence (status != DELETED)
+  - Call cc-api callback (UpdateEnv) to notify env change
+  - Encrypt validated vars as JSON Map with XSalsa20-Poly1305
+  - UPDATE config + config_nonce in DB
+  - Return updated env vars
+  - Source: ovd AddonConfigProviderActor.scala:155-168 updateAddonConfigProviderEnvVars()
+  - Source: ovd WannabeEnvVarOps.scala checkDuplicates/checkNamePattern/checkSize
+
+🔧 **Algo Rust (Implementation):**
+  - Validate env vars (duplicates, name pattern, size limits) -> 400 if invalid
+  - Fetch the addon row (status != DELETED) -> 404 if not found (gives us callback_url)
+  - Notify cc-api via HTTP PUT to addon.callback_url ({"config":{...}}, Basic Auth);
+    short-circuit with 500 on failure (matches the legacy EitherT order — the callback
+    runs BEFORE the DB write, so a failed callback aborts the update)
+  - Serialize `Vec<EnvVar>` to JSON, encrypt with XSalsa20-Poly1305
+  - UPDATE config + config_nonce WHERE status != DELETED
+  - Return Json(`Vec<EnvVar>`) with 200, or 404 if addon not found
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala putAddonEnv
+Source: references/legacy/ovd/modules/configprovider/routes/AddonConfigProviderRoutes.scala patchAddonEnv
+Behavior: validates then replaces all env vars for this addon, returns updated “Vec<EnvVar>“
+Issue: #2
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: ConfigProvider addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -34,14 +63,14 @@ Example:
 x-service: configuration_provider
 operationId: replaceConfigurationProviderEnv
 */
-func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.WannabeEnvVar) client.Response[[]models.EnvVar] {
+func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar] {
 	ctx, span := tracer.Start(ctx, "replaceConfigurationProviderEnv", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s/env", addonId)
 
 	// Make API call
-	response := client.Put[[]models.EnvVar](ctx, c, path, requestBody)
+	response := client.Put[[]models.WannabeEnvVar](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

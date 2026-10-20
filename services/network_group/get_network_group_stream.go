@@ -11,9 +11,17 @@ import (
 )
 
 /*
-Getnetworkgroupstream
+Getnetworkgroupstream GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/stream
 
-# Stream real-time NetworkGroup updates
+Source: ovd NetworkGroupController.scala networkGroupSSELogic → NetworkgroupConfStreamer
+Behavior: `text/event-stream`. Polls the NG every 15s (first read
+
+	immediate) and emits its JSON (sorted keys) whenever `version` grew; a
+	`HEARTBEAT` event fires after 5s of silence; the stream completes when
+	the NG disappears (or changes owner). 404 unknown NG / 403 owner
+	mismatch before any streaming, like the plain GET.
+
+Issue: #313, #849, #2805
 
 Parameters:
   - ctx: context for the request

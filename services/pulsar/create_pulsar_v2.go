@@ -11,9 +11,24 @@ import (
 )
 
 /*
-Createpulsarv2
+Createpulsarv2 POST /v2/providers/addon-pulsar/resources — provision a new Pulsar addon.
 
-# Provision a Pulsar addon
+**Legacy**: ovd PulsarController.scala:159 createPulsarV2ServerEndpoint()
+**Algorithm**:
+  - Delegates to PulsarProvisioningService.createPulsarFromProvision (line 114)
+  - Finds available cluster by zone+plan, INSERT addon row, SELECT back, return ProvisionResponse
+  - Internal endpoint (Basic Auth), no ownership check
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createPulsarV2ServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala createPulsarV2
+Behavior: creates addon record with ACTIVE status. In production OVD, the Pulsar tenant
+
+	and namespace are created on the actual Pulsar cluster via admin API.
+	Here we manage metadata only.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request

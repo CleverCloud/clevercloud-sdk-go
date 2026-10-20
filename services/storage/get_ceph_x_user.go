@@ -12,17 +12,38 @@ import (
 )
 
 /*
-Getcephxuser
+Getcephxuser GET /v4/tenants/{tenantId}/ceph-x-users/{entityId} -- get a Ceph X user.
 
-Get an existing ceph x user.
+Source: ovd StorageController.scala:143 getCephXUser()
+Behavior: calls Ceph Dashboard API, lists all users, finds matching entity.
+
+	Returns 404 if user not found.
+
+Issue: #313, #774, #864, #1124
+
+📥 **Algo Source (Legacy):**
+Get a CephX user by entity ID from Ceph Dashboard.
+- Authorize via authorize_v4_organisation (org membership on the path tenant)
+- GET /api/cluster/user → list all CephX users
+- Filter by entity == cephXUserId
+- Return CephXUser or 404 Not Found
+- Source: ovd StorageController.scala:143, CephAdmin.scala:167
+
+🔧 **Algo Rust (Implementation):**
+  - `OvdAuth` + `ceph_x_op:get_user` on the path tenant, **bound to the path entity**
+    (`cephx_user` scope fact — OVD routes this through `notStoredAuthorizedResourceEndpoint`
+    with `cephXUserId.asFact`, so an entity-scoped token works; refs #2902)
+  - Call ceph.get_ceph_x_user(entity_id) via reqwest
+  - Return 200 with CephXUserView or 404
+  - Return the mapped Ceph status on failure (ovd `CephHTTPError`, see `ceph_error_response`)
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - entityId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - entityId: Ceph X entity identifier
 
 # Returns the operation result or an error
 
@@ -37,14 +58,14 @@ Example:
 x-service: storage
 operationId: getCephXUser
 */
-func Getcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, entityId string) client.Response[models.CephXUser] {
+func Getcephxuser(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, clusterId string, entityId string) client.Response[models.JustCreatedCephXUser] {
 	ctx, span := tracer.Start(ctx, "getCephXUser", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("clusterId", clusterId), attribute.String("entityId", entityId)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/ceph-clusters/%s/ceph-x-users/%s", tenantId, clusterId, entityId)
 
 	// Make API call
-	response := client.Get[models.CephXUser](ctx, c, path)
+	response := client.Get[models.JustCreatedCephXUser](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

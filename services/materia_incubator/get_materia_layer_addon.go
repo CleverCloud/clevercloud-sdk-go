@@ -12,16 +12,19 @@ import (
 )
 
 /*
-Getmaterialayeraddon
+Getmaterialayeraddon GET /v2/providers/materia/{layerId}/resources/{addonId} — config vars for an addon.
 
-# Fetch the config vars for an existing Materia layer addon
+Source: ovd materia-incubator api/routes.scala getEndpoint (getMateriaLayerAddon)
+Behavior: auth → PROVISIONED row → 200 `{id, message: "Addon found", config}` with
+
+	current-config host/port and the persisted token; TO_DELETE/DELETED/absent → 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - layerId:
-  - addonId:
+  - layerId: Configured Materia layer id
+  - addonId: Addon id (prefix_ULID)
 
 # Returns the operation result or an error
 

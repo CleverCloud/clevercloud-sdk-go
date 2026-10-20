@@ -2,9 +2,9 @@
 
 package models
 
-// KubernetesTaint
+// KubernetesTaint Kubernetes taint.  Source: references/legacy/ovd/modules/kubernetes/models/types/Taint.scala
 type KubernetesTaint struct {
-	Effect TaintEffect `json:"effect"`
-	Key    string      `json:"key"`
-	Value  *string     `json:"value,omitempty"`
+	Effect TaintEffect `json:"effect"`          // Taint effect
+	Key    string      `json:"key"`             // Taint key
+	Value  *string     `json:"value,omitempty"` // Taint value
 }

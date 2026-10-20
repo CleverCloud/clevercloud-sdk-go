@@ -2,11 +2,11 @@
 
 package models
 
-// CreateClusterRequest
+// CreateClusterRequest Request body for creating a new Cellar cluster.  Source: references/legacy/ovd/modules/cellar/mod...
 type CreateClusterRequest struct {
-	Available bool   `json:"available"`
-	Host      string `json:"host"`
-	Password  string `json:"password"`
-	Username  string `json:"username"`
-	Zone      string `json:"zone"`
+	Available *bool  `json:"available,omitempty"` // Whether the cluster accepts new provisions
+	Host      string `json:"host"`                // S3 endpoint host
+	Password  string `json:"password"`            // Ceph admin password
+	Username  string `json:"username"`            // Ceph admin username
+	Zone      string `json:"zone"`                // Availability zone
 }

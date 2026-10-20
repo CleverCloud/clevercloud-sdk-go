@@ -12,16 +12,24 @@ import (
 )
 
 /*
-Deletecephcluster
+Deletecephcluster DELETE /v4/tenants/{tenantId}/ceph-clusters/{clusterId} -- soft-delete a cluster.
 
-Soft-delete an existing ceph cluster.
+Source: ovd StorageController.scala deleteCephCluster() (appends SOFT_DELETED).
+
+📥 **Algo Source (Legacy):** soft-delete a cluster by appending a SOFT_DELETED
+status (the row is retained; the cleanup service handles retention).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_cluster_op:remove` on the path
+tenant; fetch-or-404; append SOFT_DELETED and persist via the shared
+`update_cluster_and_respond` tail → 200.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
 
 # Returns the operation result or an error
 

@@ -11,15 +11,17 @@ import (
 )
 
 /*
-Rebootapplication
+Rebootapplication POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/reboot — reboot Otoroshi.
 
-# Ask for reboot Otoroshi application
+Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — redeployAddon(id, rebuild=false)
+Behavior: Fetches addon, calls PaaS restart with useCache=true (reboot, no rebuild)
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi instance ID
 
 # Returns the operation result or an error
 

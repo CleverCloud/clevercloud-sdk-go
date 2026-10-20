@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// BucketInfo
+// BucketInfo Bucket info in the buckets list response.  Source: references/legacy/ovd/modules/cellar/models/pa...
 type BucketInfo struct {
-	CreatedAt    time.Time `json:"createdAt"`
-	Name         string    `json:"name"`
-	ObjectsCount int       `json:"objectsCount"`
-	SizeInBytes  int       `json:"sizeInBytes"`
-	UpdatedAt    time.Time `json:"updatedAt"`
+	CreatedAt    time.Time `json:"createdAt"`    // Creation timestamp
+	Name         string    `json:"name"`         // Bucket name
+	ObjectsCount int       `json:"objectsCount"` // Number of objects
+	SizeInBytes  int       `json:"sizeInBytes"`  // Total size in bytes
+	UpdatedAt    time.Time `json:"updatedAt"`    // Last update timestamp
 }

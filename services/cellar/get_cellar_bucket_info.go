@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Getcellarbucketinfo
+Getcellarbucketinfo Read a bucket
 
-get bucket details for a Cellar account
+Returns one bucket's view: name, versioning status, and the object count, total size and timestamps read back from the cluster. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on or bucket answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
 
 # Returns the operation result or an error
 

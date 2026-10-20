@@ -13,15 +13,26 @@ import (
 )
 
 /*
-Listnetworkgroupcomponents
+Listnetworkgroupcomponents GET /v4/networkgroups/organisations/{owner_id}/networkgroups/search
 
-# Search a Network Group component (network group, member, or peer by its id or label
+The **owner-scoped** search. OVD has only this one
+(`NetworkGroupSwagger.scala:152-156`), it is `.authenticated`, and its
+`searchLogic` takes `readOnlyRoles`
+(`NetworkGroupController.scala:101-105`). This port used to answer it from
+the bare unauthenticated handler, so an owner segment in the path bought no
+authorization at all — harmless only because the body is an empty list, and
+a bypass the moment anyone implements the search behind it (#1214).
+
+Source: references/legacy/ovd/modules/networkgroup/src/main/scala/com/clevercloud/networkgroup/models/swagger/NetworkGroupSwagger.scala:152-156
+Source: references/legacy/ovd/modules/networkgroup/src/main/scala/com/clevercloud/networkgroup/controllers/NetworkGroupController.scala:101-105 — readOnlyRoles
+Behavior: 200 with an empty list (the OVD indexer is out of scope here); 403 if not in OVD readOnlyRoles.
+Issue: #313, #665, #676, #849, #1214
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

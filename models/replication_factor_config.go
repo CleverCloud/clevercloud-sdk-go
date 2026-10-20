@@ -2,8 +2,8 @@
 
 package models
 
-// ReplicationFactorConfig
+// ReplicationFactorConfig Replication factor configuration.  Source: references/legacy/ovd/modules/kubernetes/models/Kubern...
 type ReplicationFactorConfig struct {
-	Max int `json:"max"`
-	Min int `json:"min"`
+	Max int `json:"max"` // Maximum replication factor
+	Min int `json:"min"` // Minimum replication factor
 }

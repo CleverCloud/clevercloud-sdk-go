@@ -12,15 +12,32 @@ import (
 )
 
 /*
-Getimagepackage
+Getimagepackage GET /v4/images/{image}/versions/{version}/packages/{package}
+
+📥 **Algo Source (Legacy):**
+  - No authentication
+  - Resolve the image by label, then `packages.find(_.name == packageName)` —
+    category excluded, and the `Set` order decides when a name is ambiguous
+  - A miss is a `Resource` context whose error string is `image_package`
+  - Source: ovd ImageController.scala:110-118 + ExherboPackage.scala:130-138
+
+🔧 **Algo Rust (Implementation):**
+  - `require_by_label`, then `models::lowest_by_name` — the same name-only
+    match, with the lowest category as the tie-break the `Set` could not give
+  - `Json(ExherboPackage)` or the package not-found envelope
+
+Source: ovd modules/image/api/routes.scala:63-74 (getImagePackage)
+Source: ovd modules/image/models/ExherboPackage.scala:130-138 (findByName)
+Behavior: public; returns one package of an image, matched by name alone.
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - image:
-  - version:
-  - packageParam:
+  - image: Runtime name
+  - version: Image date
+  - packageParam: Package name, without its category
 
 # Returns the operation result or an error
 

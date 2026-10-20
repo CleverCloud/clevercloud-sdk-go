@@ -13,15 +13,13 @@ import (
 /*
 Deletesigningkey
 
-Revoke a signing key.
-
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
-  - keyId:
+  - tenantId: Tenant that owns the product
+  - productId: Product the key belongs to
+  - keyId: The key to revoke
 
 # Returns the operation result or an error
 

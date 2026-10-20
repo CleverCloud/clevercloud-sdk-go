@@ -2,8 +2,8 @@
 
 package models
 
-// Feature
+// Feature A provider feature flag, serialised as `{"name": ..., "enabled": ...}`.  Source: references/legac...
 type Feature struct {
-	Enabled bool   `json:"enabled"`
+	Enabled *bool  `json:"enabled,omitempty"`
 	Name    string `json:"name"`
 }

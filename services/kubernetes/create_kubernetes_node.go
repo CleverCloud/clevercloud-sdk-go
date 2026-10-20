@@ -12,14 +12,25 @@ import (
 )
 
 /*
-Createkubernetesnode
+Createkubernetesnode POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes — create a standalone node.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — create
+Behavior: creates a standalone node (cluster_item with item_type STANDALONE_NODE).
+Issue: #667
+
+**Legacy**: ovd StandaloneNodeController.scala create()
+**Algorithm**:
+  - Insert cluster_item with STANDALONE_NODE type, DEPLOYING status
+  - data JSONB contains name, flavor, taints, labels, status
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Owner (org) ID
+  - clusterId: Cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

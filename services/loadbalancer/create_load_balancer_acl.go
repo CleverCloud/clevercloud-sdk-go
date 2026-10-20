@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Createloadbalanceracl
-
-# Create LoadBalancer ACL
+Createloadbalanceracl Row 37 — the ACL store is IPAM: validated LB, write-through, republish.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

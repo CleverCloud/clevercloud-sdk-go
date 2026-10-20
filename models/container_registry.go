@@ -4,10 +4,10 @@ package models
 
 import "time"
 
-// ContainerRegistry
+// ContainerRegistry Container Registry view returned by the v4 API.  Source: references/legacy/ovd/modules/container-...
 type ContainerRegistry struct {
-	CreationDate time.Time                 `json:"creationDate"`
-	ID           string                    `json:"id"`
-	Statuses     []DefaultIdentifiedStatus `json:"statuses,omitempty"`
-	TenantID     TenantID                  `json:"tenantId"`
+	CreationDate time.Time          `json:"creationDate"` // Creation timestamp
+	ID           string             `json:"id"`           // Container registry ID
+	Statuses     []IdentifiedStatus `json:"statuses"`     // Status history (JSONB array)
+	TenantID     string             `json:"tenantId"`     // Tenant (owner) ID
 }

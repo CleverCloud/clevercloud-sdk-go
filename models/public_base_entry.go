@@ -2,10 +2,10 @@
 
 package models
 
-// PublicBaseEntry
+// PublicBaseEntry One catalog base entry as served by the public catalog endpoint.  Source: PluginCatalog.scala:347...
 type PublicBaseEntry struct {
 	InstallOrder  int        `json:"installOrder"`
 	K8sVersion    string     `json:"k8sVersion"`
-	Plugin        PluginName `json:"plugin"`
+	Plugin        PluginName `json:"plugin"` // Serializes SCREAMING_SNAKE (`CORE_DNS`), matching OVD.
 	PluginVersion string     `json:"pluginVersion"`
 }

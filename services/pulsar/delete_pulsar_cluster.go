@@ -11,15 +11,29 @@ import (
 )
 
 /*
-Deletepulsarcluster
+Deletepulsarcluster DELETE /v4/addon-providers/addon-pulsar/clusters/{cluster_id} — delete a Pulsar cluster.
 
-# Delete Pulsar cluster
+**Legacy**: ovd PulsarController.scala:145 deleteClusterServerEndpoint()
+**Algorithm**:
+  - Biscuit auth with PulsarClusterOp.DELETE check
+  - Delegates to PulsarClusterService.deleteCluster(clusterId)
+  - UPDATE status=DELETED + available=false, return 204 or 404
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deleteClusterServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala deleteCluster
+Behavior: marks cluster as DELETED, returns 204. Requires a Biscuit with
+
+	the `pulsar_cluster_op("delete")` (or `"root"`) fact.
+
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId:
+  - clusterId: Cluster ID
 
 # Returns the operation result or an error
 

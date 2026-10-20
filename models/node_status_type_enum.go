@@ -2,16 +2,16 @@
 
 package models
 
-// NodeStatusType represents
+// NodeStatusType represents Node status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/NodeSta...
 type NodeStatusType string
 
 const (
-	NodeStatusTypeDELETED   NodeStatusType = "DELETED"
-	NodeStatusTypeDEPLOYED  NodeStatusType = "DEPLOYED"
 	NodeStatusTypeDEPLOYING NodeStatusType = "DEPLOYING"
+	NodeStatusTypeDEPLOYED  NodeStatusType = "DEPLOYED"
+	NodeStatusTypeREADY     NodeStatusType = "READY"
 	NodeStatusTypeDRAINING  NodeStatusType = "DRAINING"
 	NodeStatusTypeFAILED    NodeStatusType = "FAILED"
-	NodeStatusTypeREADY     NodeStatusType = "READY"
+	NodeStatusTypeDELETED   NodeStatusType = "DELETED"
 )
 
 // String returns the underlying string value

@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// OtelGateway
+// OtelGateway Gateway response — OVD `GatewayResponse`, `@encodedName("OtelGateway")`. The admin token is struc...
 type OtelGateway struct {
 	CreatedAt time.Time `json:"createdAt"`
-	Endpoint  string    `json:"endpoint"` // Absolute URL
-	ID        string    `json:"id"`
+	Endpoint  string    `json:"endpoint"`
+	ID        string    `json:"id"` // `otelgw_<uuid>`.
 	Location  string    `json:"location"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }

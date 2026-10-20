@@ -12,15 +12,28 @@ import (
 )
 
 /*
-Getmateriats
+Getmateriats GET /v4/addon-providers/addon-ts/addons/{addon_ts_id} — get TS addon view.
 
-get a MateriaTS
+Legacy: ovd AddonTSAddonActor.scala:256 getAddonTS
+Algorithm:
+  - getAddonFromDatabaseTS (selectActiveAddonByID: WHERE id AND deletion_date IS NULL) → 404 if none
+  - AddonView { resourceId = addonId, addonId = ccapiAddonId, ownerId, plan, resources.token = readToken }
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:256 getAddonTS
+Source: references/legacy/ovd/modules/ts/repositories/AddonTSAddonRepository.scala:59 selectActiveAddonByID
+Behavior: active addons only (deletion_date IS NULL); resources.token = read token; 404 if not found.
+
+	Internal/broker only — end-user auth + owner-scoping are cc-api's job (see `docs/authentication.md`).
+
+Issue: #313, #765
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId:
+  - addonTsId: TS addon ID
 
 # Returns the operation result or an error
 

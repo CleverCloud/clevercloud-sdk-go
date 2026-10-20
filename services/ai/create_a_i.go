@@ -11,9 +11,28 @@ import (
 )
 
 /*
-Createai
+Createai **Legacy**: ovd AIProviderController.scala:42 provisionEndpoint()
+**Algorithm**:
+  - Generate AI ID, insert addon_ai row with PROVISIONING status
+  - On failure, mark status as PROVISIONING_ERROR
 
-# Create a new AI dedicated endpoint for customers
+**Conformity**: YES
+
+POST /v2/providers/addon-ai/resources — provision a new AI addon.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — provisionEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — provision()
+Source: references/legacy/ovd/modules/ai/repositories/AIRepository.scala — create()
+Behavior: generates AI addon ID, inserts addon_ai row with PROVISIONING status,
+
+	returns ProvisionResponse with the addon ID and empty config.
+	On failure, updates status to PROVISIONING_ERROR.
+
+Schema: addon_ai table — INSERT (id, ccapi_addon_id, owner_id, status, host, plan,
+
+	callback_url, creation_date, updated_date)
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request

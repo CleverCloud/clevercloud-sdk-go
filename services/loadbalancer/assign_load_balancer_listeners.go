@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Assignloadbalancerlisteners
-
-# Add listeners to loadbalancer
+Assignloadbalancerlisteners Row 25 — bare array body; **201** `LoadBalancerView`
+(`specification: null`); 409 duplicate ids, 412 absent cluster refs
+(TCP-Direct only — faithfully partial).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - loadbalancerId: LoadBalancer ID
+  - tenantId: Organisation/tenant ID
+  - loadbalancerId: Load balancer ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -37,14 +37,14 @@ Example:
 x-service: loadbalancer
 operationId: assignLoadBalancerListeners
 */
-func Assignloadbalancerlisteners(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Listener) client.Response[models.LoadBalancer] {
+func Assignloadbalancerlisteners(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string, requestBody []*models.Listener) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "assignLoadBalancerListeners", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/listeners", tenantId, loadbalancerId)
 
 	// Make API call
-	response := client.Post[models.LoadBalancer](ctx, c, path, requestBody)
+	response := client.Post[models.LoadBalancerView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
