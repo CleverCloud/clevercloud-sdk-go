@@ -10,6 +10,7 @@ help:
 	@echo "  make generate-models    - Generate models from OpenAPI spec"
 	@echo "  make generate-services  - Generate services from OpenAPI spec"
 	@echo "  make generate-builder   - Generate builder from services"
+	@echo "  make generate-app SPEC=<file> - Generate app environment variables"
 	@echo "  make check              - Check that generators and SDK compile"
 	@echo "  make check-generators   - Check that all generators compile"
 	@echo "  make check-sdk          - Check that SDK compiles"
@@ -52,6 +53,17 @@ generate-builder:
 		--spec ../../../scala/ovd3/server/openapi.all.json \
 		--output ../builder.go
 
+# The description of the application environment variables is not part of
+# this repository: pass its path with SPEC=<file>.
+.PHONY: generate-app
+generate-app:
+	@test -n "$(SPEC)" || { echo "SPEC=<file> is required: path to the JSON description of the application environment variables"; exit 1; }
+	@echo "🔨 Generating app environment variables..."
+	go run \
+		./cmd/generate-app/main.go \
+		--spec $(SPEC) \
+		--output ../app/variables.go
+
 .PHONY: check
 check: check-generators check-sdk
 
@@ -61,6 +73,7 @@ check-generators:
 	@go build -o /dev/null ./cmd/generate-models
 	@go build -o /dev/null ./cmd/generate-services
 	@go build -o /dev/null ./cmd/generate-builder
+	@go build -o /dev/null ./cmd/generate-app
 	@echo "✅ All generators compile successfully"
 
 .PHONY: check-sdk
