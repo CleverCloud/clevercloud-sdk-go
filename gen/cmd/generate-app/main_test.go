@@ -41,14 +41,14 @@ func TestGenerate(t *testing.T) {
 		"// CC_EXAMPLE_NAME: Name of the example\n//\n// Scopes: example.\nconst CC_EXAMPLE_NAME = \"CC_EXAMPLE_NAME\"",
 		"func GetExampleName() string {\n\treturn lookupString(\"\", false, CC_EXAMPLE_NAME)",
 		"return lookupString(\"\", true, CC_EXAMPLE_EMPTY)",
-		"func GetExampleEnabled() (bool, error) {\n\treturn lookupBool(true, []string{\"install\"}, nil, CC_EXAMPLE_ENABLED)",
-		"return lookupDisabler(false, CC_DISABLE_EXAMPLE)",
-		"func GetExampleTimeout() (int, error) {\n\treturn lookupInt(300, CC_EXAMPLE_TIMEOUT)",
-		"// Deprecated: use [CC_EXAMPLE_VERSION].\nconst EXAMPLE_VERSION = \"EXAMPLE_VERSION\"",
-		"return lookupChoice(\"2\", []string{\"1\", \"2\"}, CC_EXAMPLE_VERSION, EXAMPLE_VERSION)",
+		"func MustGetExampleEnabled() bool {\n\treturn must(lookupBool(true, []string{\"install\"}, nil, CC_EXAMPLE_ENABLED))",
+		"func MustGetDisableExample() bool {\n\treturn must(lookupDisabler(false, CC_DISABLE_EXAMPLE))",
+		"func MustGetExampleTimeout() int {\n\treturn must(lookupInt(300, CC_EXAMPLE_TIMEOUT))",
+		"func MustGetExampleVersion() string {\n\treturn must(lookupChoice(\"2\", []string{\"1\", \"2\"}, CC_EXAMPLE_VERSION))",
+		"// It panics if the value is invalid.",
 		"// The value is a tool version available on the platform.",
 		"func GetExampleToolVersion() string {",
-		"func GetExampleHTTPPort() ([]Entry[int], error) {\n\treturn lookupMultiple(parseInt, CC_EXAMPLE_HTTP_PORT)",
+		"func MustGetExampleHTTPPort() []Entry[int] {\n\treturn must(lookupMultiple(parseInt, CC_EXAMPLE_HTTP_PORT))",
 		"// Set by the platform: read it, do not set it.\n// Holds a secret.",
 		"// ScopeExample lists the variables of the \"example\" scope.\nvar ScopeExample = []string{\n\tCC_EXAMPLE_NAME,\n\tCC_EXAMPLE_TIMEOUT,\n}",
 		"var ScopeExampleAPM = []string{\n\tCC_EXAMPLE_TIMEOUT,\n}",
@@ -58,6 +58,9 @@ func TestGenerate(t *testing.T) {
 			t.Errorf("missing:\n%s", want)
 		}
 	}
+	if strings.Contains(out, "const EXAMPLE_VERSION") || strings.Contains(out, "Deprecated") {
+		t.Error("former names must not be generated")
+	}
 	if strings.Contains(out, "/*") {
 		t.Error("comments must be // lines, not /* */ blocks")
 	}
@@ -65,13 +68,12 @@ func TestGenerate(t *testing.T) {
 
 func TestGenerateRejects(t *testing.T) {
 	for name, spec := range map[string]string{
-		"getter collision":    `{"CC_FOO": {}, "FOO": {}}`,
-		"alias is a variable": `{"CC_FOO": {"aliases": ["CC_BAR"]}, "CC_BAR": {}}`,
-		"unknown type":        `{"CC_FOO": {"type": "float"}}`,
-		"choice no values":    `{"CC_FOO": {"type": "choice"}}`,
-		"bad default":         `{"CC_FOO": {"type": "integer", "default": "abc"}}`,
-		"multiple boolean":    `{"CC_FOO": {"type": "boolean", "multiple": true}}`,
-		"scope collision":     `{"CC_FOO": {"scopes": ["java-jar", "java_jar"]}}`,
+		"getter collision": `{"CC_FOO": {}, "FOO": {}}`,
+		"unknown type":     `{"CC_FOO": {"type": "float"}}`,
+		"choice no values": `{"CC_FOO": {"type": "choice"}}`,
+		"bad default":      `{"CC_FOO": {"type": "integer", "default": "abc"}}`,
+		"multiple boolean": `{"CC_FOO": {"type": "boolean", "multiple": true}}`,
+		"scope collision":  `{"CC_FOO": {"scopes": ["java-jar", "java_jar"]}}`,
 	} {
 		vars := map[string]Variable{}
 		if err := json.Unmarshal([]byte(spec), &vars); err != nil {

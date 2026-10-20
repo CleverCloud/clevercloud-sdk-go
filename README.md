@@ -85,15 +85,17 @@ response := network_group.GetNetworkGroups(ctx, client, tracer, ownerID,
 
 The `app` package holds the environment variables Clever Cloud defines for
 applications: one constant per variable and a getter reading it from the
-environment, parsed the way the platform parses it.
+environment, parsed the way the platform parses it. String variables are read
+with `Get<Name>`; every other type with `MustGet<Name>`, which panics on a value
+it cannot parse.
 
 ```go
 import "go.clever-cloud.dev/sdk/app"
 
-instance, err := app.GetInstanceNumber()      // INSTANCE_NUMBER, as an int
-features := app.GetRustFeatures()             // CC_RUST_FEATURES
-javaVersion, err := app.GetJavaVersion()      // CC_JAVA_VERSION, default 21, falls back on JAVA_VERSION
-workers, err := app.GetWorkerCommand()        // every CC_WORKER_COMMAND and CC_WORKER_COMMAND_<N>
+instance := app.MustGetInstanceNumber() // INSTANCE_NUMBER, as an int
+features := app.GetRustFeatures()       // CC_RUST_FEATURES
+javaVersion := app.MustGetJavaVersion() // CC_JAVA_VERSION, default 21
+workers := app.GetWorkerCommand()       // every CC_WORKER_COMMAND and CC_WORKER_COMMAND_<N>
 
 app.ScopeNode       // []string{CC_BUN_INSTALL_CACHE_DIR, CC_CUSTOM_BUILD_TOOL, CC_NODE_BUILD_TOOL, ...}
 app.Scopes["node"]  // the same list, looked up by scope name

@@ -18,10 +18,11 @@ func GetAppFolder() string {
 // Scopes: php.
 const CC_APACHE_HEADERS_SIZE = "CC_APACHE_HEADERS_SIZE"
 
-// GetApacheHeadersSize returns the value of [CC_APACHE_HEADERS_SIZE].
+// MustGetApacheHeadersSize returns the value of [CC_APACHE_HEADERS_SIZE].
 // Default: 8.
-func GetApacheHeadersSize() (int, error) {
-	return lookupInt(8, CC_APACHE_HEADERS_SIZE)
+// It panics if the value is invalid.
+func MustGetApacheHeadersSize() int {
+	return must(lookupInt(8, CC_APACHE_HEADERS_SIZE))
 }
 
 // CC_APP_NAME: Name of the application
@@ -53,11 +54,12 @@ func GetBlackfireCollector() string {
 // Scopes: php, blackfire.
 const CC_BLACKFIRE_LOG_LEVEL = "CC_BLACKFIRE_LOG_LEVEL"
 
-// GetBlackfireLogLevel returns the value of [CC_BLACKFIRE_LOG_LEVEL].
+// MustGetBlackfireLogLevel returns the value of [CC_BLACKFIRE_LOG_LEVEL].
 // Accepted values: 1, 2, 3, 4.
 // Default: 1.
-func GetBlackfireLogLevel() (string, error) {
-	return lookupChoice("1", []string{"1", "2", "3", "4"}, CC_BLACKFIRE_LOG_LEVEL)
+// It panics if the value is invalid.
+func MustGetBlackfireLogLevel() string {
+	return must(lookupChoice("1", []string{"1", "2", "3", "4"}, CC_BLACKFIRE_LOG_LEVEL))
 }
 
 // CC_BLACKFIRE_MEMORY_LIMIT: Maximum RAM in MB used by the Blackfire agent
@@ -66,10 +68,11 @@ func GetBlackfireLogLevel() (string, error) {
 // Scopes: php, blackfire.
 const CC_BLACKFIRE_MEMORY_LIMIT = "CC_BLACKFIRE_MEMORY_LIMIT"
 
-// GetBlackfireMemoryLimit returns the value of [CC_BLACKFIRE_MEMORY_LIMIT].
+// MustGetBlackfireMemoryLimit returns the value of [CC_BLACKFIRE_MEMORY_LIMIT].
 // Default: 500.
-func GetBlackfireMemoryLimit() (int, error) {
-	return lookupInt(500, CC_BLACKFIRE_MEMORY_LIMIT)
+// It panics if the value is invalid.
+func MustGetBlackfireMemoryLimit() int {
+	return must(lookupInt(500, CC_BLACKFIRE_MEMORY_LIMIT))
 }
 
 // CC_BLACKFIRE_SERVER_ID: Server ID credential from your Blackfire account for
@@ -127,10 +130,11 @@ func GetBlackfireStatsdPrefix() string {
 // Scopes: php, blackfire.
 const CC_BLACKFIRE_TIMEOUT = "CC_BLACKFIRE_TIMEOUT"
 
-// GetBlackfireTimeout returns the value of [CC_BLACKFIRE_TIMEOUT].
+// MustGetBlackfireTimeout returns the value of [CC_BLACKFIRE_TIMEOUT].
 // Default: 15.
-func GetBlackfireTimeout() (int, error) {
-	return lookupInt(15, CC_BLACKFIRE_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetBlackfireTimeout() int {
+	return must(lookupInt(15, CC_BLACKFIRE_TIMEOUT))
 }
 
 // CC_BUILD_COMMAND: Custom build command to run during deployment
@@ -149,16 +153,10 @@ func GetBuildCommand() string {
 // Scopes: node.
 const CC_BUN_INSTALL_CACHE_DIR = "CC_BUN_INSTALL_CACHE_DIR"
 
-// BUN_INSTALL_CACHE_DIR is the former name of [CC_BUN_INSTALL_CACHE_DIR].
-//
-// Deprecated: use [CC_BUN_INSTALL_CACHE_DIR].
-const BUN_INSTALL_CACHE_DIR = "BUN_INSTALL_CACHE_DIR"
-
 // GetBunInstallCacheDir returns the value of [CC_BUN_INSTALL_CACHE_DIR].
 // Default: /home/bas/.bun/install/cache.
-// When it is unset, the deprecated BUN_INSTALL_CACHE_DIR is read instead.
 func GetBunInstallCacheDir() string {
-	return lookupString("/home/bas/.bun/install/cache", false, CC_BUN_INSTALL_CACHE_DIR, BUN_INSTALL_CACHE_DIR)
+	return lookupString("/home/bas/.bun/install/cache", false, CC_BUN_INSTALL_CACHE_DIR)
 }
 
 // CC_CACHE_DEPENDENCIES: Enable caching of dependencies between deployments
@@ -166,17 +164,12 @@ func GetBunInstallCacheDir() string {
 // Scopes: deployer.
 const CC_CACHE_DEPENDENCIES = "CC_CACHE_DEPENDENCIES"
 
-// CACHE_DEPENDENCIES is the former name of [CC_CACHE_DEPENDENCIES].
-//
-// Deprecated: use [CC_CACHE_DEPENDENCIES].
-const CACHE_DEPENDENCIES = "CACHE_DEPENDENCIES"
-
-// GetCacheDependencies returns the value of [CC_CACHE_DEPENDENCIES].
+// MustGetCacheDependencies returns the value of [CC_CACHE_DEPENDENCIES].
 // It is true for 1, true, yes, on, enable, enabled, cache; false for 0, false,
 // no, off, disable, disabled.
-// When it is unset, the deprecated CACHE_DEPENDENCIES is read instead.
-func GetCacheDependencies() (bool, error) {
-	return lookupBool(false, []string{"cache"}, nil, CC_CACHE_DEPENDENCIES, CACHE_DEPENDENCIES)
+// It panics if the value is invalid.
+func MustGetCacheDependencies() bool {
+	return must(lookupBool(false, []string{"cache"}, nil, CC_CACHE_DEPENDENCIES))
 }
 
 // CC_CACHE_DEPENDENCIES_EXTRA_PATHS: Colon-separated list of additional paths,
@@ -196,11 +189,12 @@ func GetCacheDependenciesExtraPaths() string {
 // Scopes: php.
 const CC_CGI_IMPLEMENTATION = "CC_CGI_IMPLEMENTATION"
 
-// GetCGIImplementation returns the value of [CC_CGI_IMPLEMENTATION].
+// MustGetCGIImplementation returns the value of [CC_CGI_IMPLEMENTATION].
 // Accepted values: fastcgi, proxy_fcgi.
 // Default: proxy_fcgi.
-func GetCGIImplementation() (string, error) {
-	return lookupChoice("proxy_fcgi", []string{"fastcgi", "proxy_fcgi"}, CC_CGI_IMPLEMENTATION)
+// It panics if the value is invalid.
+func MustGetCGIImplementation() string {
+	return must(lookupChoice("proxy_fcgi", []string{"fastcgi", "proxy_fcgi"}, CC_CGI_IMPLEMENTATION))
 }
 
 // CC_CLAMAV: Enable ClamAV
@@ -208,11 +202,12 @@ func GetCGIImplementation() (string, error) {
 // Scopes: clamav.
 const CC_CLAMAV = "CC_CLAMAV"
 
-// GetClamav returns the value of [CC_CLAMAV].
+// MustGetClamav returns the value of [CC_CLAMAV].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetClamav() (bool, error) {
-	return lookupBool(false, nil, nil, CC_CLAMAV)
+// It panics if the value is invalid.
+func MustGetClamav() bool {
+	return must(lookupBool(false, nil, nil, CC_CLAMAV))
 }
 
 // CC_CLAMAV_MAXQUEUE: Maximum queue size for ClamAV
@@ -220,10 +215,11 @@ func GetClamav() (bool, error) {
 // Scopes: clamav.
 const CC_CLAMAV_MAXQUEUE = "CC_CLAMAV_MAXQUEUE"
 
-// GetClamavMaxqueue returns the value of [CC_CLAMAV_MAXQUEUE].
+// MustGetClamavMaxqueue returns the value of [CC_CLAMAV_MAXQUEUE].
 // Default: 100.
-func GetClamavMaxqueue() (int, error) {
-	return lookupInt(100, CC_CLAMAV_MAXQUEUE)
+// It panics if the value is invalid.
+func MustGetClamavMaxqueue() int {
+	return must(lookupInt(100, CC_CLAMAV_MAXQUEUE))
 }
 
 // CC_CLAMAV_MAXTHREADS: Maximum number of threads for ClamAV
@@ -231,10 +227,11 @@ func GetClamavMaxqueue() (int, error) {
 // Scopes: clamav.
 const CC_CLAMAV_MAXTHREADS = "CC_CLAMAV_MAXTHREADS"
 
-// GetClamavMaxthreads returns the value of [CC_CLAMAV_MAXTHREADS].
+// MustGetClamavMaxthreads returns the value of [CC_CLAMAV_MAXTHREADS].
 // Default: 10.
-func GetClamavMaxthreads() (int, error) {
-	return lookupInt(10, CC_CLAMAV_MAXTHREADS)
+// It panics if the value is invalid.
+func MustGetClamavMaxthreads() int {
+	return must(lookupInt(10, CC_CLAMAV_MAXTHREADS))
 }
 
 // CC_COMMIT_ID: Git commit hash of the currently deployed code, set by the
@@ -255,11 +252,12 @@ func GetCommitID() string {
 // Scopes: deployer, php, frankenphp.
 const CC_COMPOSER_VERSION = "CC_COMPOSER_VERSION"
 
-// GetComposerVersion returns the value of [CC_COMPOSER_VERSION].
+// MustGetComposerVersion returns the value of [CC_COMPOSER_VERSION].
 // Accepted values: 1, 2, 2.2, lts.
 // Default: 2.
-func GetComposerVersion() (string, error) {
-	return lookupChoice("2", []string{"1", "2", "2.2", "lts"}, CC_COMPOSER_VERSION)
+// It panics if the value is invalid.
+func MustGetComposerVersion() string {
+	return must(lookupChoice("2", []string{"1", "2", "2.2", "lts"}, CC_COMPOSER_VERSION))
 }
 
 // CC_CUSTOM_BUILD_TOOL: Custom command for Node.js dependency installation when
@@ -292,12 +290,13 @@ func GetDeploymentID() string {
 // Scopes: build.
 const CC_DISABLE_BUILD_CACHE_UPLOAD = "CC_DISABLE_BUILD_CACHE_UPLOAD"
 
-// GetDisableBuildCacheUpload returns the value of
+// MustGetDisableBuildCacheUpload returns the value of
 // [CC_DISABLE_BUILD_CACHE_UPLOAD].
 // It is true (disabled) for 1, true, yes, off, disable, disabled; false for 0,
 // false, no, on, enable, enabled.
-func GetDisableBuildCacheUpload() (bool, error) {
-	return lookupDisabler(false, CC_DISABLE_BUILD_CACHE_UPLOAD)
+// It panics if the value is invalid.
+func MustGetDisableBuildCacheUpload() bool {
+	return must(lookupDisabler(false, CC_DISABLE_BUILD_CACHE_UPLOAD))
 }
 
 // CC_DISABLE_GIT_SUBMODULES: Disable Git submodules
@@ -305,11 +304,12 @@ func GetDisableBuildCacheUpload() (bool, error) {
 // Scopes: deployer.
 const CC_DISABLE_GIT_SUBMODULES = "CC_DISABLE_GIT_SUBMODULES"
 
-// GetDisableGitSubmodules returns the value of [CC_DISABLE_GIT_SUBMODULES].
+// MustGetDisableGitSubmodules returns the value of [CC_DISABLE_GIT_SUBMODULES].
 // It is true (disabled) for 1, true, yes, off, disable, disabled; false for 0,
 // false, no, on, enable, enabled.
-func GetDisableGitSubmodules() (bool, error) {
-	return lookupDisabler(false, CC_DISABLE_GIT_SUBMODULES)
+// It panics if the value is invalid.
+func MustGetDisableGitSubmodules() bool {
+	return must(lookupDisabler(false, CC_DISABLE_GIT_SUBMODULES))
 }
 
 // CC_DISABLE_MAX_METASPACE: Disable MaxMetaspace
@@ -317,11 +317,12 @@ func GetDisableGitSubmodules() (bool, error) {
 // Scopes: java.
 const CC_DISABLE_MAX_METASPACE = "CC_DISABLE_MAX_METASPACE"
 
-// GetDisableMaxMetaspace returns the value of [CC_DISABLE_MAX_METASPACE].
+// MustGetDisableMaxMetaspace returns the value of [CC_DISABLE_MAX_METASPACE].
 // It is true (disabled) for 1, true, yes, off, disable, disabled; false for 0,
 // false, no, on, enable, enabled.
-func GetDisableMaxMetaspace() (bool, error) {
-	return lookupDisabler(false, CC_DISABLE_MAX_METASPACE)
+// It panics if the value is invalid.
+func MustGetDisableMaxMetaspace() bool {
+	return must(lookupDisabler(false, CC_DISABLE_MAX_METASPACE))
 }
 
 // CC_DISABLE_MISE: Disable Mise: no tool installation from mise.toml, no build
@@ -330,11 +331,12 @@ func GetDisableMaxMetaspace() (bool, error) {
 // Scopes: deployer, mise.
 const CC_DISABLE_MISE = "CC_DISABLE_MISE"
 
-// GetDisableMise returns the value of [CC_DISABLE_MISE].
+// MustGetDisableMise returns the value of [CC_DISABLE_MISE].
 // It is true (disabled) for 1, true, yes, off, disable, disabled; false for 0,
 // false, no, on, enable, enabled.
-func GetDisableMise() (bool, error) {
-	return lookupDisabler(false, CC_DISABLE_MISE)
+// It panics if the value is invalid.
+func MustGetDisableMise() bool {
+	return must(lookupDisabler(false, CC_DISABLE_MISE))
 }
 
 // CC_DOCKERFILE: Path to Dockerfile
@@ -352,12 +354,13 @@ func GetDockerfile() string {
 // Scopes: docker.
 const CC_DOCKER_BUILDX = "CC_DOCKER_BUILDX"
 
-// GetDockerBuildx returns the value of [CC_DOCKER_BUILDX].
+// MustGetDockerBuildx returns the value of [CC_DOCKER_BUILDX].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetDockerBuildx() (bool, error) {
-	return lookupBool(true, nil, nil, CC_DOCKER_BUILDX)
+// It panics if the value is invalid.
+func MustGetDockerBuildx() bool {
+	return must(lookupBool(true, nil, nil, CC_DOCKER_BUILDX))
 }
 
 // CC_DOCKER_EXPOSED_HTTP_PORT: HTTP port inside the container that should be
@@ -366,10 +369,12 @@ func GetDockerBuildx() (bool, error) {
 // Scopes: docker.
 const CC_DOCKER_EXPOSED_HTTP_PORT = "CC_DOCKER_EXPOSED_HTTP_PORT"
 
-// GetDockerExposedHTTPPort returns the value of [CC_DOCKER_EXPOSED_HTTP_PORT].
+// MustGetDockerExposedHTTPPort returns the value of
+// [CC_DOCKER_EXPOSED_HTTP_PORT].
 // Default: 8080.
-func GetDockerExposedHTTPPort() (int, error) {
-	return lookupInt(8080, CC_DOCKER_EXPOSED_HTTP_PORT)
+// It panics if the value is invalid.
+func MustGetDockerExposedHTTPPort() int {
+	return must(lookupInt(8080, CC_DOCKER_EXPOSED_HTTP_PORT))
 }
 
 // CC_DOCKER_EXPOSED_TCP_PORT: TCP port inside the container that should be
@@ -378,10 +383,12 @@ func GetDockerExposedHTTPPort() (int, error) {
 // Scopes: docker.
 const CC_DOCKER_EXPOSED_TCP_PORT = "CC_DOCKER_EXPOSED_TCP_PORT"
 
-// GetDockerExposedTCPPort returns the value of [CC_DOCKER_EXPOSED_TCP_PORT].
+// MustGetDockerExposedTCPPort returns the value of
+// [CC_DOCKER_EXPOSED_TCP_PORT].
 // Default: 4040.
-func GetDockerExposedTCPPort() (int, error) {
-	return lookupInt(4040, CC_DOCKER_EXPOSED_TCP_PORT)
+// It panics if the value is invalid.
+func MustGetDockerExposedTCPPort() int {
+	return must(lookupInt(4040, CC_DOCKER_EXPOSED_TCP_PORT))
 }
 
 // CC_DOCKER_FIXED_CIDR_V6: Fixed CIDR for Docker IPv6
@@ -430,11 +437,12 @@ func GetDotnetTfm() string {
 // Scopes: dotnet.
 const CC_DOTNET_VERSION = "CC_DOTNET_VERSION"
 
-// GetDotnetVersion returns the value of [CC_DOTNET_VERSION].
+// MustGetDotnetVersion returns the value of [CC_DOTNET_VERSION].
 // Accepted values: 6.0, 8.0, 9.0, 10.0.
 // Default: 8.0.
-func GetDotnetVersion() (string, error) {
-	return lookupChoice("8.0", []string{"6.0", "8.0", "9.0", "10.0"}, CC_DOTNET_VERSION)
+// It panics if the value is invalid.
+func MustGetDotnetVersion() string {
+	return must(lookupChoice("8.0", []string{"6.0", "8.0", "9.0", "10.0"}, CC_DOTNET_VERSION))
 }
 
 // CC_ELIXIR_VERSION: Elixir version to use, with automatic Erlang/OTP version
@@ -443,10 +451,11 @@ func GetDotnetVersion() (string, error) {
 // Scopes: elixir, erlang.
 const CC_ELIXIR_VERSION = "CC_ELIXIR_VERSION"
 
-// GetElixirVersion returns the value of [CC_ELIXIR_VERSION].
+// MustGetElixirVersion returns the value of [CC_ELIXIR_VERSION].
 // Accepted values: 1.14, 1.15, 1.16, 1.17, 1.18, 1.19, 1.20.
-func GetElixirVersion() (string, error) {
-	return lookupChoice("", []string{"1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"}, CC_ELIXIR_VERSION)
+// It panics if the value is invalid.
+func MustGetElixirVersion() string {
+	return must(lookupChoice("", []string{"1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"}, CC_ELIXIR_VERSION))
 }
 
 // CC_ENABLE_MYSQL_PROXYSQL: Enable MySQL ProxySQL
@@ -454,11 +463,12 @@ func GetElixirVersion() (string, error) {
 // Scopes: proxysql.
 const CC_ENABLE_MYSQL_PROXYSQL = "CC_ENABLE_MYSQL_PROXYSQL"
 
-// GetEnableMysqlProxysql returns the value of [CC_ENABLE_MYSQL_PROXYSQL].
+// MustGetEnableMysqlProxysql returns the value of [CC_ENABLE_MYSQL_PROXYSQL].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnableMysqlProxysql() (bool, error) {
-	return lookupBool(false, nil, nil, CC_ENABLE_MYSQL_PROXYSQL)
+// It panics if the value is invalid.
+func MustGetEnableMysqlProxysql() bool {
+	return must(lookupBool(false, nil, nil, CC_ENABLE_MYSQL_PROXYSQL))
 }
 
 // CC_ENABLE_PGPOOL: Enable PgPool
@@ -466,11 +476,12 @@ func GetEnableMysqlProxysql() (bool, error) {
 // Scopes: pgpool.
 const CC_ENABLE_PGPOOL = "CC_ENABLE_PGPOOL"
 
-// GetEnablePgpool returns the value of [CC_ENABLE_PGPOOL].
+// MustGetEnablePgpool returns the value of [CC_ENABLE_PGPOOL].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnablePgpool() (bool, error) {
-	return lookupBool(false, nil, nil, CC_ENABLE_PGPOOL)
+// It panics if the value is invalid.
+func MustGetEnablePgpool() bool {
+	return must(lookupBool(false, nil, nil, CC_ENABLE_PGPOOL))
 }
 
 // CC_ENABLE_REDIRECTIONIO: Enable Redirection.IO integration
@@ -478,11 +489,12 @@ func GetEnablePgpool() (bool, error) {
 // Scopes: redirectionio.
 const CC_ENABLE_REDIRECTIONIO = "CC_ENABLE_REDIRECTIONIO"
 
-// GetEnableRedirectionio returns the value of [CC_ENABLE_REDIRECTIONIO].
+// MustGetEnableRedirectionio returns the value of [CC_ENABLE_REDIRECTIONIO].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnableRedirectionio() (bool, error) {
-	return lookupBool(false, nil, nil, CC_ENABLE_REDIRECTIONIO)
+// It panics if the value is invalid.
+func MustGetEnableRedirectionio() bool {
+	return must(lookupBool(false, nil, nil, CC_ENABLE_REDIRECTIONIO))
 }
 
 // CC_ENABLE_SIDEKIQ: Enable Sidekiq
@@ -490,11 +502,12 @@ func GetEnableRedirectionio() (bool, error) {
 // Scopes: ruby.
 const CC_ENABLE_SIDEKIQ = "CC_ENABLE_SIDEKIQ"
 
-// GetEnableSidekiq returns the value of [CC_ENABLE_SIDEKIQ].
+// MustGetEnableSidekiq returns the value of [CC_ENABLE_SIDEKIQ].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnableSidekiq() (bool, error) {
-	return lookupBool(false, nil, nil, CC_ENABLE_SIDEKIQ)
+// It panics if the value is invalid.
+func MustGetEnableSidekiq() bool {
+	return must(lookupBool(false, nil, nil, CC_ENABLE_SIDEKIQ))
 }
 
 // CC_EXTRA_JAVA_ARGS: Extra arguments passed to the java command running a JAR
@@ -513,9 +526,10 @@ func GetExtraJavaArgs() string {
 // Scopes: frankenphp.
 const CC_FRANKENPHP_PORT = "CC_FRANKENPHP_PORT"
 
-// GetFrankenphpPort returns the value of [CC_FRANKENPHP_PORT].
-func GetFrankenphpPort() (int, error) {
-	return lookupInt(0, CC_FRANKENPHP_PORT)
+// MustGetFrankenphpPort returns the value of [CC_FRANKENPHP_PORT].
+// It panics if the value is invalid.
+func MustGetFrankenphpPort() int {
+	return must(lookupInt(0, CC_FRANKENPHP_PORT))
 }
 
 // CC_FRANKENPHP_WORKER: Path to frankenphp worker
@@ -537,8 +551,8 @@ const CC_FS_BUCKET = "CC_FS_BUCKET"
 
 // GetFSBucket returns every CC_FS_BUCKET and CC_FS_BUCKET_<N> variable, sorted
 // by N.
-func GetFSBucket() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_FS_BUCKET)
+func GetFSBucket() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_FS_BUCKET))
 }
 
 // CC_GO_BINARY: Path to the binary to execute after a Makefile build
@@ -556,10 +570,11 @@ func GetGoBinary() string {
 // Scopes: go.
 const CC_GO_BUILD_TOOL = "CC_GO_BUILD_TOOL"
 
-// GetGoBuildTool returns the value of [CC_GO_BUILD_TOOL].
+// MustGetGoBuildTool returns the value of [CC_GO_BUILD_TOOL].
 // Accepted values: goget, gomod, gobuild, makefile.
-func GetGoBuildTool() (string, error) {
-	return lookupChoice("", []string{"goget", "gomod", "gobuild", "makefile"}, CC_GO_BUILD_TOOL)
+// It panics if the value is invalid.
+func MustGetGoBuildTool() string {
+	return must(lookupChoice("", []string{"goget", "gomod", "gobuild", "makefile"}, CC_GO_BUILD_TOOL))
 }
 
 // CC_GO_PKG: Go package import path to build, auto-detected from go.mod
@@ -588,16 +603,10 @@ func GetGoRundir() string {
 // Scopes: java, java-gradle.
 const CC_GRADLE_BUILD_GOAL = "CC_GRADLE_BUILD_GOAL"
 
-// GRADLE_BUILD_GOAL is the former name of [CC_GRADLE_BUILD_GOAL].
-//
-// Deprecated: use [CC_GRADLE_BUILD_GOAL].
-const GRADLE_BUILD_GOAL = "GRADLE_BUILD_GOAL"
-
 // GetGradleBuildGoal returns the value of [CC_GRADLE_BUILD_GOAL].
 // Default: assemble.
-// When it is unset, the deprecated GRADLE_BUILD_GOAL is read instead.
 func GetGradleBuildGoal() string {
-	return lookupString("assemble", false, CC_GRADLE_BUILD_GOAL, GRADLE_BUILD_GOAL)
+	return lookupString("assemble", false, CC_GRADLE_BUILD_GOAL)
 }
 
 // CC_GRADLE_DEPLOY_GOAL: Gradle task(s) to execute when running the application
@@ -605,15 +614,9 @@ func GetGradleBuildGoal() string {
 // Scopes: java, java-gradle.
 const CC_GRADLE_DEPLOY_GOAL = "CC_GRADLE_DEPLOY_GOAL"
 
-// GRADLE_DEPLOY_GOAL is the former name of [CC_GRADLE_DEPLOY_GOAL].
-//
-// Deprecated: use [CC_GRADLE_DEPLOY_GOAL].
-const GRADLE_DEPLOY_GOAL = "GRADLE_DEPLOY_GOAL"
-
 // GetGradleDeployGoal returns the value of [CC_GRADLE_DEPLOY_GOAL].
-// When it is unset, the deprecated GRADLE_DEPLOY_GOAL is read instead.
 func GetGradleDeployGoal() string {
-	return lookupString("", false, CC_GRADLE_DEPLOY_GOAL, GRADLE_DEPLOY_GOAL)
+	return lookupString("", false, CC_GRADLE_DEPLOY_GOAL)
 }
 
 // CC_GRADLE_VERSION: Gradle version to set system-wide
@@ -632,17 +635,11 @@ func GetGradleVersion() string {
 // Scopes: python.
 const CC_GUNICORN_WORKER_CLASS = "CC_GUNICORN_WORKER_CLASS"
 
-// GUNICORN_WORKER_CLASS is the former name of [CC_GUNICORN_WORKER_CLASS].
-//
-// Deprecated: use [CC_GUNICORN_WORKER_CLASS].
-const GUNICORN_WORKER_CLASS = "GUNICORN_WORKER_CLASS"
-
 // GetGunicornWorkerClass returns the value of [CC_GUNICORN_WORKER_CLASS].
 // Expected values: sync, eventlet, gevent, tornado, gthread, gaiohttp.
 // Default: sync.
-// When it is unset, the deprecated GUNICORN_WORKER_CLASS is read instead.
 func GetGunicornWorkerClass() string {
-	return lookupString("sync", false, CC_GUNICORN_WORKER_CLASS, GUNICORN_WORKER_CLASS)
+	return lookupString("sync", false, CC_GUNICORN_WORKER_CLASS)
 }
 
 // CC_HASKELL_STACK_INSTALL_COMMAND: Override the default stack install command
@@ -701,8 +698,8 @@ const CC_HEALTH_CHECK_PATH = "CC_HEALTH_CHECK_PATH"
 
 // GetHealthCheckPath returns every CC_HEALTH_CHECK_PATH and
 // CC_HEALTH_CHECK_PATH_<N> variable, sorted by N.
-func GetHealthCheckPath() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_HEALTH_CHECK_PATH)
+func GetHealthCheckPath() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_HEALTH_CHECK_PATH))
 }
 
 // CC_HTTP_BASIC_AUTH: HTTP Basic Authentication credentials in user:password
@@ -715,8 +712,8 @@ const CC_HTTP_BASIC_AUTH = "CC_HTTP_BASIC_AUTH"
 
 // GetHTTPBasicAuth returns every CC_HTTP_BASIC_AUTH and CC_HTTP_BASIC_AUTH_<N>
 // variable, sorted by N.
-func GetHTTPBasicAuth() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_HTTP_BASIC_AUTH)
+func GetHTTPBasicAuth() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_HTTP_BASIC_AUTH))
 }
 
 // CC_HUGO_VERSION: Hugo version
@@ -767,12 +764,13 @@ func GetJarPath() string {
 // Scopes: java, elastic-apm.
 const CC_JAVA_APM_AGENT_CONTINUOUS = "CC_JAVA_APM_AGENT_CONTINUOUS"
 
-// GetJavaAPMAgentContinuous returns the value of
+// MustGetJavaAPMAgentContinuous returns the value of
 // [CC_JAVA_APM_AGENT_CONTINUOUS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetJavaAPMAgentContinuous() (bool, error) {
-	return lookupBool(false, nil, nil, CC_JAVA_APM_AGENT_CONTINUOUS)
+// It panics if the value is invalid.
+func MustGetJavaAPMAgentContinuous() bool {
+	return must(lookupBool(false, nil, nil, CC_JAVA_APM_AGENT_CONTINUOUS))
 }
 
 // CC_JAVA_APM_AGENT_ENABLE: Enable Java APM agent
@@ -780,11 +778,12 @@ func GetJavaAPMAgentContinuous() (bool, error) {
 // Scopes: java, elastic-apm.
 const CC_JAVA_APM_AGENT_ENABLE = "CC_JAVA_APM_AGENT_ENABLE"
 
-// GetJavaAPMAgentEnable returns the value of [CC_JAVA_APM_AGENT_ENABLE].
+// MustGetJavaAPMAgentEnable returns the value of [CC_JAVA_APM_AGENT_ENABLE].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetJavaAPMAgentEnable() (bool, error) {
-	return lookupBool(false, nil, nil, CC_JAVA_APM_AGENT_ENABLE)
+// It panics if the value is invalid.
+func MustGetJavaAPMAgentEnable() bool {
+	return must(lookupBool(false, nil, nil, CC_JAVA_APM_AGENT_ENABLE))
 }
 
 // CC_JAVA_VERSION: Java JDK version to use
@@ -792,17 +791,12 @@ func GetJavaAPMAgentEnable() (bool, error) {
 // Scopes: deployer, java.
 const CC_JAVA_VERSION = "CC_JAVA_VERSION"
 
-// JAVA_VERSION is the former name of [CC_JAVA_VERSION].
-//
-// Deprecated: use [CC_JAVA_VERSION].
-const JAVA_VERSION = "JAVA_VERSION"
-
-// GetJavaVersion returns the value of [CC_JAVA_VERSION].
+// MustGetJavaVersion returns the value of [CC_JAVA_VERSION].
 // Accepted values: 7, 8, 11, 17, 21, 22, 23, 24, 25, graalvm-ce.
 // Default: 21.
-// When it is unset, the deprecated JAVA_VERSION is read instead.
-func GetJavaVersion() (string, error) {
-	return lookupChoice("21", []string{"7", "8", "11", "17", "21", "22", "23", "24", "25", "graalvm-ce"}, CC_JAVA_VERSION, JAVA_VERSION)
+// It panics if the value is invalid.
+func MustGetJavaVersion() string {
+	return must(lookupChoice("21", []string{"7", "8", "11", "17", "21", "22", "23", "24", "25", "graalvm-ce"}, CC_JAVA_VERSION))
 }
 
 // CC_MAVEN_BUILD_GOAL: Maven build goal
@@ -821,15 +815,9 @@ func GetMavenBuildGoal() string {
 // Scopes: java, java-maven.
 const CC_MAVEN_DEPLOY_GOAL = "CC_MAVEN_DEPLOY_GOAL"
 
-// MAVEN_DEPLOY_GOAL is the former name of [CC_MAVEN_DEPLOY_GOAL].
-//
-// Deprecated: use [CC_MAVEN_DEPLOY_GOAL].
-const MAVEN_DEPLOY_GOAL = "MAVEN_DEPLOY_GOAL"
-
 // GetMavenDeployGoal returns the value of [CC_MAVEN_DEPLOY_GOAL].
-// When it is unset, the deprecated MAVEN_DEPLOY_GOAL is read instead.
 func GetMavenDeployGoal() string {
-	return lookupString("", false, CC_MAVEN_DEPLOY_GOAL, MAVEN_DEPLOY_GOAL)
+	return lookupString("", false, CC_MAVEN_DEPLOY_GOAL)
 }
 
 // CC_MAVEN_PROFILES: Maven build profile(s) to activate (-P flag)
@@ -869,9 +857,11 @@ func GetMetricsPrometheusPath() string {
 // Scopes: prometheus.
 const CC_METRICS_PROMETHEUS_PORT = "CC_METRICS_PROMETHEUS_PORT"
 
-// GetMetricsPrometheusPort returns the value of [CC_METRICS_PROMETHEUS_PORT].
-func GetMetricsPrometheusPort() (int, error) {
-	return lookupInt(0, CC_METRICS_PROMETHEUS_PORT)
+// MustGetMetricsPrometheusPort returns the value of
+// [CC_METRICS_PROMETHEUS_PORT].
+// It panics if the value is invalid.
+func MustGetMetricsPrometheusPort() int {
+	return must(lookupInt(0, CC_METRICS_PROMETHEUS_PORT))
 }
 
 // CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT: Timeout in seconds for Prometheus
@@ -880,11 +870,12 @@ func GetMetricsPrometheusPort() (int, error) {
 // Scopes: prometheus.
 const CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT = "CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT"
 
-// GetMetricsPrometheusResponseTimeout returns the value of
+// MustGetMetricsPrometheusResponseTimeout returns the value of
 // [CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT].
 // Default: 30.
-func GetMetricsPrometheusResponseTimeout() (int, error) {
-	return lookupInt(30, CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetMetricsPrometheusResponseTimeout() int {
+	return must(lookupInt(30, CC_METRICS_PROMETHEUS_RESPONSE_TIMEOUT))
 }
 
 // CC_METRICS_PROMETHEUS_USER: Username for Prometheus metrics
@@ -913,11 +904,12 @@ func GetMiseFilePath() string {
 // Scopes: docker.
 const CC_MOUNT_DOCKER_SOCKET = "CC_MOUNT_DOCKER_SOCKET"
 
-// GetMountDockerSocket returns the value of [CC_MOUNT_DOCKER_SOCKET].
+// MustGetMountDockerSocket returns the value of [CC_MOUNT_DOCKER_SOCKET].
 // It is true for 1, true, yes, on, enable, enabled, mount; false for 0, false,
 // no, off, disable, disabled.
-func GetMountDockerSocket() (bool, error) {
-	return lookupBool(false, []string{"mount"}, nil, CC_MOUNT_DOCKER_SOCKET)
+// It panics if the value is invalid.
+func MustGetMountDockerSocket() bool {
+	return must(lookupBool(false, []string{"mount"}, nil, CC_MOUNT_DOCKER_SOCKET))
 }
 
 // CC_MTA_AUTH_PASSWORD: Password for SMTP authentication when sending emails
@@ -949,12 +941,13 @@ func GetMTAAuthUser() string {
 // Scopes: php, mta.
 const CC_MTA_SERVER_AUTH_METHOD = "CC_MTA_SERVER_AUTH_METHOD"
 
-// GetMTAServerAuthMethod returns the value of [CC_MTA_SERVER_AUTH_METHOD].
+// MustGetMTAServerAuthMethod returns the value of [CC_MTA_SERVER_AUTH_METHOD].
 // Accepted values: cram-md5, digest-md5, external, gssapi, login, ntlm, off,
 // on, plain, scram-sha-1, scram-sha-256.
 // Default: on.
-func GetMTAServerAuthMethod() (string, error) {
-	return lookupChoice("on", []string{"cram-md5", "digest-md5", "external", "gssapi", "login", "ntlm", "off", "on", "plain", "scram-sha-1", "scram-sha-256"}, CC_MTA_SERVER_AUTH_METHOD)
+// It panics if the value is invalid.
+func MustGetMTAServerAuthMethod() string {
+	return must(lookupChoice("on", []string{"cram-md5", "digest-md5", "external", "gssapi", "login", "ntlm", "off", "on", "plain", "scram-sha-1", "scram-sha-256"}, CC_MTA_SERVER_AUTH_METHOD))
 }
 
 // CC_MTA_SERVER_HOST: Hostname of the SMTP server used for sending emails from
@@ -974,10 +967,11 @@ func GetMTAServerHost() string {
 // Scopes: php, mta.
 const CC_MTA_SERVER_PORT = "CC_MTA_SERVER_PORT"
 
-// GetMTAServerPort returns the value of [CC_MTA_SERVER_PORT].
+// MustGetMTAServerPort returns the value of [CC_MTA_SERVER_PORT].
 // Default: 465.
-func GetMTAServerPort() (int, error) {
-	return lookupInt(465, CC_MTA_SERVER_PORT)
+// It panics if the value is invalid.
+func MustGetMTAServerPort() int {
+	return must(lookupInt(465, CC_MTA_SERVER_PORT))
 }
 
 // CC_MTA_SERVER_STARTTLS: Enable STARTTLS upgrade for the SMTP connection
@@ -985,11 +979,12 @@ func GetMTAServerPort() (int, error) {
 // Scopes: php, mta.
 const CC_MTA_SERVER_STARTTLS = "CC_MTA_SERVER_STARTTLS"
 
-// GetMTAServerStarttls returns the value of [CC_MTA_SERVER_STARTTLS].
+// MustGetMTAServerStarttls returns the value of [CC_MTA_SERVER_STARTTLS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetMTAServerStarttls() (bool, error) {
-	return lookupBool(false, nil, nil, CC_MTA_SERVER_STARTTLS)
+// It panics if the value is invalid.
+func MustGetMTAServerStarttls() bool {
+	return must(lookupBool(false, nil, nil, CC_MTA_SERVER_STARTTLS))
 }
 
 // CC_MTA_SERVER_USE_TLS: Force TLS encryption for the SMTP connection, enabled
@@ -998,11 +993,12 @@ func GetMTAServerStarttls() (bool, error) {
 // Scopes: php, mta.
 const CC_MTA_SERVER_USE_TLS = "CC_MTA_SERVER_USE_TLS"
 
-// GetMTAServerUseTLS returns the value of [CC_MTA_SERVER_USE_TLS].
+// MustGetMTAServerUseTLS returns the value of [CC_MTA_SERVER_USE_TLS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetMTAServerUseTLS() (bool, error) {
-	return lookupBool(false, nil, nil, CC_MTA_SERVER_USE_TLS)
+// It panics if the value is invalid.
+func MustGetMTAServerUseTLS() bool {
+	return must(lookupBool(false, nil, nil, CC_MTA_SERVER_USE_TLS))
 }
 
 // CC_MYSQL_PROXYSQL_MAX_CONNECTIONS: Max connections for MySQL ProxySQL
@@ -1010,11 +1006,12 @@ func GetMTAServerUseTLS() (bool, error) {
 // Scopes: proxysql.
 const CC_MYSQL_PROXYSQL_MAX_CONNECTIONS = "CC_MYSQL_PROXYSQL_MAX_CONNECTIONS"
 
-// GetMysqlProxysqlMaxConnections returns the value of
+// MustGetMysqlProxysqlMaxConnections returns the value of
 // [CC_MYSQL_PROXYSQL_MAX_CONNECTIONS].
 // Default: 10.
-func GetMysqlProxysqlMaxConnections() (int, error) {
-	return lookupInt(10, CC_MYSQL_PROXYSQL_MAX_CONNECTIONS)
+// It panics if the value is invalid.
+func MustGetMysqlProxysqlMaxConnections() int {
+	return must(lookupInt(10, CC_MYSQL_PROXYSQL_MAX_CONNECTIONS))
 }
 
 // CC_MYSQL_PROXYSQL_USE_TLS: Enable TLS for MySQL ProxySQL
@@ -1022,12 +1019,13 @@ func GetMysqlProxysqlMaxConnections() (int, error) {
 // Scopes: proxysql.
 const CC_MYSQL_PROXYSQL_USE_TLS = "CC_MYSQL_PROXYSQL_USE_TLS"
 
-// GetMysqlProxysqlUseTLS returns the value of [CC_MYSQL_PROXYSQL_USE_TLS].
+// MustGetMysqlProxysqlUseTLS returns the value of [CC_MYSQL_PROXYSQL_USE_TLS].
 // It is true for 1, true, yes, on, enable, enabled, use, tls, ssl; false for 0,
 // false, no, off, disable, disabled.
 // Default: true.
-func GetMysqlProxysqlUseTLS() (bool, error) {
-	return lookupBool(true, []string{"use", "tls", "ssl"}, nil, CC_MYSQL_PROXYSQL_USE_TLS)
+// It panics if the value is invalid.
+func MustGetMysqlProxysqlUseTLS() bool {
+	return must(lookupBool(true, []string{"use", "tls", "ssl"}, nil, CC_MYSQL_PROXYSQL_USE_TLS))
 }
 
 // CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT: New Relic browser monitoring
@@ -1036,13 +1034,14 @@ func GetMysqlProxysqlUseTLS() (bool, error) {
 // Scopes: new-relic.
 const CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT = "CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT"
 
-// GetNewrelicBrowserMonitoringAutoInstrument returns the value of
+// MustGetNewrelicBrowserMonitoringAutoInstrument returns the value of
 // [CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetNewrelicBrowserMonitoringAutoInstrument() (bool, error) {
-	return lookupBool(true, nil, nil, CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT)
+// It panics if the value is invalid.
+func MustGetNewrelicBrowserMonitoringAutoInstrument() bool {
+	return must(lookupBool(true, nil, nil, CC_NEWRELIC_BROWSER_MONITORING_AUTO_INSTRUMENT))
 }
 
 // CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED: New Relic distributed tracing
@@ -1051,13 +1050,14 @@ func GetNewrelicBrowserMonitoringAutoInstrument() (bool, error) {
 // Scopes: new-relic.
 const CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED = "CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED"
 
-// GetNewrelicDistributedTracingEnabled returns the value of
+// MustGetNewrelicDistributedTracingEnabled returns the value of
 // [CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetNewrelicDistributedTracingEnabled() (bool, error) {
-	return lookupBool(true, nil, nil, CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED)
+// It panics if the value is invalid.
+func MustGetNewrelicDistributedTracingEnabled() bool {
+	return must(lookupBool(true, nil, nil, CC_NEWRELIC_DISTRIBUTED_TRACING_ENABLED))
 }
 
 // CC_NEWRELIC_ERROR_COLLECTOR_ENABLED: New Relic error collector enabled
@@ -1065,13 +1065,14 @@ func GetNewrelicDistributedTracingEnabled() (bool, error) {
 // Scopes: new-relic.
 const CC_NEWRELIC_ERROR_COLLECTOR_ENABLED = "CC_NEWRELIC_ERROR_COLLECTOR_ENABLED"
 
-// GetNewrelicErrorCollectorEnabled returns the value of
+// MustGetNewrelicErrorCollectorEnabled returns the value of
 // [CC_NEWRELIC_ERROR_COLLECTOR_ENABLED].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetNewrelicErrorCollectorEnabled() (bool, error) {
-	return lookupBool(true, nil, nil, CC_NEWRELIC_ERROR_COLLECTOR_ENABLED)
+// It panics if the value is invalid.
+func MustGetNewrelicErrorCollectorEnabled() bool {
+	return must(lookupBool(true, nil, nil, CC_NEWRELIC_ERROR_COLLECTOR_ENABLED))
 }
 
 // CC_NEWRELIC_TRANSACTION_TRACER_ENABLED: New Relic transaction tracer enabled
@@ -1079,13 +1080,14 @@ func GetNewrelicErrorCollectorEnabled() (bool, error) {
 // Scopes: new-relic.
 const CC_NEWRELIC_TRANSACTION_TRACER_ENABLED = "CC_NEWRELIC_TRANSACTION_TRACER_ENABLED"
 
-// GetNewrelicTransactionTracerEnabled returns the value of
+// MustGetNewrelicTransactionTracerEnabled returns the value of
 // [CC_NEWRELIC_TRANSACTION_TRACER_ENABLED].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetNewrelicTransactionTracerEnabled() (bool, error) {
-	return lookupBool(true, nil, nil, CC_NEWRELIC_TRANSACTION_TRACER_ENABLED)
+// It panics if the value is invalid.
+func MustGetNewrelicTransactionTracerEnabled() bool {
+	return must(lookupBool(true, nil, nil, CC_NEWRELIC_TRANSACTION_TRACER_ENABLED))
 }
 
 // CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL: New Relic transaction tracer
@@ -1094,12 +1096,13 @@ func GetNewrelicTransactionTracerEnabled() (bool, error) {
 // Scopes: new-relic.
 const CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL = "CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL"
 
-// GetNewrelicTransactionTracerRecordSQL returns the value of
+// MustGetNewrelicTransactionTracerRecordSQL returns the value of
 // [CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL].
 // Accepted values: obfuscated, raw, off.
 // Default: obfuscated.
-func GetNewrelicTransactionTracerRecordSQL() (string, error) {
-	return lookupChoice("obfuscated", []string{"obfuscated", "raw", "off"}, CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL)
+// It panics if the value is invalid.
+func MustGetNewrelicTransactionTracerRecordSQL() string {
+	return must(lookupChoice("obfuscated", []string{"obfuscated", "raw", "off"}, CC_NEWRELIC_TRANSACTION_TRACER_RECORD_SQL))
 }
 
 // CC_NGINX_PROXY_BUFFERS: Number and size of Nginx proxy buffers, as <number>
@@ -1130,17 +1133,11 @@ func GetNginxProxyBufferSize() string {
 // Scopes: deployer, node.
 const CC_NODE_BUILD_TOOL = "CC_NODE_BUILD_TOOL"
 
-// NODE_BUILD_TOOL is the former name of [CC_NODE_BUILD_TOOL].
-//
-// Deprecated: use [CC_NODE_BUILD_TOOL].
-const NODE_BUILD_TOOL = "NODE_BUILD_TOOL"
-
 // GetNodeBuildTool returns the value of [CC_NODE_BUILD_TOOL].
 // Expected values: bun, npm, npm-ci, npm-install, pnpm, yarn, yarn2,
 // yarn-berry, custom.
-// When it is unset, the deprecated NODE_BUILD_TOOL is read instead.
 func GetNodeBuildTool() string {
-	return lookupString("", false, CC_NODE_BUILD_TOOL, NODE_BUILD_TOOL)
+	return lookupString("", false, CC_NODE_BUILD_TOOL)
 }
 
 // CC_NODE_DEV_DEPENDENCIES: Enable Node dev dependencies
@@ -1148,11 +1145,12 @@ func GetNodeBuildTool() string {
 // Scopes: node.
 const CC_NODE_DEV_DEPENDENCIES = "CC_NODE_DEV_DEPENDENCIES"
 
-// GetNodeDevDependencies returns the value of [CC_NODE_DEV_DEPENDENCIES].
+// MustGetNodeDevDependencies returns the value of [CC_NODE_DEV_DEPENDENCIES].
 // It is true for 1, true, yes, on, enable, enabled, install; false for 0,
 // false, no, off, disable, disabled, skip, ignore.
-func GetNodeDevDependencies() (bool, error) {
-	return lookupBool(false, []string{"install"}, []string{"skip", "ignore"}, CC_NODE_DEV_DEPENDENCIES)
+// It panics if the value is invalid.
+func MustGetNodeDevDependencies() bool {
+	return must(lookupBool(false, []string{"install"}, []string{"skip", "ignore"}, CC_NODE_DEV_DEPENDENCIES))
 }
 
 // CC_NODE_VERSION: Node.js runtime version to use
@@ -1194,10 +1192,11 @@ func GetNPMRegistry() string {
 // Scopes: php, opcache.
 const CC_OPCACHE_INTERNED_STRINGS_BUFFER = "CC_OPCACHE_INTERNED_STRINGS_BUFFER"
 
-// GetOpcacheInternedStringsBuffer returns the value of
+// MustGetOpcacheInternedStringsBuffer returns the value of
 // [CC_OPCACHE_INTERNED_STRINGS_BUFFER].
-func GetOpcacheInternedStringsBuffer() (int, error) {
-	return lookupInt(0, CC_OPCACHE_INTERNED_STRINGS_BUFFER)
+// It panics if the value is invalid.
+func MustGetOpcacheInternedStringsBuffer() int {
+	return must(lookupInt(0, CC_OPCACHE_INTERNED_STRINGS_BUFFER))
 }
 
 // CC_OPCACHE_MAX_ACCELERATED_FILES: Maximum number of PHP files stored in
@@ -1206,10 +1205,11 @@ func GetOpcacheInternedStringsBuffer() (int, error) {
 // Scopes: php, opcache.
 const CC_OPCACHE_MAX_ACCELERATED_FILES = "CC_OPCACHE_MAX_ACCELERATED_FILES"
 
-// GetOpcacheMaxAcceleratedFiles returns the value of
+// MustGetOpcacheMaxAcceleratedFiles returns the value of
 // [CC_OPCACHE_MAX_ACCELERATED_FILES].
-func GetOpcacheMaxAcceleratedFiles() (int, error) {
-	return lookupInt(0, CC_OPCACHE_MAX_ACCELERATED_FILES)
+// It panics if the value is invalid.
+func MustGetOpcacheMaxAcceleratedFiles() int {
+	return must(lookupInt(0, CC_OPCACHE_MAX_ACCELERATED_FILES))
 }
 
 // CC_OPCACHE_MEMORY: Memory in MB allocated for PHP OPcache bytecode caching,
@@ -1218,9 +1218,10 @@ func GetOpcacheMaxAcceleratedFiles() (int, error) {
 // Scopes: php, opcache.
 const CC_OPCACHE_MEMORY = "CC_OPCACHE_MEMORY"
 
-// GetOpcacheMemory returns the value of [CC_OPCACHE_MEMORY].
-func GetOpcacheMemory() (int, error) {
-	return lookupInt(0, CC_OPCACHE_MEMORY)
+// MustGetOpcacheMemory returns the value of [CC_OPCACHE_MEMORY].
+// It panics if the value is invalid.
+func MustGetOpcacheMemory() int {
+	return must(lookupInt(0, CC_OPCACHE_MEMORY))
 }
 
 // CC_OPCACHE_PRELOAD: Path to a PHP script to preload into OPcache at server
@@ -1239,12 +1240,13 @@ func GetOpcachePreload() string {
 // Scopes: pgpool.
 const CC_PGPOOL_ALLOW_SQL_COMMENTS = "CC_PGPOOL_ALLOW_SQL_COMMENTS"
 
-// GetPgpoolAllowSQLComments returns the value of
+// MustGetPgpoolAllowSQLComments returns the value of
 // [CC_PGPOOL_ALLOW_SQL_COMMENTS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolAllowSQLComments() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_ALLOW_SQL_COMMENTS)
+// It panics if the value is invalid.
+func MustGetPgpoolAllowSQLComments() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_ALLOW_SQL_COMMENTS))
 }
 
 // CC_PGPOOL_APP_NAME_REDIRECT_PREFERENCE_LIST: Comma-separated list of
@@ -1292,10 +1294,11 @@ func GetPgpoolCacheUnsafeMemqcacheTableList() string {
 // Scopes: pgpool.
 const CC_PGPOOL_CHILD_LIFE_TIME = "CC_PGPOOL_CHILD_LIFE_TIME"
 
-// GetPgpoolChildLifeTime returns the value of [CC_PGPOOL_CHILD_LIFE_TIME].
+// MustGetPgpoolChildLifeTime returns the value of [CC_PGPOOL_CHILD_LIFE_TIME].
 // Default: 300.
-func GetPgpoolChildLifeTime() (int, error) {
-	return lookupInt(300, CC_PGPOOL_CHILD_LIFE_TIME)
+// It panics if the value is invalid.
+func MustGetPgpoolChildLifeTime() int {
+	return must(lookupInt(300, CC_PGPOOL_CHILD_LIFE_TIME))
 }
 
 // CC_PGPOOL_CHILD_MAX_CONNECTIONS: Number of client connections a PgPool child
@@ -1304,11 +1307,12 @@ func GetPgpoolChildLifeTime() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_CHILD_MAX_CONNECTIONS = "CC_PGPOOL_CHILD_MAX_CONNECTIONS"
 
-// GetPgpoolChildMaxConnections returns the value of
+// MustGetPgpoolChildMaxConnections returns the value of
 // [CC_PGPOOL_CHILD_MAX_CONNECTIONS].
 // Default: 0.
-func GetPgpoolChildMaxConnections() (int, error) {
-	return lookupInt(0, CC_PGPOOL_CHILD_MAX_CONNECTIONS)
+// It panics if the value is invalid.
+func MustGetPgpoolChildMaxConnections() int {
+	return must(lookupInt(0, CC_PGPOOL_CHILD_MAX_CONNECTIONS))
 }
 
 // CC_PGPOOL_CLIENT_IDLE_LIMIT: Client idle limit in PgPool
@@ -1316,10 +1320,12 @@ func GetPgpoolChildMaxConnections() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_CLIENT_IDLE_LIMIT = "CC_PGPOOL_CLIENT_IDLE_LIMIT"
 
-// GetPgpoolClientIdleLimit returns the value of [CC_PGPOOL_CLIENT_IDLE_LIMIT].
+// MustGetPgpoolClientIdleLimit returns the value of
+// [CC_PGPOOL_CLIENT_IDLE_LIMIT].
 // Default: 0.
-func GetPgpoolClientIdleLimit() (int, error) {
-	return lookupInt(0, CC_PGPOOL_CLIENT_IDLE_LIMIT)
+// It panics if the value is invalid.
+func MustGetPgpoolClientIdleLimit() int {
+	return must(lookupInt(0, CC_PGPOOL_CLIENT_IDLE_LIMIT))
 }
 
 // CC_PGPOOL_CONNECTION_CACHE: Enable connection cache in PgPool
@@ -1327,11 +1333,13 @@ func GetPgpoolClientIdleLimit() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_CONNECTION_CACHE = "CC_PGPOOL_CONNECTION_CACHE"
 
-// GetPgpoolConnectionCache returns the value of [CC_PGPOOL_CONNECTION_CACHE].
+// MustGetPgpoolConnectionCache returns the value of
+// [CC_PGPOOL_CONNECTION_CACHE].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolConnectionCache() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_CONNECTION_CACHE)
+// It panics if the value is invalid.
+func MustGetPgpoolConnectionCache() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_CONNECTION_CACHE))
 }
 
 // CC_PGPOOL_CONNECTION_LIFE_TIME: Connection life time in PgPool
@@ -1339,11 +1347,12 @@ func GetPgpoolConnectionCache() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_CONNECTION_LIFE_TIME = "CC_PGPOOL_CONNECTION_LIFE_TIME"
 
-// GetPgpoolConnectionLifeTime returns the value of
+// MustGetPgpoolConnectionLifeTime returns the value of
 // [CC_PGPOOL_CONNECTION_LIFE_TIME].
 // Default: 0.
-func GetPgpoolConnectionLifeTime() (int, error) {
-	return lookupInt(0, CC_PGPOOL_CONNECTION_LIFE_TIME)
+// It panics if the value is invalid.
+func MustGetPgpoolConnectionLifeTime() int {
+	return must(lookupInt(0, CC_PGPOOL_CONNECTION_LIFE_TIME))
 }
 
 // CC_PGPOOL_CONNECT_TIMEOUT: Connect timeout in PgPool
@@ -1351,10 +1360,11 @@ func GetPgpoolConnectionLifeTime() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_CONNECT_TIMEOUT = "CC_PGPOOL_CONNECT_TIMEOUT"
 
-// GetPgpoolConnectTimeout returns the value of [CC_PGPOOL_CONNECT_TIMEOUT].
+// MustGetPgpoolConnectTimeout returns the value of [CC_PGPOOL_CONNECT_TIMEOUT].
 // Default: 10000.
-func GetPgpoolConnectTimeout() (int, error) {
-	return lookupInt(10000, CC_PGPOOL_CONNECT_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetPgpoolConnectTimeout() int {
+	return must(lookupInt(10000, CC_PGPOOL_CONNECT_TIMEOUT))
 }
 
 // CC_PGPOOL_DATABASE_REDIRECT_PREFERENCE_LIST: Comma-separated list of
@@ -1376,9 +1386,10 @@ func GetPgpoolDatabaseRedirectPreferenceList() string {
 // Scopes: pgpool.
 const CC_PGPOOL_DELAY_THRESHOLD = "CC_PGPOOL_DELAY_THRESHOLD"
 
-// GetPgpoolDelayThreshold returns the value of [CC_PGPOOL_DELAY_THRESHOLD].
-func GetPgpoolDelayThreshold() (int, error) {
-	return lookupInt(0, CC_PGPOOL_DELAY_THRESHOLD)
+// MustGetPgpoolDelayThreshold returns the value of [CC_PGPOOL_DELAY_THRESHOLD].
+// It panics if the value is invalid.
+func MustGetPgpoolDelayThreshold() int {
+	return must(lookupInt(0, CC_PGPOOL_DELAY_THRESHOLD))
 }
 
 // CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE: Disable load balance on write in
@@ -1387,11 +1398,12 @@ func GetPgpoolDelayThreshold() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE = "CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE"
 
-// GetPgpoolDisableLoadBalanceOnWrite returns the value of
+// MustGetPgpoolDisableLoadBalanceOnWrite returns the value of
 // [CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE].
 // Accepted values: off, transaction, trans_transaction, always.
-func GetPgpoolDisableLoadBalanceOnWrite() (string, error) {
-	return lookupChoice("", []string{"off", "transaction", "trans_transaction", "always"}, CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE)
+// It panics if the value is invalid.
+func MustGetPgpoolDisableLoadBalanceOnWrite() string {
+	return must(lookupChoice("", []string{"off", "transaction", "trans_transaction", "always"}, CC_PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE))
 }
 
 // CC_PGPOOL_DML_ADAPTIVE_OBJECT_RELATIONSHIP_LIST: List of DML adaptive object
@@ -1426,12 +1438,13 @@ func GetPgpoolExtraUsers() string {
 // Scopes: pgpool.
 const CC_PGPOOL_FAILOVER_IF_AFFECTED_TUPLES_MISMATCH = "CC_PGPOOL_FAILOVER_IF_AFFECTED_TUPLES_MISMATCH"
 
-// GetPgpoolFailoverIfAffectedTuplesMismatch returns the value of
+// MustGetPgpoolFailoverIfAffectedTuplesMismatch returns the value of
 // [CC_PGPOOL_FAILOVER_IF_AFFECTED_TUPLES_MISMATCH].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolFailoverIfAffectedTuplesMismatch() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_FAILOVER_IF_AFFECTED_TUPLES_MISMATCH)
+// It panics if the value is invalid.
+func MustGetPgpoolFailoverIfAffectedTuplesMismatch() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_FAILOVER_IF_AFFECTED_TUPLES_MISMATCH))
 }
 
 // CC_PGPOOL_FOLLOWERS: Followers in PgPool, should be a JSON array of
@@ -1451,11 +1464,12 @@ func GetPgpoolFollowers() string {
 // Scopes: pgpool.
 const CC_PGPOOL_HEALTH_CHECK_MAX_RETRIES = "CC_PGPOOL_HEALTH_CHECK_MAX_RETRIES"
 
-// GetPgpoolHealthCheckMaxRetries returns the value of
+// MustGetPgpoolHealthCheckMaxRetries returns the value of
 // [CC_PGPOOL_HEALTH_CHECK_MAX_RETRIES].
 // Default: 8.
-func GetPgpoolHealthCheckMaxRetries() (int, error) {
-	return lookupInt(8, CC_PGPOOL_HEALTH_CHECK_MAX_RETRIES)
+// It panics if the value is invalid.
+func MustGetPgpoolHealthCheckMaxRetries() int {
+	return must(lookupInt(8, CC_PGPOOL_HEALTH_CHECK_MAX_RETRIES))
 }
 
 // CC_PGPOOL_HEALTH_CHECK_PERIOD: Health check period in PgPool
@@ -1463,11 +1477,12 @@ func GetPgpoolHealthCheckMaxRetries() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_HEALTH_CHECK_PERIOD = "CC_PGPOOL_HEALTH_CHECK_PERIOD"
 
-// GetPgpoolHealthCheckPeriod returns the value of
+// MustGetPgpoolHealthCheckPeriod returns the value of
 // [CC_PGPOOL_HEALTH_CHECK_PERIOD].
 // Default: 5.
-func GetPgpoolHealthCheckPeriod() (int, error) {
-	return lookupInt(5, CC_PGPOOL_HEALTH_CHECK_PERIOD)
+// It panics if the value is invalid.
+func MustGetPgpoolHealthCheckPeriod() int {
+	return must(lookupInt(5, CC_PGPOOL_HEALTH_CHECK_PERIOD))
 }
 
 // CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY: Health check retry delay in PgPool
@@ -1475,11 +1490,12 @@ func GetPgpoolHealthCheckPeriod() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY = "CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY"
 
-// GetPgpoolHealthCheckRetryDelay returns the value of
+// MustGetPgpoolHealthCheckRetryDelay returns the value of
 // [CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY].
 // Default: 5.
-func GetPgpoolHealthCheckRetryDelay() (int, error) {
-	return lookupInt(5, CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY)
+// It panics if the value is invalid.
+func MustGetPgpoolHealthCheckRetryDelay() int {
+	return must(lookupInt(5, CC_PGPOOL_HEALTH_CHECK_RETRY_DELAY))
 }
 
 // CC_PGPOOL_HEALTH_CHECK_TIMEOUT: Health check timeout in PgPool
@@ -1487,11 +1503,12 @@ func GetPgpoolHealthCheckRetryDelay() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_HEALTH_CHECK_TIMEOUT = "CC_PGPOOL_HEALTH_CHECK_TIMEOUT"
 
-// GetPgpoolHealthCheckTimeout returns the value of
+// MustGetPgpoolHealthCheckTimeout returns the value of
 // [CC_PGPOOL_HEALTH_CHECK_TIMEOUT].
 // Default: 20.
-func GetPgpoolHealthCheckTimeout() (int, error) {
-	return lookupInt(20, CC_PGPOOL_HEALTH_CHECK_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetPgpoolHealthCheckTimeout() int {
+	return must(lookupInt(20, CC_PGPOOL_HEALTH_CHECK_TIMEOUT))
 }
 
 // CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE: Ignore leading white space in PgPool
@@ -1499,13 +1516,14 @@ func GetPgpoolHealthCheckTimeout() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE = "CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE"
 
-// GetPgpoolIgnoreLeadingWhiteSpace returns the value of
+// MustGetPgpoolIgnoreLeadingWhiteSpace returns the value of
 // [CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetPgpoolIgnoreLeadingWhiteSpace() (bool, error) {
-	return lookupBool(true, nil, nil, CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE)
+// It panics if the value is invalid.
+func MustGetPgpoolIgnoreLeadingWhiteSpace() bool {
+	return must(lookupBool(true, nil, nil, CC_PGPOOL_IGNORE_LEADING_WHITE_SPACE))
 }
 
 // CC_PGPOOL_INSERT_LOCK: Enable insert lock in PgPool
@@ -1513,11 +1531,12 @@ func GetPgpoolIgnoreLeadingWhiteSpace() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_INSERT_LOCK = "CC_PGPOOL_INSERT_LOCK"
 
-// GetPgpoolInsertLock returns the value of [CC_PGPOOL_INSERT_LOCK].
+// MustGetPgpoolInsertLock returns the value of [CC_PGPOOL_INSERT_LOCK].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolInsertLock() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_INSERT_LOCK)
+// It panics if the value is invalid.
+func MustGetPgpoolInsertLock() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_INSERT_LOCK))
 }
 
 // CC_PGPOOL_LEADER_WEIGHT: Leader weight in PgPool
@@ -1525,10 +1544,11 @@ func GetPgpoolInsertLock() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LEADER_WEIGHT = "CC_PGPOOL_LEADER_WEIGHT"
 
-// GetPgpoolLeaderWeight returns the value of [CC_PGPOOL_LEADER_WEIGHT].
+// MustGetPgpoolLeaderWeight returns the value of [CC_PGPOOL_LEADER_WEIGHT].
 // Default: 1.
-func GetPgpoolLeaderWeight() (int, error) {
-	return lookupInt(1, CC_PGPOOL_LEADER_WEIGHT)
+// It panics if the value is invalid.
+func MustGetPgpoolLeaderWeight() int {
+	return must(lookupInt(1, CC_PGPOOL_LEADER_WEIGHT))
 }
 
 // CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER: Listen backlog multiplier in PgPool
@@ -1536,11 +1556,12 @@ func GetPgpoolLeaderWeight() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER = "CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER"
 
-// GetPgpoolListenBacklogMultiplier returns the value of
+// MustGetPgpoolListenBacklogMultiplier returns the value of
 // [CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER].
 // Default: 2.
-func GetPgpoolListenBacklogMultiplier() (int, error) {
-	return lookupInt(2, CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER)
+// It panics if the value is invalid.
+func MustGetPgpoolListenBacklogMultiplier() int {
+	return must(lookupInt(2, CC_PGPOOL_LISTEN_BACKLOG_MULTIPLIER))
 }
 
 // CC_PGPOOL_LOAD_BALANCE_MODE: Load balance mode in PgPool
@@ -1548,11 +1569,13 @@ func GetPgpoolListenBacklogMultiplier() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOAD_BALANCE_MODE = "CC_PGPOOL_LOAD_BALANCE_MODE"
 
-// GetPgpoolLoadBalanceMode returns the value of [CC_PGPOOL_LOAD_BALANCE_MODE].
+// MustGetPgpoolLoadBalanceMode returns the value of
+// [CC_PGPOOL_LOAD_BALANCE_MODE].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLoadBalanceMode() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOAD_BALANCE_MODE)
+// It panics if the value is invalid.
+func MustGetPgpoolLoadBalanceMode() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOAD_BALANCE_MODE))
 }
 
 // CC_PGPOOL_LOBJ_LOCK_TABLE: LOB lock table in PgPool
@@ -1571,12 +1594,13 @@ func GetPgpoolLobjLockTable() string {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_CLIENT_MESSAGES = "CC_PGPOOL_LOG_CLIENT_MESSAGES"
 
-// GetPgpoolLogClientMessages returns the value of
+// MustGetPgpoolLogClientMessages returns the value of
 // [CC_PGPOOL_LOG_CLIENT_MESSAGES].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogClientMessages() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_CLIENT_MESSAGES)
+// It panics if the value is invalid.
+func MustGetPgpoolLogClientMessages() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_CLIENT_MESSAGES))
 }
 
 // CC_PGPOOL_LOG_CONNECTIONS: Enable logging connections in PgPool
@@ -1584,11 +1608,12 @@ func GetPgpoolLogClientMessages() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_CONNECTIONS = "CC_PGPOOL_LOG_CONNECTIONS"
 
-// GetPgpoolLogConnections returns the value of [CC_PGPOOL_LOG_CONNECTIONS].
+// MustGetPgpoolLogConnections returns the value of [CC_PGPOOL_LOG_CONNECTIONS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogConnections() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_CONNECTIONS)
+// It panics if the value is invalid.
+func MustGetPgpoolLogConnections() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_CONNECTIONS))
 }
 
 // CC_PGPOOL_LOG_DISCONNECTIONS: Enable logging disconnections in PgPool
@@ -1596,12 +1621,13 @@ func GetPgpoolLogConnections() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_DISCONNECTIONS = "CC_PGPOOL_LOG_DISCONNECTIONS"
 
-// GetPgpoolLogDisconnections returns the value of
+// MustGetPgpoolLogDisconnections returns the value of
 // [CC_PGPOOL_LOG_DISCONNECTIONS].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogDisconnections() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_DISCONNECTIONS)
+// It panics if the value is invalid.
+func MustGetPgpoolLogDisconnections() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_DISCONNECTIONS))
 }
 
 // CC_PGPOOL_LOG_HOSTNAME: Enable logging hostname in PgPool
@@ -1609,11 +1635,12 @@ func GetPgpoolLogDisconnections() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_HOSTNAME = "CC_PGPOOL_LOG_HOSTNAME"
 
-// GetPgpoolLogHostname returns the value of [CC_PGPOOL_LOG_HOSTNAME].
+// MustGetPgpoolLogHostname returns the value of [CC_PGPOOL_LOG_HOSTNAME].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogHostname() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_HOSTNAME)
+// It panics if the value is invalid.
+func MustGetPgpoolLogHostname() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_HOSTNAME))
 }
 
 // CC_PGPOOL_LOG_PER_NODE_STATEMENT: Enable logging per node statement in PgPool
@@ -1621,12 +1648,13 @@ func GetPgpoolLogHostname() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_PER_NODE_STATEMENT = "CC_PGPOOL_LOG_PER_NODE_STATEMENT"
 
-// GetPgpoolLogPerNodeStatement returns the value of
+// MustGetPgpoolLogPerNodeStatement returns the value of
 // [CC_PGPOOL_LOG_PER_NODE_STATEMENT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogPerNodeStatement() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_PER_NODE_STATEMENT)
+// It panics if the value is invalid.
+func MustGetPgpoolLogPerNodeStatement() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_PER_NODE_STATEMENT))
 }
 
 // CC_PGPOOL_LOG_STANDBY_DELAY: When PgPool logs the replication delay of
@@ -1635,10 +1663,12 @@ func GetPgpoolLogPerNodeStatement() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_STANDBY_DELAY = "CC_PGPOOL_LOG_STANDBY_DELAY"
 
-// GetPgpoolLogStandbyDelay returns the value of [CC_PGPOOL_LOG_STANDBY_DELAY].
+// MustGetPgpoolLogStandbyDelay returns the value of
+// [CC_PGPOOL_LOG_STANDBY_DELAY].
 // Accepted values: none, always, if_over_threshold.
-func GetPgpoolLogStandbyDelay() (string, error) {
-	return lookupChoice("", []string{"none", "always", "if_over_threshold"}, CC_PGPOOL_LOG_STANDBY_DELAY)
+// It panics if the value is invalid.
+func MustGetPgpoolLogStandbyDelay() string {
+	return must(lookupChoice("", []string{"none", "always", "if_over_threshold"}, CC_PGPOOL_LOG_STANDBY_DELAY))
 }
 
 // CC_PGPOOL_LOG_STATEMENT: Enable logging statements in PgPool
@@ -1646,11 +1676,12 @@ func GetPgpoolLogStandbyDelay() (string, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_LOG_STATEMENT = "CC_PGPOOL_LOG_STATEMENT"
 
-// GetPgpoolLogStatement returns the value of [CC_PGPOOL_LOG_STATEMENT].
+// MustGetPgpoolLogStatement returns the value of [CC_PGPOOL_LOG_STATEMENT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolLogStatement() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_LOG_STATEMENT)
+// It panics if the value is invalid.
+func MustGetPgpoolLogStatement() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_LOG_STATEMENT))
 }
 
 // CC_PGPOOL_MAX_POOL: Maximum number of pools in PgPool
@@ -1658,10 +1689,11 @@ func GetPgpoolLogStatement() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MAX_POOL = "CC_PGPOOL_MAX_POOL"
 
-// GetPgpoolMaxPool returns the value of [CC_PGPOOL_MAX_POOL].
+// MustGetPgpoolMaxPool returns the value of [CC_PGPOOL_MAX_POOL].
 // Default: 1.
-func GetPgpoolMaxPool() (int, error) {
-	return lookupInt(1, CC_PGPOOL_MAX_POOL)
+// It panics if the value is invalid.
+func MustGetPgpoolMaxPool() int {
+	return must(lookupInt(1, CC_PGPOOL_MAX_POOL))
 }
 
 // CC_PGPOOL_MEMORY_CACHE_ENABLED: Enable memory cache in PgPool
@@ -1669,12 +1701,13 @@ func GetPgpoolMaxPool() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMORY_CACHE_ENABLED = "CC_PGPOOL_MEMORY_CACHE_ENABLED"
 
-// GetPgpoolMemoryCacheEnabled returns the value of
+// MustGetPgpoolMemoryCacheEnabled returns the value of
 // [CC_PGPOOL_MEMORY_CACHE_ENABLED].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolMemoryCacheEnabled() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_MEMORY_CACHE_ENABLED)
+// It panics if the value is invalid.
+func MustGetPgpoolMemoryCacheEnabled() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_MEMORY_CACHE_ENABLED))
 }
 
 // CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION: Enable auto cache invalidation
@@ -1683,13 +1716,14 @@ func GetPgpoolMemoryCacheEnabled() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION = "CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION"
 
-// GetPgpoolMemqcacheAutoCacheInvalidation returns the value of
+// MustGetPgpoolMemqcacheAutoCacheInvalidation returns the value of
 // [CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
 // Default: true.
-func GetPgpoolMemqcacheAutoCacheInvalidation() (bool, error) {
-	return lookupBool(true, nil, nil, CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheAutoCacheInvalidation() bool {
+	return must(lookupBool(true, nil, nil, CC_PGPOOL_MEMQCACHE_AUTO_CACHE_INVALIDATION))
 }
 
 // CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE: Block size in MB of the PgPool query
@@ -1698,11 +1732,12 @@ func GetPgpoolMemqcacheAutoCacheInvalidation() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE = "CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE"
 
-// GetPgpoolMemqcacheCacheBlockSize returns the value of
+// MustGetPgpoolMemqcacheCacheBlockSize returns the value of
 // [CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE].
 // Default: 1.
-func GetPgpoolMemqcacheCacheBlockSize() (int, error) {
-	return lookupInt(1, CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheCacheBlockSize() int {
+	return must(lookupInt(1, CC_PGPOOL_MEMQCACHE_CACHE_BLOCK_SIZE))
 }
 
 // CC_PGPOOL_MEMQCACHE_EXPIRE: Lifetime in seconds of results in the PgPool
@@ -1711,10 +1746,12 @@ func GetPgpoolMemqcacheCacheBlockSize() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_EXPIRE = "CC_PGPOOL_MEMQCACHE_EXPIRE"
 
-// GetPgpoolMemqcacheExpire returns the value of [CC_PGPOOL_MEMQCACHE_EXPIRE].
+// MustGetPgpoolMemqcacheExpire returns the value of
+// [CC_PGPOOL_MEMQCACHE_EXPIRE].
 // Default: 0.
-func GetPgpoolMemqcacheExpire() (int, error) {
-	return lookupInt(0, CC_PGPOOL_MEMQCACHE_EXPIRE)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheExpire() int {
+	return must(lookupInt(0, CC_PGPOOL_MEMQCACHE_EXPIRE))
 }
 
 // CC_PGPOOL_MEMQCACHE_MAXCACHE: Maximum size in kB of a SELECT result stored in
@@ -1723,11 +1760,12 @@ func GetPgpoolMemqcacheExpire() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_MAXCACHE = "CC_PGPOOL_MEMQCACHE_MAXCACHE"
 
-// GetPgpoolMemqcacheMaxcache returns the value of
+// MustGetPgpoolMemqcacheMaxcache returns the value of
 // [CC_PGPOOL_MEMQCACHE_MAXCACHE].
 // Default: 400.
-func GetPgpoolMemqcacheMaxcache() (int, error) {
-	return lookupInt(400, CC_PGPOOL_MEMQCACHE_MAXCACHE)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheMaxcache() int {
+	return must(lookupInt(400, CC_PGPOOL_MEMQCACHE_MAXCACHE))
 }
 
 // CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE: Maximum number of cached items in PgPool
@@ -1735,11 +1773,12 @@ func GetPgpoolMemqcacheMaxcache() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE = "CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE"
 
-// GetPgpoolMemqcacheMaxNumCache returns the value of
+// MustGetPgpoolMemqcacheMaxNumCache returns the value of
 // [CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE].
 // Default: 1e+06.
-func GetPgpoolMemqcacheMaxNumCache() (int, error) {
-	return lookupInt(1000000, CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheMaxNumCache() int {
+	return must(lookupInt(1000000, CC_PGPOOL_MEMQCACHE_MAX_NUM_CACHE))
 }
 
 // CC_PGPOOL_MEMQCACHE_TOTAL_SIZE: Total memory in MB allocated to the PgPool
@@ -1748,11 +1787,12 @@ func GetPgpoolMemqcacheMaxNumCache() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_MEMQCACHE_TOTAL_SIZE = "CC_PGPOOL_MEMQCACHE_TOTAL_SIZE"
 
-// GetPgpoolMemqcacheTotalSize returns the value of
+// MustGetPgpoolMemqcacheTotalSize returns the value of
 // [CC_PGPOOL_MEMQCACHE_TOTAL_SIZE].
 // Default: 64.
-func GetPgpoolMemqcacheTotalSize() (int, error) {
-	return lookupInt(64, CC_PGPOOL_MEMQCACHE_TOTAL_SIZE)
+// It panics if the value is invalid.
+func MustGetPgpoolMemqcacheTotalSize() int {
+	return must(lookupInt(64, CC_PGPOOL_MEMQCACHE_TOTAL_SIZE))
 }
 
 // CC_PGPOOL_NUM_INIT_CHILDREN: Number of initial child processes in PgPool
@@ -1760,10 +1800,12 @@ func GetPgpoolMemqcacheTotalSize() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_NUM_INIT_CHILDREN = "CC_PGPOOL_NUM_INIT_CHILDREN"
 
-// GetPgpoolNumInitChildren returns the value of [CC_PGPOOL_NUM_INIT_CHILDREN].
+// MustGetPgpoolNumInitChildren returns the value of
+// [CC_PGPOOL_NUM_INIT_CHILDREN].
 // Default: 16.
-func GetPgpoolNumInitChildren() (int, error) {
-	return lookupInt(16, CC_PGPOOL_NUM_INIT_CHILDREN)
+// It panics if the value is invalid.
+func MustGetPgpoolNumInitChildren() int {
+	return must(lookupInt(16, CC_PGPOOL_NUM_INIT_CHILDREN))
 }
 
 // CC_PGPOOL_PRIMARY_ROUTING_QUERY_PATTERN_LIST: Query patterns for primary
@@ -1796,11 +1838,13 @@ func GetPgpoolReadOnlyFunctionList() string {
 // Scopes: pgpool.
 const CC_PGPOOL_REPLICATE_SELECT = "CC_PGPOOL_REPLICATE_SELECT"
 
-// GetPgpoolReplicateSelect returns the value of [CC_PGPOOL_REPLICATE_SELECT].
+// MustGetPgpoolReplicateSelect returns the value of
+// [CC_PGPOOL_REPLICATE_SELECT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolReplicateSelect() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_REPLICATE_SELECT)
+// It panics if the value is invalid.
+func MustGetPgpoolReplicateSelect() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_REPLICATE_SELECT))
 }
 
 // CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH: Stop replication on data mismatch in
@@ -1809,12 +1853,13 @@ func GetPgpoolReplicateSelect() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH = "CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH"
 
-// GetPgpoolReplicationStopOnMismatch returns the value of
+// MustGetPgpoolReplicationStopOnMismatch returns the value of
 // [CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolReplicationStopOnMismatch() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH)
+// It panics if the value is invalid.
+func MustGetPgpoolReplicationStopOnMismatch() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_REPLICATION_STOP_ON_MISMATCH))
 }
 
 // CC_PGPOOL_RESERVED_CONNECTIONS: Number of reserved connections in PgPool
@@ -1822,11 +1867,12 @@ func GetPgpoolReplicationStopOnMismatch() (bool, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_RESERVED_CONNECTIONS = "CC_PGPOOL_RESERVED_CONNECTIONS"
 
-// GetPgpoolReservedConnections returns the value of
+// MustGetPgpoolReservedConnections returns the value of
 // [CC_PGPOOL_RESERVED_CONNECTIONS].
 // Default: 0.
-func GetPgpoolReservedConnections() (int, error) {
-	return lookupInt(0, CC_PGPOOL_RESERVED_CONNECTIONS)
+// It panics if the value is invalid.
+func MustGetPgpoolReservedConnections() int {
+	return must(lookupInt(0, CC_PGPOOL_RESERVED_CONNECTIONS))
 }
 
 // CC_PGPOOL_SOCKET_PATH: PgPool Unix socket directory, set for the application
@@ -1847,9 +1893,10 @@ func GetPgpoolSocketPath() string {
 // Scopes: pgpool.
 const CC_PGPOOL_SR_CHECK_PERIOD = "CC_PGPOOL_SR_CHECK_PERIOD"
 
-// GetPgpoolSrCheckPeriod returns the value of [CC_PGPOOL_SR_CHECK_PERIOD].
-func GetPgpoolSrCheckPeriod() (int, error) {
-	return lookupInt(0, CC_PGPOOL_SR_CHECK_PERIOD)
+// MustGetPgpoolSrCheckPeriod returns the value of [CC_PGPOOL_SR_CHECK_PERIOD].
+// It panics if the value is invalid.
+func MustGetPgpoolSrCheckPeriod() int {
+	return must(lookupInt(0, CC_PGPOOL_SR_CHECK_PERIOD))
 }
 
 // CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE: Enable statement-level load balancing
@@ -1858,12 +1905,13 @@ func GetPgpoolSrCheckPeriod() (int, error) {
 // Scopes: pgpool.
 const CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE = "CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE"
 
-// GetPgpoolStatementLevelLoadBalance returns the value of
+// MustGetPgpoolStatementLevelLoadBalance returns the value of
 // [CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPgpoolStatementLevelLoadBalance() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE)
+// It panics if the value is invalid.
+func MustGetPgpoolStatementLevelLoadBalance() bool {
+	return must(lookupBool(false, nil, nil, CC_PGPOOL_STATEMENT_LEVEL_LOAD_BALANCE))
 }
 
 // CC_PGPOOL_WRITE_FUNCTION_LIST: List of write functions in PgPool
@@ -1883,12 +1931,13 @@ func GetPgpoolWriteFunctionList() string {
 // Scopes: php.
 const CC_PHP_ASYNC_APP_BUCKET = "CC_PHP_ASYNC_APP_BUCKET"
 
-// GetPHPAsyncAppBucket returns the value of [CC_PHP_ASYNC_APP_BUCKET].
+// MustGetPHPAsyncAppBucket returns the value of [CC_PHP_ASYNC_APP_BUCKET].
 // It is true for 1, true, yes, on, enable, enabled, async; false for 0, false,
 // no, off, disable, disabled.
 // Default: true.
-func GetPHPAsyncAppBucket() (bool, error) {
-	return lookupBool(true, []string{"async"}, nil, CC_PHP_ASYNC_APP_BUCKET)
+// It panics if the value is invalid.
+func MustGetPHPAsyncAppBucket() bool {
+	return must(lookupBool(true, []string{"async"}, nil, CC_PHP_ASYNC_APP_BUCKET))
 }
 
 // CC_PHP_COMPOSER_FLAGS: Override the base flags passed to composer install
@@ -1906,11 +1955,12 @@ func GetPHPComposerFlags() string {
 // Scopes: php, frankenphp.
 const CC_PHP_DEV_DEPENDENCIES = "CC_PHP_DEV_DEPENDENCIES"
 
-// GetPHPDevDependencies returns the value of [CC_PHP_DEV_DEPENDENCIES].
+// MustGetPHPDevDependencies returns the value of [CC_PHP_DEV_DEPENDENCIES].
 // It is true for 1, true, yes, on, enable, enabled, install; false for 0,
 // false, no, off, disable, disabled, skip.
-func GetPHPDevDependencies() (bool, error) {
-	return lookupBool(false, []string{"install"}, []string{"skip"}, CC_PHP_DEV_DEPENDENCIES)
+// It panics if the value is invalid.
+func MustGetPHPDevDependencies() bool {
+	return must(lookupBool(false, []string{"install"}, []string{"skip"}, CC_PHP_DEV_DEPENDENCIES))
 }
 
 // CC_PHP_DISABLE_APP_BUCKET: Disable app bucket for PHP applications
@@ -1918,11 +1968,12 @@ func GetPHPDevDependencies() (bool, error) {
 // Scopes: php.
 const CC_PHP_DISABLE_APP_BUCKET = "CC_PHP_DISABLE_APP_BUCKET"
 
-// GetPHPDisableAppBucket returns the value of [CC_PHP_DISABLE_APP_BUCKET].
+// MustGetPHPDisableAppBucket returns the value of [CC_PHP_DISABLE_APP_BUCKET].
 // It is true (disabled) for 1, true, yes, off, disable, disabled; false for 0,
 // false, no, on, enable, enabled.
-func GetPHPDisableAppBucket() (bool, error) {
-	return lookupDisabler(false, CC_PHP_DISABLE_APP_BUCKET)
+// It panics if the value is invalid.
+func MustGetPHPDisableAppBucket() bool {
+	return must(lookupDisabler(false, CC_PHP_DISABLE_APP_BUCKET))
 }
 
 // CC_PHP_VERSION: PHP version to use for building and running the application
@@ -1930,18 +1981,13 @@ func GetPHPDisableAppBucket() (bool, error) {
 // Scopes: deployer, php, frankenphp.
 const CC_PHP_VERSION = "CC_PHP_VERSION"
 
-// PHP_VERSION is the former name of [CC_PHP_VERSION].
-//
-// Deprecated: use [CC_PHP_VERSION].
-const PHP_VERSION = "PHP_VERSION"
-
-// GetPHPVersion returns the value of [CC_PHP_VERSION].
+// MustGetPHPVersion returns the value of [CC_PHP_VERSION].
 // Accepted values: 5.6, 7, 7.0, 7.1, 7.2, 7.3, 7.4, 8, 8.0, 8.1, 8.2, 8.3, 8.4,
 // 8.5.
 // Default: 8.5.
-// When it is unset, the deprecated PHP_VERSION is read instead.
-func GetPHPVersion() (string, error) {
-	return lookupChoice("8.5", []string{"5.6", "7", "7.0", "7.1", "7.2", "7.3", "7.4", "8", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5"}, CC_PHP_VERSION, PHP_VERSION)
+// It panics if the value is invalid.
+func MustGetPHPVersion() string {
+	return must(lookupChoice("8.5", []string{"5.6", "7", "7.0", "7.1", "7.2", "7.3", "7.4", "8", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5"}, CC_PHP_VERSION))
 }
 
 // CC_PLAY1_VERSION: Play version
@@ -1949,18 +1995,13 @@ func GetPHPVersion() (string, error) {
 // Scopes: java, java-play.
 const CC_PLAY1_VERSION = "CC_PLAY1_VERSION"
 
-// PLAY1_VERSION is the former name of [CC_PLAY1_VERSION].
-//
-// Deprecated: use [CC_PLAY1_VERSION].
-const PLAY1_VERSION = "PLAY1_VERSION"
-
-// GetPlay1Version returns the value of [CC_PLAY1_VERSION].
+// MustGetPlay1Version returns the value of [CC_PLAY1_VERSION].
 // Accepted values: 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11, 12, 13,
 // 14, 15, 16, 17, 18, 19, 110, 111.
 // Default: 1.7.
-// When it is unset, the deprecated PLAY1_VERSION is read instead.
-func GetPlay1Version() (string, error) {
-	return lookupChoice("1.7", []string{"1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11", "12", "13", "14", "15", "16", "17", "18", "19", "110", "111"}, CC_PLAY1_VERSION, PLAY1_VERSION)
+// It panics if the value is invalid.
+func MustGetPlay1Version() string {
+	return must(lookupChoice("1.7", []string{"1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11", "12", "13", "14", "15", "16", "17", "18", "19", "110", "111"}, CC_PLAY1_VERSION))
 }
 
 // CC_POST_BUILD_HOOK: Command to run after building the app. If we are
@@ -1981,11 +2022,13 @@ func GetPostBuildHook() string {
 // Scopes: deployer.
 const CC_PREVENT_LOGSCOLLECTION = "CC_PREVENT_LOGSCOLLECTION"
 
-// GetPreventLogscollection returns the value of [CC_PREVENT_LOGSCOLLECTION].
+// MustGetPreventLogscollection returns the value of
+// [CC_PREVENT_LOGSCOLLECTION].
 // It is true for 1, true, yes, on, enable, enabled, prevent; false for 0,
 // false, no, off, disable, disabled.
-func GetPreventLogscollection() (bool, error) {
-	return lookupBool(false, []string{"prevent"}, nil, CC_PREVENT_LOGSCOLLECTION)
+// It panics if the value is invalid.
+func MustGetPreventLogscollection() bool {
+	return must(lookupBool(false, []string{"prevent"}, nil, CC_PREVENT_LOGSCOLLECTION))
 }
 
 // CC_PRE_BUILD_HOOK: Command to run before building the app. If we are
@@ -2017,17 +2060,12 @@ func GetPreRunHook() string {
 // Scopes: python.
 const CC_PYTHON_BACKEND = "CC_PYTHON_BACKEND"
 
-// PYTHON_BACKEND is the former name of [CC_PYTHON_BACKEND].
-//
-// Deprecated: use [CC_PYTHON_BACKEND].
-const PYTHON_BACKEND = "PYTHON_BACKEND"
-
-// GetPythonBackend returns the value of [CC_PYTHON_BACKEND].
+// MustGetPythonBackend returns the value of [CC_PYTHON_BACKEND].
 // Accepted values: gunicorn, daphne, uvicorn, uwsgi.
 // Default: uwsgi.
-// When it is unset, the deprecated PYTHON_BACKEND is read instead.
-func GetPythonBackend() (string, error) {
-	return lookupChoice("uwsgi", []string{"gunicorn", "daphne", "uvicorn", "uwsgi"}, CC_PYTHON_BACKEND, PYTHON_BACKEND)
+// It panics if the value is invalid.
+func MustGetPythonBackend() string {
+	return must(lookupChoice("uwsgi", []string{"gunicorn", "daphne", "uvicorn", "uwsgi"}, CC_PYTHON_BACKEND))
 }
 
 // CC_PYTHON_CELERY_LOGFILE: Log file path for Celery (Python)
@@ -2055,11 +2093,12 @@ func GetPythonCeleryModule() string {
 // Scopes: python.
 const CC_PYTHON_CELERY_USE_BEAT = "CC_PYTHON_CELERY_USE_BEAT"
 
-// GetPythonCeleryUseBeat returns the value of [CC_PYTHON_CELERY_USE_BEAT].
+// MustGetPythonCeleryUseBeat returns the value of [CC_PYTHON_CELERY_USE_BEAT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPythonCeleryUseBeat() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PYTHON_CELERY_USE_BEAT)
+// It panics if the value is invalid.
+func MustGetPythonCeleryUseBeat() bool {
+	return must(lookupBool(false, nil, nil, CC_PYTHON_CELERY_USE_BEAT))
 }
 
 // CC_PYTHON_MANAGE_TASKS: Comma-separated list of Django manage.py tasks to run
@@ -2088,11 +2127,12 @@ func GetPythonModule() string {
 // Scopes: python.
 const CC_PYTHON_USE_GEVENT = "CC_PYTHON_USE_GEVENT"
 
-// GetPythonUseGevent returns the value of [CC_PYTHON_USE_GEVENT].
+// MustGetPythonUseGevent returns the value of [CC_PYTHON_USE_GEVENT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetPythonUseGevent() (bool, error) {
-	return lookupBool(false, nil, nil, CC_PYTHON_USE_GEVENT)
+// It panics if the value is invalid.
+func MustGetPythonUseGevent() bool {
+	return must(lookupBool(false, nil, nil, CC_PYTHON_USE_GEVENT))
 }
 
 // CC_PYTHON_UV_RUN_COMMAND: Command to run to start python with uv
@@ -2110,17 +2150,12 @@ func GetPythonUvRunCommand() string {
 // Scopes: deployer, python.
 const CC_PYTHON_VERSION = "CC_PYTHON_VERSION"
 
-// PYTHON_VERSION is the former name of [CC_PYTHON_VERSION].
-//
-// Deprecated: use [CC_PYTHON_VERSION].
-const PYTHON_VERSION = "PYTHON_VERSION"
-
-// GetPythonVersion returns the value of [CC_PYTHON_VERSION].
+// MustGetPythonVersion returns the value of [CC_PYTHON_VERSION].
 // Accepted values: 2, 2.7, 3, 3.9, 3.10, 3.11, 3.12, 3.13, 3.14.
 // Default: 3.
-// When it is unset, the deprecated PYTHON_VERSION is read instead.
-func GetPythonVersion() (string, error) {
-	return lookupChoice("3", []string{"2", "2.7", "3", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"}, CC_PYTHON_VERSION, PYTHON_VERSION)
+// It panics if the value is invalid.
+func MustGetPythonVersion() string {
+	return must(lookupChoice("3", []string{"2", "2.7", "3", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"}, CC_PYTHON_VERSION))
 }
 
 // CC_RACKUP_SERVER: Rack server to use
@@ -2128,11 +2163,12 @@ func GetPythonVersion() (string, error) {
 // Scopes: ruby.
 const CC_RACKUP_SERVER = "CC_RACKUP_SERVER"
 
-// GetRackupServer returns the value of [CC_RACKUP_SERVER].
+// MustGetRackupServer returns the value of [CC_RACKUP_SERVER].
 // Accepted values: puma.
 // Default: puma.
-func GetRackupServer() (string, error) {
-	return lookupChoice("puma", []string{"puma"}, CC_RACKUP_SERVER)
+// It panics if the value is invalid.
+func MustGetRackupServer() string {
+	return must(lookupChoice("puma", []string{"puma"}, CC_RACKUP_SERVER))
 }
 
 // CC_RAKEGOALS: Comma-separated list of Rake goals to run during deployment
@@ -2150,10 +2186,11 @@ func GetRakegoals() string {
 // Scopes: php.
 const CC_REALPATH_CACHE_TTL = "CC_REALPATH_CACHE_TTL"
 
-// GetRealpathCacheTtl returns the value of [CC_REALPATH_CACHE_TTL].
+// MustGetRealpathCacheTtl returns the value of [CC_REALPATH_CACHE_TTL].
 // Default: 120.
-func GetRealpathCacheTtl() (int, error) {
-	return lookupInt(120, CC_REALPATH_CACHE_TTL)
+// It panics if the value is invalid.
+func MustGetRealpathCacheTtl() int {
+	return must(lookupInt(120, CC_REALPATH_CACHE_TTL))
 }
 
 // CC_REDIRECTIONIO_INSTANCE_NAME: Instance name for Redirection.IO
@@ -2209,15 +2246,9 @@ func GetRequestFlowCustom() string {
 // Scopes: ruby.
 const CC_RUBY_VERSION = "CC_RUBY_VERSION"
 
-// RUBY_VERSION is the former name of [CC_RUBY_VERSION].
-//
-// Deprecated: use [CC_RUBY_VERSION].
-const RUBY_VERSION = "RUBY_VERSION"
-
 // GetRubyVersion returns the value of [CC_RUBY_VERSION].
-// When it is unset, the deprecated RUBY_VERSION is read instead.
 func GetRubyVersion() string {
-	return lookupString("", false, CC_RUBY_VERSION, RUBY_VERSION)
+	return lookupString("", false, CC_RUBY_VERSION)
 }
 
 // CC_RUN_COMMAND: Custom command to run the application
@@ -2256,16 +2287,10 @@ func GetRunSucceededHook() string {
 // Scopes: rust.
 const CC_RUSTUP_CHANNEL = "CC_RUSTUP_CHANNEL"
 
-// RUSTUP_CHANNEL is the former name of [CC_RUSTUP_CHANNEL].
-//
-// Deprecated: use [CC_RUSTUP_CHANNEL].
-const RUSTUP_CHANNEL = "RUSTUP_CHANNEL"
-
 // GetRustupChannel returns the value of [CC_RUSTUP_CHANNEL].
 // Default: stable.
-// When it is unset, the deprecated RUSTUP_CHANNEL is read instead.
 func GetRustupChannel() string {
-	return lookupString("stable", false, CC_RUSTUP_CHANNEL, RUSTUP_CHANNEL)
+	return lookupString("stable", false, CC_RUSTUP_CHANNEL)
 }
 
 // CC_RUST_BIN: Name of the binary target to run from a Cargo workspace
@@ -2305,15 +2330,9 @@ func GetSbtBuildGoal() string {
 // Scopes: java, java-sbt.
 const CC_SBT_DEPLOY_ARGS = "CC_SBT_DEPLOY_ARGS"
 
-// SBT_DEPLOY_GOAL is the former name of [CC_SBT_DEPLOY_ARGS].
-//
-// Deprecated: use [CC_SBT_DEPLOY_ARGS].
-const SBT_DEPLOY_GOAL = "SBT_DEPLOY_GOAL"
-
 // GetSbtDeployArgs returns the value of [CC_SBT_DEPLOY_ARGS].
-// When it is unset, the deprecated SBT_DEPLOY_GOAL is read instead.
 func GetSbtDeployArgs() string {
-	return lookupString("", false, CC_SBT_DEPLOY_ARGS, SBT_DEPLOY_GOAL)
+	return lookupString("", false, CC_SBT_DEPLOY_ARGS)
 }
 
 // CC_SBT_TARGET_BIN: Name of the executable to run from the SBT build output
@@ -2408,9 +2427,10 @@ func GetStaticFlags() string {
 // Scopes: static.
 const CC_STATIC_PORT = "CC_STATIC_PORT"
 
-// GetStaticPort returns the value of [CC_STATIC_PORT].
-func GetStaticPort() (int, error) {
-	return lookupInt(0, CC_STATIC_PORT)
+// MustGetStaticPort returns the value of [CC_STATIC_PORT].
+// It panics if the value is invalid.
+func MustGetStaticPort() int {
+	return must(lookupInt(0, CC_STATIC_PORT))
 }
 
 // CC_STATIC_SERVER: Static file server to use
@@ -2418,10 +2438,11 @@ func GetStaticPort() (int, error) {
 // Scopes: static.
 const CC_STATIC_SERVER = "CC_STATIC_SERVER"
 
-// GetStaticServer returns the value of [CC_STATIC_SERVER].
+// MustGetStaticServer returns the value of [CC_STATIC_SERVER].
 // Accepted values: static-web-server, caddy.
-func GetStaticServer() (string, error) {
-	return lookupChoice("", []string{"static-web-server", "caddy"}, CC_STATIC_SERVER)
+// It panics if the value is invalid.
+func MustGetStaticServer() string {
+	return must(lookupChoice("", []string{"static-web-server", "caddy"}, CC_STATIC_SERVER))
 }
 
 // CC_TROUBLESHOOT: Prevent instance from being deleted for 1 hour after a
@@ -2430,11 +2451,12 @@ func GetStaticServer() (string, error) {
 // Scopes: deployer.
 const CC_TROUBLESHOOT = "CC_TROUBLESHOOT"
 
-// GetTroubleshoot returns the value of [CC_TROUBLESHOOT].
+// MustGetTroubleshoot returns the value of [CC_TROUBLESHOOT].
 // It is true for 1, true, yes, on, enable, enabled, troubleshoot; false for 0,
 // false, no, off, disable, disabled.
-func GetTroubleshoot() (bool, error) {
-	return lookupBool(false, []string{"troubleshoot"}, nil, CC_TROUBLESHOOT)
+// It panics if the value is invalid.
+func MustGetTroubleshoot() bool {
+	return must(lookupBool(false, []string{"troubleshoot"}, nil, CC_TROUBLESHOOT))
 }
 
 // CC_UWSGI_EXTRA_CONFIG: Additional uWSGI configuration
@@ -2477,21 +2499,9 @@ func GetVarnishStorageSize() string {
 // The platform removes it from the application environment.
 const CC_VPN_CACRT = "CC_VPN_CACRT"
 
-// CC_VPN_ADDON_CACRT is the former name of [CC_VPN_CACRT].
-//
-// Deprecated: use [CC_VPN_CACRT].
-const CC_VPN_ADDON_CACRT = "CC_VPN_ADDON_CACRT"
-
-// VPN_ADDON_CACRT is the former name of [CC_VPN_CACRT].
-//
-// Deprecated: use [CC_VPN_CACRT].
-const VPN_ADDON_CACRT = "VPN_ADDON_CACRT"
-
 // GetVPNCacrt returns the value of [CC_VPN_CACRT].
-// When it is unset, the deprecated CC_VPN_ADDON_CACRT, VPN_ADDON_CACRT is read
-// instead.
 func GetVPNCacrt() string {
-	return lookupString("", false, CC_VPN_CACRT, CC_VPN_ADDON_CACRT, VPN_ADDON_CACRT)
+	return lookupString("", false, CC_VPN_CACRT)
 }
 
 // CC_VPN_CIPHER: VPN encryption cipher
@@ -2500,22 +2510,10 @@ func GetVPNCacrt() string {
 // The platform removes it from the application environment.
 const CC_VPN_CIPHER = "CC_VPN_CIPHER"
 
-// CC_VPN_ADDON_CIPHER is the former name of [CC_VPN_CIPHER].
-//
-// Deprecated: use [CC_VPN_CIPHER].
-const CC_VPN_ADDON_CIPHER = "CC_VPN_ADDON_CIPHER"
-
-// VPN_ADDON_CIPHER is the former name of [CC_VPN_CIPHER].
-//
-// Deprecated: use [CC_VPN_CIPHER].
-const VPN_ADDON_CIPHER = "VPN_ADDON_CIPHER"
-
 // GetVPNCipher returns the value of [CC_VPN_CIPHER].
 // Default: DES-EDE3-CBC:SHA1.
-// When it is unset, the deprecated CC_VPN_ADDON_CIPHER, VPN_ADDON_CIPHER is
-// read instead.
 func GetVPNCipher() string {
-	return lookupString("DES-EDE3-CBC:SHA1", false, CC_VPN_CIPHER, CC_VPN_ADDON_CIPHER, VPN_ADDON_CIPHER)
+	return lookupString("DES-EDE3-CBC:SHA1", false, CC_VPN_CIPHER)
 }
 
 // CC_VPN_CRT: Client certificate for OpenVPN
@@ -2525,21 +2523,9 @@ func GetVPNCipher() string {
 // The platform removes it from the application environment.
 const CC_VPN_CRT = "CC_VPN_CRT"
 
-// CC_VPN_ADDON_CRT is the former name of [CC_VPN_CRT].
-//
-// Deprecated: use [CC_VPN_CRT].
-const CC_VPN_ADDON_CRT = "CC_VPN_ADDON_CRT"
-
-// VPN_ADDON_CRT is the former name of [CC_VPN_CRT].
-//
-// Deprecated: use [CC_VPN_CRT].
-const VPN_ADDON_CRT = "VPN_ADDON_CRT"
-
 // GetVPNCrt returns the value of [CC_VPN_CRT].
-// When it is unset, the deprecated CC_VPN_ADDON_CRT, VPN_ADDON_CRT is read
-// instead.
 func GetVPNCrt() string {
-	return lookupString("", false, CC_VPN_CRT, CC_VPN_ADDON_CRT, VPN_ADDON_CRT)
+	return lookupString("", false, CC_VPN_CRT)
 }
 
 // CC_VPN_DEVTYPE: Device type for OpenVPN
@@ -2548,23 +2534,12 @@ func GetVPNCrt() string {
 // The platform removes it from the application environment.
 const CC_VPN_DEVTYPE = "CC_VPN_DEVTYPE"
 
-// CC_VPN_ADDON_DEVTYPE is the former name of [CC_VPN_DEVTYPE].
-//
-// Deprecated: use [CC_VPN_DEVTYPE].
-const CC_VPN_ADDON_DEVTYPE = "CC_VPN_ADDON_DEVTYPE"
-
-// VPN_ADDON_DEVTYPE is the former name of [CC_VPN_DEVTYPE].
-//
-// Deprecated: use [CC_VPN_DEVTYPE].
-const VPN_ADDON_DEVTYPE = "VPN_ADDON_DEVTYPE"
-
-// GetVPNDevtype returns the value of [CC_VPN_DEVTYPE].
+// MustGetVPNDevtype returns the value of [CC_VPN_DEVTYPE].
 // Accepted values: tun, tap.
 // Default: tun.
-// When it is unset, the deprecated CC_VPN_ADDON_DEVTYPE, VPN_ADDON_DEVTYPE is
-// read instead.
-func GetVPNDevtype() (string, error) {
-	return lookupChoice("tun", []string{"tun", "tap"}, CC_VPN_DEVTYPE, CC_VPN_ADDON_DEVTYPE, VPN_ADDON_DEVTYPE)
+// It panics if the value is invalid.
+func MustGetVPNDevtype() string {
+	return must(lookupChoice("tun", []string{"tun", "tap"}, CC_VPN_DEVTYPE))
 }
 
 // CC_VPN_DNS_OVERRIDE: DNS override for VPN
@@ -2575,8 +2550,8 @@ const CC_VPN_DNS_OVERRIDE = "CC_VPN_DNS_OVERRIDE"
 
 // GetVPNDNSOverride returns every CC_VPN_DNS_OVERRIDE and
 // CC_VPN_DNS_OVERRIDE_<N> variable, sorted by N.
-func GetVPNDNSOverride() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_VPN_DNS_OVERRIDE)
+func GetVPNDNSOverride() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_VPN_DNS_OVERRIDE))
 }
 
 // CC_VPN_DNS_OVERRIDES: DNS overrides for VPN
@@ -2596,21 +2571,10 @@ func GetVPNDNSOverrides() string {
 // The platform removes it from the application environment.
 const CC_VPN_HOST = "CC_VPN_HOST"
 
-// CC_VPN_ADDON_HOST is the former name of [CC_VPN_HOST].
-//
-// Deprecated: use [CC_VPN_HOST].
-const CC_VPN_ADDON_HOST = "CC_VPN_ADDON_HOST"
-
-// VPN_ADDON_HOST is the former name of [CC_VPN_HOST].
-//
-// Deprecated: use [CC_VPN_HOST].
-const VPN_ADDON_HOST = "VPN_ADDON_HOST"
-
 // GetVPNHost returns every CC_VPN_HOST and CC_VPN_HOST_<N> variable, sorted by
 // N.
-// The deprecated CC_VPN_ADDON_HOST, VPN_ADDON_HOST variables are collected too.
-func GetVPNHost() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_VPN_HOST, CC_VPN_ADDON_HOST, VPN_ADDON_HOST)
+func GetVPNHost() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_VPN_HOST))
 }
 
 // CC_VPN_KEY: Private key for OpenVPN
@@ -2620,21 +2584,9 @@ func GetVPNHost() ([]Entry[string], error) {
 // The platform removes it from the application environment.
 const CC_VPN_KEY = "CC_VPN_KEY"
 
-// CC_VPN_ADDON_KEY is the former name of [CC_VPN_KEY].
-//
-// Deprecated: use [CC_VPN_KEY].
-const CC_VPN_ADDON_KEY = "CC_VPN_ADDON_KEY"
-
-// VPN_ADDON_KEY is the former name of [CC_VPN_KEY].
-//
-// Deprecated: use [CC_VPN_KEY].
-const VPN_ADDON_KEY = "VPN_ADDON_KEY"
-
 // GetVPNKey returns the value of [CC_VPN_KEY].
-// When it is unset, the deprecated CC_VPN_ADDON_KEY, VPN_ADDON_KEY is read
-// instead.
 func GetVPNKey() string {
-	return lookupString("", false, CC_VPN_KEY, CC_VPN_ADDON_KEY, VPN_ADDON_KEY)
+	return lookupString("", false, CC_VPN_KEY)
 }
 
 // CC_VPN_PORT: Port for OpenVPN
@@ -2644,21 +2596,11 @@ func GetVPNKey() string {
 // The platform removes it from the application environment.
 const CC_VPN_PORT = "CC_VPN_PORT"
 
-// CC_VPN_ADDON_PORT is the former name of [CC_VPN_PORT].
-//
-// Deprecated: use [CC_VPN_PORT].
-const CC_VPN_ADDON_PORT = "CC_VPN_ADDON_PORT"
-
-// VPN_ADDON_PORT is the former name of [CC_VPN_PORT].
-//
-// Deprecated: use [CC_VPN_PORT].
-const VPN_ADDON_PORT = "VPN_ADDON_PORT"
-
-// GetVPNPort returns every CC_VPN_PORT and CC_VPN_PORT_<N> variable, sorted by
-// N.
-// The deprecated CC_VPN_ADDON_PORT, VPN_ADDON_PORT variables are collected too.
-func GetVPNPort() ([]Entry[int], error) {
-	return lookupMultiple(parseInt, CC_VPN_PORT, CC_VPN_ADDON_PORT, VPN_ADDON_PORT)
+// MustGetVPNPort returns every CC_VPN_PORT and CC_VPN_PORT_<N> variable, sorted
+// by N.
+// It panics if the value is invalid.
+func MustGetVPNPort() []Entry[int] {
+	return must(lookupMultiple(parseInt, CC_VPN_PORT))
 }
 
 // CC_VPN_TAKEY: TLS auth key for OpenVPN
@@ -2668,22 +2610,10 @@ func GetVPNPort() ([]Entry[int], error) {
 // The platform removes it from the application environment.
 const CC_VPN_TAKEY = "CC_VPN_TAKEY"
 
-// CC_VPN_ADDON_TAKEY is the former name of [CC_VPN_TAKEY].
-//
-// Deprecated: use [CC_VPN_TAKEY].
-const CC_VPN_ADDON_TAKEY = "CC_VPN_ADDON_TAKEY"
-
-// VPN_ADDON_TAKEY is the former name of [CC_VPN_TAKEY].
-//
-// Deprecated: use [CC_VPN_TAKEY].
-const VPN_ADDON_TAKEY = "VPN_ADDON_TAKEY"
-
 // GetVPNTakey returns the value of [CC_VPN_TAKEY].
 // Default: .
-// When it is unset, the deprecated CC_VPN_ADDON_TAKEY, VPN_ADDON_TAKEY is read
-// instead.
 func GetVPNTakey() string {
-	return lookupString("", true, CC_VPN_TAKEY, CC_VPN_ADDON_TAKEY, VPN_ADDON_TAKEY)
+	return lookupString("", true, CC_VPN_TAKEY)
 }
 
 // CC_VPN_TARGETS: Comma-separated list of VPN targets
@@ -2691,15 +2621,9 @@ func GetVPNTakey() string {
 // Scopes: vpn.
 const CC_VPN_TARGETS = "CC_VPN_TARGETS"
 
-// VPN_TARGETS is the former name of [CC_VPN_TARGETS].
-//
-// Deprecated: use [CC_VPN_TARGETS].
-const VPN_TARGETS = "VPN_TARGETS"
-
 // GetVPNTargets returns the value of [CC_VPN_TARGETS].
-// When it is unset, the deprecated VPN_TARGETS is read instead.
 func GetVPNTargets() string {
-	return lookupString("", false, CC_VPN_TARGETS, VPN_TARGETS)
+	return lookupString("", false, CC_VPN_TARGETS)
 }
 
 // CC_V_BINARY: Output path of the compiled V executable
@@ -2731,8 +2655,8 @@ const CC_WORKER_COMMAND = "CC_WORKER_COMMAND"
 
 // GetWorkerCommand returns every CC_WORKER_COMMAND and CC_WORKER_COMMAND_<N>
 // variable, sorted by N.
-func GetWorkerCommand() ([]Entry[string], error) {
-	return lookupMultiple(parseString, CC_WORKER_COMMAND)
+func GetWorkerCommand() []Entry[string] {
+	return must(lookupMultiple(parseString, CC_WORKER_COMMAND))
 }
 
 // CC_WORKER_RESTART: Restart mode for workers
@@ -2740,11 +2664,12 @@ func GetWorkerCommand() ([]Entry[string], error) {
 // Scopes: deployer.
 const CC_WORKER_RESTART = "CC_WORKER_RESTART"
 
-// GetWorkerRestart returns the value of [CC_WORKER_RESTART].
+// MustGetWorkerRestart returns the value of [CC_WORKER_RESTART].
 // Accepted values: always, on-failure, no.
 // Default: on-failure.
-func GetWorkerRestart() (string, error) {
-	return lookupChoice("on-failure", []string{"always", "on-failure", "no"}, CC_WORKER_RESTART)
+// It panics if the value is invalid.
+func MustGetWorkerRestart() string {
+	return must(lookupChoice("on-failure", []string{"always", "on-failure", "no"}, CC_WORKER_RESTART))
 }
 
 // CC_WORKER_RESTART_DELAY: Delay in seconds before restarting workers
@@ -2752,10 +2677,11 @@ func GetWorkerRestart() (string, error) {
 // Scopes: deployer.
 const CC_WORKER_RESTART_DELAY = "CC_WORKER_RESTART_DELAY"
 
-// GetWorkerRestartDelay returns the value of [CC_WORKER_RESTART_DELAY].
+// MustGetWorkerRestartDelay returns the value of [CC_WORKER_RESTART_DELAY].
 // Default: 1.
-func GetWorkerRestartDelay() (int, error) {
-	return lookupInt(1, CC_WORKER_RESTART_DELAY)
+// It panics if the value is invalid.
+func MustGetWorkerRestartDelay() int {
+	return must(lookupInt(1, CC_WORKER_RESTART_DELAY))
 }
 
 // ELASTIC_APM_SERVICE_NAME: Elastic APM service name
@@ -2773,11 +2699,12 @@ func GetElasticAPMServiceName() string {
 // Scopes: php, elastic-apm.
 const ENABLE_ELASTIC_APM_AGENT = "ENABLE_ELASTIC_APM_AGENT"
 
-// GetEnableElasticAPMAgent returns the value of [ENABLE_ELASTIC_APM_AGENT].
+// MustGetEnableElasticAPMAgent returns the value of [ENABLE_ELASTIC_APM_AGENT].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnableElasticAPMAgent() (bool, error) {
-	return lookupBool(false, nil, nil, ENABLE_ELASTIC_APM_AGENT)
+// It panics if the value is invalid.
+func MustGetEnableElasticAPMAgent() bool {
+	return must(lookupBool(false, nil, nil, ENABLE_ELASTIC_APM_AGENT))
 }
 
 // ENABLE_GZIP_COMPRESSION: Enable gzip compression of proxied responses in
@@ -2786,11 +2713,12 @@ func GetEnableElasticAPMAgent() (bool, error) {
 // Scopes: nginx.
 const ENABLE_GZIP_COMPRESSION = "ENABLE_GZIP_COMPRESSION"
 
-// GetEnableGzipCompression returns the value of [ENABLE_GZIP_COMPRESSION].
+// MustGetEnableGzipCompression returns the value of [ENABLE_GZIP_COMPRESSION].
 // It is true for 1, true, yes, on, enable, enabled; false for 0, false, no,
 // off, disable, disabled.
-func GetEnableGzipCompression() (bool, error) {
-	return lookupBool(false, nil, nil, ENABLE_GZIP_COMPRESSION)
+// It panics if the value is invalid.
+func MustGetEnableGzipCompression() bool {
+	return must(lookupBool(false, nil, nil, ENABLE_GZIP_COMPRESSION))
 }
 
 // ENVIRONMENT: Application environment mode, used by Python uv and V builds
@@ -2820,10 +2748,11 @@ func GetGzipTypes() string {
 // Scopes: php.
 const HTTP_TIMEOUT = "HTTP_TIMEOUT"
 
-// GetHTTPTimeout returns the value of [HTTP_TIMEOUT].
+// MustGetHTTPTimeout returns the value of [HTTP_TIMEOUT].
 // Default: 180.
-func GetHTTPTimeout() (int, error) {
-	return lookupInt(180, HTTP_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetHTTPTimeout() int {
+	return must(lookupInt(180, HTTP_TIMEOUT))
 }
 
 // INSTANCE_NUMBER: Number of the instance
@@ -2832,9 +2761,10 @@ func GetHTTPTimeout() (int, error) {
 // Set by the platform: read it, do not set it.
 const INSTANCE_NUMBER = "INSTANCE_NUMBER"
 
-// GetInstanceNumber returns the value of [INSTANCE_NUMBER].
-func GetInstanceNumber() (int, error) {
-	return lookupInt(0, INSTANCE_NUMBER)
+// MustGetInstanceNumber returns the value of [INSTANCE_NUMBER].
+// It panics if the value is invalid.
+func MustGetInstanceNumber() int {
+	return must(lookupInt(0, INSTANCE_NUMBER))
 }
 
 // INSTANCE_TYPE: Type of the instance
@@ -2843,11 +2773,12 @@ func GetInstanceNumber() (int, error) {
 // Set by the platform: read it, do not set it.
 const INSTANCE_TYPE = "INSTANCE_TYPE"
 
-// GetInstanceType returns the value of [INSTANCE_TYPE].
+// MustGetInstanceType returns the value of [INSTANCE_TYPE].
 // Accepted values: build, task_runner, production.
 // Default: production.
-func GetInstanceType() (string, error) {
-	return lookupChoice("production", []string{"build", "task_runner", "production"}, INSTANCE_TYPE)
+// It panics if the value is invalid.
+func MustGetInstanceType() string {
+	return must(lookupChoice("production", []string{"build", "task_runner", "production"}, INSTANCE_TYPE))
 }
 
 // MAX_INPUT_VARS: Maximum number of input variables PHP accepts per request
@@ -2855,9 +2786,10 @@ func GetInstanceType() (string, error) {
 // Scopes: php.
 const MAX_INPUT_VARS = "MAX_INPUT_VARS"
 
-// GetMaxInputVars returns the value of [MAX_INPUT_VARS].
-func GetMaxInputVars() (int, error) {
-	return lookupInt(0, MAX_INPUT_VARS)
+// MustGetMaxInputVars returns the value of [MAX_INPUT_VARS].
+// It panics if the value is invalid.
+func MustGetMaxInputVars() int {
+	return must(lookupInt(0, MAX_INPUT_VARS))
 }
 
 // MEMORY_LIMIT: Maximum memory in MB a PHP script can allocate
@@ -2865,9 +2797,10 @@ func GetMaxInputVars() (int, error) {
 // Scopes: php.
 const MEMORY_LIMIT = "MEMORY_LIMIT"
 
-// GetMemoryLimit returns the value of [MEMORY_LIMIT].
-func GetMemoryLimit() (int, error) {
-	return lookupInt(0, MEMORY_LIMIT)
+// MustGetMemoryLimit returns the value of [MEMORY_LIMIT].
+// It panics if the value is invalid.
+func MustGetMemoryLimit() int {
+	return must(lookupInt(0, MEMORY_LIMIT))
 }
 
 // NEW_RELIC_APP_NAME: Application name displayed in the New Relic monitoring
@@ -2876,16 +2809,10 @@ func GetMemoryLimit() (int, error) {
 // Scopes: new-relic.
 const NEW_RELIC_APP_NAME = "NEW_RELIC_APP_NAME"
 
-// NEWRELIC_APPNAME is the former name of [NEW_RELIC_APP_NAME].
-//
-// Deprecated: use [NEW_RELIC_APP_NAME].
-const NEWRELIC_APPNAME = "NEWRELIC_APPNAME"
-
 // GetNewRelicAppName returns the value of [NEW_RELIC_APP_NAME].
 // Default: .
-// When it is unset, the deprecated NEWRELIC_APPNAME is read instead.
 func GetNewRelicAppName() string {
-	return lookupString("", true, NEW_RELIC_APP_NAME, NEWRELIC_APPNAME)
+	return lookupString("", true, NEW_RELIC_APP_NAME)
 }
 
 // NEW_RELIC_LICENSE_KEY: New Relic license key
@@ -2894,27 +2821,10 @@ func GetNewRelicAppName() string {
 // Holds a secret.
 const NEW_RELIC_LICENSE_KEY = "NEW_RELIC_LICENSE_KEY"
 
-// NEWRELIC_LICENSE is the former name of [NEW_RELIC_LICENSE_KEY].
-//
-// Deprecated: use [NEW_RELIC_LICENSE_KEY].
-const NEWRELIC_LICENSE = "NEWRELIC_LICENSE"
-
-// NEWRELIC_LICENSE_KEY is the former name of [NEW_RELIC_LICENSE_KEY].
-//
-// Deprecated: use [NEW_RELIC_LICENSE_KEY].
-const NEWRELIC_LICENSE_KEY = "NEWRELIC_LICENSE_KEY"
-
-// NEW_RELIC_LICENSE is the former name of [NEW_RELIC_LICENSE_KEY].
-//
-// Deprecated: use [NEW_RELIC_LICENSE_KEY].
-const NEW_RELIC_LICENSE = "NEW_RELIC_LICENSE"
-
 // GetNewRelicLicenseKey returns the value of [NEW_RELIC_LICENSE_KEY].
 // Default: .
-// When it is unset, the deprecated NEWRELIC_LICENSE, NEWRELIC_LICENSE_KEY,
-// NEW_RELIC_LICENSE is read instead.
 func GetNewRelicLicenseKey() string {
-	return lookupString("", true, NEW_RELIC_LICENSE_KEY, NEWRELIC_LICENSE, NEWRELIC_LICENSE_KEY, NEW_RELIC_LICENSE)
+	return lookupString("", true, NEW_RELIC_LICENSE_KEY)
 }
 
 // NGINX_READ_TIMEOUT: Timeout in seconds while Nginx reads backend responses
@@ -2922,10 +2832,11 @@ func GetNewRelicLicenseKey() string {
 // Scopes: nginx.
 const NGINX_READ_TIMEOUT = "NGINX_READ_TIMEOUT"
 
-// GetNginxReadTimeout returns the value of [NGINX_READ_TIMEOUT].
+// MustGetNginxReadTimeout returns the value of [NGINX_READ_TIMEOUT].
 // Default: 300.
-func GetNginxReadTimeout() (int, error) {
-	return lookupInt(300, NGINX_READ_TIMEOUT)
+// It panics if the value is invalid.
+func MustGetNginxReadTimeout() int {
+	return must(lookupInt(300, NGINX_READ_TIMEOUT))
 }
 
 // NPM_TOKEN: NPM authentication token
@@ -2977,9 +2888,10 @@ func GetRedisPassword() string {
 // Scopes: php, redis.
 const REDIS_PORT = "REDIS_PORT"
 
-// GetRedisPort returns the value of [REDIS_PORT].
-func GetRedisPort() (int, error) {
-	return lookupInt(0, REDIS_PORT)
+// MustGetRedisPort returns the value of [REDIS_PORT].
+// It panics if the value is invalid.
+func MustGetRedisPort() int {
+	return must(lookupInt(0, REDIS_PORT))
 }
 
 // SESSION_TYPE: Session storage type
@@ -2987,10 +2899,11 @@ func GetRedisPort() (int, error) {
 // Scopes: php.
 const SESSION_TYPE = "SESSION_TYPE"
 
-// GetSessionType returns the value of [SESSION_TYPE].
+// MustGetSessionType returns the value of [SESSION_TYPE].
 // Accepted values: redis.
-func GetSessionType() (string, error) {
-	return lookupChoice("", []string{"redis"}, SESSION_TYPE)
+// It panics if the value is invalid.
+func MustGetSessionType() string {
+	return must(lookupChoice("", []string{"redis"}, SESSION_TYPE))
 }
 
 // SQREEN_API_APP_NAME: Sqreen API app name
@@ -3021,15 +2934,9 @@ func GetSqreenAPIToken() string {
 // Scopes: nginx.
 const STATIC_FILES_PATH = "STATIC_FILES_PATH"
 
-// STATIC_PATH is the former name of [STATIC_FILES_PATH].
-//
-// Deprecated: use [STATIC_FILES_PATH].
-const STATIC_PATH = "STATIC_PATH"
-
 // GetStaticFilesPath returns the value of [STATIC_FILES_PATH].
-// When it is unset, the deprecated STATIC_PATH is read instead.
 func GetStaticFilesPath() string {
-	return lookupString("", false, STATIC_FILES_PATH, STATIC_PATH)
+	return lookupString("", false, STATIC_FILES_PATH)
 }
 
 // STATIC_URL_PREFIX: URL path prefix where Nginx serves static files
@@ -3047,12 +2954,13 @@ func GetStaticURLPrefix() string {
 // Scopes: tailscale.
 const TAILSCALE_ACCEPT_DNS = "TAILSCALE_ACCEPT_DNS"
 
-// GetTailscaleAcceptDNS returns the value of [TAILSCALE_ACCEPT_DNS].
+// MustGetTailscaleAcceptDNS returns the value of [TAILSCALE_ACCEPT_DNS].
 // It is true for 1, true, yes, on, enable, enabled, accept; false for 0, false,
 // no, off, disable, disabled, refuse.
 // Default: true.
-func GetTailscaleAcceptDNS() (bool, error) {
-	return lookupBool(true, []string{"accept"}, []string{"refuse"}, TAILSCALE_ACCEPT_DNS)
+// It panics if the value is invalid.
+func MustGetTailscaleAcceptDNS() bool {
+	return must(lookupBool(true, []string{"accept"}, []string{"refuse"}, TAILSCALE_ACCEPT_DNS))
 }
 
 // TAILSCALE_ACCEPT_ROUTES: Accept routes from Tailscale
@@ -3060,11 +2968,12 @@ func GetTailscaleAcceptDNS() (bool, error) {
 // Scopes: tailscale.
 const TAILSCALE_ACCEPT_ROUTES = "TAILSCALE_ACCEPT_ROUTES"
 
-// GetTailscaleAcceptRoutes returns the value of [TAILSCALE_ACCEPT_ROUTES].
+// MustGetTailscaleAcceptRoutes returns the value of [TAILSCALE_ACCEPT_ROUTES].
 // It is true for 1, true, yes, on, enable, enabled, accept; false for 0, false,
 // no, off, disable, disabled, refuse.
-func GetTailscaleAcceptRoutes() (bool, error) {
-	return lookupBool(false, []string{"accept"}, []string{"refuse"}, TAILSCALE_ACCEPT_ROUTES)
+// It panics if the value is invalid.
+func MustGetTailscaleAcceptRoutes() bool {
+	return must(lookupBool(false, []string{"accept"}, []string{"refuse"}, TAILSCALE_ACCEPT_ROUTES))
 }
 
 // TAILSCALE_AUTH_KEY: Tailscale authentication key for connecting the instance
@@ -3095,11 +3004,12 @@ func GetTailscaleLoginServer() string {
 // Scopes: nginx, python.
 const UWSGI_INTERCEPT_ERRORS = "UWSGI_INTERCEPT_ERRORS"
 
-// GetUwsgiInterceptErrors returns the value of [UWSGI_INTERCEPT_ERRORS].
+// MustGetUwsgiInterceptErrors returns the value of [UWSGI_INTERCEPT_ERRORS].
 // It is true for 1, true, yes, on, enable, enabled, intercept; false for 0,
 // false, no, off, disable, disabled.
-func GetUwsgiInterceptErrors() (bool, error) {
-	return lookupBool(false, []string{"intercept"}, nil, UWSGI_INTERCEPT_ERRORS)
+// It panics if the value is invalid.
+func MustGetUwsgiInterceptErrors() bool {
+	return must(lookupBool(false, []string{"intercept"}, nil, UWSGI_INTERCEPT_ERRORS))
 }
 
 // VMODULES: Path to V modules directory
