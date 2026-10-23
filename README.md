@@ -81,6 +81,26 @@ response := network_group.GetNetworkGroups(ctx, client, tracer, ownerID,
 )
 ```
 
+### Application Environment Variables
+
+The `app` package holds the environment variables Clever Cloud defines for
+applications: one constant per variable and a getter reading it from the
+environment, parsed the way the platform parses it. String variables are read
+with `Get<Name>`; every other type with `MustGet<Name>`, which panics on a value
+it cannot parse.
+
+```go
+import "go.clever-cloud.dev/sdk/app"
+
+instance := app.MustGetInstanceNumber() // INSTANCE_NUMBER, as an int
+features := app.GetRustFeatures()       // CC_RUST_FEATURES
+javaVersion := app.MustGetJavaVersion() // CC_JAVA_VERSION, default 21
+workers := app.GetWorkerCommand()       // every CC_WORKER_COMMAND and CC_WORKER_COMMAND_<N>
+
+app.ScopeNode       // []string{CC_BUN_INSTALL_CACHE_DIR, CC_CUSTOM_BUILD_TOOL, CC_NODE_BUILD_TOOL, ...}
+app.Scopes["node"]  // the same list, looked up by scope name
+```
+
 ## Authentication
 
 The SDK uses the [clever-cloud-client-go](https://github.com/CleverCloud/clever-cloud-client-go) for authentication. Configure credentials via:
@@ -101,6 +121,7 @@ client.New(client.WithOAuth1Config(consumerKey, consumerSecret, token, tokenSecr
 ```
 ├── sdk.go              # Main SDK entry point
 ├── builder.go          # Builder pattern implementation
+├── app/                # Generated application environment variables
 ├── models/             # Generated data structures
 └── services/           # Generated API operations by service
     ├── kubernetes/
@@ -116,6 +137,14 @@ This SDK is generated from the Clever Cloud OpenAPI specification. See `gen/` di
 ```bash
 cd gen
 make all
+```
+
+The `app` package is generated from a JSON description of the application
+environment variables that is not part of this repository:
+
+```bash
+cd gen
+make generate-app SPEC=/path/to/variables.json
 ```
 
 ## Requirements
