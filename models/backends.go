@@ -2,8 +2,8 @@
 
 package models
 
-// Backends
+// Backends Backend connection information of a cluster (:201-206).
 type Backends struct {
-	Servers   []Server1  `json:"servers,omitempty"`
-	Transport Transport2 `json:"transport"`
+	Servers   []BackendServer   `json:"servers"`   // The backend servers.
+	Transport BackendsTransport `json:"transport"` // The backend transport tree.
 }

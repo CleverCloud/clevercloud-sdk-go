@@ -2,9 +2,9 @@
 
 package models
 
-// WannabeContainerRegistryToken
+// WannabeContainerRegistryToken Request to create a new container registry token.  Source: references/legacy/ovd/modules/containe...
 type WannabeContainerRegistryToken struct {
-	ExpiresInDays *int                         `json:"expiresInDays,omitempty"`
-	Rights        ContainerRegistryTokenRights `json:"rights"`
-	Scope         []string                     `json:"scope,omitempty"`
+	ExpiresInDays *int                         `json:"expiresInDays,omitempty"` // Token expiration in days (None = never expires)
+	Rights        ContainerRegistryTokenRights `json:"rights"`                  // Token rights (READ or READ_WRITE)
+	Scope         []ScopePattern               `json:"scope"`                   // Scope patterns for access control
 }

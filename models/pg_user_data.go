@@ -2,10 +2,10 @@
 
 package models
 
-// PgUserData
+// PgUserData User data view returned by user endpoints.  Source: ovd PrivilegeData.scala — PgUserData Spec: an...
 type PgUserData struct {
-	ID         string         `json:"id"`
-	Name       string         `json:"name"`
-	Password   string         `json:"password"`
-	Privileges UserPrivileges `json:"privileges"`
+	ID         string         `json:"id"`         // User ID (e.g. pg-user_UUID)
+	Name       string         `json:"name"`       // SQL username
+	Password   string         `json:"password"`   // Cleartext password (decrypted from DB)
+	Privileges UserPrivileges `json:"privileges"` // User-level privileges
 }

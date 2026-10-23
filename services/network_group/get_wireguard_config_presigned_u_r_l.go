@@ -12,9 +12,25 @@ import (
 )
 
 /*
-Getwireguardconfigpresignedurl
+Getwireguardconfigpresignedurl GET .../peers/{peer_id}/wireguard/configuration/presigned-url
 
-# Get a presigned URL for wireguard configuration
+Algo Source: ovd NetworkGroupWireguardController.scala generatePresignedURL —
+mints a Biscuit token (identity fact + 60-min expiry check + operation
+check/rule) and returns a URL pointing at the config endpoint with the token
+as `authorization`.
+
+Algo Rust: re-ported against [`crate::cache::NgCache`] (peer existence check)
+instead of PG. The token and URL are OVD's, on the module-scoped root key
+`MODULE_PRODUCT_NETWORKGROUP__BISCUIT_ROOT_HEX` and base
+`MODULE_PRODUCT_NETWORKGROUP__BASE_URL` (OVD `ccapi.url`) — see
+[`crate::wireguard_presign`] (refs #3024).
+
+Source: references/legacy/ovd/modules/networkgroup/controllers/NetworkGroupWireguardController.scala generatePresignedURL
+Behavior: 200 + presigned URL; 401 another owner's group; 404 unknown NG or
+
+	peer; 500 when the token cannot be minted (OVD `BiscuitError`).
+
+Issue: #849, #3024
 
 Parameters:
   - ctx: context for the request

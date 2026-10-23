@@ -12,7 +12,28 @@ import (
 )
 
 /*
-Createimage
+Createimage POST /v4/images — register an image from its package list.
+
+📥 **Algo Source (Legacy):**
+- Decode `runtime`, `date` (YYYYMMDD) and the repeatable `tag` from the query
+- Authorize the Biscuit against `image_op("create")`
+- `ExherboPackage.parse` the text body into a `Set[ExherboPackage]`
+- Mint `image_<ULID>`, build the label `<runtime>:<date>`, `repository.insert`
+- 201 with `ImageOutput`; a label already present is a 409
+- Source: ovd ImageController.scala:69-87 createImage + routes.scala:24-34
+
+🔧 **Algo Rust (Implementation):**
+  - `CreateQuery::decode` → the tapir 400 sentences on a missing, repeated or
+    malformed parameter, before any credential is looked at
+  - `authorize` → 401 without a verifiable Biscuit, 403 without `image_op("create")`
+  - `models::parse_packages` → 400 with the `label` field context
+  - `ImageId::generate` + `ImageRepository::insert` → 409 on the unique label
+  - `Json(ImageOutput)` with 201
+
+Source: ovd modules/image/api/routes.scala:24-34 (createImage)
+Source: ovd modules/image/controllers/ImageController.scala:69-87 (createImage)
+Behavior: stores one image; 409 when its label is already taken.
+Issue: #313
 
 Parameters:
   - ctx: context for the request

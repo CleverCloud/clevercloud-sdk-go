@@ -2,12 +2,12 @@
 
 package models
 
-// Kms
+// Kms What a customer-facing client sees. **Six fields, no others** — the upstream view carries no stat...
 type Kms struct {
-	AddonID string            `json:"addonId"`
-	ID      string            `json:"id"`
-	Name    string            `json:"name"`
-	OwnerID OwnerID           `json:"ownerId"`
-	Plan    KmsPlanIdentifier `json:"plan"`
-	Token   string            `json:"token"`
+	AddonID string         `json:"addonId"` // The cc-api addon this resource was provisioned under (`addon_<uuid>`).
+	ID      string         `json:"id"`      // `kms_<uuid>`, canonical hyphenated lowercase.
+	Name    string         `json:"name"`    // Display name.
+	OwnerID string         `json:"ownerId"` // The owning organisation.
+	Plan    KmsPlan        `json:"plan"`
+	Tokens  map[string]any `json:"tokens"` // The resource's live credentials, **keyed by scope** (FR-024).  A scope the caller may not see car...
 }

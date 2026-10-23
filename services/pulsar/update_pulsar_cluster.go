@@ -12,15 +12,29 @@ import (
 )
 
 /*
-Updatepulsarcluster
+Updatepulsarcluster PUT /v4/addon-providers/addon-pulsar/clusters/{cluster_id} — update a Pulsar cluster.
 
-# Update Pulsar cluster
+**Legacy**: ovd PulsarController.scala:132 updateClusterServerEndpoint()
+**Algorithm**:
+  - Biscuit auth with PulsarClusterOp.UPDATE check
+  - Delegates to PulsarClusterService.updateCluster(clusterId, wannabeCluster)
+  - UPDATE cluster row, SELECT back, return ClusterView or 404
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala updateClusterServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala updateCluster
+Behavior: updates cluster record, returns updated view. Requires a Biscuit
+
+	with the `pulsar_cluster_op("update")` (or `"root"`) fact.
+
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId:
+  - clusterId: Cluster ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

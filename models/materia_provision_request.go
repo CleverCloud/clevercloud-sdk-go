@@ -2,7 +2,7 @@
 
 package models
 
-// MateriaProvisionRequest
+// MateriaProvisionRequest Provision request. DIVERGENCE(#1487): the wire key is snake_case `owner_id` — OVD's circe config ...
 type MateriaProvisionRequest struct {
-	OwnerID OwnerID `json:"ownerId"`
+	OwnerID string `json:"owner_id"`
 }

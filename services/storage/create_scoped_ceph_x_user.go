@@ -12,18 +12,45 @@ import (
 )
 
 /*
-Createscopedcephxuser
+Createscopedcephxuser POST .../ceph-pools/{poolId}/ceph-rbd-namespaces/{namespaceId}/ceph-x-users
+-- create a CephX user scoped to a pool+namespace.
 
-Create a ceph x user scoped to a given pool and rbd namespace (mon/osd/mgr rbd profile).
+Source: ovd StorageController.scala createScopedCephXUser() /
+`WannabeCephXUser.rbdScoped` — entity and caps are derived from the path (no
+body): a generated `client.cephXUser_*` entity with mon `profile rbd` and osd/mgr
+`profile rbd pool=<pool> namespace=<ns>`.
+
+📥 **Algo Source (Legacy):** mint a CephX user scoped to one pool+namespace via
+`rbdScoped` (mon `profile rbd` — ovd!2170; osd/mgr `profile rbd pool=… namespace=…`).
+
+🔧 **Algo Rust (Implementation):** `OvdAuth` + `ceph_x_op:create_user` **bound to the
+path pool and namespace** (`cephPool` / `cephRBDNamespace` scope facts); validate
+the path `pool_id`/`namespace_id` charset (cap-injection guard); load the namespace
+and require it to be owned by the path tenant on the path (cluster_id, pool_id) —
+404 otherwise; resolve the cluster client;
+`create_ceph_x_user(client.cephXUser_*, caps)` → 201 `CephXUserView`.
+
+OVD routes this through `notStoredAuthorizedResourceEndpoint`
+(`BiscuitAuthorizer.scala:231`) rather than the plain tenant gate: its datalog
+authorizes `{pool.asFact, namespace.asFact}` + `CephXOp.CREATE_USER`, so a token
+scoped to one pool/namespace cannot mint a key for another. That is reproduced
+exactly, via the two [`ScopeFact`]s below.
+
+The DB ownership check is kept **on top of** the scope facts rather than replaced by
+them. It was written to stand in for the missing facts, but it is not redundant now:
+the facts prove the *token* is scoped to this pool/namespace, while the row check
+proves the *namespace* really belongs to the path tenant and cluster — the dimension
+OVD's fact set omits. Belt and braces, and it costs one indexed lookup.
+Issue: #774
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - clusterId:
-  - poolId:
-  - namespaceId:
+  - tenantId: Tenant identifier
+  - clusterId: Ceph cluster identifier
+  - poolId: Pool identifier
+  - namespaceId: RBD namespace identifier
 
 # Returns the operation result or an error
 

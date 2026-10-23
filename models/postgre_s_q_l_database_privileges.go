@@ -2,9 +2,9 @@
 
 package models
 
-// PostgreSQLDatabasePrivileges
+// PostgreSQLDatabasePrivileges Aggregated privilege export: per-database with nested schemas and tables.  Source: ovd Privileges...
 type PostgreSQLDatabasePrivileges struct {
-	DatabaseName string                       `json:"databaseName"`
-	Schemas      []PostgreSQLSchemaPrivileges `json:"schemas,omitempty"`
-	Users        []PostgreSQLObjectPrivilege  `json:"users,omitempty"`
+	DatabaseName string                             `json:"databaseName"`
+	Schemas      []PostgreSQLSchemaPrivilegesExport `json:"schemas"`
+	Users        []PostgreSQLObjectPrivilege        `json:"users"`
 }

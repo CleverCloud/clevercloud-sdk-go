@@ -11,7 +11,21 @@ import (
 )
 
 /*
-Createconfigurationprovider
+Createconfigurationprovider POST /v2/providers/config-provider/resources — provision a new config-provider addon.
+
+Legacy: ovd routes.scala:28 createAddonV2 / AddonConfigProviderActor.scala
+Algorithm:
+  - Mint the provider-side id (`config_<uuid>`), as OVD does
+  - Encrypt empty env with XSalsa20-Poly1305, INSERT with ACTIVE status
+  - A cc-api retry (same `addon_id` and `owner_id`) returns the addon already provisioned
+  - Return ProvisionResponse with an empty config map, on the first call and on a retry
+
+Conformity: YES
+
+Source: references/legacy/ovd/modules/configprovider/api/routes.scala createAddonV2
+Source: references/legacy/ovd/modules/configprovider/models/AddonConfigProvider.scala ProvisionResponseBuilder
+Behavior: creates provision record with ACTIVE status and empty env, returns ProvisionResponse with env map
+Issue: #2
 
 Parameters:
   - ctx: context for the request

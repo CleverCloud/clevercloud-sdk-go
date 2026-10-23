@@ -11,18 +11,27 @@ import (
 )
 
 /*
-Getbudget
+Getbudget **Legacy**: ovd AIProviderController.scala:307 getSpecificBudgetEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, resolve config, call Otoroshi getBudget
 
-# Get a specific budget by ID from an otoroshi endpoint
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/.../endpoints/{endpoint_id}/budgets/{budget_id} — get specific budget.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getSpecificBudgetEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getBudget()
+Behavior: verifies addon + tenancy, resolves config, calls otoroshiClient.getBudget.
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - budgetId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - budgetId: Budget ID
 
 # Returns the operation result or an error
 

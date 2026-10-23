@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeDeploymentProfile
+// WannabeDeploymentProfile The create / update request body — the same triple, un-redacted.  Source: ovd models/DeploymentPr...
 type WannabeDeploymentProfile struct {
 	LocationID  string `json:"locationId"`
 	ProfileData any    `json:"profileData"`

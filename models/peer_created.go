@@ -2,7 +2,7 @@
 
 package models
 
-// PeerCreated
+// PeerCreated Response after creating a peer.  Source: references/legacy/ovd/modules/networkgroup/models/protoc...
 type PeerCreated struct {
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerId"` // The newly created peer's ID.
 }

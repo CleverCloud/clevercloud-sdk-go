@@ -12,13 +12,34 @@ import (
 )
 
 /*
-Triggerclusterpluginsbackfill
+Triggerclusterpluginsbackfill POST /v4/kubernetes/admin/clusters/{cluster_id}/plugins/backfill
+
+📥 **Algo Source (Legacy):**
+Backfill the plugin bookkeeping of ONE cluster.
+  - `requireBasicAuth` → 403 otherwise
+  - `findOneByIdAnyTenant(clusterId)` — tenant-agnostic lookup
+  - `backfillService.backfillCluster`: ACTIVE gate → 409; observe every
+    plugin; register the unregistered ones; report drift without fixing it
+  - 200 `PluginBackfillResult` (its `error` is always null on this route)
+  - Source: ovd controllers/AdminPluginBackfillController.scala:60-80,104-106
+
+🔧 **Algo Rust (Implementation):**
+  - `AdminAccess` extractor → 403
+  - tenant-agnostic status fetch: absent → 404 (deviation, see file header),
+    DB failure → 500, non-ACTIVE → 409 with OVD's message
+  - `deployers.cluster.backfill_plugins` → `BackfillConflict` ⇒ 409 (it can
+    still fire if the cluster left ACTIVE between the pre-check and the call),
+    any other error ⇒ 500
+
+Source: ovd controllers/AdminPluginBackfillController.scala:60-80
+Schema: cluster_item (V2.0.0; PLUGIN item type V2.29.0)
+Issue: #2355
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: A Kubernetes cluster identifier
+  - clusterId: Cluster id (kube_<uuid>)
 
 # Returns the operation result or an error
 

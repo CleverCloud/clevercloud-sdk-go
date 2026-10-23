@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// ResourceACL
+// ResourceACL OVD `ResourceACL` (ipam types) — rows 37-38 response schema. Not producible in WP3 (the ACL store...
 type ResourceACL struct {
-	Allow      []string      `json:"allow,omitempty"`
-	CreatedAt  time.Time     `json:"createdAt"`
-	Deny       []string      `json:"deny,omitempty"`
-	ID         ResourceACLId `json:"id"`
-	OwnerID    TenantID      `json:"ownerId"`
-	ResourceID string        `json:"resourceId"`
-	UpdatedAt  time.Time     `json:"updatedAt"`
+	Allow      []string  `json:"allow"`
+	CreatedAt  time.Time `json:"createdAt"`
+	Deny       []string  `json:"deny"`
+	ID         string    `json:"id"`
+	OwnerID    string    `json:"ownerId"`
+	ResourceID string    `json:"resourceId"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }

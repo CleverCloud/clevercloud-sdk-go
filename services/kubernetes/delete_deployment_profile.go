@@ -11,13 +11,28 @@ import (
 )
 
 /*
-Deletedeploymentprofile
+Deletedeploymentprofile DELETE /v4/kubernetes/admin/deployment-profiles/{location_id}
+
+📥 **Algo Source (Legacy):**
+Delete a location's deployment profile.
+- `requireBasicAuth` → 403 otherwise
+- `repository.delete`; 0 affected rows → 404
+- 204 No Content on success
+- Source: ovd DeploymentProfileController.scala:119-139
+
+🔧 **Algo Rust (Implementation):**
+- `AdminAccess` extractor → 403; `validate_location_id` → 400
+- `delete` → 0 rows ⇒ 404; else 204 with no body
+
+Source: ovd controllers/DeploymentProfileController.scala:119-139
+Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
+Issue: #1625
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId:
+  - locationId: Location id (location_<uuid>)
 
 # Returns the operation result or an error
 

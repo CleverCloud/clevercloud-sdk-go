@@ -11,9 +11,20 @@ import (
 )
 
 /*
-Getmateriakvprovider
+Getmateriakvprovider GET /v4/addon-providers/kv — get Materia KV provider info.
 
-# Get MateriaKV provider
+📥 **Algo Source (Legacy):** ovd `MateriaDBActor.getProvider` →
+`ProviderConsoleView(providerId="kv", clusters=[CLUSTER.toConsoleView], dedicated={}, defaultDedicatedVersion="")`.
+`Cluster.toConsoleView` sets `label = id.value` and `features = []` (NOT the cluster's own
+label/features). No plans field — the shared addon-provider console shape.
+
+🔧 **Algo Rust:** build `ProviderConsoleView` from the static cluster config; one cluster entry
+whose `label` echoes its `id` and whose `features` are empty, per `toConsoleView`.
+
+Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala getProvider
+Source: references/legacy/ovd/modules/materia/db/models/Cluster.scala toConsoleView
+Behavior: 200 ProviderConsoleView (public — no auth, like OVD)
+Issue: #1260, #679
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +44,14 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKvProvider
 */
-func Getmateriakvprovider(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getmateriakvprovider(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMateriaKvProvider")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/kv")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// TokenRevokedResponse
+// TokenRevokedResponse Token revoked response.  Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercl...
 type TokenRevokedResponse struct {
-	RevocationID string    `json:"revocationId"`
-	RevokedAt    time.Time `json:"revokedAt"`
+	RevocationID RevocationId `json:"revocationId"` // Revocation ID.
+	RevokedAt    time.Time    `json:"revokedAt"`    // Revocation timestamp.
 }

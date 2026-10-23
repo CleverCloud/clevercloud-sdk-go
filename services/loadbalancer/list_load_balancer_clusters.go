@@ -12,16 +12,14 @@ import (
 )
 
 /*
-Listloadbalancerclusters
-
-# Get loadbalancer clusters
+Listloadbalancerclusters Row 31 — `200 []`; config row absent → 500.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - loadbalancerId: LoadBalancer ID
+  - tenantId: Organisation/tenant ID
+  - loadbalancerId: Load balancer ID
 
 # Returns the operation result or an error
 
@@ -36,14 +34,14 @@ Example:
 x-service: loadbalancer
 operationId: listLoadBalancerClusters
 */
-func Listloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string) client.Response[[]models.Cluster] {
+func Listloadbalancerclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, loadbalancerId string) client.Response[[]models.PublicCluster] {
 	ctx, span := tracer.Start(ctx, "listLoadBalancerClusters", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/loadbalancers/%s/clusters", tenantId, loadbalancerId)
 
 	// Make API call
-	response := client.Get[[]models.Cluster](ctx, c, path)
+	response := client.Get[[]models.PublicCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

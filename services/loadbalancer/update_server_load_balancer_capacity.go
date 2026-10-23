@@ -12,15 +12,14 @@ import (
 )
 
 /*
-Updateserverloadbalancercapacity
-
-# Update server Load Balancer capacity
+Updateserverloadbalancercapacity Row 3 — ⚠️ answers **200 with an empty body** where its siblings answer
+204 (E:270, pinned quirk).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - serverId: Server ID
   - requestBody: the request payload

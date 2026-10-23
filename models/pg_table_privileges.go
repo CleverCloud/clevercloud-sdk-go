@@ -2,12 +2,12 @@
 
 package models
 
-// PgTablePrivileges
+// PgTablePrivileges Table-level privileges for a user.  Source: ovd PrivilegeData.scala — PgTablePrivileges Issue: #646
 type PgTablePrivileges struct {
-	DatabaseOID int        `json:"databaseOId"`
-	ID          string     `json:"id"`
-	Oid         int        `json:"oid"`
-	Privileges  Privileges `json:"privileges"`
-	SchemaOID   int        `json:"schemaOId"`
-	UserID      string     `json:"userId"`
+	DatabaseOID int        `json:"databaseOId"` // Database OID
+	ID          string     `json:"id"`          // Privilege row ID
+	Oid         int        `json:"oid"`         // Table OID
+	Privileges  Privileges `json:"privileges"`  // Privileges
+	SchemaOID   int        `json:"schemaOId"`   // Schema OID
+	UserID      string     `json:"userId"`      // User ID
 }

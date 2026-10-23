@@ -12,15 +12,23 @@ import (
 )
 
 /*
-Listpostgresqlmigrationprivileges
+Listpostgresqlmigrationprivileges **Legacy**: ovd migration.scala:38 getPrivileges()
+**Algorithm**:
+  - Fetch addon, complex JOIN across privilege tables for full export
 
-# Get the privileges snapshot for a given PostgreSQL addon
+**Conformity**: STUB (complex join TODO, returns empty list)
+
+GET /v4/postgresql/{postgreSQLId}/migration/privileges
+
+Source: ovd PostgreSQLMigrationRepository.scala — selectPrivileges
+Behavior: returns aggregated privileges export for migration
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
 
 # Returns the operation result or an error
 

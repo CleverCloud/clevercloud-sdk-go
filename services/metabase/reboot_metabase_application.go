@@ -11,15 +11,24 @@ import (
 )
 
 /*
-Rebootmetabaseapplication
+Rebootmetabaseapplication POST .../addons/{id}/reboot — restart the Java app **with** build cache.
 
-# Ask for reboot metabase application
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — rebootAddon(rebuild=false)
+Behavior: resolve the addon and authorize the caller against its owner
+
+	(404 when it is absent or soft-deleted, 403 for a non-member), require a
+	Java application on the row (a NULL column logs a WARN and 404s), then ask
+	cc-api to restart it **with** the build cache. Answers 204 once the restart
+	is accepted; a cc-api failure is a 500. With no outbound clients
+	(airgap/test) nothing is restarted and the 204 still stands.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase addon ID
 
 # Returns the operation result or an error
 

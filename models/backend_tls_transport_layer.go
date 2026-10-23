@@ -2,8 +2,10 @@
 
 package models
 
-// BackendTlsTransportLayer
+// BackendTlsTransportLayer Backend TLS layer with SNI list (:109-114).
 type BackendTlsTransportLayer struct {
-	Layer Layer    `json:"layer"`
-	Sni   []string `json:"sni,omitempty"`
+	ClientCertificate *TlsClientCertificate `json:"clientCertificate,omitempty"`
+	Layer             BackendTlsLayerChoice `json:"layer"` // The layer under TLS.
+	Sni               []string              `json:"sni"`   // SNIs to verify — empty means no SNI check (:110).
+	Verification      *TlsVerification      `json:"verification,omitempty"`
 }

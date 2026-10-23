@@ -2,12 +2,12 @@
 
 package models
 
-// PgSchemaPrivileges
+// PgSchemaPrivileges Schema-level privileges for a user.  Source: ovd PrivilegeData.scala — PgSchemaPrivileges Issue: ...
 type PgSchemaPrivileges struct {
-	DatabaseOID         int        `json:"databaseOId"`
-	ID                  string     `json:"id"`
-	Oid                 int        `json:"oid"`
-	Privileges          Privileges `json:"privileges"`
-	PrivilegesAllTables Privileges `json:"privilegesAllTables"`
-	UserID              string     `json:"userId"`
+	DatabaseOID         int        `json:"databaseOId"`         // Database OID
+	ID                  string     `json:"id"`                  // Privilege row ID
+	Oid                 int        `json:"oid"`                 // Schema OID
+	Privileges          Privileges `json:"privileges"`          // Schema-level privileges
+	PrivilegesAllTables Privileges `json:"privilegesAllTables"` // All-tables level privileges within this schema
+	UserID              string     `json:"userId"`              // User ID
 }

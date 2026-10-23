@@ -2,7 +2,8 @@
 
 package models
 
-// WannabeNamespace
+// WannabeNamespace Request body for creating a TCP/UDP redirection.  `source_port` is **accepted and ignored** on th...
 type WannabeNamespace struct {
-	Location string `json:"location"`
+	Namespace  *string `json:"namespace,omitempty"`
+	SourcePort *int    `json:"sourcePort,omitempty"`
 }

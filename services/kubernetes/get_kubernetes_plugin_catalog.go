@@ -11,7 +11,37 @@ import (
 )
 
 /*
-Getkubernetesplugincatalog
+Getkubernetesplugincatalog GET /v4/kubernetes/plugins/catalog — the declared plugin catalog (bases + migrations).
+
+Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:38-42 — getPluginCatalog
+Source: references/legacy/ovd/modules/kubernetes/controllers/PluginCatalogController.scala:20-33
+Behavior: static snapshot of the in-code catalog; mutation = an axo release.
+Issue: #1623
+
+Unauthenticated **by design** (`PluginCatalogController.scala:12-19`): the
+response is metadata about which plugins exist on which k8s versions — no
+per-cluster, per-tenant, or credential content. Same shape as
+[`get_kubernetes_product`] above.
+
+**Legacy**: ovd PluginCatalogController.getCatalogLogic()
+
+📥 **Algo Source (Legacy):**
+Return the declared plugin matrix as static metadata.
+- `routes.getPluginCatalog.serverLogic(_ => _ => Future.successful(Right(PublicPluginCatalog.current)))`
+- `PublicPluginCatalog.current` = `PluginCatalog.bases.map(PublicBaseEntry.from)`
+  - `PluginCatalog.migrations.map(PublicMigrationEntry.from)` (PluginCatalog.scala:396-399)
+
+- `PublicBaseEntry.from` strips the internal `resourcePath` (:342-345, :358-364)
+- No auth, no DB access, no per-cluster data
+
+🔧 **Algo Rust (Implementation):**
+  - `plugin_catalog::PublicPluginCatalog::current()` — same strip/map, computed
+    per request (35 tiny static entries; no cache needed)
+  - Serialization: camelCase fields, SCREAMING_SNAKE plugin names, strategy tags
+    `BEFORE_BASE`/… — byte-compatible with OVD's circe derives
+  - Return `Json(PublicPluginCatalog)` with 200 OK
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request

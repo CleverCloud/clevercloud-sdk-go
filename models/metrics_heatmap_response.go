@@ -2,9 +2,9 @@
 
 package models
 
-// MetricsHeatmapResponse
+// MetricsHeatmapResponse Response for GET /v4/stats/organisations/{ownerId}/requests (heatmap).  Source: references/legacy...
 type MetricsHeatmapResponse struct {
-	AccessCount int     `json:"accessCount"`
-	Lat         float64 `json:"lat"`
-	Long        float64 `json:"long"`
+	AccessCount int     `json:"accessCount"` // Number of requests from this geo cell. `i32` to match the Scala `MetricsHeatmapResponse(..., acce...
+	Lat         float64 `json:"lat"`         // Latitude.
+	Long        float64 `json:"long"`        // Longitude.
 }

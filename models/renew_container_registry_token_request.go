@@ -2,7 +2,7 @@
 
 package models
 
-// RenewContainerRegistryTokenRequest
+// RenewContainerRegistryTokenRequest Request to renew an expired token.  Source: references/legacy/ovd/modules/container-registry/mode...
 type RenewContainerRegistryTokenRequest struct {
-	ExpiresInDays int `json:"expiresInDays"`
+	ExpiresInDays int `json:"expiresInDays"` // New expiration period in days
 }

@@ -12,35 +12,47 @@ import (
 )
 
 /*
-Deleteregistry
+DeleteRegistry DELETE /v4/tenants/{tenant_id}/container-registry/registries/{registry_id} — soft-delete a registry.
 
-Mark a container registry for deletion with a retention period.
+Source: references/legacy/ovd/modules/container-registry/controllers/ContainerRegistryController.scala deleteRegistryServerEndpoint
+Source: references/legacy/ovd/modules/container-registry/services/ContainerRegistryProvisioningService.scala deleteRegistry
+Behavior: marks registry with SOFT_DELETED status, sets ask_for_deletion_date and scheduled_deletion_date,
+
+	returns updated view. Returns 404 if not found, 412 if not in deletable state.
+
+Issue: #643
+
+**Legacy**: ovd ContainerRegistryController.scala:138 deleteRegistryServerEndpoint
+**Algorithm**:
+  - Verify deletable state, UPDATE status=SOFT_DELETED + deletion dates, return view or 404/412
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - registryId:
+  - tenant_id: Tenant ID
+  - registry_id: Container registry ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := container_registry.Deleteregistry(ctx, client, tracer, tenantId, registryId)
+	response := container_registry.DeleteRegistry(ctx, client, tracer, tenant_id, registry_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: container_registry
-operationId: deleteRegistry
+operationId: delete_registry
 */
-func Deleteregistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, registryId string) client.Response[models.ContainerRegistry] {
-	ctx, span := tracer.Start(ctx, "deleteRegistry", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("registryId", registryId)))
+func DeleteRegistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, registry_id string) client.Response[models.ContainerRegistry] {
+	ctx, span := tracer.Start(ctx, "delete_registry", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("registry_id", registry_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/container-registry/%s", tenantId, registryId)
+	path := utils.Path("/v4/tenants/%s/container-registry/registries/%s", tenant_id, registry_id)
 
 	// Make API call
 	response := client.Delete[models.ContainerRegistry](ctx, c, path)

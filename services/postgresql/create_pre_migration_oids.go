@@ -12,15 +12,25 @@ import (
 )
 
 /*
-Createpremigrationoids
+Createpremigrationoids **Legacy**: ovd migration.scala:52 updatePreMigration()
+**Algorithm**:
+  - Fetch addon, batch UPSERT old_oid+name pairs into provision_migration
+  - Uses transaction for atomicity
 
-# Create OID pairs for each database, schema and table for a given PostgreSQL addon before migration
+**Conformity**: YES
+
+POST /v4/postgresql/{postgreSQLId}/migration/pre — create OID name pairs before migration.
+
+Source: ovd PostgreSQLMigrationRepository.scala — upsertOldOidPairs
+Source: ovd PostgreSQLMigrationService.scala — createOidNamePairs
+Behavior: inserts OID-name pairs into provision_migration for tracking across migration
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - postgreSQLId: PostgreSQL ID
+  - postgreSQLId: PostgreSQL addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

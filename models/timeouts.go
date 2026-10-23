@@ -2,10 +2,10 @@
 
 package models
 
-// Timeouts
+// Timeouts Per-listener/spec timeout overrides (:88-91) — every field optional.
 type Timeouts struct {
-	Backend  *int `json:"backend,omitempty"`
-	Connect  *int `json:"connect,omitempty"`
-	Frontend *int `json:"frontend,omitempty"`
-	Request  *int `json:"request,omitempty"`
+	Backend  *int `json:"backend,omitempty"`  // Server-side inactivity timeout (ms).
+	Connect  *int `json:"connect,omitempty"`  // Backend connect timeout (ms).
+	Frontend *int `json:"frontend,omitempty"` // Client-side inactivity timeout (ms).
+	Request  *int `json:"request,omitempty"`  // Full-request receive timeout (ms).
 }

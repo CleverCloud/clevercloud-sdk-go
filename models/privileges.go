@@ -2,7 +2,7 @@
 
 package models
 
-// Privileges
+// Privileges Read/write privilege pair.  Source: ovd Privileges.scala
 type Privileges struct {
 	Read  bool `json:"read"`
 	Write bool `json:"write"`

@@ -2,7 +2,7 @@
 
 package models
 
-// PluginBackfillItem
+// PluginBackfillItem One plugin the backfill registered, at the version found deployed.  Source: ovd models/PluginBack...
 type PluginBackfillItem struct {
 	Name    PluginName `json:"name"`
 	Version string     `json:"version"`

@@ -2,8 +2,8 @@
 
 package models
 
-// StorageConfigurationPolicies
+// StorageConfigurationPolicies One side of a storage policy — legacy `StorageConfigurationPoliciesView`.  A negative Pulsar sent...
 type StorageConfigurationPolicies struct {
-	DurationInMinutes *int `json:"durationInMinutes,omitempty"`
-	SizeInBytes       *int `json:"sizeInBytes,omitempty"`
+	DurationInMinutes *int `json:"durationInMinutes,omitempty"` // Duration limit in minutes.
+	SizeInBytes       *int `json:"sizeInBytes,omitempty"`       // Size limit in BYTES (the Pulsar admin API speaks MiB; converted here).
 }

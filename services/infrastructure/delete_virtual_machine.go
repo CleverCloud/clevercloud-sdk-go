@@ -11,15 +11,17 @@ import (
 )
 
 /*
-Deletevirtualmachine
+Deletevirtualmachine DELETE /v4/infrastructure/virtual-machines/{virtual_machine_id}
 
-# Delete a virtual machine
+Source: references/legacy/ovd/modules/compute/routes/DeploymentController.scala deleteVirtualMachine
+Behavior: send RabbitMQ delete instruction to Supernova.
+Issue: #664
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - virtualMachineId: an id of a virtual machine
+  - virtualMachineId: Virtual machine UUID
 
 # Returns the operation result or an error
 
@@ -31,7 +33,7 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: deleteVirtualMachine
 */
 func Deletevirtualmachine(ctx context.Context, c *client.Client, tracer trace.Tracer, virtualMachineId string) client.Response[client.Nothing] {

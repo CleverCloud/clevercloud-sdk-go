@@ -12,35 +12,44 @@ import (
 )
 
 /*
-Getregistry
+GetRegistry GET /v4/tenants/{tenant_id}/container-registry/registries/{registry_id} — get a registry.
 
-Get container registry details.
+Source: references/legacy/ovd/modules/container-registry/controllers/ContainerRegistryController.scala getRegistryServerEndpoint
+Source: references/legacy/ovd/modules/container-registry/repositories/ContainerRegistryRepository.scala findById
+Behavior: returns registry view, 404 if not found
+Issue: #643
+
+**Legacy**: ovd ContainerRegistryController.scala:123 getRegistryServerEndpoint
+**Algorithm**:
+  - SELECT registry by ID, return view or 404
+
+**Conformity**: YES
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - registryId:
+  - tenant_id: Tenant ID
+  - registry_id: Container registry ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := container_registry.Getregistry(ctx, client, tracer, tenantId, registryId)
+	response := container_registry.GetRegistry(ctx, client, tracer, tenant_id, registry_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
 x-service: container_registry
-operationId: getRegistry
+operationId: get_registry
 */
-func Getregistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, registryId string) client.Response[models.ContainerRegistry] {
-	ctx, span := tracer.Start(ctx, "getRegistry", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("registryId", registryId)))
+func GetRegistry(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, registry_id string) client.Response[models.ContainerRegistry] {
+	ctx, span := tracer.Start(ctx, "get_registry", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("registry_id", registry_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/tenants/%s/container-registry/%s", tenantId, registryId)
+	path := utils.Path("/v4/tenants/%s/container-registry/registries/%s", tenant_id, registry_id)
 
 	// Make API call
 	response := client.Get[models.ContainerRegistry](ctx, c, path)

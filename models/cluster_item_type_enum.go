@@ -2,19 +2,19 @@
 
 package models
 
-// ClusterItemType represents
+// ClusterItemType represents Cluster item type (discriminator for the polymorphic `cluster_item` registry).  Source: reference...
 type ClusterItemType string
 
 const (
-	ClusterItemTypeComponentBundle     ClusterItemType = "COMPONENT_BUNDLE"
-	ClusterItemTypeLoadbalancerNetwork ClusterItemType = "LOADBALANCER_NETWORK"
-	ClusterItemTypeLoadBalancer        ClusterItemType = "LOAD_BALANCER"
-	ClusterItemTypeMateriaLogicaldb    ClusterItemType = "MATERIA_LOGICALDB"
 	ClusterItemTypeNetworkGroup        ClusterItemType = "NETWORK_GROUP"
-	ClusterItemTypeNodeGroup           ClusterItemType = "NODE_GROUP"
-	ClusterItemTypeOtelConfig          ClusterItemType = "OTEL_CONFIG"
-	ClusterItemTypePLUGIN              ClusterItemType = "PLUGIN"
+	ClusterItemTypeLoadBalancer        ClusterItemType = "LOAD_BALANCER"
 	ClusterItemTypeSTORAGE             ClusterItemType = "STORAGE"
+	ClusterItemTypeComponentBundle     ClusterItemType = "COMPONENT_BUNDLE"
+	ClusterItemTypeNodeGroup           ClusterItemType = "NODE_GROUP"
+	ClusterItemTypeLoadbalancerNetwork ClusterItemType = "LOADBALANCER_NETWORK"
+	ClusterItemTypeOtelConfig          ClusterItemType = "OTEL_CONFIG"
+	ClusterItemTypeMateriaLogicaldb    ClusterItemType = "MATERIA_LOGICALDB"
+	ClusterItemTypePLUGIN              ClusterItemType = "PLUGIN"
 )
 
 // String returns the underlying string value

@@ -12,9 +12,28 @@ import (
 )
 
 /*
-Listregions
+Listregions List available regions.
 
-# List available regions
+**Public, and authentication only ever widens.** The route cannot refuse a
+caller: upstream declares it with `ovdEndpoint`, whose security input is `Unit`
+(`OVDTapir.scala:55-65`), and `ZoneActor` funnels every authentication outcome
+into a 200 — an absent credential and a rejected one both reach
+`onPublicActions` and the public list (`ZoneActor.scala:73,97`), while an
+accepted one reaches `onPrivateActions` carrying the caller's organisations,
+which admit the zones their `zone_access` rows grant on top of the public set.
+See [`authorized_owner_ids`] for where that owner set comes from and how
+`?ownerId` narrows it.
+
+So the answer is: the ACTIVE zones carrying no `zone_access` row, plus the
+ACTIVE zones the caller's owner set is granted, minus what `zone_restrictions`
+/ `zone_tag_restrictions` withhold from that set — narrowed by `?tag` when it
+is given. For an anonymous caller the owner set is empty and only the public
+half remains.
+
+Source: ovd ZoneActor.scala:109-118 listZones + queries.selectZones
+Source: ovd ZoneActor.scala:70-77 (the three authentication branches)
+Source: live capture api.clever-cloud.com /v4/products/zones (2026-08-25)
+Issues: #313, #3069
 
 Parameters:
   - ctx: context for the request

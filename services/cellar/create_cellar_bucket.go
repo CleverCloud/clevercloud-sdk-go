@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Createcellarbucket
+Createcellarbucket Create a bucket
 
-create a bucket for a Cellar account
+Creates a bucket in this add-on's storage and returns its view: name, versioning status, and the object count, total size and timestamps read back from the cluster. Set `versioning` in the body to turn on object versioning at creation. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on answers 404, and a bucket name already in use answers 409.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

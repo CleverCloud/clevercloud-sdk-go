@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Listoutboxmessages
-
-# Get all Outbox messages
+Listoutboxmessages Row 45 — the machine-only GLOBAL diagnostic outbox (tenant ignored), first
+100 rows, empty → 404; payloads decoded protobuf → JSON (undecodable → 500).
+User-bearing OAuth1 and Bearer callers receive the standard 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
 
 # Returns the operation result or an error
 

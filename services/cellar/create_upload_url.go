@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Createuploadurl
+Createuploadurl Presign a direct S3 upload URL
 
-generate a presigned URL for uploading an object
+Returns `{ url, expiresAt }`: a presigned S3 URL the caller PUTs the object bytes to, straight to the storage cluster. `expiresIn` sets its lifetime in seconds (300 by default) and is used as given, with no clamping. The target object need not exist yet, but the bucket must. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on or bucket answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner (org) ID
+  - CellarId: Cellar addon ID
+  - bucketName: Bucket name
   - requestBody: the request payload
 
 # Returns the operation result or an error

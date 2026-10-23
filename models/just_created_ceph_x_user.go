@@ -2,9 +2,11 @@
 
 package models
 
-// JustCreatedCephXUser
+// JustCreatedCephXUser Ceph X user view.  Source: references/legacy/ovd/modules/storage/models/CephXUser.scala Issue: #3...
 type JustCreatedCephXUser struct {
-	Caps   Caps   `json:"caps"`
-	Entity string `json:"entity"`
-	Key    string `json:"key"`
+	Caps     any     `json:"caps"`             // Capabilities map (e.g. {"mon": "allow r", "osd": "allow rwx pool=mypool"}).
+	Entity   *string `json:"entity,omitempty"` // The SAME entity name under legacy's field spelling — OVD's `JustCreatedCephXUser` decoder require...
+	EntityID string  `json:"entityId"`         // Entity ID (Ceph auth entity name, e.g. "client.tenant-123").
+	Key      string  `json:"key"`              // Ceph auth key.
+	TenantID string  `json:"tenantId"`         // Tenant that owns this user.
 }

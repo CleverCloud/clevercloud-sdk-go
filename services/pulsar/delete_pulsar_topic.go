@@ -4,7 +4,6 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -12,23 +11,38 @@ import (
 )
 
 /*
-Deletepulsartopic
+Deletepulsartopic DELETE /v2/providers/addon-pulsar/resources/{pulsar_id}/topics/{topic} — delete topic (v2 legacy).
 
-# Delete a Pulsar topic
+**Legacy**: ovd PulsarController.scala:417 deleteTopicV2ServerEndpoint()
+**Algorithm**:
+  - Delegates to PulsarTopicService.deletePersistentTopic(pulsarId, topic, partitioned, force) (line 103)
+  - Scala calls PulsarAdminClient to delete topic on actual cluster
+
+**Conformity**: FAITHFUL — proxies to
+
+	`PulsarAdminClient::delete_persistent_topic` (refs #1066)
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deleteTopicV2ServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala deleteTopicV2
+Behavior: resolves addon + cluster, calls
+
+	`admin_client.delete_persistent_topic(...partitioned, force)`
+	on the cluster's admin REST API, returns 204 on success.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
-  - opts: optional query parameters
+  - pulsarId: Pulsar addon ID
+  - topic: Topic name
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Deletepulsartopic(ctx, client, tracer, pulsarId, topic, opts...)
+	response := pulsar.Deletepulsartopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,17 +51,11 @@ Example:
 x-service: pulsar
 operationId: deletePulsarTopic
 */
-func Deletepulsartopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string, opts ...Option) client.Response[client.Nothing] {
+func Deletepulsartopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deletePulsarTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-pulsar/resources/%s/topics/%s", pulsarId, topic)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

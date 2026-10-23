@@ -2,19 +2,19 @@
 
 package models
 
-// Keycloak
+// Keycloak Console view of a Keycloak addon — the legacy `KeycloakAddonView.AddonView`.  ⚠ Field-for-field p...
 type Keycloak struct {
-	AccessURL          string            `json:"accessUrl"` // Absolute URL
+	AccessURL          string            `json:"accessUrl"`
 	AddonID            string            `json:"addonId"`
-	AvailableVersions  []string          `json:"availableVersions,omitempty"`
-	EnvVars            MapString         `json:"envVars"`
+	AvailableVersions  []string          `json:"availableVersions"`
+	EnvVars            map[string]any    `json:"envVars"`
 	Features           KeycloakFeatures  `json:"features"`
 	InitialCredentials BasicCredentials  `json:"initialCredentials"`
 	JavaVersion        string            `json:"javaVersion"`
 	Name               string            `json:"name"`
-	OwnerID            OwnerID           `json:"ownerId"`
-	Plan               KeycloakPlan      `json:"plan"`
-	ResourceID         AddonID           `json:"resourceId"`
+	OwnerID            string            `json:"ownerId"`
+	Plan               string            `json:"plan"`
+	ResourceID         string            `json:"resourceId"`
 	Resources          KeycloakResources `json:"resources"`
 	Version            string            `json:"version"`
 }

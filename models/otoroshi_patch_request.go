@@ -2,7 +2,7 @@
 
 package models
 
-// OtoroshiPatchRequest
+// OtoroshiPatchRequest Request body for version update.  Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiR...
 type OtoroshiPatchRequest struct {
-	TargetVersion string `json:"targetVersion"`
+	TargetVersion string `json:"targetVersion"` // Target version string for the update.
 }

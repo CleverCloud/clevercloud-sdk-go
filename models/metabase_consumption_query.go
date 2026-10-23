@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// MetabaseConsumptionQuery
+// MetabaseConsumptionQuery Query body for the consumption endpoints.  Source: references/legacy/ovd/modules/metabase/models/...
 type MetabaseConsumptionQuery struct {
-	Since time.Time `json:"since"`
-	Until time.Time `json:"until"`
+	Since time.Time `json:"since"` // Start of the consumption window (inclusive).
+	Until time.Time `json:"until"` // End of the consumption window (exclusive).
 }

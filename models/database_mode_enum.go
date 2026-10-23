@@ -2,12 +2,12 @@
 
 package models
 
-// DatabaseMode represents
+// DatabaseMode represents Database read/write mode.  Source: ovd V1__init_postgresql_provision_database.sql — CREATE TYPE D...
 type DatabaseMode string
 
 const (
-	DatabaseModeReadOnly DatabaseMode = "READ_ONLY"
 	DatabaseModeWRITABLE DatabaseMode = "WRITABLE"
+	DatabaseModeReadOnly DatabaseMode = "READ_ONLY"
 )
 
 // String returns the underlying string value

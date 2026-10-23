@@ -4,10 +4,10 @@ package models
 
 import "time"
 
-// RevocationEntry
+// RevocationEntry Revoked token entry returned by the revocation list endpoint.  Source: references/legacy/ovd/modu...
 type RevocationEntry struct {
 	AddonID        string    `json:"addonId"`
-	ExpirationDate time.Time `json:"expirationDate"`
-	RevocationDate time.Time `json:"revocationDate"`
+	ExpirationDate time.Time `json:"expirationDate"` // ISO 8601 token expiration timestamp.
+	RevocationDate time.Time `json:"revocationDate"` // ISO 8601 revocation timestamp.
 	RevocationID   string    `json:"revocationId"`
 }

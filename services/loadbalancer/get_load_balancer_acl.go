@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Getloadbalanceracl
-
-# Get loadbalancer ACL
+Getloadbalanceracl Row 38 — validated LB, then the IPAM read (its 404 = OVD's no-ACL arm).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
 
 # Returns the operation result or an error
 

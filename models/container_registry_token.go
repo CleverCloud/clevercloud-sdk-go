@@ -4,12 +4,12 @@ package models
 
 import "time"
 
-// ContainerRegistryToken
+// ContainerRegistryToken Container Registry Token view returned by the v4 API.  Source: references/legacy/ovd/modules/cont...
 type ContainerRegistryToken struct {
-	CreationDate time.Time                    `json:"creationDate"`
-	ExpiresAt    *time.Time                   `json:"expiresAt,omitempty"`
-	ID           string                       `json:"id"`
-	IsActive     bool                         `json:"isActive"`
-	Rights       ContainerRegistryTokenRights `json:"rights"`
-	Scope        []string                     `json:"scope,omitempty"`
+	CreationDate time.Time                    `json:"creationDate"`        // Creation timestamp
+	ExpiresAt    *time.Time                   `json:"expiresAt,omitempty"` // Expiration timestamp (None = never expires)
+	ID           string                       `json:"id"`                  // Token ID
+	IsActive     bool                         `json:"isActive"`            // Whether the token is currently active (not revoked, not expired)
+	Rights       ContainerRegistryTokenRights `json:"rights"`              // Token rights (READ or READ_WRITE)
+	Scope        []ScopePattern               `json:"scope"`               // Scope patterns for access control
 }

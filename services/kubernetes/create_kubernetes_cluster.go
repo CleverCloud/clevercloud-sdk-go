@@ -12,13 +12,31 @@ import (
 )
 
 /*
-Createkubernetescluster
+Createkubernetescluster **Legacy**: ovd ClusterController.scala:86 create()
+**Algorithm**:
+  - ClusterCRUDService.create inserts cluster + initial ClusterStatus(DEPLOYING)
+  - Topology config stored as JSONB, tags as TEXT[]
+  - Infra provisioning delegated to deployment pipeline (async)
+
+**Conformity**: YES
+
+POST /v4/kubernetes/organisations/{owner_id}/clusters — create a new Kubernetes cluster.
+
+Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — create
+Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — queries.insert
+Behavior: creates cluster record with DEPLOYING status in the `cluster` table.
+
+	Inserts topology_config as JSONB, tags as TEXT[].
+	Also inserts initial cluster_status record (Scala: ClusterStatus(DEPLOYING)).
+	Actual infrastructure provisioning is handled by the deployment pipeline.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner (org) ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -34,14 +52,14 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesCluster
 */
-func Createkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.ClusterCreationPayload) client.Response[models.Cluster1] {
+func Createkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.ClusterCreationPayload) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "createKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters", ownerId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, requestBody)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

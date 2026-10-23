@@ -2,17 +2,17 @@
 
 package models
 
-// WannabePeer
+// WannabePeer Input to add a peer to a network group.  `ip`/`port` are the peer's **public** terminus: a SERVER...
 type WannabePeer struct {
-	Hostname     *string  `json:"hostname,omitempty"`
-	Hv           *string  `json:"hv,omitempty"`
-	ID           string   `json:"id"`
-	IP           *string  `json:"ip,omitempty"`
-	Label        *string  `json:"label,omitempty"`
-	ParentEvent  *string  `json:"parentEvent,omitempty"`
-	ParentMember string   `json:"parentMember"`
-	PeerKind     PeerKind `json:"peerKind"`
-	PeerRole     PeerRole `json:"peerRole"`
-	Port         *int     `json:"port,omitempty"`
-	PublicKey    *string  `json:"publicKey,omitempty"`
+	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname for this peer.
+	Hv           *string `json:"hv,omitempty"`          // Hypervisor the peer runs on — required for CLEVER peers (OVD `handleCleverPeerType`: "hv id must ...
+	ID           string  `json:"id"`                    // Peer identifier.
+	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).
+	Label        *string `json:"label,omitempty"`       // Human-readable label.
+	ParentEvent  *string `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
+	ParentMember string  `json:"parentMember"`          // Parent member this peer belongs to.
+	PeerKind     string  `json:"peerKind"`              // Peer kind: CLEVER | EXTERNAL
+	PeerRole     string  `json:"peerRole"`              // Peer role: CLIENT | SERVER
+	Port         *int    `json:"port,omitempty"`        // Public port (SERVER peers).
+	PublicKey    *string `json:"publicKey,omitempty"`   // WireGuard public key (base64).
 }

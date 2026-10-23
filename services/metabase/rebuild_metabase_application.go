@@ -11,15 +11,21 @@ import (
 )
 
 /*
-Rebuildmetabaseapplication
+Rebuildmetabaseapplication POST .../addons/{id}/rebuild — restart the Java app **without** build cache.
 
-# Ask for rebuild metabase application
+Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — rebootAddon(rebuild=true)
+Behavior: identical to the reboot route above — same 404/403 resolution, same
+
+	404 on a missing Java application, same 204 — except the restart is asked
+	for **without** the build cache, so the app is rebuilt from source.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase addon ID
 
 # Returns the operation result or an error
 

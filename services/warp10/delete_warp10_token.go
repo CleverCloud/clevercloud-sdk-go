@@ -12,16 +12,23 @@ import (
 )
 
 /*
-Deletewarp10token
+Deletewarp10token DELETE /v4/warp10/cluster/{cluster_id}/token/{revocation_id} — revoke a cluster token.
 
-# Revoke a Warp10 token by its revocation ID
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/api/Warp10Controller.scala:181-196 revokeTokenLogic
+Source: references/legacy/ovd/modules/warp10/src/main/scala/com/clevercloud/warp10/services/Warp10Service.scala:389-427 revokeToken
+Behavior:
+  - Accepts Basic or Bearer (biscuit) auth.
+  - Biscuit: requires REVOKE_TOKEN operation (no scope).
+  - Marks the token as revoked (sets revoked_at). Idempotent.
+
+Issue: #642, #764, #758
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: Cluster identifier (UUID)
-  - revocationId: Token revocation identifier (16 hex characters)
+  - clusterId: Warp10 cluster ID
+  - revocationId: Token revocation ID (16 hex characters)
 
 # Returns the operation result or an error
 

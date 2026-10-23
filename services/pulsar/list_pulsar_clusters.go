@@ -11,9 +11,23 @@ import (
 )
 
 /*
-Listpulsarclusters
+Listpulsarclusters GET /v4/addon-providers/addon-pulsar/clusters — list all Pulsar clusters.
 
-# List all Pulsar clusters
+**Legacy**: ovd PulsarController.scala:105 listClustersServerEndpoint()
+**Algorithm**:
+  - Biscuit auth with PulsarClusterOp.LIST check
+  - Delegates to PulsarClusterService.listClusters
+  - SELECT all ACTIVE clusters, map to ClusterView
+
+**Conformity**: YES
+
+Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala listClustersServerEndpoint
+Source: references/legacy/ovd/modules/pulsar/api/routes.scala listClusters
+Behavior: returns all clusters (active only). Requires a Biscuit with the
+
+	`pulsar_cluster_op("list")` (or `"root"`) fact.
+
+Issue: #8, #1057
 
 Parameters:
   - ctx: context for the request

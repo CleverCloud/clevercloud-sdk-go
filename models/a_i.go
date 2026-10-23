@@ -2,9 +2,9 @@
 
 package models
 
-// AI
+// AI AI addon view returned by GET /v4/addon-providers/addon-ai/addons/{aiId}.  Source: references/leg...
 type AI struct {
-	ID             string  `json:"id"`
-	OwnerID        OwnerID `json:"ownerId"`
-	PlanIdentifier AIPlan  `json:"planIdentifier"`
+	ID             string `json:"id"`             // Provider-internal AI addon ID
+	OwnerID        string `json:"ownerId"`        // Owner (user or org) ID
+	PlanIdentifier string `json:"planIdentifier"` // Plan identifier (ALPHA, BETA, BASE)
 }

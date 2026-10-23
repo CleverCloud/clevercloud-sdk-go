@@ -2,7 +2,7 @@
 
 package models
 
-// BearerCredentials
+// BearerCredentials Bearer credentials (:300-302).
 type BearerCredentials struct {
-	Hash string `json:"hash"`
+	Hash string `json:"hash"` // Token hash.
 }

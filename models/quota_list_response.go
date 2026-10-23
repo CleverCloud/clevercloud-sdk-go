@@ -2,8 +2,8 @@
 
 package models
 
-// QuotaListResponse
+// QuotaListResponse Paginated list of quota entries.  Source: references/legacy/ovd/modules/ts/models/QuotaListRespon...
 type QuotaListResponse struct {
-	Metadata QuotaMetadata `json:"metadata"`
-	Quotas   []QuotaEntry  `json:"quotas,omitempty"`
+	Metadata PaginationMetadata `json:"metadata"`
+	Quotas   []QuotaEntry       `json:"quotas"`
 }

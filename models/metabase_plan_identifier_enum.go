@@ -2,13 +2,13 @@
 
 package models
 
-// MetabasePlanIdentifier represents
+// MetabasePlanIdentifier represents Plan identifier accepted in provision requests.  `serde`/`utoipa` emit the canonical `ALPHA`/`BET...
 type MetabasePlanIdentifier string
 
 const (
 	MetabasePlanIdentifierALPHA MetabasePlanIdentifier = "ALPHA"
-	MetabasePlanIdentifierBASE  MetabasePlanIdentifier = "BASE"
 	MetabasePlanIdentifierBETA  MetabasePlanIdentifier = "BETA"
+	MetabasePlanIdentifierBASE  MetabasePlanIdentifier = "BASE"
 )
 
 // String returns the underlying string value
