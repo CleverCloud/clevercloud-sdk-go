@@ -2,18 +2,18 @@
 
 package models
 
-// NetworkGroup Full network group representation.  Source: references/legacy/ovd/modules/networkgroup/models/Net...
+// NetworkGroup A network group: a private WireGuard mesh with its address range, its members and their peers.
 type NetworkGroup struct {
 	Description       *string    `json:"description,omitempty"`       // Optional description.
-	DnsSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"` // The label sanitized for DNS/ZooKeeper use, when it was derived at creation; `None` on groups crea...
+	DnsSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"` // The label sanitized for DNS use, when it was derived at creation; null on older groups.
 	ID                string     `json:"id"`                          // Unique network group ID.
 	Label             string     `json:"label"`                       // Human-readable label.
-	LastAllocatedIP   string     `json:"lastAllocatedIp"`             // The mesh address handed out last — where the leader resumes peer address allocation (OVD `findFre...
+	LastAllocatedIP   string     `json:"lastAllocatedIp"`             // The mesh address allocated last: the next peer address is allocated after it, wrapping around the...
 	Members           []Member   `json:"members"`                     // Members of this network group.
 	NetworkIP         string     `json:"networkIp"`                   // CIDR block for this network group (e.g. "10.101.0.0/16").
 	OwnerID           string     `json:"ownerId"`                     // Owner organisation ID.
 	Ownership         *Ownership `json:"ownership,omitempty"`
 	Peers             []Peer     `json:"peers"`   // Peers.
-	Tags              []string   `json:"tags"`    // Semantic tags. OVD's legacy `{key,value}` spelling decodes to its own `key:value` form.
-	Version           int        `json:"version"` // Optimistic concurrency version — a monotonically increasing counter, widened to 64 bits so it can...
+	Tags              []string   `json:"tags"`    // Semantic tags.
+	Version           int        `json:"version"` // Optimistic concurrency version: a monotonically increasing counter.
 }

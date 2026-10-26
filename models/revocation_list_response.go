@@ -2,7 +2,7 @@
 
 package models
 
-// RevocationListResponse Paginated list of revoked tokens.  Source: references/legacy/ovd/modules/ts/models/RevocationList...
+// RevocationListResponse A page of revoked Materia TS tokens, with its pagination metadata.
 type RevocationListResponse struct {
 	Metadata      PaginationMetadata `json:"metadata"`
 	RevokedTokens []RevocationEntry  `json:"revokedTokens"`

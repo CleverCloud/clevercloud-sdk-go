@@ -14,6 +14,7 @@ type Option func(*Options)
 type Options struct {
 	Count              *any  `url:"count,omitempty"`
 	Cursor             *any  `url:"cursor,omitempty"`
+	Delimiter          *any  `url:"delimiter,omitempty"`
 	Includeunavailable *bool `url:"includeUnavailable,omitempty"`
 	Objectkey          *any  `url:"objectKey,omitempty"`
 	Prefix             *any  `url:"prefix,omitempty"`
@@ -34,6 +35,13 @@ func WithCount(count any) Option {
 func WithCursor(cursor any) Option {
 	return func(o *Options) {
 		o.Cursor = &cursor
+	}
+}
+
+// WithDelimiter sets the delimiter query parameter
+func WithDelimiter(delimiter any) Option {
+	return func(o *Options) {
+		o.Delimiter = &delimiter
 	}
 }
 
@@ -99,6 +107,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Cursor != nil {
 		params = append(params, fmt.Sprintf("cursor=%v", *options.Cursor))
+	}
+	if options.Delimiter != nil {
+		params = append(params, fmt.Sprintf("delimiter=%v", *options.Delimiter))
 	}
 	if options.Includeunavailable != nil {
 		params = append(params, fmt.Sprintf("includeUnavailable=%t", *options.Includeunavailable))

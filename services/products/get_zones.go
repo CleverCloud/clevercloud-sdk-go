@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getzones GET /v2/products/zones — list active zones. **Public**: auth widens, never gates.
+Getzones GET /v2/products/zones — list zones. **Public**: auth widens, never gates.
 
 Source: cc-api ProductsAPI.java:194-195 — `ah.auth(crc)` is passed *into*
 `aph.getAllowedZones(tk)` and never tested, so a missing, malformed or expired
@@ -26,7 +26,27 @@ Authenticated, the caller's organisations widen the public set through
 zones with no `zone_access` row, since a zone granted to one owner must not leak
 to a public caller. The previous partner-based filter is not what cc-api applies
 here — see `ZoneRepository::find_visible_to_user`.
-Issues: #102, #1091, #2361, #2424
+
+Neither branch filters on status: `getAllowedZones` walks `zf.findAll()`
+(`AddonProviderHelper.java:151`), which is `AbstractFacade.findAll` — a bare
+`select from Zone` (`AbstractFacade.java:57-62`).
+
+The caller is read through `authenticated_user_id()`, legacy's `getUserId()`
+(`AuthToken.java:99-108`): it has no internal branch, so an internal service
+credential resolves to no user, `getOwnersToAllow` collects nothing
+(`AddonProviderHelper.java:138-141`) and the caller takes the public branch.
+`user_id()` would have answered the *service name* and widened the answer with
+whatever zones that name is granted.
+
+Each row becomes `new ZoneView(z.getName(), z.getName())`
+(`ProductsAPI.java:198-200`) — three fields, `internal` always true; see
+[`ZoneView`].
+
+Source: cc-api ProductsAPI.java:194-206 getZones()
+Source: cc-api AddonProviderHelper.java:136-145,147-157
+Source: cc-api AbstractFacade.java:57-62 findAll()
+Source: ccapidto ZoneView.java:11-13,23-25
+Issues: #102, #1091, #2361, #2424, refs #3380
 
 Parameters:
   - ctx: context for the request

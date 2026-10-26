@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Deleteproviderplan DELETE /v2/organisations/{id}/addonproviders/{provider_id}/plans/{plan_id}.
+Deleteproviderplan Delete a plan of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java deletePlan()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, DELETE feature instances first, then DELETE plan. Publish event.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java deletePlan()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Deletes the plan; 409 when add-ons were created with it. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

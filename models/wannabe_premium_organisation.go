@@ -2,8 +2,9 @@
 
 package models
 
-// WannabePremiumOrganisation Request body for POST /internal/organisations/{id}/premium-enterprise.  Source: cc-api WannabePre...
+// WannabePremiumOrganisation Premium enterprise settings of an organisation. `monthlyPrice` and `runtimeFactor` are required (...
 type WannabePremiumOrganisation struct {
-	PhoneNumber   *string `json:"phoneNumber,omitempty"`
-	RuntimeFactor *string `json:"runtimeFactor,omitempty"`
+	MonthlyPrice  *float64 `json:"monthlyPrice,omitempty"`  // Monthly price of the offer; required, but not stored.
+	PhoneNumber   *string  `json:"phoneNumber,omitempty"`   // Emergency phone number of the organisation; absent or `null` sets none.
+	RuntimeFactor *float64 `json:"runtimeFactor,omitempty"` // Runtime factor of the organisation, kept with two decimals.
 }

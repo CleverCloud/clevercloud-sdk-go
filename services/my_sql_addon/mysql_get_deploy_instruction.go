@@ -12,7 +12,8 @@ import (
 
 /*
 MysqlGetDeployInstruction GET /internal/{id}/instruction — the BDS deploy instruction for a dedicated
-addon (the VM/ops fetch it). Requires messaging. Source: Internal.getDeployInstruction.
+addon (the VM/ops fetch it). Builds and returns the instruction; it publishes
+nothing, so it needs no broker. Source: Internal.getDeployInstruction.
 
 Parameters:
   - ctx: context for the request

@@ -12,10 +12,13 @@ import (
 /*
 Getcountrycodes GET /v2/products/countrycodes
 
-Source: cc-api ProductsAPI.java:135 getCountryCodes()
-Issue: #104
+Source: cc-api ProductsAPI.java:173-186 getCountryCodes()
+Issue: #104, #3382
 Algorithm: Return same country code map as /countries — cc-api calls CountryCodes.MAP for both endpoints (alias).
-Legacy: Duplicate endpoint; both /countries and /countrycodes return identical data from CountryCodes.MAP.
+Legacy: Duplicate endpoint; both /countries and /countrycodes return identical data from CountryCodes.MAP,
+
+	and both declare the same `@Produces(… + "; charset=UTF-8")` (`ProductsAPI.java:174`).
+
 Conformity: faithful
 
 Parameters:

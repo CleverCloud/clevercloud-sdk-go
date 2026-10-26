@@ -2,7 +2,7 @@
 
 package models
 
-// FieldError One field's failure inside [`ErrorContext`].
+// FieldError Why one field was rejected: a machine-matchable `code` and a human-readable `error`.
 type FieldError struct {
 	Code  string `json:"code"`
 	Error string `json:"error"`

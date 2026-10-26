@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Unlinkselfddonfromapplicationbyappandaddonid DELETE /v2/self/applications/{app_id}/addons/{addon_id} — unlink an addon.
+Unlinkselfddonfromapplicationbyappandaddonid Unlink an add-on from an application
 
-Legacy: SelfApplicationsHelper.java:196-199 unlinkAddon() -> ApplicationHelper.java:3499-3517 unlinkAddon()
-Algorithm: Shape S4c, then resolve the addon; an absent link remains a bodyless 204.
-Conformity: faithful — unknown addon is 404/11001, absent link is 204. Refs #2228
-
-Source: cc-api SelfApplicationsAPI.java:233-239 unlinkAddonFromApplication()
-Issue: #2228
+Removes the link between an add-on and an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - addonId: Addon ID
+  - appId: Application ID (`app_…`)
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

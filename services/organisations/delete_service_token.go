@@ -11,23 +11,9 @@ import (
 )
 
 /*
-Deleteservicetoken DELETE /v2/organisations/{id}/service-tokens/{token_id} — revoke a service token.
+Deleteservicetoken Revoke a service token
 
-Source: cc-api OrganisationServiceTokensAPI.java:109 deleteServiceToken()
-Source: cc-api ServiceTokenHelper.java:212 delete()
-Behavior: revokes a service token by ID (proxied from token API).
-
-	Returns 204 on success.
-
-Issue: #855
-
-📥 **Algo Source (Legacy):**
-1. Auth: check caller is member of org with manage_organisations_services
-2. Forward DELETE to token API /v4/tenants/{tenantId}/tokens/{tokenId}
-3. Return 204 No Content on success
-
-🔧 **Algo Rust (Implementation):**
-Faithful reproduction.
+Revokes the service token, which then stops being accepted; answers 204. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

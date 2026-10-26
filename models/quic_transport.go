@@ -4,6 +4,6 @@ package models
 
 // QuicTransport QUIC frontend transport — `alpn -> layer` (:403-407).
 type QuicTransport struct {
-	Alpn       map[string]any `json:"alpn"` // ALPN protocol → TLS layer.
-	TLSOptions *TlsOptions    `json:"tlsOptions,omitempty"`
+	Alpn       map[string]TlsTransportLayer `json:"alpn"` // ALPN protocol → TLS layer.
+	TLSOptions *TlsOptions                  `json:"tlsOptions,omitempty"`
 }

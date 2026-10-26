@@ -12,22 +12,15 @@ import (
 )
 
 /*
-GetMfa GET /v2/self/mfa/{kind} — get MFA configuration status.
+GetMfa Get the status of an MFA
 
-📥 **Algo Source (Legacy):**
-Verify almighty + password re-auth, check EXISTS in mfa_configurations WHERE validated=true
-- Legacy note: cc-api SelfMFAAPI.java getMFA()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java getMFA()
-Issue: #102
+Tells whether a validated MFA of this kind is configured, as `{"kind": "TOTP", "configured": true}`. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
 
 # Returns the operation result or an error
 

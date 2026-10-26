@@ -12,24 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplication PUT /v2/organisations/{id}/applications/{app_id} — update an org application.
+Updateorganisationapplication Update an application of an organisation
 
-Legacy: cc-api ApplicationHelper.java:2304 edit() -> :2728 save()
-Algorithm: Auth canAddApp; Validate zone, name length, instance variant; Update, tri...
-Conformity: shape S10 — scope bit and canAddApp both 8103, 403 APPLICATION_BAD_OWNER on the app miss; nothing gates `archived`; rescale-on-edit ported bug-for-bug (refs #2666); zone relocation and the FTP folder rename ported (refs #3251, #3252)
-
-The `ApplicationEdition` publish fires only for a CUSTOMER-owned application (ownership
-NULL or not SYSTEM), matching save()'s own gate (ApplicationHelper.java:3388).
-
-Source: cc-api OrganisationApplicationsAPI.java updateApplication()
-Issue: #107, fixes #2497, refs #2666
+Edits an organisation's application from the given application definition and returns the updated application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

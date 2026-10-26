@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Addbetatester POST /v2/organisations/{id}/addonproviders/{provider_id}/testers — add a beta tester.
+Addbetatester Invite a beta tester to an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java addTester()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, INSERT INTO beta_users_for_addon_provider ON CONFLICT DO NOTHING.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java addTester()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Emails an invitation to test the add-on to the address given as the body (a JSON string or plain text); 400 when it is not an email address. Invitation emails are rate-limited per recipient. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

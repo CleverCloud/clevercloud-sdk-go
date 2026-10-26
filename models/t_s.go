@@ -2,7 +2,7 @@
 
 package models
 
-// TS TS addon view returned by GET /v4/addon-providers/addon-ts/addons/{id}.  Source: references/legac...
+// TS A Materia TS (time series) add-on: its resource and add-on IDs, owner, access token and plan.
 type TS struct {
 	AddonID    string      `json:"addonId"`
 	OwnerID    string      `json:"ownerId"`

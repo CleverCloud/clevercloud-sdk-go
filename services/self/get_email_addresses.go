@@ -10,17 +10,9 @@ import (
 )
 
 /*
-Getemailaddresses GET /v2/self/emails — list all email addresses for the current user.
+Getemailaddresses List the current user's secondary email addresses
 
-📥 **Algo Source (Legacy):**
-Check access_personal_information, fetch primary from users + secondaries from secondary_emails, return flat list
-- Legacy note: cc-api SelfEmailsAPI.java getEmailAddresses()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfEmailsAPI.java getEmailAddresses()
-Returns primary email (from users table) + secondary emails.
-Issue: #102
+Returns the confirmed secondary email addresses of the user; the primary address is part of the user profile, not of this list. Requires the `access_personal_information` right.
 
 Parameters:
   - ctx: context for the request

@@ -6,42 +6,26 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-SetInternalInvoiceCustomerCostCenter PUT /v2/internal/invoices/{inv_id}/customer_cost_center — set customer cost center.
+SetInternalInvoiceCustomerCostCenter Set the customer cost center of an invoice (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:131 setInvoiceCustomerCostCenter()
-Source: billing-api AdminRoutes.scala — setCustomerCostCenter()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Set the customer_cost_center on the invoice's address record.
-- Internal auth required
-- UPDATE address SET customer_cost_center = $val WHERE address_id = (SELECT address_id FROM invoice WHERE ...)
-- Source: billing-api InvoiceDAO.scala
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- ccapi::db::billing::set_invoice_customer_cost_center(pool, inv_id, cost_center)
-- Return 200 or 404
-Conformity: real -- pure PG update, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - inv_id: Invoice number
-  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.SetInternalInvoiceCustomerCostCenter(ctx, client, tracer, inv_id, requestBody)
+	response := internalapi.SetInternalInvoiceCustomerCostCenter(ctx, client, tracer, inv_id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -50,14 +34,14 @@ Example:
 x-service: internal
 operationId: set_internal_invoice_customer_cost_center
 */
-func SetInternalInvoiceCustomerCostCenter(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string, requestBody *models.SetCustomerCostCenterBody) client.Response[client.Nothing] {
+func SetInternalInvoiceCustomerCostCenter(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "set_internal_invoice_customer_cost_center", trace.WithAttributes(attribute.String("inv_id", inv_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/%s/customer_cost_center", inv_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, requestBody)
+	response := client.Put[any](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

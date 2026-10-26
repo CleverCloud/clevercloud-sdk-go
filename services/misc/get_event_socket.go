@@ -4,47 +4,28 @@ package misc
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-GetEventSocket GET /v2/events/event-socket — WebSocket real-time event stream.
+GetEventSocket Open a WebSocket of the current user's platform events
 
-📥 **Algo Source (Legacy):**
-Console3 connects to ws://api/v2/events/event-socket for real-time events.
-- Client sends HTTP upgrade request (may include OAuth1 Authorization header)
-- Server upgrades to WebSocket
-- Client sends auth message: `{"authMessage": "OAuth oauth_consumer_key=..."}`
-- Server validates OAuth and begins streaming events
-- Server sends `{"type": "heartbeat", "heartbeat_msg": "ping"}` every 30s
-- Client responds with `{"type": "heartbeat", "heartbeat_msg": "pong"}`
-- Events are JSON: `{"event": "APPLICATION_CREATION", "data": {...}}`
-- Source: cc-api EventsAPI.java — WebSocket event endpoint
-
-🔧 **Algo Rust (Implementation):**
-- WebSocket upgrade via axum::extract::ws::WebSocketUpgrade
-- Subscribe to module's broadcast channel (same as SSE endpoint)
-- Spawn heartbeat task: send `{"type":"heartbeat","heartbeat_msg":"ping"}` every 30s
-- Forward events from broadcast channel as JSON text messages
-- Handle incoming pong messages from client
-- Close cleanly on disconnect or channel close
-
-Source: cc-api EventsAPI.java — WebSocket event endpoint for Console3
-Spec: analysis-output/35-console3-api-consumption.md §3.A Server-Sent Events
-Issue: #298
+The upgrade takes no credential: within 9 seconds, send `{"message_type": "oauth", "authorization": "OAuth …"}` with an OAuth1 `Authorization` value signed for `GET /v2/events/event-socket`, or `{"message_type": "oauth", "authorization": "Bearer …", "organisationId": "orga_…"}` with a service token of that organisation; a missing or rejected message closes the socket. Once `socket_ready` is received, the socket relays the events of the user and their organisations (or of that organisation alone), with a heartbeat every 2 seconds.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := misc.GetEventSocket(ctx, client, tracer)
+	response := misc.GetEventSocket(ctx, client, tracer, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -53,11 +34,17 @@ Example:
 x-service: misc
 operationId: get_event_socket
 */
-func GetEventSocket(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
+func GetEventSocket(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_event_socket")
 	defer span.End()
 
 	path := utils.Path("/v2/events/event-socket")
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[any](ctx, c, path)

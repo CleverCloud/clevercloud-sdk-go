@@ -4,15 +4,14 @@ package models
 
 // VendorAppView Vendor app view — addon as seen by the provider.  Source: cc-api AddonApplicationInfo.java — all ...
 type VendorAppView struct {
-	CallbackURL *string        `json:"callback_url,omitempty"` // Provider callback URL for lifecycle events.
-	Config      map[string]any `json:"config,omitempty"`       // Addon configuration key-value pairs (env vars).
-	Domains     []string       `json:"domains,omitempty"`      // Domains of applications linked to this addon.
-	ID          string         `json:"id"`
-	Name        *string        `json:"name,omitempty"`
-	OwnerEmail  *string        `json:"owner_email,omitempty"`  // Primary email of the addon owner.
-	OwnerEmails []string       `json:"owner_emails,omitempty"` // All contact emails of the addon owner.
-	OwnerID     *string        `json:"owner_id,omitempty"`
-	OwnerName   *string        `json:"owner_name,omitempty"` // Display name of the addon owner (org or user name).
-	Plan        *string        `json:"plan,omitempty"`
-	Region      *string        `json:"region,omitempty"`
+	CallbackURL *string           `json:"callback_url,omitempty"` // The addon's callback URL on this API: `{base}/v2/vendor/apps/{addonId}`.
+	Config      map[string]string `json:"config,omitempty"`       // Addon configuration key-value pairs (env vars).
+	Domains     []string          `json:"domains,omitempty"`      // Domains of applications linked to this addon.
+	ID          string            `json:"id"`
+	Name        *string           `json:"name,omitempty"`
+	OwnerEmail  *string           `json:"owner_email,omitempty"`  // Email of the first owner member holding a deliverable one.
+	OwnerEmails []string          `json:"owner_emails,omitempty"` // Emails of the ACTIVE owner members holding a deliverable one.
+	OwnerID     *string           `json:"owner_id,omitempty"`
+	OwnerName   *string           `json:"owner_name,omitempty"` // Display name of the owning organisation.
+	Region      *string           `json:"region,omitempty"`     // Name of the zone the addon runs in.
 }

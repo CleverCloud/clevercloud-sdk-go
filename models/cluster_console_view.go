@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterConsoleView Cluster info within a provider console view.  Source: references/legacy/ovd/core ProviderConsoleV...
+// ClusterConsoleView A cluster of an add-on provider: its ID, label, zone, version and features.
 type ClusterConsoleView struct {
 	Features []string `json:"features,omitempty"`
 	ID       string   `json:"id"`

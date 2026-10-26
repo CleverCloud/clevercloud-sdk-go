@@ -11,27 +11,16 @@ import (
 )
 
 /*
-Getaddonmigration GET /v2/organisations/{id}/addons/{addon_id}/migrations/{migration_id} — get migration.
+Getaddonmigration Get a plan migration of an add-on
 
-Source: cc-api OrganisationAddonsAPI.java getAddonMigration()
-Source: cc-api AddonHelper.java:661-671 (getAddonMigrations with migrationId)
-Source: cc-api AddonAPIHelper.java:278-298 (getMigrations — GET to provider)
-Behavior: checks membership + addon ownership, proxies GET /{real_id}/migrations/{migration_id}
-
-	to the addon provider, forwards response.
-
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, proxy GET /{real_id}/migrations/{id} to provider
-Legacy: cc-api OrganisationAddonsAPI.java getAddonMigration() -> AddonAPIHelper.getMigrations()
-Conformity: faithful -- provider proxy for single migration status
+Returns one plan migration of the add-on as its provider reports it (provider-defined JSON, forwarded with the provider's status). 404 when the add-on has no provider. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - migrationId: Migration ID
 
 # Returns the operation result or an error

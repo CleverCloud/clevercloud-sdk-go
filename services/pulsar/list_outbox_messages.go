@@ -32,7 +32,7 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: pulsar
+x-service: loadbalancer
 operationId: listOutboxMessages
 */
 func Listoutboxmessages(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[[]models.LoadbalanceroutboxT] {

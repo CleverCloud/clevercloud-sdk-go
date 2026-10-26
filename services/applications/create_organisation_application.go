@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Createorganisationapplication POST /v2/organisations/{id}/applications — create application in an organisation.
+Createorganisationapplication Create an application in an organisation
 
-Legacy: cc-api OrganisationApplicationsAPI.java:45-47 @Consumes -> ApplicationHelper.java:1202-1271 add() -> :2728-2745 save(String)
-Algorithm: media type, auth/Jenkins, org active, scope + membership, user, feature, body, rate limit, then create.
-Conformity: faithful — the Jenkins path carries actor, tags, and rate-limit bypass. Refs #2228
-
-Source: cc-api OrganisationApplicationsAPI.java createApplication()
-Source: cc-api ApplicationHelper.java:2789-2812, :3140-3146 save()
-Schema: V1__Initial_schema.sql — organisations, conf_base, application_tags
-Spec: analysis-output/02-ccapi-analysis.md §Applications
-Issues: #107, #2228
+Creates an application owned by the organisation and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation, which must be active. With the organisation's Jenkins token, the new application is tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
   - requestBody: the request payload
 
 # Returns the operation result or an error

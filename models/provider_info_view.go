@@ -4,8 +4,8 @@ package models
 
 // ProviderInfoView Provider info view — returned by GET /v4/addon-providers/redis-addon.  Source: references/legacy/...
 type ProviderInfoView struct {
-	Clusters                []ProviderClusterView `json:"clusters"`
-	Dedicated               map[string]any        `json:"dedicated"`
-	DefaultDedicatedVersion string                `json:"defaultDedicatedVersion"`
-	ProviderID              string                `json:"providerId"`
+	Clusters                []ProviderClusterView           `json:"clusters"`
+	Dedicated               map[string]DedicatedVersionView `json:"dedicated"`
+	DefaultDedicatedVersion string                          `json:"defaultDedicatedVersion"`
+	ProviderID              string                          `json:"providerId"`
 }

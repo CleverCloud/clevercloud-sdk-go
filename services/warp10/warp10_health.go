@@ -11,14 +11,16 @@ import (
 )
 
 /*
-Warp10Health GET /v4/warp10/health — the cached, sanitized aggregate report; the thin documented
-wrapper over [`api_health::aggregate_health`] (which carries the two algorithm
-blocks — cache → sanitize → 200/503).
+Warp10Health GET /v4/warp10/health — the cached aggregate report; the thin documented wrapper over
+[`api_health::aggregate_health`] (which carries the two algorithm blocks — cache →
+200/503).
 
 Doc carrier for `warp10_health`; the framework serves the route — do not mount.
 
+Behind the health credential (#3518): a caller without `AXO__INTERNAL_DOCS__PASSWORD` gets 401.
+
 Source: ModuleHealthCheckComponent.scala:56-65 healthEndpoint (Service.WARP10)
-Issues: #758, #2101, #2376, #2798
+Issues: #758, #2101, #2376, #2798, refs #3518, refs #3514
 
 Parameters:
   - ctx: context for the request

@@ -12,27 +12,15 @@ import (
 )
 
 /*
-Getorganisation GET /v2/organisations/{id} — get a single organisation.
+Getorganisation Get an organisation
 
-Source: cc-api OrganisationsAPI.java GET /organisations/{id}
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Look the organisation up FIRST, then gate on membership — the order decides 404 vs 403
-- `oph.find(id)` null → 404 ORGA_NOT_FOUND (6004)
-- `!orga.isActive()` → 403 ORGANISATION_NOT_ACTIVE (6017)
-- `!token.hasAccessToOrg(orga)` → 403 ORGA_ACCESS (6200)
-- Legacy note: cc-api OrganisationHelper.java:137-145 get()
-
-🔧 **Algo Rust (Implementation):**
-  - Conformity: faithful for the 404 + ORGA_ACCESS branches; the isActive gate is not
-    implemented here (tracked with the other org-scoped envelopes, refs #2029)
+Returns the organisation, which may be a personal space (`user_…`). The caller must be a member: a non-member gets 403, an unknown ID 404. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
+  - id: Organisation ID (`orga_…`) or personal space ID (`user_…`)
 
 # Returns the operation result or an error
 

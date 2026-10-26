@@ -11,35 +11,16 @@ import (
 )
 
 /*
-DeprovisionInternalAddon DELETE /v2/internal/organisations/{id}/addons/byRealId/{addonRealId} — deprovision addon by real ID (internal).
+DeprovisionInternalAddon Delete an add-on of an organisation by real ID as a platform service
 
-Source: cc-api InternalOrganisationAddonsAPI.java:47-52 @Path("byRealId/{addonRealId}")
-
-	@DELETE deprovisionAddonInternal()
-
-Source: cc-api AddonHelper.java:322-323 deprovisionFromRealIdFromInternal() → :126-129
-
-	getOrga() — the same `canManageOrganisationsServices()` gate as the POST sibling
-
-Behavior: 401 when the caller is not an internal service, 403 for an internal
-
-	service without `manage_organisations_services`, 404 when no live addon
-	of the org carries that real id, 412 when it carries SYSTEM ownership.
-	Bodyless: legacy signs `authInternal(crc, null)`, so the route takes no
-	payload layer.
-
-Issues: #709, #1956, #2018, #1061, #2974
-
-Algorithm: Internal auth, find addon by real_id within org, soft-delete + provider deprovision
-Legacy: cc-api InternalOrganisationAddonsAPI.java:51 deprovisionAddonInternal()
-Conformity: faithful -- internal deprovision path
+Deprovisions the add-on, and the add-ons it provisioned, at their providers and deletes them. 404 when the organisation owns no live add-on with this real ID, 412 for a system add-on. Platform services granted the right to manage organisation services only (401 for any other caller, 403 without that right).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addon_real_id: Addon real ID (provider-facing)
+  - addon_real_id: Add-on real ID, as the provider knows it
 
 # Returns the operation result or an error
 

@@ -13,20 +13,9 @@ import (
 )
 
 /*
-Addorganisationmember POST /v2/organisations/{id}/members — invite a member, or accept an invitation.
+Addorganisationmember Invite a member to an organisation
 
-Source: cc-api OrganisationMembersAPI.java addOrganisationMember()
-Issue: #103, #3092
-
-📥 **Algo Source (Legacy):**
-Dual-purpose endpoint (OrganisationMemberHelper.add():249-261): when the `invitationKey` query param is present, dispatch to replyToInvite() — the authenticated caller accepts the invitation, and the body is NEVER read (the console's `/join` page POSTs with an empty body). Otherwise: verify AddMember permission (ADMIN, MANAGER only), validate WannabeMember (email + role), check role assignability vs caller role, generate invitation key (UUID), build signup URL with invitationKey + email, send InvitationCCMail to wm.email, store the invitation. The target user does NOT need to exist yet — they sign up via the invitation link and accept it via replyToInvite (which is where getByEmail is finally called).
-- Legacy: cc-api OrganisationMemberHelper.java add() lines 249-279, addUnchecked() lines 179-240, replyToInvite() lines 281-334
-
-🔧 **Algo Rust (Implementation):**
-  - Conformity: faithful. The body is taken raw (legacy takes a `String` too) and
-    parsed only in the invite branch, AFTER the permission gate — a `Json<...>`
-    extractor here used to 400 the body-less accept flow before the handler ran
-    (refs #3092).
+Emails an invitation to `email` for the given `role` (`DEVELOPER` by default) and answers 201 with it. Requires the `ADMIN` or `MANAGER` role, the caller may only grant a role it is allowed to assign, and invitations are rate-limited per sender and per invitee. With `invitationKey`, the authenticated user instead accepts that invitation and joins the organisation (200).
 
 Parameters:
   - ctx: context for the request

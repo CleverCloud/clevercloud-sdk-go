@@ -11,21 +11,15 @@ import (
 )
 
 /*
-Unmarkselffavouritevhostbyappid DELETE /v2/self/applications/{app_id}/vhosts/favourite — remove favourite vhost.
+Unmarkselffavouritevhostbyappid Clear the favourite domain name of an application
 
-Legacy: SelfApplicationsHelper.java:154-157 unmarkFavouriteVhost() -> ApplicationHelper.java:1172-1195
-Algorithm: effective V2, then clear and persist favouriteVhost.
-Conformity: faithful — self auth makes V3's INTERNAL bypass unreachable; success is bodyless 200. Refs #2228
-
-Source: cc-api SelfApplicationVhostsAPI.java removeFavourite()
-Source: cc-api ApplicationHelper.java:1067 unmarkFavouriteVhost() (aph.edit(app))
-Issue: #107, #753 (messaging law)
+Removes the favourite mark from the virtual hosts of an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -2,7 +2,7 @@
 
 package models
 
-// Author Author — matches cc-api Author schema.  Source: cc-api Deployment.java — Author inner class (id, ...
+// Author The user who triggered a deployment, when known.
 type Author struct {
 	ID   *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`

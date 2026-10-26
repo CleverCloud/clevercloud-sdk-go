@@ -2,10 +2,12 @@
 
 package models
 
-// Hypervisor Source: references/legacy/ovd/modules/compute/models/hypervisor/Hypervisor.scala
+// Hypervisor Source: ovd Hypervisor.scala — Hypervisor
 type Hypervisor struct {
-	Capacity any    `json:"capacity"`
-	Name     string `json:"name"`
-	Region   string `json:"region"`
-	Zone     string `json:"zone"`
+	Metadata HypervisorMetadata  `json:"metadata"`
+	Networks []HypervisorNetwork `json:"networks,omitempty"`
+	Server   Server              `json:"server"`
+	Spec     HypervisorSpec      `json:"spec"`
+	Status   HypervisorStatus    `json:"status"`
+	Storages []HypervisorStorage `json:"storages,omitempty"`
 }

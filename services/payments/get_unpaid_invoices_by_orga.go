@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Getunpaidinvoicesbyorga GET /v2/organisations/{id}/payments/methods — discontinued.
+Getunpaidinvoicesbyorga List the payment methods of an organisation (discontinued)
 
-Source: cc-api OrganisationPaymentsAPI.java getPaymentMethods() — 501
-Issues: #289, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

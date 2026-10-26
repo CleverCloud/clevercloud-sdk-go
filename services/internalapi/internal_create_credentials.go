@@ -11,52 +11,9 @@ import (
 )
 
 /*
-InternalCreateCredentials **Legacy**: cc-api InternalAPI.java:82 createCredentials()
-**Algorithm**:
-  - Generate consumer_key (UUID), consumer_secret (32-char random)
-  - Generate token (UUID), token_secret (32-char random)
-  - Transaction: INSERT consumer_rights (almighty), INSERT oauth1_consumers, INSERT oauth1_access_tokens
+InternalCreateCredentials Create internal credentials
 
-**Conformity**: YES — `ConfInternalAuth(wic)` + `ciaf.create()` + `TokensView`
-
-POST /v2/internal/credentials — mint an internal-auth credential pair.
-
-Writes the `conf_internal_auth_creds` row the internal-auth verifier reads
-(`api_auth::middleware` looks the presented token up in that very table), with a
-fresh `oauth_rights` row carrying exactly the rights the body asked for.
-
-The route used to be nested under `/v2/internal/addons/{addonId}/credentials`,
-which exists nowhere in legacy: `createCredentials` takes the request body
-only, no path parameter (refs #1956).
-
-Source: cc-api InternalAPI.java:48 @Path("internal") + :80 @Path("credentials") :82 createCredentials()
-Source: cc-api InternalAPI.java:82 — `ah.authInternal(crc, data)`: the RAW body
-
-	string is the signing base, so the route carries
-	`buffer_internal_auth_payload` and `Json` sits LAST
-
-Source: cc-api InternalCredsHelper.java:56-77 createCreds() — :60-62
-
-	`!tk.right().isCCAdmin()` → 403 USER_CREATION, :64-72 the
-	`WannabeInternalCreds` mapping/validation → 400 INVALID_CREDENTIALS,
-	:74-76 `new ConfInternalAuth(wic)` + `ciaf.create(cia)` +
-	`genResponse(cia.getToken(), cia.getSecret())`
-
-Source: cc-api ConfInternalAuth.java:19 @Table("conf_internal_auth_creds"),
-
-	:32-42 — token/secret are two random UUIDs, rights come from `wic.rights`
-
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Spec: references/legacy/cc-api/doc/internal.md §WannabeInternalCreds
-Schema: crates/api/ccapi/migrations/00001_initial_schema.sql:585 conf_internal_auth_creds,
-
-	:1314 oauth_rights, :1485 seq_gen_sequence
-
-Behavior: 401 when the caller is not an internal service, 403 for any internal
-
-	service other than ccadmin, 400 on an unusable body, 200 credentials
-
-Issue: #722, #1956, #2018
+Creates a platform service credential with the rights given in the body, and returns its token and secret. Callable only by the administration service: another platform service gets 403, any other caller 401. An empty name or an unknown right answers 400.
 
 Parameters:
   - ctx: context for the request

@@ -10,17 +10,9 @@ import (
 )
 
 /*
-Getconsumptions GET /v2/self/consumptions — returns 501 (matches cc-api production behavior).
+Getconsumptions Get consumptions (discontinued)
 
-📥 **Algo Source (Legacy):**
-Return 501 NOT_IMPLEMENTED with billing delegation message (error code 19000)
-- Legacy note: cc-api SelfConsumptionsAPI.java returns NOT_IMPLEMENTED_BILLING; real data in billing-api /v4/billing
-
-🔧 **Algo Rust (Implementation):**
-- Faithful 501 -- cc-api Java also returns 501 in production (NOT_IMPLEMENTED_BILLING)
-- Conformity: faithful
-Source: cc-api SelfConsumptionsAPI.java:46 — returns NOT_IMPLEMENTED_BILLING
-Issue: #102, #93
+Discontinued endpoint: answers 501. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

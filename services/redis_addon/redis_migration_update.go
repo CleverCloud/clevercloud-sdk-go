@@ -18,10 +18,10 @@ RedisMigrationUpdate PUT /v2/providers/redis-addon/internal/migrations/{migratio
 **Algorithm**:
   - Updates migration status/steps in DB.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — migrationUpdate
-Behavior: 501 conditional stub — requires MigrationManager.
+Behavior: real migration step update in the database; no 501 path.
 Issue: #713
 
 Parameters:

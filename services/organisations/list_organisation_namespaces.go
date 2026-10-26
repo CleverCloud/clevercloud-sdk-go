@@ -12,19 +12,9 @@ import (
 )
 
 /*
-Listorganisationnamespaces GET /v2/organisations/{id}/namespaces — list namespaces for an organisation.
+Listorganisationnamespaces List the TCP redirection namespaces of an organisation
 
-Source: cc-api OrganisationHelper.java:450-463 getNamespaces()
-Source: cc-api NamespacesHelper.java:65-76 — org namespaces + global defaults
-Behavior: returns org-specific namespaces + always includes "default" and "cleverapps"
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + canManageOrganisationsApplications, Query organisation_namespaces for org, Always include "default" and "cleverapps" (global defaults)
-- Legacy note: cc-api OrganisationHelper.java:450 getNamespaces() -> NamespacesHelper.java:65
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the namespaces the organisation's applications can use for TCP redirections, always including `default` and `cleverapps`. The caller must be a member (404 otherwise).
 
 Parameters:
   - ctx: context for the request

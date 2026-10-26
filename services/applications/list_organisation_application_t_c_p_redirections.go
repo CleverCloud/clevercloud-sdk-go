@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Listorganisationapplicationtcpredirections Legacy: cc-api OrganisationApplicationsAPI.java getTcpRedirs()
-Algorithm: Verify org membership + app access; SELECT namespace, source_port FROM application_tcp_redirections WHERE app_id
-Conformity: faithful — simple DB read, matches legacy
+Listorganisationapplicationtcpredirections List the TCP redirections of an application
 
-GET /v2/organisations/{id}/applications/{app_id}/tcpRedirs — list TCP redirections.
-
-Source: cc-api OrganisationApplicationsAPI.java getTcpRedirs()
-Issue: #107
+Returns the TCP redirections of an organisation's application, each as a namespace and the port allocated in it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

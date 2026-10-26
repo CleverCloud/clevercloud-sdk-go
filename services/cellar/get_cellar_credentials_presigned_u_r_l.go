@@ -14,14 +14,14 @@ import (
 /*
 Getcellarcredentialspresignedurl Issue a download link for the add-on's credentials file
 
-Returns `{ url }`: a short-lived, self-authenticating link that serves this add-on's s3cmd configuration file from the `credentials.cfg` route with no further authentication. Treat the link as a secret. Its expiry is carried inside the link itself, which is why the response has no `expiresAt` field. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation owning it: 401 without a usable authentication, 403 for a caller outside that owner, and 404 when the organisation in the path does not own the add-on.
+Returns `{ url }`: a short-lived, self-authenticating link that serves the add-on's s3cmd configuration file from the `credentials.cfg` route to whoever holds it; treat it as a secret. Its expiry is carried inside the link. The caller must be the owner in the path (personal add-on) or a member of that organisation with the admin, manager or developer role: 401 when unauthenticated, 403 otherwise. 404 when the owner does not own the add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - CellarId: Cellar addon ID
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 

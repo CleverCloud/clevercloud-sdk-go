@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// KnownQuotaItem The two `QuotaItem` kinds the kubernetes module evaluates.  Source: Quota.scala:107,117 — MillivC...
+// KnownQuotaItem A Kubernetes quota ceiling, tagged by `type`: `MillivCPUMaxLimit` (CPU, in millicores) or `RamMax...
 // Tagged union - can hold one of: map[string]any, map[string]any
 type KnownQuotaItem struct {
 	raw json.RawMessage

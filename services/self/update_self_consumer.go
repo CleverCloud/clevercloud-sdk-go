@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Updateselfconsumer PUT /v2/self/consumers/{key} — update a consumer.
+Updateselfconsumer Update an OAuth consumer
 
-📥 **Algo Source (Legacy):**
-Update name/description/url/picture/base_url where key+org match; 404 if no rows affected
-- Legacy note: cc-api SelfConsumersAPI.java updateConsumer()
-
-🔧 **Algo Rust (Implementation):**
-- Validate + persist caller-supplied rights (refs #1181); 400 OAUTH1_CONSUMER on bad rights.
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java updateConsumer()
-Source: cc-api OAuth1ConsumersHelper.java:157-177 updateOAuth1Consumer() → getOrga:51
-Issue: #102, #1181, refs #2211
+Replaces the name, description, URLs, picture and rights of one OAuth1 consumer of the user's personal space, and returns it. Requires the `manage_organisations_services` right (403, error id 6200); an unknown key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

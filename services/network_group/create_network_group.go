@@ -12,28 +12,15 @@ import (
 )
 
 /*
-Createnetworkgroup POST /v4/networkgroups/organisations/{owner_id}/networkgroups
+Createnetworkgroup Create a network group
 
-Algo Source: ovd NetworkGroupRoutes.scala postNetworkGroup → `NetworkGroupActionsActor`
-acquires ZK `_creating` locks on identifier + context, publishes
-`NetworkGroupCreationCMD` to `commands`, returns 202 (the watcher fires
-when leader deletes the lock).
-
-Algo Rust: same shape. ZK locks via [`zk::make_creation_node`] (409 on conflict),
-awaited publish via [`crate::producer::NgPulsarProducer::send_cmd`]; if the
-publish fails both `_creating` locks are rolled back (otherwise they would
-wedge that NG id and label with a permanent 409 — nothing else deletes them).
-
-Source: references/legacy/ovd/modules/networkgroup/routes/NetworkGroupRoutes.scala postNetworkGroup
-Source: references/legacy/ovd/modules/networkgroup/actors/NetworkGroupActionsActor.scala — wannaCreateNetworkGroup
-Behavior: 202 + `{"id": ...}` on accept; 400 invalid input; 409 id/label in flight; 403 if the caller is not in OVD writeRoles (ADMIN/MANAGER), or is an external caller asking for a PLATFORM-owned group (OVD `CallerKind`).
-Issue: #313, #665, #676, #849, #1127
+Requests the creation of a network group, optionally with an ID, a label, tags and initial members. The group is created asynchronously and cannot be read until it is; 409 when its ID or label is already being created. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Organisation ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

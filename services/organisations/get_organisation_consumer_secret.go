@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getorganisationconsumersecret GET /v2/organisations/{id}/consumers/{key}/secret — get the secret of a consumer.
+Getorganisationconsumersecret Get the secret of an OAuth consumer
 
-Source: cc-api OrganisationConsumersAPI.java getConsumerSecret()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Query secret by key + org; 404 if not found.
-- Legacy note: cc-api OrganisationConsumersAPI.java getConsumerSecret()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the secret of the organisation's OAuth1 consumer. Requires the `ADMIN` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

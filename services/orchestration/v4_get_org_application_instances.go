@@ -13,29 +13,16 @@ import (
 )
 
 /*
-V4GetOrgApplicationInstances Legacy: Console3 v4 orchestration (no cc-api equivalent — OVD OrchestrationRoutes)
-Algorithm: Shape S7 authorization and the same provider read as the v2 route, rendered as the v4 InstanceView
-Conformity: faithful shape and, since #313 and #2896, faithful data — `hypervisorId`, `isBuildVm` and `deletionDate` are all served; the last is populated for a clean-stop instance, which the listing predicate serves the way legacy's did
+V4GetOrgApplicationInstances List the instances of an application
 
-GET /v4/orchestration/organisations/{id}/applications/{app_id}/instances
-
-Serves the v4 body, NOT the v2 one. The rename that matters is `deployId` →
-`deploymentId`: Console3's runtime-logs component maps this list through
-`i => i.deploymentId` and fetches each result, so while this route served the v2
-`SuperNovaInstanceView` every instance yielded `undefined` and the component
-issued `GET /v4/.../deployments/undefined`.
-
-Source: ovd core/.../capacity/instance/Instance.scala:55 (InstanceView), :100 (toView)
-Source: @clevercloud/components cc-logs-app-runtime.smart.js — fetchOrRefreshDeployments
-Spec: analysis-output/38-github-api-consumers.md §Console3 — v4 orchestration
-Issue: #313
+Returns the instances of an organisation's application, filtered by the query parameters. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list. Superseded by the `/v4/paas/` spelling of this path.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - app_id: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - app_id: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

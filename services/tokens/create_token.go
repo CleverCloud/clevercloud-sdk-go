@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createtoken
+Createtoken POST /v4/tenants/{tenantId}/tokens
 
 Parameters:
   - ctx: context for the request

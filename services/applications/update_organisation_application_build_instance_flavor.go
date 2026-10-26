@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationbuildinstanceflavor PUT /v2/organisations/{id}/applications/{app_id}/buildflavor — set org build flavor.
+Updateorganisationapplicationbuildinstanceflavor Set the build flavor of an application
 
-Legacy: cc-api ApplicationHelper.java:3861 setBuildFlavor()
-Algorithm: Auth + canAddApp; validate flavor in variant's list; Set app.buildFlavor, persist
-Conformity: faithful — variant flavor-list validation, 400 FLAVOR_NOT_FOUND(9018), 204 No Content; column stores flavors.id (refs #2325)
-
-Source: cc-api OrganisationApplicationsAPI.java putBuildFlavor()
-Issue: #107
+Sets the flavor of the instance that builds an organisation's application, named in the body's `name`; an unknown flavor answers 400 (error id 9018). Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

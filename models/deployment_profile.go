@@ -2,9 +2,12 @@
 
 package models
 
-// DeploymentProfile The deployment profile as returned by the admin API — `profile_data` with every secret redacted. ...
+// DeploymentProfile A Kubernetes deployment profile: the zone it serves, whether it is that zone's default, and its c...
 type DeploymentProfile struct {
-	LocationID  string `json:"locationId"`
-	ProfileData any    `json:"profileData"`
-	RegionID    string `json:"regionId"`
+	ID          string  `json:"id"`                   // `kubernetes_deployment_profile_<uuid>`, assigned on creation.
+	LocationID  *string `json:"locationId,omitempty"` // Deprecated: read `zoneId`. Always the same value as `zoneId`, and `null` exactly when it is.
+	ProdDefault bool    `json:"prodDefault"`          // Whether this profile is its zone's production default: the one a cluster creation that names no p...
+	ProfileData any     `json:"profileData"`
+	RegionID    string  `json:"regionId"`         // The region, copied from `profileData.regionId`.
+	ZoneID      *string `json:"zoneId,omitempty"` // The zone (uuid) this profile serves. `null` when no zone is set yet; cluster creation with the pr...
 }

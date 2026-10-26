@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getselfconsumersecret GET /v2/self/consumers/{key}/secret — get the secret of a consumer.
+Getselfconsumersecret Get the secret of an OAuth consumer
 
-📥 **Algo Source (Legacy):**
-Query secret from oauth1_consumers by key + org ownership; 404 if not found
-- Legacy note: cc-api SelfConsumersAPI.java getConsumerSecret()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java getConsumerSecret()
-Source: cc-api OAuth1ConsumersHelper.java:103-111 getOAuth1ConsumerSecret() → getOrga:51
-Issue: #102, refs #2211
+Returns the secret of one OAuth1 consumer of the user's personal space. Requires the `manage_organisations_services` right (403, error id 6200); an unknown key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

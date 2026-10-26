@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeBranch Body of the two `PUT .../branch` routes — cc-api's `WannabeBranch`.  A JSON **object**, never a b...
+// WannabeBranch The Git branch an application deploys from.
 type WannabeBranch struct {
-	Branch *string `json:"branch,omitempty"`
+	Branch *string `json:"branch,omitempty"` // Branch name; `null` or absent sets the branch back to `master`.
 }

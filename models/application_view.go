@@ -2,11 +2,11 @@
 
 package models
 
-// ApplicationView ApplicationView — matches cc-api openapi/ccapiv3.json ApplicationView schema.  Source: cc-api App...
+// ApplicationView An application: its identity, region, instance configuration, deployment settings, domains, envir...
 type ApplicationView struct {
 	Appliance      *string                `json:"appliance,omitempty"`
 	Archived       bool                   `json:"archived"`
-	Branch         *string                `json:"branch,omitempty"` // RAW `applications.branch` column — legacy `toView()` passes `this.branch` verbatim (Application.j...
+	Branch         *string                `json:"branch,omitempty"` // Git branch configured for the application, as set; `null` when none is set.
 	BuildFlavor    *Flavor                `json:"buildFlavor,omitempty"`
 	CancelOnPush   bool                   `json:"cancelOnPush"`
 	CommitID       *string                `json:"commitId,omitempty"`

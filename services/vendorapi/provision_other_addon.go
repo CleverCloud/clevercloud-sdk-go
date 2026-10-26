@@ -26,7 +26,7 @@ Behavior:
 Issue: #105
 Algorithm: Validate Basic auth with specialPassword, check canProvision whitelist, enforce free plan, call target provider Heroku API, insert addon + config, fire AddonCreate event.
 Legacy: cc-api uses checkSpecialAuth (separate from normal checkAuth); canProvision is a DB whitelist table (addon_provider_can_provision).
-Conformity: faithful
+Conformity: faithful up to `_provisionUnchecked`, whose owner-activity refusal (403 ORGANISATION_NOT_ACTIVE) is not reproduced; an unknown region is refused 400 here.
 
 Parameters:
   - ctx: context for the request
@@ -47,14 +47,14 @@ Example:
 x-service: vendor
 operationId: provisionOtherAddon
 */
-func Provisionotheraddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeInterAddonProvision) client.Response[models.AddonView] {
+func Provisionotheraddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeInterAddonProvision) client.Response[models.AddonProvisionResult] {
 	ctx, span := tracer.Start(ctx, "provisionOtherAddon")
 	defer span.End()
 
 	path := utils.Path("/v2/vendor/addons")
 
 	// Make API call
-	response := client.Post[models.AddonView](ctx, c, path, requestBody)
+	response := client.Post[models.AddonProvisionResult](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

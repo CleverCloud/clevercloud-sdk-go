@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterNode A node within a node group, as embedded in the aggregate cluster view.  Source: references/legacy...
+// ClusterNode A node of a node group, as embedded in a cluster's detail: id, name, status, vCPU count and RAM i...
 type ClusterNode struct {
 	ID       string         `json:"id"`
 	Name     string         `json:"name"`

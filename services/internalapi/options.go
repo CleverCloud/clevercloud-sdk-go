@@ -28,7 +28,6 @@ type Options struct {
 	Message     *string `url:"message,omitempty"`
 	Namespace   *string `url:"namespace,omitempty"`
 	Offset      *int64  `url:"offset,omitempty"`
-	Owner       *string `url:"owner,omitempty"`
 	Pin         *int    `url:"pin,omitempty"`
 	Secret      *string `url:"secret,omitempty"`
 	Since       *string `url:"since,omitempty"`
@@ -144,13 +143,6 @@ func WithOffset(offset int64) Option {
 	}
 }
 
-// WithOwner sets the owner query parameter
-func WithOwner(owner string) Option {
-	return func(o *Options) {
-		o.Owner = &owner
-	}
-}
-
 // WithPin sets the pin query parameter
 func WithPin(pin int) Option {
 	return func(o *Options) {
@@ -259,9 +251,6 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Offset != nil {
 		params = append(params, fmt.Sprintf("offset=%d", *options.Offset))
-	}
-	if options.Owner != nil {
-		params = append(params, fmt.Sprintf("owner=%s", url.QueryEscape(*options.Owner)))
 	}
 	if options.Pin != nil {
 		params = append(params, fmt.Sprintf("pin=%d", *options.Pin))

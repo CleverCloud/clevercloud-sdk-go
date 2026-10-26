@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Createselfmfa POST /v2/self/mfa/{kind} — create/enroll MFA.
+Createselfmfa Start an MFA enrolment
 
-📥 **Algo Source (Legacy):**
-Verify almighty + password, 409 if already configured, generate 20-byte CSPRNG base32 TOTP secret, insert unvalidated config
-- Legacy note: cc-api SelfMFAAPI.java createMFA() -> MFAHelper.java; secret generation matches SecretGenerator.generate()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java createMFA()
-Behavior: stashes the pending secret + recovery codes in the MFA cache (not the DB — only /confirmation persists) and returns the otpauth:// provisioning URI as MfaEnrollmentResponse { url }, matching cc-api MFAHelper.create's UrlView.
-Issue: #102
+Generates a TOTP secret and recovery codes, pending until confirmed, and returns the `otpauth://` provisioning URL to load in an authenticator app. Requires a validated primary email (400, error id 8502). Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). Answers 409 when an MFA of this kind is already configured.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
 
 # Returns the operation result or an error
 

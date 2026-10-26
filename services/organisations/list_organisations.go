@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Listorganisations GET /v2/organisations — list organisations the user belongs to.
+Listorganisations List the organisations of the current user
 
-Source: cc-api OrganisationsAPI.java GET /organisations
-cc-api filters by user parameter, but most commonly returns orgs for the authenticated user.
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Check canAccessOrganisations permission, Join organisations + owner_info + organisation_members WHERE user_id, state=ACTIVE
-- Legacy note: cc-api OrganisationsAPI.java:62 getUserOrganisationss() -> OrganisationHelper.java:95 getOrgasForUser()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns every organisation the authenticated user is a member of.
 
 Parameters:
   - ctx: context for the request

@@ -10,17 +10,9 @@ import (
 )
 
 /*
-Getselfamount GET /v2/self/credits — discontinued.
+Getselfamount Get the current user's credits (discontinued)
 
-Not part of `SelfPaymentsAPI.java`, but discontinued all the same:
-`SelfCreditsAPI.java` holds one method, `getAmount()`, whose whole body is
-`NOT_IMPLEMENTED_BILLING`. It used to answer 200 with a balance read from
-`account_balance`/`billing_context` — figures cc-api refuses to serve, and
-which `crates/tooling/parity-runner/scenarios/26-billing-v2.json` already
-expected to be 501.
-
-Source: cc-api SelfCreditsAPI.java getAmount() — 501
-Issues: #267, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

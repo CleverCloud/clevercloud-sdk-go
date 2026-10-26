@@ -2,10 +2,10 @@
 
 package models
 
-// ProviderConsoleView Provider console view returned by GET /v4/addon-providers/{slug}.  Source: references/legacy/ovd/...
+// ProviderConsoleView An add-on provider as the console shows it: its clusters, the dedicated versions it offers and th...
 type ProviderConsoleView struct {
-	Clusters                []ClusterConsoleView `json:"clusters,omitempty"`
-	Dedicated               map[string]any       `json:"dedicated,omitempty"` // Offered dedicated versions, **in the order the provider declares them**.  An `IndexMap`, not a `H...
-	DefaultDedicatedVersion *string              `json:"defaultDedicatedVersion,omitempty"`
-	ProviderID              string               `json:"providerId"`
+	Clusters                []ClusterConsoleView     `json:"clusters,omitempty"`
+	Dedicated               map[string]DedicatedView `json:"dedicated,omitempty"` // Offered dedicated versions, keyed by version, in the order the provider declares them.
+	DefaultDedicatedVersion *string                  `json:"defaultDedicatedVersion,omitempty"`
+	ProviderID              string                   `json:"providerId"`
 }

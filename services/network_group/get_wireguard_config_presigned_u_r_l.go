@@ -12,33 +12,17 @@ import (
 )
 
 /*
-Getwireguardconfigpresignedurl GET .../peers/{peer_id}/wireguard/configuration/presigned-url
+Getwireguardconfigpresignedurl Get a presigned URL for a peer's WireGuard configuration
 
-Algo Source: ovd NetworkGroupWireguardController.scala generatePresignedURL —
-mints a Biscuit token (identity fact + 60-min expiry check + operation
-check/rule) and returns a URL pointing at the config endpoint with the token
-as `authorization`.
-
-Algo Rust: re-ported against [`crate::cache::NgCache`] (peer existence check)
-instead of PG. The token and URL are OVD's, on the module-scoped root key
-`MODULE_PRODUCT_NETWORKGROUP__BISCUIT_ROOT_HEX` and base
-`MODULE_PRODUCT_NETWORKGROUP__BASE_URL` (OVD `ccapi.url`) — see
-[`crate::wireguard_presign`] (refs #3024).
-
-Source: references/legacy/ovd/modules/networkgroup/controllers/NetworkGroupWireguardController.scala generatePresignedURL
-Behavior: 200 + presigned URL; 401 another owner's group; 404 unknown NG or
-
-	peer; 500 when the token cannot be minted (OVD `BiscuitError`).
-
-Issue: #849, #3024
+Returns a URL that downloads the peer's WireGuard configuration with no other credential, valid 60 minutes; keep it secret, as its token grants that download for every peer of the organisation's network groups until it expires. 404 when the network group or the peer does not exist; a biscuit cannot obtain one. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
 
 # Returns the operation result or an error
 

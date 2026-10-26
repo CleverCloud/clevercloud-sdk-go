@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletetoken
+Deletetoken DELETE /v4/tenants/{tenantId}/tokens/{tokenId}
 
 Parameters:
   - ctx: context for the request

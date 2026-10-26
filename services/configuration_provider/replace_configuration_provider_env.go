@@ -12,42 +12,15 @@ import (
 )
 
 /*
-Replaceconfigurationproviderenv PUT /v4/addon-providers/config-provider/addons/{addon_id}/env — replace env vars.
+Replaceconfigurationproviderenv Replace the variables of a configuration provider add-on
 
-Legacy: ovd routes.scala:57 putAddonEnv / AddonConfigProviderActor.scala
-
-📥 **Algo Source (Legacy):**
-Replace all env vars for a config-provider addon.
-  - Validate env vars: checkDuplicates -> checkNamePattern -> checkSize
-    (WannabeEnvVarOps.scala, name pattern `^[a-zA-Z0-9-_.]+$`, limits from config)
-  - Fetch addon to verify existence (status != DELETED)
-  - Call cc-api callback (UpdateEnv) to notify env change
-  - Encrypt validated vars as JSON Map with XSalsa20-Poly1305
-  - UPDATE config + config_nonce in DB
-  - Return updated env vars
-  - Source: ovd AddonConfigProviderActor.scala:155-168 updateAddonConfigProviderEnvVars()
-  - Source: ovd WannabeEnvVarOps.scala checkDuplicates/checkNamePattern/checkSize
-
-🔧 **Algo Rust (Implementation):**
-  - Validate env vars (duplicates, name pattern, size limits) -> 400 if invalid
-  - Fetch the addon row (status != DELETED) -> 404 if not found (gives us callback_url)
-  - Notify cc-api via HTTP PUT to addon.callback_url ({"config":{...}}, Basic Auth);
-    short-circuit with 500 on failure (matches the legacy EitherT order — the callback
-    runs BEFORE the DB write, so a failed callback aborts the update)
-  - Serialize `Vec<EnvVar>` to JSON, encrypt with XSalsa20-Poly1305
-  - UPDATE config + config_nonce WHERE status != DELETED
-  - Return Json(`Vec<EnvVar>`) with 200, or 404 if addon not found
-
-Source: references/legacy/ovd/modules/configprovider/api/routes.scala putAddonEnv
-Source: references/legacy/ovd/modules/configprovider/routes/AddonConfigProviderRoutes.scala patchAddonEnv
-Behavior: validates then replaces all env vars for this addon, returns updated “Vec<EnvVar>“
-Issue: #2
+Replaces all the add-on's environment variables with the given list, updates the variables it exposes to its linked applications and returns the new list. Answers 400 for a duplicate name, a name outside `[a-zA-Z0-9-_.]` or a name or value over the size limit, and 413 for an oversized body. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: ConfigProvider addon ID
+  - addonId: Configuration provider add-on ID (`config_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

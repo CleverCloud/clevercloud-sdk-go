@@ -2,7 +2,7 @@
 
 package models
 
-// SetVatStateRequest Request body for PUT /v2/internal/organisations/{id}/vat_state.  THREE spellings of the one field...
+// SetVatStateRequest New VAT validation state of an organisation. The field is accepted as `vatState`, `vat_state` or ...
 type SetVatStateRequest struct {
 	VatState string `json:"vatState"` // New VAT validation state.
 }

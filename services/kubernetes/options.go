@@ -17,9 +17,10 @@ type Options struct {
 	Limit         *int64    `url:"limit,omitempty"`
 	Resourceid    *[]string `url:"resourceId,omitempty"`
 	Since         *string   `url:"since,omitempty"`
-	Status        *string   `url:"status,omitempty"`
+	Status        *[]string `url:"status,omitempty"`
 	Typeparam     *string   `url:"typeParam,omitempty"`
 	Until         *string   `url:"until,omitempty"`
+	Workers       *bool     `url:"workers,omitempty"`
 }
 
 // WithAuthorization sets the authorization query parameter
@@ -51,7 +52,7 @@ func WithSince(since string) Option {
 }
 
 // WithStatus sets the status query parameter
-func WithStatus(status string) Option {
+func WithStatus(status []string) Option {
 	return func(o *Options) {
 		o.Status = &status
 	}
@@ -68,6 +69,13 @@ func WithTypeparam(typeParam string) Option {
 func WithUntil(until string) Option {
 	return func(o *Options) {
 		o.Until = &until
+	}
+}
+
+// WithWorkers sets the workers query parameter
+func WithWorkers(workers bool) Option {
+	return func(o *Options) {
+		o.Workers = &workers
 	}
 }
 
@@ -92,13 +100,16 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
 	}
 	if options.Status != nil {
-		params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(*options.Status)))
+		params = append(params, fmt.Sprintf("status=%v", *options.Status))
 	}
 	if options.Typeparam != nil {
 		params = append(params, fmt.Sprintf("typeParam=%s", url.QueryEscape(*options.Typeparam)))
 	}
 	if options.Until != nil {
 		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+	}
+	if options.Workers != nil {
+		params = append(params, fmt.Sprintf("workers=%t", *options.Workers))
 	}
 
 	if len(params) == 0 {

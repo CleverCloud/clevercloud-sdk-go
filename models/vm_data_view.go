@@ -2,7 +2,7 @@
 
 package models
 
-// VmDataView VM data without the internal IP and hypervisor identifier.  Source: ClusterItemDataView.scala — V...
+// VmDataView A VM of the cluster: its id, name and resources.
 type VmDataView struct {
 	ID            string            `json:"id"`
 	Name          string            `json:"name"`

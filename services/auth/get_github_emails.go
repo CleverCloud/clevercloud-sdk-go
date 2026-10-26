@@ -17,9 +17,10 @@ Source: cc-api GithubAPIHelper.java:getEmails()
 Behavior: Fetch verified emails from GitHub API
 Issue: #223
 
-Algorithm: Verify OAuth1 auth, fetch GitHub token, call /user/emails API; Filter to verified emails, exclude noreply addresses
-Legacy: cc-api GithubAPI.java getEmails() -> GithubAPIHelper.getEmails()
+Algorithm: Verify OAuth1 auth, fetch GitHub token, call /user/emails API; Filter to verified emails, exclude noreply addresses; Any GitHub answer outside 2xx (most often a token it rejects) or one that does not parse lists no address; 502 only when GitHub cannot be reached or times out
+Legacy: cc-api GithubHelper.java:191 getEmails() -> GithubAPIHelper.java:253 getSelfEmails()
 Conformity: faithful — proxies GitHub API with cc-api filtering logic
+Issues: #4140
 
 Parameters:
   - ctx: context for the request

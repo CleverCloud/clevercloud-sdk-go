@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -12,83 +11,14 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
-	"gopkg.in/yaml.v3"
+
+	"go.clever-cloud.dev/sdk/internal/naming"
+	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
-// SERVICE_NAME_EXCEPTIONS maps x-service values to specific package names
-// This handles special cases where the x-service name needs to be mapped to a different package name
-var SERVICE_NAME_EXCEPTIONS = map[string]string{
-	// Map addon services to their dedicated packages if needed
-	"addon-pulsar":  "pulsar",
-	"addon-storage": "storage",
-	"addon-cellar":  "storage",
-
-	// Map config-provider to product since it's product-related
-	"config-provider": "product",
-
-	// Map network-related services appropriately
-	"network-group": "networkgroup",
-
-	// Map infrastructure-related services
-	"infrastructure": "infrastructure",
-	"compute":        "infrastructure",
-
-	// Map drain services
-	"drain":  "drains",
-	"drains": "drains",
-
-	// `internal` is reserved by Go: a package at services/internal is importable only from
-	// services/..., so builder.go at the module root cannot reach it and the SDK stops
-	// compiling. AXO publishes an `Internal` tag (46 operations), hence the rename.
-	"internal": "internalapi",
-	"Internal": "internalapi",
-
-	// `vendor` is reserved by the go command: directories of that name are stripped from a
-	// module zip, so `go get` of this SDK yields a module with no services/vendor package at
-	// all and every consumer fails to build. AXO publishes a `Vendor` tag, hence the rename.
-	"vendor": "vendorapi",
-	"Vendor": "vendorapi",
-
-	// Example of consolidating related services
-	// "keycloak":        "product", // Move keycloak operations to product package
-	// "matomo":          "product", // Move matomo operations to product package
-	// "otoroshi":        "product", // Move otoroshi operations to product package
-}
-
-// OPERATION_ID_OVERRIDES fixes duplicate operationId issues in the OpenAPI spec
-// Key format: "METHOD:path" -> new operationId
-var OPERATION_ID_OVERRIDES = map[string]string{
-	// Fix duplicate "createEndpoint" operationId
-	"DELETE:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints/{endpointId}": "deleteAIEndpoint",
-	"POST:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints":                "createAIEndpoint",
-	// Fix duplicate getMateriaKv/deleteMateriaKv (exist on both /v2 and /v4 paths)
-	"GET:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}":    "getMateriaKvV4",
-	"DELETE:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}": "deleteMateriaKvV4",
-}
-
-// OPERATION_MAPPING_EXCEPTIONS maps specific operations to target services
-// This handles operations that should be moved to different services based on SERVICE_MAPPING_EXCEPTIONS.md
-var OPERATION_MAPPING_EXCEPTIONS = map[string]string{
-	// Pulsar operations mal classées (x-service: product → pulsar)
-	"getPulsar":                      "pulsar",
-	"deletePulsar":                   "pulsar",
-	"getPulsarPolicies":              "pulsar",
-	"setStoragePolicies":             "pulsar",
-	"renewPulsarToken":               "pulsar",
-	"createPulsarTenantAndNamespace": "pulsar",
-	"deletePulsarTenantAndNamespace": "pulsar",
-	"createPulsar":                   "pulsar",
-	"getPulsarProviderInfo":          "pulsar",
-	"getPulsarCluster":               "pulsar",
-	"listPulsarConsumptions":         "pulsar",
-	"getTriggerPulsar":               "pulsar",
-	"createTriggerPulsar":            "pulsar",
-	"deleteTriggerPulsar":            "pulsar",
-
-	// V2 Pulsar operations (x-service: product → pulsar)
-	"provisionPulsar": "pulsar",
-	"getPulsarV2":     "pulsar",
-}
+// Package names, function names and the exception tables live in internal/naming; the
+// document is pruned and normalised by internal/spec. Both are shared with the builder
+// generator so the two cannot drift apart.
 
 // Service generation structures
 type ServiceOperation struct {
@@ -122,9 +52,8 @@ type ServiceParam struct {
 
 func main() {
 	var (
-		specFile       = flag.String("spec", "openapi.json", "Path to OpenAPI specification file")
-		outputDir      = flag.String("output", "services", "Output directory for generated services")
-		exceptionsFile = flag.String("exceptions", "", "Path to service mapping exceptions file")
+		specFile  = flag.String("spec", "openapi.json", "Path to OpenAPI specification file")
+		outputDir = flag.String("output", "services", "Output directory for generated services")
 	)
 	flag.Parse()
 
@@ -132,56 +61,14 @@ func main() {
 		log.Fatal("Please provide -spec flag with path to OpenAPI specification")
 	}
 
-	// Load exceptions file if provided
-	if *exceptionsFile != "" && fileExists(*exceptionsFile) {
-		log.Printf("Loading service mapping exceptions from: %s", *exceptionsFile)
-		// Note: The exceptions are currently hardcoded in OPERATION_MAPPING_EXCEPTIONS
-		// In the future, we could parse the markdown file to populate the map dynamically
-	}
-
-	// Read OpenAPI spec
-	data, err := os.ReadFile(*specFile)
+	document, report, err := spec.Load(*specFile)
 	if err != nil {
-		log.Fatalf("Failed to read spec file: %v", err)
+		log.Fatalf("Failed to load spec: %v", err)
 	}
-
-	var spec openapi31.Spec
-
-	// Detect format based on file extension
-	ext := strings.ToLower(filepath.Ext(*specFile))
-
-	switch ext {
-	case ".json":
-		// Parse JSON document
-		if err := json.Unmarshal(data, &spec); err != nil {
-			log.Fatalf("Failed to parse OpenAPI JSON: %v", err)
-		}
-		log.Printf("Parsed OpenAPI JSON specification")
-	case ".yaml", ".yml":
-		// Parse YAML document
-		if err := yaml.Unmarshal(data, &spec); err != nil {
-			log.Fatalf("Failed to parse OpenAPI YAML: %v", err)
-		}
-		log.Printf("Parsed OpenAPI YAML specification")
-	default:
-		// Try to auto-detect format
-		log.Printf("Unknown file extension %s, attempting auto-detection...", ext)
-
-		// Try JSON first
-		err := json.Unmarshal(data, &spec)
-		if err == nil {
-			log.Printf("Auto-detected JSON format")
-		} else {
-			// Try YAML
-			if err := yaml.Unmarshal(data, &spec); err != nil {
-				log.Fatalf("Failed to parse OpenAPI file (tried both JSON and YAML): %v", err)
-			}
-			log.Printf("Auto-detected YAML format")
-		}
-	}
+	log.Printf("Loaded %s: %s", *specFile, report)
 
 	// Process operations
-	operations := extractOperations(spec)
+	operations := extractOperations(*document)
 
 	if len(operations) == 0 {
 		log.Println("No operations found in OpenAPI spec")
@@ -242,14 +129,10 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 			continue
 		}
 
-		// Apply operationId overrides for duplicate IDs
+		// Ids are unique and x-service is set on every operation: spec.Load saw to it.
 		operationID := ""
 		if operation.ID != nil {
 			operationID = *operation.ID
-		}
-		overrideKey := method + ":" + path
-		if override, exists := OPERATION_ID_OVERRIDES[overrideKey]; exists {
-			operationID = override
 		}
 
 		summary := ""
@@ -263,7 +146,7 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 
 		op := ServiceOperation{
 			OperationID:   operationID,
-			FunctionName:  toPascalCase(operationID),
+			FunctionName:  naming.FunctionName(operationID),
 			Path:          convertPathToGoFormat(path),
 			Method:        method,
 			Summary:       summary,
@@ -271,37 +154,11 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 			TraceSpanName: operationID,
 		}
 
-		// Check operation mapping exceptions first
-		if targetService, hasException := OPERATION_MAPPING_EXCEPTIONS[operationID]; hasException {
-			op.XService = targetService
-			op.PackageName = getPackageNameFromService(targetService)
-		} else {
-			// Apply mapping rules from SERVICE_MAPPING_EXCEPTIONS.md
-			targetService := applyMappingRules(operationID, path, operation.Tags)
-			if targetService != "" {
-				op.XService = targetService
-				op.PackageName = getPackageNameFromService(targetService)
-			} else {
-				// Extract x-service from MapOfAnything
-				if xService, exists := operation.MapOfAnything["x-service"]; exists {
-					if xServiceStr, ok := xService.(string); ok {
-						op.XService = xServiceStr
-						op.PackageName = getPackageNameFromService(xServiceStr)
-					}
-				}
-
-				// If no x-service, use first tag or derive from path
-				if op.PackageName == "" {
-					if len(operation.Tags) > 0 {
-						tagValue := operation.Tags[0]
-						op.XService = tagValue
-						op.PackageName = getPackageNameFromService(tagValue)
-					} else {
-						op.PackageName = derivePackageFromPath(path)
-						op.XService = op.PackageName
-					}
-				}
-			}
+		xService, _ := operation.MapOfAnything["x-service"].(string)
+		op.XService = xService
+		op.PackageName = naming.OperationPackage(operationID, xService, path, operation.Tags)
+		if op.PackageName == "" {
+			log.Fatalf("%s %s (%s): no x-service and no tag to name a package after", method, path, operationID)
 		}
 
 		// Extract parameters
@@ -438,9 +295,18 @@ func generatePackage(outputDir, packageName string, operations []ServiceOperatio
 		return fmt.Errorf("failed to create package directory: %v", err)
 	}
 
-	// Generate one file per operation
+	// Generate one file per operation. Two ids can share a file name — `deleteCephPool` and
+	// `delete_ceph_pool` are distinct functions on distinct routes but both spell
+	// `delete_ceph_pool.go` — so the second takes its method as a suffix rather than
+	// overwriting the first.
+	fileNames := map[string]bool{}
 	for _, op := range operations {
-		if err := generateOperationFile(packageDir, op); err != nil {
+		fileName := operationFileName(op.OperationID)
+		if fileNames[fileName] {
+			fileName = strings.TrimSuffix(fileName, ".go") + "_" + strings.ToLower(op.Method) + ".go"
+		}
+		fileNames[fileName] = true
+		if err := generateOperationFile(packageDir, fileName, op); err != nil {
 			return fmt.Errorf("failed to generate operation %s: %v", op.OperationID, err)
 		}
 	}
@@ -453,7 +319,7 @@ func generatePackage(outputDir, packageName string, operations []ServiceOperatio
 	return nil
 }
 
-func generateOperationFile(packageDir string, op ServiceOperation) error {
+func generateOperationFile(packageDir, fileName string, op ServiceOperation) error {
 	f := NewFile(op.PackageName)
 	f.HeaderComment("Code generated by generate-services. DO NOT EDIT.")
 
@@ -607,7 +473,7 @@ func generateOperationFile(packageDir string, op ServiceOperation) error {
 	f.Func().Id(op.FunctionName).Params(params...).Qual("go.clever-cloud.dev/client", "Response").Types(responseType).Block(body...)
 
 	// Write file
-	filename := toSnakeCase(op.OperationID) + ".go"
+	filename := fileName
 	outputPath := filepath.Join(packageDir, filename)
 	return f.Save(outputPath)
 }
@@ -658,9 +524,14 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 				// For options, use PascalCase for GoName and simplify complex types to string
 				param := qp
 				param.GoName = toPascalCase(qp.Name)
-				// Query params should be simple types - convert complex refs to string
-				if strings.HasPrefix(param.Type, "*") || strings.HasPrefix(param.Type, "models.") {
-					param.Type = "string"
+				// Query params should be simple types - convert complex refs to string,
+				// and a list of them (`status=[]*models.ClusterStatusType`) to a list of strings.
+				if strings.Contains(param.Type, "models.") {
+					if strings.HasPrefix(param.Type, "[]") {
+						param.Type = "[]string"
+					} else {
+						param.Type = "string"
+					}
 				}
 				queryParamMap[qp.Name] = param
 			}
@@ -767,25 +638,7 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 
 // Utility functions
 func toPascalCase(s string) string {
-	if s == "" {
-		return ""
-	}
-
-	// Split by common delimiters
-	words := strings.FieldsFunc(s, func(c rune) bool {
-		return c == '_' || c == '-' || c == ' '
-	})
-
-	var result strings.Builder
-	for _, word := range words {
-		if len(word) > 0 {
-			result.WriteString(strings.ToUpper(string(word[0])))
-			result.WriteString(strings.ToLower(word[1:]))
-		}
-	}
-
-	// Apply ID suffix fix
-	return fixIDSuffixes(result.String())
+	return naming.PascalCase(s)
 }
 
 func toCamelCase(s string) string {
@@ -796,20 +649,18 @@ func toCamelCase(s string) string {
 	return strings.ToLower(string(pascal[0])) + pascal[1:]
 }
 
-func toSnakeCase(s string) string {
-	if s == "" {
-		return ""
-	}
-
+// operationFileName is the file an operation is written to: its id with every capital
+// turned into an underscore and a lower-case letter. Only a file name, not an identifier,
+// so acronyms are not kept together (`getAIEndpoint` is `get_a_i_endpoint.go`).
+func operationFileName(operationID string) string {
 	var result strings.Builder
-	for i, r := range s {
+	for i, r := range operationID {
 		if i > 0 && r >= 'A' && r <= 'Z' {
 			result.WriteRune('_')
 		}
 		result.WriteRune(r)
 	}
-
-	return strings.ToLower(result.String())
+	return strings.ToLower(result.String()) + ".go"
 }
 
 func convertPathToGoFormat(path string) string {
@@ -953,82 +804,6 @@ func toPascalCaseForTypes(s string) string {
 	return result
 }
 
-func derivePackageFromPath(path string) string {
-	// Extract package name from path like /v4/addon-providers/addon-pulsar/...
-	parts := strings.Split(strings.Trim(path, "/"), "/")
-	for i, part := range parts {
-		if part == "addon-providers" && i+1 < len(parts) {
-			next := parts[i+1]
-			if after, ok := strings.CutPrefix(next, "addon-"); ok {
-				return after
-			}
-		}
-	}
-
-	// Fallback to first meaningful part
-	if len(parts) > 1 {
-		return toSnakeCase(parts[1])
-	}
-
-	return "unknown"
-}
-
-func fixIDSuffixes(s string) string {
-	// Fix common Go naming conventions for ID-related suffixes
-	// This ensures getPulsar becomes GetPulsar, getId becomes GetID, etc.
-	// Acronyms that Go spells in full caps. This table is duplicated in
-	// generate-services/main.go and generate-builder/main.go and MUST stay identical: the two
-	// generators derive the same function names independently, and a divergence produces a
-	// builder that calls a service function under a name the services package never emitted.
-	// It had drifted — services knew Ipam/Sql/Ttl/Uri/Uuid, the builder knew Yaml — and
-	// `builder.go` referenced `GetInternalBestAppForUri` where the package exports
-	// `GetInternalBestAppForURI`.
-	replacements := map[string]string{
-		"Api":   "API",
-		"Http":  "HTTP",
-		"Https": "HTTPS",
-		"Id":    "ID",
-		"Ip":    "IP",
-		"Ipam":  "IPAM",
-		"Json":  "JSON",
-		"Sql":   "SQL",
-		"Tls":   "TLS",
-		"Ttl":   "TTL",
-		"Uri":   "URI",
-		"Url":   "URL",
-		"Uuid":  "UUID",
-		"Xml":   "XML",
-		"Yaml":  "YAML",
-	}
-
-	for old, new := range replacements {
-		// Replace at the end of the string (suffix)
-		if strings.HasSuffix(s, old) {
-			s = strings.TrimSuffix(s, old) + new
-			continue
-		}
-
-		// Replace in the middle when followed by another capital letter (A-Z)
-		for i := 'A'; i <= 'Z'; i++ {
-			next := string(i)
-			s = strings.ReplaceAll(s, old+next, new+next)
-		}
-	}
-
-	return s
-}
-
-// getPackageNameFromService determines the package name for a given service name
-// using SERVICE_NAME_EXCEPTIONS and falling back to snake_case conversion
-func getPackageNameFromService(serviceName string) string {
-	// Check SERVICE_NAME_EXCEPTIONS first
-	if exceptionName, hasException := SERVICE_NAME_EXCEPTIONS[serviceName]; hasException {
-		return exceptionName
-	}
-	// Fall back to snake_case conversion
-	return toSnakeCase(serviceName)
-}
-
 func isReservedWord(word string) bool {
 	reservedWords := map[string]bool{
 		"break": true, "case": true, "chan": true, "const": true, "continue": true,
@@ -1038,35 +813,6 @@ func isReservedWord(word string) bool {
 		"select": true, "struct": true, "switch": true, "type": true, "var": true,
 	}
 	return reservedWords[word]
-}
-
-// applyMappingRules applies the mapping rules from SERVICE_MAPPING_EXCEPTIONS.md
-func applyMappingRules(operationID, path string, tags []string) string {
-	// Rule 1: Toute opération avec "pulsar" dans le path → service pulsar
-	if strings.Contains(strings.ToLower(path), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 2: Toute opération avec "Pulsar" dans l'operationId → service pulsar
-	if strings.Contains(operationID, "Pulsar") || strings.Contains(strings.ToLower(operationID), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 3: Operations avec tag "pulsar" → service pulsar
-	for _, tag := range tags {
-		if strings.ToLower(tag) == "pulsar" {
-			return "pulsar"
-		}
-	}
-
-	// No mapping rule applies
-	return ""
-}
-
-// fileExists checks if a file exists
-func fileExists(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil
 }
 
 // sanitizeComment makes spec prose safe to embed in a Go block comment.

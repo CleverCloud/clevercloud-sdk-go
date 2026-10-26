@@ -2,7 +2,7 @@
 
 package models
 
-// AlertMetadata Alert envelope metadata. `resource_id` is the **cluster id**, `tenant_id` the owner the cluster l...
+// AlertMetadata Metadata of a monitoring alert: the alert `id`, the `tenant_id` (owner) of the cluster, the `reso...
 type AlertMetadata struct {
 	ID         string `json:"id"`
 	ResourceID string `json:"resource_id"`

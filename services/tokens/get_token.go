@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Gettoken
+Gettoken GET /v4/tenants/{tenantId}/tokens/{tokenId}
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// OwnerIdView Owner ID view — wraps user ID as {"ownerId": "user_..."}.  Source: cc-api OwnerIdView class (used...
+// OwnerIdView The owner identifier of the authenticated user (`user_…`).
 type OwnerIdView struct {
 	OwnerID string `json:"ownerId"`
 }

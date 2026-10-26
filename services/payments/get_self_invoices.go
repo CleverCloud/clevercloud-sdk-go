@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Getselfinvoices GET /v2/self/payments/billings — discontinued.
+Getselfinvoices List invoices (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:86 getInvoices() — 501
-Issues: #213, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

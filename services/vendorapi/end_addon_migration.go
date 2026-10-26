@@ -20,7 +20,7 @@ Behavior: updates addon plan + zone + config (env vars), verifies provider owner
 Issue: #215
 Algorithm: Verify provider ownership, update plan_id/zone/config in a transaction, then redeploy linked SHOULD_BE_UP apps via BDS instruction.
 Legacy: cc-api applies the region aliases (eu->par, us->mtl) at the API layer, then REFUSES a region the provider does not serve — and an absent one — with 404 ADDON_PLAN_NOT_FOUND (11003).
-Conformity: faithful for the plan/region/config path and its 404/400 envelopes; the success BODY is a Message, where cc-api answers `addon.toView()` (AddonVendorAPIHelper.java:206), and the redeploys it triggers reproduce `bds()` only — `_redeploy`'s pre-startApp gates and the env-update-token mint stay unported (refs #2567, refs #2537).
+Conformity: faithful for the plan/region/config path and its envelopes; the redeploys it triggers reproduce `bds()` only — `_redeploy`'s pre-startApp gates and the env-update-token mint stay unported (refs #2567, refs #2537).
 
 Parameters:
   - ctx: context for the request
@@ -42,7 +42,7 @@ Example:
 x-service: vendor
 operationId: endAddonMigration
 */
-func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, opts ...Option) client.Response[models.Message] {
+func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, opts ...Option) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "endAddonMigration", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
@@ -55,7 +55,7 @@ func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Put[models.Message](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

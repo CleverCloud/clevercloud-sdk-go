@@ -11,17 +11,30 @@ import (
 )
 
 /*
-RedisGetSentinelConfig GET /v2/providers/redis-addon/internal/{id}/sentinel-configuration — Get sentinel configuration.
+RedisGetSentinelConfig GET /v2/providers/redis-addon/internal/{id}/sentinel-configuration — Gone (removed, #1610).
 
-**Legacy**: addon-api-redis Internal.scala getSentinelConfig()
+**Legacy**: addon-api-redis Internal.scala getSentinelConfig() renders
+`sentinelConfiguration.scala.txt`, whose `sentinel monitor` (line 6) and
+`sentinel announce-ip` (line 12) ship commented out under a `ToDo CHANGE ME`
+marker — a sentinel with no master to monitor and no announce address.
+
 **Algorithm**:
-  - Returns sentinel configuration as text/plain.
+  - 410 behind the unchanged per-addon token gate, after the two guards that already
+    framed the route: 404 on a malformed id, 403 on a cross-addon caller (#1416).
+    Reaches no database.
 
-**Conformity**: YES
+**Conformity**: NO — deliberate, arbitrated divergence (2026-07-24). The payload goes,
+the route's auth envelope stays: a cross-addon caller still gets the #1416 403 and a
+malformed id still gets 404, so nothing becomes learnable that was not before.
 
 Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — getSentinelConfig
-Behavior: real DB query. Returns text/plain sentinel config.
-Issue: #713
+Source: rubydeployer src/deploytypes/redis.rb:79 — writes the body to /etc/sentinel.conf,
+
+	which no unit ever reads (`getConfig` ignores the status, :19-28)
+
+Behavior: Gone (410) — removed, no database access, empty body.
+Spec: crates/addons/redis/docs/adr/1610-sentinel-configuration-removal.md
+Issue: #713, #1610
 
 Parameters:
   - ctx: context for the request
@@ -42,14 +55,14 @@ Example:
 x-service: redis_addon
 operationId: redis_get_sentinel_config
 */
-func RedisGetSentinelConfig(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func RedisGetSentinelConfig(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "redis_get_sentinel_config", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/redis-addon/internal/%s/sentinel-configuration", id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

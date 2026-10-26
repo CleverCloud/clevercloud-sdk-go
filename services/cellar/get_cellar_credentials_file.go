@@ -11,35 +11,48 @@ import (
 )
 
 /*
-Getcellarcredentialsfile Download the add-on's s3cmd configuration file
+GetCellarCredentialsFile GET /v4/addon-providers/addon-cellar/addons/{addon_id}/credentials.cfg -- download s3cfg file.
 
-Returns this add-on's S3 credentials rendered as an s3cmd `.s3cfg` file, served as `text/plain` with an attachment filename. Two ways in. Either an authenticated caller who is the add-on's owner (personal add-ons) or a member of the organisation owning it; or the holder of a download link issued by the `credentials/presigned-url` route, whose token travels in the `authorization` query parameter or a `Bearer` header. Such a link authenticates on its own and is honoured for whoever holds it, checked against its expiry and the add-on it was issued for rather than against organisation membership. Presenting neither answers 401; a link that has expired or was issued for another add-on answers 403; an add-on the organisation in the path does not own answers 404; and a request whose `Accept` header rules out `text/plain` answers 406.
+**Legacy**: ovd CellarRoutes.scala:145 getCellarCredentialsFileEndpoint / CellarConfigFileService.scala generateS3ConfigFile()
+**Algorithm**:
+  - Fetch credentials, generate s3cmd-compatible .s3cfg file
+  - Return as text/plain with Content-Disposition attachment header
+
+**Conformity**: YES
+
+Source: ovd/modules/cellar/routes/CellarRoutes.scala getCellarCredentialsFileEndpoint
+Source: ovd/modules/cellar/services/CellarConfigFileService.scala generateS3ConfigFile()
+Behavior: Fetches credentials from provision_config, generates an s3cmd-compatible
+
+	config file (.s3cfg format) with host, access_key, and secret_key.
+	Returns as text/plain with Content-Disposition attachment header.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - CellarId: Cellar addon ID
+  - addon_id: Cellar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Getcellarcredentialsfile(ctx, client, tracer, ownerId, CellarId)
+	response := cellar.GetCellarCredentialsFile(ctx, client, tracer, addon_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: cellar
-operationId: getCellarCredentialsFile
+x-service: Cellar
+operationId: get_cellar_credentials_file
 */
-func Getcellarcredentialsfile(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "getCellarCredentialsFile", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
+func GetCellarCredentialsFile(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "get_cellar_credentials_file", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/credentials.cfg", ownerId, CellarId)
+	path := utils.Path("/v4/addon-providers/addon-cellar/addons/%s/credentials.cfg", addon_id)
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

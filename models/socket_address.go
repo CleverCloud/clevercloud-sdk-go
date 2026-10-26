@@ -2,7 +2,7 @@
 
 package models
 
-// SocketAddress `{host, port}` — OVD's object-based `SocketAddress` codec for WireGuard endpoints (`SocketAddress...
+// SocketAddress A network address: a host (IP address) and a port.
 type SocketAddress struct {
 	Host string `json:"host"`
 	Port int    `json:"port"`

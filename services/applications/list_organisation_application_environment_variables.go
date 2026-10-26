@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Listorganisationapplicationenvironmentvariables GET /v2/organisations/{id}/applications/{app_id}/env — get env variables.
+Listorganisationapplicationenvironmentvariables List the environment variables of an application
 
-Source: cc-api OrganisationApplicationsAPI.java:459-460 getApplicationEnv()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:3751-3770 getApplicationEnv()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(tk, id, this::canAddApp, …) followed by the owner-scoped application lookup answering 404 APPLICATION_NOT_FOUND.
-Conformity: faithful — shape S4. Refs #2211
+Returns the environment variables set on an organisation's application, as name/value pairs. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

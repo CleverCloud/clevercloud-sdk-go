@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Getselfbackupcodes GET /v2/self/mfa/{kind}/backupcodes — get MFA backup/recovery codes.
+Getselfbackupcodes List the recovery codes of an MFA
 
-📥 **Algo Source (Legacy):**
-Verify almighty + X-Clever-Password re-auth, query mfa_recovery_codes WHERE used=false
-- Legacy note: cc-api SelfMFAAPI.java getMFABackupCodes() -> SelfMFAHelper.java
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java getMFABackupCodes()
-Issue: #102
+Returns the recovery codes of the user's validated MFA of this kind. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). Answers 404 when no MFA of this kind is configured.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
 
 # Returns the operation result or an error
 

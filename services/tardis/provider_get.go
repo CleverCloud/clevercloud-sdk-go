@@ -14,7 +14,10 @@ import (
 /*
 ProviderGet GET /v4/v2/providers/addon-tardis/resources/{tardisId} — fetch via provider API.
 
-Algorithm: Heroku-compatible provider fetch. Proxies to get_tardis_addon.
+Algorithm: Heroku-compatible provider fetch. Proxies to get_tardis_addon, with the same
+
+	owner binding (refs #4431).
+
 Legacy: ovd v2 provider API bridge
 Conformity: real
 

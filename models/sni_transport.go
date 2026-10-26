@@ -4,5 +4,5 @@ package models
 
 // SniTransport TLS ClientHello SNI routes to direct backend clusters.  The containing ALPN map uses the reserved...
 type SniTransport struct {
-	Routes map[string]any `json:"routes"` // Exact or single-level wildcard SNI name to direct backend mapping.
+	Routes map[string]DirectTransport `json:"routes"` // Exact or single-level wildcard SNI name to direct backend mapping.
 }

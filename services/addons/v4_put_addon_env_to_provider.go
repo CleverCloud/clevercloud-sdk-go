@@ -11,26 +11,16 @@ import (
 )
 
 /*
-V4PutAddonEnvToProvider PUT /v4/addon-providers/{provider_id}/addons/{real_id}/env
+V4PutAddonEnvToProvider Update the environment of an add-on at its provider
 
-Proxy endpoint that forwards PUT /addons/{real_id}/env to the addon provider.
-Used by Terraform (config-provider) to update environment variables.
-
-Source: cc-api AuthorizationHelper.java:1292 authorize_v4_addonproviders()
-Source: terraform-provider-clevercloud — clevercloud_config_provider resource
-Spec: analysis-output/38-github-api-consumers.md §Terraform — config-provider
-Issue: #313
-
-Algorithm: Resolve provider URL, proxy PUT /addons/{real_id}/env with JSON body
-Legacy: cc-api — v4 addon provider env update proxy
-Conformity: faithful -- Terraform config-provider write path
+Sends the body (provider-defined JSON) to the add-on's provider and forwards the provider's answer. The caller must own the add-on or hold the admin, manager, developer or accounting role in its owner organisation; 404 otherwise.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - provider_id: Addon provider ID (e.g., config-provider)
-  - real_id: Provider-side addon real ID
+  - real_id: Add-on real ID
 
 # Returns the operation result or an error
 

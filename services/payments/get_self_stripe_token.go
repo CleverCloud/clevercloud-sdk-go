@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Getselfstripetoken GET /v2/self/payments/tokens/stripe — discontinued.
+Getselfstripetoken Get a Stripe payment token (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:232 getStripeToken() — 501
-Issues: #289, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

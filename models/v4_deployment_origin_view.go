@@ -2,9 +2,9 @@
 
 package models
 
-// V4DeploymentOriginView The `origin` object — why and by whom the deployment was started.  `source`, `constraints` and `p...
+// V4DeploymentOriginView Why and by whom a deployment was started: its action, cause, source, author, constraints and prio...
 type V4DeploymentOriginView struct {
-	Action      string   `json:"action"`
+	Action      string   `json:"action"` // What the deployment does: `DEPLOY`, `UNDEPLOY`, `UPSCALE`, `DOWNSCALE`, `REPLACE`, `CANCEL` or `N...
 	AuthorID    *string  `json:"authorId,omitempty"`
 	Cause       *string  `json:"cause,omitempty"`
 	Constraints []string `json:"constraints"`

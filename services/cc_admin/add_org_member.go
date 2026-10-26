@@ -12,24 +12,9 @@ import (
 )
 
 /*
-AddOrgMember **Legacy**: cc-api InternalOrganisationsAPI.java:531 addMemberDirectly()
-**Algorithm**:
-  - Verify org exists (404), user exists (404), not already member (409)
-  - Transaction: INSERT member_info (role), INSERT organisation_members link
+AddOrgMember Add a member to an organisation without invitation
 
-**Conformity**: YES — direct member add (bypass invitation) matches cc-api
-
-POST /v2/internal/organisations/{id}/members — add member directly (bypass invitation).
-
-Source: cc-api InternalOrganisationsAPI.java:528 addMemberDirectly()
-Schema: V1__Initial_schema.sql — tables organisation_member_info, organisation_members
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal, 403 internal without access_organisations, 404 org/user
-
-	not found, 409 already member, 200 on success. Body-signed: legacy signs
-	memberData, so the route is layered with buffer_internal_auth_payload.
-
-Issue: #634, #2018
+Adds the user with the given role, without invitation or email; 404 for an unknown organisation or user, 409 when already a member. Restricted to platform services holding the organisation access right.
 
 Parameters:
   - ctx: context for the request

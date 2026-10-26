@@ -2,7 +2,7 @@
 
 package models
 
-// ApiHealthStatus represents Aggregate / per-constraint health status. Serializes UPPERCASE (`"HEALTHY"`/`"DEGRADED"`/`"UNHEAL...
+// ApiHealthStatus represents Health status: `HEALTHY`, `DEGRADED` or `UNHEALTHY`.
 type ApiHealthStatus string
 
 const (

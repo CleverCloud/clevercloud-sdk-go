@@ -13,8 +13,16 @@ type Option func(*Options)
 
 // Options holds query parameters for vendorapi operations
 type Options struct {
+	Offset *int    `url:"offset,omitempty"`
 	PlanID *string `url:"plan_id,omitempty"`
 	Region *string `url:"region,omitempty"`
+}
+
+// WithOffset sets the offset query parameter
+func WithOffset(offset int) Option {
+	return func(o *Options) {
+		o.Offset = &offset
+	}
 }
 
 // WithPlanID sets the plan_id query parameter
@@ -39,6 +47,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Offset != nil {
+		params = append(params, fmt.Sprintf("offset=%d", *options.Offset))
+	}
 	if options.PlanID != nil {
 		params = append(params, fmt.Sprintf("plan_id=%s", url.QueryEscape(*options.PlanID)))
 	}

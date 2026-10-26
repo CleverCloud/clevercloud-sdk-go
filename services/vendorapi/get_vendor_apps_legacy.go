@@ -4,6 +4,7 @@ package vendorapi
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -23,12 +24,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := vendorapi.GetVendorAppsLegacy(ctx, client, tracer)
+	response := vendorapi.GetVendorAppsLegacy(ctx, client, tracer, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,14 +39,20 @@ Example:
 x-service: vendor
 operationId: get_vendor_apps_legacy
 */
-func GetVendorAppsLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.VendorAppView] {
+func GetVendorAppsLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.AddonApplicationSummary] {
 	ctx, span := tracer.Start(ctx, "get_vendor_apps_legacy")
 	defer span.End()
 
 	path := utils.Path("/vendor/apps")
 
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
+
 	// Make API call
-	response := client.Get[[]models.VendorAppView](ctx, c, path)
+	response := client.Get[[]models.AddonApplicationSummary](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

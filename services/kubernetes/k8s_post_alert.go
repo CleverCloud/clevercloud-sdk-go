@@ -11,54 +11,9 @@ import (
 )
 
 /*
-K8sPostAlert POST /v4/kubernetes/alerts — monitoring-alert intake (autoscale + auto-heal).
+K8sPostAlert Deliver a cluster monitoring alert
 
-📥 **Algo Source (Legacy):**
-Accept a monitoring webhook alert and react to it asynchronously.
-  - Decode the `MonitoringAlert` body; an undecodable payload is a 400
-  - Spawn a fibre (`.start`) and answer `202 Accepted` with an empty body
-  - `RESOLUTION` alerts are logged and dropped
-  - `PROBLEM`: load the cluster scoped by `metadata.tenant_id`, then react —
-    heal the VM (`NodeUnhealthy` / `Unreachable`), scale the node group up
-    (`CpuPressure` / `MemoryPressure` / `DiskPressure`), scale it down
-    (`NodeGroupUnderloaded`), or do nothing (`ApiServerUnreachable`)
-  - Every processing outcome is logged only; the response never reflects it
-  - Source: ovd MonitoringController.scala + MonitoringAlertService.scala:40-190
-
-🔧 **Algo Rust (Implementation):**
-  - `Json<MonitoringAlert>` decodes the envelope (base64 payload codec); the
-    rejection is taken by hand and mapped to 400, because axum's default is
-    422 for a body that parses as JSON but fails to decode, whereas OVD's
-    tapir decode failure is a 400 for every undecodable body
-  - `tokio::spawn` runs [`crate::monitoring_alert::process_alert`] detached
-    (precedent: `resume_node_group`) and returns `202` immediately
-
-**Authentication** (#2259, porting ovd `50348d681`): the request must carry
-`Authorization: Bearer <token>` matching the module's configured shared
-secret, verified in constant time by `check_alert_bearer`. A missing
-header, a non-Bearer scheme, an empty bearer and a wrong token are all a
-**bare 401** — no body, no `WWW-Authenticate`, no distinction between them —
-and the alert never reaches [`crate::monitoring_alert::process_alert`].
-
-The bearer is checked **before** the body-decode result is consulted, which
-is why a wrong token with an undecodable body answers 401 rather than 400:
-tapir runs `serverSecurityLogicPure` ahead of body decode, and that
-precedence is part of the ported contract.
-
-This route sits outside the module's `require_auth` layer because that is a
-*user/console* gate and the caller here is monitoring, not a user; it is not
-unauthenticated. The payload-declared `tenant_id` remains a filter, not a
-credential — the tenant-scoped cluster lookup means a forged tenant can only
-fail to match.
-
-**Recorded divergence (#2259 D4)**: OVD deliberately keeps this endpoint out
-of its OpenAPI (`routes.scala:343-348` — not built from `ovdEndpoint`, not
-listed in `endpoints`, "nothing worth describing to an unauthenticated
-machine"). axo publishes it, as shipped in !961, and keeps doing so.
-
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/routes/routes.scala:343-356
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/controllers/MonitoringController.scala
-Issues: #2178, #2259
+Called by the platform monitoring service: heals an unhealthy node or scales a node group according to the alert, asynchronously. Answers 202 whatever the outcome, 400 for an undecodable body, and a bare 401 without the monitoring token.
 
 Parameters:
   - ctx: context for the request

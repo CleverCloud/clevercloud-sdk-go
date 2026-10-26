@@ -6,20 +6,22 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
 Getgithubkeys GET /v2/github/keys — list SSH keys from GitHub.
 
-Source: cc-api GithubAPI.java getKeys()
-Source: cc-api GithubAPIHelper.java:getKeys()
+Source: cc-api GithubAPI.java:150 getGithubKeys()
+Source: cc-api GithubAPIHelper.java:273 getSelfSshKeys()
 Behavior: Fetch SSH keys from GitHub API, sanitize, filter already-added keys
 Issue: #223
 
-Algorithm: Verify OAuth1 auth, fetch GitHub token, call /user/keys API; Return SSH keys (sanitized, filtered vs already-added)
-Legacy: cc-api GithubAPI.java getKeys() -> GithubAPIHelper.getKeys()
-Conformity: faithful — proxies GitHub API keys endpoint
+Algorithm: Verify OAuth1 auth and the manage_ssh_keys right, fetch GitHub token, call /user/keys API; Return SshKeyView entries — comment stripped, validated, fingerprinted, minus the keys the account already holds; Any GitHub answer outside 2xx (most often a token it rejects) or one that does not parse lists no key; 502 only when GitHub cannot be reached or times out
+Legacy: cc-api GithubHelper.java:143 getKeys() -> GithubAPIHelper.java:273 getSelfSshKeys()
+Conformity: faithful — legacy view, sanitising and filtering; validation is in process where legacy runs ssh-keygen
+Issues: #3653, #4140
 
 Parameters:
   - ctx: context for the request
@@ -39,14 +41,14 @@ Example:
 x-service: auth
 operationId: getGithubKeys
 */
-func Getgithubkeys(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getgithubkeys(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.GithubSshKeyView] {
 	ctx, span := tracer.Start(ctx, "getGithubKeys")
 	defer span.End()
 
 	path := utils.Path("/v2/github/keys")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.GithubSshKeyView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

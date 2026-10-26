@@ -12,23 +12,9 @@ import (
 )
 
 /*
-ShivaGetInstance **Legacy**: cc-api InternalShivaAPI.java:176 getInstance()
-**Algorithm**:
-  - Require `instance` query param — 400 if missing
-  - Return 501 (stub: needs SuperNova to resolve instance -> host:port)
+ShivaGetInstance Get the SSH target of an instance
 
-**Conformity**: STUB — returns 501; the real implementation is #1802.
-Moved as-is (refs #1956).
-
-GET /v2/internal/shiva/instance — Shiva: get instance SSH target.
-
-Returns the SSH host/port for a given instance ID.
-Stub: real implementation needs SuperNova integration.
-
-Source: cc-api InternalShivaAPI.java:176 getInstance()
-Schema: N/A — SuperNova-sourced, no table
-Behavior: 401 no auth, 403 not almighty, 400 missing param, 501 stub
-Issues: #730, #1802, #1956
+Returns where the SSH gateway connects to reach the instance, when the user holds the ADMIN, MANAGER or DEVELOPER role in the application's owner or is a platform administrator. Restricted to the SSH gateway service.
 
 Parameters:
   - ctx: context for the request
@@ -49,7 +35,7 @@ Example:
 x-service: cc_admin
 operationId: shiva_get_instance
 */
-func ShivaGetInstance(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.ShivaInstanceSshTarget] {
+func ShivaGetInstance(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.ShivaTarget] {
 	ctx, span := tracer.Start(ctx, "shiva_get_instance")
 	defer span.End()
 
@@ -62,7 +48,7 @@ func ShivaGetInstance(ctx context.Context, c *client.Client, tracer trace.Tracer
 	}
 
 	// Make API call
-	response := client.Get[models.ShivaInstanceSshTarget](ctx, c, path)
+	response := client.Get[models.ShivaTarget](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

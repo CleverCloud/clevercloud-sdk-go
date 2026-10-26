@@ -2,7 +2,7 @@
 
 package models
 
-// OAuth1AccessTokenView OAuth1 access token view.  Source: cc-api output/oauth/OAuth1AccessTokenView.java Source: cc-api ...
+// OAuth1AccessTokenView An OAuth1 access token of the user: the consumer it was issued to, its rights, and its creation, ...
 type OAuth1AccessTokenView struct {
 	Consumer        OAuth1ConsumerView `json:"consumer"`
 	CreationDate    *int               `json:"creationDate,omitempty"`

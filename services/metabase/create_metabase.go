@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Createmetabase POST /v2/providers/addon-metabase/resources — provision a new Metabase addon.
+Createmetabase Provision a Metabase add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — provision
-Behavior: insert (`PROVISIONING`) → create PG addon → create Java app (env set)
-
-	→ register DNS → remove the platform default vhost → set favourite vhost → restart.
-	On any partial failure the addon is marked `PROVISIONING_ERROR` and a degraded
-	success (`201`) is still returned (`handleFailedDeployment`).
-	The addon stays `PROVISIONING` after a fully-successful provision — the `ACTIVE`
-	transition is set later on deployment success, not by provision (legacy parity).
-
-Issue: #8
+Called by the platform when a customer creates a Metabase add-on. Creates the Metabase instance and its backing resources (a Java application and a PostgreSQL add-on), registers its domain and answers 201 with the add-on ID (`metabase_…`). An invalid request or `access-domain` option answers 400 before anything is created; once the add-on is recorded, a failure in a later step still answers 201 with the add-on marked as failed.
 
 Parameters:
   - ctx: context for the request

@@ -4,7 +4,7 @@ package models
 
 // PostgresqlFullConfigurationView `GET /internal/{id}/configuration/full` response body — the layered configuration: the plan's unt...
 type PostgresqlFullConfigurationView struct {
-	Default   map[string]any   `json:"default"`
-	Full      map[string]any   `json:"full"`
-	Overrides []map[string]any `json:"overrides"`
+	Default   map[string]string   `json:"default"`
+	Full      map[string]string   `json:"full"`
+	Overrides []map[string]string `json:"overrides"`
 }

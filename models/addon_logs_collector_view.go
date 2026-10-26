@@ -2,7 +2,7 @@
 
 package models
 
-// AddonLogsCollectorView Logs collector response.  Source: cc-api AddonLogsCollectorView Issue: #214
+// AddonLogsCollectorView Logs collector response.  Source: cc-api AddonLogsCollectorView.java — one public field, `logs_co...
 type AddonLogsCollectorView struct {
-	URL *string `json:"url,omitempty"`
+	LogsCollector *string `json:"logs_collector,omitempty"`
 }

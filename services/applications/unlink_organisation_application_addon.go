@@ -11,22 +11,17 @@ import (
 )
 
 /*
-Unlinkorganisationapplicationaddon DELETE /v2/organisations/{id}/applications/{app_id}/addons/{addon_id} — unlink an addon.
+Unlinkorganisationapplicationaddon Unlink an add-on from an application
 
-Legacy: cc-api ApplicationHelper.java:3499-3517 unlinkAddon()
-Algorithm: Auth + canAddApp; reject if addonId starts with "app_"; probe the addon exists, then remove the link
-Conformity: faithful — 404 ADDON_NOT_FOUND (11001) only when the addon does not exist (:3510-3512); a bodyless 204 on success, including when the addon exists but was not linked (:3513-3516), byte-identical to the self twin
-
-Source: cc-api OrganisationApplicationsAPI.java unlinkAddonFromOrganisationApplication()
-Issue: #107, refs #2211
+Removes the link between an add-on and an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - addonId: Addon ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

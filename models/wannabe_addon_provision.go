@@ -2,11 +2,11 @@
 
 package models
 
-// WannabeAddonProvision Request body for POST /v2/self/addons and POST /v2/organisations/{id}/addons.  Source: cc-api Wan...
+// WannabeAddonProvision Add-on to create: its name, provider, plan, region and provider-specific options.
 type WannabeAddonProvision struct {
-	Name       string         `json:"name"`              // Addon display name.
-	Options    map[string]any `json:"options,omitempty"` // Provider-specific options (null treated as empty map for Terraform compat).
-	Plan       string         `json:"plan"`              // Plan ID (plan slug resolved by looking up the plan).
-	ProviderID string         `json:"providerId"`        // Provider ID (e.g., "postgresql-addon").
-	Region     string         `json:"region"`            // Region/zone name (e.g., "par").
+	Name       string            `json:"name"`              // Addon display name.
+	Options    map[string]string `json:"options,omitempty"` // Provider-specific options, passed to the provider as strings; `null` is read as no options.
+	Plan       string            `json:"plan"`              // Plan identifier.
+	ProviderID string            `json:"providerId"`        // Provider ID (e.g., "postgresql-addon").
+	Region     string            `json:"region"`            // Zone name, such as `par`; `par` when absent or `null`, and `eu` and `us` read as `par` and `mtl`.
 }

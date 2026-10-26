@@ -13,10 +13,19 @@ type Option func(*Options)
 
 // Options holds query parameters for products operations
 type Options struct {
+	App      *string `url:"app,omitempty"`
 	Context  *string `url:"context,omitempty"`
 	Coupon   *string `url:"coupon,omitempty"`
 	Currency *string `url:"currency,omitempty"`
+	Forparam *string `url:"forParam,omitempty"`
 	Orgaid   *string `url:"orgaId,omitempty"`
+}
+
+// WithApp sets the app query parameter
+func WithApp(app string) Option {
+	return func(o *Options) {
+		o.App = &app
+	}
 }
 
 // WithContext sets the context query parameter
@@ -40,6 +49,13 @@ func WithCurrency(currency string) Option {
 	}
 }
 
+// WithForparam sets the forParam query parameter
+func WithForparam(forParam string) Option {
+	return func(o *Options) {
+		o.Forparam = &forParam
+	}
+}
+
 // WithOrgaid sets the orgaId query parameter
 func WithOrgaid(orgaId string) Option {
 	return func(o *Options) {
@@ -55,6 +71,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.App != nil {
+		params = append(params, fmt.Sprintf("app=%s", url.QueryEscape(*options.App)))
+	}
 	if options.Context != nil {
 		params = append(params, fmt.Sprintf("context=%s", url.QueryEscape(*options.Context)))
 	}
@@ -63,6 +82,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Currency != nil {
 		params = append(params, fmt.Sprintf("currency=%s", url.QueryEscape(*options.Currency)))
+	}
+	if options.Forparam != nil {
+		params = append(params, fmt.Sprintf("forParam=%s", url.QueryEscape(*options.Forparam)))
 	}
 	if options.Orgaid != nil {
 		params = append(params, fmt.Sprintf("orgaId=%s", url.QueryEscape(*options.Orgaid)))

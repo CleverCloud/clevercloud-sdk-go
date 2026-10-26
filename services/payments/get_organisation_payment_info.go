@@ -12,13 +12,9 @@ import (
 )
 
 /*
-Getorganisationpaymentinfo GET /v2/organisations/{id}/payment-info — billing/payment address for the org.
+Getorganisationpaymentinfo Get the billing details of an organisation
 
-Source: cc-api OrganisationAPI.java:159 getPaymentInfo() — implemented in cc-api
-Source: billing-api AddressDAO.scala getByOwnerId()
-Schema: 00015_billing_schema.sql — table address (name, company, address, zipcode, city, country_alpha2, vat_number)
-Spec: analysis-output/12-billing-api-deep-analysis.md §Billing address
-Issue: #267
+Returns the name, company, address and VAT number used to bill the organisation, with the missing fields listed in `errors`. Requires the `ADMIN` or `ACCOUNTING` role (or the caller's own personal space) and, for OAuth1, the rights to access the organisation's bills and credit count; an unknown or deleted organisation answers 403. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

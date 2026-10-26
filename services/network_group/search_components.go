@@ -12,11 +12,9 @@ import (
 )
 
 /*
-SearchComponents GET /v4/networkgroups/search
+SearchComponents Search network group components
 
-Source: ovd NetworkGroupRoutes.scala searchNetworkGroupComponentPekko — delegates to a cc-admin index
-Behavior: 200 with an empty list (the OVD indexer is out of scope here).
-Issue: #313, #665, #676, #849
+Always returns an empty list. Use the organisation-scoped search instead.
 
 Parameters:
   - ctx: context for the request

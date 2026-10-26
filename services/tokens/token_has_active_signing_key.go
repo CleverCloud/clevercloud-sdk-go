@@ -13,7 +13,7 @@ import (
 )
 
 /*
-TokenHasActiveSigningKey
+TokenHasActiveSigningKey GET /v4/tenants/{tenant_id}/products/{product_id}/keys/active
 
 Parameters:
   - ctx: context for the request

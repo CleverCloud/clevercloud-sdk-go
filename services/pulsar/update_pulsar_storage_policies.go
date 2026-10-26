@@ -12,35 +12,15 @@ import (
 )
 
 /*
-Updatepulsarstoragepolicies PATCH /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/storage-policies
+Updatepulsarstoragepolicies Update a Pulsar add-on's storage policies
 
-	— update namespace storage policies.
-
-**Legacy**: ovd PulsarController.scala:277 updateStoragePoliciesServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarStoragePoliciesService.patchStoragePolicies (line 77)
-  - Scala sets retention + backlog quota on Pulsar admin API
-
-**Conformity**: FAITHFUL — proxies retention update to the admin
-
-	client, re-reads both retention + offload, returns the resolved
-	view. (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala updateStoragePoliciesServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala updateStoragePolicies
-Behavior: `update_retention_policies` on the admin client with the
-
-	caller's values, then re-reads to return the policy view
-	the cluster actually applied.
-
-Issue: #8
+Sets the retention policy of the add-on's namespace and, when `offloadPolicies` is sent, its offload (cold storage) thresholds; returns the policies the cluster then applies. Sizes are in bytes and durations in minutes. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -2,5 +2,5 @@
 
 package models
 
-// NodeGroupNodeCount Desired node count for a node group — an integer in `0..=256`.  Source: references/legacy/ovd/mod...
+// NodeGroupNodeCount A number of nodes in a node group: an integer from 0 to 256.
 type NodeGroupNodeCount = int

@@ -2,14 +2,14 @@
 
 package models
 
-// WannabeInterAddonProvision Request body for POST /v2/vendor/addons — inter-vendor provisioning.  Source: cc-api WannabeInter...
+// WannabeInterAddonProvision Request body for POST /v2/vendor/addons — inter-vendor provisioning.  Every field is nullable in ...
 type WannabeInterAddonProvision struct {
-	AddonID        *string        `json:"addonId,omitempty"` // Optional: the calling addon's id — the parent-addon pointer legacy records as provisionedBy. Not ...
-	Name           string         `json:"name"`              // Human name for the addon.
-	Options        map[string]any `json:"options,omitempty"` // Pass-through options.
-	OrganisationID string         `json:"organisationId"`    // Target organisation that will own the addon.
-	Plan           string         `json:"plan"`              // Plan ID or slug.
-	ProviderID     string         `json:"providerId"`        // Which addon provider to provision.
-	Region         string         `json:"region"`            // Region/zone name (e.g., "par").
-	UserID         *string        `json:"userId,omitempty"`  // User ID for event attribution.
+	AddonID        *string           `json:"addonId,omitempty"`        // Optional: the calling addon's id — the parent-addon pointer legacy records as provisionedBy. Not ...
+	Name           *string           `json:"name,omitempty"`           // Human name for the addon.
+	Options        map[string]string `json:"options,omitempty"`        // Pass-through options.
+	OrganisationID *string           `json:"organisationId,omitempty"` // Target organisation that will own the addon.
+	Plan           *string           `json:"plan,omitempty"`           // Plan ID.
+	ProviderID     *string           `json:"providerId,omitempty"`     // Which addon provider to provision.
+	Region         *string           `json:"region,omitempty"`         // Region/zone name (e.g., "par").
+	UserID         *string           `json:"userId,omitempty"`         // User ID for event attribution.
 }

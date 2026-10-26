@@ -2,7 +2,7 @@
 
 package models
 
-// ServiceTokenRole represents Role for service tokens (subset of org roles assignable to robots).  Source: cc-api WannabeServic...
+// ServiceTokenRole represents Role a service token holds in its organisation.
 type ServiceTokenRole string
 
 const (

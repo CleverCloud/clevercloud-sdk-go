@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Updateproviderinfos PUT /v2/organisations/{id}/addonproviders/{provider_id} — update addon provider.
+Updateproviderinfos Update an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java updateAddonProvider()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN role + ownership, update addon_provider_infos fields.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java updateAddonProvider()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Updates the provider's name, short and long descriptions, logo URL, website, support email, social account names and analytics ID; omitted fields keep their value. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

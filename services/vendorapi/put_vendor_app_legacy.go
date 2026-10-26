@@ -18,7 +18,7 @@ Source: cc-api production openapi.json serves /vendor/apps/{addonId}
 Issue: #159
 Algorithm: Delegate to put_vendor_app (identical logic, different path prefix).
 Legacy: cc-api @Path("vendor") class has no /v2/ prefix; both paths coexist in production.
-Conformity: divergent — same as /v2/ variant (plan change deferred).
+Conformity: same as the /v2/ variant.
 
 Parameters:
   - ctx: context for the request
@@ -39,14 +39,14 @@ Example:
 x-service: vendor
 operationId: put_vendor_app_legacy
 */
-func PutVendorAppLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.VendorAppView] {
+func PutVendorAppLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "put_vendor_app_legacy", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/vendor/apps/%s", addonId)
 
 	// Make API call
-	response := client.Put[models.VendorAppView](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

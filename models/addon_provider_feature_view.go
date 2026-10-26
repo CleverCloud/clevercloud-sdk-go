@@ -2,9 +2,9 @@
 
 package models
 
-// AddonProviderFeatureView Addon provider feature view.  Source: cc-api AddonProviderFeature.java Schema: V1__Initial_schema...
+// AddonProviderFeatureView A feature an add-on provider describes its plans with, such as a memory size or a number of conne...
 type AddonProviderFeatureView struct {
-	Name     string  `json:"name"`
-	NameCode *string `json:"name_code,omitempty"` // snake_case, NOT camelCase. `AddonProviderFeature.toView()` builds the same `AddonFeatureView` the...
-	Type     string  `json:"type"`
+	Name     string  `json:"name"`                // Display name of the feature.
+	NameCode *string `json:"name_code,omitempty"` // Stable code of the feature, when the provider defines one.
+	Type     string  `json:"type"`                // Type of the feature's value.
 }

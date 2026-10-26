@@ -12,16 +12,15 @@ import (
 )
 
 /*
-Getotoroshiinfos GET /v4/otoroshi/{otoroshi_id} — get Otoroshi info (internal route, basic auth in prod).
+Getotoroshiinfos Get an Otoroshi add-on for a platform service
 
-Source: references/legacy/ovd/modules/otoroshi/controllers/OtoroshiProviderController.scala — getOtoroshiInfosEndpoint
-Issue: #313
+Returns the same view of an active add-on as the customer read, without any owner check. Called by platform services with the provider's machine credentials. Answers 404 for an unknown or deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

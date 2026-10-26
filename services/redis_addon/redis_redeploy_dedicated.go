@@ -4,6 +4,7 @@ package redis_addon
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -15,25 +16,27 @@ RedisRedeployDedicated PUT /v2/providers/redis-addon/internal/{id}/redeploy — 
 
 **Legacy**: addon-api-redis Internal.scala redeployDedicated()
 **Algorithm**:
-  - Returns 501 — requires BDS integration for redeployment.
+  - Records a deployment and publishes a BDS START instruction (ADD_NEW), then 204.
+  - An `imageVersion` query parameter pins the image release the new VM boots;
+    absent, the configured `CURRENT_IMAGE_VERSION` applies.
 
 **Conformity**: YES (Cloud Versatile conditional — works when configured)
 
 Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — redeployDedicated
-Behavior: 501 conditional stub — requires BDS + CleverCloudOps.
-Issue: #713
+Issue: #713, clever-cloud/axo#1745
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Redis addon ID
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := redis_addon.RedisRedeployDedicated(ctx, client, tracer, id)
+	response := redis_addon.RedisRedeployDedicated(ctx, client, tracer, id, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -42,11 +45,17 @@ Example:
 x-service: redis_addon
 operationId: redis_redeploy_dedicated
 */
-func RedisRedeployDedicated(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func RedisRedeployDedicated(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "redis_redeploy_dedicated", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/redis-addon/internal/%s/redeploy", id)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Put[client.Nothing](ctx, c, path, nil)

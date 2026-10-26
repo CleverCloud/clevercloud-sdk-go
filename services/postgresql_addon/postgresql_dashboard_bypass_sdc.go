@@ -16,7 +16,7 @@ supernova info RPC (`getSDCConfiguration`: hostname, appPort, tcpPort),
 `withDiscoveredDirectHost` + `updateDirectHV` (`upsertDirectHostCoordinates`:
 the `provision_directhost_config` row plus the legacy `config_hv_*`
 double-write, `config_direct_host_only = proxyMode == DirectHost`), then
-— FerretDB on AND a `tcpPort` discovered — `updateFerretDB` with the
+— DocumentDB on AND a `tcpPort` discovered — `updateDocumentDB` with the
 direct port, then push the (now `_DIRECT_*`-carrying) `toMap` to the
 vendor, AWAITED — unlike `genpwd`'s fire-and-forget push, a vendor
 failure here IS the visible outcome. Shared plans are refused before any

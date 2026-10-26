@@ -13,20 +13,15 @@ import (
 )
 
 /*
-Getapplicationdeployments GET /v2/self/applications/{app_id}/deployments — deployment history.
+Getapplicationdeployments List the deployments of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationDeployments()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:52-55 getDeployments() -> ApplicationHelper.java:454-503 getDeployments()
-Algorithm: Shape D1 — personal-org existence, scope, and hasAccessToOrg; the self shim makes D1's Jenkins path unreachable.
-Conformity: faithful — owner-scoped 404/4004, then unchanged deployment pagination. Refs #2228
+Returns the deployment history of an application of the user's personal space, paginated with `limit` and `offset`. An `action` query parameter keeps only one kind of deployment (`DEPLOY`, `UNDEPLOY`, `UPSCALE` or `DOWNSCALE`).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

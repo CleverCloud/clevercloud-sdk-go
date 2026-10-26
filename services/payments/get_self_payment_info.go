@@ -11,30 +11,9 @@ import (
 )
 
 /*
-Getselfpaymentinfo GET /v2/self/payment-info — billing/payment address for the current user.
+Getselfpaymentinfo Get the current user's billing details
 
-Gated on the OAuth bill-access scope, as cc-api is: `UsersHelper.java:528`
-checks `token.canAccessOrganisationsBills()` — the *organisations* scope,
-even on the self route — and answers `403 OAUTH_BILL_ACCESS(13002)`
-otherwise. Without it a consumer token issued with no billing scope could
-read the user's name, company, street address, city, zip and VAT number.
-
-The envelope is built here rather than through `AuthError::Forbidden`, which
-carries id 405: the id is the part a legacy client matches on. The org twin
-answers a different id for the same refusal (`ORGA_BILLS_ACCESS(6202)` via
-`verify_org_billing_access`), which is legacy-faithful — cc-api uses two
-distinct errors here.
-
-`has_permission` is true for almighty rights and for Session tokens, so
-admin and console callers are unaffected.
-
-Source: cc-api SelfAPI.java:87 getPaymentInfo() — implemented in cc-api
-Source: cc-api UsersHelper.java:528 — canAccessOrganisationsBills() gate
-Source: cc-api Errors.java:386 OAUTH_BILL_ACCESS(13002, …)
-Source: billing-api AddressDAO.scala getByOwnerId()
-Schema: 00015_billing_schema.sql — table address (name, company, address, zipcode, city, country_alpha2, vat_number)
-Spec: analysis-output/12-billing-api-deep-analysis.md §Billing address
-Issues: #267, #2428
+Returns the name, company, postal address, country and VAT number used to bill the user's personal space, with an `errors` map of the fields still missing or invalid. Requires the `access_organisations_bills` right (403, error id 13002).
 
 Parameters:
   - ctx: context for the request

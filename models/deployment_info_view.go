@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentInfoView DeploymentInfoView — matches cc-api openapi/ccapiv3.json DeploymentInfoView schema.  Source: cc-a...
+// DeploymentInfoView How an application is deployed: whether it can be stopped, the deployment type, the state of its ...
 type DeploymentInfoView struct {
 	HTTPURL      *string `json:"httpUrl,omitempty"`
 	RepoState    string  `json:"repoState"`

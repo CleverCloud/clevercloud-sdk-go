@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Addselfvhostbyappid PUT /v2/self/applications/{app_id}/vhosts/{domain} — add a vhost.
+Addselfvhostbyappid Add a domain name to an application
 
-Source: cc-api SelfApplicationsAPI.java addSelfVhost()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:130-133 addVhost() -> ApplicationHelper.java:2361-2388 addVhost()
-Algorithm: Shape V5 — canAddApp, acting-user probe, then owner-scoped 403 APPLICATION_BAD_OWNER before the vhost write.
-Conformity: faithful — personal org_id, V5 errors, DNS/ADC actions, and messaging. Refs #2228
+Routes the given domain name to an application of the user's personal space. Refused when the domain is already used by another application or is not allowed.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - domain: FQDN
+  - appId: Application ID (`app_…`)
+  - domain: Domain name (FQDN)
 
 # Returns the operation result or an error
 

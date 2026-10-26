@@ -2,7 +2,7 @@
 
 package models
 
-// OrganisationView Organisation view returned by GET /v2/organisations. Matches cc-api's OrganisationView JSON shape...
+// OrganisationView An organisation: its identity, billing details and payment capabilities.
 type OrganisationView struct {
 	Address          *string       `json:"address,omitempty"`
 	Avatar           *string       `json:"avatar,omitempty"`
@@ -12,7 +12,7 @@ type OrganisationView struct {
 	City             *string       `json:"city,omitempty"`
 	CleverEnterprise bool          `json:"cleverEnterprise"`
 	Company          *string       `json:"company,omitempty"`
-	ContextFlags     []PartnerFlag `json:"contextFlags,omitempty"` // The flags of the organisation's partner — `Partner.getContextFlags()`. Always serialized (an empt...
+	ContextFlags     []PartnerFlag `json:"contextFlags,omitempty"` // Flags of the organisation's partner; always present, an empty array when there are none.
 	Country          *string       `json:"country,omitempty"`
 	CustomerFullName *string       `json:"customerFullName,omitempty"`
 	Description      string        `json:"description"`

@@ -4,6 +4,6 @@ package models
 
 // TlsTransport TLS frontend transport — `alpn -> layer` (:438-442).
 type TlsTransport struct {
-	Alpn       map[string]any `json:"alpn"` // ALPN protocol → TLS layer.
-	TLSOptions *TlsOptions    `json:"tlsOptions,omitempty"`
+	Alpn       map[string]TlsTransportLayer `json:"alpn"` // ALPN protocol → TLS layer.
+	TLSOptions *TlsOptions                  `json:"tlsOptions,omitempty"`
 }

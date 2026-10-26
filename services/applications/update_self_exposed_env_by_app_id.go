@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Updateselfexposedenvbyappid PUT /v2/self/applications/{app_id}/exposed_env — update exposed environment variables.
+Updateselfexposedenvbyappid Replace the exposed environment variables of an application
 
-Legacy: SelfApplicationsHelper.java:214-217 updateExposedEnv() -> ApplicationEnvironmentHelper.java:121-130 updateExposedEnv()
-Algorithm: Shape S4 before the unchanged exposed-env replacement.
-Conformity: faithful — personal org_id, canAddApp, owner-scoped 404/4004, and messaging. Refs #2228
-
-Source: cc-api SelfApplicationsAPI.java putExposedEnv()
-Issue: #2228
+Replaces the variables an application of the user's personal space exposes to the applications that depend on it with the given name-to-value map.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

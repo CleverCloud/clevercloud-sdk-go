@@ -2,7 +2,7 @@
 
 package models
 
-// SetCustomerCostCenterRequest Request body for PUT /v2/internal/organisations/{id}/customer_cost_center.  Source: cc-api Intern...
+// SetCustomerCostCenterRequest Customer cost centre of an organisation.
 type SetCustomerCostCenterRequest struct {
 	CostCenter string `json:"cost_center"` // Cost center identifier.
 }

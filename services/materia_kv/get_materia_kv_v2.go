@@ -12,24 +12,15 @@ import (
 )
 
 /*
-Getmateriakvv2 GET /v2/providers/kv/resources/{kvId} — get Materia KV (v2 legacy, internal).
+Getmateriakvv2 Get a Materia KV add-on for the platform
 
-HARDENING DIVERGENCE from OVD (`onUserAction` whitelists `Get` for user tokens here too):
-this broker-protocol route has no owner segment, so caller membership cannot be bound —
-OVD's posture exposed the live `MateriaDBView.token` to any valid user token knowing a
-kv_id (credential IDOR, P0 #1142). Internal-only now (`require_internal_only` on the
-sub-router); user-facing reads go through the v4 route, which binds membership.
-
-Source: references/legacy/ovd/modules/materia/db/api/routes.scala getMateriaDbV2
-Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala onUserAction (diverged, #1142)
-Behavior: internal cc-api Basic only — 401 for user tokens; MateriaDBView, 404 if not found
-Issue: #1142, #1260, #679
+Called by the platform to read a Materia KV add-on, its access token included. Answers 404 for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kvId: Materia KV ID
+  - kvId: Materia KV add-on ID (`kv_…`)
 
 # Returns the operation result or an error
 

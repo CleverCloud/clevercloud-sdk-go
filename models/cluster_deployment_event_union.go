@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// ClusterDeploymentEvent A unified event log entry returned by `GET /v4/kubernetes/…/clusters/{id}/events`.  Each entry is...
+// ClusterDeploymentEvent An entry of a cluster's event log, discriminated by `event`: `CLUSTER_STATUS` for a status change...
 // Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type ClusterDeploymentEvent struct {
 	raw json.RawMessage

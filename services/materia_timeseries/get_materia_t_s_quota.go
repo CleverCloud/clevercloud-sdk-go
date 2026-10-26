@@ -12,29 +12,15 @@ import (
 )
 
 /*
-Getmateriatsquota GET /v4/addon-providers/addon-ts/addons/{addon_ts_id}/quota — get quota for a single TS addon.
+Getmateriatsquota Get the quota of a Materia TS add-on
 
-Legacy: ovd AddonTSAddonActor.scala:471 getAddonQuota
-Algorithm:
-  - getAddonFromDatabaseTS (selectActiveAddonByID: WHERE id AND deletion_date IS NULL) → 404 if none
-  - addon.asQuotaEntry() → QuotaEntry (addonId, producerUuid, max_monthly_gts_count, max_points_per_day, creation_date)
-
-Conformity: YES
-
-Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:471 getAddonQuota
-Source: references/legacy/ovd/modules/ts/repositories/AddonTSAddonRepository.scala:59 selectActiveAddonByID
-Behavior: active addons only (deletion_date IS NULL); 404 if not found or being deleted.
-
-	Internal/broker only — end-user auth is cc-api's job (see `docs/authentication.md`). (OVD left
-	`getAddonQuota` unauthenticated, an OVD gap; here it requires the broker credential like the rest.)
-
-Issue: #313, #765
+Returns the quota of an active add-on: its maximum number of time series per month and of data points per day. Answers 404 for an unknown add-on or one being deleted.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId: TS addon ID
+  - addonTsId: Materia TS add-on ID (`ts_…`)
 
 # Returns the operation result or an error
 

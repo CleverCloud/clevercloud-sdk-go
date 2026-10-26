@@ -2,7 +2,7 @@
 
 package models
 
-// TaintEffect represents Taint effect — PascalCase to match the Kubernetes API (used in JSON, not as a PG enum).  Source: ...
+// TaintEffect represents Effect of a Kubernetes taint, spelled as in the Kubernetes API: `NoSchedule`, `PreferNoSchedule` ...
 type TaintEffect string
 
 const (

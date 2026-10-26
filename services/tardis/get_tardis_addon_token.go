@@ -14,7 +14,13 @@ import (
 /*
 GetTardisAddonToken GET /v4/.../addon/{tardisId}/token/{tokenId} — get specific token.
 
-Algorithm: Query tardis_addon_token by token_id. Return 404 if not found.
+Algorithm: Resolve the addon under the path's owner, then query tardis_addon_token by token_id
+
+	AND addon_id. Return 404 if not found, or if the token belongs to another addon. The caller
+	must be the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403, and the addon's
+	application must still be held by its owner, else 404 (refs #4431).
+
 Legacy: ovd tardis token get
 Conformity: real
 

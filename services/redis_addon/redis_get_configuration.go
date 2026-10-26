@@ -11,7 +11,18 @@ import (
 )
 
 /*
-RedisGetConfiguration
+RedisGetConfiguration GET /v2/providers/redis-addon/internal/{id}/configuration — Get Redis configuration for a dedicated addon.
+
+**Legacy**: addon-api-redis Internal.scala getConfiguration()
+**Algorithm**:
+  - Binds the authenticated addon to the path id, then renders `redis.conf` from the
+    dedicated plan (a RUNNING migration's new plan takes over, shared source included).
+
+**Conformity**: YES
+
+Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — getConfiguration
+Behavior: real DB query + configuration template; no 501 path.
+Issue: #713
 
 Parameters:
   - ctx: context for the request

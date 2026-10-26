@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Listorganisationapplicationaddons GET /v2/organisations/{id}/applications/{app_id}/addons — linked addons.
+Listorganisationapplicationaddons List the add-ons linked to an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationLinkedAddons()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:3555-3560 getLinkedAddons()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(canAddApp) then the owner-scoped application lookup answering 404 APPLICATION_NOT_FOUND; Fetch addon_app_link join table for app_id, filter deleted=false; For ea...
-Conformity: faithful — shape S4: canAddApp (not canAccessApps), 404 APPLICATION_NOT_FOUND on the owner-scoped lookup miss; same join table query, same AddonView structure. Refs #2211
+Returns the add-ons linked to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

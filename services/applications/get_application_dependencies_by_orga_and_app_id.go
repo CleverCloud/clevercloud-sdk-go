@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getapplicationdependenciesbyorgaandappid GET /v2/organisations/{id}/applications/{app_id}/dependencies — application dependencies.
+Getapplicationdependenciesbyorgaandappid List the dependencies of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationDependencies()
-Issue: #107
-
-Legacy: cc-api ApplicationDependenciesHelper.java:105 getDependencies()
-Algorithm: Shape S3 — the shared private getApp() (:56-73): canAddApp answering OWNER_APP_ADDITION_RIGHT (8101) on both the scope miss and the role miss, a plain existence probe, then the owner-scoped lookup; Fetch application_dependency join table for app_id; For each dep_id, loa...
-Conformity: faithful — shape S3: canAddApp/8101 (not canAccessApps), same join table query, same ApplicationView per dependency. Refs #2211
+Returns the applications an organisation's application depends on; a dependency owned by another owner is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

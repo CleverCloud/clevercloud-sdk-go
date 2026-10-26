@@ -2,7 +2,7 @@
 
 package models
 
-// InternalCredentialsView Internal credentials response for POST /v2/internal/credentials.  Legacy's `TokensView(token, sec...
+// InternalCredentialsView Newly created internal credentials: a token and the secret requests are signed with.
 type InternalCredentialsView struct {
 	Secret string `json:"secret"` // Internal-auth secret — the HMAC key the caller signs its requests with.
 	Token  string `json:"token"`  // Internal-auth token — the identifier half of the pair.

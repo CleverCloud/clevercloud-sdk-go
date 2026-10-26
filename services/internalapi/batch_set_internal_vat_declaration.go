@@ -6,41 +6,24 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-BatchSetInternalVatDeclaration POST /v2/internal/invoices/declared_vat — batch set VAT declaration ID on invoices.
+BatchSetInternalVatDeclaration Record VAT declarations (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:117 batchSetInvoiceVatDeclarationId()
-Source: billing-api AdminRoutes.scala — batchSetVatDeclarationId()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Set vat_declaration_id on multiple invoices at once.
-- Internal auth required
-- For each invoice_number in body: UPDATE invoice SET vat_declaration_id = $id
-- Source: billing-api InvoiceDAO.scala
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- Parse body (invoice_numbers array, vat_declaration_id)
-- ccapi::db::billing::batch_set_vat_declaration_id(pool, numbers, id) in transaction
-- Return count of updated rows
-Conformity: real -- pure PG batch update, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.BatchSetInternalVatDeclaration(ctx, client, tracer, requestBody)
+	response := internalapi.BatchSetInternalVatDeclaration(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -49,14 +32,14 @@ Example:
 x-service: internal
 operationId: batch_set_internal_vat_declaration
 */
-func BatchSetInternalVatDeclaration(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.BatchVatDeclarationBody) client.Response[client.Nothing] {
+func BatchSetInternalVatDeclaration(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "batch_set_internal_vat_declaration")
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/declared_vat")
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[any](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

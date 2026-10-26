@@ -16,10 +16,10 @@ Getapplicationinfo GET /v2/vendor/apps/{addon_id} — get a specific provisioned
 
 Source: cc-api AddonVendorAPI.java:98-106 getApplicationInfo() → checkAuth()
 Source: cc-api AddonVendorAPIHelper.java:105-130 appInfo()
-Issue: #105
-Algorithm: Authenticate the provider via vendor Basic auth, find addon by id-or-realId, reject (403) if it belongs to another provider, else enrich + return.
-Legacy: cc-api uses provider Basic auth; a non-Basic Authorization header makes extractAuthData throw → 500. Addon not found → 404, provider mismatch → 403.
-Conformity: faithful — non-provider caller reproduces cc-api production 500.
+Issue: #105, #424
+Algorithm: Authenticate the provider via vendor Basic auth, find addon by id-or-realId, reject (403) if it belongs to another provider, refuse (500) an ownerless addon, else read config, owner contacts and linked domains.
+Legacy: cc-api uses provider Basic auth; a non-Basic Authorization header makes extractAuthData throw → 500. Addon not found → 404 APPLICATION_NOT_FOUND, provider mismatch → 403 ADDON_PROVIDER_ACCESS, no owner → bare 500.
+Conformity: faithful, but for a soft-deleted addon (404 here, served by cc-api) and an owner with no member (no `owner_email` here, an uncaught throw in cc-api).
 
 Parameters:
   - ctx: context for the request

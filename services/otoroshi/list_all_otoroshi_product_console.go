@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Listallotoroshiproductconsole POST /v4/otoroshi/consumptions — all Otoroshi consumptions in a time range.
+Listallotoroshiproductconsole List the consumption of all Otoroshi add-ons
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getAllConsumptions()
-Issue: #313
+Called by the platform's billing to read the consumption of every Otoroshi add-on active over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request
@@ -35,14 +34,14 @@ Example:
 x-service: otoroshi
 operationId: listAllOtoroshiProductConsole
 */
-func Listallotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.OtoroshiConsumptionQuery) client.Response[[]models.OtoroshiResourceConsumption] {
+func Listallotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.OtoroshiConsumptionQuery) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listAllOtoroshiProductConsole")
 	defer span.End()
 
 	path := utils.Path("/v4/otoroshi/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.OtoroshiResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[[]models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

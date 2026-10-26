@@ -12,8 +12,12 @@ import (
 /*
 RevokeTardisTokenGlobal POST /v4/addon-providers/addon-tardis/token/revoke — revoke a token globally.
 
-Algorithm: Delete the token from tardis_addon_token table by token_id from JSON body.
+Algorithm: Look up the token by token_id from JSON body, then its addon. The caller must be the
 
+	service account, be the stored owner when it is a personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation stored on that addon, else 404
+	like an unknown token (refs #4431).
+	Delete the token from tardis_addon_token table (bound to its addon).
 	Returns 200 on success, 404 if token not found.
 
 Legacy: ovd tardis token revocation

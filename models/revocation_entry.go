@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// RevocationEntry Revoked token entry returned by the revocation list endpoint.  Source: references/legacy/ovd/modu...
+// RevocationEntry A revoked Materia TS token: its revocation ID, revocation and expiration dates, and add-on.
 type RevocationEntry struct {
 	AddonID        string    `json:"addonId"`
 	ExpirationDate time.Time `json:"expirationDate"` // ISO 8601 token expiration timestamp.

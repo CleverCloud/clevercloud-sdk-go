@@ -2,5 +2,5 @@
 
 package models
 
-// Version A Kubernetes version, serialized as a plain `MAJOR.MINOR[.PATCH]` string.  Source: references/leg...
+// Version A Kubernetes version, as a `MAJOR.MINOR` (`1.35`) or `MAJOR.MINOR.PATCH` string.
 type Version = string

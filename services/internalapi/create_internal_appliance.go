@@ -10,19 +10,9 @@ import (
 )
 
 /*
-CreateInternalAppliance Legacy: cc-api InternalApplicationsAPI.java:74 createAppliance()
-Algorithm: authInternal() + isCCAdmin() + canManageOrganisationsApplications();
-parse name from JSON body; insert ApplianceRepository row with id = "app_UUID",
-ars_tenant from default zone config, name; publish etilotig ADD_APP command;
-register backup entity via backup-manager (non-fatal); return serialized row.
-Conformity: YES — implements the full legacy flow.
+CreateInternalAppliance Create an appliance repository
 
-POST /v2/internal/applications/appliances — create appliance repository.
-
-Source: cc-api InternalApplicationsAPI.java:74 createAppliance()
-Schema: V1__Initial_schema.sql:229 — appliance_repositories (id VARCHAR(255) PK, ars_tenant VARCHAR(255), name VARCHAR(255))
-Behavior: creates a new appliance repository entry with etilotig ADD_APP notify. Admin-only.
-Issue: #159
+Creates the Git repository of an appliance, named by the JSON string body, and returns it. Restricted to internal credentials with administration rights.
 
 Parameters:
   - ctx: context for the request

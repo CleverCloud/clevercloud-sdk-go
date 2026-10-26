@@ -12,25 +12,15 @@ import (
 )
 
 /*
-Deleteconfigurationprovider DELETE /v2/providers/config-provider/resources/{addon_id} — deprovision config-provider addon.
+Deleteconfigurationprovider Deprovision a configuration provider add-on
 
-Legacy: ovd routes.scala:43 deleteAddonV2
-Algorithm:
-  - Fetch row first (build final view), then UPDATE status=DELETED
-  - Returns 200 with body (NOT 204 like other providers)
-
-Conformity: YES
-
-Source: references/legacy/ovd/modules/configprovider/api/routes.scala deleteAddonV2
-Behavior: marks as DELETED, returns 200 with addon view body (NOT 204!)
-This is intentionally different from most other addon providers (KMS returns 204).
-Issue: #2
+Called by the platform when a customer deletes a configuration provider add-on. Marks the add-on as deleted and answers 200 with its last state, variables included; 404 for an unknown or already deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: ConfigProvider addon ID
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 

@@ -2,9 +2,9 @@
 
 package models
 
-// MatomoWithPHPApp Keycloak token-validation response.  Source: references/legacy/ovd/modules/matomo/src/main/scala/...
+// MatomoWithPHPApp What a Matomo sign-in token designates: the owner, the Matomo add-on and the PHP application runn...
 type MatomoWithPHPApp struct {
-	AddonID  MatomoId `json:"addonId"`  // Matomo addon id.
-	OwnerID  UserId   `json:"ownerId"`  // Owner (user or org) id.
+	AddonID  MatomoId `json:"addonId"`  // Matomo add-on ID (`matomo_…`).
+	OwnerID  UserId   `json:"ownerId"`  // ID of the owner: a user or an organisation.
 	PhpAppID AppId    `json:"phpAppId"` // PHP application id hosting the Matomo instance.
 }

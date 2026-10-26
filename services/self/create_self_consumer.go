@@ -11,20 +11,9 @@ import (
 )
 
 /*
-Createselfconsumer POST /v2/self/consumers — create a new OAuth1 consumer.
+Createselfconsumer Create an OAuth consumer
 
-📥 **Algo Source (Legacy):**
-Validate name + rights, generate UUID key (ck_) + secret (cs_), persist oauth_rights from caller map, insert consumer
-- Legacy note: cc-api SelfConsumersAPI.java createConsumer(); UUID key format matches cc-api
-
-🔧 **Algo Rust (Implementation):**
-- Validate + persist caller-supplied rights (refs #1181); 400 OAUTH1_CONSUMER on bad rights.
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java createConsumer()
-Generates a random key + secret, persists the validated caller rights
-(`almighty` never granted externally).
-Requires: almighty token (refs #911, F-054)
-Issue: #102, #911, #1181
+Registers a new OAuth1 consumer in the user's personal space and returns it with its generated key (`ck_…`); read its secret with the `secret` route. The rights requested in the body are granted, except `almighty`, which never is. Requires an almighty token; creation is rate-limited per account (403 when exceeded).
 
 Parameters:
   - ctx: context for the request

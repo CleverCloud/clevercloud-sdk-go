@@ -14,9 +14,11 @@ import (
 /*
 Listhypervisors GET /v4/compute/hypervisors
 
-Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala listHypervisors
-Behavior: list hypervisors from cache with optional filters.
-Issue: #664
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:51-73 (listHypervisors)
+Source: references/legacy/ovd/modules/compute/persistence/HypervisorQueryService.scala:23-40 (the six filters)
+Behavior: list hypervisors from the cache, filtered by any of OVD's six
+query parameters; a value the OVD codec refuses answers 400.
+Issue: #664, #1295, #3503
 
 Parameters:
   - ctx: context for the request

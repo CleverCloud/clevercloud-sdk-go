@@ -11,35 +11,16 @@ import (
 )
 
 /*
-Createpulsarnonpersistenttopic POST /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics/{topic}
+Createpulsarnonpersistenttopic Create a non-persistent topic
 
-	— create a non-persistent topic.
-
-**Legacy**: ovd PulsarController.scala:351 createNonPersistentTopicServerEndpoint()
-**Algorithm**:
-  - Ownership verified via withTopicOwner helper (line 80)
-  - Delegates to PulsarTopicService.createNonPersistentTopic (line 190)
-  - Scala calls HttpPulsarAdminClient.createNonPersistentTopic with optional partitions
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::create_non_persistent_topic` (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createNonPersistentTopicServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala createNonPersistentTopic
-Behavior: creates the non-persistent topic on the cluster
-
-	(partitioned if `partitions_number` query param is set);
-	returns 201.
-
-Issue: #8
+Creates a non-persistent topic in the add-on's namespace; answers 201. Pass `partitions_number` to create a partitioned topic with that many partitions. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
-  - topic: Topic name
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

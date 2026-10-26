@@ -2,7 +2,7 @@
 
 package models
 
-// MatomoPlanIdentifier represents Plan identifier accepted in provision requests. Matomo has a single plan (`BETA`); any other valu...
+// MatomoPlanIdentifier represents Plan of a Matomo add-on. Matomo has a single plan, `BETA`; any plan requested at provisioning res...
 type MatomoPlanIdentifier string
 
 const (

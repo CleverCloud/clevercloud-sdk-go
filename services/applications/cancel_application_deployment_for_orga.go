@@ -11,28 +11,16 @@ import (
 )
 
 /*
-Cancelapplicationdeploymentfororga Legacy: cc-api OrganisationApplicationDeploymentsAPI.java:62 cancelApplicationDeploymentsForOrga()
-Algorithm: Verify org membership + app access; Check deployment state == WIP; Move WANTS_TO_BE_UP to SHOULD_BE_DOWN; Publish BDS CANCEL instruction on the normal queue
-Conformity: faithful — matches cancel_self_deployment, same BDS instruction logic.
-Legacy routes both through one helper (SelfApplicationsHelper.java:106-109 delegates
-to ApplicationHelper.cancelDeploy with the caller's personal pseudo-org as `id`),
-so the id resolution, the 400 DEPLOYMENT_NOT_WIP contract and the side-effects in
-`apply_deployment_cancel` are all shared.
-Issues: refs #2004, refs #2008, refs #2009, refs #2010, refs #2136
+Cancelapplicationdeploymentfororga Cancel a deployment of an application
 
-DELETE /v2/organisations/{id}/applications/{app_id}/deployments/{deployment_id}/instances.
-
-Source: cc-api OrganisationApplicationDeploymentsAPI.java:62 cancelApplicationDeploymentsForOrga()
-Behavior: publishes BDS CANCEL instruction on the normal queue, returns 200
-APPLICATION_DEPLOY_CANCELLED (id 325).
-Issue: #107
+Cancels a deployment of an organisation's application that is still in progress, designated by its ID or its number; answers 400 (error id 4101) when it is not in progress. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - deploymentId: Deployment ID
 
 # Returns the operation result or an error

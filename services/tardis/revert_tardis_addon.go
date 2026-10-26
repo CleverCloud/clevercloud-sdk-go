@@ -16,6 +16,9 @@ RevertTardisAddon POST /v4/addon-providers/addon-tardis/organisations/{ownerId}/
 
 Algorithm: Revert addon state to the specified timestamp using point-in-time backups.
 
+	The caller must be the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, and the addon must belong
+	to it, else 403 / 404 (refs #4431).
 	This is the core Tardis feature — "time travel" for addon data.
 	Requires Tardis service integration for actual backup restoration.
 

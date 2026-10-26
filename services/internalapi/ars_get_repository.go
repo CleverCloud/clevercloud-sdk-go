@@ -11,25 +11,16 @@ import (
 )
 
 /*
-ArsGetRepository Legacy: cc-api InternalARSAPI.java:238 getRepository()
-Algorithm: Legacy: check app exists and ars_tenant matches the given tenant param; Legacy: return 200 if match, 404 otherwise
-Conformity: faithful — exact tenant matching logic
+ArsGetRepository Check that a repository belongs to a tenant
 
-Check if a repository exists for a given tenant and app ID.
-
-Source: cc-api InternalARSAPI.java:348 getRepository()
-Behavior: appliance_repositories first, then applications; 200 if the row's
-
-	ars_tenant matches the path tenant, 404 otherwise.
-
-Issue: #709, #1297
+Answers 200 when the application or appliance repository exists under the given tenant, 404 otherwise. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenant: ARS tenant
-  - app_id: Application ID
+  - tenant: Git repository tenant
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

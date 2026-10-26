@@ -11,41 +11,9 @@ import (
 )
 
 /*
-AdminCreateOrganisation **Legacy**: cc-api InternalOrganisationsAPI.java:113 createOrganisation() (@POST at :104)
-**Algorithm**:
-  - Validate name non-empty, verify user exists (404)
-  - Accept a caller-supplied org id (`orga_<uuid>`, 400 malformed, 409 taken)
-    or generate org_id = "orga_" + UUID (legacy prefix,
-    OrganisationPersistHelper.java:86 — was "org_", a conformity bug)
-  - Transaction: INSERT owner_info (with uuid_suffix), INSERT organisations,
-    INSERT member_info (ADMIN role), INSERT organisation_members — via the
-    shared ccapi::db::organisations_create::create_with_owner (also used by
-    the SCA portal's in-process Clever provisioner)
-  - vat_state defaults to PENDING if VAT provided, NOT_APPLICABLE otherwise
+AdminCreateOrganisation Create an organisation for a user
 
-**Conformity**: YES — creation flow matches cc-api OrganisationHelper.createInternal()
-(member_info ids now drawn from the Hibernate random id space, ISO with the
-personal-space and legacy internal creation paths, instead of the sequence)
-
-POST /v2/internal/organisations — admin create organisation.
-
-Creates a new organisation owned by the given user. The user must exist.
-The user becomes the ADMIN member of the new org.
-
-Source: cc-api InternalOrganisationsAPI.java:113 createOrganisation() (@POST at :104)
-Source: cc-api OrganisationHelper.java:232 createInternal()
-Source: cc-api OrganisationHelper.java:308 save() — creation path
-Source: cc-api OrganisationHelper.java:404 sendCreationEvents() — creation messaging
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Behavior: 401 not internal, 403 internal service neither ccadmin nor holding
-
-	manage_organisations, 400 bad JSON/validation/malformed id, 404 user
-	not found, 409 caller-supplied id already taken (idempotent retry),
-	200 org created. Body-signed: legacy signs the entity, so the route
-	is layered with buffer_internal_auth_payload.
-
-Side effect: fires OrganisationCreationEvent + OrganisationUserAdditionEvent (RabbitMQ) on creation
-Issue: #403, #2018, #2371
+Creates an organisation owned by `userId`, who becomes its `ADMIN` member; 404 when the user is unknown. An optional `id` (`orga_…`) makes retries safe: an ID already taken answers 409. Restricted to the administration console service and platform services allowed to manage organisations.
 
 Parameters:
   - ctx: context for the request

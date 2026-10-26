@@ -12,19 +12,20 @@ import (
 /*
 Postgithubredeploy POST /v2/github/redeploy — GitHub push webhook handler.
 
-Source: cc-api GithubAPI.java:184-194 postRedeploy()
-Source: cc-api GithubAPIHelper.java:269-308 handlePushWebhook()
+Source: cc-api GithubAPI.java:191 redeployApp()
+Source: cc-api GithubHelper.java:271-311 redeployApp()
 Spec: analysis-output/02-ccapi-analysis.md §Auth — GitHub webhook redeploy
 Behavior: Validate User-Agent, check event type, parse payload, lookup linked apps,
 
-	verify HMAC-SHA1 per-app via deployment_token, dedup via Redis, log redeploy.
-	Actual RabbitMQ GitPushEvent not yet wired (Phase 2 messaging).
+	verify HMAC-SHA1 per-app via deployment_token, dedup via Redis, publish
+	the GIT_PUSH event the deployment consumer reads.
 
 Issue: #223
 
-Algorithm: Validate User-Agent starts with "GitHub-Hookshot/"; Check X-GitHub-Event header (push, ping); Parse payload, lookup linked apps by repo full_name; Verify HMAC-SHA1 signature per-app using deployment_token; Dedup via Redis, publish GitPushEvent (Phase 2 messaging)
-Legacy: cc-api GithubAPI.java redeploy() -> GithubAPIHelper.handleWebhook()
-Conformity: enhanced — webhook validation+lookup complete, RabbitMQ publish not wired
+Algorithm: Validate User-Agent starts with "GitHub-Hookshot/"; Check X-GitHub-Event header (push, ping); Parse payload, lookup linked apps by repo full_name; Verify HMAC-SHA1 signature per-app using deployment_token; Dedup via Redis, publish GitPushEvent carrying the pushed branch
+Legacy: cc-api GithubAPI.java:191 redeployApp() -> GithubHelper.java:271-311 redeployApp()
+Conformity: faithful — legacy dedup key, response and DeploymentRequestData payload
+Issues: #3650
 
 Parameters:
   - ctx: context for the request

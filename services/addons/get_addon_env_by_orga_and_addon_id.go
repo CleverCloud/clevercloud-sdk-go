@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getaddonenvbyorgaandaddonid GET /v2/organisations/{id}/addons/{addon_id}/env — get addon env variables.
+Getaddonenvbyorgaandaddonid List the environment variables of an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java getAddonEnv()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, return env vars
-Legacy: cc-api OrganisationAddonsAPI.java getAddonEnv()
-Conformity: faithful -- IDOR fix: addon ownership check
+Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

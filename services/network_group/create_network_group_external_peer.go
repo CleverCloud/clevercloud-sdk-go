@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Createnetworkgroupexternalpeer POST /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/external-peers
+Createnetworkgroupexternalpeer Add an external peer to a network group
 
-Source: ovd NetworkGroupActionsActor (WannabeExternalPeer.toWannabePeer) → `PeerCreationCMD` (EXTERNAL kind)
-Behavior: 200 OK + `{"peerId": ...}` with a server-generated id (OVD
-
-	`createNetworkGroupExternalPeer` status); 400 invalid role, invalid IPv4,
-	missing parentMember, or SERVER without ip+port; 404 unknown NG or unknown
-	parentMember; 403 owner mismatch; 500 publish failure.
-
-Issue: #313, #665, #676, #849, #1127, #2790
+Requests the addition of a WireGuard peer running outside Clever Cloud under the member `parentMember`, and answers with its generated ID; the peer is created asynchronously. A `SERVER` peer needs `ip` and `port`. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

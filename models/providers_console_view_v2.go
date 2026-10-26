@@ -4,6 +4,6 @@ package models
 
 // ProvidersConsoleViewV2 `GET /resources/providerInfos` body.  Source: MigrationView.scala — ProvidersConsoleViewV2
 type ProvidersConsoleViewV2 struct {
-	Clusters  []ClusterConsoleViewV2 `json:"clusters"`
-	Dedicated map[string]any         `json:"dedicated"`
+	Clusters  []ClusterConsoleViewV2      `json:"clusters"`
+	Dedicated map[string]DedicatedOptions `json:"dedicated"`
 }

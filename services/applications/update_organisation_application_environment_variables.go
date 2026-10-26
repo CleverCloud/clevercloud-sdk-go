@@ -13,24 +13,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationenvironmentvariables PUT /v2/organisations/{id}/applications/{app_id}/env — replace all env vars.
+Updateorganisationapplicationenvironmentvariables Replace the environment variables of an application
 
-Legacy: cc-api ApplicationHelper.java:3640 editApplicationEnvironment()
-Algorithm: Auth; supports Jenkins token auth with tag validation; Parse Map (400/3004 when Jackson fails), delete all existing env vars, insert new ones; answer the edited ApplicationView; Rede...
-Conformity: enhanced — ?check param accepted (#795); missing dependent app redeploy. Response body and the unparseable-body 400 are 1:1 (#2030, #2028)
-
-Accepts a JSON object `{"KEY": "VALUE", ...}` (map format, matching cc-api Java).
-
-Source: cc-api OrganisationApplicationsAPI.java updateOrganisationApplicationEnvironmentVariables()
-Behavior: cc-api accepts Map<String,String>, stores as name/value pairs
-Issue: #107
+Replaces every environment variable of an organisation's application with the given name-to-value map and returns the edited application; with `check=true`, the variables are validated first. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service. The organisation's Jenkins token edits only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

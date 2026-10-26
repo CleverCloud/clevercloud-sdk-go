@@ -2,37 +2,37 @@
 
 package models
 
-// InvoiceRendering The invoice document `POST …/addons/preorders` answers with.  This is cc-api's `InvoiceRendering`...
+// InvoiceRendering Invoice preview of an add-on order: a zero-amount order with a single `No preorder` line, carryin...
 type InvoiceRendering struct {
 	Address            string             `json:"address"`                      // Owner's street address; `""` when there is no owner info.
 	City               string             `json:"city"`                         // Owner's city.
 	Company            *string            `json:"company,omitempty"`            // Owner's company, when it has one.
-	Country            string             `json:"country"`                      // Country display name, uppercased — `render:54-55`.
-	CountryCode        string             `json:"countryCode"`                  // ISO 3166-1 alpha-2 for [`Self::country`].
+	Country            string             `json:"country"`                      // Country display name, uppercased.
+	CountryCode        string             `json:"countryCode"`                  // ISO 3166-1 alpha-2 code of `country`.
 	CustomerCostCenter *string            `json:"customerCostCenter,omitempty"` // Customer's own cost centre.
 	CustomerOrderID    *string            `json:"customerOrderId,omitempty"`    // Customer's own order reference.
-	EmissionDate       string             `json:"emissionDate"`                 // ISO date (`ISODateTimeFormat.date()`), i.e. `YYYY-MM-DD`.
-	ErrorCode          *string            `json:"errorCode,omitempty"`          // Payment error fields — never set by `render`, always null on the wire.
-	ErrorLongMsg       *string            `json:"errorLongMsg,omitempty"`       // See [`Self::error_code`].
-	ErrorShortMsg      *string            `json:"errorShortMsg,omitempty"`      // See [`Self::error_code`].
-	ForID              *string            `json:"forId,omitempty"`              // Set only by `render(token, forId)`.
+	EmissionDate       string             `json:"emissionDate"`                 // Emission date, `YYYY-MM-DD`.
+	ErrorCode          *string            `json:"errorCode,omitempty"`          // Payment error code; always `null` on a preview.
+	ErrorLongMsg       *string            `json:"errorLongMsg,omitempty"`       // Detailed payment error message; always `null` on a preview.
+	ErrorShortMsg      *string            `json:"errorShortMsg,omitempty"`      // Short payment error message; always `null` on a preview.
+	ForID              *string            `json:"forId,omitempty"`              // Always `null` on a preview.
 	FromSubscription   bool               `json:"fromSubscription"`             // Whether the invoice came from a subscription.
 	ID                 *string            `json:"id,omitempty"`                 // Invoice id — null until the order becomes a real invoice.
 	Lines              []PreorderLineView `json:"lines"`                        // Line items.
 	Name               string             `json:"name"`                         // Owner's display name; `""` when the invoice carries none.
 	Number             *string            `json:"number,omitempty"`             // Invoice number — likewise null on a preorder.
 	OriginalTotal      int                `json:"originalTotal"`                // Total before any discount.
-	PayWhen            string             `json:"payWhen"`                      // `PaymentDisposition` the renderer was built with.
+	PayWhen            string             `json:"payWhen"`                      // When the order is paid: `PAY_NEXT_MONTH` for a preview.
 	PayingUser         *any               `json:"payingUser,omitempty"`         // The member who pays, when the invoice names one.
-	PaymentDate        *string            `json:"paymentDate,omitempty"`        // Always null here — `render` hardcodes it.
+	PaymentDate        *string            `json:"paymentDate,omitempty"`        // Payment date; always `null` on a preview.
 	Status             string             `json:"status"`                       // `PENDING` for an order that has not been paid.
 	Target             *string            `json:"target,omitempty"`             // Target organisation's name.
 	TargetID           string             `json:"targetId"`                     // Id of the invoice's target owner.
-	Token              *string            `json:"token,omitempty"`              // Payment token — null unless `render(token)` was given one.
+	Token              *string            `json:"token,omitempty"`              // Payment token; always `null` on a preview.
 	TotalHT            float64            `json:"totalHT"`                      // Total excluding VAT.
 	TotalTTC           float64            `json:"totalTTC"`                     // Total including VAT.
 	TotalVAT           float64            `json:"totalVAT"`                     // Total VAT.
-	Type               string             `json:"type"`                         // Type of the preorder.
+	Type               string             `json:"type"`                         // Invoice type: `ADDON_PREORDER` for a preview.
 	VatNumber          *string            `json:"vatNumber,omitempty"`          // VAT number, when registered.
 	VatRate            int                `json:"vatRate"`                      // VAT rate applied.
 	ZipCode            string             `json:"zipCode"`                      // Owner's postcode.

@@ -4,13 +4,15 @@ package models
 
 // WannabeToken Body of a token create. `productId`/`locationId` are typed `Option` but **required in effect** — ...
 type WannabeToken struct {
-	Datalog     *string   `json:"datalog,omitempty"` // Caller datalog for the minted Biscuit's authority block. Absent → empty.
-	Description *string   `json:"description,omitempty"`
-	LocationID  *string   `json:"locationId,omitempty"`
-	Name        *string   `json:"name,omitempty"`
-	ProductID   *string   `json:"productId,omitempty"`
-	ResourceID  *string   `json:"resourceId,omitempty"`
-	TTLSeconds  *int      `json:"ttlSeconds,omitempty"` // TTL in seconds → `expired_at = created_at + ttl`; absent means a non-expiring token.
-	Tags        []string  `json:"tags,omitempty"`
-	TokenType   TokenType `json:"tokenType"`
+	Datalog      *string   `json:"datalog,omitempty"` // Caller datalog for the minted Biscuit's authority block. Absent → empty.
+	Description  *string   `json:"description,omitempty"`
+	LocationID   *string   `json:"locationId,omitempty"`
+	Name         *string   `json:"name,omitempty"`
+	ProductID    *string   `json:"productId,omitempty"`
+	RefreshToken *bool     `json:"refreshToken,omitempty"` // Issue a refresh token alongside the access token, opening a rotation family (spec 005). **Absent ...
+	ResourceID   *string   `json:"resourceId,omitempty"`
+	RootKeyID    *bool     `json:"rootKeyId,omitempty"`  // Stamp the Biscuit envelope's `rootKeyId` with the signing key's id — the first four bytes of its ...
+	TTLSeconds   *int      `json:"ttlSeconds,omitempty"` // TTL in seconds → `expired_at = created_at + ttl`; absent means a non-expiring token.
+	Tags         []string  `json:"tags,omitempty"`
+	TokenType    TokenType `json:"tokenType"`
 }

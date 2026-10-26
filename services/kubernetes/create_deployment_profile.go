@@ -11,27 +11,9 @@ import (
 )
 
 /*
-Createdeploymentprofile POST /v4/kubernetes/admin/deployment-profiles
+Createdeploymentprofile Create a Kubernetes deployment profile
 
-📥 **Algo Source (Legacy):**
-Create a location's deployment profile.
-  - `requireBasicAuth` → 403 otherwise
-  - `validateProfileData` — the body's `profileData` must decode as a
-    `DeploymentProfile`, else 400 `DeploymentProfileInvalid`
-  - `repository.insertIfAbsent` (`ON CONFLICT DO NOTHING`); already present →
-    409 `DeploymentProfileAlreadyExists`
-  - 201 with the redacted view
-  - Source: ovd DeploymentProfileController.scala:99-117
-
-🔧 **Algo Rust (Implementation):**
-- `AdminAccess` extractor → 403; `validate_location_id` → 400
-- `DeploymentProfile::decode` → 400 carrying the decode message
-- `insert_if_absent` → `false` ⇒ 409
-- Return 201 + `DeploymentProfileView::from_row` (redacted)
-
-Source: ovd controllers/DeploymentProfileController.scala:99-117
-Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
-Issue: #1625
+Creates a deployment profile in the zone `zoneId`; the first profile of a zone becomes its production default. 400 when the zone is unknown, the profile does not decode or the body sets `prodDefault`. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request

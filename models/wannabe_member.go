@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeMember Request body for POST/PUT /v2/organisations/{id}/members.  Source: cc-api OrganisationMemberInfo....
+// WannabeMember Member to invite into the organisation, or member to update. `email` designates the person to inv...
 type WannabeMember struct {
 	Email *string `json:"email,omitempty"`
 	Job   *string `json:"job,omitempty"`

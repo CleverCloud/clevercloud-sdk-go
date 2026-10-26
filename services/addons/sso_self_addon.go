@@ -12,21 +12,15 @@ import (
 )
 
 /*
-SsoSelfAddon POST /v2/self/addons/{addon_id}/sso — SSO into addon dashboard.
+SsoSelfAddon Generate the single sign-on data of an add-on of the current user
 
-Source: cc-api SelfAddonsSsoAPI.java addonSso()
-Behavior: computes Heroku-compatible SSO token + signature
-Issue: #216
-
-Algorithm: Verify ownership, compute Heroku SSO token (SHA1 of id:password:timestamp); Return { url, token, timestamp, email, nav_data }
-Legacy: cc-api SelfAddonsSsoAPI.java addonSso()
-Conformity: faithful -- Heroku SSO protocol
+Same answer as the `GET` variant: the signed data that opens the add-on's provider dashboard as the current user. The add-on is looked up by add-on ID or real ID among the user's own; 404 otherwise. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addon_id: Addon ID
+  - addon_id: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

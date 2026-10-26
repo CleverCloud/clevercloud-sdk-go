@@ -12,21 +12,15 @@ import (
 )
 
 /*
-DeleteInternalTcpRedir Legacy: cc-api InternalApplicationsAPI.java:168-173 removeTcpRedirFromApp()
-Algorithm: Legacy: authInternal(), reject a missing namespace with 400, resolve it by primary key, DELETE by (namespace, sourcePort), publish hayxorp REMOVE_TCP_REDIRECTION
-Conformity: faithful on the namespace rungs; the `isCCAdmin() || isAddonAPI()` gate is still axo's broader `is_internal()`, and the `aph.find`/`aph.getOwner` probes (:2208-2213) are unported
+DeleteInternalTcpRedir Delete a TCP redirection of an application
 
-DELETE /v2/internal/applications/{appId}/tcpRedirs/{sourcePort} — remove TCP redir (internal).
-
-Source: cc-api InternalApplicationsAPI.java:168-173 removeTcpRedirFromApp()
-Source: cc-api ApplicationHelper.java:2199-2218 removeTcpRedir()
-Issue: #159, refs #2403
+Removes the TCP redirection of the given port, in the namespace named by the `namespace` query parameter, from any application. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
   - source_port: Source port
   - opts: optional query parameters
 

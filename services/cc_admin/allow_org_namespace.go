@@ -11,25 +11,9 @@ import (
 )
 
 /*
-AllowOrgNamespace **Legacy**: cc-api InternalOrganisationsAPI.java:374 allowNamspaceForOrganisation()
-**Algorithm**:
-  - Verify org exists (404)
-  - CREATE TABLE IF NOT EXISTS organisation_namespaces (idempotent DDL)
-  - INSERT ON CONFLICT DO NOTHING (idempotent)
+AllowOrgNamespace Allow a TCP redirection namespace for an organisation
 
-**Conformity**: YES — idempotent namespace grant matches cc-api
-
-PUT /v2/internal/organisations/{id}/namespaces/{namespace} — allow namespace for organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:374 allowNamspaceForOrganisation()
-Schema: organisation_namespaces (organisation_id, namespace) — PK composite
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal, 403 internal service other than ccadmin, 404 org or
-
-	namespace not found, 204 on success (idempotent). Bodyless: the Java
-	method takes no entity, so authInternal(crc, null) is the signing base.
-
-Issue: #634, #2018
+Lets the organisation's applications use the namespace for TCP redirections; idempotent. 404 when the organisation or the namespace is unknown. Restricted to the administration console service.
 
 Parameters:
   - ctx: context for the request

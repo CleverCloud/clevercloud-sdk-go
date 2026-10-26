@@ -11,25 +11,15 @@ import (
 )
 
 /*
-Getotoroshiconfigfile GET /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/config.yaml
+Getotoroshiconfigfile Get the otoroshictl configuration of an add-on
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getConfigurationFile()
-Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiCtlConfig.scala — from()
-
-📥 **Algo Source (Legacy):**
-- Get full OtoroshiView (includes env vars from cc-api)
-- Build OtoroshiCtlConfig from the view (hostname from api.url, credentials from api.user/secret)
-- Serialize to YAML using circe-yaml Printer(preserveOrder=true, explicitStart=true)
-- Return as text/yaml
-- Source: ovd OtoroshiProviderService.scala:714 getConfigurationFile()
-
-Issue: #313
+Returns a YAML configuration file for the `otoroshictl` command-line tool, holding the add-on's admin API URL and credentials. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

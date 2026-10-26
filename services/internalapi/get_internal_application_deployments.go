@@ -12,21 +12,15 @@ import (
 )
 
 /*
-GetInternalApplicationDeployments Legacy: cc-api InternalApplicationsAPI.java:182 getDeploymentsForApp()
-Algorithm: Legacy: authInternal(), find app by ID, call ApplicationHelper._getDeployments(); Legacy: paginated query with limit/...
-Conformity: faithful — paginated deployment query with same limit/offset logic
+GetInternalApplicationDeployments List the deployments of an application
 
-GET /v2/internal/applications/{appId}/deployments — get deployments (internal).
-
-Source: cc-api InternalApplicationsAPI.java:182 getDeploymentsForApp()
-Behavior: returns deployments for an app without OAuth checks, internal auth required.
-Issue: #159
+Returns the deployment history of any application, paginated with `limit` and `offset`. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

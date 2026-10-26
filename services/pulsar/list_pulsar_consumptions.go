@@ -13,37 +13,15 @@ import (
 )
 
 /*
-Listpulsarconsumptions GET /v4/pulsar/organisations/{owner_id}/pulsar/consumptions — the owner's
-billed Pulsar consumption.
+Listpulsarconsumptions List an owner's Pulsar consumption
 
-**This is the legacy consumption endpoint** — the one
-`ProductConsumptionComponent.createEndpoint[PulsarId](Service.PULSAR)`
-generates, and the one the billing service calls.
-
-**Algorithm** (1:1 with `PulsarConsumptionService.getConsumptions`):
- 1. SELECT the owner's non-system addons whose lifetime overlaps the
-    window (`findActiveFromOwner` — the `ORGANISATION_*` plans are system
-    addons and are never billed; only `BETA` is billable).
- 2. Optionally narrow to the `resourceId` values the caller named.
- 3. Per addon: clamp the window to its lifetime, run the Pulsar
-    consumption WarpScript, and emit the four billed lines.
-
-**Window parameters.** The legacy names them `since`/`until`; axo's earlier
-revision of this route named them `from`/`to`. Both spellings are accepted,
-`since`/`until` winning when present, so the billing service's calls work
-unchanged and anything already built against the axo spelling keeps working.
-
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/services/PulsarConsumptionService.scala
-Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/consumption/ProductConsumptionComponent.scala:338 `createEndpoint`
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/repository/PulsarRepository.scala — `findActiveFromOwner` (line 175)
-Schema: addon (owner_id, namespace, plan, creation_date, deletion_date)
-Issue: #313, #1063
+Called by the platform's billing service. Returns the hourly billed consumption of every billable Pulsar add-on of the owner over the `since`/`until` window (the last 30 days by default), including add-ons deleted within it; repeat `resourceId` to restrict the report. 501 means consumption metrics are not available on this deployment.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -59,7 +37,7 @@ Example:
 x-service: pulsar
 operationId: listPulsarConsumptions
 */
-func Listpulsarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.PulsarResourceConsumptionView] {
+func Listpulsarconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listPulsarConsumptions", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -72,7 +50,7 @@ func Listpulsarconsumptions(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.PulsarResourceConsumptionView](ctx, c, path)
+	response := client.Get[[]models.ResourceConsumption](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

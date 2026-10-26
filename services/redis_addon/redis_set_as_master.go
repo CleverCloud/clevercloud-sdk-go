@@ -14,12 +14,12 @@ RedisSetAsMaster DELETE /v2/providers/redis-addon/dashboard/master — Set this 
 
 **Legacy**: addon-api-redis Dashboard.scala setAsMaster()
 **Algorithm**:
-  - Returns 501 — requires direct instance replication command.
+  - Resolves the addon from the Sessioned token, then SLAVEOF NO ONE + CONFIG REWRITE.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Dashboard.scala — setAsMaster
-Behavior: 501 conditional stub — requires direct Redis SLAVEOF NO ONE command.
+Behavior: real SLAVEOF NO ONE via `crate::replication`; the only 501 comes from the session gate (no ENCRYPTION_KEY).
 Issue: #713
 
 Parameters:

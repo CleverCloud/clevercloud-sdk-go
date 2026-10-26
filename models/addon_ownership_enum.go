@@ -2,7 +2,7 @@
 
 package models
 
-// AddonOwnership represents Who owns an addon — the `addons.ownership` column.  A `SYSTEM` addon is one the platform provisio...
+// AddonOwnership represents Who an add-on is provisioned for: `CUSTOMER` for an add-on a customer asked for (the default), `S...
 type AddonOwnership string
 
 const (

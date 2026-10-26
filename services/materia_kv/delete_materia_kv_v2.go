@@ -11,24 +11,15 @@ import (
 )
 
 /*
-Deletemateriakvv2 DELETE /v2/providers/kv/resources/{kvId} — deprovision Materia KV (v2 legacy, internal).
+Deletemateriakvv2 Deprovision a Materia KV add-on
 
-📥 **Algo Source (Legacy):** ovd `MateriaDBActor.delete` — get (PROVISIONED|TO_DELETE) →
-revoke IAM token → Materia Cluster API delete → INSERT `service_status` DELETED.
-
-🔧 **Algo Rust:** internal-only gate (OVD `onUserAction`) → fetch addon → revoke IAM token
-in-process → (cluster-API wipe, fail-closed) → INSERT `service_status` DELETED → 204;
-404 if unknown; 401 for any non-internal caller (user OAuth/Bearer included).
-
-Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala delete + onUserAction
-Behavior: internal Basic only; revokes the IAM token, marks DELETED, returns 204; 404 if not found
-Issue: #1260, #679
+Called by the platform when a customer deletes a Materia KV add-on. Revokes its access token, erases its data and marks it as deleted; if the data cannot be erased, the add-on is kept and the call answers an error. Answers 404 for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kvId: Materia KV ID
+  - kvId: Materia KV add-on ID (`kv_…`)
 
 # Returns the operation result or an error
 

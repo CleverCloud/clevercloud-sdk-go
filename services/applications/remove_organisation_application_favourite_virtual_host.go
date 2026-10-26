@@ -11,24 +11,16 @@ import (
 )
 
 /*
-Removeorganisationapplicationfavouritevirtualhost DELETE /v2/organisations/{id}/applications/{app_id}/vhosts/favourite — remove org fav vhost.
+Removeorganisationapplicationfavouritevirtualhost Clear the favourite domain name of an application
 
-Legacy: cc-api ApplicationHelper.java:1172 unmarkFavouriteVhost()
-Algorithm: Auth + canAddApp; set favouriteVhost = null, then aph.edit(app) persist
-Conformity: faithful — DB UPDATE sets favourite_vhost_id to NULL; aph.edit(app) is a
-bare EntityManager.merge and fires no event, matching markFavouriteVhost's own PUT
-sibling (refs #2486)
-
-Source: cc-api OrganisationApplicationVhostsAPI.java removeFavourite()
-Source: cc-api ApplicationHelper.java:1172 unmarkFavouriteVhost() (aph.edit(app))
-Issue: #107, #753 (messaging law)
+Removes the favourite mark from the virtual hosts of an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

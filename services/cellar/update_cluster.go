@@ -14,13 +14,13 @@ import (
 /*
 Updatecluster Update a Cellar storage cluster
 
-Applies a partial update to a storage cluster — any of host, availability zone, administrative credentials and availability — over the stored values and returns the refreshed `{ id, host, zone, available }`. Setting `available` to false stops the cluster taking new add-ons without touching those already on it. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. An update leaving the host, username or password blank answers 400, and an unknown cluster id answers 404.
+Applies a partial update (host, zone, administrative credentials, availability) and returns the cluster; `available: false` stops it taking new add-ons without affecting existing ones. A blank host, username or password answers 400 and an unknown cluster 404. Platform-operations route: it requires a bearer token granting this cluster operation for the organisation in the path, and answers 401 without a usable token and 403 when the token does not cover it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) the token must cover
   - ClusterIndex: Cluster numeric ID
   - requestBody: the request payload
 

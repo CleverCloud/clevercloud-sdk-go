@@ -2,16 +2,16 @@
 
 package models
 
-// AddonSSOData SSO data returned by GET /v2/self/addons/{id}/sso and GET /v2/organisations/{id}/addons/{id}/sso....
+// AddonSSOData Single sign-on data to open an add-on's dashboard on its provider's site, signed with the provide...
 type AddonSSOData struct {
 	Email             string  `json:"email"`                        // User email (empty string if user not found).
-	ID                string  `json:"id"`                           // Addon real_id (the provider-facing ID).
-	Name              *string `json:"name,omitempty"`               // Always `null`: `getSSOData` never assigns this field either. Source: cc-api AddonHelper.java:481-...
-	NavData           string  `json:"nav-data"`                     // Navigation data (always empty string in cc-api). Legacy uses "nav-data" (with DASH) as the JSON f...
-	Signature         string  `json:"signature"`                    // SHA512(real_id + ":" + user_id + ":" + email + ":" + nav-data + ":" + sso_salt + ":" + timestamp).
+	ID                string  `json:"id"`                           // Identifier of the add-on at its provider (its real ID).
+	Name              *string `json:"name,omitempty"`               // Always `null`.
+	NavData           string  `json:"nav-data"`                     // Navigation data; always an empty string.
+	Signature         string  `json:"signature"`                    // Hex SHA-512 of `<id>:<user_id>:<email>:<nav-data>:<SSO salt>:<timestamp>`.
 	Timestamp         int     `json:"timestamp"`                    // Unix timestamp in seconds.
-	Token             string  `json:"token"`                        // SHA1(real_id + ":" + sso_salt + ":" + timestamp).
+	Token             string  `json:"token"`                        // Hex SHA-1 of `<id>:<SSO salt>:<timestamp>`.
 	URL               *string `json:"url,omitempty"`                // Provider SSO URL (production or test depending on provider status).
 	UserID            string  `json:"user_id"`                      // User ID (empty string if user not found).
-	UserinfoSignature *string `json:"userinfo_signature,omitempty"` // Always `null`: `getSSOData` never assigns this field, so it serialises as the POJO default. Do no...
+	UserinfoSignature *string `json:"userinfo_signature,omitempty"` // Always `null`.
 }

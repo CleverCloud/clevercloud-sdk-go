@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Getuser1 GET /v2/self — returns the current user profile.
+Getuser1 Get the current user
 
-📥 **Algo Source (Legacy):**
-Join users+owner_info+partner, compute can_pay from address completeness, fetch oauthApps from user_oauth_tokens
-- Legacy note: cc-api SelfAPI.java:58 getUser() -> UsersHelper.java:145 getSelf(), User.java:344 toView()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java:53-60, User.java:344 toView()
-Issue: #102
+Returns the profile of the user the token belongs to: identity, contact and postal details, email validation state, preferred MFA kind, linked OAuth providers and partner context. Requires the `access_personal_information` right.
 
 Parameters:
   - ctx: context for the request

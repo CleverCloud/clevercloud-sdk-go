@@ -6,6 +6,7 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -17,7 +18,7 @@ Source: cc-api production openapi.json serves /vendor/apps/{addonId}/migration_c
 Issue: #159
 Algorithm: Delegate to put_vendor_migration_callback (identical logic, different path prefix).
 Legacy: cc-api @Path("vendor") class has no /v2/ prefix; both paths coexist in production.
-Conformity: faithful for the plan/region/config path and its 404/400 envelopes; the success BODY is a Message, where cc-api answers `addon.toView()` (AddonVendorAPIHelper.java:206), and the redeploys it triggers reproduce `bds()` only — `_redeploy`'s pre-startApp gates and the env-update-token mint stay unported (refs #2567, refs #2537).
+Conformity: faithful for the plan/region/config path and its envelopes; the redeploys it triggers reproduce `bds()` only — `_redeploy`'s pre-startApp gates and the env-update-token mint stay unported (refs #2567, refs #2537).
 
 Parameters:
   - ctx: context for the request
@@ -38,14 +39,14 @@ Example:
 x-service: vendor
 operationId: put_vendor_migration_callback_legacy
 */
-func PutVendorMigrationCallbackLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
+func PutVendorMigrationCallbackLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "put_vendor_migration_callback_legacy", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/vendor/apps/%s/migration_callback", addonId)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

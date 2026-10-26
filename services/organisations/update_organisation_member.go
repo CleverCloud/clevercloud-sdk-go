@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Updateorganisationmember PUT /v2/organisations/{id}/members/{user_id} — update a member's role/job.
+Updateorganisationmember Update a member of an organisation
 
-Source: cc-api OrganisationMembersAPI.java editOrganisationMember()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify EditOrg permission (ADMIN, MANAGER only), Update organisation_member_info SET role, job, Edge: cc-api prevents downgrading the last ADMIN
-- Legacy note: cc-api OrganisationMembersAPI.java editMember() -> OrganisationMemberHelper.java
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Changes a member's `role` and/or `job`. Requires the `ADMIN` or `MANAGER` role; the caller may only grant a role it is allowed to assign, and the last `ADMIN` cannot be demoted. Platform services with administrative rights can change the job title only.
 
 Parameters:
   - ctx: context for the request

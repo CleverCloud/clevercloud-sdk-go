@@ -2,10 +2,10 @@
 
 package models
 
-// WannabePeer Input to add a peer to a network group.  `ip`/`port` are the peer's **public** terminus: a SERVER...
+// WannabePeer Input to add a peer to a network group. `ip` and `port` are the peer's public endpoint: a `SERVER...
 type WannabePeer struct {
 	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname for this peer.
-	Hv           *string `json:"hv,omitempty"`          // Hypervisor the peer runs on — required for CLEVER peers (OVD `handleCleverPeerType`: "hv id must ...
+	Hv           *string `json:"hv,omitempty"`          // Hypervisor the peer runs on; required for `CLEVER` peers.
 	ID           string  `json:"id"`                    // Peer identifier.
 	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).
 	Label        *string `json:"label,omitempty"`       // Human-readable label.

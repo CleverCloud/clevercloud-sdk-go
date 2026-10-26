@@ -15,6 +15,10 @@ import (
 GetTardisAddonForOrg GET /v4/addon-providers/addon-tardis/organisations/{ownerId}/addon/{tardisId} — get addon.
 
 Algorithm: Query by addon_id + owner_id for org isolation. Return 404 if not found.
+
+	The caller must be the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403 (refs #4431).
+
 Legacy: ovd tardis addon get
 Conformity: real
 

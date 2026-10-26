@@ -13,9 +13,8 @@ import (
 
 /*
 MysqlUpdateConfigOnCcapi PUT /internal/{id}/updateconfig — push the addon's `MYSQL_ADDON_*` env back
-to cc-api. In the monolith (ccapi_pool present) this UPSERTs `addon_options`
-directly (we ARE cc-api); otherwise it PUTs the addon's `callback_url` with
-`{"config": …}` (the legacy standalone HTTP path). Source:
+to cc-api through its `callback_url`, which replaces the addon's config and
+redeploys the applications linked to it. Source:
 Internal.updateConfigurationOnCCApi + VendorAPIClient.updateAddonEnvironment.
 
 Parameters:

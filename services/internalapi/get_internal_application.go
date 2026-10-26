@@ -11,21 +11,15 @@ import (
 )
 
 /*
-GetInternalApplication Legacy: cc-api InternalApplicationsAPI.java:107 getApplication()
-Algorithm: Legacy: authInternal(), find app owner org, call ApplicationHelper.get(); Legacy: returns full ApplicationView with v...
-Conformity: faithful — returns full ApplicationView via build_view()
+GetInternalApplication Get an application
 
-GET /v2/internal/applications/{id} — get application (unchecked).
-
-Source: cc-api InternalApplicationsAPI.java:107 getApplication()
-Behavior: returns application without OAuth access checks, internal auth required.
-Issue: #159
+Returns any application by ID, with no owner check. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

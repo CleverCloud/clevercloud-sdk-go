@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Getmonitoringhealth `GET /v4/monitoring/health` — the cached, sanitized aggregate report; the thin
-documented wrapper over [`api_health::aggregate_health`] (which carries the two
-algorithm blocks — cache → sanitize → 200/503).
+Getmonitoringhealth `GET /v4/monitoring/health` — the cached aggregate report; the thin documented
+wrapper over [`api_health::aggregate_health`] (which carries the two algorithm blocks
+— cache → 200/503).
 
 Doc carrier for `getMonitoringHealth`; the framework serves the route — do not
 mount.
@@ -32,7 +32,10 @@ rest were exempt. They are documented where an operator looks for them,
 `monitoring_health_probe_answers_through_the_global_middleware_stack` in `main.rs`.
 The `responses(…)` block stays the *handler's* contract.
 
-Issue: #1722
+Behind the health credential (#3518): a caller without `AXO__INTERNAL_DOCS__PASSWORD` gets 401
+and never learns which of the branches below it would have reached.
+
+Issue: #1722, refs #3518
 
 Parameters:
   - ctx: context for the request

@@ -12,16 +12,9 @@ import (
 )
 
 /*
-Getselfconsumer GET /v2/self/consumers/{key} — get a specific consumer.
+Getselfconsumer Get an OAuth consumer of the current user
 
-📥 **Algo Source (Legacy):**
-Query by key + org ownership + not deleted; 404 if not found
-- Legacy note: cc-api SelfConsumersAPI.java getConsumer()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java getConsumer()
-Issue: #102
+Returns one OAuth1 consumer of the user's personal space with its rights. An unknown or deleted key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

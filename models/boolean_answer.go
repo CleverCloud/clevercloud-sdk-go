@@ -2,7 +2,7 @@
 
 package models
 
-// BooleanAnswer Boolean answer for ARS authorisation.  Source: cc-api BooleanAnswer.java Issue: #709
+// BooleanAnswer The answer to an authorisation request.
 type BooleanAnswer struct {
-	Ok bool `json:"ok"` // JSON field is `ok` — the etilotig client deserializes `BoolAnswer { ok }` and cc-api's BooleanAns...
+	Ok bool `json:"ok"` // Whether the request is authorised.
 }

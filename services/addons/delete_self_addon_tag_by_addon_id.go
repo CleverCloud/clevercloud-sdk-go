@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Deleteselfaddontagbyaddonid DELETE /v2/self/addons/{addon_id}/tags/{tag} — remove a tag.
+Deleteselfaddontagbyaddonid Remove a tag from an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java removeTag()
-Issue: #108
-
-Algorithm: Verify ownership, delete tag from addon_tags
-Legacy: cc-api SelfAddonsAPI.java removeTag()
-Conformity: faithful -- simple tag removal
+Removes the tag from the add-on and returns the remaining tags. 404 when the add-on does not carry this tag, 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
-  - tag: Tag
+  - addonId: Add-on ID (`addon_…`)
+  - tag: Tag to remove
 
 # Returns the operation result or an error
 

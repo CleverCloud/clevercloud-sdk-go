@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// WireguardEndpoint Where a stored peer sits in the mesh: a CLIENT has its mesh address (`ngIp`), a SERVER additional...
+// WireguardEndpoint Where a peer sits in the mesh, told apart by `type`. A `ClientEndpoint` has its mesh address (`ng...
 // Tagged union - can hold one of: map[string]any, map[string]any
 type WireguardEndpoint struct {
 	raw json.RawMessage

@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getmatomo GET /v4/addon-providers/addon-matomo/addons/{id} — addon view.
+Getmatomo Get a Matomo add-on
 
-📥 Algo Source (Legacy): `getMatomoAddon` — load addon (`deletion_date IS
-NULL`) → read PHP app env + cc-api addon name → build the view.
-
-🔧 Algo Rust: `repository::find` → `build_view`. `.authenticated`.
-
-Issue: #660
+Returns the add-on: access URL, installed and available versions, PHP version, backing resources and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId: Matomo addon ID
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

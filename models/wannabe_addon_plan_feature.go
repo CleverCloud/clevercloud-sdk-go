@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonPlanFeature WannabeAddonPlanFeature — input DTO for addon plan feature provisioning.  Source: cc-api AddonPla...
+// WannabeAddonPlanFeature Value of one feature on an add-on plan: the feature name, the value as displayed and its machine-...
 type WannabeAddonPlanFeature struct {
 	ComputableValue *string `json:"computableValue,omitempty"`
 	Name            string  `json:"name"`

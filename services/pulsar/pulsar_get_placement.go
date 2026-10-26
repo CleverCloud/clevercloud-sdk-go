@@ -11,16 +11,9 @@ import (
 )
 
 /*
-PulsarGetPlacement GET /v4/addon-providers/addon-pulsar/placement — report the placement rule
-this deployment is running: the cluster every zone provisions onto, and the
-zones that override it.
+PulsarGetPlacement Read the Pulsar placement rule
 
-Read-only by design; placement is deploy-time configuration and there is no
-endpoint that changes it. Requires the same Biscuit right as listing the
-fleet, `pulsar_cluster_op("list")` (or `"root"`).
-
-Source: devel/docs/pulsar-multi-region.md §4.3, §4.5 (the placement rule)
-Issue: #2986
+Returns the rule that decides which cluster a new add-on is placed on: the default cluster, and the zones that place on another cluster (usually none). Platform-operations route: it requires a bearer token granting the list operation on Pulsar clusters, and answers 401 without a valid token and 403 when the token is not accepted or lacks the grant.
 
 Parameters:
   - ctx: context for the request

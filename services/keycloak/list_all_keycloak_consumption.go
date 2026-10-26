@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Listallkeycloakconsumption POST /v4/keycloak/consumptions
+Listallkeycloakconsumption List the consumption of all Keycloak add-ons
 
-📥 **Algo Source (Legacy):** `getAllResourceConsumption` (`A:261`) reports every
-addon in the window, **including soft-deleted ones** — that is how the final
-period gets invoiced.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:261
-Issues: #313
+Called by the platform's billing to read the consumption of every Keycloak add-on billed over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request
@@ -39,14 +34,14 @@ Example:
 x-service: keycloak
 operationId: listAllKeycloakConsumption
 */
-func Listallkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.KeycloakConsumptionQuery) client.Response[[]models.KeycloakConsumptionView] {
+func Listallkeycloakconsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.KeycloakConsumptionQuery) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listAllKeycloakConsumption")
 	defer span.End()
 
 	path := utils.Path("/v4/keycloak/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.KeycloakConsumptionView](ctx, c, path, requestBody)
+	response := client.Post[[]models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,7 +2,7 @@
 
 package models
 
-// SettingView A single setting (key-value pair).  Source: OVD SettingsRepository.scala — Setting case class Spe...
+// SettingView A single setting (key-value pair).
 type SettingView struct {
 	Name  string `json:"name"`  // Setting name (key).
 	Value string `json:"value"` // Setting value (string).

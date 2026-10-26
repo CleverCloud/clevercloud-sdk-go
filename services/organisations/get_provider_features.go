@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getproviderfeatures GET /v2/organisations/{id}/addonproviders/{provider_id}/features — list features.
+Getproviderfeatures List the features of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getFeatures()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + ownership, SELECT from addon_provider_features by provider_id.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getFeatures()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the features the provider's plans can set. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

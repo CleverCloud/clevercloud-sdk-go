@@ -13,43 +13,16 @@ import (
 )
 
 /*
-V4GetOrgResourceInstances GET /v4/orchestration/organisations/{id}/resources/{resource_id}/instances
+V4GetOrgResourceInstances List the instances of a resource
 
-ovd's fifth orchestration route, the generic twin of the application instances read:
-the same owner-scoped `vm` read (`OrchestrationCoreActor.listInstances`, `appid = <id>`
-under `owner_id = <tenant>`), keyed by a *computable* id — an application, a dedicated
-addon (`mysql_`, `postgresql_`, `redis_`, `mongodb_`, `elasticsearch_`, `jenkins_`,
-`cumulocity_`) or a Kubernetes component — rather than an application id alone.
-
-Authorization is the application route's up to the role gate
-(`guard_org_instances_access`); the application-ownership lookup does not apply, a
-dedicated addon being no `applications` row, and the owner scope is enforced the way
-ovd's query enforces it: the *owner's* instances are read and the resource's kept, so a
-resource id from another tenant yields nothing. An id outside the computable grammar is
-ovd's 400 before any read. The seven v4 filters are the application route's.
-
-Instances with no deployment id are dropped, as ovd's `filter(_.deployId.isDefined)`
-does on both routes (`OrchestrationRoutes.scala:357, :396`).
-
-Legacy: Console3 v4 orchestration (no cc-api equivalent — OVD OrchestrationRoutes)
-Algorithm: the computable-id grammar, then shape S7 authorization, then the
-orchestration instance read of the tenant filtered to the resource, then the seven v4
-filters and the deployment-id drop.
-Conformity: faithful shape and data — the tenant is matched under both prefixes,
-terminal states reach the state filter, a failed registry read is a 5xx rather than an
-empty listing, and a malformed filter is ovd's 400.
-
-Source: ovd OrchestrationRoutes.scala:213-260, :362-400 getResourceInstances
-Source: ovd OrchestrationCoreActor.scala:246-262, :386, :461-482 (owner + resource restriction)
-Source: ovd ComputableId.scala:31-53 (the id grammar)
-Issues: #3277
+Returns the instances of an organisation's application, dedicated add-on or Kubernetes component, filtered by the query parameters. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list. Superseded by the `/v4/paas/` spelling of this path.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - resource_id: Computable resource ID: an application, a dedicated addon or a Kubernetes component
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - resource_id: Resource ID: an application (`app_…`), a dedicated add-on or a Kubernetes component
   - opts: optional query parameters
 
 # Returns the operation result or an error

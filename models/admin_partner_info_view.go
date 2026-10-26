@@ -2,7 +2,7 @@
 
 package models
 
-// AdminPartnerInfoView Partner info response for GET /v2/internal/organisations/{id}/partner-info.  Copied — not moved —...
+// AdminPartnerInfoView Partner an organisation belongs to; every field is `null` when the organisation has no partner.
 type AdminPartnerInfoView struct {
 	APIDomain     *string `json:"api_domain,omitempty"`     // Partner API domain.
 	ConsoleDomain *string `json:"console_domain,omitempty"` // Partner console domain.

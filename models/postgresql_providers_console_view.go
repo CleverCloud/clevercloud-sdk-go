@@ -4,8 +4,8 @@ package models
 
 // PostgresqlProvidersConsoleView `GET /v4/addon-providers/{providerId}` response body (V1 shape).  Source: rewrite/rust/src/provid...
 type PostgresqlProvidersConsoleView struct {
-	Clusters                []PostgresqlClusterConsoleView `json:"clusters"`
-	Dedicated               map[string]any                 `json:"dedicated"` // Keyed by version, in the order the versions were listed. `IndexMap` (not `HashMap`) is load-beari...
-	DefaultDedicatedVersion string                         `json:"defaultDedicatedVersion"`
-	ProviderID              string                         `json:"providerId"`
+	Clusters                []PostgresqlClusterConsoleView     `json:"clusters"`
+	Dedicated               map[string]PostgresqlDedicatedView `json:"dedicated"` // Keyed by version, in the order the versions were listed. `IndexMap` (not `HashMap`) is load-beari...
+	DefaultDedicatedVersion string                             `json:"defaultDedicatedVersion"`
+	ProviderID              string                             `json:"providerId"`
 }

@@ -6,20 +6,22 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
 Getgithubapplications GET /v2/github/applications — list user's GitHub repositories.
 
-Source: cc-api GithubAPI.java getApplications()
-Source: cc-api GithubAPIHelper.java:getRepos()
+Source: cc-api GithubAPI.java:170 getGithubApplications()
+Source: cc-api GithubAPIHelper.java:244 getApps(), :111 getRepositories()
 Behavior: Fetch repos from GitHub API using user's stored token
 Issue: #223
 
-Algorithm: Verify OAuth1 auth, fetch stored GitHub token; Call GitHub API /user/repos with token, return repo list
-Legacy: cc-api GithubAPI.java getApplications() -> GithubAPIHelper.getRepos()
-Conformity: faithful — proxies GitHub API repos endpoint
+Algorithm: Verify OAuth1 auth, fetch stored GitHub token; Walk every page of GitHub API /user/repos with token, map each repository to an OAuthApplicationView
+Legacy: cc-api GithubHelper.java:218 getApps() -> GithubAPIHelper.java:244 getApps() -> GithubRepository.toApp()
+Conformity: faithful — legacy view shape, every page
+Issues: #3651
 
 Parameters:
   - ctx: context for the request
@@ -39,14 +41,14 @@ Example:
 x-service: auth
 operationId: getGithubApplications
 */
-func Getgithubapplications(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getgithubapplications(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.OAuthApplicationView] {
 	ctx, span := tracer.Start(ctx, "getGithubApplications")
 	defer span.End()
 
 	path := utils.Path("/v2/github/applications")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.OAuthApplicationView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

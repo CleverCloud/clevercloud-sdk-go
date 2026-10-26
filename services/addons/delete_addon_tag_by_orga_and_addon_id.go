@@ -11,22 +11,17 @@ import (
 )
 
 /*
-Deleteaddontagbyorgaandaddonid DELETE /v2/organisations/{id}/addons/{addon_id}/tags/{tag} — remove a tag.
+Deleteaddontagbyorgaandaddonid Remove a tag from an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java removeTag()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, delete tag
-Legacy: cc-api OrganisationAddonsAPI.java removeTag()
-Conformity: faithful -- simple tag removal with RBAC
+Removes the tag from the add-on and returns the remaining tags. 404 when the add-on does not carry this tag, 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
-  - tag: Tag
+  - addonId: Add-on ID (`addon_…`)
+  - tag: Tag to remove
 
 # Returns the operation result or an error
 

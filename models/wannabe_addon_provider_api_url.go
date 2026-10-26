@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonProviderApiUrl One `{base_url, sso_url}` pair — cc-api `WannabeAddonProviderAPIUrl`, consumed by `AddonProviderA...
+// WannabeAddonProviderApiUrl One API endpoint of an add-on provider: its base URL and its SSO URL. Both are optional; a member...
 type WannabeAddonProviderApiUrl struct {
 	BaseURL *string `json:"base_url,omitempty"`
 	SsoURL  *string `json:"sso_url,omitempty"`

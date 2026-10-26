@@ -6,45 +6,26 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-SetInternalInvoiceState PUT /v2/internal/invoices/{inv_id}/state — set invoice state.
+SetInternalInvoiceState Set the state of an invoice (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:110 setInvoiceState()
-Source: billing-api AdminRoutes.scala — setInvoiceState()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Update invoice status to a new value (PAID, CANCELED, WONTPAY, LOSS, etc.).
-- Internal auth required
-- Validates new status is a known value
-- UPDATE invoice SET status = $new WHERE invoice_number = $id
-- Source: billing-api InvoiceDAO.scala updateStatus()
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- Parse body for status field
-- Validate status is known: PENDING, PROCESSING, PAID, CANCELED, REFUNDED, WONTPAY, PAYMENTHELD, LOSS
-- ccapi::db::billing::update_invoice_status(pool, inv_id, status)
-- Return 200 or 404
-Conformity: real -- pure PG update, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - inv_id: Invoice number
-  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.SetInternalInvoiceState(ctx, client, tracer, inv_id, requestBody)
+	response := internalapi.SetInternalInvoiceState(ctx, client, tracer, inv_id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -53,14 +34,14 @@ Example:
 x-service: internal
 operationId: set_internal_invoice_state
 */
-func SetInternalInvoiceState(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string, requestBody *models.SetInvoiceStateBody) client.Response[client.Nothing] {
+func SetInternalInvoiceState(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "set_internal_invoice_state", trace.WithAttributes(attribute.String("inv_id", inv_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/%s/state", inv_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, requestBody)
+	response := client.Put[any](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

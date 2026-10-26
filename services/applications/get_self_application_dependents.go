@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfapplicationdependents GET /v2/self/applications/{app_id}/dependents — list apps that depend on this one.
+Getselfapplicationdependents List the applications depending on an application
 
-Legacy: SelfApplicationDependenciesHelper.java:36-39 getDependents() -> ApplicationDependenciesHelper.java:56-73, :119-123
-Algorithm: Shape S3 — canAddApp and owner-scoped 404 APPLICATION_NOT_FOUND before the existing same-owner dependent filter.
-Conformity: faithful — personal org_id, 8101, 404/4004, and preserved post-guard filter. Refs #2228
-
-Source: cc-api SelfApplicationDependentsAPI.java getDependents()
-Issue: #2228
+Returns the applications that depend on an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

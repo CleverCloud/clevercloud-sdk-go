@@ -2,9 +2,9 @@
 
 package models
 
-// CreateInternalOrgRequest Request body for POST /v2/internal/organisations — internal org creation.  Source: cc-api Wannabe...
+// CreateInternalOrgRequest Organisation to create on behalf of a user, who becomes its administrator.
 type CreateInternalOrgRequest struct {
-	ID           *string        `json:"id,omitempty"` // Caller-supplied organisation ID (`orga_<uuid>`), for idempotent creation: a retried request with ...
+	ID           *string        `json:"id,omitempty"` // Identifier to give the organisation (`orga_<uuid>`), for idempotent creation: retrying with the s...
 	Organisation WannabeOrgData `json:"organisation"` // Organisation data (name, description, etc.).
 	UserID       string         `json:"userId"`       // User ID of the admin who will own the new organisation.
 }

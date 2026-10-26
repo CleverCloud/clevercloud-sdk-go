@@ -2,9 +2,11 @@
 
 package models
 
-// KmsRegisterRegionRequest Body of `PUT /v4/kms/regions/{region_id}` — register or replace a region's KMS attributes.  The c...
+// KmsRegisterRegionRequest Body of `POST /v4/kms/regions` — register a region.  **Carries no region id.** The identifier is ...
 type KmsRegisterRegionRequest struct {
-	ClusterAPISecret string `json:"cluster_api_secret"` // The cluster-API credential. Stored encrypted; never read back through any endpoint.
-	ClusterAPIURL    string `json:"cluster_api_url"`    // The region's internal Materia cluster-API address. Never returned to a tenant.
-	Zone             string `json:"zone"`               // The cc-api zone this region answers to. Claiming a zone another region holds is a 409.
+	ClusterAPISecret string        `json:"cluster_api_secret"` // The cluster-API credential. Stored encrypted; never read back through any endpoint.
+	ClusterAPIURL    string        `json:"cluster_api_url"`    // The region's internal Materia cluster-API address. Never returned to a tenant.
+	Name             *string       `json:"name,omitempty"`     // Human-facing label ("Paris"). Optional, and purely cosmetic: resolution is by `zone`.
+	Status           *RegionStatus `json:"status,omitempty"`   // Whether placement may land here. Omitted means `ACTIVE` — registering a region opens it. Set `MAI...
+	Zone             string        `json:"zone"`               // The cc-api zone this region answers to. Claiming a zone another region holds is a 409.
 }

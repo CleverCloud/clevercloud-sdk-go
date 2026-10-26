@@ -4,6 +4,7 @@ package products
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -11,22 +12,44 @@ import (
 )
 
 /*
-Getaddonproviders GET /v2/products/addonproviders — list addon providers with plans and features.
+Getaddonproviders GET /v2/products/addonproviders — the addon catalogue: providers, plans, features, regions.
 
-Source: cc-api ProductsAPI.java getAddonProviders()
-Phase 1: returns all non-deleted providers (no org-based filtering).
-Issue: #102
+Authentication is read, never required: cc-api passes `ah.auth(crc)` into
+`getProviders` and only tests `tk.isRight()` (`AddonProviderHelper.java:398`),
+so an anonymous, malformed or expired credential reads the public catalogue
+— `BETA_PUB`/`RELEASE` providers, public active zones, non-hidden plans — and
+a valid one widens it with the ALPHA providers the caller's organisations
+own and the BETA_PRIV providers the caller beta-tests. The console sends
+its token here at boot (`console3/src/modules/loader/main.js:81`).
+
+`?orgaId=` names an organisation to read the catalogue *as*: the zones
+granted to it, the hidden plans it is allowed, and prices scaled by its
+runtime factor. It needs a token and membership — either missing is `403
+ORGA_ACCESS` (`AddonProviderHelper.java:377-395`) — and an id no
+organisation carries is silently no organisation (`orgaId.flatMap(oph.find)`).
+Only its first occurrence is read: `@QueryParam("orgaId") String` binds one
+value and never rejects a repeated parameter, where a serde-derived
+`Query<T>` answered a `400` legacy cannot produce here.
+
+Everything else is the repository's: two batched queries, not one per
+provider and per plan (`AddonProviderRepository::find_all`).
+
+Source: cc-api ProductsAPI.java:79-86 — getAddonProviders(crc, orgaId)
+Source: cc-api AddonProviderHelper.java:375-406 — getProviders(tk, orgaId)
+Source: cc-api AddonProviderPersistHelper.java:236-238 — runtime factor
+Issues: #3370, #102, #3371, #2271
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := products.Getaddonproviders(ctx, client, tracer)
+	response := products.Getaddonproviders(ctx, client, tracer, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +58,17 @@ Example:
 x-service: products
 operationId: getAddonProviders
 */
-func Getaddonproviders(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.AddonProviderInfoFullView] {
+func Getaddonproviders(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.AddonProviderInfoFullView] {
 	ctx, span := tracer.Start(ctx, "getAddonProviders")
 	defer span.End()
 
 	path := utils.Path("/v2/products/addonproviders")
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[[]models.AddonProviderInfoFullView](ctx, c, path)

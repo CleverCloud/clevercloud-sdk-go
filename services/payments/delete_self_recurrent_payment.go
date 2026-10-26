@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Deleteselfrecurrentpayment DELETE /v2/self/payments/recurring — discontinued.
+Deleteselfrecurrentpayment Delete the recurring payment (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:336 deleteRecurrentPayment() — 501
-Issues: #289, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

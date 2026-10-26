@@ -11,21 +11,9 @@ import (
 )
 
 /*
-DeleteSelf DELETE /v2/self — request account deletion (step one of two).
+DeleteSelf Request the deletion of the current user's account
 
-📥 **Algo Source (Legacy):**
-Send the confirmation email carrying the deletionKey link; the actual
-cascade runs when the bare GET /v2/session/login?deletionKey=… is clicked
-(ccapi's finish_delete_from_key → cascade_delete_user, refs #2484/#2518).
-- Legacy note: cc-api SelfAPI.java:111 deleteUser() -> UsersHelper.java:420 delete(); the two-step email confirmation IS the legacy shape
-
-🔧 **Algo Rust (Implementation):**
-  - Conformity: faithful — this route only mints the key and sends the mail;
-    no row is touched here. The one cascade implementation lives in ccapi
-    (the former self-api finish_delete duplicate was dropped, refs #1599).
-
-Source: cc-api SelfAPI.java deleteSelf() / UsersHelper.java:420-450 delete()
-Issue: #102, refs #1599, refs #2518
+Sends the user an email with a confirmation link; the account is deleted only once that link is followed. Requires an almighty token and a validated email address; refused (403) when the user's partner forbids self-deletion, and rate-limited per address.
 
 Parameters:
   - ctx: context for the request

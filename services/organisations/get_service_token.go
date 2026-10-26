@@ -11,20 +11,9 @@ import (
 )
 
 /*
-Getservicetoken GET /v2/organisations/{id}/service-tokens/{token_id} — get a specific service token.
+Getservicetoken Get a service token
 
-Source: cc-api OrganisationServiceTokensAPI.java:89 getServiceToken()
-Source: cc-api ServiceTokenHelper.java:199 get()
-Behavior: returns a single service token by ID (proxied from token API).
-Issue: #855
-
-📥 **Algo Source (Legacy):**
-1. Auth: check caller is member of org with manage_organisations_services
-2. Forward GET to token API /v4/tenants/{tenantId}/tokens/{tokenId}
-3. Return token API response (200 with token details)
-
-🔧 **Algo Rust (Implementation):**
-Faithful reproduction.
+Returns the service token's details; 404 when unknown. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

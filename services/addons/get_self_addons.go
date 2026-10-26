@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Getselfaddons GET /v2/self/addons — list personal addons.
+Getselfaddons List the add-ons of the current user
 
-Source: cc-api SelfAddonsAPI.java getAddons()
-Issue: #108
-
-Algorithm: Verify auth, query addons by owner_id, build AddonView for each
-Legacy: cc-api SelfAddonsAPI.java getAddons()
-Conformity: faithful -- full CRUD read with ownership check
+Returns the add-ons owned by the authenticated user's personal account. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

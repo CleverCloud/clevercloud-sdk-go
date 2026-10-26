@@ -13,11 +13,19 @@ import (
 /*
 Getexcahngerates GET /v2/products/prices — get drop prices (exchange rates) from DB.
 
-Source: cc-api ProductsAPI.java getExcahngeRates() → DropPriceHelper.getPrices()
-Source: cc-api DropPriceHelper.java — queries drop_prices table, returns `Vec<DropPriceView>`
+A failed read is a 500. `getExcahngeRates` is `return dprh.getPrices();`
+(`ProductsAPI.java:154-155`) and `getPrices` has two exits only: the 200 built
+from `dpf.findAll()`, and a `Response.serverError()` carrying
+`SERIALIZATION_FAIL` when Jackson fails (`DropPriceHelper.java:37-42`). A
+facade that cannot reach the database throws past both and the container
+answers 500 — nothing in the chain produces a 4xx, so the `Forbidden` this
+mapped the query error to told a client it was refused a public route.
+
+Source: cc-api ProductsAPI.java:148-156 getExcahngeRates() → DropPriceHelper.getPrices()
+Source: cc-api DropPriceHelper.java:31-43 — queries drop_prices, returns `Vec<DropPriceView>`
 Schema: V1__Initial_schema.sql:719 — table drop_prices (currency VARCHAR PK, value NUMERIC)
 Behavior: returns array of {currency, value} objects from drop_prices table
-Issue: #102
+Issue: #102, #3382
 
 Parameters:
   - ctx: context for the request

@@ -13,24 +13,15 @@ import (
 )
 
 /*
-Editselfapplicationenvbyappid PUT /v2/self/applications/{app_id}/env — replace all env vars.
+Editselfapplicationenvbyappid Replace the environment variables of an application
 
-Accepts a JSON object `{"KEY": "VALUE", ...}` (map format, matching cc-api Java).
-Terraform provider and clever-tools both send this format.
-
-Source: cc-api SelfApplicationsAPI.java:165-169 editApplicationEnvironment()
-Behavior: cc-api accepts Map<String,String>, stores as name/value pairs
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:178-181 editApplicationEnvironment() -> ApplicationHelper.java:3640-3705
-Algorithm: S4 before parsing the map. The delegate is handed the REAL HeaderMap, mirroring legacy's forwarded `crc`, but its Jenkins branch is unreachable from here — see the note on the extractor below.
-Conformity: faithful — self authentication remains mandatory, exactly as the shim's `if (tk.isLeft()) return tk.left();` makes it. Refs #2228
+Replaces every environment variable of an application of the user's personal space with the given name-to-value map and returns the edited application. With `check=true`, the variables are validated first.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

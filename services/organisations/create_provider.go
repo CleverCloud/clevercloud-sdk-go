@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Createprovider POST /v2/organisations/{id}/addonproviders — create an addon provider.
+Createprovider Create an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java createAddonProvider()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN role, validate fields, insert into addon_provider + infos.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java createAddonProvider()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Registers an add-on provider owned by the organisation, with its ID, name, test and production API URLs, SSO salt and password. The provider starts in the `ALPHA` status and is offered in every public zone. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

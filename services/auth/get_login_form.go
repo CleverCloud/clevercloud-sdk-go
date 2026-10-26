@@ -21,7 +21,7 @@ which case this endpoint is destructive and no credential is required: it is
 the target of the account-deletion confirmation mail, and legacy completes
 the deletion on this bare GET before any login step.
 
-Query params `from_authorize`, `oauth_token`, `cli_token` are injected into
+Query params `fromAuthorize`, `oauth_token`, `cli_token` are injected into
 hidden form fields so the POST preserves the OAuth flow context.
 Source: cc-api OAuth1ServerHelper.java:285-291 — redirect to tmpLogin with params
 Issue: #220, #2484, #1615, #1595

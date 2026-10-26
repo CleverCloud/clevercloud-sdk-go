@@ -2,7 +2,7 @@
 
 package models
 
-// CephCsiConfigView Tenant-facing CephCSI config — without operator-internal topology (monitors) or the Ceph credenti...
+// CephCsiConfigView Ceph CSI storage configuration of a cluster: the Ceph cluster, RBD namespace and pool its volumes...
 type CephCsiConfigView struct {
 	CephCSIVersion      string           `json:"cephCSIVersion"`
 	CephNamespace       CephRbdNamespace `json:"cephNamespace"`

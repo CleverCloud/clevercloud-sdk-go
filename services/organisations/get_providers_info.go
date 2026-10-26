@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getprovidersinfo GET /v2/organisations/{id}/addonproviders — list addon providers owned by this org.
+Getprovidersinfo List the add-on providers of an organisation
 
-Source: cc-api OrganisationAddonProviderAPI.java getAddonProviders()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Query addon_provider + addon_provider_infos WHERE owner_id = org_id.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getAddonProviders()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the add-on providers the organisation owns. Any member may call it, but only the `ADMIN`, `MANAGER` and `DEVELOPER` roles see the providers: other members get an empty list. A deleted organisation answers 403. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

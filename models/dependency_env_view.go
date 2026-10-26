@@ -2,7 +2,7 @@
 
 package models
 
-// DependencyEnvView Dependency environment variables grouped by application.  Source: cc-api ApplicationDependenciesH...
+// DependencyEnvView The environment variables one application exposes to the applications that depend on it, with tha...
 type DependencyEnvView struct {
 	AppID   string                 `json:"app_id"`
 	AppName *string                `json:"app_name,omitempty"`

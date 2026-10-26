@@ -2,17 +2,17 @@
 
 package models
 
-// Metabase Full Metabase addon view.  Returned by `GET /v4/addon-providers/addon-metabase/addons/{id}` and t...
+// Metabase A Metabase add-on: its identifiers, plan, deployed versions, access URL, the resources backing it...
 type Metabase struct {
-	AccessURL         string                 `json:"accessUrl"`         // Public access URL (`MB_SITE_URL` env).
-	AddonID           AddonId                `json:"addonId"`           // cc-api addon id (`addon_<uuid>`).
-	AvailableVersions []string               `json:"availableVersions"` // Versions offered for upgrade.
-	EnvVars           map[string]any         `json:"envVars"`           // All env vars exposed for the CLI view.
-	JavaVersion       string                 `json:"javaVersion"`       // Java runtime version (`CC_JAVA_VERSION` env).
-	Name              string                 `json:"name"`              // Human-readable addon name (from cc-api `getAddon`).
-	OwnerID           UserId                 `json:"ownerId"`           // Owner (user or org) id.
-	Plan              MetabasePlanIdentifier `json:"plan"`              // Plan identifier (ALPHA/BETA/BASE).
-	ResourceID        MetabaseId             `json:"resourceId"`        // Provider-internal resource id (`metabase_<uuid>`).
-	Resources         MetabaseResources      `json:"resources"`         // Underlying infrastructure resource ids.
-	Version           string                 `json:"version"`           // Deployed Metabase version (`CC_METABASE_VERSION` env).
+	AccessURL         string                 `json:"accessUrl"`         // Public URL of the Metabase instance.
+	AddonID           AddonId                `json:"addonId"`           // Add-on ID (`addon_…`).
+	AvailableVersions []string               `json:"availableVersions"` // Versions on offer.
+	EnvVars           map[string]string      `json:"envVars"`           // Environment variables of the add-on's application.
+	JavaVersion       string                 `json:"javaVersion"`       // Java version the add-on's application runs on.
+	Name              string                 `json:"name"`              // Add-on name.
+	OwnerID           UserId                 `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	Plan              MetabasePlanIdentifier `json:"plan"`              // Plan identifier.
+	ResourceID        MetabaseId             `json:"resourceId"`        // Metabase add-on ID (`metabase_…`).
+	Resources         MetabaseResources      `json:"resources"`         // Resources backing the add-on.
+	Version           string                 `json:"version"`           // Deployed Metabase version.
 }

@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterFeaturesPatch Cluster feature-flag patch — a JSON merge patch (RFC 7386), field by field: an ABSENT key keeps t...
+// ClusterFeaturesPatch Change to a cluster's feature flags, as a JSON merge patch (RFC 7386), field by field: an absent ...
 type ClusterFeaturesPatch struct {
 	AutoscalingEnabled   *bool             `json:"autoscalingEnabled,omitempty"`   // Whether node autoscaling is enabled (`null` unsets)
 	Csi                  *bool             `json:"csi,omitempty"`                  // Whether CSI is enabled (`null` unsets)

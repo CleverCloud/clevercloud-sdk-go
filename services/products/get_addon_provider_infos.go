@@ -19,11 +19,19 @@ addon-creation and version panes — NOT the `addon_provider_infos` catalogue
 row (`id`/`name`/`shortDesc`/…), which is a different resource: that one is
 what `GET /v2/products/addonproviders` already lists.
 
+Gated exactly like `{provider_id}/versions`: a token, then `apph.allowUser`
+with its `404 ADDON_PROVIDER_NOT_FOUND` refusal, both before any outbound
+call. An unknown provider is the legacy NPE, a 500.
+
 Source: cc-api ProductsAPI.java:108-116 getAddonProviderInfos()
+Source: cc-api AuthHelper.java:79-104 — auth(), which has no internal-HMAC branch
 Source: cc-api AddonProviderHelper.java:334-344 getProviderInfos() -> aah.getInfos()
+Source: cc-api AddonProviderHelper.java:284-286 — tk.isLeft(), then uph.find(getUserId())
+Source: cc-api AddonProviderPersistHelper.java:96-107 — allowUser(provider, userId)
 Source: cc-api AddonAPIHelper.java:339-341 — `getStuff(provider, "providerInfos")`
 Source: ovd core ProviderConsoleView.scala:48-52 — `{providerId, clusters, dedicated, defaultDedicatedVersion}`
-Issues: #102, #2432
+Source: cc-api AuthHelper.java:98-101 auth() — 401 EXPIRED_OAUTH_TOKEN (1503)
+Issues: #102, #2432, #3371, #2271, #3440
 
 Parameters:
   - ctx: context for the request

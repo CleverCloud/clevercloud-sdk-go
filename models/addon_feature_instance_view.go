@@ -2,11 +2,11 @@
 
 package models
 
-// AddonFeatureInstanceView AddonFeatureInstanceView — feature value for a specific plan. Matches cc-api openapi/ccapiv3.json...
+// AddonFeatureInstanceView The value a provider feature takes on one add-on plan.
 type AddonFeatureInstanceView struct {
-	ComputableValue *string `json:"computable_value,omitempty"` // Legacy cc-api uses snake_case "computable_value" (NOT camelCase)
-	Name            string  `json:"name"`
-	NameCode        *string `json:"name_code,omitempty"` // Legacy cc-api uses snake_case "name_code" (NOT camelCase)
-	Type            string  `json:"type"`                // Selected as `AS feature_type` by the plan-view queries: `type` is the column, but it is also a Ru...
-	Value           *string `json:"value,omitempty"`
+	ComputableValue *string `json:"computable_value,omitempty"` // Machine-readable form of `value`, when the provider gives one.
+	Name            string  `json:"name"`                       // Display name of the feature.
+	NameCode        *string `json:"name_code,omitempty"`        // Stable code of the feature, when the provider defines one.
+	Type            string  `json:"type"`                       // Type of the feature's value.
+	Value           *string `json:"value,omitempty"`            // Value of the feature on this plan, as displayed.
 }

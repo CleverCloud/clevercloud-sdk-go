@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Getaddonssodatafororga GET /v2/organisations/{id}/addons/{addon_id}/sso — get SSO data for org addon.
+Getaddonssodatafororga Get the single sign-on data of an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java:149-158 getSSOData()
-Source: cc-api AddonHelper.java:481-503 getSSOData()
-Behavior: returns SSO token, signature, URL for addon provider dashboard
-Issue: #216
-
-Algorithm: Verify org RBAC + addon ownership, compute Heroku SSO token
-Legacy: cc-api OrganisationAddonsAPI.java:149 getSSOData()
-Conformity: faithful -- GET variant of org SSO data with IDOR fix
+Returns the signed data that opens the add-on's provider dashboard as the caller: the provider's SSO `url`, the add-on real `id`, `timestamp`, `token`, `signature` and `email`. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

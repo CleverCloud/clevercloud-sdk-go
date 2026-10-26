@@ -2,10 +2,11 @@
 
 package models
 
-// NodeGroupPatchPayload Node group patch payload (update).  Source: references/legacy/ovd/modules/kubernetes/models/NodeG...
+// NodeGroupPatchPayload Request body to update a node group: name, description, tag, node counts, autoscaling, and the dr...
 type NodeGroupPatchPayload struct {
 	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled
 	Description        *string             `json:"description,omitempty"`        // Optional description
+	DrainPolicy        *DrainPolicy        `json:"drainPolicy,omitempty"`
 	MaxNodeCount       *NodeGroupNodeCount `json:"maxNodeCount,omitempty"`
 	MinNodeCount       *NodeGroupNodeCount `json:"minNodeCount,omitempty"`
 	Name               NodeGroupName       `json:"name"`            // Node group name

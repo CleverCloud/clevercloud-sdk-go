@@ -10,10 +10,9 @@ import (
 )
 
 /*
-PostSelfUnpaidBillings POST /v2/self/payments/billings/unpaid — discontinued.
+PostSelfUnpaidBillings Pay unpaid invoices (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java — no such route
-Issues: #428, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

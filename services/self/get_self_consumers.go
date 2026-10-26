@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Getselfconsumers GET /v2/self/consumers — list OAuth1 consumers owned by the current user.
+Getselfconsumers List the current user's OAuth consumers
 
-📥 **Algo Source (Legacy):**
-Query oauth1_consumers by user org ownership, join oauth_rights for permissions
-- Legacy note: cc-api SelfConsumersAPI.java getConsumers()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java getConsumers()
-Issue: #102
+Returns the OAuth1 consumers (client applications) registered in the user's personal space, with their rights, sorted by name. Secrets are not included.
 
 Parameters:
   - ctx: context for the request

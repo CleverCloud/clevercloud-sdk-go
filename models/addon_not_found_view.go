@@ -4,7 +4,7 @@ package models
 
 // AddonNotFoundView The `{"id":"error","message":"Add-on not found","config":{}}` envelope — reference `ProvisionResp...
 type AddonNotFoundView struct {
-	Config  map[string]any `json:"config"`
-	ID      string         `json:"id"`
-	Message string         `json:"message"`
+	Config  map[string]string `json:"config"`
+	ID      string            `json:"id"`
+	Message string            `json:"message"`
 }

@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Getselfpricewithtax GET /v2/self/payments/fullprice/{price} — discontinued.
+Getselfpricewithtax Get a price including tax (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:358 priceWithTax() — 501
-Issues: #213, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

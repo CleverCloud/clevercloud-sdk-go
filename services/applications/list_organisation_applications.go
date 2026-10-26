@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Listorganisationapplications GET /v2/organisations/{id}/applications — list organisation applications.
+Listorganisationapplications List the applications of an organisation
 
-Source: cc-api OrganisationApplicationsAPI.java listOrganisationApplications()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:689-729 getAll()
-Algorithm: Auth (OAuth1 or the org's Jenkins shared secret); guard organisation existence, scope, membership, and canAccessApps; if !canAccessApps, return empty [] (not an error); a Jenkins-authorised caller lists only the runner-tagged applications; then list apps.
-Conformity: faithful — `guard_getall_org_apps` preserves legacy's 404/6004 before
-scope, separate hasMember and role rungs, the member-without-canAccessApps 200 `[]`
-branch, and the Jenkins shared-secret channel with its runner-tag filter. InstanceId
-filtering remains outside this task (refs #2292).
+Returns the applications owned by the organisation. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list. The organisation's Jenkins token lists only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
 
 # Returns the operation result or an error
 

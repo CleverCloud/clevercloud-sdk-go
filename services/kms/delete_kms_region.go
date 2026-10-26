@@ -13,11 +13,17 @@ import (
 /*
 DeleteKmsRegion `DELETE /v4/kms/regions/{region_id}` — refused while any cluster references it (FR-047).
 
+`404` for no such region, `409` while clusters still reference it — the body names the obstacle
+without enumerating them (FR-049). Neither is declared in `responses` below: `openapi::route`
+refuses an error status that carries no schema of its own, because the shared `default` response
+already documents the platform error envelope. The refusal table lives in
+`specs/007-per-region-signing-location/contracts/http-api.md`.
+
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - region_id: Base region identifier
+  - region_id: Region identifier
 
 # Returns the operation result or an error
 

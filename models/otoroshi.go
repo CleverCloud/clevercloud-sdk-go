@@ -2,25 +2,19 @@
 
 package models
 
-import "time"
-
-// Otoroshi Otoroshi addon full view.  Source: references/legacy/ovd/modules/otoroshi/models/OtoroshiView.sca...
+// Otoroshi An Otoroshi add-on: its identifiers, plan, deployed versions, access URLs and credentials, and th...
 type Otoroshi struct {
-	APIHost           string     `json:"apiHost"`                     // API host for the Otoroshi admin API.
-	AddonID           string     `json:"addonId"`                     // CCAPI addon ID (from provision request).
-	AdminTargethost   string     `json:"adminTargethost"`             // Admin target host for routing.
-	BackofficeHost    string     `json:"backofficeHost"`              // Backoffice/UI host for the Otoroshi instance.
-	CreationDate      time.Time  `json:"creationDate"`                // Creation timestamp.
-	DeletionDate      *time.Time `json:"deletionDate,omitempty"`      // Deletion timestamp (None = not deleted).
-	Error             *string    `json:"error,omitempty"`             // Error message from failed provisioning (optional).  Source: references/legacy/ovd/modules/otorosh...
-	JavaApplicationID *string    `json:"javaApplicationId,omitempty"` // Associated Java application ID (optional).
-	Name              string     `json:"name"`                        // Human-readable name for the addon.
-	NetworkgroupID    *string    `json:"networkgroupId,omitempty"`    // Associated NetworkGroup ID (optional).
-	OwnerID           string     `json:"ownerId"`                     // Owner ID (organisation or user).
-	Plan              string     `json:"plan"`                        // Subscribed plan (ALPHA, BETA, BASE).
-	PrivateHost       string     `json:"privateHost"`                 // Private/SSO apps host.
-	RedisAddonID      *string    `json:"redisAddonId,omitempty"`      // Associated Redis addon ID (optional).
-	ResourceID        string     `json:"resourceId"`                  // Otoroshi instance resource ID (provider-assigned).
-	Status            string     `json:"status"`                      // Current lifecycle status.
-	UpdatedDate       *time.Time `json:"updatedDate,omitempty"`       // Last update timestamp (optional).
+	API                OtoroshiApi              `json:"api"`                // Access to the Otoroshi admin API.
+	AccessURL          string                   `json:"accessUrl"`          // Public URL of the Otoroshi back office.
+	AddonID            string                   `json:"addonId"`            // Add-on ID (`addon_…`).
+	AvailableVersions  []string                 `json:"availableVersions"`  // Versions offered for upgrade.
+	Features           OtoroshiFeatures         `json:"features"`           // Optional features of the add-on (network group).
+	InitialCredentials OtoroshiBasicCredentials `json:"initialCredentials"` // Initial administrator credentials of the back office.
+	JavaVersion        string                   `json:"javaVersion"`        // Java version the add-on's application runs on; empty when unknown.
+	Name               string                   `json:"name"`               // Add-on name.
+	OwnerID            UserId                   `json:"ownerId"`
+	Plan               OtoroshiPlanIdentifier   `json:"plan"`
+	ResourceID         OtoroshiId               `json:"resourceId"`
+	Resources          OtoroshiResources        `json:"resources"` // Resources backing the add-on.
+	Version            string                   `json:"version"`   // Deployed Otoroshi version; a `NOT FOUND` marker when the add-on's application reports none.
 }

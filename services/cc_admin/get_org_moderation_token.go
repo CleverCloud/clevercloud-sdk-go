@@ -12,27 +12,9 @@ import (
 )
 
 /*
-GetOrgModerationToken **Legacy**: cc-api InternalOrganisationsAPI.java:443 getTokenForHardModeration()
-**Algorithm**:
-  - Verify org exists (404)
-  - Generate 8-char alphanumeric token (RandomStringGenerator ASCII_ALPHA_NUMERALS)
-  - cc-api stores in Redis cache; here returned directly for immediate use
+GetOrgModerationToken Create a moderation token for an organisation
 
-**Conformity**: PARTIAL — token generated but not stored in Redis (ccadmin uses immediately)
-
-GET /v2/internal/organisations/{id}/moderation-token
-
-Generate a random 8-char token for the safe-destroy moderation workflow.
-In cc-api, this stores the token in Redis (cache). Here we generate and return it.
-The caller (ccadmin) is expected to use it immediately.
-
-Source: cc-api InternalOrganisationsAPI.java:443 getTokenForHardModeration()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal service other
-
-	than ccadmin, 404 if org not found. Bodyless signing base.
-
-Issue: #398, #2018
+Returns a random 8-character token, valid for one hour, that confirms the moderated deletion of the organisation; 404 when the organisation is unknown. Restricted to the administration console service.
 
 Parameters:
   - ctx: context for the request

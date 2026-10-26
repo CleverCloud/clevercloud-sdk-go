@@ -2,7 +2,7 @@
 
 package models
 
-// AvatarInput Avatar update input for PUT /v2/self/avatar.  cc-api takes a *source discriminator*, never a URL:...
+// AvatarInput Where to take the user's avatar from. The avatar URL is derived from the chosen source; a URL can...
 type AvatarInput struct {
 	Source *string `json:"source,omitempty"` // `"gravatar"` or `"github"`; anything else (or absent) is an invalid source.
 }

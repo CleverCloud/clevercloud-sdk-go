@@ -11,21 +11,15 @@ import (
 )
 
 /*
-Getselfapplicationinstancebyappandinstanceid Legacy: SelfApplicationsHelper.java:82-85 getAppInstance() -> ApplicationHelper.java:320-350 getAppInstance()
-Algorithm: Shape S1b — scope, canAccessApps, and owner-scoped 404 APPLICATION_BAD_OWNER/4002 before the instance stub.
-Conformity: stub — returns 404 always, OVD orchestration integration pending
+Getselfapplicationinstancebyappandinstanceid Get an instance of an application
 
-GET /v2/self/applications/{app_id}/instances/{instance_id} — get specific instance.
-
-Source: cc-api SelfApplicationsAPI.java getInstance()
-Phase 1: returns 404 — instance data comes from OVD orchestration.
-Issue: #2228
+Checks access to an application of the user's personal space, then answers 404: a single instance cannot be read on this route yet. List the application's instances instead.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - instanceId: Instance ID
 
 # Returns the operation result or an error

@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Getconfirmationemail GET /v2/self/confirmation_email — resend confirmation email.
+Getconfirmationemail Resend the account confirmation email
 
-📥 **Algo Source (Legacy):**
-Check user exists + not validated, rate limit 3/hr via Redis, store UUID key in Redis TTL 12h, send email with validation URL
-- Legacy note: cc-api SelfAPI.java:133-140 sendConfirmationEmail() + UsersHelper.java:249-264
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java:133-140 sendConfirmationEmail()
-Source: cc-api UsersHelper.java:249-264 sendEmailConfirmation()
-Spec: analysis-output/02-ccapi-analysis.md §Self — sendConfirmationEmail
-Issue: #102
+Sends a new validation link to the user's primary address. Answers 400 when the address is already validated or missing. Sending is rate-limited: a rate-limited request still answers 200, without sending.
 
 Parameters:
   - ctx: context for the request

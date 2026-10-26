@@ -12,45 +12,15 @@ import (
 )
 
 /*
-AdminDeleteAddon DELETE /v2/internal/addons/{addonId} — admin delete addon.
+AdminDeleteAddon Delete any add-on
 
-Delete an addon by ID or real_id through the current cc-api deprovisioning flow.
-
-Algorithm:
-  - Find addon by id OR real_id (matching cc-api `apph.findByIdOrRealId`)
-  - Resolve and validate the owning organisation, then reject SYSTEM addons
-  - Deprovision the provider resource before any local mutation
-  - Soft-delete, unlink applications, recursively deprovision dependants
-  - Fire AddonDeletionEvent("ccadmin", AddonEventPayload(id, ownerId, provider))
-
-Conformity: faithful — both compatibility routes share the complete legacy operation
-
-Source: cc-api InternalAddonsAPI.java:117-120 deleteAddon()
-Source: cc-api InternalAddonsAPI.java:121 authInternal(crc, "") then :124-126 isCCAdmin(),
-
-	403 ACCESS_REQUIRES_CCADMIN_AUTHENTICATION otherwise
-
-Source: cc-api AddonHelper.java:378 deprovisionUnchecked() — rh.event(new AddonDeletionEvent(...))
-Source: cc-api Addon.java:255 getEventPayload() → AddonEventPayload(id, ownerId, provider.id)
-Schema: crates/api/ccapi/migrations/00001_initial_schema.sql — table addons
-
-	(id, owner_id, provider_id, real_id, deletion_date)
-
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Spec: analysis-output/39-message-schemas-event-payloads.md §clever.events AddonDeletionEvent
-Behavior: 401 when the caller is not an internal service,
-
-	403 for any internal service other than ccadmin, 404 if the
-	addon is not found, 200 SERVICE_DELETED on success. Bodyless: legacy signs
-	`authInternal(crc, "")`, so the route takes no payload layer.
-
-Issues: #399, #753, #1956, #2018, #2489
+Same as `DELETE /internal/addons/{addon_id}`: deprovisions the add-on at its provider and deletes it, whoever owns it. Restricted to the platform administration service: 401 for any other caller, 403 for another platform service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID or real_id
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

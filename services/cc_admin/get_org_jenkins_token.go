@@ -12,26 +12,9 @@ import (
 )
 
 /*
-GetOrgJenkinsToken **Legacy**: cc-api InternalOrganisationsAPI.java:416 createJenkinsToken()
-**Algorithm**:
-  - Verify org exists (404)
-  - Generate 32-char hex token + secret (16 random bytes each)
-  - INSERT into oauth1_tokens with consumer_key='jenkins', member_id=org_id
+GetOrgJenkinsToken Create a Jenkins token for an organisation
 
-**Conformity**: YES — Jenkins token creation matches cc-api pattern
-
-GET /v2/internal/organisations/{id}/jenkins-token — create Jenkins token for org.
-
-Source: cc-api InternalOrganisationsAPI.java:413 createJenkinsToken()
-Schema: V1__Initial_schema.sql — table oauth1_tokens
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: generates new OAuth1 token+secret scoped to org, 404 if org not found.
-
-	401 not internal, 403 for any internal service other than
-	gitlab-heptapod-integration-api — legacy checks that flag here and NOT
-	isCCAdmin(), so ccadmin is refused too. Bodyless signing base.
-
-Issue: #634, #2018
+Creates and returns a new OAuth1 token and secret scoped to the organisation, for its Jenkins integration; 404 when the organisation is unknown. Restricted to the Git hosting integration service.
 
 Parameters:
   - ctx: context for the request

@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Deleteproviderplanfeature DELETE /v2/organisations/{id}/addonproviders/{provider_id}/plans/{plan_id}/features/{feature_name}.
+Deleteproviderplanfeature Remove a feature value from a plan
 
-Source: cc-api OrganisationAddonProviderAPI.java deletePlanFeature()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, DELETE from addon_plan_feature_instances by composite key.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java deletePlanFeature()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Removes the plan's value for the feature `featureName`. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

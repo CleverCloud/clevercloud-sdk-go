@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Createversionupdatemetabase POST .../addons/{id}/version/update — update the deployed Metabase version.
+Createversionupdatemetabase Update the Metabase version of an add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — updateVersion
-Behavior: verify the target is allowed (`400` otherwise) → require a Java app
-
-	(`409` otherwise) → if the target crosses the application-update threshold and
-	the app is still on the legacy `XS` flavor, bump it to `S` via `editApplication`
-	→ set `CC_METABASE_VERSION` → restart without cache → return the refreshed view.
-
-Issue: #994
+Switches the add-on's application to `targetVersion`, moving it to a larger instance size first when that version needs one, redeploys it without build cache and returns the updated add-on. Answers 409 when the add-on has no application and 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId: Metabase addon ID
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

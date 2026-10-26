@@ -14,7 +14,13 @@ import (
 /*
 CreateTardisAddonToken POST /v4/addon-providers/addon-tardis/organisations/{ownerId}/addon/{tardisId}/tokens — create token.
 
-Algorithm: Generate token with optional TTL, store in tardis_addon_token. Token value is UUID-based.
+Algorithm: Resolve the addon under the path's owner (404 otherwise), generate token with
+
+	optional TTL, store in tardis_addon_token. Token value is UUID-based. The caller must be
+	the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403, and the addon's
+	application must still be held by its owner, else 404 (refs #4431).
+
 Legacy: ovd tardis token create
 Conformity: real
 

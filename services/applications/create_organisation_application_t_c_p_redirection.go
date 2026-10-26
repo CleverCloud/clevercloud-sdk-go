@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Createorganisationapplicationtcpredirection Legacy: cc-api OrganisationApplicationsAPI.java:302 addTcpRedir() -> ApplicationHelper.addTcpRedir()
-Algorithm: S9b prologue, then S9c: resolve the namespace inside the path organisation
-(404 NAMESPACE_NOT_FOUND), refuse a second redirection in it (409), ALLOCATE the source
-port from [min_port, max_port], INSERT, publish hayxorp ADD_TCP_REDIRECTION.
-Conformity: faithful — `sourcePort` from the body is ignored, as on legacy's add path
+Createorganisationapplicationtcpredirection Create a TCP redirection for an application
 
-POST /v2/organisations/{id}/applications/{app_id}/tcpRedirs — create a TCP redirection.
-
-Source: cc-api OrganisationApplicationsAPI.java:302 addTcpRedir()
-Issue: #107
+Allocates a port in the namespace named in the body (a global namespace or one of the organisation's) and redirects its TCP traffic to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -13,23 +13,15 @@ import (
 )
 
 /*
-Listnetworkgroups GET /v4/networkgroups/organisations/{owner_id}/networkgroups
+Listnetworkgroups List the network groups of an organisation
 
-Algo Source: ovd NetworkGroupRoutes.scala getNetworkGroups — actor query
-against in-memory `ngMap` filtered by `ownerId`, optionally tag-filtered.
-
-Algo Rust: serve from [`crate::cache::NgCache::list_by_owner`] (hydrated from compacted
-`networkgroups.events`). Apply tag intersection client-side. No DB, no ZK round-trip.
-
-Source: references/legacy/ovd/modules/networkgroup/routes/NetworkGroupRoutes.scala — getNetworkGroups
-Behavior: 200 with the owner's NGs (possibly empty); 403 if not an org member.
-Issue: #313, #665, #676, #849, #1127
+Returns every network group the organisation owns, possibly none. Repeat `tags` to keep only the groups that carry every given tag. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Organisation ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

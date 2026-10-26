@@ -2,7 +2,7 @@
 
 package models
 
-// PluginDrift A plugin whose registered version drifted from the deployed one.  Reported, never remediated — OV...
+// PluginDrift A plugin whose registered version differs from the version running in the cluster. The difference...
 type PluginDrift struct {
 	DeployedVersion   string     `json:"deployedVersion"`
 	Name              PluginName `json:"name"`

@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Getselfapplicationtagsbyappid GET /v2/self/applications/{app_id}/tags — application tags.
+Getselfapplicationtagsbyappid List the tags of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationTags()
-Issue: #2228
-
-Legacy: SelfApplicationTagsHelper.java:23-26 getTags() -> ApplicationTagsHelper.java:37-69 getApp()/getTags()
-Algorithm: Shape S3 — scope and canAddApp return 8101, then owner-scoped 404 APPLICATION_NOT_FOUND before reading tags.
-Conformity: faithful — personal org_id, canAddApp, 8101, and owner-scoped 404/4004. Refs #2228
+Returns the tags of an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

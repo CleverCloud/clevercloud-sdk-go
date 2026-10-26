@@ -11,22 +11,17 @@ import (
 )
 
 /*
-Addaddontagbyorgaandaddonid PUT /v2/organisations/{id}/addons/{addon_id}/tags/{tag} — add a tag.
+Addaddontagbyorgaandaddonid Add a tag to an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java addTag()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, insert tag
-Legacy: cc-api OrganisationAddonsAPI.java addTag()
-Conformity: faithful -- idempotent tag add with RBAC
+Adds the tag to the add-on and returns all its tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
-  - tag: Tag
+  - addonId: Add-on ID (`addon_…`)
+  - tag: Tag to add
 
 # Returns the operation result or an error
 

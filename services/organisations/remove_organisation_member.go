@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Removeorganisationmember DELETE /v2/organisations/{id}/members/{user_id} — remove a member.
+Removeorganisationmember Remove a member from an organisation
 
-Source: cc-api OrganisationMembersAPI.java removeOrganisationMember()
-Guards: cannot remove last member, cannot remove last ADMIN unless canDeleteAdmin()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify RemoveMember permission (ADMIN, MANAGER only), Guard: cannot remove last member; cannot remove last ADMIN, Delete from organisation_members + organisation_member_info (transaction), Publish OrganisationUserRemovalEvent
-- Legacy note: cc-api OrganisationMembersAPI.java removeMember() -> OrganisationPersistHelper.java
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Removes the user from the organisation. Any member may remove themselves; removing someone else requires the `ADMIN` or `MANAGER` role. The last member and the last `ADMIN` cannot be removed. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

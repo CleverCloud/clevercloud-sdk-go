@@ -2,7 +2,7 @@
 
 package models
 
-// HTTPErrorBody The platform error envelope, as published.  Named `ErrorEnvelope`, not `ErrorBody`: `crates/api/t...
+// HTTPErrorBody Error returned by the API: branch on `code`, show `error` to a human, read `context` for details,...
 type HTTPErrorBody struct {
 	APIRequestID string       `json:"apiRequestId"` // `request_<uuid>` — correlates the response with the request's traces and logs.
 	Code         string       `json:"code"`         // Machine-matchable code, e.g. `clever.core.not-found`.

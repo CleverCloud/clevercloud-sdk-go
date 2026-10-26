@@ -2,7 +2,7 @@
 
 package models
 
-// TsResources Token resources embedded in TsAddonView.  Source: references/legacy/ovd/modules/ts/models/TsAddon...
+// TsResources Access resources of a Materia TS add-on.
 type TsResources struct {
 	Token string `json:"token"` // Combined read+write token representation exposed to consumers.
 }

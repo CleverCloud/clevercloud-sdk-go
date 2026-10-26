@@ -12,53 +12,16 @@ import (
 )
 
 /*
-RotateOrgApplicationGithubWebhookSecret POST /v2/organisations/{id}/applications/{app_id}/github-webhook/secret —
-rotate the GitHub push hook's secret for this application's repository.
+RotateOrgApplicationGithubWebhookSecret Rotate the GitHub webhook secret of an application
 
-The secret is per-**repository**, so this rotates it once and rewrites the
-`deployment_token` of every application deploying from that repository — the
-receiver checks the HMAC against each candidate application's own token, so
-they have to agree with the hook or all but one stop redeploying. That is why
-the response reports how many applications were touched rather than just
-answering 200.
-
-It doubles as the retry path for a link that could not register its hook:
-creation is deliberately non-fatal about GitHub being unreachable
-(`register_github_hook`), and this is the endpoint that re-drives it.
-
-📥 **Algo Source (Legacy):**
-  - `canManageOrganisationsApplications` scope bit, org lookup (404 ORGA_NOT_FOUND),
-    `hasAccessToOrg` + `canAddApp` (403 OWNER_APP_EDITION_RIGHT)
-  - owner-scoped `aph.getByOwner` → 404 APPLICATION_NOT_FOUND
-  - `app.getOauthData()` null → 400 INVALID_APPLICATION_DATA
-  - pick an OAuth token: for a service token, any org member with one (role-gated
-    on `canRemoveApp`); otherwise the caller's own, 403 if they have none
-  - mint `RandomStringUtils.secure().nextAlphanumeric(32)`
-  - `osh.addServiceToApp(...)` with the new token — PATCHes the existing hook's secret
-  - write the new token onto every sibling application, then 200 APPLICATION_EDITION
-  - Source: cc-api ApplicationHelper.java:965-1059 rotateGithubWebhookSecret()
-
-🔧 **Algo Rust (Implementation):**
-  - `guard_app_not_found` reproduces the scope/role/owner-scoped-404 prologue (shape S4)
-  - `GithubHookService::rotate_secret` does the rest: resolve the link, pick the
-    credential (the caller's own GitHub account; only a machine credential with
-    no actor falls back to an ADMIN/MANAGER member's), mint, PATCH, converge
-    siblings — and fail the request if that sweep does not land
-  - `RotateError` maps to 400 / 403 / 502 / 500 rather than legacy's single
-    `Response`, so a caller can tell "not a GitHub app" from "GitHub refused"
-
-Source: cc-api OrganisationApplicationsAPI.java:688-711 rotateGithubWebhookSecret()
-Source: cc-api ApplicationHelper.java:965-1059 rotateGithubWebhookSecret()
-Schema: V1__Initial_schema.sql:307-312 application_oauth_data; :373-410 applications.deployment_token
-Spec: analysis-output/02-ccapi-analysis.md §Applications
-Issue: #2502
+Generates a new secret for the GitHub push webhook of the repository linked to an organisation's application, for every application deploying from that repository. Answers 400 when the application is not linked to GitHub, 501 when GitHub integration is not available. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - app_id: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

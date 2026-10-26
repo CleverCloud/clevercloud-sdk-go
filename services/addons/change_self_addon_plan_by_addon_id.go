@@ -12,26 +12,15 @@ import (
 )
 
 /*
-Changeselfaddonplanbyaddonid PUT /v2/self/addons/{addon_id}/plan — change addon plan.
+Changeselfaddonplanbyaddonid Change the plan of an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java changePlan()
-Source: cc-api SelfAddonHelper.java:43-46 (planChange delegates to AddonHelper)
-Source: cc-api AddonHelper.java:383-443 (doPlanChange)
-Behavior: validates ownership, calls provider POST /{real_id}/migrations,
-
-	forwards provider response.
-
-Issue: #108
-
-Algorithm: Verify ownership, call provider POST /{real_id}/migrations, forward response
-Legacy: cc-api SelfAddonsAPI.java changePlan() -> AddonHelper.doPlanChange()
-Conformity: faithful -- provider proxy for plan upgrade/downgrade
+Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist or is deleted, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

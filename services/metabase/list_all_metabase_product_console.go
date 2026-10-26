@@ -11,20 +11,9 @@ import (
 )
 
 /*
-Listallmetabaseproductconsole POST /v4/metabase/consumptions — consumption for every addon active in the window.
+Listallmetabaseproductconsole List the consumption of all Metabase add-ons
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getAllConsumptions
-Behavior: enforce the same internal Basic credential (401), then list every
-
-	addon alive at any point in `[since, until]` — soft-deleted rows included,
-	up to their deletion date — and answer 200 with one `ResourceConsumption`
-	per row, each attributed to its **stored** owner (legacy
-	`getAllConsumptions`), never to a path owner. A window matching nothing is
-	an empty array, not a 404; the rows are decoded in a single `fetch_all`, so
-	one row carrying an id the typed decode rejects 500s the whole listing
-	(refs #2397).
-
-Issue: #8
+Called by the platform's billing to read the consumption of every Metabase add-on active over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request
@@ -45,14 +34,14 @@ Example:
 x-service: metabase
 operationId: listAllMetabaseProductConsole
 */
-func Listallmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.MetabaseConsumptionQuery) client.Response[[]models.MetabaseResourceConsumption] {
+func Listallmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.MetabaseConsumptionQuery) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listAllMetabaseProductConsole")
 	defer span.End()
 
 	path := utils.Path("/v4/metabase/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.MetabaseResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[[]models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

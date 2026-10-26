@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Getapplicationdeploymentfororga GET /v2/organisations/{id}/applications/{app_id}/deployments/{deployment_id} — single deployment.
+Getapplicationdeploymentfororga Get a deployment of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationDeployment()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:562 getDeployment()
-Algorithm: Shape S1 — scope bit (403/6201), plain oph.find existence probe (404/6004), hasAccessToOrg + canAccessApps folded into one 403/6201, then the owner-scoped lookup (404/4004); Linear scan of deployments for app; find by deployment_id match; Resolve author name fro...
-Conformity: faithful — queries by deployment_id directly (more efficient than legacy linear scan);
-uuid-only like legacy (no deploy-number fallback), and an unresolvable id answers
-400 DEPLOYMENT_NOT_FOUND (id 4102) as legacy does, not 404. Issues: refs #2004
+Returns one deployment of an organisation's application. An unknown deployment ID answers 400 (error id 4102). Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - deploymentId: Deployment ID
 
 # Returns the operation result or an error

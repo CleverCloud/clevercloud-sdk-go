@@ -16,7 +16,7 @@ RedisDeprovision DELETE /v2/providers/redis-addon/resources/{addon_id} — Depro
 **Legacy**: addon-api-redis Application.scala deprovision()
 **Algorithm**:
   - Marks addon as TO_DELETE (soft-delete).
-  - Unregisters the addon hostname CNAME (dedicated plans only).
+  - Unregisters the addon hostname CNAME, for every plan as the legacy does.
   - Unregisters the backup entity.
 
 The BDS STOP instruction is **deferred** to the `DeleteMarkedJob` cleanup
@@ -32,7 +32,7 @@ ProvisionDriver.removeDedicatedDatabase, scala:89-124), NOT in this endpoint.
 🔧 **Algo Rust (Implementation):**
 - Query provision row by UUID or app_id
 - Mark addon as TO_DELETE (sets deletion_date for the cleanup worker)
-- Unregister DNS CNAME (dedicated) + backup entity, fire-and-forget
+- Unregister DNS CNAME (every plan) + backup entity, fire-and-forget
 - Return 200 OK — the STOP is published later by DeleteMarkedJob
 
 Source: references/legacy/addon-api/redis/app/controllers/Application.scala — deprovision

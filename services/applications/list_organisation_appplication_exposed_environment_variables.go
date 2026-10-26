@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Listorganisationappplicationexposedenvironmentvariables GET /v2/organisations/{id}/applications/{app_id}/exposed_env — exposed env vars.
+Listorganisationappplicationexposedenvironmentvariables Get the exposed environment variables of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationExposedEnv()
-Issue: #107
-
-Legacy: cc-api ApplicationEnvironmentHelper.java:87 getExposedEnv()
-Algorithm: Shape S4 — ah.userAllowedInOrgaGuard(tk, id, ah::canAddApp, ...) wrapping the owner-scoped lookup that answers 404 APPLICATION_NOT_FOUND (:89-91); Fetch exposed_env from application_exposed_env table; Return as HashMap<...
-Conformity: faithful — shape S4: userAllowedInOrgaGuard with canAddApp (not canAccessApps), same query, same key-value map return. Refs #2211
+Returns the variables an organisation's application exposes to the applications that depend on it, as a name-to-value map. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

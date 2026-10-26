@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfaddonenvbyaddonid GET /v2/self/addons/{addon_id}/env — get addon environment variables.
+Getselfaddonenvbyaddonid List the environment variables of an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java getAddonEnv()
-Issue: #108
-
-Algorithm: Verify ownership, query addon_environment_variables for addon_id
-Legacy: cc-api SelfAddonsAPI.java getAddonEnv()
-Conformity: faithful -- returns env vars as AddonEnvironmentView array
+Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

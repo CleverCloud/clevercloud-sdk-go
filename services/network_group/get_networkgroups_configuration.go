@@ -11,14 +11,9 @@ import (
 )
 
 /*
-GetNetworkgroupsConfiguration GET /networkgroup/configuration
+GetNetworkgroupsConfiguration Get the network group service configuration
 
-Source: ovd networkgroup api/routes.scala getNetworkGroupsConfiguration
-Behavior: 200 with the deployment-level configuration (the DNS suffixes a
-member domainName may end with). Public — no authentication and no
-organisation scoping, same stance as the product catalogues: the value only
-depends on the module configuration.
-Issue: #3024
+Returns the DNS suffixes a member `domainName` may end with on this platform. No authentication is required.
 
 Parameters:
   - ctx: context for the request

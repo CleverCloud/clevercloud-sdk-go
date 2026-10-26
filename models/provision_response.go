@@ -2,9 +2,9 @@
 
 package models
 
-// ProvisionResponse Heroku addon provision response (POST /resources response).  `config` carries live credentials (p...
+// ProvisionResponse An add-on provider's answer to a provisioning request: the resource ID, an optional message and t...
 type ProvisionResponse struct {
-	Config  map[string]any `json:"config,omitempty"`  // Environment variables to inject into the addon consumer's app.
-	ID      string         `json:"id"`                // Provider-internal resource ID (or "error" on failure)
-	Message *string        `json:"message,omitempty"` // Human-readable message
+	Config  map[string]string `json:"config,omitempty"`  // Environment variables to inject into the addon consumer's app.
+	ID      string            `json:"id"`                // Provider-internal resource ID (or "error" on failure)
+	Message *string           `json:"message,omitempty"` // Human-readable message
 }

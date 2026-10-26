@@ -2,7 +2,7 @@
 
 package models
 
-// MfaEnrollmentResponse MFA enrollment response returned by POST /v2/self/mfa/{kind}.  Source: cc-api MFAHelper.java:156 ...
+// MfaEnrollmentResponse A pending multi-factor authentication enrolment: the provisioning URL to load in an authenticator...
 type MfaEnrollmentResponse struct {
-	URL string `json:"url"`
+	URL string `json:"url"` // TOTP provisioning URL (`otpauth://…`).
 }

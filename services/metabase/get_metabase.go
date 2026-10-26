@@ -12,21 +12,15 @@ import (
 )
 
 /*
-Getmetabase GET /v4/addon-providers/addon-metabase/addons/{addon_metabase_id} — addon view.
+Getmetabase Get a Metabase add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getMetabaseAddon
-Behavior: fetch row; when a PaaS client is available, read the Java app env
-
-	(`CC_METABASE_VERSION` / `CC_JAVA_VERSION` / `MB_SITE_URL`) and the addon name;
-	otherwise fall back to configured defaults.
-
-Issue: #8
+Returns the add-on: access URL, installed and available versions, backing resources and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId: Metabase addon ID
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
 
 # Returns the operation result or an error
 

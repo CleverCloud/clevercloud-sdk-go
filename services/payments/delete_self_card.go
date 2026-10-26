@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Deleteselfcard DELETE /v2/self/payments/methods/{mId} — discontinued.
+Deleteselfcard Delete a payment method (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:210 deleteUserCard() — 501
-Issues: #289, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

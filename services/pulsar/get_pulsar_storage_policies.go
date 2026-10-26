@@ -12,34 +12,15 @@ import (
 )
 
 /*
-Getpulsarstoragepolicies GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/storage-policies
+Getpulsarstoragepolicies Read a Pulsar add-on's storage policies
 
-	— get namespace storage policies.
-
-**Legacy**: ovd PulsarController.scala:266 getStoragePoliciesServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarStoragePoliciesService.getStoragePolicies (line 70)
-  - Scala queries Pulsar admin API for retention + backlog quota policies
-
-**Conformity**: FAITHFUL — proxies to
-
-	`get_retention_policies` + `get_offload_policies` on the admin
-	client (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getStoragePoliciesServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala getStoragePolicies
-Behavior: parallel admin-API calls for retention + offload policies;
-
-	returns -1 sentinels for any field the cluster did not set.
-
-Issue: #8
+Returns the retention and offload (cold storage) policies of the add-on's namespace: sizes in bytes, durations in minutes, an unset limit omitted. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

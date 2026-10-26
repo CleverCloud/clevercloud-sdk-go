@@ -12,26 +12,9 @@ import (
 )
 
 /*
-Getmateriatsquotalist GET /v4/addon-providers/addon-ts/quotas — list all TS addon quotas.
+Getmateriatsquotalist List the quotas of Materia TS add-ons
 
-Legacy: ovd AddonTSAddonActor.scala:446 getQuotaList
-Algorithm:
-  - `location` must equal the configured location, else 400 (AddonTSBadRequest)
-  - Cursor on `creation_date`: active addons only (`deletion_date IS NULL`, = selectCreatedAddonsSince),
-    `creation_date > since ORDER BY creation_date ASC LIMIT limit + 1`
-  - `QuotaListResponse.fromAddons`: has_more = rows > limit; keep `limit`; one QuotaEntry per addon
-    (addonId = MateriaTsId); next_since = last kept addon's creation_date
-
-Conformity: YES
-
-Source: references/legacy/ovd/modules/ts/actors/AddonTSAddonActor.scala:446-470 getQuotaList
-Source: references/legacy/ovd/modules/ts/repositories/AddonTSAddonRepository.scala:73-76 selectCreatedAddonsSince
-Source: references/legacy/ovd/modules/ts/models/QuotaList.scala QuotaListResponse.fromAddons
-Behavior: cursor-based pagination via `since` (creation_date) + `limit`; scoped by `location`.
-
-	Returns active addons with their quota configuration.
-
-Issue: #313, #765
+Returns the quota of every active add-on, ordered by creation date and paginated with a `since` cursor; the response says whether more entries follow and the cursor to use next. Answers 400 when `location` is not the location this provider serves or `limit` is out of range.
 
 Parameters:
   - ctx: context for the request

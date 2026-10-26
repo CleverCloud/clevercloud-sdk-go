@@ -12,27 +12,17 @@ import (
 )
 
 /*
-Updateorganisationapplicationenvironmentvariable PUT /v2/organisations/{id}/applications/{app_id}/env/{env_name} — set a single env var.
+Updateorganisationapplicationenvironmentvariable Set an environment variable of an application
 
-Legacy: cc-api ApplicationHelper.java:3402 editApplicationEnvUnchecked()
-Algorithm: Auth + canAddApp; parse WannabeValue, validate name and value; Remove existing env with same name, flush, add new val...
-Conformity: faithful — validates the name, upserts, answers the edited
-ApplicationView (#2035), and rejects an unreadable body with 400 3004 (#2028);
-missing the value validation and the ?check schema branch.
-
-Accepts `{"value": "..."}` (WannabeValue format, matching cc-api Java).
-
-Source: cc-api OrganisationApplicationsAPI.java editApplicationEnvByAppIdAndEnvName()
-Behavior: cc-api accepts WannabeValue {value: String}
-Issue: #107
+Creates or updates one environment variable of an organisation's application and returns the edited application. The body carries the value in `value`. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - envName: Env var name
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - envName: Environment variable name
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -12,30 +12,9 @@ import (
 )
 
 /*
-ProvisionInternalAddon POST /v2/internal/organisations/{id}/addons — provision addon for org (internal).
+ProvisionInternalAddon Create an add-on for an organisation as a platform service
 
-Source: cc-api InternalOrganisationAddonsAPI.java:22 @Path("internal/organisations/{id}/addons")
-  - :34-41 @POST provisionAddonInternal()
-
-Source: cc-api AddonHelper.java:863-864 provisionInternal() → :126-129 getOrga() —
-
-	`!token.canManageOrganisationsServices()` → 403 ORGA_SERVICE_ACCESS. getOrga's
-	other 403 branch (hasAccessToOrg, :136-139) is guarded by
-	`isExternalRequest() || isServiceRequest()` and cannot fire for an
-	internal-auth token, so the capability IS the whole gate here.
-
-Behavior: 401 when the caller is not an internal service, 403 for an internal
-
-	service without `manage_organisations_services`, 404 when the org or the
-	provider is unknown. Body-signed: legacy passes the entity to
-	`authInternal(crc, entity)`, so the route carries
-	`buffer_internal_auth_payload`.
-
-Issues: #709, #1956, #2018
-
-Algorithm: Internal auth, provision addon for org via Heroku protocol (same as public create)
-Legacy: cc-api InternalOrganisationAddonsAPI.java:41 provisionAddonInternal()
-Conformity: faithful -- internal provisioning path
+Provisions an add-on at its provider for the organisation, after creating the organisation's own system dependencies when they are missing, and returns its ID, real ID, provider message and configuration. `ownership` may mark it as a system add-on. Platform services granted the right to manage organisation services only (401 for any other caller, 403 without that right); 404 when the organisation does not exist.
 
 Parameters:
   - ctx: context for the request

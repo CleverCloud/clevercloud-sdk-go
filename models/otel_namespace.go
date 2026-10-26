@@ -6,12 +6,14 @@ import "time"
 
 // OtelNamespace Namespace response — OVD `NamespaceResponse`, `@encodedName("OtelNamespace")`.  `location` and `g...
 type OtelNamespace struct {
-	CreatedAt       time.Time `json:"createdAt"`
-	GatewayEndpoint string    `json:"gatewayEndpoint"`
-	GatewayID       string    `json:"gatewayId"` // `otelgw_<uuid>`.
-	ID              string    `json:"id"`        // `otel_<uuid>`.
-	Location        string    `json:"location"`
-	OwnerID         string    `json:"ownerId"` // The path `ownerId`, stored verbatim (`orga_<uuid>`).
-	ReadToken       string    `json:"readToken"`
-	UpdatedAt       time.Time `json:"updatedAt"`
+	CreatedAt             time.Time `json:"createdAt"`
+	GatewayEndpoint       string    `json:"gatewayEndpoint"`
+	GatewayID             string    `json:"gatewayId"` // `otelgw_<uuid>`.
+	ID                    string    `json:"id"`        // `otel_<uuid>`.
+	Location              string    `json:"location"`
+	LogRetentionSeconds   int       `json:"logRetentionSeconds"`   // Seconds the logs index keeps a document (axo-native, #3272).
+	OwnerID               string    `json:"ownerId"`               // The path `ownerId`, stored verbatim (`orga_<uuid>`).
+	ReadToken             string    `json:"readToken"`             // `null` until the namespace is provisioned, by its first service.
+	TraceRetentionSeconds int       `json:"traceRetentionSeconds"` // Seconds the traces index keeps a span (axo-native, #3272).
+	UpdatedAt             time.Time `json:"updatedAt"`
 }

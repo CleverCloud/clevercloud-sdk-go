@@ -8,7 +8,7 @@ type VirtualMachineSpecInput struct {
 	Image        string             `json:"image"`
 	Instructions any                `json:"instructions"`
 	Kernel       VmKernel           `json:"kernel"`
-	Labels       map[string]any     `json:"labels"`
+	Labels       map[string]string  `json:"labels"`
 	Name         string             `json:"name"`
 	ResourceID   *string            `json:"resourceId,omitempty"`
 	Resources    ResourcesSpecInput `json:"resources"`

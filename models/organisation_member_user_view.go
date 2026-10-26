@@ -2,7 +2,7 @@
 
 package models
 
-// OrganisationMemberUserView Nested user view inside OrganisationMemberView.  Source: cc-api User.java toMemberView() Spec: an...
+// OrganisationMemberUserView The user behind an organisation membership: identifier, email, name, avatar and preferred multi-f...
 type OrganisationMemberUserView struct {
 	Avatar       *string `json:"avatar,omitempty"`
 	Email        *string `json:"email,omitempty"`

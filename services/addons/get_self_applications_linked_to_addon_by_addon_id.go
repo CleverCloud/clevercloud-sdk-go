@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfapplicationslinkedtoaddonbyaddonid GET /v2/self/addons/{addon_id}/applications — get linked applications.
+Getselfapplicationslinkedtoaddonbyaddonid List the applications linked to an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java getApplicationsLinkedToAddon()
-Issue: #108
-
-Algorithm: Verify ownership, join addon_application_links to get linked apps
-Legacy: cc-api SelfAddonsAPI.java getApplicationsLinkedToAddon()
-Conformity: faithful -- returns ApplicationView array for linked apps
+Returns the applications the add-on is linked to. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

@@ -12,29 +12,16 @@ import (
 )
 
 /*
-Getkeycloak GET /v4/keycloaks/organisations/{owner_id}/keycloaks/{keycloak_id}
+Getkeycloak Get a Keycloak add-on of an owner
 
-📥 **Algo Source (Legacy):** `AddonKeycloakRoutes.scala:104` discards `ownerId`
-and calls `getAddon(keycloakId)` — the owner is **never** checked against
-`addon_keycloak.owner_id`. The module has no authorizer at all.
-
-⚠ **Two deliberate divergences from legacy, both hardening.** The path
-`owner_id` is attacker-controlled, so it can never be the authorization
-input: the caller is bound to the owner on the STORED row by
-`fetch_owned_addon_row` (private helper above), and the path id is then
-required to *agree* with it. A disagreement is the same 404 an unknown id
-yields — a 403 there would confirm the addon exists under another owner.
-Legacy checked neither.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/routes/AddonKeycloakRoutes.scala:104
-Issues: #313
+Returns the add-on, as the read without owner does, and answers 404 when the add-on does not belong to `ownerId`. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner id; must match the addon's stored owner
-  - addonKeycloakId: Keycloak addon id
+  - ownerId: Owner ID (`user_…` or `orga_…`); must be the add-on's owner
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

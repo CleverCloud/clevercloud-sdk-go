@@ -12,26 +12,15 @@ import (
 )
 
 /*
-GetInternalAddonV2 GET /v2/internal/addons/{addonId} — get addon view (internal, `/v2` compatibility twin).
+GetInternalAddonV2 Get any add-on
 
-Legacy serves this GET under the `/v2` JAX-RS base — `InternalAddonsAPI.java:38`
-`@Path("internal/addons")` + `:65` `@GET @Path("{addonId}")` — and the legacy provider
-readback targets exactly that path (ovd `CCAPI.getAddon` → `GET /v2/internal/addons/{addonId}`,
-`CCAPI.scala:193-197`). The port initially mounted the GET only at the unprefixed
-`/internal/addons/{addon_id}` while this twin carried DELETE alone, so a legacy-faithful
-client received a 405 here and every addon-provider readback failed right after a
-successful provision. Same compatibility-twin pattern as the DELETE (#1956, #2489).
-
-Conformity: faithful — both paths delegate to the same internal-only lookup.
-
-Source: cc-api InternalAddonsAPI.java:65 getAddon()
-Issues: #2648
+Same as `GET /internal/addons/{addon_id}`: returns an add-on by add-on ID or real ID, whoever owns it; a deleted add-on is not found (404). Platform services only (403 otherwise).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID or real ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

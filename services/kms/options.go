@@ -13,7 +13,23 @@ type Option func(*Options)
 
 // Options holds query parameters for kms operations
 type Options struct {
-	Zone *string `url:"zone,omitempty"`
+	IncludeInactive *string `url:"include_inactive,omitempty"`
+	Token           *string `url:"token,omitempty"`
+	Zone            *string `url:"zone,omitempty"`
+}
+
+// WithIncludeInactive sets the include_inactive query parameter
+func WithIncludeInactive(include_inactive string) Option {
+	return func(o *Options) {
+		o.IncludeInactive = &include_inactive
+	}
+}
+
+// WithToken sets the token query parameter
+func WithToken(token string) Option {
+	return func(o *Options) {
+		o.Token = &token
+	}
 }
 
 // WithZone sets the zone query parameter
@@ -31,6 +47,12 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.IncludeInactive != nil {
+		params = append(params, fmt.Sprintf("include_inactive=%s", url.QueryEscape(*options.IncludeInactive)))
+	}
+	if options.Token != nil {
+		params = append(params, fmt.Sprintf("token=%s", url.QueryEscape(*options.Token)))
+	}
 	if options.Zone != nil {
 		params = append(params, fmt.Sprintf("zone=%s", url.QueryEscape(*options.Zone)))
 	}

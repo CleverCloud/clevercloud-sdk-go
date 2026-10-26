@@ -2,7 +2,7 @@
 
 package models
 
-// CephPool Ceph pool — OVD stores this as an object `{"name": "..."}`, not a bare string (same `Encoder.AsOb...
+// CephPool A Ceph pool, as an object holding its `name`.
 type CephPool struct {
 	Name string `json:"name"`
 }

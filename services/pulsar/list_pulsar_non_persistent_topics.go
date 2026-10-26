@@ -12,33 +12,15 @@ import (
 )
 
 /*
-Listpulsarnonpersistenttopics GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/non-persistent-topics
+Listpulsarnonpersistenttopics List a Pulsar add-on's non-persistent topics
 
-	— list non-persistent topics.
-
-**Legacy**: ovd PulsarController.scala:377 listNonPersistentTopicsServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarTopicService.listNonPersistentTopics (line 228)
-  - Scala queries HttpPulsarAdminClient.listNonPersistentTopics, returns `Set[Topic]`
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::list_non_persistent_topics` (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala listNonPersistentTopicsServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala listNonPersistentTopics
-Behavior: returns the cluster's non-persistent topic list for the
-
-	addon's tenant/namespace, mapped into `Vec<TopicView>`.
-
-Issue: #8
+Returns the non-persistent topics of the add-on's namespace as full names (`non-persistent://tenant/namespace/topic`). Pass `partitioned=true` to list the partitioned topics instead. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

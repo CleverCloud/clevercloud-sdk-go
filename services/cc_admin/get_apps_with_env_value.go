@@ -7,59 +7,13 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-GetAppsWithEnvValue **Legacy**: cc-api InternalApplicationsAPI.java:249 getAppsAndEnvValueForEnvName()
-**Algorithm**:
-  - Validate env_name against ALLOWED_ENVS whitelist (403 if not allowed)
-  - Resolve env_name to its canonical key + aliases (`SanitizedConfig.getAllNamesFor`,
-    e.g. `CC_JAVA_VERSION` → `CC_JAVA_VERSION`, `JAVA_VERSION`)
-  - JOIN application_env + applications WHERE env_name IN names (own env), plus
-    applications_linked_to_addons + addons + addon_options WHERE env_name IN names
-    (env exported by linked, non-deleted add-ons) — the same two lookups as the
-    `/internal` twin, via [`lookup_env_value_rows`]
-  - Return list of {id, name, envName, envValue} — `envName` is the name actually
-    matched, so it may be an alias of the requested one; one entry per matched env
-    entry (an app linked to two add-ons exporting the variable appears twice)
+GetAppsWithEnvValue Find the applications setting an environment variable
 
-**Conformity**: PARTIAL — the gate, the allowlist, the alias resolution and the two
-lookups are legacy's (both ports now read the one `ALLOWED_ENV_NAMES` const and the one
-[`lookup_env_value_rows`]), but this crate also serves the same legacy method at
-`/internal/applications/with_env_value` (`get_internal_apps_with_env_value`), which
-answers the legacy grouped-map body where this one answers a flat list. The response
-shapes are still unreconciled: picking one is a behaviour change, not a relocation
-(refs #1956). Values are now decrypted like every other env read (refs #1081); the
-inline query this handler carried served the raw ciphertext.
-
-GET /v2/internal/applications/with_env_value
-
-Find applications that have a specific environment variable.
-Restricted to a whitelist of allowed env var names for security.
-
-Source: cc-api InternalApplicationsAPI.java:246-270 getAppsAndEnvValueForEnvName()
-Source: cc-api InternalApplicationsAPI.java:250 `authInternal(crc, null)` — bodyless,
-
-	so the route takes no `buffer_internal_auth_payload` layer; :252-254
-	`!etk.right().isCCAdmin()` → 403 ACCESS_REQUIRES_CCADMIN_AUTHENTICATION
-
-Source: cc-api SanitizedConfig.java getAllNamesFor(), ApplicationPersistHelper.java
-
-	getAppsHavingConfigEnvVariable() — own env ∪ linked add-ons' exported env
-
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Schema: application_env (env_name VARCHAR, env_value TEXT, application_id VARCHAR)
-  - applications (id VARCHAR PK, name VARCHAR) + applications_linked_to_addons
-  - addons (deletion_date, owner_id) + addon_options (env_name, env_value)
-
-Behavior: 401 when the caller is not an internal service, 403 for any internal
-
-	service other than ccadmin AND for an env_name outside the allowlist —
-	legacy answers a bare 403 on both, in that order — 400 if env_name missing
-
-Issues: #401, #1081, #1956, #2018, refs core-team/cc-api!575
+Maps each value of the given environment variable to the IDs of the applications setting it. Only an allow-listed set of variable names can be queried. Restricted to the platform administration service.
 
 Parameters:
   - ctx: context for the request
@@ -80,7 +34,7 @@ Example:
 x-service: cc_admin
 operationId: get_apps_with_env_value
 */
-func GetAppsWithEnvValue(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.AppEnvValueView] {
+func GetAppsWithEnvValue(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "get_apps_with_env_value")
 	defer span.End()
 
@@ -93,7 +47,7 @@ func GetAppsWithEnvValue(ctx context.Context, c *client.Client, tracer trace.Tra
 	}
 
 	// Make API call
-	response := client.Get[[]models.AppEnvValueView](ctx, c, path)
+	response := client.Get[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

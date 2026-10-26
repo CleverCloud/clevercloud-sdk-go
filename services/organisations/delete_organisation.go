@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Deleteorganisation DELETE /v2/organisations/{id} — delete an organisation.
+Deleteorganisation Delete an organisation
 
-Source: cc-api OrganisationAPI.java deleteOrganisation()
-Source: cc-api OrganisationHelper.java doDelete()
-Issue: #103, refs #2518
-
-📥 **Algo Source (Legacy):**
-Verify DeleteOrg permission (ADMIN only) and refuse a non-active organisation — `!orga.isActive()` (state ACTIVE, no deletion date, members non-empty) → 403 ORGANISATION_NOT_ACTIVE (6017) — then doDelete: refuse if the organisation exposes add-on providers (the ONE precondition), delete every application through the shared doDeleteApp leaf (failures swallowed, deleteAll always 200), deprovision every add-on through the shared deprovisionUnchecked leaf behind the canRemoveAddon role gate (per-add-on outcomes discarded), persist via OrganisationPersistHelper.remove (deletion_date + DECOMMISSIONING on audit/logs/actions statuses), publish OrganisationDeletionEvent (RabbitMQ + Pulsar v1 + v3)
-- Legacy note: cc-api OrganisationHelper.java:184 delete() (isActive gate :195-197) -> doDelete():158
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful — the isActive gate is the ROUTE's; the account-deletion cascade reaches doDelete through the OrganisationDeleter seam and stays ungated, exactly as finishDelete bypasses delete() (refs #2518)
+Deletes the organisation along with its applications and add-ons. Requires the `ADMIN` role, and is refused (403) while the organisation owns add-on providers. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

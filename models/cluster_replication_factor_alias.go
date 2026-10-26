@@ -2,5 +2,5 @@
 
 package models
 
-// ClusterReplicationFactor Control-plane replication factor — an integer in `1..=5`.  Source: references/legacy/ovd/modules/...
+// ClusterReplicationFactor Control-plane replication factor: an integer from 1 to 5, 1 by default.
 type ClusterReplicationFactor = int

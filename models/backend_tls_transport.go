@@ -4,5 +4,5 @@ package models
 
 // BackendTlsTransport Backend TLS transport — `sni-key -> layer` (`BackendTLSTransport`, :158-162).
 type BackendTlsTransport struct {
-	TLS map[string]any `json:"tls"` // Key → TLS layer with SNI checks.
+	TLS map[string]BackendTlsTransportLayer `json:"tls"` // Key → TLS layer with SNI checks.
 }

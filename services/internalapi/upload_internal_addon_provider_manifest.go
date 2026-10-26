@@ -11,27 +11,9 @@ import (
 )
 
 /*
-UploadInternalAddonProviderManifest POST /v2/internal/organisations/{id}/addonproviders — upload addon provider manifest (internal).
+UploadInternalAddonProviderManifest Register an add-on provider from its manifest
 
-Source: cc-api InternalAddonProvidersAPI.java:22 @Path("internal/organisations/{id}/addonproviders")
-  - :35-37 @POST uploadManifest()
-
-Source: cc-api AddonProviderHelper.java:160-165 addProvider() — `!tk.right().isCCAdmin()`
-
-	→ bare 403, checked before the manifest is parsed and before the owner lookup
-
-Behavior: 401 when the caller is not an internal service, 403 for any internal
-
-	service other than ccadmin, 400 on an unusable manifest, 404 when the org
-	is unknown. Body-signed: legacy passes the manifest to
-	`authInternal(crc, content)`, so the route carries
-	`buffer_internal_auth_payload`.
-
-Issues: #709, #1956, #2018
-
-Algorithm: Internal auth, upsert addon provider + plans from manifest JSON
-Legacy: cc-api InternalAddonProvidersAPI.java:37 uploadManifest()
-Conformity: faithful -- provider manifest registration
+Creates or updates the add-on provider described by the JSON manifest in the body (`id`, `name`, and `api` with `test`, `production`, `sso_salt` and `password`), owned by the organisation, and puts it in the `ALPHA` status; returns `{"id": "<provider ID>", "status": "ALPHA"}`. 400 on an invalid manifest, 404 when the organisation does not exist. Restricted to the platform administration service (401 for any other caller, 403 for another platform service).
 
 Parameters:
   - ctx: context for the request

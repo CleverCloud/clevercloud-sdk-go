@@ -4,6 +4,6 @@ package models
 
 // PostgresqlProvidersConsoleViewV2 `GET /resources/providerInfos` response body.  Source: rewrite/rust/src/provider/views.rs — Postg...
 type PostgresqlProvidersConsoleViewV2 struct {
-	Clusters  []PostgresqlClusterConsoleViewV2 `json:"clusters"`
-	Dedicated map[string]any                   `json:"dedicated"`
+	Clusters  []PostgresqlClusterConsoleViewV2      `json:"clusters"`
+	Dedicated map[string]PostgresqlDedicatedOptions `json:"dedicated"`
 }

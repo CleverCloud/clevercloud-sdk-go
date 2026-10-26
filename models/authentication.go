@@ -4,6 +4,6 @@ package models
 
 // Authentication Authentication set (:307-309).
 type Authentication struct {
-	Bearers []BearerCredentials `json:"bearers,omitempty"` // Bearer tokens.
-	Users   []BasicCredentials  `json:"users,omitempty"`   // Basic users.
+	Bearers []BearerCredentials            `json:"bearers,omitempty"` // Bearer tokens.
+	Users   []LoadBalancerBasicCredentials `json:"users,omitempty"`   // Basic users.
 }

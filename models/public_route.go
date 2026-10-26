@@ -9,5 +9,5 @@ type PublicRoute struct {
 	Method         *string               `json:"method,omitempty"`
 	PathRule       PathRule              `json:"pathRule"`
 	RewriteRule    *RewriteRule          `json:"rewriteRule,omitempty"`
-	Tags           map[string]any        `json:"tags"`
+	Tags           map[string]string     `json:"tags"`
 }

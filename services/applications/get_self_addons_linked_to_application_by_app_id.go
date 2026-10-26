@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfaddonslinkedtoapplicationbyappid GET /v2/self/applications/{app_id}/addons — linked addons.
+Getselfaddonslinkedtoapplicationbyappid List the add-ons linked to an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationLinkedAddons()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:166-168 getLinkedAddons() -> ApplicationHelper.java:3556-3574 getLinkedAddons()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(canAddApp), owner-scoped 404 APPLICATION_NOT_FOUND lookup, then list live addons.
-Conformity: faithful — personal org_id, canAddApp, and owner-scoped 404/4004. Refs #2228
+Returns the add-ons linked to an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

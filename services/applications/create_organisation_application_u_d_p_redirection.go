@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Createorganisationapplicationudpredirection Legacy: cc-api OrganisationApplicationsAPI.java:365 addUdpRedir() -> ApplicationHelper.addUdpRedir()
-Algorithm: S9b prologue, then S9c: resolve the namespace inside the path organisation
-(404 NAMESPACE_NOT_FOUND), refuse a second redirection in it (409, the TCP-named 4041),
-ALLOCATE the source port, INSERT. No hayxorp — legacy commented the publish out.
-Conformity: faithful — `sourcePort` from the body is ignored, as on legacy's add path
+Createorganisationapplicationudpredirection Create a UDP redirection for an application
 
-POST /v2/organisations/{id}/applications/{app_id}/udpRedirs — create a UDP redirection.
-
-Source: cc-api OrganisationApplicationsAPI.java:365 addUdpRedir()
-Issue: #107
+Allocates a port in the namespace named in the body (a global namespace or one of the organisation's) and redirects its UDP traffic to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

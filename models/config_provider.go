@@ -4,10 +4,10 @@ package models
 
 import "time"
 
-// ConfigProvider ConfigProvider addon view returned by GET/DELETE endpoints.  Source: references/legacy/ovd/module...
+// ConfigProvider A configuration provider add-on with the environment variables it holds.
 type ConfigProvider struct {
-	CreationDate time.Time       `json:"creation_date"`      // Addon creation timestamp
-	Env          []WannabeEnvVar `json:"env"`                // Current environment variables stored in this config addon
-	ID           string          `json:"id"`                 // cc-api addon ID (the `id` column in `provision` table)
-	OwnerID      *string         `json:"owner_id,omitempty"` // Owner (user or org) ID — optional as stored in DB
+	CreationDate time.Time       `json:"creation_date"`      // Creation date of the add-on (RFC 3339).
+	Env          []WannabeEnvVar `json:"env"`                // Environment variables the add-on holds.
+	ID           string          `json:"id"`                 // Configuration provider add-on ID (`config_…`).
+	OwnerID      *string         `json:"owner_id,omitempty"` // ID of the owner: a user or an organisation.
 }

@@ -15,7 +15,12 @@ ProviderCreate POST /v4/v2/providers/addon-tardis/resources — create via provi
 
 Algorithm: Heroku-compatible provider create endpoint. Creates addon from provider request body.
 
-	Generates addon_id, inserts with ACTIVE status, returns created addon.
+	Generates addon_id, inserts with ACTIVE status, returns created addon. The owner is read
+	from the request body: a user must be that owner when it is their personal `user_…` space,
+	or hold the `ADMIN`/`MANAGER`/`DEVELOPER` role in that `ACTIVE` organisation, else 403, and
+	`applicationId` must be an application it owns, else 404; the service account is served,
+	and 404 when the owner it names is not an existing user or an `ACTIVE` organisation, and
+	any other internal principal is refused 403 (refs #4431).
 
 Legacy: ovd v2 provider API bridge
 Conformity: real

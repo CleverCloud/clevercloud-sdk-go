@@ -10,22 +10,9 @@ import (
 )
 
 /*
-GetInternalInvoicesPendingTransfer GET /v2/internal/invoices/pending_transfer — list invoices pending bank transfer.
+GetInternalInvoicesPendingTransfer List invoices awaiting a bank transfer (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:103 getInvoicesWithPendingTransfer()
-Source: billing-api AdminRoutes.scala — getInvoicesPendingTransfer()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-List all invoices with status PENDING and payment_provider = 'transfer'.
-- Internal auth required
-- Source: billing-api InvoiceDAO.scala
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- ccapi::db::billing::list_invoices_pending_transfer(pool)
-- Return serialized invoice rows
-Conformity: real -- pure PG query, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
@@ -45,14 +32,14 @@ Example:
 x-service: internal
 operationId: get_internal_invoices_pending_transfer
 */
-func GetInternalInvoicesPendingTransfer(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func GetInternalInvoicesPendingTransfer(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_internal_invoices_pending_transfer")
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/pending_transfer")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

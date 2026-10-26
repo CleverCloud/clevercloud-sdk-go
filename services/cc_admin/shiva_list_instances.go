@@ -7,27 +7,14 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-ShivaListInstances **Legacy**: cc-api InternalShivaAPI.java:133 getInstancesForApp()
-**Algorithm**:
-  - Require `app` query param — 400 if missing
-  - Return empty list (stub: needs SuperNova instance registry)
+ShivaListInstances List the instances of an application for the SSH gateway
 
-**Conformity**: STUB — returns an empty list; the real implementation is #1802.
-Moved as-is (refs #1956).
-
-GET /v2/internal/shiva/instances — Shiva: list instances for an application.
-
-Returns SuperNova instance IDs (or empty if no deployment running).
-Stub: real implementation needs SuperNova integration.
-
-Source: cc-api InternalShivaAPI.java:133 getInstancesForApp()
-Schema: N/A — SuperNova-sourced, no table
-Behavior: 401 no auth, 403 not almighty, 400 missing param, 200 list (empty for now)
-Issues: #729, #1802, #1956
+Returns the instances of the application as a choice for the SSH gateway, when the user holds the ADMIN, MANAGER or DEVELOPER role in its owner or is a platform administrator. Restricted to the SSH gateway service.
 
 Parameters:
   - ctx: context for the request
@@ -48,7 +35,7 @@ Example:
 x-service: cc_admin
 operationId: shiva_list_instances
 */
-func ShivaListInstances(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func ShivaListInstances(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.ShivaChoice] {
 	ctx, span := tracer.Start(ctx, "shiva_list_instances")
 	defer span.End()
 
@@ -61,7 +48,7 @@ func ShivaListInstances(ctx context.Context, c *client.Client, tracer trace.Trac
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.ShivaChoice](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

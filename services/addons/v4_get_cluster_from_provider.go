@@ -11,19 +11,9 @@ import (
 )
 
 /*
-V4GetClusterFromProvider GET /v4/addon-providers/{provider_id}/clusters/{cluster_id}
+V4GetClusterFromProvider Get a cluster from an add-on provider
 
-Proxy endpoint that forwards GET /clusters/{cluster_id} to the addon provider.
-Used by Terraform (pulsar), Console3, clever-tools.
-
-Source: cc-api AuthorizationHelper.java:1292 authorize_v4_addonproviders()
-Source: terraform-provider-clevercloud — clevercloud_pulsar resource
-Spec: analysis-output/38-github-api-consumers.md §Terraform — pulsar clusters
-Issue: #313
-
-Algorithm: Resolve provider URL, proxy GET /clusters/{cluster_id}
-Legacy: cc-api — v4 addon provider cluster proxy
-Conformity: faithful -- Terraform pulsar resource uses this
+Returns the description of one of the provider's clusters (provider-defined JSON, forwarded with the provider's status). Requires an OAuth token granted every right (403 otherwise). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

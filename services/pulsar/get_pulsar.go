@@ -12,29 +12,15 @@ import (
 )
 
 /*
-Getpulsar GET /v4/addon-providers/addon-pulsar/addons/{pulsar_id} — get Pulsar addon.
+Getpulsar Read a Pulsar add-on
 
-**Legacy**: ovd PulsarController.scala:206 getPulsarServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarProvisioningService.getPulsar(ownerId, pulsarId) (line 137)
-  - SELECT from addon WHERE id AND owner_id AND status=ACTIVE
-
-**Conformity**: FAITHFUL — ownership enforced via `verify_addon_owner` (refs #1057)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getPulsarServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala getPulsar
-Behavior: returns full addon view. 401 unauthenticated, 403 if the caller
-
-	neither owns the addon nor belongs to the owning org, 404 if not found.
-
-Issue: #8, #1057
+Returns the add-on: tenant, namespace, cluster, plan, status, cold storage state and access token. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

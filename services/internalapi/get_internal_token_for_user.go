@@ -12,16 +12,9 @@ import (
 )
 
 /*
-GetInternalTokenForUser GET /internal/tokenforuser/{userId} — create token as user for CCAdmin (stub).
+GetInternalTokenForUser Issue an access token for a user (not available)
 
-📥 **Algo Source (Legacy):**
-Return error (not yet implemented); needs OAuth1 token generation + cache storage
-- Legacy note: cc-api InternalAPI.java:89 createTokenAsUser(); creates temporary impersonation token
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: stub
-Source: cc-api InternalAPI.java:89 createTokenAsUser()
-Issue: #709
+Not implemented: answers 400 without `employee_id` and 500 otherwise to platform services, and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request

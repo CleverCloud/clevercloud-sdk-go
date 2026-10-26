@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselffavouritevhostbyappid GET /v2/self/applications/{app_id}/vhosts/favourite — favourite vhost.
+Getselffavouritevhostbyappid Get the favourite domain name of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationFavouriteVhost()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:142-145 getFavouriteVhost() -> ApplicationHelper.java:1091-1122 getFavouriteVhost()
-Algorithm: Shape V1 — canAddApp with 6201 on role failure, owner-scoped 403 APPLICATION_BAD_OWNER, then no-favourite 404/4021.
-Conformity: faithful — personal org_id and distinct application versus vhost failures. Refs #2228
+Returns the virtual host marked as favourite on an application of the user's personal space; 404 (error id 4021) when none is.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

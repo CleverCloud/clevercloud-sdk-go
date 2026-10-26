@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Listorganisationapplicationvirtualhosts GET /v2/organisations/{id}/applications/{app_id}/vhosts — virtual hosts.
+Listorganisationapplicationvirtualhosts List the domain names of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationVhosts()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:732 getAllVhosts()
-Algorithm: Shape S1 — scope bit (403/6201), plain oph.find existence probe (404/6004), hasAccessToOrg + canAccessApps folded into one 403/6201, then the owner-scoped lookup (404/4004); Iterate app.getVhosts() — returns VhostView {fqdn}
-Conformity: faithful — shape S1, same vhost iteration, same VhostView shape. Refs #2211
+Returns the virtual hosts (domain names) routed to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -2,13 +2,14 @@
 
 package models
 
-// ClusterNodeGroup A node group, as embedded in the aggregate cluster view.  Source: references/legacy/ovd/modules/k...
+// ClusterNodeGroup A node group as embedded in a cluster's detail, with its nodes.
 type ClusterNodeGroup struct {
-	CurrentNodeCount int                 `json:"currentNodeCount"`
-	Flavor           NodeFlavor          `json:"flavor"`
-	ID               string              `json:"id"`
-	Name             NodeGroupName       `json:"name"`
-	Nodes            []ClusterNode       `json:"nodes,omitempty"`
-	Status           NodeGroupStatusType `json:"status"`
-	TargetNodeCount  NodeGroupNodeCount  `json:"targetNodeCount"`
+	CurrentNodeCount int                   `json:"currentNodeCount"`
+	Failure          *NodeGroupFailureView `json:"failure,omitempty"`
+	Flavor           NodeFlavor            `json:"flavor"`
+	ID               string                `json:"id"`
+	Name             NodeGroupName         `json:"name"`
+	Nodes            []ClusterNode         `json:"nodes,omitempty"`
+	Status           NodeGroupStatusType   `json:"status"`
+	TargetNodeCount  NodeGroupNodeCount    `json:"targetNodeCount"`
 }

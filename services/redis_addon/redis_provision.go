@@ -11,7 +11,17 @@ import (
 )
 
 /*
-RedisProvision
+RedisProvision POST /v2/providers/redis-addon/resources — Provision a new Redis addon.
+
+**Legacy**: addon-api-redis Application.scala provision()
+**Algorithm**:
+  - 501 only when `encryption=true` and no ENCRYPTION_KEY (`ProvisionOutcome::EncryptionUnavailable`).
+
+**Conformity**: YES — fully implemented
+
+Source: references/legacy/addon-api/redis/app/controllers/Application.scala — provision
+Behavior: real provisioning; the 501 is the encryption-key gate, not a stub.
+Issue: #713
 
 Parameters:
   - ctx: context for the request

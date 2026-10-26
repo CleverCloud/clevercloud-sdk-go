@@ -13,7 +13,7 @@ import (
 )
 
 /*
-Listtokens
+Listtokens GET /v4/tenants/{tenantId}/tokens
 
 Parameters:
   - ctx: context for the request

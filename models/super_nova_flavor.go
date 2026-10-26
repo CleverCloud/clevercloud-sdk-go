@@ -2,7 +2,7 @@
 
 package models
 
-// SuperNovaFlavor SuperNovaFlavorView — nested flavor object within SuperNovaInstanceView.  Source: cc-api SuperNov...
+// SuperNovaFlavor The flavor a running instance uses: its name, memory, CPUs and price.
 type SuperNovaFlavor struct {
 	Cpus  Vcpus   `json:"cpus"`
 	Mem   int     `json:"mem"`

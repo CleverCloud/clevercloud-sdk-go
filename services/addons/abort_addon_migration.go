@@ -11,28 +11,16 @@ import (
 )
 
 /*
-Abortaddonmigration DELETE /v2/organisations/{id}/addons/{addon_id}/migrations/{migration_id} — cancel migration.
+Abortaddonmigration Abort a plan migration of an add-on
 
-Source: cc-api OrganisationAddonsAPI.java abortAddonMigration()
-Source: cc-api AddonHelper.java:718-731 (abortMigration)
-Source: cc-api AddonAPIHelper.java:344-362 (abortMigration — DELETE to provider)
-Behavior: checks membership + addon ownership, verifies provider can_upgrade,
-
-	calls provider DELETE /{real_id}/migrations/{migration_id},
-	forwards provider response.
-
-Issue: #108
-
-Algorithm: Verify ADMIN/MANAGER, verify provider can_upgrade flag; Call provider DELETE /{real_id}/migrations/{migration_id}, forward response
-Legacy: cc-api OrganisationAddonsAPI.java abortAddonMigration() -> AddonAPIHelper.abortMigration()
-Conformity: faithful -- provider proxy for migration cancellation
+Asks the add-on's provider to abort the plan migration, and forwards the provider's answer. 400 when the provider does not allow plan changes. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - migrationId: Migration ID
 
 # Returns the operation result or an error

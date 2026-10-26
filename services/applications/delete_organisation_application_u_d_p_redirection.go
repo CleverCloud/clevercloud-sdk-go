@@ -13,21 +13,16 @@ import (
 )
 
 /*
-Deleteorganisationapplicationudpredirection Legacy: cc-api OrganisationApplicationsAPI.java:384 removeUdpRedir() -> ApplicationHelper.removeUdpRedir()
-Algorithm: Legacy: verify org access, DELETE from DB (hayxorp was commented out in Java)
-Conformity: faithful — Java also skipped hayxorp for UDP delete
+Deleteorganisationapplicationudpredirection Delete a UDP redirection of an application
 
-DELETE /v2/organisations/{id}/applications/{app_id}/udpRedirs/{source_port}.
-
-Source: cc-api OrganisationApplicationsAPI.java:384 removeUdpRedir()
-Issue: #107
+Removes the UDP redirection of the given port, in the namespace named by the `namespace` query parameter, from an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - sourcePort: Source port
   - opts: optional query parameters
 

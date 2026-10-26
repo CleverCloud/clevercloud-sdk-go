@@ -12,39 +12,9 @@ import (
 )
 
 /*
-Updateorganisationavatar PUT /v2/organisations/{id}/avatar — replace an organisation's avatar.
+Updateorganisationavatar Replace the avatar of an organisation
 
-📥 **Algo Source (Legacy):**
-Two JAX-RS methods, one helper. `setOrgaAvatar` consumes the five image types and
-hands `replaceAvatar` the raw file; `setOrgaAvatarFromSource` consumes JSON and hands
-it a `WannabeAvatarSource` — a `source` discriminator, never a URL. `replaceAvatar`
-then: refuses a token that cannot manage organisations (403 8101), 404s an unknown
-organisation (6004), refuses a caller without access or without `canEditOrga` (403
-6200), deletes the previous Cellar object, and resolves a URL — by uploading the image
-to the `ccapiavatars` bucket, or by hashing the CALLER's email for `gravatar` / reading
-the CALLER's linked GitHub account for `github`. An unresolvable source is 400 3026; a
-caller with no linked GitHub account gets GithubHelper's own 404 1602 instead. On
-success it writes `owner_info.avatar_url` and answers `UrlView` — `{"url": "…"}`.
-
-🔧 **Algo Rust (Implementation):**
-  - The behaviour lives in `api-avatar`, shared with `PUT /v2/self/avatar`; this handler
-    owns the dispatch, the auth chain and the status codes.
-  - The caller-supplied `url` / `avatar` body key is **gone**. It let any member with
-    `canEditOrga` write an arbitrary string into `owner_info.avatar_url`, which legacy
-    never accepted from a client at all.
-  - Every refusal is an `AuthError`, not an `AuthProof`-wrapped response: `AuthProof::new`
-    panics on an `Anonymous` token and the first legacy gate is the no-credential one.
-  - Conformity: faithful, except that a body which is neither JSON nor one of the five
-    image types answers 415 where legacy's `* /*` source method would answer 400 3026 —
-    see `avatar_variant`. The delete-old step reproduces legacy's miscomputed object key
-    (AvatarHelper.java:67-83) rather than repairing it. The uploaded image is also bounded
-    by the api binary's `BODY_SIZE_LIMIT_MB` layer (10 MB by default, api/src/middleware.rs:29-43),
-    which legacy has no counterpart to — an oversized image is 413 here and an upload there.
-
-Source: cc-api OrganisationAPI.java:176-214 setOrgaAvatarFromSource()/setOrgaAvatar()
-Source: cc-api AvatarHelper.java:98-143 replaceAvatar()
-Schema: V1__Initial_schema.sql:1383-1391 — owner_info (id, avatar_url)
-Issues: #103, #2679
+Uploads a new avatar sent as the raw image body (`image/bmp`, `image/gif`, `image/jpeg`, `image/png` or `image/tiff`), or with a JSON body takes it from the caller's Gravatar or linked GitHub account, and returns its URL. Requires the right to manage organisations and the `ADMIN` or `MANAGER` role. A service token can only upload an image.
 
 Parameters:
   - ctx: context for the request

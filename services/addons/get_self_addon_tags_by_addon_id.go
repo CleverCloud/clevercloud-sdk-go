@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Getselfaddontagsbyaddonid GET /v2/self/addons/{addon_id}/tags — get addon tags.
+Getselfaddontagsbyaddonid List the tags of an add-on of the current user
 
-Source: cc-api Addon.getTags()
-Issue: #108
-
-Algorithm: Verify ownership, query addon_tags for addon_id
-Legacy: cc-api Addon.getTags()
-Conformity: faithful -- returns tag list
+Returns the add-on's tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

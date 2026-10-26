@@ -2,20 +2,20 @@
 
 package models
 
-// V4InstanceView A running instance, in the v4 orchestration shape.  Field-for-field the port of OVD's `InstanceVi...
+// V4InstanceView An instance of an application: the deployment it runs, its flavor, state, host, dates and network...
 type V4InstanceView struct {
 	ApplicationID string  `json:"applicationId"`
-	CreationDate  *string `json:"creationDate,omitempty"`
-	DeletionDate  *string `json:"deletionDate,omitempty"`
-	DeploymentID  *string `json:"deploymentId,omitempty"` // The field this whole module exists for. v2 spells it `deployId`.  `null`, never `""`, when the re...
-	Flavor        *string `json:"flavor,omitempty"`       // The flavor NAME only — v4 is a bare string where v2 nests the whole `{name, mem, cpus, price}` ob...
-	HypervisorID  *string `json:"hypervisorId,omitempty"`
+	CreationDate  *string `json:"creationDate,omitempty"` // Creation date, as an RFC 3339 UTC timestamp.
+	DeletionDate  *string `json:"deletionDate,omitempty"` // Deletion date, as an RFC 3339 UTC timestamp; `null` for a live instance.
+	DeploymentID  *string `json:"deploymentId,omitempty"` // Identifier of the deployment the instance runs; `null` when unknown.
+	Flavor        *string `json:"flavor,omitempty"`       // Name of the instance's flavor.
+	HypervisorID  *string `json:"hypervisorId,omitempty"` // Identifier of the host the instance runs on.
 	ID            string  `json:"id"`
-	Index         *int    `json:"index,omitempty"`
-	IsBuildVm     bool    `json:"isBuildVm"`
+	Index         *int    `json:"index,omitempty"` // Number of the instance within the application.
+	IsBuildVm     bool    `json:"isBuildVm"`       // Whether the instance is a dedicated build instance rather than a runtime one.
 	Name          *string `json:"name,omitempty"`
-	Network       *string `json:"network,omitempty"`
+	Network       *string `json:"network,omitempty"` // Address of the instance, as `<ip>:<port>`; `null` when either part is unknown.
 	OwnerID       *string `json:"ownerId,omitempty"`
-	ResourceID    string  `json:"resourceId"`
+	ResourceID    string  `json:"resourceId"` // Identifier of the resource the instance belongs to; the application ID.
 	State         string  `json:"state"`
 }

@@ -12,25 +12,9 @@ import (
 )
 
 /*
-GetOrgPartnerInfo **Legacy**: cc-api InternalOrganisationsAPI.java:513 getPartnerInfoForOrga()
-**Algorithm**:
-  - LEFT JOIN organisations -> partner ON partner_id
-  - 404 if org not found, return empty partner fields if no partner
+GetOrgPartnerInfo Get the partner of an organisation
 
-**Conformity**: YES — partner info query matches cc-api
-
-GET /v2/internal/organisations/{id}/partner-info — get partner info for org.
-
-Source: cc-api InternalOrganisationsAPI.java:510 getPartnerInfoForOrga()
-Schema: V1__Initial_schema.sql — tables organisations (partner_id), partner
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: returns partner info or empty object if no partner, 404 if org not found.
-
-	401 not internal; there is NO role check — legacy runs authInternal() and
-	goes straight to the lookup, so every internal service is accepted.
-	Bodyless signing base.
-
-Issue: #634, #2018
+Returns the partner the organisation belongs to (ID, name, console and API domains), with empty fields when it has none; 404 when the organisation is unknown. Callable by any platform service.
 
 Parameters:
   - ctx: context for the request

@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Buydropsbyorga POST /v2/organisations/{id}/payments/billings — discontinued.
+Buydropsbyorga Buy credits for an organisation (discontinued)
 
-Source: cc-api OrganisationPaymentsAPI.java:144 buyDrops() — 501
-Issues: #106, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

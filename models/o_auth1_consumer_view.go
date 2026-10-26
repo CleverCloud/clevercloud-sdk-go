@@ -2,7 +2,7 @@
 
 package models
 
-// OAuth1ConsumerView OAuth1 consumer view.  Source: cc-api output/oauth/OAuth1ConsumerView.java Source: cc-api CleverC...
+// OAuth1ConsumerView An OAuth1 consumer: a third-party application allowed to act on behalf of users, with its display...
 type OAuth1ConsumerView struct {
 	BaseURL     *string         `json:"baseUrl,omitempty"`
 	Description *string         `json:"description,omitempty"`

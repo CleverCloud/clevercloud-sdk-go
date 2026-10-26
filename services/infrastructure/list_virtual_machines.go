@@ -14,9 +14,11 @@ import (
 /*
 Listvirtualmachines GET /v4/compute/virtual-machines
 
-Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala listVirtualMachines
-Behavior: list VMs from cache, optionally filtered by state/resource_id.
-Issue: #664
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:96-104 (listVirtualMachines)
+Source: references/legacy/ovd/modules/compute/api/routes.scala:120-136,227-240 (query codecs)
+Behavior: list VMs from the cache, filtered by `state` (the lowercase
+state name, else 400) and/or `resourceId` (a `ComputableId`, else 400).
+Issue: #664, #1295, #3503
 
 Parameters:
   - ctx: context for the request

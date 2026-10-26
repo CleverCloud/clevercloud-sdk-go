@@ -27,8 +27,9 @@ ovd `UserTokenService.generateOrganizationReadToken` → `doGenerateToken`:
 
 🔧 **Algo Rust (Implementation):**
   - `WannabeStatsReadToken::validate(maxTtl=P20D, defaultTtl=P5D, allowedApps)` resolves defaults
-    (empty `{}` body → {metrics, metrics.accesslogs} / P5D) and returns the resolved applications;
-    ttl validated before apps.
+    (empty `{}` body → {metrics, metrics.accesslogs, addon-api-fsbucket} / P5D) and returns the
+    resolved applications; ttl validated before apps. The third application is this crate's
+    deliberate divergence from the legacy default above (#3019).
   - `build_stats_read_token(.., None, ..)` → `module.metrics().create_tenant_read_token(owner_id,
     &applications, &lifespan_iso)` (`lifespan_iso` = the effective TTL's `Interval.toISO8601`)
     mints the REAL lifespan-honouring `PlatformTokenOutput`.

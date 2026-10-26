@@ -2,7 +2,7 @@
 
 package models
 
-// ContactEntry A single contact entry for PUT /v2/internal/organisations/{id}/contacts.  Source: cc-api WannabeC...
+// ContactEntry A security, privacy or abuse contact of an organisation.
 type ContactEntry struct {
 	ContactType  string  `json:"contact_type"`           // Contact type: SECURITY, PRIVACY, or ABUSE.
 	EmailAddress string  `json:"email_address"`          // Contact email address.

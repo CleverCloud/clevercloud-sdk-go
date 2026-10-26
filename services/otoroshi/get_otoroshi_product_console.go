@@ -12,18 +12,16 @@ import (
 )
 
 /*
-Getotoroshiproductconsole POST /v4/otoroshi/organisations/{owner_id}/otoroshi/{otoroshi_id}/consumption
+Getotoroshiproductconsole Get the consumption of an Otoroshi add-on
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getConsumption()
-Behavior: Fetch addon by ID+owner, compute active days in `[since,until]`, return consumption view.
-Issue: #313
+Called by the platform's billing to read the consumption of one active add-on over the `since`–`until` window given in the body. Answers 404 when the add-on is unknown, deleted or not owned by `ownerId`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Organisation or user owner ID
-  - OtoroshiId: Otoroshi instance ID
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -39,14 +37,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiProductConsole
 */
-func Getotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, OtoroshiId string, requestBody *models.OtoroshiConsumptionQuery) client.Response[models.OtoroshiResourceConsumption] {
+func Getotoroshiproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, OtoroshiId string, requestBody *models.OtoroshiConsumptionQuery) client.Response[models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiProductConsole", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/otoroshi/organisations/%s/otoroshi/%s/consumption", ownerId, OtoroshiId)
 
 	// Make API call
-	response := client.Post[models.OtoroshiResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

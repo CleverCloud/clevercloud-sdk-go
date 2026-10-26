@@ -12,35 +12,15 @@ import (
 )
 
 /*
-DeleteInternalAddon DELETE /internal/addons/{addonId} — admin delete addon (deprovision, internal).
+DeleteInternalAddon Delete any add-on
 
-Source: cc-api InternalAddonsAPI.java:120 deleteAddon()
-Behavior: requires CCAdmin. Looks up addon by ID or real_id, deprovisions via provider API,
-
-	then soft-deletes. Returns 404 if not found, 403 if not admin.
-
-Gate: legacy's, since #2018 — `authInternal()` answers 401 for a caller that is not an
-internal service (where an almighty OAuth1 token now lands), then `isCCAdmin()` answers
-403. This path is not one legacy serves — legacy mounts the method under `/v2` only,
-which `admin_delete_addon` covers — but it stays mounted, and it is the half of the pair
-that really deprovisions, so it carries the same gate as its twin rather than a laxer one
-any almighty-holding internal service could walk through.
-
-Source: cc-api AuthHelper.java:127-140 authInternal() — 401 when not internal
-Source: cc-api InternalAddonsAPI.java:124 — `isCCAdmin()` → 403
-Issues: #709, #2018, #2489
-
-Algorithm: Internal auth; validate organisation ownership; reject SYSTEM ownership; call
-provider DELETE; soft-delete and unlink; recursively deprovision dependants; publish each
-successful deletion event descendants-first; return SERVICE_DELETED.
-Legacy: cc-api InternalAddonsAPI.java deleteAddon()
-Conformity: faithful -- compatibility path delegates to the complete current cc-api flow
+Deprovisions the add-on at its provider and deletes it, whoever owns it. Restricted to the platform administration service: 401 for any other caller, 403 for another platform service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addon_id: Addon ID or real ID
+  - addon_id: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

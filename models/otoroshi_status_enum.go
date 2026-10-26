@@ -2,7 +2,7 @@
 
 package models
 
-// OtoroshiStatus represents Otoroshi addon status.  Source: references/legacy/ovd/modules/otoroshi/models/Otoroshi.scala — Ad...
+// OtoroshiStatus represents Lifecycle state of an Otoroshi addon.  Source: references/legacy/ovd/modules/otoroshi/models/Otor...
 type OtoroshiStatus string
 
 const (

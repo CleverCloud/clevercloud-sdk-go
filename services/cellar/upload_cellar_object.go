@@ -14,14 +14,14 @@ import (
 /*
 Uploadcellarobject Upload an object through an issued upload link
 
-Streams the request body straight into a bucket as the named object and returns the stored key, the byte count, the ETag and the content type echoed back from the request. No body-size limit applies on this route. This is the redemption route for a link issued by the `objects/{objectKey}/presigned-url` route: the caller must present that link's token, either in the `authorization` query parameter or as a `Bearer` header, and the token is accepted only for the exact add-on, bucket and object key it was issued for. The request `Content-Type` is stored with the object, falling back to `application/octet-stream` when absent, and `x-amz-meta-*` headers become the object's user metadata, lowercased with the prefix stripped. A request presenting no token, or one that cannot be verified, answers 401; a token that has expired, or that was issued for a different add-on, bucket or key, answers 403; and an unknown add-on or bucket answers 404.
+Redeems a link issued by the `objects/{objectKey}/presigned-url` route: streams the request body, with no size limit, into the bucket as the named object and returns its key, size, ETag and content type. The link's token travels in the `authorization` query parameter or a `Bearer` header and is valid only for its add-on, bucket and key; `Content-Type` (default `application/octet-stream`) and `x-amz-meta-*` headers are stored with the object. 401 without a verifiable token, 403 for an expired or mismatched one, 404 for an unknown add-on or bucket.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - CellarId: Cellar addon ID
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
   - bucketName: Bucket name
   - objectKey: Object key
 

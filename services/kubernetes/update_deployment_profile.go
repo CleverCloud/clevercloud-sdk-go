@@ -12,38 +12,22 @@ import (
 )
 
 /*
-Updatedeploymentprofile PUT /v4/kubernetes/admin/deployment-profiles/{location_id}
+Updatedeploymentprofile Replace a Kubernetes deployment profile
 
-📥 **Algo Source (Legacy):**
-Replace a location's deployment profile.
-  - `requireBasicAuth` → 403 otherwise
-  - The body's `locationId` must equal the path one, else 400
-    `DeploymentProfileInvalid`
-  - `validateProfileData` → 400
-  - `repository.update`; 0 affected rows → 404
-  - Source: ovd DeploymentProfileController.scala:141-168
-
-🔧 **Algo Rust (Implementation):**
-- `AdminAccess` extractor → 403; `validate_location_id` (path) → 400
-- Path/body mismatch → 400; `DeploymentProfile::decode` → 400
-- `update` → 0 rows ⇒ 404; else 200 + redacted view
-
-Source: ovd controllers/DeploymentProfileController.scala:141-168
-Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
-Issue: #1625
+Replaces the profile's zone and content. Moving it into a zone that already has a production default is a 409 unless `prodDefault` says which profile keeps it; `prodDefault: false` on a profile staying in its zone is a 400, and an unknown profile a 404. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId: Location id (location_<uuid>)
+  - profileId: Deployment profile ID (`kubernetes_deployment_profile_<uuid>` or `kubernetesDeploymentProfile_<uuid>`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Updatedeploymentprofile(ctx, client, tracer, locationId, requestBody)
+	response := kubernetes.Updatedeploymentprofile(ctx, client, tracer, profileId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -52,11 +36,11 @@ Example:
 x-service: kubernetes
 operationId: updateDeploymentProfile
 */
-func Updatedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, locationId string, requestBody *models.WannabeDeploymentProfile) client.Response[models.DeploymentProfile] {
-	ctx, span := tracer.Start(ctx, "updateDeploymentProfile", trace.WithAttributes(attribute.String("locationId", locationId)))
+func Updatedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, profileId string, requestBody *models.WannabeDeploymentProfile) client.Response[models.DeploymentProfile] {
+	ctx, span := tracer.Start(ctx, "updateDeploymentProfile", trace.WithAttributes(attribute.String("profileId", profileId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", locationId)
+	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", profileId)
 
 	// Make API call
 	response := client.Put[models.DeploymentProfile](ctx, c, path, requestBody)

@@ -12,22 +12,17 @@ import (
 )
 
 /*
-Addapplicationdependencybyorgaandappid PUT /v2/organisations/{id}/applications/{app_id}/dependencies/{dep_id} — add org dependency.
+Addapplicationdependencybyorgaandappid Add a dependency to an application
 
-Legacy: cc-api ApplicationDependenciesHelper.java:126-140 addDependency()
-Algorithm: Auth + org membership check; Insert dependency link
-Conformity: faithful — matches JPA behavior
-
-Source: cc-api OrganisationApplicationDependenciesAPI.java addDependency()
-Issue: #107
+Makes an organisation's application depend on another application of the organisation, whose exposed variables it then receives; the ID of an add-on that runs as an application of the organisation is accepted too. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - dependencyId: Dependency application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - dependencyId: ID of the dependency application (`app_…`)
 
 # Returns the operation result or an error
 

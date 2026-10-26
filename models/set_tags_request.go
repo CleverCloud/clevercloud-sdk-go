@@ -2,7 +2,7 @@
 
 package models
 
-// SetTagsRequest Request body for PUT /v2/internal/organisations/{id}/tags.  TWO wire shapes are accepted, for the...
+// SetTagsRequest Tags of an organisation, replacing the current ones. Send either the bare list of tags or an obje...
 type SetTagsRequest struct {
 	Tags []string `json:"tags"` // Tags to set on the organisation (replaces existing tags).
 }

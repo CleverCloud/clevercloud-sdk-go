@@ -11,7 +11,11 @@ import (
 )
 
 /*
-OperationalHealth Unauthenticated operational health of the new-model LoadBalancer module:
+OperationalHealth Operational health of the new-model LoadBalancer module, behind the deployment's
+shared health credential (`Authorization: Basic`, the password in
+`AXO__INTERNAL_DOCS__PASSWORD`) — not one of the tenant schemes: no organisation, role or
+Biscuit capability opens this route, and it opens none of the parity surface.
+
 - database unreachable or schema incompatible → **503**;
 - database ok → **200** `{"status":"ok","database":"compatible"}`.
 

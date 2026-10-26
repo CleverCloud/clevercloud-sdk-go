@@ -2,10 +2,10 @@
 
 package models
 
-// ResourcesSpec Source: ovd VirtualMachineDeploymentSpec.scala — ResourcesSpec
+// ResourcesSpec Source: ovd VirtualMachineDeploymentSpec.scala — ResourcesSpec  `interfaces` replaced OVD's `netw...
 type ResourcesSpec struct {
-	Cpu      int           `json:"cpu"`    // CPU in milli-CPU (1000 = 1 vCPU).
-	Memory   int           `json:"memory"` // Memory in bytes.
-	Networks []NetworkSpec `json:"networks"`
-	Volumes  VolumesSpec   `json:"volumes"`
+	Cpu        int             `json:"cpu"`        // CPU in milli-CPU (1000 = 1 vCPU).
+	Interfaces []InterfaceSpec `json:"interfaces"` // The VM's network attachments: exactly one `NAT` for now (a VM without one is refused until the hy...
+	Memory     int             `json:"memory"`     // Memory in bytes.
+	Volumes    VolumesSpec     `json:"volumes"`
 }

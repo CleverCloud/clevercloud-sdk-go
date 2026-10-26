@@ -11,21 +11,15 @@ import (
 )
 
 /*
-GetInternalApplicationOwnerID Legacy: cc-api InternalApplicationsAPI.java:197 getAppOwner()
-Algorithm: Legacy: authInternal(), call ApplicationPersistHelper.getOwner(appId); Legacy: returns plain org ID string (not JSON ...
-Conformity: faithful — returns owner_id string, matches legacy behavior
+GetInternalApplicationOwnerID Get the owner of an application
 
-GET /v2/internal/applications/{appId}/ownerId — get application owner ID.
-
-Source: cc-api InternalApplicationsAPI.java:197 getAppOwner()
-Behavior: returns the org ID that owns the given application.
-Issue: #159
+Returns the ID of the organisation or user owning the application; 404 when the application is unknown. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

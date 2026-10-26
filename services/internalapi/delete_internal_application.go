@@ -12,22 +12,15 @@ import (
 )
 
 /*
-DeleteInternalApplication Legacy: cc-api InternalApplicationsAPI.java:100-105 deleteApplication()
-Algorithm: authInternal(), then ApplicationHelper.deleteUnchecked (:942-962): the canManageOrganisationsApplications + isAddonAPI claim pair (:949-950, bare 403), acting user = getUserId() else "infra" (:951-954), owner lookup Nothing answers 204 (:956-959), then _delete (:886) into the SAME doDeleteApp (:766-858) the unit paths run — legacy has no lighter internal path.
-Conformity: faithful — routed through the shared deletion leaf: BDS STOP + SHOULD_BE_DOWN, redirection/env/dependency teardown, backup entity (GIT), per-vhost DNS delete, ADC REMOVE_ACL (+ REMOVE_APP on GIT), etilotig REMOVE_APP, deletion events. Refs #2518
+DeleteInternalApplication Delete an application
 
-DELETE /v2/internal/applications/{id} — delete application (unchecked).
-
-Source: cc-api InternalApplicationsAPI.java:100-105 deleteApplication()
-Source: cc-api ApplicationHelper.java:942-962 deleteUnchecked()
-Behavior: deletes application without OAuth access checks; internal auth carrying the addon-api claim pair required.
-Issue: #159, refs #2518
+Stops and deletes any application; answers 204 when the ID resolves no owner. Restricted to add-on provider services allowed to manage organisation applications.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -2,7 +2,7 @@
 
 package models
 
-// MemberKind represents Member kind. Lowercase on the wire (`PulsarMessageCodecs.lowercaseEncoder`) and decoded case-inse...
+// MemberKind represents Kind of resource a network group member stands for. Returned in lowercase; accepted in any case o...
 type MemberKind string
 
 const (

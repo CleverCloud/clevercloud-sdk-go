@@ -12,10 +12,13 @@ import (
 /*
 Getcountries GET /v2/products/countries
 
-Source: cc-api ProductsAPI.java:130 getCountries()
-Issue: #104
+Source: cc-api ProductsAPI.java:158-171 getCountries()
+Issue: #104, #3382
 Algorithm: Return static HashMap of ISO 3166-1 alpha-2 codes to country names — no DB, hardcoded from CountryCodes.java.
-Legacy: none
+Legacy: The method declares its own `@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")`
+
+	(`ProductsAPI.java:159`), so the answer carries the charset the rest of the resource does not.
+
 Conformity: faithful
 
 Parameters:

@@ -12,35 +12,50 @@ import (
 )
 
 /*
-Renewcellarcredentials Rotate the add-on's S3 secret key
+RenewCellarCredentials POST /v4/addon-providers/addon-cellar/addons/{addon_id}/credentials/renew -- renew secret.
 
-Generates a fresh secret access key for this add-on, keeping the same endpoint and access key id, and returns the refreshed credentials. The new value is recorded once on the add-on's own `CELLAR_ADDON_*` environment variables before the call returns, so a failure to record it fails the whole call rather than handing back a key nothing else knows about. The previous secret stops working, so any client still holding it must be updated. The caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation in the path. An unknown add-on answers 404.
+**Legacy**: ovd CellarRoutes.scala:153 renewCellarCredentialsEndpoint / CellarCephService.scala renewCredentials()
+**Algorithm**:
+  - Renew S3 key via Ceph RGW Admin API (keep access key, regenerate secret)
+  - Update provision_config, fallback to UUID secret if no RGW (dev/airgap)
+
+**Conformity**: YES
+
+Source: ovd/modules/cellar/routes/CellarRoutes.scala renewCellarCredentialsEndpoint
+Source: ovd/modules/cellar/services/CellarCephService.scala renewCredentials()
+Source: ovd/modules/cellar/repositories/CellarProvisionConfigRepository.scala updateSecret()
+Source: ovd/modules/storage/CephRadosGW.scala — renewS3Key(uid, accessKey)
+Behavior: Renews the S3 secret key via Ceph RGW Admin API (keeping access key ID),
+
+	then updates the provision_config table with the new secret from Ceph.
+	Falls back to local UUID secret if no RGW cluster configured (dev/airgap).
+
+Issue: #8, #668
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - CellarId: Cellar addon ID
+  - addon_id: Cellar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Renewcellarcredentials(ctx, client, tracer, ownerId, CellarId)
+	response := cellar.RenewCellarCredentials(ctx, client, tracer, addon_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: cellar
-operationId: renewCellarCredentials
+x-service: Cellar
+operationId: renew_cellar_credentials
 */
-func Renewcellarcredentials(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.CellarCredentials] {
-	ctx, span := tracer.Start(ctx, "renewCellarCredentials", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
+func RenewCellarCredentials(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[models.CellarCredentials] {
+	ctx, span := tracer.Start(ctx, "renew_cellar_credentials", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/credentials/renew", ownerId, CellarId)
+	path := utils.Path("/v4/addon-providers/addon-cellar/addons/%s/credentials/renew", addon_id)
 
 	// Make API call
 	response := client.Post[models.CellarCredentials](ctx, c, path, nil)

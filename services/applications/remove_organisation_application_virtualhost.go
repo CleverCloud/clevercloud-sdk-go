@@ -12,22 +12,17 @@ import (
 )
 
 /*
-Removeorganisationapplicationvirtualhost DELETE /v2/organisations/{id}/applications/{app_id}/vhosts/{domain} — remove a vhost.
+Removeorganisationapplicationvirtualhost Remove a domain name from an application
 
-Legacy: cc-api ApplicationHelper.java:1063 removeVhost() -> :2472 removeVhostUnchecked()
-Algorithm: Auth + canAddApp; find vhost by FQDN (case-insensitive); Remove from list; clear favourite if it was the favourite vh...
-Conformity: faithful — DNS cleanup via messaging matches Java behavior
-
-Source: cc-api OrganisationApplicationsAPI.java removeOrganisationVhost()
-Issue: #107
+Stops routing the given domain name to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by platform services.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - domain: FQDN
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - domain: Domain name (FQDN)
 
 # Returns the operation result or an error
 

@@ -4,9 +4,9 @@ package models
 
 import "time"
 
-// PaginationMetadata Pagination metadata for cursor-based pagination in TS list endpoints.  Source: references/legacy/...
+// PaginationMetadata Cursor pagination of a Materia TS listing: the location listed, whether more entries follow and t...
 type PaginationMetadata struct {
 	HasMore    bool       `json:"hasMore"`
 	LocationID LocationId `json:"locationId"`
-	NextSince  *time.Time `json:"nextSince,omitempty"` // ISO 8601 cursor for next page. Absent when has_more is false.
+	NextSince  *time.Time `json:"nextSince,omitempty"` // ISO 8601 cursor of the next page; absent when `hasMore` is false.
 }

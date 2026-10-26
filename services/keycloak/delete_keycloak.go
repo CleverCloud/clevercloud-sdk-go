@@ -11,27 +11,15 @@ import (
 )
 
 /*
-Deletekeycloak DELETE /v2/providers/addon-keycloak/resources/{keycloak_id}
+Deletekeycloak Deprovision a Keycloak add-on
 
-📥 **Algo Source (Legacy):** `markToDelete` (`A:1173`) **soft-deletes**: sets
-`deletion_date` and `status = TO_DELETE` on the addon and its child applications.
-The row is kept so billing can still invoice the final period. Missing ids are
-ignored (`ignoreNotFound`, `Keycloak.scala:56-59`) and still answer 204.
-
-🔧 **Algo Rust (Implementation):** release every cc-api resource first
-(applications, DNS, PostgreSQL addon, FS bucket), then `repo::soft_delete` in
-one transaction. A teardown failure records `DELETION_ERROR`, leaves the row
-live and answers 500 so the delete can be retried. An unknown or
-already-deleted id is 404.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:1173
-Issues: #313
+Called by the platform when a customer deletes a Keycloak add-on. Deletes its Java applications, DNS records, PostgreSQL add-on, FS Bucket and network group, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers an error and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

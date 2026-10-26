@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// Bucket Bucket view returned by bucket endpoints.  Source: references/legacy/ovd/modules/cellar/models/pa...
+// Bucket A bucket of a Cellar add-on, with its object count and size.
 type Bucket struct {
 	CreatedAt    time.Time `json:"createdAt"`    // Creation timestamp
 	Name         string    `json:"name"`         // Bucket name

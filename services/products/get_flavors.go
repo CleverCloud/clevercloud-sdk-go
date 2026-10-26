@@ -12,12 +12,27 @@ import (
 )
 
 /*
-Getflavors GET /v2/products/flavors — list public flavors.
+Getflavors GET /v2/products/flavors — list public flavors. **Public**: no authentication.
 
-Source: cc-api ProductsAPI.java getFlavors()
-Filters by visibility (PUBLIC/CONTEXT) and excludes owner-specific flavors.
-No authentication required.
-Issue: #102
+`?context=` selects the catalogue: absent or empty is the `default` context,
+`all` is every context, anything else is a strict equality that answers `[]`
+when nothing carries it (cc-api FlavorFacade.java:48-55). Rows come back in
+`Flavor.compareTo` order — cpus, then mem — with `(cpus, mem)` ties collapsed,
+and are filtered on visibility and on carrying no `flavor_owners` row
+(ProductsAPI.java:233-236); see `FlavorRepository::find_public_flavors` for the
+visibility rule, which tests the *raw* parameter.
+
+The parameter is read off the raw query string rather than through a `Query<T>`
+extractor: `getFlavors(@QueryParam("context") String context)`
+(ProductsAPI.java:232) binds one `String` out of however many occurrences the
+caller sent and JAX-RS gives it the first, while deserialising a struct answers
+400 on a duplicated parameter and would otherwise take the last.
+
+Source: cc-api ProductsAPI.java:226-242 — getFlavors
+Source: cc-api FlavorFacade.java:48-55 — findByContext
+Schema: 00001_initial_schema.sql:729-739 — flavors
+Spec: analysis-output/02-ccapi-analysis.md §Products
+Issues: #102, #3378
 
 Parameters:
   - ctx: context for the request

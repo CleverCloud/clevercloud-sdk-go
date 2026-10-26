@@ -2,7 +2,7 @@
 
 package models
 
-// AddonStatus represents Addon lifecycle status shared across OVD addon modules (configprovider, metabase, etc.).  This is...
+// AddonStatus represents Lifecycle status of an add-on: `PROVISIONING`, `ACTIVE`, `TO_DELETE` (deletion requested), `DELET...
 type AddonStatus string
 
 const (

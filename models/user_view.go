@@ -2,27 +2,27 @@
 
 package models
 
-// UserView User view returned by GET /v2/self. Matches cc-api's UserView JSON shape exactly.  Source: cc-api...
+// UserView A user's profile: identity, contact and postal details, account status, preferred multi-factor au...
 type UserView struct {
 	Address           *string       `json:"address,omitempty"`
 	Admin             bool          `json:"admin"`
 	Avatar            *string       `json:"avatar,omitempty"`
-	CanPay            bool          `json:"canPay"`
+	CanPay            bool          `json:"canPay"` // Whether the profile holds what paying requires: name, phone, full postal address and a validated ...
 	City              *string       `json:"city,omitempty"`
-	ContextFlags      []PartnerFlag `json:"contextFlags,omitempty"` // The flags of the user's partner — `Partner.getContextFlags()`. Always serialized (an empty array,...
+	ContextFlags      []PartnerFlag `json:"contextFlags,omitempty"` // Restrictions the user's partner imposes; always present, empty when there are none.
 	Country           *string       `json:"country,omitempty"`
-	CreationDate      *int          `json:"creationDate,omitempty"`
+	CreationDate      *int          `json:"creationDate,omitempty"` // Account creation date, in milliseconds since the Unix epoch.
 	Email             *string       `json:"email,omitempty"`
 	EmailValidated    bool          `json:"emailValidated"`
 	HasPassword       bool          `json:"hasPassword"`
 	ID                string        `json:"id"`
 	Lang              *string       `json:"lang,omitempty"`
 	Name              *string       `json:"name,omitempty"`
-	OauthApps         []string      `json:"oauthApps"`
+	OauthApps         []string      `json:"oauthApps"` // Git hosting services the user has linked, such as `github`.
 	PartnerConsoleURL *string       `json:"partnerConsoleUrl,omitempty"`
 	PartnerID         *string       `json:"partnerId,omitempty"`
 	PartnerName       *string       `json:"partnerName,omitempty"`
 	Phone             *string       `json:"phone,omitempty"`
-	PreferredMFA      string        `json:"preferredMFA"`
+	PreferredMFA      string        `json:"preferredMFA"` // Preferred multi-factor authentication kind; `NONE` when none is configured.
 	Zipcode           *string       `json:"zipcode,omitempty"`
 }

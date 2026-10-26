@@ -2,7 +2,7 @@
 
 package models
 
-// AddonPlanView AddonPlanView — matches cc-api openapi/ccapiv3.json AddonPlanView schema.  Source: cc-api AddonPr...
+// AddonPlanView A plan of an add-on provider: its price, the zones it is available in and the value of each feature.
 type AddonPlanView struct {
 	Features []AddonFeatureInstanceView `json:"features"`
 	ID       string                     `json:"id"`

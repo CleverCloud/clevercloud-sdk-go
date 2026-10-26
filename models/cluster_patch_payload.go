@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterPatchPayload Cluster patch payload (update).  Source: references/legacy/ovd/modules/kubernetes/models/Cluster....
+// ClusterPatchPayload Request body to update a cluster. Every field is optional: an absent field keeps its current valu...
 type ClusterPatchPayload struct {
 	Description *string               `json:"description,omitempty"` // New description
 	Features    *ClusterFeaturesPatch `json:"features,omitempty"`

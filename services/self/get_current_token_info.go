@@ -11,17 +11,9 @@ import (
 )
 
 /*
-Getcurrenttokeninfo GET /v2/self/tokens/current — get info about the current token.
+Getcurrenttokeninfo Get the access token of this request
 
-📥 **Algo Source (Legacy):**
-Extract current token from auth, lookup in oauth1_access_tokens by token value, return full view with consumer+rights
-- Legacy note: cc-api SelfTokensAPI.java getCurrentTokenInfo() -> SelfOAuth1TokensHelper.java getCurrent()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfTokensAPI.java getCurrentTokenInfo()
-Source: cc-api SelfOAuth1TokensHelper.java getCurrent()
-Issue: #102
+Returns the OAuth1 access token that signed this request, with its consumer, rights and dates. Answers 404 when the request is not signed with an OAuth1 access token.
 
 Parameters:
   - ctx: context for the request

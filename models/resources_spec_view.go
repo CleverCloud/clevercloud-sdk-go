@@ -2,7 +2,7 @@
 
 package models
 
-// ResourcesSpecView Tenant-facing summary of `product_compute::ResourcesSpec` (cpu millicores, memory bytes, disk byt...
+// ResourcesSpecView Resources of a VM: CPU in millicores, memory in bytes, and disk in bytes (root volume plus extra ...
 type ResourcesSpecView struct {
 	CpuMillicores int `json:"cpuMillicores"`
 	DiskBytes     int `json:"diskBytes"`

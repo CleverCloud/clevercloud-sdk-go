@@ -2,10 +2,10 @@
 
 package models
 
-// InternalProvisionAddonResponse Response of `POST /v2/internal/organisations/{id}/addons` — the java `AddonProvisionResponse`, ca...
+// InternalProvisionAddonResponse Add-on just provisioned, with the configuration its provider returned.
 type InternalProvisionAddonResponse struct {
-	Config  map[string]any `json:"config"`            // Env vars to inject into consuming applications — LIVE CREDENTIALS. Internal-auth only; never reac...
-	ID      string         `json:"id"`                // cc-api addon id (`addon_xxx`).
-	Message *string        `json:"message,omitempty"` // Free-form provider message, when it sent one.
-	RealID  string         `json:"realId"`            // Provider-side addon id (`cellar_xxx`).
+	Config  map[string]string `json:"config"`            // Environment variables to inject into the applications that use the add-on; they hold live credent...
+	ID      string            `json:"id"`                // Add-on identifier (`addon_…`).
+	Message *string           `json:"message,omitempty"` // Free-form provider message, when it sent one.
+	RealID  string            `json:"realId"`            // Identifier of the add-on at its provider (such as `cellar_…`).
 }

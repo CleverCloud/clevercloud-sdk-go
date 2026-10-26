@@ -13,7 +13,13 @@ import (
 /*
 DeleteTardisAddonToken DELETE /v4/.../addon/{tardisId}/token/{tokenId} — delete token.
 
-Algorithm: Remove token from tardis_addon_token table. Return 204 on success, 404 if not found.
+Algorithm: Resolve the addon under the path's owner, then remove the token from
+
+	tardis_addon_token by token_id AND addon_id. Return 204 on success, 404 if not found, or if
+	the token belongs to another addon. The caller must be the path's
+	owner when it is their personal `user_…` space, or hold the `ADMIN`/`MANAGER`/`DEVELOPER`
+	role in the `ACTIVE` organisation, else 403 (refs #4431).
+
 Legacy: ovd tardis token delete
 Conformity: real
 

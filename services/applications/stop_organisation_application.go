@@ -11,26 +11,16 @@ import (
 )
 
 /*
-Stoporganisationapplication DELETE /v2/organisations/{id}/applications/{app_id}/instances — undeploy org app.
+Stoporganisationapplication Stop an application of an organisation
 
-Legacy: cc-api ApplicationHelper.java:2256 undeploy() -> :1616 _undeploy()
-Algorithm: Auth + canAccessRepositories; find app; Send BDS STOP instruction, update state
-Conformity: shape S2 — 1:1 on authorization, deliberately stricter on moderation: legacy gates a moderated user in _redeploy only, this handler also refuses one here
-
-Source: cc-api OrganisationApplicationsAPI.java undeployApplication()
-Behavior: publishes BDS STOP instruction, updates app state to SHOULD_BE_DOWN.
-The instruction's cause, echoed into the ApplicationStop event payload, is the
-calling consumer's name, not a hardcoded string: legacy's undeploy() reads
-token.getConsumerName() and threads it into _undeploy() as cause
-(ApplicationHelper.java:2281).
-Issues: #107, refs #2136
+Stops every instance of an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

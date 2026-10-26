@@ -10,6 +10,7 @@ type Alert struct {
 	DriverEventID string          `json:"driver_event_id"`   // `driver_event_id` — the alert's own id, what `?driverEventId=` filters on (#2103).
 	Kind          DriverAlertKind `json:"kind"`              // `kind`.
 	Payload       map[string]any  `json:"payload,omitempty"` // `payload`.
+	ProductID     string          `json:"product_id"`        // `product_id` — the alert's product; the nil id when none was named (#4071).
 	ResourceID    string          `json:"resource_id"`       // `resource_id`.
 	Source        string          `json:"source"`            // `source`.
 	TenantID      string          `json:"tenant_id"`         // `tenant_id`.

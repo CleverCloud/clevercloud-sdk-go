@@ -11,19 +11,15 @@ import (
 )
 
 /*
-Rebootkeycloakapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/reboot
+Rebootkeycloakapplication Restart a Keycloak add-on
 
-📥 **Algo Source (Legacy):** `rebootAddonKeycloak(_, rebuild = false)` (`A:871`)
-— restarts the Java application **with** the build cache.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:871
-Issues: #313
+Restarts every application of the add-on, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

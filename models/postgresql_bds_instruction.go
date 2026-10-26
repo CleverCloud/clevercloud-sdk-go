@@ -10,7 +10,7 @@ type PostgresqlBdsInstruction struct {
 	DeploymentPolicy PostgresqlDeploymentPolicy   `json:"deploymentPolicy"`
 	Down             bool                         `json:"down"`
 	Emails           []string                     `json:"emails"`
-	Env              map[string]any               `json:"env"`
+	Env              map[string]string            `json:"env"`
 	InstanceID       *string                      `json:"instanceId,omitempty"`
 	InstanceLifetime *PostgresqlInstanceLifetime  `json:"instanceLifetime,omitempty"`
 	LogsCollector    *string                      `json:"logsCollector,omitempty"`

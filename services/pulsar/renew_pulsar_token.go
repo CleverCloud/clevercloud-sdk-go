@@ -12,43 +12,15 @@ import (
 )
 
 /*
-Renewpulsartoken PATCH /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/renew-biscuit — renew Biscuit token.
+Renewpulsartoken Renew a Pulsar add-on's access token
 
-**Legacy**: ovd PulsarController.scala:229 renewBiscuitServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarProvisioningService.renewBiscuit(ownerId, pulsarId) (line 159)
-  - Generates new Biscuit via AddonPulsarBiscuitHelper, UPDATE token in DB
-
-**Conformity**: FAITHFUL — ownership enforced (refs #1057), real Biscuit
-
-	minting wired (refs #1058), environment pushed back to
-	cc-api (refs #1057).
-
-An earlier revision of this block claimed the legacy also revokes the old
-token cluster-side and marked the route PARTIAL for not doing so. It does
-not: `renewBiscuitWithPulsar` is mint → `updateCCAPIEnvVars` → `updateBiscuit`
-and nothing else, `PulsarAdminClient` exposes no revocation call, and the
-only "revoke" in the legacy module is the word in this endpoint's own
-description. Attenuated Biscuits are not revocable that way — the old token
-simply stays valid until it expires, which is why the environment push
-matters. Refs #2875.
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala renewBiscuitServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/services/PulsarProvisioningService.scala:228 (`renewBiscuitWithPulsar`)
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala renewBiscuit
-Behavior: generates a new Biscuit token (attenuated from the cluster's root),
-
-	stores it, and pushes the addon's environment to cc-api so the
-	linked applications are redeployed with it. Returns updated view.
-
-Issue: #8, #1057, #1058, #2875
+Issues a new access token (Biscuit) for the add-on, stores it and updates the add-on's environment so that linked applications are redeployed with it; returns the updated add-on. The previous token stays valid until it expires. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

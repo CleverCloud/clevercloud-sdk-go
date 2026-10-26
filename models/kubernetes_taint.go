@@ -2,7 +2,7 @@
 
 package models
 
-// KubernetesTaint Kubernetes taint.  Source: references/legacy/ovd/modules/kubernetes/models/types/Taint.scala
+// KubernetesTaint A Kubernetes taint applied to the nodes of a node group: key, optional value and effect.
 type KubernetesTaint struct {
 	Effect TaintEffect `json:"effect"`          // Taint effect
 	Key    string      `json:"key"`             // Taint key

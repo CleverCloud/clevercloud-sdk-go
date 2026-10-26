@@ -13,26 +13,16 @@ import (
 )
 
 /*
-Redeployorganisationapplication POST /v2/organisations/{id}/applications/{app_id}/instances — redeploy org app.
+Redeployorganisationapplication Redeploy an application of an organisation
 
-Legacy: cc-api ApplicationHelper.java:1501 redeploy() -> :1273 _redeploy()
-Algorithm: Auth + canAccessRepositories; check org active; resolve_deploy_commit() precedence — explicit non-HEAD request SHA (validated) wins, else the appliance branch commit (appliance_repository_branches.commit), else the plain-app's own deployed commit column; the APPLICATION_NO_DEPLOYS guard; user not moderated (runs AFTER the guard, matching legacy's redeploy() -> _redeploy() sequence); the owner-less divert to `_undeploy` (ApplicationHelper.java:1283-1285 — an unresolvable owner short-circuits straight to the undeploy response, before the CPU quota or `bh.startApp` ever run); the CPU quota; `undeployIfModerated`'s 403 APPLICATION_MODERATED (BdsHelper.java:93-119, reached through bh.startApp at :1318); create deployment, publish BDS START, update state.
-Conformity: enhanced — missing canStartApp, maintenance slots, boot deps
-
-Source: cc-api OrganisationApplicationsAPI.java redeployApplication()
-Behavior: creates deployment record, publishes BDS START instruction, updates app state, and returns the legacy redeploy success envelope with deploymentId.
-`deployments.cause` and the BDS instruction's cause are both the calling
-consumer's name, not a hardcoded string: legacy's redeploy() reads
-token.getConsumerName() once and threads it into _redeploy() as cause
-(ApplicationHelper.java:1543).
-Issues: #107, refs #2136, refs #2471, refs #2472, refs #2509, refs #2532, refs #2937
+Starts a new deployment of an organisation's application and returns its deployment ID; without `commit`, the application's current commit is deployed. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

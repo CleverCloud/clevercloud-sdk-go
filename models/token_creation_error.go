@@ -2,8 +2,8 @@
 
 package models
 
-// TokenCreationError Error from a token creation attempt during registry provisioning.  Source: references/legacy/ovd/...
+// TokenCreationError One position of a multi-token creation request that could not be honoured.  Source: specs/001-api...
 type TokenCreationError struct {
-	Error string `json:"error"`
-	Index int    `json:"index"`
+	Error string `json:"error"` // Why that position was refused.
+	Index int    `json:"index"` // Position in the creation request.
 }

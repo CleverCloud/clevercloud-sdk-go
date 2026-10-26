@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeContainerRegistry Request to create a new container registry with optional initial tokens.  Source: references/lega...
+// WannabeContainerRegistry Ask for a registry, optionally with tokens created alongside it.  Source: specs/001-api-surface-p...
 type WannabeContainerRegistry struct {
-	Tokens []WannabeContainerRegistryToken `json:"tokens,omitempty"` // Optional initial tokens to create with the registry
+	Tokens []WannabeContainerRegistryToken `json:"tokens,omitempty"` // Tokens to create with the registry. Each is honoured or reported on its own.
 }

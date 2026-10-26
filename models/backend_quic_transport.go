@@ -4,7 +4,7 @@ package models
 
 // BackendQuicTransport Backend QUIC transport — `alpn -> direct` (:102-106).
 type BackendQuicTransport struct {
-	ClientCertificate *TlsClientCertificate `json:"clientCertificate,omitempty"`
-	Quic              map[string]any        `json:"quic"` // ALPN protocol → direct leaf.
-	Verification      *TlsVerification      `json:"verification,omitempty"`
+	ClientCertificate *TlsClientCertificate             `json:"clientCertificate,omitempty"`
+	Quic              map[string]BackendDirectTransport `json:"quic"` // ALPN protocol → direct leaf.
+	Verification      *TlsVerification                  `json:"verification,omitempty"`
 }

@@ -12,21 +12,15 @@ import (
 )
 
 /*
-Deprovisionselfaddonbyid DELETE /v2/self/addons/{addon_id} — deprovision an addon.
+Deprovisionselfaddonbyid Delete an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java deleteAddon()
-Issues: #108, #2518
-
-Algorithm: Verify ownership, reject FTP app addons and SYSTEM ownership, then run the
-shared deprovision leaf (provider DELETE, soft-delete + unlink, recursion, events)
-Legacy: cc-api SelfAddonsAPI.java deleteAddon() -> AddonHelper deprovisionUnchecked()
-Conformity: faithful -- full deprovisionUnchecked flow through the shared leaf
+Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

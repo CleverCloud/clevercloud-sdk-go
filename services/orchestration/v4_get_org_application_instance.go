@@ -12,37 +12,16 @@ import (
 )
 
 /*
-V4GetOrgApplicationInstance Legacy: Console3 v4 orchestration (no cc-api equivalent — OVD OrchestrationRoutes)
-Algorithm: Shape S1b authorization, then the registry read filtered to one instance id
-Conformity: faithful shape, partial data — the same empty fields as the list route
+V4GetOrgApplicationInstance Get an instance of an application
 
-GET /v4/orchestration/organisations/{id}/applications/{app_id}/instances/{instance_id}
-
-Served from the same provider read as the list route rather than delegating to
-the v2 handler, which is a stub that answers 404 unconditionally. Console3's
-runtime-logs component calls this once per distinct `instanceId` it sees in the
-log stream, to label each line with its instance name; against the stub every
-lookup 404'd, the component fell back to its `{ghost: true}` placeholder, and
-every log line rendered its instance as `?`.
-
-A miss still answers 404 — the ghost path is the right destination for an
-instance the registry no longer serves, and the component handles it.
-
-The v2 stub is deliberately left alone: its 404 is legacy-faithful
-(`getAppInstance` has its own 404 APPLICATION_BAD_OWNER contract) and changing
-it is a cc-api parity question, not a v4 one.
-
-Source: ovd core/.../capacity/instance/Instance.scala:55 (InstanceView)
-Source: @clevercloud/components cc-logs-app-runtime.smart.js — _fetchAndConvert
-Spec: analysis-output/38-github-api-consumers.md §Console3 — v4 orchestration
-Issue: #313
+Returns one instance of an organisation's application; 404 when it is unknown. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation. Superseded by the `/v4/paas/` spelling of this path.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - app_id: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - app_id: Application ID (`app_…`)
   - instance_id: Instance ID
 
 # Returns the operation result or an error

@@ -4,9 +4,9 @@ package models
 
 import "time"
 
-// IdentifiedStatus A status entry in the `statuses` JSONB array on `container_registry`.  Source: references/legacy/...
+// IdentifiedStatus One entry of a registry's status history.  Source: specs/001-api-surface-placeholders/data-model....
 type IdentifiedStatus struct {
-	Date         *time.Time `json:"date,omitempty"`         // Timestamp of the status change
-	InstigatorID *string    `json:"instigatorId,omitempty"` // ID of the user/system that triggered this status change
-	State        string     `json:"state"`                  // State name: PENDING, PROVISIONED, SOFT_DELETED, DELETED, etc.
+	Date         *time.Time `json:"date,omitempty"`         // When the transition happened, when that is known.
+	InstigatorID *string    `json:"instigatorId,omitempty"` // Who caused the transition, when that is known.
+	State        string     `json:"state"`                  // The state name.
 }

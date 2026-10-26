@@ -11,20 +11,9 @@ import (
 )
 
 /*
-Getmateriakvprovider GET /v4/addon-providers/kv — get Materia KV provider info.
+Getmateriakvprovider Get the Materia KV provider information
 
-📥 **Algo Source (Legacy):** ovd `MateriaDBActor.getProvider` →
-`ProviderConsoleView(providerId="kv", clusters=[CLUSTER.toConsoleView], dedicated={}, defaultDedicatedVersion="")`.
-`Cluster.toConsoleView` sets `label = id.value` and `features = []` (NOT the cluster's own
-label/features). No plans field — the shared addon-provider console shape.
-
-🔧 **Algo Rust:** build `ProviderConsoleView` from the static cluster config; one cluster entry
-whose `label` echoes its `id` and whose `features` are empty, per `toConsoleView`.
-
-Source: references/legacy/ovd/modules/materia/db/actors/MateriaDBActor.scala getProvider
-Source: references/legacy/ovd/modules/materia/db/models/Cluster.scala toConsoleView
-Behavior: 200 ProviderConsoleView (public — no auth, like OVD)
-Issue: #1260, #679
+Returns the Materia KV cluster add-ons are created on. Requires no authentication.
 
 Parameters:
   - ctx: context for the request

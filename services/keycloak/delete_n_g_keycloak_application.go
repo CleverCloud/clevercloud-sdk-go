@@ -11,19 +11,15 @@ import (
 )
 
 /*
-Deletengkeycloakapplication DELETE /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/networkgroup
+Deletengkeycloakapplication Detach a Keycloak add-on from its network group
 
-A network group the module no longer knows about answers 404, after the
-addon has been walked back regardless.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:897
-Issues: #313, #3133
+Deletes the add-on's network group, scales its application back to one instance and restarts it. Answers 404 when the network group no longer existed, after detaching the add-on anyway. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

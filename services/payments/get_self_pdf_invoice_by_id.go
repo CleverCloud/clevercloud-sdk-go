@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Getselfpdfinvoicebyid GET /v2/self/payments/billings/{bid}.pdf — discontinued.
+Getselfpdfinvoicebyid Get an invoice as PDF (discontinued)
 
-Documented, never routed: cc-api spells the PDF path with a `.pdf` suffix and
-this router with a `/pdf` segment. Both answer 501 now, so the discrepancy no
-longer changes what a caller gets.
-
-Source: cc-api SelfPaymentsAPI.java:128 getPdfInvoice() — 501
-Issues: #159, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - bid: Invoice/billing ID (without .pdf extension)
+  - bid: Invoice ID, without the `.pdf` extension
 
 # Returns the operation result or an error
 

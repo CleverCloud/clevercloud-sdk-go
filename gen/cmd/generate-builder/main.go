@@ -2,7 +2,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"go/format"
@@ -13,7 +12,9 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
-	"gopkg.in/yaml.v3"
+
+	"go.clever-cloud.dev/sdk/internal/naming"
+	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
 // Config holds the generator configuration
@@ -43,7 +44,13 @@ type Param struct {
 
 // BuilderNode represents a node in the builder hierarchy
 type BuilderNode struct {
-	Segment    string
+	Segment string
+	// TypePrefix names the builder types of this node: `V4AddonProviders` for
+	// `/v4/addon-providers`, whose interface is `V4AddonProvidersBuilder`. Derived once,
+	// when the node is created, so that two routes whose segments spell the same
+	// identifier (`/v4/console/settings`, `/v4/console-settings`) get two type names
+	// rather than one declared twice.
+	TypePrefix string
 	IsParam    bool
 	ParamName  string
 	ParamType  string
@@ -89,22 +96,12 @@ func parseFlags() *Config {
 }
 
 func parseOpenAPISpec(specFile string) (*openapi31.Spec, error) {
-	data, err := os.ReadFile(specFile)
+	document, report, err := spec.Load(specFile)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read spec file: %w", err)
+		return nil, err
 	}
-
-	spec := &openapi31.Spec{}
-
-	// Try JSON first
-	if err := json.Unmarshal(data, spec); err != nil {
-		// Try YAML
-		if err := yaml.Unmarshal(data, spec); err != nil {
-			return nil, fmt.Errorf("failed to parse spec as JSON or YAML: %w", err)
-		}
-	}
-
-	return spec, nil
+	log.Printf("Loaded %s: %s", specFile, report)
+	return document, nil
 }
 
 func extractOperations(spec *openapi31.Spec) []BuilderOperation {
@@ -139,35 +136,15 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 				continue
 			}
 
-			// Apply operationId overrides for duplicate IDs
+			// Ids are unique and x-service is set on every operation: spec.Load saw to it.
 			operationID := ""
 			if op.ID != nil {
 				operationID = *op.ID
 			}
-			overrideKey := method + ":" + path
-			if override, exists := OPERATION_ID_OVERRIDES[overrideKey]; exists {
-				operationID = override
-			}
-
-			// Get x-service from MapOfAnything
-			xService := ""
-			if xs, ok := op.MapOfAnything["x-service"].(string); ok {
-				xService = xs
-			}
-
-			// If no x-service, try to derive from tags or path
-			if xService == "" {
-				if len(op.Tags) > 0 {
-					xService = op.Tags[0]
-				} else {
-					continue
-				}
-			}
-
-			// Map to package name (check operation exceptions first, then service mapping)
-			packageName := getPackageForOperation(operationID, xService, path)
+			xService, _ := op.MapOfAnything["x-service"].(string)
+			packageName := naming.OperationPackage(operationID, xService, path, op.Tags)
 			if packageName == "" {
-				continue // Skip operations without a service
+				log.Fatalf("%s %s (%s): no x-service and no tag to name a package after", method, path, operationID)
 			}
 
 			// Extract parameters
@@ -266,139 +243,6 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 	}
 
 	return operations
-}
-
-// SERVICE_NAME_EXCEPTIONS maps x-service values to package names
-// Must match generate-services/main.go SERVICE_NAME_EXCEPTIONS
-var SERVICE_NAME_EXCEPTIONS = map[string]string{
-	// `internal` is reserved by Go: a package at services/internal is importable only from
-	// services/..., so builder.go at the module root cannot reach it. AXO publishes an
-	// `Internal` tag, hence the rename. Keep in step with generate-services/main.go — this
-	// table is duplicated between the two generators.
-	"internal": "internalapi",
-	"Internal": "internalapi",
-
-	// `vendor` is reserved by the go command: directories of that name are stripped from a
-	// module zip, so `go get` of this SDK yields a module with no services/vendor package at
-	// all and every consumer fails to build. AXO publishes a `Vendor` tag, hence the rename.
-	"vendor": "vendorapi",
-	"Vendor": "vendorapi",
-
-	"addon-pulsar":     "pulsar",
-	"addon-storage":    "storage",
-	"addon-cellar":     "storage",
-	"config-provider":  "configuration_provider",
-	"network-group":    "network_group",
-	"infrastructure":   "infrastructure",
-	"compute":          "infrastructure",
-	"drain":            "drains",
-	"drains":           "drains",
-	"materia-kv":       "materia_kv",
-	"addon-ai":         "ai",
-	"addon-cumulocity": "cumulocity",
-	"addon-keycloak":   "keycloak",
-	"addon-matomo":     "matomo",
-	"addon-metabase":   "metabase",
-	"addon-otoroshi":   "otoroshi",
-	"addon-postgresql": "postgresql",
-	"loadbalancer":     "loadbalancer",
-}
-
-// OPERATION_ID_OVERRIDES fixes duplicate operationId issues in the OpenAPI spec
-// Must match generate-services/main.go OPERATION_ID_OVERRIDES
-var OPERATION_ID_OVERRIDES = map[string]string{
-	// Fix duplicate "createEndpoint" operationId
-	"DELETE:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints/{endpointId}": "deleteAIEndpoint",
-	"POST:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints":                "createAIEndpoint",
-	// Fix duplicate getMateriaKv/deleteMateriaKv (exist on both /v2 and /v4 paths)
-	"GET:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}":    "getMateriaKvV4",
-	"DELETE:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}": "deleteMateriaKvV4",
-}
-
-// OPERATION_MAPPING_EXCEPTIONS maps specific operations to target services
-// Must match generate-services/main.go OPERATION_MAPPING_EXCEPTIONS
-var OPERATION_MAPPING_EXCEPTIONS = map[string]string{
-	// Pulsar operations mal classées (x-service: product → pulsar)
-	"getPulsar":                      "pulsar",
-	"deletePulsar":                   "pulsar",
-	"getPulsarPolicies":              "pulsar",
-	"setStoragePolicies":             "pulsar",
-	"renewPulsarToken":               "pulsar",
-	"createPulsarTenantAndNamespace": "pulsar",
-	"deletePulsarTenantAndNamespace": "pulsar",
-	"createPulsar":                   "pulsar",
-	"getPulsarProviderInfo":          "pulsar",
-	"getPulsarCluster":               "pulsar",
-	"listPulsarConsumptions":         "pulsar",
-	"getTriggerPulsar":               "pulsar",
-	"createTriggerPulsar":            "pulsar",
-	"deleteTriggerPulsar":            "pulsar",
-
-	// V2 Pulsar operations (x-service: product → pulsar)
-	"provisionPulsar": "pulsar",
-	"getPulsarV2":     "pulsar",
-}
-
-func mapServiceToPackage(xService string) string {
-	if pkg, ok := SERVICE_NAME_EXCEPTIONS[xService]; ok {
-		return pkg
-	}
-
-	// Snake-case, exactly as generate-services does — the two derive package names
-	// independently, and only that generator writes the directories. Replacing hyphens alone
-	// left a tag like `NetworkGroup` untouched, so `builder.go` imported
-	// `services/NetworkGroup` while the package on disk was `services/network_group`. Go
-	// package names are lower-case anyway.
-	return toSnakeCasePackage(xService)
-}
-
-// toSnakeCasePackage mirrors `toSnakeCase` in generate-services/main.go. Keep them in step: a
-// divergence produces a builder that imports a package the services generator never wrote.
-func toSnakeCasePackage(s string) string {
-	if s == "" {
-		return ""
-	}
-	var result strings.Builder
-	for i, r := range s {
-		if i > 0 && r >= 'A' && r <= 'Z' {
-			result.WriteRune('_')
-		}
-		result.WriteRune(r)
-	}
-	return strings.ToLower(strings.ReplaceAll(result.String(), "-", "_"))
-}
-
-// getPackageForOperation returns the package for a specific operation, checking exceptions first
-func getPackageForOperation(operationID, xService, path string) string {
-	// Check operation-specific exceptions first
-	if pkg, ok := OPERATION_MAPPING_EXCEPTIONS[operationID]; ok {
-		return pkg
-	}
-
-	// Apply mapping rules (must match generate-services applyMappingRules)
-	if pkg := applyMappingRules(operationID, path); pkg != "" {
-		return pkg
-	}
-
-	// Fall back to service-level mapping
-	return mapServiceToPackage(xService)
-}
-
-// applyMappingRules applies path-based and operationId-based mapping rules
-// Must match generate-services/main.go applyMappingRules
-func applyMappingRules(operationID, path string) string {
-	// Rule 1: Toute opération avec "pulsar" dans le path → service pulsar
-	if strings.Contains(strings.ToLower(path), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 2: Toute opération avec "Pulsar" dans l'operationId → service pulsar
-	if strings.Contains(operationID, "Pulsar") || strings.Contains(strings.ToLower(operationID), "pulsar") {
-		return "pulsar"
-	}
-
-	// No mapping rule applies
-	return ""
 }
 
 // Helper functions to extract values from map[string]any schemas
@@ -504,11 +348,37 @@ func schemaMapToGoTypeForResponse(schema map[string]any) string {
 	return "any"
 }
 
+// typePrefix is the TypePrefix of a node: its parent's followed by the segment in
+// PascalCase. When another node already took that name — `/v4/console/settings` and
+// `/v4/console-settings` both spell `V4ConsoleSettings` — the segment is kept as one word
+// (`V4Consolesettings`), and failing that numbered. The accessor method keeps the
+// PascalCase spelling either way; only the type's name has to be unique.
+func typePrefix(parent, segment string, taken map[string]bool) string {
+	candidates := []string{
+		parent + toPascalCase(segment),
+		parent + toPascalCase(strings.NewReplacer("-", "", "_", "", ".", "").Replace(segment)),
+	}
+	for _, candidate := range candidates {
+		if !taken[candidate] {
+			taken[candidate] = true
+			return candidate
+		}
+	}
+	for i := 2; ; i++ {
+		candidate := fmt.Sprintf("%s%d", candidates[0], i)
+		if !taken[candidate] {
+			taken[candidate] = true
+			return candidate
+		}
+	}
+}
+
 func buildPathTree(operations []BuilderOperation) *BuilderNode {
 	root := &BuilderNode{
 		Segment:  "root",
 		Children: make(map[string]*BuilderNode),
 	}
+	typePrefixes := map[string]bool{}
 
 	for _, op := range operations {
 		// Parse path segments
@@ -563,11 +433,12 @@ func buildPathTree(operations []BuilderOperation) *BuilderNode {
 			child, exists := current.Children[key]
 			if !exists {
 				child = &BuilderNode{
-					Segment:   segment,
-					IsParam:   isParam,
-					ParamName: paramName,
-					ParamType: paramType,
-					Children:  make(map[string]*BuilderNode),
+					Segment:    segment,
+					TypePrefix: typePrefix(current.TypePrefix, segment, typePrefixes),
+					IsParam:    isParam,
+					ParamName:  paramName,
+					ParamType:  paramType,
+					Children:   make(map[string]*BuilderNode),
 				}
 				current.Children[key] = child
 			}
@@ -670,7 +541,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Methods for child nodes
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		if child.IsParam {
 			// Parameter method
@@ -746,7 +617,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Generate method implementations for child nodes
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		if child.IsParam {
 			// Parameter method
@@ -825,7 +696,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Recursively generate child builders
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		// Prepare fields for child builder
 		childFields := make([]FieldInfo, len(fieldInfos))
@@ -1012,32 +883,9 @@ func parseModelTypeForResponse(typeName string) *Statement {
 }
 
 func toPascalCase(s string) string {
-	// Remove special characters.
-	//
-	// `Trim` only strips braces at the ends, which is not enough: a path segment can mix a
-	// parameter with a literal suffix — `/payments/billings/{bid}.pdf` is a real route — and the
-	// inner `}` survived into the identifier, yielding `Bid}Pdf` and a Go syntax error. Strip
-	// every brace instead.
-	s = strings.ReplaceAll(s, "{", "")
-	s = strings.ReplaceAll(s, "}", "")
-	s = strings.ReplaceAll(s, "-", "_")
-	s = strings.ReplaceAll(s, ".", "_")
-
-	// Split by underscore
-	parts := strings.Split(s, "_")
-
-	var result string
-	for _, part := range parts {
-		if len(part) > 0 {
-			result += strings.ToUpper(string(part[0])) + strings.ToLower(part[1:])
-		}
-	}
-
-	return fixIDSuffixes(result)
+	return naming.PascalCase(s)
 }
 
-// toGoStructName converts OpenAPI schema names to Go struct names
-// Must match the logic in generate-models/main.go
 func toGoStructName(name string) string {
 	// Preserve exact casing for certain names to avoid conflicts
 	if name == "WireGuard" {
@@ -1130,46 +978,5 @@ func toCamelCase(s string) string {
 }
 
 func fixIDSuffixes(s string) string {
-	// Acronyms that Go spells in full caps. This table is duplicated in
-	// generate-services/main.go and generate-builder/main.go and MUST stay identical: the two
-	// generators derive the same function names independently, and a divergence produces a
-	// builder that calls a service function under a name the services package never emitted.
-	// It had drifted — services knew Ipam/Sql/Ttl/Uri/Uuid, the builder knew Yaml — and
-	// `builder.go` referenced `GetInternalBestAppForUri` where the package exports
-	// `GetInternalBestAppForURI`.
-	replacements := map[string]string{
-		"Api":   "API",
-		"Http":  "HTTP",
-		"Https": "HTTPS",
-		"Id":    "ID",
-		"Ip":    "IP",
-		"Ipam":  "IPAM",
-		"Json":  "JSON",
-		"Sql":   "SQL",
-		"Tls":   "TLS",
-		"Ttl":   "TTL",
-		"Uri":   "URI",
-		"Url":   "URL",
-		"Uuid":  "UUID",
-		"Xml":   "XML",
-		"Yaml":  "YAML",
-	}
-
-	// Same application as generate-services, not just the same table. A blanket `ReplaceAll`
-	// rewrites `Ids` into `IDs` and `Idle` into `IDle`; the services generator replaces only at
-	// the end of a word or before another capital, which is why the two produced
-	// `PostgresqlInternalIDsByOwner` and `PostgresqlInternalIdsByOwner` for one operation.
-	// Unifying the tables was not enough — the code that applies them has to match too.
-	for old, new := range replacements {
-		if strings.HasSuffix(s, old) {
-			s = strings.TrimSuffix(s, old) + new
-			continue
-		}
-		for i := 'A'; i <= 'Z'; i++ {
-			next := string(i)
-			s = strings.ReplaceAll(s, old+next, new+next)
-		}
-	}
-
-	return s
+	return naming.FixIDSuffixes(s)
 }

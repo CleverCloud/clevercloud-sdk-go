@@ -2,7 +2,7 @@
 
 package models
 
-// AlertKind represents Top-level alert lifecycle. Only `PROBLEM` triggers a reaction; `RESOLUTION` is logged and dropped...
+// AlertKind represents Alert lifecycle: `PROBLEM` reports an active condition on the resource, `RESOLUTION` that it clea...
 type AlertKind string
 
 const (

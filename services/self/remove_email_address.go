@@ -12,31 +12,9 @@ import (
 )
 
 /*
-Removeemailaddress DELETE /v2/self/emails/{email} — remove a secondary email address.
+Removeemailaddress Remove a secondary email address
 
-📥 **Algo Source (Legacy):**
-Check manage_personal_information, reject primary email with 400, lookup PG secondary_emails by PK, 400+1003 if absent, 403+1004 if owned by another user, else DELETE.
-- Legacy note: cc-api SelfEmailsAPI.java:43 removeEmailAddress() -> SelfEmailHelper.java:62 remove() -> removeUnchecked():86-102
-- removeUnchecked: getBySecondaryEmail(email) == null -> 400 EMAIL_DELETION(1003); concurrent.userId != user.userId -> 403 EMAIL_OWNERSHIP(1004)
-- Unconfirmed emails live in Redis only (NOT in PG secondary_emails) so the PG existence check naturally rejects pending-confirmation deletions with 400+1003
-- Source: cc-api Errors.java:27 EMAIL_DELETION(1003, "A problem occured while deleting your email address") (typo preserved)
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-- Auth: extract user_id, require manage_personal_information
-- Look up primary email; if matches path param -> 400 (cannot remove primary)
-- SELECT user_id FROM secondary_emails WHERE email = $1 (mirrors getBySecondaryEmail PK lookup)
-  - None -> 400 + {id:1003, message:..., type:"error"} (EMAIL_DELETION, typo "occured" preserved)
-  - Some(other) where other != user_id -> 403 + {id:1004, message:"The email address does not belong to you", type:"error"} (EMAIL_OWNERSHIP)
-
-- DELETE FROM secondary_emails WHERE email = $1 AND user_id = $2; return 200 info Message
-
-Source: cc-api SelfEmailsAPI.java:43 removeEmailAddress()
-Source: cc-api SelfEmailHelper.java:62-102 remove() / removeUnchecked()
-Source: cc-api UserPersistHelper.java:108-114 getBySecondaryEmail()
-Source: cc-api Errors.java:27 EMAIL_DELETION(1003)
-Schema: V1__Initial_schema.sql:1475-1478 secondary_emails (email PK, user_id) — no validated column
-Issue: #102, #1029
+Removes a confirmed secondary address from the user's account; the primary address cannot be removed. Requires the `manage_personal_information` right.
 
 Parameters:
   - ctx: context for the request

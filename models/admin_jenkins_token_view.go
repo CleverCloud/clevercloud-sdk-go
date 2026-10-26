@@ -2,7 +2,7 @@
 
 package models
 
-// AdminJenkinsTokenView Jenkins token response for GET /v2/internal/organisations/{id}/jenkins-token.  Moved out of cc-ad...
+// AdminJenkinsTokenView OAuth1 token and secret created for the Jenkins integration of an organisation.
 type AdminJenkinsTokenView struct {
 	Secret string `json:"secret"` // OAuth1 token secret.
 	Token  string `json:"token"`  // OAuth1 token string.

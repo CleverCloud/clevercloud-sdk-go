@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Removeorganisationapplicationtag DELETE /v2/organisations/{id}/applications/{app_id}/tags/{tag} — remove a tag.
+Removeorganisationapplicationtag Remove a tag from an application
 
-Legacy: cc-api OrganisationApplicationTagsAPI.java removeTag()
-Algorithm: Auth + org membership; app.removeTag(tag) unconditionally; answer app.getTags()
-Conformity: faithful — removes the tag unconditionally and answers the remaining
-tags array, the same body GET .../tags returns (#2038).
-
-Source: cc-api OrganisationApplicationsAPI.java removeOrganisationTag()
-Source: cc-api ApplicationTagsHelper.java:103 removeTag() -> :55 returnTags()
-Issue: #107, #2038
+Removes a tag from an organisation's application and returns the remaining tags. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - tag: Tag
 
 # Returns the operation result or an error

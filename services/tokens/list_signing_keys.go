@@ -13,7 +13,7 @@ import (
 )
 
 /*
-Listsigningkeys
+Listsigningkeys GET /v4/tenants/{tenantId}/products/{productId}/keys
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// KubeConfigType represents The `?type=` selector of the public kubeconfig download.  The wire values are OVD's SCREAM_CASE e...
+// KubeConfigType represents Which address of the cluster's API server the downloaded kubeconfig targets: `LOADBALANCER` (the ...
 type KubeConfigType string
 
 const (

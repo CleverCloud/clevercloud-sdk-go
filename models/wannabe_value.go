@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeValue Request body for PUT /env/{name} — just `{"value": "..."}`.  Source: cc-api WannabeValue.java (co...
+// WannabeValue The new value of an environment variable.
 type WannabeValue struct {
-	Value string `json:"value"`
+	Value string `json:"value"` // Value of the variable. A number or boolean is stored as its text; `null`, an object or an array i...
 }

@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonPlan Addon plan input.  Source: cc-api WannabeAddonPlan.java
+// WannabeAddonPlan Add-on plan to create or update: its name, slug, price and feature values.
 type WannabeAddonPlan struct {
 	Features []WannabeAddonPlanFeature `json:"features,omitempty"`
 	Name     string                    `json:"name"`

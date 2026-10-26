@@ -10,16 +10,9 @@ import (
 )
 
 /*
-CreateInternalNamespace POST /internal/namespaces — create namespace (stub).
+CreateInternalNamespace Create a port namespace (not available)
 
-📥 **Algo Source (Legacy):**
-Return error (not yet implemented); requires NamespacesHelper logic
-- Legacy note: cc-api InternalAPI.java:135 createNamespace()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: stub
-Source: cc-api InternalAPI.java:135 createNamespace()
-Issue: #709
+Not implemented at this path: answers 500 to platform services and 403 to any other caller. Use `POST /v2/internal/namespaces`.
 
 Parameters:
   - ctx: context for the request

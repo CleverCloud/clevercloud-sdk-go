@@ -13,7 +13,23 @@ type Option func(*Options)
 
 // Options holds query parameters for self operations
 type Options struct {
+	CliToken      *string `url:"cli_token,omitempty"`
+	Full          *string `url:"full,omitempty"`
 	Validationkey *string `url:"validationKey,omitempty"`
+}
+
+// WithCliToken sets the cli_token query parameter
+func WithCliToken(cli_token string) Option {
+	return func(o *Options) {
+		o.CliToken = &cli_token
+	}
+}
+
+// WithFull sets the full query parameter
+func WithFull(full string) Option {
+	return func(o *Options) {
+		o.Full = &full
+	}
 }
 
 // WithValidationkey sets the validationKey query parameter
@@ -31,6 +47,12 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.CliToken != nil {
+		params = append(params, fmt.Sprintf("cli_token=%s", url.QueryEscape(*options.CliToken)))
+	}
+	if options.Full != nil {
+		params = append(params, fmt.Sprintf("full=%s", url.QueryEscape(*options.Full)))
+	}
 	if options.Validationkey != nil {
 		params = append(params, fmt.Sprintf("validationKey=%s", url.QueryEscape(*options.Validationkey)))
 	}

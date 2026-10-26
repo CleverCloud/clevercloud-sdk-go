@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Getselfapplicationbranchesbyappid GET /v2/self/applications/{app_id}/branches — git branches.
+Getselfapplicationbranchesbyappid List the Git branches of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationBranches()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:64-67 getBranches() -> ApplicationHelper.java:368-394 getBranches()
-Algorithm: Shape S1 — scope, canAccessApps, and owner-scoped 404 APPLICATION_NOT_FOUND before the branch-provider call.
-Conformity: the branch-provider limitation remains separate; authorization is faithful. Refs #2228
+Returns the branches of the GitHub repository linked to an application of the user's personal space, the default branch first, or only `master` when no repository is linked. Answers 400 (error id 1603) when GitHub rejects the access held for the user's GitHub account, which must then be linked again.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

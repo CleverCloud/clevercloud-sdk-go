@@ -11,21 +11,9 @@ import (
 )
 
 /*
-AddInternalUserEmail PUT /internal/user/{userId}/emails/{email} — add email address for user (internal).
+AddInternalUserEmail Add a secondary email address to a user
 
-📥 **Algo Source (Legacy):**
-Delegates to SelfEmailHelper.addWithUserId(crc, email, body, userId): validate the user +
-target email, optionally promote an existing secondary to primary, rate-limit, then cache a
-pending confirmation key and publish rh.sendMail(new SecondaryEmailCCMail(...)). The
-secondary row is inserted ONLY after the user clicks the confirmation link (finshAdd).
-- Legacy note: cc-api InternalUserEmailsAPI.java:85 addInternalEmailAddress() -> SelfEmailHelper.addWithUserId:149-204
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful — shares add_secondary_email_with_user_id with PUT /v2/self/emails/{email}.
-- Publishes the SecondaryEmailCCMail confirmation email (messaging law #753); no direct INSERT.
-Source: cc-api InternalUserEmailsAPI.java:85 addInternalEmailAddress()
-Source: cc-api SelfEmailHelper.java:201 rh.sendMail(new SecondaryEmailCCMail(...))
-Issue: #709
+Same as adding a secondary address from the account, for the user named in the path: sends the confirmation link, or makes an already confirmed secondary address primary with `make_primary`. Callable only by platform services (403 otherwise).
 
 Parameters:
   - ctx: context for the request

@@ -12,19 +12,9 @@ import (
 )
 
 /*
-ArsGetAuthorisation Legacy: cc-api InternalARSAPI.java:105 getAuthorisation()
-Algorithm: Legacy: if a biscuit query param is present, authorize it first (service-token git push) — resolve app owner as the expected tenant, run authBiscuitRaw(method=git/path=appId/clientIp/resource=appId) + tenant check, grant on a canAccessRepositories role, collapse every failure to {false}; else get token+secret+appId; if token=='Jenkins', check org's jenkins_token matches secret; else validate OAuth1 token+secret + org membership role...
-Conformity: enhanced — biscuit service-token + Jenkins cases work; OAuth1 via DB
+ArsGetAuthorisation Check a Git push authorisation
 
-Check if a caller is allowed to push to an app repo (biscuit service token, Jenkins token, or OAuth1 user).
-
-Source: cc-api InternalARSAPI.java:105 getAuthorisation() (+ :160-165 biscuit precedence, authorizeBiscuit)
-Behavior: a present biscuit param takes precedence (HTTPS git-push service token) — authorized against the app owner as expected tenant, granted on a canAccessRepositories role, any failure → {false}.
-
-	Otherwise validates OAuth1 token+secret + org membership + canAccessRepositories role.
-	Special case: token="Jenkins" uses org's Jenkins token for auth.
-
-Issue: #709, #1299
+Answers whether the given credentials (an OAuth1 token and secret, the owner's Jenkins token, or a service token in `biscuit`) may push to the application's Git repository: 200 with `ok: true`, or 401 with `ok: false`. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request

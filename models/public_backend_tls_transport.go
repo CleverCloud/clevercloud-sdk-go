@@ -4,5 +4,5 @@ package models
 
 // PublicBackendTlsTransport
 type PublicBackendTlsTransport struct {
-	TLS map[string]any `json:"tls"`
+	TLS map[string]PublicBackendTlsTransportLayer `json:"tls"`
 }

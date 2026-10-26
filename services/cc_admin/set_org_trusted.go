@@ -12,23 +12,9 @@ import (
 )
 
 /*
-SetOrgTrusted **Legacy**: cc-api InternalOrganisationsAPI.java:392 updateOrganisationTrusted()
-**Algorithm**:
-  - UPDATE organisations SET trusted = body.trusted WHERE id
-  - 404 if rows_affected == 0
+SetOrgTrusted Set whether an organisation is trusted
 
-**Conformity**: YES — direct column update matches cc-api
-
-PUT /v2/internal/organisations/{id}/trusted — set the trusted status of an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:392 setOrganisationTrusted()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal service other
-
-	than ccadmin, 404 org not found, 200 on success. Body-signed: legacy
-	signs the entity, so the route is layered with buffer_internal_auth_payload.
-
-Issue: #387, #2018
+Marks the organisation as trusted or not; a trusted organisation can pay by SEPA and gets higher creation rate limits. 404 when the organisation is unknown. Restricted to the administration console service.
 
 Parameters:
   - ctx: context for the request

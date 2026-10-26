@@ -11,39 +11,15 @@ import (
 )
 
 /*
-Deletepulsartenantandnamespace DELETE /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/delete-tenant-and-namespace
+Deletepulsartenantandnamespace Delete the add-on's Pulsar tenant and namespace
 
-	— delete the Pulsar tenant and namespace on the cluster.
-
-**Legacy**: ovd PulsarController.scala:257 deleteTenantAndNamespaceServerEndpoint()
-
-	→ PulsarProvisioningService.deleteTenantAndNamespace
-	→ deleteTenantAndNamespaceWithPulsar (line 256-274):
-	    deleteNamespace(force=false), then deleteTenant(force=false),
-	    swallowing 412/409 on the tenant call (still has other namespaces).
-	The legacy does NOT update `addon.status` — that transition
-	is owned by the reaper (refs #1060). This endpoint is a one-shot
-	manual cluster operation.
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::delete_tenant_and_namespace` (refs #1066, #1062)
-
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/controller/PulsarController.scala deleteTenantAndNamespaceServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/services/PulsarProvisioningService.scala deleteTenantAndNamespaceWithPulsar
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/api/routes.scala deleteTenantAndNamespace
-Behavior: deletes namespace then tenant on the Pulsar cluster; returns
-
-	204 on success. Addon row status is intentionally untouched
-	(the reaper owns the lifecycle state machine).
-
-Issue: #8, #1062
+Deletes the add-on's namespace on its cluster, then its tenant unless another namespace still uses it; answers 204. The add-on itself is not deleted. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

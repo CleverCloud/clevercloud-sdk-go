@@ -2,7 +2,7 @@
 
 package models
 
-// V4DeploymentVersionView The `version` object — the commit this deployment carries.  `previousCommitId` is always `null`: ...
+// V4DeploymentVersionView The commit a deployment carries and, when known, the commit deployed before it. A commit that is ...
 type V4DeploymentVersionView struct {
 	CommitID         *string `json:"commitId,omitempty"`
 	PreviousCommitID *string `json:"previousCommitId,omitempty"`

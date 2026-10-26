@@ -11,31 +11,9 @@ import (
 )
 
 /*
-GenerateInternalCreditNote PUT /v2/internal/invoices/{inv_id}/credit — generate credit note for an invoice.
+GenerateInternalCreditNote Generate a credit note (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:89 generateCreditNote()
-Source: billing-api CreditNoteProcessor.scala — cancelInvoiceFull()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Generate a credit note (accounting reversal) for a given invoice.
-- Internal auth required
-- Check invoice can be canceled (status Pending or Paid)
-- Determine new status (Pending→Canceled, Paid→Refunded)
-- Generate credit note number
-- Insert credit_note row with total_ht matching original invoice
-- Update invoice status to new status
-- Source: billing-api CreditNoteProcessor.scala cancelInvoiceFull()
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- Fetch invoice by number, verify cancellable status
-- Generate credit note number via next_invoice_number("credit-note")
-- Get invoice totals for total_ht
-- Insert credit_note row
-- Update invoice status to CANCELED/REFUNDED
-- Return credit note details
-Conformity: real -- PG transaction, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
@@ -56,14 +34,14 @@ Example:
 x-service: internal
 operationId: generate_internal_credit_note
 */
-func GenerateInternalCreditNote(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string) client.Response[client.Nothing] {
+func GenerateInternalCreditNote(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "generate_internal_credit_note", trace.WithAttributes(attribute.String("inv_id", inv_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/%s/credit", inv_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[any](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationexposedenvironmentvariables PUT /v2/organisations/{id}/applications/{app_id}/exposed_env — update org exposed env.
+Updateorganisationapplicationexposedenvironmentvariables Replace the exposed environment variables of an application
 
-Legacy: cc-api OrganisationApplicationsAPI.java:660 updateExposedEnv() -> ApplicationEnvironmentHelper.java:121 updateExposedEnv()
-Algorithm: Verify org membership + app ownership; replace all exposed env entries (full overwrite, not merge)
-Conformity: faithful — DB UPDATE on exposed_env JSON column
-
-Source: cc-api OrganisationApplicationsAPI.java:660 updateExposedEnv()
-Issue: #107
+Replaces the variables an organisation's application exposes to the applications that depend on it with the given name-to-value map. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -11,28 +11,9 @@ import (
 )
 
 /*
-Createpulsarv4 POST /v4/addon-providers/addon-pulsar/addons — create Pulsar addon (v4 internal).
+Createpulsarv4 Create a Pulsar add-on
 
-**Legacy**: ovd PulsarController.scala:191 createPulsarServerEndpoint()
-**Algorithm**:
-  - Ownership verified: token ownerId must match body.ownerId (403 if mismatch)
-  - Delegates to PulsarProvisioningService.createPulsar(wannabePulsar) (line 90)
-  - Finds cluster, INSERT addon, calls Pulsar admin to create tenant+namespace
-
-**Conformity**: FAITHFUL — ownership enforced (refs #1057); the tenant and
-
-	namespace are materialised on the broker through
-	`ensure_tenant_and_namespace` *before* the addon row is
-	inserted, with `compensate_private_namespace` unwinding it
-	when the insert fails (refs #1065)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createPulsarServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala createPulsar
-Behavior: creates addon from WannabePulsar body. Ownership verified by comparing
-
-	the OAuth1 user (or org membership) against `body.ownerId`.
-
-Issue: #8, #1057, #1065
+Creates a Pulsar add-on for the owner named in the body (`ownerId`) on the given cluster and plan, with its tenant and namespace, and returns it with 201. The caller must be that user, or a member of that organisation with any role other than none; otherwise 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

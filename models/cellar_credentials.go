@@ -2,7 +2,7 @@
 
 package models
 
-// CellarCredentials Cellar credentials (S3 access key + secret).  Source: references/legacy/ovd/modules/cellar/models...
+// CellarCredentials S3 credentials of a Cellar add-on: endpoint host, access key ID and secret access key.
 type CellarCredentials struct {
 	Host      string `json:"host"`      // S3 endpoint host
 	KeyID     string `json:"keyId"`     // Access key ID

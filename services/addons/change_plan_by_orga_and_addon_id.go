@@ -12,27 +12,16 @@ import (
 )
 
 /*
-Changeplanbyorgaandaddonid POST /v2/organisations/{id}/addons/{addon_id}/migrations — change addon plan (create migration).
+Changeplanbyorgaandaddonid Change the plan of an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java changePlan() (operationId=changePlanByOrgaAndAddonId)
-Source: cc-api AddonHelper.java:383-443 (doPlanChange)
-Behavior: despite the route name "migrations", this is the plan change endpoint.
-
-	Validates membership + addon ownership, calls provider POST /{real_id}/migrations,
-	forwards provider response.
-
-Issue: #108
-
-Algorithm: Verify ADMIN/MANAGER, call provider POST /{real_id}/migrations, forward response
-Legacy: cc-api OrganisationAddonsAPI.java changePlan() (operationId=changePlanByOrgaAndAddonId)
-Conformity: faithful -- provider proxy with destructive-op RBAC
+Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist or is deleted, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

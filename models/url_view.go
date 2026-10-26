@@ -2,7 +2,7 @@
 
 package models
 
-// UrlView A bare `{"url": "…"}` response body.  Source: cc-api output/misc/UrlView.java, returned by Avatar...
+// UrlView A URL.
 type UrlView struct {
 	URL string `json:"url"`
 }

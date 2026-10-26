@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Replaceaddontags PUT /v2/organisations/{id}/addons/{addon_id}/tags — replace all tags.
+Replaceaddontags Replace the tags of an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java setTags()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, delete all existing tags, insert new ones
-Legacy: cc-api OrganisationAddonsAPI.java setTags()
-Conformity: faithful -- replace-all-tags with RBAC
+Replaces all the add-on's tags with the list given in the body and returns it. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

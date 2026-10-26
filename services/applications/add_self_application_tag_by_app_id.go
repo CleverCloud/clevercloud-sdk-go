@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Addselfapplicationtagbyappid PUT /v2/self/applications/{app_id}/tags/{tag} — add a tag.
+Addselfapplicationtagbyappid Add a tag to an application
 
-Source: cc-api SelfApplicationsAPI.java addSelfTag()
-Issue: #2228
-
-Legacy: SelfApplicationTagsHelper.java:35-38 addTag() -> ApplicationTagsHelper.java:37-52,72-100
-Algorithm: Shape S3 — canAddApp then owner-scoped 404 APPLICATION_NOT_FOUND before the unchanged tag write.
-Conformity: faithful — personal org_id, 8101/4004, response, and messaging. Refs #2228
+Adds a tag to an application of the user's personal space and returns its tags.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - tag: Tag
 
 # Returns the operation result or an error

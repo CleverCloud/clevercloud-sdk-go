@@ -2,7 +2,7 @@
 
 package models
 
-// SetTrustedRequest Request body for PUT /v2/internal/organisations/{id}/trusted.  Source: cc-api InternalOrganisatio...
+// SetTrustedRequest Whether an organisation is trusted.
 type SetTrustedRequest struct {
 	Trusted bool `json:"trusted"` // Whether the organisation is trusted.
 }

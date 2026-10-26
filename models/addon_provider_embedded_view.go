@@ -2,7 +2,7 @@
 
 package models
 
-// AddonProviderEmbeddedView AddonProviderEmbeddedView — the provider as embedded in an `AddonView`.  Named "Embedded" rather ...
+// AddonProviderEmbeddedView The provider of an add-on, as embedded in the add-on: identity, contact and display details and t...
 type AddonProviderEmbeddedView struct {
 	AnalyticsID    *string  `json:"analyticsId,omitempty"`
 	CanUpgrade     bool     `json:"canUpgrade"`

@@ -2,7 +2,7 @@
 
 package models
 
-// ListObjectsResponse Response for listing objects in a bucket.  Source: references/legacy/ovd/modules/cellar/models/pa...
+// ListObjectsResponse A page of the objects and directories of a bucket, with the cursor of the next page.
 type ListObjectsResponse struct {
 	Content     []CellarObject    `json:"content"`          // List of object entries
 	Cursor      *string           `json:"cursor,omitempty"` // Cursor for pagination (`null` when no more results).

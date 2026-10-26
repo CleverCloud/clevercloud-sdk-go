@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getorganisationapplication GET /v2/organisations/{id}/applications/{app_id} — get an organisation application.
+Getorganisationapplication Get an application of an organisation
 
-Source: cc-api OrganisationApplicationsAPI.java:106-107 getApplication()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:224-273 get(crc, id, tk, appId)
-Algorithm: Shape G1 — the Jenkins shared-secret channel read only once ordinary authentication has failed, the organisation existence probe between the header-presence gate and the secret comparison, then the scope bit folded with canAccessApps into one 403/6201, the owner-scoped application lookup on both paths, and the runner-tags bodyless 403 on the Jenkins path.
-Conformity: faithful — shape G1. Refs #2211
+Returns an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation. The organisation's Jenkins token reads only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon` (403 otherwise).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

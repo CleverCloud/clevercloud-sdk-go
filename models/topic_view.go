@@ -2,7 +2,7 @@
 
 package models
 
-// TopicView Topic info (persistent or non-persistent).  Source: references/legacy/ovd/core/models/pulsar/Doma...
+// TopicView A topic of a Pulsar namespace.
 type TopicView struct {
 	Name string `json:"name"` // Full topic name (e.g. "persistent://tenant/ns/topic")
 }

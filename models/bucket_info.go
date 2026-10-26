@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// BucketInfo Bucket info in the buckets list response.  Source: references/legacy/ovd/modules/cellar/models/pa...
+// BucketInfo A bucket in a bucket listing, with its object count and size.
 type BucketInfo struct {
 	CreatedAt    time.Time `json:"createdAt"`    // Creation timestamp
 	Name         string    `json:"name"`         // Bucket name

@@ -11,32 +11,16 @@ import (
 )
 
 /*
-Deletepulsartopic DELETE /v2/providers/addon-pulsar/resources/{pulsar_id}/topics/{topic} — delete topic (v2 legacy).
+Deletepulsartopic Delete a persistent topic of a Pulsar add-on
 
-**Legacy**: ovd PulsarController.scala:417 deleteTopicV2ServerEndpoint()
-**Algorithm**:
-  - Delegates to PulsarTopicService.deletePersistentTopic(pulsarId, topic, partitioned, force) (line 103)
-  - Scala calls PulsarAdminClient to delete topic on actual cluster
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::delete_persistent_topic` (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deleteTopicV2ServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala deleteTopicV2
-Behavior: resolves addon + cluster, calls
-
-	`admin_client.delete_persistent_topic(...partitioned, force)`
-	on the cluster's admin REST API, returns 204 on success.
-
-Issue: #8
+Called by the platform to delete a persistent topic of the add-on's namespace; answers 204. Query parameters: `partitioned` (default `false`) targets a partitioned topic, and `force` (default `false`) deletes it even with connected producers or consumers. An invalid topic name answers 400 and an unknown add-on 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
-  - topic: Topic name
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

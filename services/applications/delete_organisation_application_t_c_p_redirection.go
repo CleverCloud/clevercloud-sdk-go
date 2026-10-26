@@ -13,21 +13,16 @@ import (
 )
 
 /*
-Deleteorganisationapplicationtcpredirection Legacy: cc-api OrganisationApplicationsAPI.java:321 removeTcpRedir() -> ApplicationHelper.removeTcpRedir()
-Algorithm: Legacy: verify org access, DELETE from DB, publish hayxorp REMOVE_TCP_REDIRECTION
-Conformity: faithful — deletes from DB + publishes hayxorp ADC RemoveTcpRedir
+Deleteorganisationapplicationtcpredirection Delete a TCP redirection of an application
 
-DELETE /v2/organisations/{id}/applications/{app_id}/tcpRedirs/{source_port}.
-
-Source: cc-api OrganisationApplicationsAPI.java:321 removeTcpRedir()
-Issue: #107
+Removes the TCP redirection of the given port, in the namespace named by the `namespace` query parameter, from an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - sourcePort: Source port
   - opts: optional query parameters
 

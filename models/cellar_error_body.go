@@ -2,10 +2,10 @@
 
 package models
 
-// CellarErrorBody Structured Cellar API error body — the 4-field OVD error envelope `{apiRequestId, code, context, ...
+// CellarErrorBody Error returned by the Cellar API: a request ID, a machine-readable code, a typed context and a hu...
 type CellarErrorBody struct {
-	APIRequestID string             `json:"apiRequestId"` // Per-request id, `request_<uuid>` (from `api_errors::ovd_envelope::request_id`).
+	APIRequestID string             `json:"apiRequestId"` // Request ID (`request_<uuid>`).
 	Code         string             `json:"code"`         // Machine-readable error code (e.g. "clever.cellar.bucket-not-found").
 	Context      CellarErrorContext `json:"context"`      // Typed error context (resource / input / empty).
-	Error        string             `json:"error"`        // Human-readable error message (must NOT leak raw S3/Ceph errors).
+	Error        string             `json:"error"`        // Human-readable error message.
 }

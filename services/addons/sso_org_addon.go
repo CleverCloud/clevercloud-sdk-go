@@ -12,22 +12,16 @@ import (
 )
 
 /*
-SsoOrgAddon POST /v2/organisations/{id}/addons/{addon_id}/sso — SSO into org addon dashboard.
+SsoOrgAddon Generate the single sign-on data of an add-on of an organisation
 
-Source: cc-api OrganisationAddonsSsoAPI.java addonSso()
-Behavior: computes Heroku-compatible SSO token + signature for org addon
-Issue: #216
-
-Algorithm: Verify org RBAC + addon ownership, compute Heroku SSO token
-Legacy: cc-api OrganisationAddonsSsoAPI.java addonSso()
-Conformity: faithful -- Heroku SSO protocol with org RBAC
+Same answer as the `GET` variant: the signed data that opens the add-on's provider dashboard as the caller. The add-on is looked up by add-on ID or real ID among the organisation's own; 404 otherwise. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addon_id: Addon ID
+  - addon_id: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

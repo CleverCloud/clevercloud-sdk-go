@@ -11,16 +11,9 @@ import (
 )
 
 /*
-GetInternalUserid GET /internal/userid — get user ID from OAuth1 token (stub).
+GetInternalUserid Resolve the user of an access token
 
-📥 **Algo Source (Legacy):**
-Return error (not yet implemented); special-case "Jenkins" token returns "Jenkins"; needs Redis cache lookup
-- Legacy note: cc-api InternalAPI.java:103 getInternalUserid(); looks up OAuth1 token in cache
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: stub
-Source: cc-api InternalAPI.java:103 getInternalUserid()
-Issue: #709
+Returns, as a JSON string, the ID (`user_…`) of the user owning the OAuth1 access token given in `token`; a missing or unknown token answers 401 with `{"value": false}`. Callable only by platform services (403 otherwise).
 
 Parameters:
   - ctx: context for the request

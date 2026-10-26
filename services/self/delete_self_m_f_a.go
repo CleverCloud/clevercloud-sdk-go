@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Deleteselfmfa DELETE /v2/self/mfa/{kind} — delete MFA configuration.
+Deleteselfmfa Disable an MFA
 
-📥 **Algo Source (Legacy):**
-Verify almighty + password re-auth, delete mfa_configurations + mfa_recovery_codes, reset preferred_mfa_kind to NONE
-- Legacy note: cc-api SelfMFAAPI.java deleteMFA()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java deleteMFA()
-Issue: #102
+Deletes the user's MFA of this kind and its recovery codes; when it was the preferred kind, login no longer asks for a second factor. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). Answers 404 when no MFA of this kind is configured.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
 
 # Returns the operation result or an error
 

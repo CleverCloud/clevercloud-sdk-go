@@ -2,7 +2,7 @@
 
 package models
 
-// TrafficView Traffic statistics for a Cellar addon.  Source: references/legacy/ovd/modules/cellar/models/packa...
+// TrafficView Traffic of a Cellar add-on, in bytes.
 type TrafficView struct {
 	Inbound  int `json:"inbound"`  // Inbound traffic in bytes
 	Outbound int `json:"outbound"` // Outbound traffic in bytes

@@ -11,19 +11,9 @@ import (
 )
 
 /*
-GetInternalHtmlInvoice GET /v2/internal/invoices/{invId} — get HTML invoice (501 stub, matches Java).
+GetInternalHtmlInvoice Get an invoice (discontinued)
 
-Also answers `{invId}.pdf`, which axum cannot route separately — see
-`internal_invoices_router`. Both Java methods return the same 501, so the
-responses are identical; this stops holding the day either is implemented.
-
-Source: cc-api InternalInvoiceAPI.java:59 getHtmlInvoice()
-Source: cc-api InternalInvoiceAPI.java:82 getPdfInvoice() — absorbed, same 501
-Issues: #709, #2016
-
-Legacy: billing-api InternalInvoiceService.getHTML()
-Algorithm: Internal auth, render invoice as HTML
-Conformity: stub -- 501 matching Java InternalInvoiceAPI
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller. Also answers `GET /v2/internal/invoices/{inv_id}.pdf`.
 
 Parameters:
   - ctx: context for the request

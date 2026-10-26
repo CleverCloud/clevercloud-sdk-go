@@ -2,7 +2,7 @@
 
 package models
 
-// ComponentConfig Per-component flavor + replication factor (distributed topology).  Source: references/legacy/ovd/...
+// ComponentConfig Flavor and replication factor of one control-plane component in the `DISTRIBUTED` topology.
 type ComponentConfig struct {
 	Flavor            NodeFlavor               `json:"flavor"`
 	ReplicationFactor ClusterReplicationFactor `json:"replicationFactor"` // Control-plane replication factor (1-5).

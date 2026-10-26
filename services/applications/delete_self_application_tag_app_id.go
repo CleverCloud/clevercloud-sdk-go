@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Deleteselfapplicationtagappid DELETE /v2/self/applications/{app_id}/tags/{tag} — remove a tag.
+Deleteselfapplicationtagappid Remove a tag from an application
 
-Source: cc-api SelfApplicationsAPI.java removeSelfTag()
-Issue: #2228
-
-Legacy: SelfApplicationTagsHelper.java:29-32 removeTag() -> ApplicationTagsHelper.java:37-52,103-108
-Algorithm: Shape S3 — canAddApp then owner-scoped 404 APPLICATION_NOT_FOUND before the unchanged tag removal.
-Conformity: faithful — personal org_id, 8101/4004, response, and messaging. Refs #2228
+Removes a tag from an application of the user's personal space and returns the remaining tags.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - tag: Tag
 
 # Returns the operation result or an error

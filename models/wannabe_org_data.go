@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeOrgData Organisation data for internal creation.  Source: cc-api WannabeOrganisation.java — name, descrip...
+// WannabeOrgData Details of the organisation to create.
 type WannabeOrgData struct {
 	Address      *string `json:"address,omitempty"`      // Postal address.
 	BillingEmail *string `json:"billingEmail,omitempty"` // Billing email address.

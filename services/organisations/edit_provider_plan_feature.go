@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Editproviderplanfeature PUT /v2/organisations/{id}/addonproviders/{provider_id}/plans/{plan_id}/features/{feature_name}.
+Editproviderplanfeature Set a feature value on a plan
 
-Source: cc-api OrganisationAddonProviderAPI.java putPlanFeature()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, UPSERT addon_plan_feature_instances (value, computableValue).
-- Legacy note: cc-api OrganisationAddonProviderAPI.java putPlanFeature()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Sets the plan's value for the provider feature `featureName` from a JSON body `{"name": "<featureName>", "value": "…"}` and returns the plan; an existing value is replaced only when `name` equals `featureName` and `value` is present. A feature the provider does not declare is ignored. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

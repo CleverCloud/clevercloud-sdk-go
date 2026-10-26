@@ -12,26 +12,15 @@ import (
 )
 
 /*
-Createngotoroshiapplication POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/networkgroup
+Createngotoroshiapplication Attach an Otoroshi add-on to a network group
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — createNGForAddon()
-
-📥 **Algo Source (Legacy):**
-- Generate a new NetworkGroupId
-- Fetch addon from DB
-- Create NetworkGroup via NG API with java app as member
-- UPDATE addon with networkgroup_id in DB
-- Redeploy the addon (reboot without rebuild)
-- Return updated OtoroshiView
-- Source: ovd OtoroshiProviderService.scala:547 createNGForAddon()
-
-Issue: #313
+Puts the add-on's application in a network group (created unless the add-on already has a live one), restarts it and returns the updated add-on. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

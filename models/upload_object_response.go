@@ -2,10 +2,10 @@
 
 package models
 
-// UploadObjectResponse Response of the streaming object-upload endpoint.  Source: references/legacy/ovd/modules/cellar/m...
+// UploadObjectResponse Result of an object upload: the stored key, its size, ETag and content type.
 type UploadObjectResponse struct {
 	ContentLength int     `json:"contentLength"`         // Number of bytes stored.
-	ContentType   *string `json:"contentType,omitempty"` // Content type echoed from the request (`null` when the client sent no `Content-Type`). Legacy `Upl...
+	ContentType   *string `json:"contentType,omitempty"` // Content type echoed from the request; `null` when the request sent no `Content-Type`. The key is ...
 	ETag          string  `json:"eTag"`                  // The object's ETag (quotes stripped).
 	ObjectKey     string  `json:"objectKey"`             // The stored object key.
 }

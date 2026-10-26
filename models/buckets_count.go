@@ -2,7 +2,7 @@
 
 package models
 
-// BucketsCount Bucket count statistics for a Cellar addon.  Source: references/legacy/ovd/modules/cellar/models/...
+// BucketsCount Bucket statistics of a Cellar add-on: number of buckets, total size in bytes and total number of ...
 type BucketsCount struct {
 	Count   int `json:"count"`   // Number of buckets
 	Objects int `json:"objects"` // Total number of objects

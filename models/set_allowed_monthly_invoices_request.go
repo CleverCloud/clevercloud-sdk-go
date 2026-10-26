@@ -2,7 +2,7 @@
 
 package models
 
-// SetAllowedMonthlyInvoicesRequest Request body for PUT /v2/internal/organisations/{id}/allowed_monthly_invoices.  Source: cc-api In...
+// SetAllowedMonthlyInvoicesRequest Number of monthly invoices an organisation is allowed.
 type SetAllowedMonthlyInvoicesRequest struct {
 	Limit int `json:"limit"` // Maximum number of allowed monthly invoices.
 }

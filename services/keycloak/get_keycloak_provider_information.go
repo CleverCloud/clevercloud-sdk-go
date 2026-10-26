@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Getkeycloakproviderinformation GET /v4/addon-providers/keycloak
+Getkeycloakproviderinformation Get the Keycloak provider information
 
-📥 **Algo Source (Legacy):** `getProviderInformation` (`A:1385`) returns the
-provider console view: the dedicated version map and the default version.
-⚠ This route has **zero legacy tests** — fully ASSUMED (`01-legacy-tests.md`).
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:1385
-Issues: #313
+Returns the Keycloak versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
 Parameters:
   - ctx: context for the request

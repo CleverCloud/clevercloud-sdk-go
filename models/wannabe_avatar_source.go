@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAvatarSource The body of the JSON avatar variant — cc-api's `WannabeAvatarSource`.  Documentation only: the ha...
+// WannabeAvatarSource Where to take the organisation's new avatar from, when it is not uploaded as an image.
 type WannabeAvatarSource struct {
 	Source *string `json:"source,omitempty"` // `github` or `gravatar`; anything else (or absent) is an invalid source.
 }

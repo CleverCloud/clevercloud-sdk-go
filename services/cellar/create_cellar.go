@@ -13,7 +13,7 @@ import (
 /*
 Createcellar Provision a Cellar add-on
 
-Creates a Cellar add-on for the requested owner and plan, places it on a storage cluster available in the requested region, and returns the provider-side resource id together with the `CELLAR_ADDON_HOST`, `CELLAR_ADDON_KEY_ID` and `CELLAR_ADDON_KEY_SECRET` values to inject into the consuming application. Reserved for the Clever Cloud add-on broker, which authenticates with its own provider credentials; any other caller is refused with 401. A request that cannot succeed — unknown plan, missing region, malformed add-on or owner id, an unusable `initial_buckets` option — is refused before anything is created, so no half-provisioned add-on is left behind.
+Called by the platform's add-on broker when a customer creates a Cellar add-on. Places it on a storage cluster available in the requested region and returns the provider-side ID (`cellar_…`) with the `CELLAR_ADDON_HOST`, `CELLAR_ADDON_KEY_ID` and `CELLAR_ADDON_KEY_SECRET` values exposed to linked applications. A request that cannot succeed (unknown plan, missing region, malformed add-on or owner ID, unusable `initial_buckets` option) answers 400 before anything is created.
 
 Parameters:
   - ctx: context for the request

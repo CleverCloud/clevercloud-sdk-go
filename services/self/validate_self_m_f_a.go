@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Validateselfmfa POST /v2/self/mfa/{kind}/confirmation — validate/confirm MFA enrollment.
+Validateselfmfa Confirm an MFA enrolment
 
-📥 **Algo Source (Legacy):**
-Verify TOTP code against stored secret with +/-1 time window skew, mark validated, generate 10 recovery codes
-- Legacy note: cc-api SelfMFAAPI.java validateMFA() + MFAHelper.java:verify(); 3 time windows match cc-api
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java validateMFA()
-Source: cc-api MFAHelper.java:verify() — TOTP verification with time window
-Issue: #102
+Checks `code`, from the authenticator app, against the pending enrolment and activates the MFA, which becomes the preferred kind when none was set; with `revokeTokens: true`, every other access token of the user is revoked. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). A wrong code answers 400 (error id 3103), no pending enrolment 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
   - requestBody: the request payload
 
 # Returns the operation result or an error

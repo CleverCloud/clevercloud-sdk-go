@@ -4,44 +4,26 @@ package internalapi
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-GetInternalInvoices GET /v2/internal/invoices — list invoices with optional owner filter.
+GetInternalInvoices List invoices (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:27 getInvoices()
-Source: billing-api AdminRoutes.scala — getInvoices()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Query billing DB for invoices, optionally filtered by owner_id.
-- Internal auth required
-- SELECT from invoice table with optional owner_id WHERE clause
-- Return list of invoice rows as JSON
-- Source: billing-api InvoiceDAO.scala getInvoices()
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth token
-- Extract optional `owner` query param
-- ccapi::db::billing::list_invoices_filtered_by_owner(pool, owner)
-- Return `Vec<InvoiceRow>` serialized to JSON
-Conformity: real -- pure PG query, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.GetInternalInvoices(ctx, client, tracer, opts...)
+	response := internalapi.GetInternalInvoices(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -50,20 +32,14 @@ Example:
 x-service: internal
 operationId: get_internal_invoices
 */
-func GetInternalInvoices(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func GetInternalInvoices(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_internal_invoices")
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices")
 
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
-
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

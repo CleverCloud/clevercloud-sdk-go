@@ -12,25 +12,9 @@ import (
 )
 
 /*
-SetOrgContacts **Legacy**: cc-api InternalOrganisationsAPI.java:463 setOrganisationContacts()
-**Algorithm**:
-  - Verify org exists (404)
-  - Update billing_email on organisations if provided
-  - Transaction: DELETE existing organisation_contacts, INSERT new ones
-  - Graceful if organisation_contacts table missing (JPA @ElementCollection)
+SetOrgContacts Replace the contacts of an organisation
 
-**Conformity**: YES — billing_email + HDS contacts replacement matches cc-api
-
-PUT /v2/internal/organisations/{id}/contacts — replace billing contacts for an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:463 setOrganisationContacts()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal, 403 internal service other than ccadmin, 404 org not
-
-	found, 204 on success. Body-signed: legacy signs the entity, so the
-	route is layered with buffer_internal_auth_payload.
-
-Issue: #391, #2018
+Replaces the organisation's security, privacy and abuse contacts, and its billing email when given; the body is either the list of contacts or an object with `billingEmail` and `contacts`. 404 when the organisation is unknown. Restricted to the administration console service.
 
 Parameters:
   - ctx: context for the request

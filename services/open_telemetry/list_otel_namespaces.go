@@ -12,8 +12,10 @@ import (
 )
 
 /*
-Listotelnamespaces GET /v4/otel/organisations/{owner_id}/namespaces — the owner's ACTIVE
-namespaces, newest first, read tokens included.
+Listotelnamespaces GET /v4/otel/organisations/{owner_id}/namespaces — the owner's live
+namespaces, newest first, read tokens included: provisioned ones, and the
+one reserved for the organisation until its first service provisions it,
+whose read token is `null`.
 
 Parameters:
   - ctx: context for the request

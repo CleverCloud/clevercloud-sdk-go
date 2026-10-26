@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// Pulsar Full Pulsar addon view returned by GET endpoints.  Source: references/legacy/ovd/modules/pulsar/m...
+// Pulsar A Pulsar add-on: its tenant and namespace, cluster, access token, lifecycle dates and cold-storag...
 type Pulsar struct {
 	AskForDeletionDate        *time.Time   `json:"ask_for_deletion_date,omitempty"` // When deletion was requested
 	ClusterID                 string       `json:"cluster_id"`                      // Cluster ID the addon is deployed on

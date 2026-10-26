@@ -2,8 +2,8 @@
 
 package models
 
-// PulsarZoneOverride One zone's exception to [`PlacementView::default_cluster`].  Issue: #2986
+// PulsarZoneOverride A zone that provisions onto a cluster other than the default one.
 type PulsarZoneOverride struct {
 	Cluster string `json:"cluster"` // The cluster that zone provisions onto instead of the default.
-	Zone    string `json:"zone"`    // The zone as cc-api spells it in a provision request (`rbx`), which is also how it is written in t...
+	Zone    string `json:"zone"`    // The zone, as spelled in a provision request (e.g. `rbx`); matched exactly.
 }

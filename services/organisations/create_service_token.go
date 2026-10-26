@@ -12,33 +12,9 @@ import (
 )
 
 /*
-Createservicetoken POST /v2/organisations/{id}/service-tokens — create a service token.
+Createservicetoken Create a service token
 
-Source: cc-api OrganisationServiceTokensAPI.java:48 createServiceToken()
-Source: cc-api ServiceTokenHelper.java:104 create()
-Source: cc-api !533 — resources array replaces resource_id
-Behavior: validates role hierarchy, builds datalog, forwards to token API.
-
-	Returns 201 with the created token response (shown once).
-	Returns 400 if validation fails.
-	Returns 403 if caller role cannot assign requested role.
-	Returns 404 if a resource in the array is not an app/addon of the org.
-	Returns 502 if token API communication fails.
-
-Issue: #855
-
-📥 **Algo Source (Legacy):**
-1. Auth: check caller is member of org with manage_organisations_services permission
-2. Parse WannabeServiceToken JSON body (name, description, role, resources[], ttl_seconds)
-3. Validate: name required, role required, ttl in range, resources non-empty strings
-4. Check caller role can assign requested role (canAssign hierarchy)
-5. For each resource in resources[]: verify it's an app or addon of the org (404 if not)
-6. Build datalog: tenant(orgId), role(roleName), robot(robotId), check if resource($r) [resources].contains($r)
-7. Forward WannabeToken to token API POST /v4/tenants/{tenantId}/tokens
-8. Return 201 with token API response
-
-🔧 **Algo Rust (Implementation):**
-Faithful reproduction. Uses reqwest to call local token API (same binary).
+Creates a token that calls the API on the organisation's behalf with the given `role`, optionally restricted to some applications and add-ons (`resources`), valid `ttl_seconds` (90 days by default, one year at most). Requires membership, the right to manage the organisation's services and permission to assign the requested role; creation is rate-limited per organisation. The token value appears only in this response.
 
 Parameters:
   - ctx: context for the request

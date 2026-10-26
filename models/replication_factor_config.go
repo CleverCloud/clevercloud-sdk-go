@@ -2,7 +2,7 @@
 
 package models
 
-// ReplicationFactorConfig Replication factor configuration.  Source: references/legacy/ovd/modules/kubernetes/models/Kubern...
+// ReplicationFactorConfig Bounds of the control-plane replication factor, inclusive.
 type ReplicationFactorConfig struct {
 	Max int `json:"max"` // Maximum replication factor
 	Min int `json:"min"` // Minimum replication factor

@@ -12,32 +12,15 @@ import (
 )
 
 /*
-Deletepulsarv2 DELETE /v2/providers/addon-pulsar/resources/{pulsar_id} — deprovision a Pulsar addon.
+Deletepulsarv2 Deprovision a Pulsar add-on
 
-**Legacy**: ovd PulsarController.scala:178 deletePulsarV2ServerEndpoint()
-**Algorithm**:
-  - Delegates to PulsarProvisioningService.markToDelete (line 147)
-  - UPDATE status=TO_DELETE + ask_for_deletion_date=NOW, then SELECT to return view
-  - Internal endpoint (Basic Auth), no ownership check
-
-**Conformity**: YES
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deletePulsarV2ServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala deletePulsarV2
-Behavior: marks addon as TO_DELETE with ask_for_deletion_date. Background cleanup job
-
-	handles actual Pulsar tenant/namespace deletion once the addon's
-	grace period is up — a year for access and audit logs, three days
-	for the rest (`cleanup::LONG_RETENTION_DAYS`).
-	Returns the current Pulsar view (Scala returns Ok with body).
-
-Issue: #8
+Called by the platform's add-on broker when a customer deletes a Pulsar add-on. Marks the add-on for deletion and returns its view; its namespace and topics are removed shortly afterwards. An unknown add-on answers 404, and an add-on whose plan cannot be deleted answers 412.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

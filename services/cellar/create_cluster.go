@@ -14,13 +14,13 @@ import (
 /*
 Createcluster Register a Cellar storage cluster
 
-Registers a storage cluster — its S3 endpoint host, availability zone, administrative credentials and whether it accepts new add-ons — and returns the created cluster as `{ id, host, zone, available }`; the administrative credentials are never echoed back. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. A blank host, username or password answers 400.
+Registers a storage cluster (S3 endpoint host, zone, administrative credentials, availability) and returns it as `{ id, host, zone, available }`; the credentials are never returned. A blank host, username or password answers 400. Platform-operations route: it requires a bearer token granting this cluster operation for the organisation in the path, and answers 401 without a usable token and 403 when the token does not cover it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) the token must cover
   - requestBody: the request payload
 
 # Returns the operation result or an error

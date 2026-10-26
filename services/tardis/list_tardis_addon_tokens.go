@@ -14,7 +14,13 @@ import (
 /*
 ListTardisAddonTokens GET /v4/addon-providers/addon-tardis/organisations/{ownerId}/addon/{tardisId}/tokens — list tokens.
 
-Algorithm: Query tardis_addon_token by addon_id. Return all tokens for this addon.
+Algorithm: Resolve the addon under the path's owner (404 otherwise), then query
+
+	tardis_addon_token by addon_id. Return all tokens for this addon. The caller must be the
+	path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403, and the addon's
+	application must still be held by its owner, else 404 (refs #4431).
+
 Legacy: ovd tardis token list
 Conformity: real
 

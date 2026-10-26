@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Updateorganisationconsumer PUT /v2/organisations/{id}/consumers/{key} — update a consumer.
+Updateorganisationconsumer Update an OAuth consumer
 
-Source: cc-api OrganisationConsumersAPI.java updateConsumer()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Update name/description/url/picture/base_url; 404 if not found.
-- Legacy note: cc-api OrganisationConsumersAPI.java updateConsumer()
-
-🔧 **Algo Rust (Implementation):**
-- Validate + persist caller-supplied rights (refs #1181); 400 OAUTH1_CONSUMER on bad rights.
-- Conformity: faithful
+Updates the consumer's name, description, URLs, picture and rights, and returns it; 404 when the organisation has no consumer with this key. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentView DeploymentView — matches cc-api openapi/ccapiv3.json DeploymentView schema.  Source: cc-api Deplo...
+// DeploymentView A deployment of an application: when it ran, its action, state and cause, the commit it deployed,...
 type DeploymentView struct {
 	Action    string  `json:"action"`
 	Author    Author  `json:"author"`

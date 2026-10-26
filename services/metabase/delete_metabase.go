@@ -11,21 +11,15 @@ import (
 )
 
 /*
-Deletemetabase DELETE /v2/providers/addon-metabase/resources/{addon_metabase_id} — deprovision.
+Deletemetabase Deprovision a Metabase add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — deprovision
-Behavior: delete Java app + PG addon (ignore 404) + unregister DNS, then
-
-	`setToDelete` → status `TO_DELETE` + `deletion_date`. Returns 204, or 404
-	when no active addon was updated.
-
-Issue: #8
+Called by the platform when a customer deletes a Metabase add-on. Deletes its Java application, PostgreSQL add-on and DNS record, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers 500 and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId: Metabase addon ID
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
 
 # Returns the operation result or an error
 

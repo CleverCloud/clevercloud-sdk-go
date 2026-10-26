@@ -10,16 +10,9 @@ import (
 )
 
 /*
-CreateInternalCredentials POST /internal/credentials — create internal credentials (stub).
+CreateInternalCredentials Create internal credentials (not available)
 
-📥 **Algo Source (Legacy):**
-Return error (not yet implemented); requires InternalCredsHelper logic
-- Legacy note: cc-api InternalAPI.java:82 createCredentials()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: stub
-Source: cc-api InternalAPI.java:82 createCredentials()
-Issue: #709
+Not implemented at this path: answers 500 to platform services and 403 to any other caller. Use `POST /v2/internal/credentials`.
 
 Parameters:
   - ctx: context for the request

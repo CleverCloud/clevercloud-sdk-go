@@ -2,8 +2,9 @@
 
 package models
 
-// PulsarCluster Cluster view returned by cluster management endpoints.  Source: references/legacy/ovd/modules/pul...
+// PulsarCluster A Pulsar cluster: its endpoints and ports, version, zone, availability and the plans it supports.
 type PulsarCluster struct {
+	AdminHost          *string  `json:"admin_host,omitempty"`      // Host the platform's own calls to the cluster's admin API use when it differs from `url`; `null` m...
 	Available          bool     `json:"available"`                 // Whether this cluster is available for new addons
 	ID                 string   `json:"id"`                        // Cluster identifier
 	PulsarPort         int      `json:"pulsar_port"`               // Pulsar binary protocol port

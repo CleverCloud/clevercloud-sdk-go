@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Updateaddoninfo PUT /v2/organisations/{id}/addons/{addon_id} — rename an org addon.
+Updateaddoninfo Rename an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java updateAddon()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, update name, publish event
-Legacy: cc-api OrganisationAddonsAPI.java updateAddon()
-Conformity: faithful -- rename with RBAC
+Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

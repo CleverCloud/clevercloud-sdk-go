@@ -12,22 +12,17 @@ import (
 )
 
 /*
-Addorganisationapplicationvirtualhost PUT /v2/organisations/{id}/applications/{app_id}/vhosts/{domain} — add a vhost.
+Addorganisationapplicationvirtualhost Add a domain name to an application
 
-Legacy: cc-api ApplicationHelper.java:2253 addVhost() -> :2324 _addVhost()
-Algorithm: Auth + canAddApp; validate domain via dh.registerVhost(); Add vhost to app entity, register domain to DNS; Notify rev...
-Conformity: faithful — domain validation delegated to DB + publishes DNS CNAME create for CC-owned domains
-
-Source: cc-api OrganisationApplicationsAPI.java addOrganisationVhost()
-Issue: #107
+Routes the given domain name to an organisation's application. Refused when the domain is already used by another application or is not allowed. Requires a user holding the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - domain: FQDN
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - domain: Domain name (FQDN)
 
 # Returns the operation result or an error
 

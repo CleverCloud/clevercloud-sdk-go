@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletesigningkey
+Deletesigningkey DELETE /v4/tenants/{tenantId}/products/{productId}/keys/{keyId}
 
 Parameters:
   - ctx: context for the request

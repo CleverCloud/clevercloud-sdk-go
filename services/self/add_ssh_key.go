@@ -12,25 +12,15 @@ import (
 )
 
 /*
-Addsshkey PUT /v2/self/keys/{key_name} — add an SSH key.
+Addsshkey Add an SSH key to the current user
 
-📥 **Algo Source (Legacy):**
-Parse+validate key type and base64, check name/fingerprint conflicts, compute SHA256 fingerprint, insert, broadcast ADD_KEY Etilotig
-- Legacy note: cc-api SelfKeysAPI.java addSshKey() -> SelfSshKeyHelper.java:130-162 add()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfKeysAPI.java addSshKey()
-Source: cc-api SelfSshKeyHelper.java add()
-The {key_name} is the label, the body is the raw public key as a JSON string.
-Fingerprint is computed as SHA256 hash of the decoded base64 key data.
-Issue: #102
+Registers the public key sent as a JSON string (for example `"ssh-ed25519 AAAA… comment"`) under the name given in the path, for Git pushes and SSH access to instances. A name the user already uses, or a key already registered on any account, answers 409. Requires the `manage_ssh_keys` right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - key: SSH key label
+  - key: Name of the key
 
 # Returns the operation result or an error
 

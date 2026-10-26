@@ -11,15 +11,9 @@ import (
 )
 
 /*
-ArsGetEvent Legacy: cc-api InternalARSAPI.java:207 getEventTemplate()
-Algorithm: Legacy: strip .git suffix from appId, get app + owner + zone + FQDNs; Legacy: build GitPushEvent JSON with commit, br...
-Conformity: faithful — full event construction matching legacy JSON structure
+ArsGetEvent Build a Git push event
 
-Build a git push event template for deployment.
-
-Source: cc-api InternalARSAPI.java:207 getEventTemplate()
-Behavior: builds GitPushEvent with commit, branch, deployment zone, FQDNs.
-Issue: #709
+Returns the Git push event of a commit pushed to an application's repository, with its branch, message, deployment zone and domain names. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request

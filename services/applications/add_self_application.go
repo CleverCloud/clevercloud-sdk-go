@@ -11,43 +11,9 @@ import (
 )
 
 /*
-Addselfapplication POST /v2/self/applications — create a new personal application.
+Addselfapplication Create an application for the current user
 
-Source: cc-api SelfApplicationsAPI.java:38-40 @Consumes(APPLICATION_JSON), :193-201 addApplication()
-Source: cc-api SelfApplicationsHelper.java:94-97 add() -> ApplicationHelper.java:1202-1271 add()
-Source: cc-api ApplicationHelper.java:2728-2745 save(String), :2789-2812, :3140-3146 save()
-Schema: V1__Initial_schema.sql — organisations, organisation_members, conf_base,
-
-	users(email_validated, state), applications
-
-Spec: analysis-output/02-ccapi-analysis.md §Self Applications
-Issues: #107, #2228
-[DB-WRITE] INSERT applications + INSERT instances + INSERT vhosts
-
-📥 Algo Source (Legacy):
-JAX-RS matches the class-level `@Consumes(APPLICATION_JSON)` before `ah.auth(crc)` runs, so a
-nonmatching media type is a bodyless 415 ahead of everything else. The shim then replays a
-failed authentication and delegates to the shared `add(crc, tk.right().getUserId(), tk,
-uriInfo, app)` — the *organisation* create helper, with the caller's own user id as the
-organisation id.
-
-🔧 Algo Rust (Implementation):
-  - `org_id = user_id` is legacy's own argument: the personal space is a real organisation row
-    whose id IS the user id. `guard_create_app` therefore answers 404/6004 for a token with no
-    personal organisation (a service token's robot id), 403/6017 for an inactive one, 403/8101
-    for the scope bit and for membership-plus-`canAddApp`, 403/8502 on the unvalidated email,
-    403/2001 on a moderated user, then 503 when `conf_base.appcreation` is off.
-  - The handler takes `Result<Auth, AuthError>` **only** to keep the 415 ahead of the
-    authentication rejection; it replays `Err` immediately and hands `guard_create_app` an `Ok`
-    plus an **empty** header map. The shim never delegates a left `tk`, so legacy's Jenkins
-    channel — its shared secret, actor, runner tags and limiter bypass — cannot run here, and
-    passing the real headers would smuggle it in.
-  - The raw body reproduces `save(String)`: empty is 400/3003, undecodable is 400/3004, and a
-    JSON `null` reaches the ordinary 24-hour creation limiter before legacy's null dereference
-    becomes 500/500.
-
-Conformity: faithful — shares `add` with the organisation create route, with no Jenkins
-branch and no almighty or internal bypass. Refs #2228
+Creates an application in the authenticated user's personal space and returns it. The user's email address must be validated and the account must not be moderated.
 
 Parameters:
   - ctx: context for the request

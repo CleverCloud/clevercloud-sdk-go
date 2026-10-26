@@ -12,31 +12,22 @@ import (
 )
 
 /*
-Triggerkubernetesclusterresume POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/resume — resume a failed cluster.
+Triggerkubernetesclusterresume Resume a failed cluster
 
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — triggerResume
-Behavior: resumes a failed cluster by resetting status to DEPLOYING.
-Issue: #667
-
-**Legacy**: ovd ClusterController.scala triggerKubernetesClusterResume()
-**Algorithm**:
-  - Only if current status is FAILED, set status=DEPLOYING
-  - Actual redeployment is async
-
-**Conformity**: YES
+Retries the operation that left the cluster `FAILED`: deployment, redeployment, upgrade or plugin reconcile; a failed deletion is a 409. The optional body sets the `drainPolicy` of the drains the retried operation runs, `STRICT` by default. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -45,11 +36,11 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterResume
 */
-func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
-	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)

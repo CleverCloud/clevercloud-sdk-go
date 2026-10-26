@@ -2,7 +2,7 @@
 
 package models
 
-// LinkedAddonEnvironmentView LinkedAddonEnvironmentView — env vars grouped by linked addon.  Source: cc-api Addon.getEnvView()...
+// LinkedAddonEnvironmentView The environment variables one add-on linked to the application provides, with the add-on's identity.
 type LinkedAddonEnvironmentView struct {
 	AddonID    string                 `json:"addon_id"`
 	AddonName  string                 `json:"addon_name"`

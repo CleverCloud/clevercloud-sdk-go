@@ -12,24 +12,16 @@ import (
 )
 
 /*
-Editselfapplicationenvbyappidandenvname PUT /v2/self/applications/{app_id}/env/{env_name} — set a single env var.
+Editselfapplicationenvbyappidandenvname Set an environment variable of an application
 
-Accepts `{"value": "..."}` (WannabeValue format, matching cc-api Java).
-
-Source: cc-api SelfApplicationsAPI.java editSelfApplicationEnvByAppIdAndEnvName()
-Behavior: cc-api accepts WannabeValue {value: String}, returns ApplicationView
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:172-175 editApplicationEnv() -> ApplicationHelper.java:3577-3586 editApplicationEnv()
-Algorithm: Shape S4b — canAddApp then owner-scoped 403 APPLICATION_BAD_OWNER before the unchanged env write.
-Conformity: faithful — personal org_id, S4b errors, response, validation, and messaging. Refs #2228
+Creates or updates one environment variable of an application of the user's personal space and returns the edited application. The body carries the value in `value`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - envName: Env var name
+  - appId: Application ID (`app_…`)
+  - envName: Environment variable name
   - requestBody: the request payload
 
 # Returns the operation result or an error

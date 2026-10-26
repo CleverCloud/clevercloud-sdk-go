@@ -11,32 +11,16 @@ import (
 )
 
 /*
-Createpulsarpersistenttopictoken POST /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/topics/{topic}/token
+Createpulsarpersistenttopictoken Issue an access token for a persistent topic
 
-	— generate a topic-scoped Biscuit token.
-
-**Legacy**: ovd PulsarController.scala:325 generateTokenPersistentTopicServerEndpoint()
-**Algorithm**:
-  - Ownership verified via withTopicOwner helper (line 80)
-  - Delegates to PulsarTopicService.generatePersistentTopicToken (line 176)
-  - Scala mints a Biscuit token scoped to the specific topic via AddonPulsarBiscuitHelper
-
-**Conformity**: FAITHFUL — real Biscuit minting wired (refs #1058, #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala generateTokenPersistentTopicServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala generateTokenPersistentTopic
-Behavior: mints a topic-scoped Biscuit by attenuating the cluster's root
-
-	token with `check if topic(tenant, namespace, topic)`.
-
-Issue: #8, #1058
+Returns a new access token (Biscuit) restricted to this topic of the add-on's namespace, to hand to a producer or consumer that must reach this topic only. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
-  - topic: Topic name
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

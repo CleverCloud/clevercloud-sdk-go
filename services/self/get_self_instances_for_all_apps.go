@@ -10,26 +10,9 @@ import (
 )
 
 /*
-Getselfinstancesforallapps GET /v2/self/instances — list all personal application instances.
+Getselfinstancesforallapps List the instances of the current user's applications
 
-📥 **Algo Source (Legacy):**
-Return a map of appId -> Vec<SuperNovaInstanceView> for all running instances
-owned by the authenticated user.
-- Verify user auth
-- Call SupernovaHelper._getInstancesForOwner(userId)
-- Group instances by appId into MultivaluedMap
-- Return map (empty map if Supernova returns null)
-- Source: cc-api SelfAPI.java:82 getInstancesForAllApps()
-- Source: cc-api UsersHelper.java:504-519 getInstancesForAllApps()
-- Source: cc-api ApplicationHelper.java:616-633 getAllAppInstances()
-
-🔧 **Algo Rust (Implementation):**
-- Auth middleware extracts user_id
-- Cloud Versatile: return empty map {} when no Supernova/orchestration configured
-- This matches cc-api behavior when Supernova returns null (ApplicationHelper.java:619)
-
-Source: cc-api SelfAPI.java getInstances()
-Issue: #102
+Returns the instances of the applications of the user's personal space, grouped by application ID (`app_…`). The map is empty when instance data is not available on this deployment.
 
 Parameters:
   - ctx: context for the request

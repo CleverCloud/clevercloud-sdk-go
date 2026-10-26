@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeBucket Request body for creating a bucket.  Source: references/legacy/ovd/modules/cellar/models/package....
+// WannabeBucket Request body to create a bucket.
 type WannabeBucket struct {
 	Name       string `json:"name"`                 // Bucket name
 	Versioning *bool  `json:"versioning,omitempty"` // Whether to enable versioning

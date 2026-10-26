@@ -10,16 +10,9 @@ import (
 )
 
 /*
-GetInternalMigrationMailing POST /internal/migrationMailing — get migration mailing data (stub).
+GetInternalMigrationMailing Get migration mailing data (not available)
 
-📥 **Algo Source (Legacy):**
-Return error (not yet implemented); requires cross-module addon/org/user resolution
-- Legacy note: cc-api InternalAPI.java:142 getMigrationData(); takes addon IDs, returns owner+email data
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: stub
-Source: cc-api InternalAPI.java:142 getMigrationData()
-Issue: #709
+Not implemented: answers 500 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request

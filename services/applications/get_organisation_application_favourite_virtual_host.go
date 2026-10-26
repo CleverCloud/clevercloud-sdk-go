@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getorganisationapplicationfavouritevirtualhost GET /v2/organisations/{id}/applications/{app_id}/vhosts/favourite — favourite vhost.
+Getorganisationapplicationfavouritevirtualhost Get the favourite domain name of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationFavouriteVhost()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:1091 getFavouriteVhost()
-Algorithm: Shape V1 — scope bit (403/6201), plain oph.find existence probe (404/6004), hasAccessToOrg + canAddApp folded into one 403/6201, then the owner-scoped lookup answering 403 APPLICATION_BAD_OWNER; Return app.getFavouriteVhost() — nullable field on Application entity
-Conformity: faithful — shape V1: canAddApp under a 6201 envelope, legacy's own inconsistency against the DELETE sibling's 8103; same field lookup, and a missing favourite answers 404 APPLICATION_VHOST_NOT_FOUND (4021) as legacy does. Refs #2211
+Returns the virtual host marked as favourite on an organisation's application; 404 (error id 4021) when none is. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

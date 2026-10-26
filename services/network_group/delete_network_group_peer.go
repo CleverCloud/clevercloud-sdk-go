@@ -11,20 +11,17 @@ import (
 )
 
 /*
-Deletenetworkgrouppeer DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/peers/{peer_id}
+Deletenetworkgrouppeer Remove a peer from a network group
 
-Source: ovd NetworkGroupRoutes.scala deletePeer → `PeerCMD(DELETE)`
-Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG
-or peer; 401 for a Clever peer (OVD `wannaDeletePeer` without `force`).
-Issue: #313, #665, #676, #849, #1127, #2790
+Requests the removal of an external peer, which is applied asynchronously; 404 when the network group or the peer does not exist. A Clever Cloud instance peer cannot be removed this way (401): it leaves the group with its instance or its member. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
 
 # Returns the operation result or an error
 

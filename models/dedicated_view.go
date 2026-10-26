@@ -2,7 +2,7 @@
 
 package models
 
-// DedicatedView Dedicated plan view within a provider console view.  Source: references/legacy/ovd/core ProviderC...
+// DedicatedView A dedicated version offered by an add-on provider, with its features.
 type DedicatedView struct {
 	Features []Feature `json:"features,omitempty"`
 }

@@ -11,18 +11,19 @@ import (
 )
 
 /*
-Getstatshealth `GET /v4/stats/health` — the cached, sanitized aggregate report; the thin documented
-wrapper over [`api_health::aggregate_health`] (which carries the two algorithm blocks —
-cache → sanitize → 200/503).
+Getstatshealth `GET /v4/stats/health` — the cached aggregate report; the thin documented wrapper over
+[`api_health::aggregate_health`] (which carries the two algorithm blocks — cache →
+200/503).
 
 Doc carrier for `getStatsHealth`; the framework serves the route — do not mount.
 
-200 when HEALTHY, 503 otherwise. `responses(…)` is the handler's own contract: the
-HTTPS-filter 301 and the `?callback=` JSONP body are global layers, reachable on every
-route in the document.
+200 when HEALTHY, 503 otherwise, and 401 without `AXO__INTERNAL_DOCS__PASSWORD` (#3518).
+`responses(…)` is the handler's own contract: the HTTPS-filter 301 and the `?callback=`
+JSONP body are global layers, reachable on every route in the document, while the 401
+is this surface's own.
 
 Source: ModuleHealthCheckComponent.scala:56-65 (`healthEndpoint`)
-Issue: #2375
+Issue: #2375, refs #3518
 
 Parameters:
   - ctx: context for the request

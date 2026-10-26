@@ -13,13 +13,13 @@ import (
 /*
 Deletecellar Deprovision a Cellar add-on
 
-Marks a Cellar add-on for removal: its storage account is suspended at once, so the add-on's access keys stop working immediately, and the add-on is flagged for deletion by the retention sweep. Reserved for the Clever Cloud add-on broker, which authenticates with its own provider credentials; any other caller is refused with 401. An unknown add-on answers 404, and an add-on on the Backup plan answers 403 — those are driven by Clever Cloud and cannot be removed through this route. Calling it again on an add-on already marked for removal succeeds.
+Called by the platform's add-on broker when a customer deletes a Cellar add-on. Suspends its storage account at once, so its access keys stop working, and marks it for deletion; calling it again succeeds. An unknown add-on answers 404, and an add-on on the Backup plan answers 403 because it cannot be removed this way.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - CellarId: Cellar addon ID
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 

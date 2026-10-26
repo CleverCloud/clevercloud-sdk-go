@@ -2,7 +2,7 @@
 
 package models
 
-// TSPlan represents TS addon plan.  Source: references/legacy/ovd/modules/ts/src/main/scala/com/clevercloud/ts/config...
+// TSPlan represents Plan of a Materia TS add-on: `BETA` or `BASE`.
 type TSPlan string
 
 const (

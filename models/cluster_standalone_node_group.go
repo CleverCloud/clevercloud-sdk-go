@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterStandaloneNodeGroup A standalone (single-node) node group, as embedded in the aggregate cluster view.  Source: refere...
+// ClusterStandaloneNodeGroup A standalone (single-node) node group as embedded in a cluster's detail. Its `id` is the node gro...
 type ClusterStandaloneNodeGroup struct {
 	CurrentNodeCount int                 `json:"currentNodeCount"`
 	Flavor           NodeFlavor          `json:"flavor"`

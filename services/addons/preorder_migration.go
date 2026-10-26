@@ -13,27 +13,16 @@ import (
 )
 
 /*
-Preordermigration GET /v2/organisations/{id}/addons/{addon_id}/migrations/preorders
+Preordermigration Preview the cost of an add-on plan change
 
-Source: cc-api OrganisationAddonsAPI.java preorderMigration()
-Source: cc-api AddonHelper.java:674-715 (preorderMigration — calculates plan diff cost)
-Behavior: checks membership + addon ownership, validates target planId,
-
-	calculates cost difference between current and target plan.
-	If pricing data unavailable, returns zero-cost preorder.
-
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, validate target planId; Calculate cost diff between current and target plan (zero if pricing unavailable)
-Legacy: cc-api OrganisationAddonsAPI.java preorderMigration() -> AddonHelper.preorderMigration()
-Conformity: faithful -- plan diff calculation matches cc-api
+Returns, as an invoice preview, the monthly price difference between the add-on's current plan and the `planId` plan; without `planId`, a zero-amount preview. 400 when the provider does not allow plan changes, 404 when the plan is unknown. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

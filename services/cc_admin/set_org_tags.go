@@ -12,24 +12,9 @@ import (
 )
 
 /*
-SetOrgTags **Legacy**: cc-api InternalOrganisationsAPI.java:490 setOrganisationTags()
-**Algorithm**:
-  - Transaction: DELETE all existing tags, INSERT new tags one by one
-  - Idempotent: org existence not checked (no 404)
+SetOrgTags Replace the tags of an organisation
 
-**Conformity**: YES — delete-then-insert pattern matches cc-api
-
-PUT /v2/internal/organisations/{id}/tags — replace all tags for an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:490 setOrganisationTags()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal service other
-
-	than ccadmin, 200 on success (org existence not checked — idempotent).
-	Body-signed: legacy signs the entity, so the route is layered with
-	buffer_internal_auth_payload.
-
-Issue: #388, #2018
+Replaces all the organisation's tags with the given list. The organisation's existence is not checked. Restricted to the administration console service.
 
 Parameters:
   - ctx: context for the request

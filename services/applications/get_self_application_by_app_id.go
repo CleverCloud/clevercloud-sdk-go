@@ -12,31 +12,15 @@ import (
 )
 
 /*
-Getselfapplicationbyappid GET /v2/self/applications/{app_id} — get a personal application.
+Getselfapplicationbyappid Get an application of the current user
 
-Source: cc-api SelfApplicationsAPI.java:67-69 getApplication()
-Source: cc-api SelfApplicationsHelper.java:38-49 get() -> ApplicationHelper.java:225-273 get()
-Schema: V1__Initial_schema.sql — applications.owner_id
-Spec: analysis-output/02-ccapi-analysis.md §Self Applications
-Issue: #2228
-
-📥 Algo Source (Legacy):
-First call G1 with the personal organisation. On every >=400 response, look up the
-application's owner organisation; a direct member with canAccessRepositories retries G1
-against that organisation and returns the retry result directly.
-
-🔧 Algo Rust (Implementation):
-  - The first and retried attempts each execute G1's full normal OAuth path and its
-    owner-scoped application lookup.
-  - The fallback reads the persisted member role directly, never service-token claims.
-
-Conformity: faithful — retry failures replace the original result, as Java does. Refs #2228
+Returns an application of the user's personal space. An application of an organisation is returned too when the user holds the ADMIN, MANAGER or DEVELOPER role in it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

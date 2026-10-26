@@ -11,16 +11,15 @@ import (
 )
 
 /*
-GetSelfInvoicePdf GET /v2/self/payments/billings/{bid}/pdf — discontinued.
+GetSelfInvoicePdf Get an invoice as PDF (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:128 getPdfInvoice() — 501
-Issues: #568, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - bid: Invoice/billing ID
+  - bid: Invoice ID
 
 # Returns the operation result or an error
 

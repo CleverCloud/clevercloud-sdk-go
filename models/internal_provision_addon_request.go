@@ -2,12 +2,12 @@
 
 package models
 
-// InternalProvisionAddonRequest Body of `POST /v2/internal/organisations/{id}/addons` — [`WannabeAddon`] plus the `ownership` the...
+// InternalProvisionAddonRequest Add-on to provision for an organisation. `ownership` says who the add-on belongs to and defaults ...
 type InternalProvisionAddonRequest struct {
 	Name       string          `json:"name"`                // Display name for the addon.
 	Options    *any            `json:"options,omitempty"`   // Provider-specific options, passed through to the provider API.
 	Ownership  *AddonOwnership `json:"ownership,omitempty"` // Who the addon belongs to. Absent means `CUSTOMER`.
-	Plan       string          `json:"plan"`                // Plan slug.
+	Plan       string          `json:"plan"`                // Plan identifier.
 	ProviderID string          `json:"providerId"`          // Addon provider id (e.g. `cellar-addon`).
-	Region     string          `json:"region"`              // Region / zone name.
+	Region     string          `json:"region"`              // Zone name, such as `par`.
 }

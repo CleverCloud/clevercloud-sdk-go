@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Deleteselfapplicationdependencybyappid DELETE /v2/self/applications/{app_id}/dependencies/{dep_id} — remove a dependency.
+Deleteselfapplicationdependencybyappid Remove a dependency from an application
 
-Legacy: SelfApplicationDependenciesHelper.java:48-51 removeDependency() -> ApplicationDependenciesHelper.java:56-73,143-151
-Algorithm: Shape S3, then remove the raw dependency link; no dependency lookup or owner probe runs on DELETE.
-Conformity: faithful — a missing link is 404/4004 and success is bodyless 200. Refs #2228
-
-Source: cc-api SelfApplicationDependenciesAPI.java removeDependency()
-Issue: #107
+Removes a dependency of an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - dependencyId: Dependency application ID
+  - appId: Application ID (`app_…`)
+  - dependencyId: ID of the dependency application (`app_…`)
 
 # Returns the operation result or an error
 

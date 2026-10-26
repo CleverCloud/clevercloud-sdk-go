@@ -2,9 +2,9 @@
 
 package models
 
-// AddonFeatureView AddonFeatureView — matches cc-api openapi/ccapiv3.json AddonFeatureView schema.  Source: cc-api A...
+// AddonFeatureView A feature an add-on provider describes its plans with, such as a memory size or a number of conne...
 type AddonFeatureView struct {
-	Name     string  `json:"name"`
-	NameCode *string `json:"name_code,omitempty"` // Legacy cc-api uses snake_case "name_code" (NOT camelCase)
-	Type     string  `json:"type"`
+	Name     string  `json:"name"`                // Display name of the feature.
+	NameCode *string `json:"name_code,omitempty"` // Stable code of the feature, when the provider defines one.
+	Type     string  `json:"type"`                // Type of the feature's value.
 }

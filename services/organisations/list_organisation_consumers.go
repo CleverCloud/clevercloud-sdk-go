@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Listorganisationconsumers GET /v2/organisations/{id}/consumers — list OAuth1 consumers owned by an organisation.
+Listorganisationconsumers List the OAuth consumers of an organisation
 
-Source: cc-api OrganisationConsumersAPI.java getConsumers()
-SQL: oauth1_consumers WHERE oauth1_consumer_organisation = org_id
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Query consumers by org_id + not deleted, join oauth_rights.
-- Legacy note: cc-api OrganisationConsumersAPI.java getConsumers()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the OAuth1 consumers (API client applications) the organisation owns, with their rights. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

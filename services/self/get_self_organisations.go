@@ -10,33 +10,9 @@ import (
 )
 
 /*
-GetSelfOrganisations GET /v2/self/organisations — list organisations for the authenticated user.
+GetSelfOrganisations List the current user's organisations
 
-📥 **Algo Source (Legacy):**
-cc-api has no /v2/self/organisations route — the legacy listing this mirrors is
-GET /v2/organisations: every non-deleted organisation the user is a member of,
-each serialised through Organisation.toView(), which computes both billing flags.
-  - OrganisationsAPI.java:45-64 listOrganisations() → OrganisationHelper.getOrgasForUser
-  - OrganisationHelper.java:100-119 getOrgasForUser() — per-org o.toView()
-  - OrganisationFacade.java:73-83 getByMember/getOrgasWithMember — deletion_date IS NULL
-  - Organisation.java:527-535 toView() — canPay = validate().valid() (:421-431),
-    canSEPA = canSEPA() (:740-742)
-
-🔧 **Algo Rust (Implementation):**
-  - One JOIN over organisation_members + organisation_member_info + organisations +
-    owner_info, WHERE user_id AND deletion_date IS NULL
-  - canPay/canSEPA from the shared ccapi::db formulas (OrganisationPaymentIdentity,
-    organisation_can_sepa) — the same home /v2/organisations and /v2/summary use
-  - role and job come from the membership row — an axo extension over the legacy
-    OrganisationView, which carries neither
-  - Conformity: faithful to the legacy view fields; the route path and the role/job
-    extras have no cc-api anchor
-
-Source: cc-api OrganisationsAPI.java:45-64 listOrganisations()
-Source: cc-api OrganisationHelper.java:100-119 getOrgasForUser()
-Source: cc-api Organisation.java:527-535 toView(), :421-431 validate(), :740-742 canSEPA()
-Spec: analysis-output/02-ccapi-analysis.md §Self
-Issue: #313, refs #2623
+Returns the organisations the user is a member of, sorted by name, with their billing details, flags, and the user's role and job in each. Deleted organisations are left out.
 
 Parameters:
   - ctx: context for the request

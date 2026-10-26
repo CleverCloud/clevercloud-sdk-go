@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Setselfapplicationbranchbyappid PUT /v2/self/applications/{app_id}/branch — update deployment branch.
+Setselfapplicationbranchbyappid Set the deployed branch of an application
 
-Legacy: SelfApplicationsHelper.java:70-73 setBranch() -> ApplicationHelper.java:397-426 setBranch()
-Algorithm: Shape S1 before the unchanged branch write.
-Conformity: faithful — personal org_id, canAccessApps, owner-scoped 404/4004, and messaging. Refs #2228
-
-Source: cc-api SelfApplicationsAPI.java updateBranch()
-Issue: #2228
+Sets the Git branch an application of the user's personal space deploys from, named in the body's `branch`. Answers 400 (error id 3004) when the repository has no such branch.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -10,13 +10,9 @@ import (
 )
 
 /*
-GetSelfUnpaidBillings GET /v2/self/payments/billings/unpaid — discontinued.
+GetSelfUnpaidBillings List unpaid invoices (discontinued)
 
-Has no cc-api counterpart — only `OrganisationPaymentsAPI.java` declares an
-`unpaid` listing, and that one is 501 too.
-
-Source: cc-api SelfPaymentsAPI.java — no such route
-Issues: #428, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

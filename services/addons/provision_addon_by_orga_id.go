@@ -12,16 +12,9 @@ import (
 )
 
 /*
-Provisionaddonbyorgaid POST /v2/organisations/{id}/addons — provision a new addon for an org.
+Provisionaddonbyorgaid Create an add-on for an organisation
 
-Source: cc-api OrganisationAddonsAPI.java createAddon()
-Source: cc-api AddonAPIHelper.java:96-183 (_provision)
-Behavior: checks org membership, calls provider API, stores in DB, returns AddonView
-Issue: #108
-
-Algorithm: Verify org membership, call provider POST /resources, store addon, publish event
-Legacy: cc-api OrganisationAddonsAPI.java createAddon() -> AddonAPIHelper._provision()
-Conformity: faithful -- full Heroku provisioning with org RBAC
+Provisions an add-on at its provider for the organisation and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

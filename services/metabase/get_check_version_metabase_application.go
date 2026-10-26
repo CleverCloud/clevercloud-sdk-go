@@ -12,27 +12,15 @@ import (
 )
 
 /*
-Getcheckversionmetabaseapplication GET .../addons/{id}/version/check — installed vs latest version.
+Getcheckversionmetabaseapplication Check the Metabase version of an add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — checkVersion
-Behavior: resolve the addon and authorize the caller against its owner
-
-	(404 / 403) → read the installed version from the running Java app's
-	`CC_METABASE_VERSION`, which 409s when there is no cc-api client, no Java
-	application, or the variable is unset (legacy errors rather than
-	substituting the catalog default) → take `latest` from the configured
-	catalog, answering 400 when that list is empty (legacy
-	`fromOption(availableVersions.maxOption, …)`) → answer 200 with the whole
-	catalog, the installed and latest versions, `needUpdate`, and whether
-	`latest` crosses the application-update threshold.
-
-Issue: #994
+Returns the installed Metabase version, the latest version offered, every available version, whether an update is available and whether it needs a larger instance size. Answers 409 when the installed version cannot be read. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId: Metabase addon ID
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
 
 # Returns the operation result or an error
 

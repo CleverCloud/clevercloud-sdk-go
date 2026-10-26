@@ -11,44 +11,9 @@ import (
 )
 
 /*
-InternalGetByPremiumPin GET /v2/internal/organisations/by-premium-pin — Twilio PIN lookup.
+InternalGetByPremiumPin Find an organisation by premium support PIN
 
-Source: cc-api InternalOrganisationsAPI.java:330-359 getOrganisationsByPremiumPIN()
-Schema: organisations — column: premium_pin integer; conf_internal_auth_creds — token, name
-Issue: #709, #2018
-
-📥 **Algo Source (Legacy):**
-PIN outside 10000..100000 (or absent) -> sleepAndReplyEmpty. Otherwise the `token` query
-param is resolved through the internal-auth credentials map and the row's `name` must be
-`twilio`, case-insensitively — this is the one internal route with a bespoke gate rather
-than authInternal: no HMAC, no nonce, just a bearer in the query string. A non-Twilio
-caller gets sleepAndReplyEmpty. A match then looks the organisation up and returns its
-Twilio view, or sleepAndReplyEmpty when no organisation carries that PIN.
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful, including cc-api's NPE-500.
-
-cc-api reaches `.name` on the result of `getInternalAuthCreds(token)` with no null
-check, so an **unknown or absent** token throws and comes back as a 500, while a
-**known** token whose service is not Twilio takes the empty reply (`equalsIgnoreCase`
-returns false for a null argument rather than throwing, so a row with a null name
-lands there too). That difference is observable, and it tells a caller whether a token
-exists. It is reproduced deliberately: the 1:1 requirement wins, and callers that
-matter hold a real token. Deviating is a legacy change, not ours to make here.
-
-The rate limit is cc-api's, expressed against the shared sliding-window primitive
-rather than its own key-per-request scheme. Two things differ from the letter of the
-Java, both making the limit work as written rather than as executed:
-
-`getTwilioRequests` counts with a **single** `SCAN` cursor iteration at the default
-COUNT of 10 (`RedisHelper.java:306-317`), so against a production keyspace it returns
-a small, essentially arbitrary number and the `>= 15` test almost never fires. Ours
-counts the window exactly. And cc-api records the hit before testing it, so refused
-calls keep feeding the window and extend the lockout; the shared primitive tests
-before inserting, so a refused call does not push the window forward.
-
-The Slack post cc-api makes on every fifteenth refusal has no equivalent here — axo
-has no webhook helper — so the refusal is logged instead. #2133 covers the alerting.
+Returns the organisation holding the 5-digit premium support `pin`, for the telephony support service, whose credential goes in the `token` query parameter. Any miss (malformed PIN, another service's token, no match) answers an empty object after a short delay; an unknown token answers 500, and the endpoint is limited to 14 calls per 4 hours (429).
 
 Parameters:
   - ctx: context for the request

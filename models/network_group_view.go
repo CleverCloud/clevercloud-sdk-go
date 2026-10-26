@@ -2,7 +2,7 @@
 
 package models
 
-// NetworkGroupView Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/Add...
+// NetworkGroupView Network group an add-on is linked to.
 type NetworkGroupView struct {
-	ID string `json:"id"`
+	ID string `json:"id"` // Network group ID (`ng_…`).
 }

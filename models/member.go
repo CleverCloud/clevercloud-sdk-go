@@ -2,7 +2,7 @@
 
 package models
 
-// Member A member of a network group.  Source: references/legacy/ovd/modules/networkgroup/models/NetworkGr...
+// Member A member of a network group: the application, add-on, external resource or load balancer whose pe...
 type Member struct {
 	DomainName string     `json:"domainName"` // Domain name for WireGuard routing.
 	ID         string     `json:"id"`         // Member ID (application/addon ID).

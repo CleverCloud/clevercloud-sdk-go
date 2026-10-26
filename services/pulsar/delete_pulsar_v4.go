@@ -12,26 +12,15 @@ import (
 )
 
 /*
-Deletepulsarv4 DELETE /v4/addon-providers/addon-pulsar/addons/{pulsar_id} — delete Pulsar addon (v4).
+Deletepulsarv4 Delete a Pulsar add-on
 
-**Legacy**: ovd PulsarController.scala:215 deletePulsarServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarProvisioningService.markToDelete(ownerId, pulsarId) (line 153)
-  - UPDATE status=TO_DELETE + ask_for_deletion_date=NOW, return view
-
-**Conformity**: FAITHFUL — ownership enforced (refs #1057)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deletePulsarServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala deletePulsar
-Behavior: marks addon as TO_DELETE. Returns the current view.
-Issue: #8, #1057
+Marks the add-on for deletion and returns its view; its namespace and topics are removed shortly afterwards. An add-on whose plan cannot be deleted answers 412. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

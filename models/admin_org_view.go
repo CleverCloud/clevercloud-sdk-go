@@ -2,7 +2,7 @@
 
 package models
 
-// AdminOrgView Admin organisation view — the body POST /v2/internal/organisations answers with.  Copied — not mo...
+// AdminOrgView Organisation summary: identifier, name, description and state.
 type AdminOrgView struct {
 	Description string `json:"description"` // Organisation description.
 	ID          string `json:"id"`          // Unique organisation identifier.

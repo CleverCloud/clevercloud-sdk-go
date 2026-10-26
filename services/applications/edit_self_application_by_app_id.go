@@ -12,24 +12,15 @@ import (
 )
 
 /*
-Editselfapplicationbyappid PUT /v2/self/applications/{app_id} — update a personal application.
+Editselfapplicationbyappid Update an application of the current user
 
-Legacy: SelfApplicationsHelper.java:117-121 edit() -> ApplicationHelper.java:2303-2328 edit() -> :2728 save()
-Algorithm: Shape S10 with the caller's personal organisation as the owner — scope bit and canAddApp both 8103, 403 APPLICATION_BAD_OWNER on the application miss, then save().
-Conformity: faithful prologue — rescale-on-edit ported bug-for-bug (refs #2666); zone relocation and the FTP folder rename ported (refs #3251, #3252). Refs #2228
-
-The `ApplicationEdition` publish fires only for a CUSTOMER-owned application (ownership
-NULL or not SYSTEM), matching save()'s own gate (ApplicationHelper.java:3388).
-
-Source: cc-api SelfApplicationsAPI.java:203-212 editApplication()
-[DB-WRITE] UPDATE applications (name, description, instance config, etc.)
-Issue: #107, refs #2228, fixes #2497, refs #2666
+Edits an application of the user's personal space from the given application definition and returns the updated application.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -13,18 +13,44 @@ type Option func(*Options)
 
 // Options holds query parameters for misc operations
 type Options struct {
-	Country   *string `url:"country,omitempty"`
-	Full      *string `url:"full,omitempty"`
-	PartnerID *string `url:"partner_id,omitempty"`
-	Token     *string `url:"token,omitempty"`
-	Types     *string `url:"types,omitempty"`
-	Vat       *string `url:"vat,omitempty"`
+	Appids        *string `url:"appids,omitempty"`
+	Applicationid *string `url:"applicationId,omitempty"`
+	Country       *string `url:"country,omitempty"`
+	From          *string `url:"from,omitempty"`
+	Full          *string `url:"full,omitempty"`
+	Ownerid       *string `url:"ownerId,omitempty"`
+	PartnerID     *string `url:"partner_id,omitempty"`
+	To            *string `url:"to,omitempty"`
+	Token         *string `url:"token,omitempty"`
+	Types         *string `url:"types,omitempty"`
+	Vat           *string `url:"vat,omitempty"`
+}
+
+// WithAppids sets the appids query parameter
+func WithAppids(appids string) Option {
+	return func(o *Options) {
+		o.Appids = &appids
+	}
+}
+
+// WithApplicationid sets the applicationId query parameter
+func WithApplicationid(applicationId string) Option {
+	return func(o *Options) {
+		o.Applicationid = &applicationId
+	}
 }
 
 // WithCountry sets the country query parameter
 func WithCountry(country string) Option {
 	return func(o *Options) {
 		o.Country = &country
+	}
+}
+
+// WithFrom sets the from query parameter
+func WithFrom(from string) Option {
+	return func(o *Options) {
+		o.From = &from
 	}
 }
 
@@ -35,10 +61,24 @@ func WithFull(full string) Option {
 	}
 }
 
+// WithOwnerid sets the ownerId query parameter
+func WithOwnerid(ownerId string) Option {
+	return func(o *Options) {
+		o.Ownerid = &ownerId
+	}
+}
+
 // WithPartnerID sets the partner_id query parameter
 func WithPartnerID(partner_id string) Option {
 	return func(o *Options) {
 		o.PartnerID = &partner_id
+	}
+}
+
+// WithTo sets the to query parameter
+func WithTo(to string) Option {
+	return func(o *Options) {
+		o.To = &to
 	}
 }
 
@@ -71,14 +111,29 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Appids != nil {
+		params = append(params, fmt.Sprintf("appids=%s", url.QueryEscape(*options.Appids)))
+	}
+	if options.Applicationid != nil {
+		params = append(params, fmt.Sprintf("applicationId=%s", url.QueryEscape(*options.Applicationid)))
+	}
 	if options.Country != nil {
 		params = append(params, fmt.Sprintf("country=%s", url.QueryEscape(*options.Country)))
+	}
+	if options.From != nil {
+		params = append(params, fmt.Sprintf("from=%s", url.QueryEscape(*options.From)))
 	}
 	if options.Full != nil {
 		params = append(params, fmt.Sprintf("full=%s", url.QueryEscape(*options.Full)))
 	}
+	if options.Ownerid != nil {
+		params = append(params, fmt.Sprintf("ownerId=%s", url.QueryEscape(*options.Ownerid)))
+	}
 	if options.PartnerID != nil {
 		params = append(params, fmt.Sprintf("partner_id=%s", url.QueryEscape(*options.PartnerID)))
+	}
+	if options.To != nil {
+		params = append(params, fmt.Sprintf("to=%s", url.QueryEscape(*options.To)))
 	}
 	if options.Token != nil {
 		params = append(params, fmt.Sprintf("token=%s", url.QueryEscape(*options.Token)))

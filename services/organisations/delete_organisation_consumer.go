@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Deleteorganisationconsumer DELETE /v2/organisations/{id}/consumers/{key} — soft-delete a consumer.
+Deleteorganisationconsumer Delete an OAuth consumer
 
-Source: cc-api OrganisationConsumersAPI.java deleteConsumer()
-Soft delete: sets deletion_date = NOW()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-SET deletion_date = NOW(); 404 if not found.
-- Legacy note: cc-api OrganisationConsumersAPI.java deleteConsumer()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Deletes the organisation's OAuth1 consumer; 404 when the organisation has no consumer with this key. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

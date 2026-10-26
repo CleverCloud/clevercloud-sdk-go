@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Getunpaidinvoicesbyorga1 GET /v2/organisations/{id}/payments/billings/unpaid — discontinued.
+Getunpaidinvoicesbyorga1 List the unpaid invoices of an organisation (discontinued)
 
-Source: cc-api OrganisationPaymentsAPI.java:78 getUnpaidInvoices() — 501
-Issues: #213, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

@@ -12,13 +12,20 @@ import (
 /*
 Getgithubusername GET /v2/github/username — get GitHub username.
 
-Source: cc-api GithubAPI.java getUsername()
-Source: cc-api GithubAPIHelper.java:getLogin()
+Source: cc-api GithubAPI.java:180 getGithubUsername()
+Source: cc-api GithubAPIHelper.java:312 getUsername()
 Issue: #223
 
-Algorithm: Verify OAuth1 auth, fetch GitHub token, call /user API, return login field
-Legacy: cc-api GithubAPI.java getUsername() -> GithubAPIHelper.getLogin()
+Behavior: 200 with the login as a JSON string; 200 with JSON `null` when GitHub
+answers with any status outside 2xx (most often a token it rejects), with a
+body that does not parse, or with a profile carrying no login — the console's
+Profile page waits on this call before it renders the form holding the unlink
+button
+
+Algorithm: Verify OAuth1 auth, fetch GitHub token, call /user API, return login field; null on any GitHub answer outside 2xx (most often a token it rejects) or with no usable login; 502 only when GitHub cannot be reached or times out
+Legacy: cc-api GithubHelper.java:239 getUsername() -> GithubAPIHelper.java:312 getUsername() -> :292 getSelf()
 Conformity: faithful — proxies GitHub API user endpoint
+Issues: #4140
 
 Parameters:
   - ctx: context for the request

@@ -13,23 +13,25 @@ import (
 Getgithublink GET /v2/github/link — initiate GitHub account linking.
 
 Source: cc-api GithubAPI.java:87-90 linkGithub() → GithubHelper.startFlow()
-Source: cc-api OAuth2ClientHelper.java:135-160 startFlow(LINK) (post-!565)
-Behavior: since cc-api !565 (YesWeHack #798), `linkGithub` authenticates the
+Source: cc-api OAuth2ClientHelper.java:135-153 startFlow(LINK)
+Behavior: unauthenticated by construction — the console reaches this route by
 
-	caller (`ah.auth(crc)`): an unauthenticated call is rejected 401 BEFORE the
-	transaction is consumed. For a LINK action, startFlow then consumes the
-	one-time `transactionId` from the cache (`ch.getOAuth2Transaction`); when
-	it is null/unknown it returns 400 INVALID_OAUTH_TRANSACTION (Errors id
-	1501). The transaction was created on behalf of a user; only that very
-	user, once authenticated, may complete the link — any other caller gets
-	403 USER_DATA_ACCESS (id 7301). Otherwise an attacker could trick a victim
-	into linking the victim's GitHub account to the attacker's account.
+	a top-level browser navigation, which carries no OAuth1 header. The caller
+	is identified by the one-time `transactionId` that `GET /v2/github` minted
+	for an authenticated user: startFlow consumes it from the cache
+	(`ch.getOAuth2Transaction`), answers 400 INVALID_OAUTH_TRANSACTION (Errors
+	id 1501) when it is null/unknown, and parks the user id it resolved to on
+	the cached flow for the callback's LINK arm. cc-api 8847c7a68 (!565,
+	YesWeHack #798) authenticated the caller and refused a foreign transaction;
+	4ddef2881 reverted it three days later because no browser could pass it,
+	and this port follows the revert. The link-to-the-attacker's-account vector
+	of #798 is therefore open again, as it is in legacy.
 
-Issue: #223, #1187, #1460
+Issues: #223, #1187, #1460, #3729
 
-Algorithm: Authenticate caller (401 if absent, before consuming the transaction); resolve+consume the LINK transactionId from cache; absent/unknown → 400 id 1501; caller != transaction user → 403 id 7301; else redirect to GitHub authorize with action=LINK
-Legacy: cc-api GithubAPI.java:87 linkGithub() → OAuth2ClientHelper.startFlow(LINK), post-!565
-Conformity: faithful — auth-before-consume + identity binding mirror cc-api !565
+Algorithm: Resolve+consume the LINK transactionId from cache; absent/unknown → 400 id 1501; else park the transaction's user id and `redirectUrl` on the flow and redirect to GitHub authorize with action=link
+Legacy: cc-api GithubAPI.java:87 linkGithub() → OAuth2ClientHelper.startFlow(LINK), post-4ddef2881
+Conformity: faithful — no authentication, one-time transaction, as legacy master
 
 Parameters:
   - ctx: context for the request

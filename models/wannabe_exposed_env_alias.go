@@ -2,5 +2,5 @@
 
 package models
 
-// WannabeExposedEnv Request body for PUT /applications/{id}/exposed_env.  Source: cc-api SelfApplicationsAPI.java put...
+// WannabeExposedEnv Environment variables an application exposes to the applications that depend on it, as an object ...
 type WannabeExposedEnv = map[string]string

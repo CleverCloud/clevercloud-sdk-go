@@ -4,7 +4,7 @@ package models
 
 // MysqlProvisionResponse Provision response body (`ProvisionResponse` in dto.scala) — frozen wire: `{"id": str, "message":...
 type MysqlProvisionResponse struct {
-	Config  map[string]any `json:"config"`
-	ID      string         `json:"id"`
-	Message string         `json:"message"`
+	Config  map[string]string `json:"config"`
+	ID      string            `json:"id"`
+	Message string            `json:"message"`
 }

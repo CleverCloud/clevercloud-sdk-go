@@ -11,22 +11,16 @@ import (
 )
 
 /*
-Getorganisationapplicationinstance Legacy: cc-api OrganisationApplicationsAPI.java:194 getApplicationInstance()
-Algorithm: Verify org membership + app access; Query OVD/Supernova for live instance by ID; Return SuperNovaInstanceView
-Conformity: stub — returns 404 always, OVD orchestration integration pending
+Getorganisationapplicationinstance Get an instance of an application
 
-GET /v2/organisations/{id}/applications/{app_id}/instances/{instance_id}.
-
-Source: cc-api OrganisationApplicationsAPI.java:194 getApplicationInstance()
-Phase 1: returns 404.
-Issue: #107
+Checks access to an organisation's application, then answers 404: a single instance cannot be read on this route yet. List the application's instances instead. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - instanceId: Instance ID
 
 # Returns the operation result or an error

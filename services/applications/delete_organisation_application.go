@@ -12,24 +12,16 @@ import (
 )
 
 /*
-Deleteorganisationapplication DELETE /v2/organisations/{id}/applications/{app_id} — soft-delete an org application.
+Deleteorganisationapplication Delete an application of an organisation
 
-Legacy: cc-api ApplicationHelper.java:765 doDeleteApp() + :883 delete()
-Algorithm: Auth ADMIN/MANAGER (canRemoveApp); supports Jenkins token auth; stopApp() via BDS, remove TCP/UDP redirections, FTP/P...
-Conformity: faithful — all steps replicated; DNS cleanup added
-
-Source: cc-api OrganisationApplicationsAPI.java deleteOrganisationApplication()
-The STOP instruction's cause is the calling consumer's name, not a hardcoded
-string: legacy's delete() reads token.getConsumerName() and threads it into
-_delete() as cause (ApplicationHelper.java:929-932).
-Issues: #107, refs #2136
+Stops and deletes an organisation's application. Requires the ADMIN or MANAGER role in the organisation. The organisation's Jenkins token deletes only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

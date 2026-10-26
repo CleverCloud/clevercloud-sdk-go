@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// OtoroshiConsumptionQuery Query parameters for consumption endpoints.  Source: references/legacy/ovd/modules/otoroshi/model...
+// OtoroshiConsumptionQuery Time window of a consumption report.
 type OtoroshiConsumptionQuery struct {
-	Since time.Time `json:"since"` // Start of the consumption window (inclusive).
-	Until time.Time `json:"until"` // End of the consumption window (exclusive).
+	Since time.Time `json:"since"` // Start of the window (RFC 3339).
+	Until time.Time `json:"until"` // End of the window (RFC 3339).
 }

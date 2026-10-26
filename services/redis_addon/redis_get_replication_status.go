@@ -15,12 +15,12 @@ RedisGetReplicationStatus GET /v2/providers/redis-addon/dashboard/master — Get
 
 **Legacy**: addon-api-redis Dashboard.scala getReplicationStatus()
 **Algorithm**:
-  - Returns 501 — requires direct instance connection.
+  - Resolves the addon from the Sessioned token, then INFO replication on its Redis.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Dashboard.scala — getReplicationStatus
-Behavior: 501 conditional stub — requires direct Redis connection.
+Behavior: real INFO replication via `crate::replication`; the only 501 comes from the session gate (no ENCRYPTION_KEY).
 Issue: #713
 
 Parameters:

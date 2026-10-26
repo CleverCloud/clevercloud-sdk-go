@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Buyselfdrops POST /v2/self/payments/billings — discontinued.
+Buyselfdrops Buy credits (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:64 buyDrops() — 501
-Issues: #106, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

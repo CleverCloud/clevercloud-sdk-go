@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Addemailaddress PUT /v2/self/emails/{email} — add a secondary email.
+Addemailaddress Add a secondary email address
 
-📥 **Algo Source (Legacy):**
-Check manage_personal_information, require validated primary email, verify email not in use,
-rate-limit, then cache a pending entry + send the confirmation email (no insert until confirmed).
-- Legacy note: cc-api SelfEmailsAPI.java addEmail() -> SelfEmailHelper.addWithUserId:148-205
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful — confirmation flow via SECONDARY cache + validate_email (#1113)
-
-Source: cc-api SelfEmailsAPI.java addEmail()
-Issue: #102
+Sends a confirmation link to the address, which is added to the account once that link is followed. With `make_primary`, an address that is already a confirmed secondary becomes the primary one at once. Requires the `manage_personal_information` right and a validated primary address; sending is rate-limited.
 
 Parameters:
   - ctx: context for the request

@@ -4,6 +4,7 @@ package vendorapi
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -17,20 +18,21 @@ Source: cc-api AddonVendorAPI.java:108-116 listApps() → checkAuth()
 Source: cc-api AddonVendorAPIHelper.java:132-177 listApps()
 Provider is identified by HTTP Basic auth (provider_id:password).
 Issue: #105
-Algorithm: Authenticate the provider via vendor Basic auth (extractAuthData+checkAuth), then list addons WHERE provider_id = provider.id and enrich each.
-Legacy: cc-api uses provider Basic auth, NOT an end-user OAuth1 token; a non-Basic Authorization header (the OAuth1 header api-bridge re-signs) makes extractAuthData throw → 500.
+Algorithm: Authenticate the provider via vendor Basic auth (extractAuthData+checkAuth), list its live addons oldest first — one page of 4000 from `offset`, or all of them capped — skip the ownerless ones, and answer a `Link` header whenever the listing is paged.
+Legacy: cc-api uses provider Basic auth, NOT an end-user OAuth1 token; a non-Basic Authorization header (the OAuth1 header api-bridge re-signs) makes extractAuthData throw → 500. Both `Link` targets are the bare listing URL: `listApps` has no path template for `build(offset)` to fill.
 Conformity: faithful — non-provider caller reproduces cc-api production 500.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := vendorapi.Listapps(ctx, client, tracer)
+	response := vendorapi.Listapps(ctx, client, tracer, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -39,14 +41,20 @@ Example:
 x-service: vendor
 operationId: listApps
 */
-func Listapps(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.VendorAppView] {
+func Listapps(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.AddonApplicationSummary] {
 	ctx, span := tracer.Start(ctx, "listApps")
 	defer span.End()
 
 	path := utils.Path("/v2/vendor/apps")
 
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
+
 	// Make API call
-	response := client.Get[[]models.VendorAppView](ctx, c, path)
+	response := client.Get[[]models.AddonApplicationSummary](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

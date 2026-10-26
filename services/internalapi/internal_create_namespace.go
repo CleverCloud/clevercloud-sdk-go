@@ -11,33 +11,9 @@ import (
 )
 
 /*
-InternalCreateNamespace **Legacy**: cc-api InternalAPI.java:135 createNamespace() → NamespacesHelper.java:71
-**Algorithm**:
-  - Validate namespace + minPort + maxPort present (400 if any missing)
-  - INSERT INTO namespaces (namespace, min_port, max_port) ON CONFLICT DO NOTHING
-  - Return NamespaceView (just the namespace name)
+InternalCreateNamespace Create a port namespace
 
-**Conformity**: YES — matches WannabeNamespace → Namespace(namespace,minPort,maxPort)
-
-POST /v2/internal/namespaces — create a TCP/UDP port namespace.
-
-Source: cc-api InternalAPI.java:133 @Path("namespaces") :135 createNamespace(), NamespacesHelper.java:71 createNamespace()
-Source: cc-api InternalAPI.java:135 — `nh.createNamespace(ah.authInternal(crc, entity), entity)`:
-
-	the RAW body is the signing base, so the route carries
-	`buffer_internal_auth_payload` (see the router in module.rs)
-
-Source: cc-api NamespacesHelper.java:71-74 createNamespace() — `!tk.right().isCCAdmin()`
-
-	→ a bare 403 FORBIDDEN with no `Errors` body
-
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API calls
-Schema: namespaces (namespace PK, min_port bigint, max_port bigint)
-Behavior: 401 when the caller is not an internal service, 403 for any internal
-
-	service other than ccadmin, 400 empty name, 200 created or already exists
-
-Issue: #723, #1081, #1956, #2018
+Creates a TCP/UDP port namespace with its port range, and returns `{"namespace": …}`; an existing namespace is left unchanged. Callable only by the administration service: another platform service gets 403, any other caller 401. An empty name answers 400.
 
 Parameters:
   - ctx: context for the request

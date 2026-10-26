@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Validateemail GET /v2/self/validate_email — validate email from token link.
+Validateemail Confirm an email address
 
-📥 **Algo Source (Legacy):**
-Lookup validationKey in Redis, delete key (one-time), mark email_validated=true in DB, redirect to console
-- Legacy note: cc-api SelfAPI.java:126-130 validateEmail() + UsersHelper.java:485-501; Redis key format matches
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java:126-130 validateEmail()
-Source: cc-api UsersHelper.java:485-501 validateEmail()
-Spec: analysis-output/02-ccapi-analysis.md §Self — validateEmail
-Issue: #102
+Target of the link in a confirmation email: validates the account's primary address, or adds (or makes primary) the secondary address the link was sent for, then redirects to the console. Takes no credential: the validation key is the secret. An unknown or expired key answers 404 (error id 7006).
 
 Parameters:
   - ctx: context for the request

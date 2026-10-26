@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Linkorganisationapplicationaddon POST /v2/organisations/{id}/applications/{app_id}/addons — link an addon.
+Linkorganisationapplicationaddon Link an add-on to an application
 
-Legacy: cc-api ApplicationHelper.java:3421-3477 linkAddon()
-Algorithm: Auth (supports Jenkins token + OAuth); canAddApp; Reject if addonId starts with "app_" (FTP guard); Verify addon belo...
-Conformity: faithful — ownership check matches Java's orga.hasAddon()
-
-Source: cc-api OrganisationApplicationsAPI.java linkAddonToOrganisationApplication()
-Issue: #107
+Links an add-on of the organisation to an organisation's application, which then receives the add-on's environment variables. The body is the add-on ID, as a JSON string. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; the organisation's Jenkins token is accepted too.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

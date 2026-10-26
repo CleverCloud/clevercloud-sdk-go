@@ -21,7 +21,7 @@ RedisMigrate POST /v2/providers/redis-addon/resources/{addon_id}/migrations — 
 **Conformity**: YES — fully implemented
 
 Source: references/legacy/addon-api/redis/app/controllers/Application.scala — migrate
-Behavior: 501 conditional stub — requires BDS + cluster infrastructure.
+Behavior: real migration bootstrap (Supernova RPC + migration row); no 501 path.
 Issue: #713
 
 Parameters:

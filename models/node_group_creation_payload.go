@@ -2,12 +2,12 @@
 
 package models
 
-// NodeGroupCreationPayload Node group creation payload.  Source: references/legacy/ovd/modules/kubernetes/models/NodeGroup.s...
+// NodeGroupCreationPayload Request body to create a node group in a cluster. Taints, labels and flavor cannot be changed onc...
 type NodeGroupCreationPayload struct {
-	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscaling_e...
+	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscalingEn...
 	Description        *string             `json:"description,omitempty"`        // Optional description
 	Flavor             NodeFlavor          `json:"flavor"`                       // Node flavor (VM size)
-	Labels             map[string]any      `json:"labels,omitempty"`             // Kubernetes labels
+	Labels             map[string]string   `json:"labels,omitempty"`             // Kubernetes labels
 	MaxNodeCount       *NodeGroupNodeCount `json:"maxNodeCount,omitempty"`
 	MinNodeCount       *NodeGroupNodeCount `json:"minNodeCount,omitempty"`
 	Name               NodeGroupName       `json:"name"`             // Node group name

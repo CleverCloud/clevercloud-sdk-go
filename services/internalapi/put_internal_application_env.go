@@ -12,26 +12,16 @@ import (
 )
 
 /*
-PutInternalApplicationEnv Legacy: cc-api InternalApplicationsAPI.java:135 addEnvToApp()
-Algorithm: Legacy: authInternal(), then ApplicationHelper.editApplicationEnvUnchecked(); Legacy: validate env name string, remov...
-Conformity: faithful — delegates to the same upsert the /v2 routes use, answers
-the edited ApplicationView (#2035) and rejects an unreadable body with 400 3004
-(#2028); missing the value validation.
+PutInternalApplicationEnv Set an environment variable of an application
 
-PUT /v2/internal/applications/{appId}/env/{envName} — upsert env var (unchecked).
-
-Source: cc-api InternalApplicationsAPI.java:135 addEnvToApp()
-Source: cc-api ApplicationHelper.java:3402 editApplicationEnvUnchecked()
-Behavior: upsert single env var by name without access checks, internal auth required.
-Called by OVD CCAPIActor.scala:256 to set addon env vars.
-Issue: #247
+Creates or updates one environment variable of any application, with no owner check, and returns the edited application. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
-  - env_name: Env var name
+  - app_id: Application ID (`app_…`)
+  - env_name: Environment variable name
   - requestBody: the request payload
 
 # Returns the operation result or an error

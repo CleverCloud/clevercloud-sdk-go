@@ -11,17 +11,9 @@ import (
 )
 
 /*
-Getsshkeys GET /v2/self/keys — list SSH keys for the authenticated user.
+Getsshkeys List the current user's SSH keys
 
-📥 **Algo Source (Legacy):**
-Query user_ssh_keys by user_id, return name/key/fingerprint ordered by name
-- Legacy note: cc-api SelfKeysAPI.java getSshKeys(), SshKey.java toView()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfKeysAPI.java getSshKeys()
-Schema: cc-api V1__Initial_schema.sql — table ssh_keys
-Issue: #102
+Returns the user's SSH public keys with their name and fingerprint, sorted by name.
 
 Parameters:
   - ctx: context for the request

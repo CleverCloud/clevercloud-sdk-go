@@ -10,16 +10,9 @@ import (
 )
 
 /*
-CreateInternalVirtualApplication Legacy: cc-api InternalVirtualApplicationsAPI.java:34 createVirtualApplication()
-Algorithm: Legacy: authInternal(), validate the body (domain required), resolve the namespace, list the id's SuperNova instances, INSERT the row, then publish ADD_APP + ADD_ACL + one ADD_SERVER per UP instance, all under the `infra` owner
-Conformity: faithful — `infra` owner, forceHttps ENABLED, ACL frontend `infra`, one ADD_SERVER per UP instance, 409 on a duplicate, `{id, namespace}` returned
+CreateInternalVirtualApplication Create a virtual application
 
-POST /v2/internal/virtual-applications — create virtual application (internal).
-
-Source: cc-api InternalVirtualApplicationsAPI.java:34 createVirtualApplication()
-Source: cc-api VirtualApplicationsHelper.java:42-79 create()
-Behavior: creates a virtual application entry. Used by infra for load balancer targets.
-Issue: #709, refs #2638
+Registers a virtual application (an ID, a namespace, a domain name and an optional path prefix) and routes its domain name to the instances running under that ID. Answers 409 when it already exists. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request

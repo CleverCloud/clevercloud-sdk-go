@@ -12,23 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationtags PUT /v2/organisations/{id}/applications/{app_id}/tags — replace all tags.
+Updateorganisationapplicationtags Replace the tags of an application
 
-Legacy: cc-api OrganisationApplicationTagsAPI.java replaceApplicationTags() -> ApplicationTagsHelper.replaceTags()
-Algorithm: Auth + org membership; parse Vec<SemanticTag>; Delete all existing tags, insert new ones atomically in transaction; persist via aph.edit(app)
-Conformity: faithful — transaction wraps delete+insert; aph.edit(app) is a bare
-EntityManager.merge and fires no event, same as the single-tag add/remove paths
-(refs #2486)
-
-Source: cc-api OrganisationApplicationsAPI.java replaceApplicationTags() / ApplicationTagsHelper.replaceTags()
-Issue: #107
+Replaces every tag of an organisation's application with the given list and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -13,23 +13,16 @@ import (
 )
 
 /*
-Listorganisationapplicationinstances GET /v2/organisations/{id}/applications/{app_id}/instances — list org app instances.
+Listorganisationapplicationinstances List the instances of an application
 
-Legacy: cc-api ApplicationHelper.java:276 getAppInstances()
-Algorithm: Auth + org membership; query SuperNova for running instances; Filter by deploymentId, return Vec<SuperNovaInstanceView>
-Conformity: enhanced — uses InstanceProvider or empty (Phase 1)
-
-Source: cc-api OrganisationApplicationsAPI.java getInstances()
-Spec: openapi-reference/cc-api-enriched.json /organisations/{id}/applications/{appId}/instances
-Note: Running instances come from OVD orchestration. Phase 1 returns empty list.
-Issue: #107, #342
+Returns the running instances of an organisation's application, optionally only those of one deployment. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

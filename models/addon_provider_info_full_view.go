@@ -2,7 +2,7 @@
 
 package models
 
-// AddonProviderInfoFullView AddonProviderInfoFullView — matches cc-api openapi/ccapiv3.json schema.  Source: cc-api AddonProv...
+// AddonProviderInfoFullView An add-on provider with its catalogue: identity, contact and display details, the regions it serv...
 type AddonProviderInfoFullView struct {
 	AnalyticsID    *string            `json:"analyticsId,omitempty"`
 	CanUpgrade     bool               `json:"canUpgrade"`

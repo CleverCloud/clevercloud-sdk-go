@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Setselfbuildinstanceflavorbyappid PUT /v2/self/applications/{app_id}/buildflavor — set build flavor.
+Setselfbuildinstanceflavorbyappid Set the build flavor of an application
 
-Legacy: SelfApplicationsHelper.java:220-223 setBuildFlavor() -> ApplicationHelper.java:3861-3883 setBuildFlavor()
-Algorithm: retain body extraction, then Shape S4 before the variant-scoped flavor resolution and the id write.
-Conformity: faithful — personal org_id and S4 errors, variant flavor-list validation, 400 FLAVOR_NOT_FOUND(9018), 204 No Content; column stores flavors.id. Refs #2228, #2325
-
-Source: cc-api SelfApplicationsAPI.java putBuildFlavor()
-Issues: #107, #2228, #2325
+Sets the flavor of the instance that builds an application of the user's personal space, named in the body's `name`. An unknown flavor answers 400 (error id 9018).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

@@ -11,20 +11,17 @@ import (
 )
 
 /*
-Deletenetworkgroupmember DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members/{member_id}
+Deletenetworkgroupmember Remove a member from a network group
 
-Source: ovd NetworkGroupRoutes.scala deleteMember → `MembershipCMD(DELETE)`
-Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG
-or member.
-Issue: #313, #665, #676, #849, #1127, #2790
+Requests the removal of the member, which is applied asynchronously; 404 when the network group or the member does not exist. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - memberId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - memberId: Member ID: the application, add-on, load balancer or external resource ID
 
 # Returns the operation result or an error
 

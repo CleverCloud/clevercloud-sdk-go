@@ -16,13 +16,18 @@ RedisUpdateConfigOnCcapi PUT /v2/providers/redis-addon/internal/{id}/updateconfi
 
 **Legacy**: addon-api-redis Internal.scala updateConfigurationOnCCApi()
 **Algorithm**:
-  - Returns 501 — requires CC-API vendor callback.
+  - PUTs the legacy `config.toMap` key set (seven keys, plus `REDIS_DIRECT_*` once the
+    HV coordinates are stored) to the add-on's provision `callback_url`, where cc-api
+    replaces the add-on's options and redeploys its applications.
+  - A failed push answers 500 with the id of the error log line.
+  - The push body is `{"config": env}` alone (`send_env_callback`): it carries neither
+    the provision plan nor the zone.
 
-**Conformity**: YES — fully implemented
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — updateConfigurationOnCCApi
-Behavior: 501 conditional stub — requires VendorAPIClient.
-Issue: #713
+Behavior: real cc-api vendor callback through the migration env relay.
+Issue: #713, #4030
 
 Parameters:
   - ctx: context for the request

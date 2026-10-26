@@ -11,21 +11,9 @@ import (
 )
 
 /*
-Createorganisation POST /v2/organisations — create a new organisation.
+Createorganisation Create an organisation
 
-Source: cc-api OrganisationsAPI.java createOrganisation()
-Source: cc-api Organisation.java absorb(WannabeOrganisation)
-Side effect: fires OrganisationCreationEvent + OrganisationUserAdditionEvent
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Check canManageOrganisations + isOrgaCreationEnabled config, Require email_validated (403 if not), Validate WannabeOrganisation fields, handle VAT via VIES, Create org + owner_info + add user as ADMIN member (transaction), Publish OrganisationCreation + OrganisationUserAddition events (RabbitMQ + Pulsar)
-- Legacy note: cc-api OrganisationsAPI.java:83 createOrganisation() -> OrganisationHelper.java:196 create()
-
-🔧 **Algo Rust (Implementation):**
-  - country is normalised through ccapi::db::country::country_code_safe before the
-    owner_info INSERT — the getCountryCodeSafe of Organisation.java:236 (refs #2620)
-  - Conformity: faithful
+Creates an organisation with the caller as its `ADMIN` member and returns it. Requires a validated email address; `name` (at most 128 characters) and `description` (at most 256) are mandatory. Creation is rate-limited per user and per IP address (403 when exceeded).
 
 Parameters:
   - ctx: context for the request

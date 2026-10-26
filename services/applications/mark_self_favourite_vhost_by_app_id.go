@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Markselffavouritevhostbyappid PUT /v2/self/applications/{app_id}/vhosts/favourite — set favourite vhost.
+Markselffavouritevhostbyappid Set the favourite domain name of an application
 
-Source: cc-api SelfApplicationVhostAPI.java:90-92 markFavouriteVhost()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:148-151 markFavouriteVhost() -> ApplicationHelper.java:1125-1168
-Algorithm: effective V2: scope, personal-org, membership plus canAddApp, then owner-scoped 403/4002 before the unchanged write.
-Conformity: faithful — self auth makes V3's INTERNAL bypass unreachable. Refs #2228
+Marks one of the virtual hosts of an application of the user's personal space as its favourite and returns it. The body is a virtual host whose `fqdn` must already be routed to the application (400, error id 3004, otherwise).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

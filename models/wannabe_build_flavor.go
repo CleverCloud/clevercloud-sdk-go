@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeBuildFlavor Request body for PUT /applications/{id}/buildflavor.  Source: cc-api SelfApplicationsAPI.java put...
+// WannabeBuildFlavor The flavor an application's builds run on.
 type WannabeBuildFlavor struct {
-	FlavorName *string `json:"flavorName,omitempty"`
+	FlavorName *string `json:"flavorName,omitempty"` // Name of the build flavor.
 }

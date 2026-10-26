@@ -12,7 +12,7 @@ import (
 )
 
 /*
-TokenListRefreshTokens
+TokenListRefreshTokens GET /v4/tenants/{tenant_id}/tokens/{token_id}/refresh-tokens
 
 Parameters:
   - ctx: context for the request

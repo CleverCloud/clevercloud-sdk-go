@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterItemStatusType represents Cluster item lifecycle status.  Source: references/legacy/ovd/modules/kubernetes/models/types/sta...
+// ClusterItemStatusType represents Lifecycle status of a cluster item: `ACTIVE`, `DELETED`, or `FAILED_TO_DELETE` when its removal d...
 type ClusterItemStatusType string
 
 const (

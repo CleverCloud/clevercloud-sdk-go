@@ -13,13 +13,13 @@ import (
 /*
 Deletecluster Retire a Cellar storage cluster
 
-Retires a storage cluster by marking it unavailable, so it takes no new add-ons; the add-ons already placed on it keep working and the record is kept. A cluster that still carries live add-ons is refused rather than retired. This is a platform-operations route: it needs a bearer token authorising cluster management for the organisation in the path, answering 401 without a usable token and 403 when the token does not cover that organisation. An unknown cluster id answers 404.
+Marks a storage cluster unavailable so it takes no new add-ons; the add-ons already on it keep working and the record is kept. A cluster still carrying live add-ons is refused, and an unknown cluster answers 404. Platform-operations route: it requires a bearer token granting this cluster operation for the organisation in the path, and answers 401 without a usable token and 403 when the token does not cover it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) the token must cover
   - ClusterIndex: Cluster numeric ID
 
 # Returns the operation result or an error

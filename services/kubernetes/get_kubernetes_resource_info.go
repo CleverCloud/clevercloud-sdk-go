@@ -12,35 +12,15 @@ import (
 )
 
 /*
-Getkubernetesresourceinfo GET /v4/kubernetes/organisations/{owner_id}/kubernetes/resources/{resource_id} —
-the customer-set cluster name, for invoice display.
+Getkubernetesresourceinfo Get the display name of a cluster
 
-📥 **Algo Source (Legacy):**
-Resolve a billed resource id to a display name.
-  - Authenticate the module's machine Basic pair
-  - `clusterRepository.findOneById(resourceId, ownerId)` — tenant-scoped, so a
-    cluster belonging to another owner is indistinguishable from a missing one
-  - Answer `{"name": …}`, or 404 when the lookup finds nothing
-  - Source: ovd ProductConsumptionComponent.scala:374-388 + KubernetesConsumptionComponent.scala:68-81
-
-🔧 **Algo Rust (Implementation):**
-- `check_consumption_basic_auth`, then a `WHERE id = $1 AND tenant_id = $2` read
-- Map the row to [`crate::views::ResourceInfoView`], `None` to 404
-
-Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/consumption/ProductConsumptionComponent.scala:374-388 — createResourceInfoEndpoint
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/repositories/ClusterRepository.scala:214-222 — findOneById
-Schema: cluster.name, cluster.tenant_id (V0__init_kubernetes_tables.sql:9-11)
-Behavior: 401 unauthenticated or unconfigured; 400 on a `resource_id` that is not
-
-	a kubernetes id; 404 for an unknown *or foreign* cluster; else 200.
-
-Issue: #2353
+Called by the billing service: returns the name of the organisation's cluster, for invoices. 404 when the organisation has no such cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - resourceId: Cluster ID
 
 # Returns the operation result or an error
@@ -56,14 +36,14 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesResourceInfo
 */
-func Getkubernetesresourceinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string) client.Response[models.KubernetesResourceInfoView] {
+func Getkubernetesresourceinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string) client.Response[models.ResourceInfo] {
 	ctx, span := tracer.Start(ctx, "getKubernetesResourceInfo", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("resourceId", resourceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/kubernetes/resources/%s", ownerId, resourceId)
 
 	// Make API call
-	response := client.Get[models.KubernetesResourceInfoView](ctx, c, path)
+	response := client.Get[models.ResourceInfo](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,25 +12,15 @@ import (
 )
 
 /*
-Getcheckversionotoroshiapplication GET /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/version/check — check version.
+Getcheckversionotoroshiapplication Check the Otoroshi version of an add-on
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — checkVersion()
-
-📥 **Algo Source (Legacy):**
-- Fetch addon from DB
-- GET Java application from cc-api (for env vars)
-- Read CC_OTOROSHI_VERSION from env vars = installed version
-- Last entry in config.availableVersions = latest version
-- needUpdate = latest != installed
-- Source: ovd OtoroshiProviderService.scala:583 checkVersion()
-
-Issue: #313
+Returns the installed Otoroshi version, the latest version offered, every available version and whether an update is available. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

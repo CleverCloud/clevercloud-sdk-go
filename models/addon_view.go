@@ -2,15 +2,15 @@
 
 package models
 
-// AddonView AddonView — matches cc-api openapi/ccapiv3.json AddonView schema.  Source: cc-api Addon.toView() ...
+// AddonView An add-on: its identifiers, region, provider, plan, creation date, the names of the environment v...
 type AddonView struct {
-	ConfigKeys   []string                  `json:"configKeys"`
-	CreationDate *int                      `json:"creationDate,omitempty"`
+	ConfigKeys   []string                  `json:"configKeys"`             // Names of the environment variables the add-on exposes.
+	CreationDate *int                      `json:"creationDate,omitempty"` // Creation date, in milliseconds since the Unix epoch.
 	ID           string                    `json:"id"`
 	Name         *string                   `json:"name,omitempty"`
 	Plan         AddonPlanView             `json:"plan"`
-	Provider     AddonProviderEmbeddedView `json:"provider"` // The SLIM provider view — no `plans`, no `features`.  `Addon.toView()` embeds `provider.getProvide...
-	RealID       *string                   `json:"realId,omitempty"`
+	Provider     AddonProviderEmbeddedView `json:"provider"`         // The add-on's provider, without its plans and features.
+	RealID       *string                   `json:"realId,omitempty"` // Identifier of the add-on at its provider.
 	Region       string                    `json:"region"`
 	Tags         []SemanticTag             `json:"tags,omitempty"`
 	ZoneID       *string                   `json:"zoneId,omitempty"`

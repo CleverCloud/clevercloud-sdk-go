@@ -2,7 +2,7 @@
 
 package models
 
-// CephRbdNamespace Ceph RBD namespace — OVD stores this as an object `{"id": "..."}`, not a bare string: `CephRBDNam...
+// CephRbdNamespace A Ceph RBD namespace, as an object holding its `id`.
 type CephRbdNamespace struct {
 	ID string `json:"id"`
 }

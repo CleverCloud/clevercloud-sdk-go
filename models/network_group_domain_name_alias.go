@@ -2,5 +2,5 @@
 
 package models
 
-// NetworkGroupDomainName a network group member DNS name, e.g. `<member>.m.<network-group>.ng.clever-cloud.com`  Underscor...
+// NetworkGroupDomainName DNS name of a network group member, such as `<member>.m.<network-group>.ng.clever-cloud.com`: at ...
 type NetworkGroupDomainName = string

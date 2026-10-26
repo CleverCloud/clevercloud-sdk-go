@@ -12,35 +12,15 @@ import (
 )
 
 /*
-Createpulsartenantandnamespace POST /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/create-tenant-and-namespace
+Createpulsartenantandnamespace Create the add-on's Pulsar tenant and namespace
 
-	— create Pulsar tenant and namespace.
-
-**Legacy**: ovd PulsarController.scala:242 createTenantAndNamespaceServerEndpoint()
-**Algorithm**:
-  - Ownership verified via authServerLogicWithOwner (OwnerId, PulsarId)
-  - Delegates to PulsarProvisioningService.createTenantAndNamespace (line 166)
-  - Scala calls HttpPulsarAdminClient to create tenant+namespace on cluster (line 235)
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::create_tenant_and_namespace`; idempotent on
-	409 Conflict (tenant exists). (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala createTenantAndNamespaceServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala createTenantAndNamespace
-Behavior: union of the cluster's existing allowed_clusters with
-
-	`{cluster.id}`, then `create_tenant_and_namespace` on the
-	admin client. Returns the addon view on success.
-
-Issue: #8
+Creates the add-on's tenant and namespace on its cluster when they do not exist yet, and returns the add-on. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

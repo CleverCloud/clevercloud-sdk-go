@@ -7,5 +7,5 @@ type PublicHttpRouter struct {
 	Authentication *PublicAuthentication `json:"authentication,omitempty"`
 	RedirectHTTPS  bool                  `json:"redirectHttps"`
 	Routes         []PublicRoute         `json:"routes"`
-	Templates      map[string]any        `json:"templates"`
+	Templates      map[string]string     `json:"templates"`
 }

@@ -2,7 +2,7 @@
 
 package models
 
-// Flavor Flavor view returned by GET /v2/products/flavors. Matches cc-api openapi/ccapiv3.json FlavorView ...
+// Flavor A flavor: the size of an instance (CPUs, memory, GPUs), its price and how it scales.
 type Flavor struct {
 	Available            bool          `json:"available"`
 	CpuFactor            ScalingFactor `json:"cpuFactor"`
@@ -16,7 +16,7 @@ type Flavor struct {
 	Microservice         bool          `json:"microservice"`
 	Name                 *string       `json:"name,omitempty"`
 	Nice                 NiceValue     `json:"nice"`
-	Price                float64       `json:"price"`
+	Price                float64       `json:"price"` // Price of the flavor; always present, `null` when the flavor has no price.
 	PriceID              *string       `json:"price_id,omitempty"`
 	SystemOverheadFactor ScalingFactor `json:"systemOverheadFactor"`
 }

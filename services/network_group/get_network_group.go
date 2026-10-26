@@ -12,18 +12,16 @@ import (
 )
 
 /*
-Getnetworkgroup GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}
+Getnetworkgroup Get a network group
 
-Source: ovd NetworkGroupRoutes.scala getNetworkGroup — `ngMap` lookup
-Behavior: 200 with the NG; 404 unknown; 403 owner mismatch or not a member.
-Issue: #313, #665, #676, #849, #1127
+Returns the network group with its members and peers; 404 when it does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Organisation ID
-  - networkGroupId: Network group ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

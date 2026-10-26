@@ -2,10 +2,10 @@
 
 package models
 
-// ResourcesSpecInput Source: references/legacy/ovd/modules/compute/models/deployment/ResourcesSpec.scala  `networks` (...
+// ResourcesSpecInput Source: references/legacy/ovd/modules/compute/models/deployment/ResourcesSpec.scala  `interfaces`...
 type ResourcesSpecInput struct {
-	Cpu      int           `json:"cpu"`
-	Memory   int           `json:"memory"`
-	Networks []NetworkSpec `json:"networks"` // Per-VM port forwardings (guest→host), propagated to the boot instruction's `extra_port`.
-	Volumes  VolumesSpec   `json:"volumes"`  // Local disks (root + extra `data` volumes); the `data` volume drives `flavor.disk`.
+	Cpu        int             `json:"cpu"`
+	Interfaces []InterfaceSpec `json:"interfaces"` // The VM's network attachments: exactly one `NAT` for now (a VM without one is refused until the hy...
+	Memory     int             `json:"memory"`
+	Volumes    VolumesSpec     `json:"volumes"` // Local disks (root + extra `data` volumes); the `data` volume drives `flavor.disk`.
 }

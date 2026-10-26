@@ -12,32 +12,9 @@ import (
 )
 
 /*
-InviteOrgMember **Legacy**: cc-api InternalOrganisationsAPI.java:254 inviteUser()
-**Algorithm**:
-  - Verify org exists (404), resolve the invitee from `userId` OR `email` (404), not
-    already member (409)
-  - Transaction: INSERT organisation_member_info (role, job), INSERT organisation_members link
-  - Messaging: send InvitationCCMail to the invitee (clever.mail.send) and
-    publish OrganisationUserAddition (clever.events) — ISO with
-    OrganisationMemberHelper.addUnchecked():236 rh.sendMail(InvitationCCMail) and
-    replyToInvite() rh.event(OrganisationUserAdditionEvent)
+InviteOrgMember Add a user to an organisation
 
-**Conformity**: YES — matches cc-api OrganisationMemberHelper.addUnchecked()
-
-POST /v2/internal/organisations/{id}/invite — add a user as member of an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:254 inviteUser()
-Source: cc-api OrganisationMemberHelper.java:184-206 addUnchecked() — WannabeMember `{email, role}`
-Source: cc-api OrganisationMemberHelper.java:236 — addUnchecked() rh.sendMail(InvitationCCMail)
-Source: ccapidto account/InvitationCCMail.java — campaign_orga_invite mail
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal without
-
-	access_organisations, 400 when the body identifies no invitee, 404 org/user
-	not found, 409 already member, 200 on success. Body-signed: legacy signs the
-	member entity, so the route is layered with buffer_internal_auth_payload.
-
-Issue: #392, #2018
+Adds the user named by `userId` or `email` with the given role and job, then emails them; 404 for an unknown organisation or user, 409 when already a member. Restricted to platform services holding the organisation access right.
 
 Parameters:
   - ctx: context for the request

@@ -11,23 +11,16 @@ import (
 )
 
 /*
-DeleteInternalApplicationEnv Legacy: cc-api InternalApplicationsAPI.java:144 deleteEnvFromApp()
-Algorithm: Legacy: authInternal(), find app, remove env by name, persist; Legacy: ApplicationHelper.removeApplicationEnvUnchecke...
-Conformity: faithful — deletes env var by name, same behavior as legacy
+DeleteInternalApplicationEnv Delete an environment variable of an application
 
-DELETE /v2/internal/applications/{appId}/env/{envName} — delete env var (unchecked).
-
-Source: cc-api InternalApplicationsAPI.java:144 deleteEnvFromApp()
-Source: cc-api ApplicationHelper.java removeApplicationEnvUnchecked()
-Behavior: delete single env var by name without access checks, internal auth required.
-Issue: #253
+Removes one environment variable from any application, with no owner check. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
-  - env_name: Env var name
+  - app_id: Application ID (`app_…`)
+  - env_name: Environment variable name
 
 # Returns the operation result or an error
 

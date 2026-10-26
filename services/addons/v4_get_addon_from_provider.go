@@ -11,30 +11,16 @@ import (
 )
 
 /*
-V4GetAddonFromProvider GET /v4/addon-providers/{provider_id}/addons/{real_id}
+V4GetAddonFromProvider Get an add-on from its provider
 
-Proxy endpoint that forwards the request to the addon provider's HTTP API.
-Used by Terraform provider (all addon resources), Console3, and clever-tools.
-
-Source: cc-api AuthorizationHelper.java:1292 authorize_v4_addonproviders()
-Source: terraform-provider-clevercloud — clevercloud_postgresql, clevercloud_cellar, etc.
-Spec: analysis-output/38-github-api-consumers.md §Terraform — addon resources
-Behavior: looks up provider credentials from DB, determines base URL by status
-
-	(ALPHA → test_base_url, else → production_base_url), proxies GET /addons/{real_id}
-
-Issue: #313
-
-Algorithm: Look up provider credentials, determine base URL by status (ALPHA=test, else=prod); Proxy GET /addons/{real_id} to provider, forward response
-Legacy: cc-api AuthorizationHelper.java:1292 authorize_v4_addonproviders()
-Conformity: faithful -- used by Terraform, Console3, clever-tools
+Returns the add-on as its provider describes it (provider-defined JSON, forwarded with the provider's status). The caller must own the add-on or hold the admin, manager, developer or accounting role in its owner organisation; 404 otherwise, or when `provider_id` is not the add-on's provider.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - provider_id: Addon provider ID (e.g., postgresql-addon)
-  - real_id: Provider-side addon real ID
+  - real_id: Add-on real ID, or add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

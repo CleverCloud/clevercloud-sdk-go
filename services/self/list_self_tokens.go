@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Listselftokens GET /v2/self/tokens — list all OAuth1 access tokens for the current user.
+Listselftokens List the current user's access tokens
 
-📥 **Algo Source (Legacy):**
-Require almighty token, join oauth1_access_tokens+consumers+oauth_rights, return full token views
-- Legacy note: cc-api SelfTokensAPI.java getSelfTokens() -> SelfOAuth1TokensHelper.java getAll()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfTokensAPI.java getSelfTokens()
-Source: cc-api SelfOAuth1TokensHelper.java getAll()
-Requires: almighty token
-Issue: #102
+Returns the user's unexpired OAuth1 access tokens with their consumer, rights and dates, newest first. Requires an almighty token.
 
 Parameters:
   - ctx: context for the request

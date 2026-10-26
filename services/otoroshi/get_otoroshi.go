@@ -12,34 +12,15 @@ import (
 )
 
 /*
-Getotoroshi GET /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id} — get Otoroshi addon view.
+Getotoroshi Get an Otoroshi add-on
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — getOtoroshiAddon()
-
-📥 **Algo Source (Legacy):**
-Rich view assembly from DB + cc-api:
-  - Fetch Otoroshi row from DB
-  - GET Java application from cc-api (for env vars)
-  - GET addon info from cc-api (for name)
-  - Build OtoroshiView: compute accessUrl, apiUrl, openapiUrl from env vars
-    (ADMIN_API_EXPOSED_SUBDOMAIN + APP_DOMAIN, APP_BACKOFFICE_SUBDOMAIN + APP_DOMAIN)
-  - Include initialCredentials (admin login/password from env)
-  - Include API credentials (client_id/secret from env)
-  - Include availableVersions from config
-  - Include resources (java app ID, redis ID), features (networkgroup), all envVars
-  - Source: ovd OtoroshiProviderService.scala:455 getOtoroshiAddon()
-
-🔧 **Algo Rust:**
-- If paas_client available: full rich view with env vars from cc-api
-- If paas_client unavailable: DB-only view (Cloud Versatile)
-
-Issue: #313
+Returns the add-on: access URL, installed and available versions, initial admin credentials, admin API URL and credentials, backing resources and network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

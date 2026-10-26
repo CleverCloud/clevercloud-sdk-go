@@ -2,7 +2,7 @@
 
 package models
 
-// MonthlyInvoiceItemRequest Request body for POST /v2/internal/organisations/{id}/monthlyinvoice.  Source: cc-api InternalOrg...
+// MonthlyInvoiceItemRequest Item to add to the monthly invoice of an organisation.
 type MonthlyInvoiceItemRequest struct {
 	Amount      int    `json:"amount"`      // Item amount in cents.
 	Description string `json:"description"` // Item description.

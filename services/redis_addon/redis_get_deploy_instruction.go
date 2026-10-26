@@ -15,13 +15,14 @@ RedisGetDeployInstruction GET /v2/providers/redis-addon/internal/{id}/instructio
 
 **Legacy**: addon-api-redis Internal.scala getDeployInstruction()
 **Algorithm**:
-  - Returns BDS deploy instruction from addon DB row.
+  - Records a deployment and returns the BDS START instruction naming it, built from the
+    addon DB row with the owner's logs collector.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Internal.scala — getDeployInstruction
-Behavior: 501 conditional stub — requires BDS + VendorAPIClient.
-Issue: #713
+Behavior: serves the stored BDS deploy instruction; no 501 path.
+Issue: #713, clever-cloud/axo#4025
 
 Parameters:
   - ctx: context for the request

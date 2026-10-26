@@ -2,8 +2,8 @@
 
 package models
 
-// V4DeploymentStepView One entry of a v4 deployment's `steps` array.  Source: ovd Deployment.scala:139 (DeploymentStepVi...
+// V4DeploymentStepView One step of a deployment: a state and when the deployment reached it.
 type V4DeploymentStepView struct {
-	Date  *string `json:"date,omitempty"`
-	State string  `json:"state"`
+	Date  *string `json:"date,omitempty"` // When the state was reached, as an RFC 3339 UTC timestamp.
+	State string  `json:"state"`          // State reached: `QUEUED`, `TASK_IN_PROGRESS`, `WORK_IN_PROGRESS`, `SUCCEEDED`, `FAILED` or `CANCEL...
 }

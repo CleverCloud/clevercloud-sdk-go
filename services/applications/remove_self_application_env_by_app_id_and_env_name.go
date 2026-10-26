@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Removeselfapplicationenvbyappidandenvname DELETE /v2/self/applications/{app_id}/env/{env_name} — delete a single env var.
+Removeselfapplicationenvbyappidandenvname Delete an environment variable of an application
 
-Source: cc-api SelfApplicationsAPI.java deleteSelfApplicationEnvVarByAppId()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:190-192 removeApplicationEnv() -> ApplicationHelper.java:3773-3790 removeApplicationEnv()
-Algorithm: Shape S4 — canAddApp then owner-scoped 404 APPLICATION_NOT_FOUND before the unchanged env removal.
-Conformity: faithful — personal org_id, S4 errors, response, and messaging. Refs #2228
+Removes one environment variable from an application of the user's personal space and returns the edited application.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - envName: Env var name
+  - appId: Application ID (`app_…`)
+  - envName: Environment variable name
 
 # Returns the operation result or an error
 

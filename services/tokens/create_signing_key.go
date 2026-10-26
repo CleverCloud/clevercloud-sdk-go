@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createsigningkey
+Createsigningkey POST /v4/tenants/{tenantId}/products/{productId}/keys
 
 Parameters:
   - ctx: context for the request

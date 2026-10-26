@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Getid GET /v2/self/id — returns the user ID as OwnerIdView.
+Getid Get the current user's ID
 
-📥 **Algo Source (Legacy):**
-Extract user_id from auth token, return as OwnerIdView JSON
-- Legacy note: cc-api SelfAPI.java:68 getId() -> UsersHelper.java:156 getId(); Console3 destructures {ownerId}
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java:62-70, OwnerIdView class
-Issue: #102
+Returns the ID (`user_…`) of the user the token belongs to, as `{"ownerId": "user_…"}`. Requires the `access_personal_information` right.
 
 Parameters:
   - ctx: context for the request

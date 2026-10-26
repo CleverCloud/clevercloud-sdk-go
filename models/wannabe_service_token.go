@@ -2,11 +2,11 @@
 
 package models
 
-// WannabeServiceToken Request body for POST /v2/organisations/{id}/service-tokens.  Source: cc-api WannabeServiceToken....
+// WannabeServiceToken Service token to create in an organisation.
 type WannabeServiceToken struct {
 	Description *string          `json:"description,omitempty"` // Description of the token purpose.
 	Name        string           `json:"name"`                  // Human-readable name for the service token (required).
-	Resources   []string         `json:"resources,omitempty"`   // Resource IDs (app_id or addon_id) this token is scoped to. If empty/absent, the token has org-wid...
+	Resources   []string         `json:"resources,omitempty"`   // Identifiers of the applications (`app_…`) and add-ons (`addon_…`) the token is restricted to; abs...
 	Role        ServiceTokenRole `json:"role"`                  // Role assigned to the service token within the organisation.
 	TTLSeconds  *int             `json:"ttl_seconds,omitempty"` // TTL in seconds. Default: 90 days (7776000). Max: 1 year (31536000).
 }

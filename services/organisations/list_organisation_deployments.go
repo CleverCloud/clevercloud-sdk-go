@@ -12,25 +12,9 @@ import (
 )
 
 /*
-Listorganisationdeployments GET /v2/organisations/{id}/deployments — list recent deployments across org apps.
+Listorganisationdeployments List the recent deployments of an organisation's applications
 
-Returns a map of `appId -> Vec<DeploymentView>`, matching cc-api's
-`DeploymentFacade.getDeploymentsForOwner()` which returns `MultivaluedMap<String, DeploymentView>`.
-Apps with no deployments appear as empty arrays in the map.
-Date field is i64 millis (cc-api OpenAPI: { type: integer, format: int64 }).
-
-Source: cc-api DeploymentFacade.java:46 getDeploymentsForOwner()
-Source: cc-api ApplicationHelper.java:636 getAllAppsDeployments()
-Schema: V1__Initial_schema.sql:659 — table deployments
-Spec: analysis-output/02-ccapi-analysis.md §Organisations
-Issue: #103, #465
-
-📥 **Algo Source (Legacy):**
-Verify membership + canAccessApps role, Query all apps for org, then deployments grouped by app_id, Return map of appId -> Vec with limit param (default 20), Apps with no deployments appear as empty arrays
-- Legacy note: cc-api OrganisationHelper.java:430 getDeploymentsForAllApps() -> DeploymentFacade.java:46
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns a map from application ID (`app_…`) to its most recent deployments, newest first, at most `limit` per application. The caller must be a member (404 otherwise). Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

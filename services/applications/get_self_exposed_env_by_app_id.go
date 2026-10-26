@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Getselfexposedenvbyappid GET /v2/self/applications/{app_id}/exposed_env — exposed environment variables.
+Getselfexposedenvbyappid Get the exposed environment variables of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationExposedEnv()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:208-211 getExposedEnv() -> ApplicationEnvironmentHelper.java:87-95 getExposedEnv()
-Algorithm: Shape S4 through ApplicationEnvironmentHelper — canAddApp then owner-scoped 404 APPLICATION_NOT_FOUND.
-Conformity: faithful — personal org_id, canAddApp, and owner-scoped 404/4004. Refs #2228
+Returns the variables an application of the user's personal space exposes to the applications that depend on it, as a name-to-value map.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

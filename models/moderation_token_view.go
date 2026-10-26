@@ -2,7 +2,7 @@
 
 package models
 
-// ModerationTokenView Moderation token response for safe-destroy workflow.  Source: cc-api InternalOrganisationsAPI.jav...
+// ModerationTokenView Token, valid for one hour, that confirms the moderated deletion of an organisation.
 type ModerationTokenView struct {
 	Token string `json:"token"` // Random 8-character alphanumeric token for moderation verification.
 }

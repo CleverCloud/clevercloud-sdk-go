@@ -12,33 +12,23 @@ import (
 )
 
 /*
-Deletekubernetesnode **Legacy**: ovd StandaloneNodeController.scala:88 delete()
-**Algorithm**:
-  - ClusterItemRepository.updateFrag sets status=DELETED, deactivated_at=now
-  - Actual drain+delete is async via deployment pipeline
+Deletekubernetesnode Delete a standalone node
 
-**Conformity**: YES
-
-DELETE /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes/{node_id} — delete a standalone node.
-
-Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — delete
-Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterItemRepository.scala — queries.updateFrag
-Behavior: marks cluster_item as DELETED, sets deactivated_at. Actual drain+delete is async.
-Issue: #8
+Marks the standalone node for deletion and returns it; it is drained and removed asynchronously. 404 when the cluster or the node does not exist, 409 when the cluster is not active. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
-  - nodeId: Node ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeId: Node ID (`standalone_node_` or `standaloneNode_` followed by a ULID or a UUID; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Deletekubernetesnode(ctx, client, tracer, ownerId, clusterId, nodeId)
+	response := kubernetes.Deletekubernetesnode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -47,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesNode
 */
-func Deletekubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeId string) client.Response[models.StandaloneNode] {
-	ctx, span := tracer.Start(ctx, "deleteKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeId", nodeId)))
+func Deletekubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
+	ctx, span := tracer.Start(ctx, "deleteKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeId", nodeId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes/%s", ownerId, clusterId, nodeId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes/%s", ownerId, kubernetesId, nodeId)
 
 	// Make API call
 	response := client.Delete[models.StandaloneNode](ctx, c, path)

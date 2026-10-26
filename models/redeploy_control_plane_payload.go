@@ -2,8 +2,9 @@
 
 package models
 
-// RedeployControlPlanePayload Redeploy control-plane payload — the optional base64 YAML hooks applied before and after the cont...
+// RedeployControlPlanePayload Request body to redeploy a cluster: optional base64-encoded YAML manifests applied before and aft...
 type RedeployControlPlanePayload struct {
-	AfterYamls  []string `json:"afterYamls,omitempty"`  // Base64-encoded YAML manifests applied AFTER the swing.
-	BeforeYamls []string `json:"beforeYamls,omitempty"` // Base64-encoded YAML manifests applied BEFORE the control-plane swing.
+	AfterYamls  []string     `json:"afterYamls,omitempty"`  // Base64-encoded YAML manifests applied AFTER the control plane is replaced.
+	BeforeYamls []string     `json:"beforeYamls,omitempty"` // Base64-encoded YAML manifests applied BEFORE the control plane is replaced.
+	DrainPolicy *DrainPolicy `json:"drainPolicy,omitempty"` // How the redeploy treats a node whose pods will not leave — a worker node, or on an `ALL_IN_ONE` c...
 }

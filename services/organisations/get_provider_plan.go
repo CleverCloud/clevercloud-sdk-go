@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getproviderplan GET /v2/organisations/{id}/addonproviders/{provider_id}/plans/{plan_id}.
+Getproviderplan Get a plan of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getPlan()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + ownership, SELECT addon_plan by id + provider_id.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getPlan()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the plan with its price and feature values; 404 when the provider has no such plan. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

@@ -2,10 +2,10 @@
 
 package models
 
-// ApiHealthConstraintResult One constraint's result. `duration` encodes as **integer milliseconds** (`Encoder.encodeLong.cont...
+// ApiHealthConstraintResult The result of one health constraint (a check of one dependency): its name, status, failure detail...
 type ApiHealthConstraintResult struct {
-	Duration int             `json:"duration"` // Evaluation time in integer milliseconds. Always `0` on the wire — sanitized.
-	Message  string          `json:"message"`  // Failure detail. Always present and always `null` on the wire — the HTTP layer sanitizes it away, ...
+	Duration int             `json:"duration"` // How long this constraint took, in integer milliseconds.
+	Message  string          `json:"message"`  // Failure detail: what the constraint has to say about why it reached this status. Always present; ...
 	Name     string          `json:"name"`     // The constraint's name (`^[a-z][a-z0-9-]*$`), e.g. `database`.
 	Status   ApiHealthStatus `json:"status"`   // This constraint's own status.
 }

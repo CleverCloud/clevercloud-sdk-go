@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Getconsumptionsfororga GET /v2/organisations/{id}/consumptions — returns 501 (matches cc-api production behavior).
+Getconsumptionsfororga Get the consumption of an organisation (discontinued)
 
-Source: cc-api OrganisationConsumptionsAPI.java — returns NOT_IMPLEMENTED_BILLING
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-see handler logic
-- Legacy note: cc-api OrganisationCronsumptionsAPI.java:58 returns NOT_IMPLEMENTED_BILLING
-
-🔧 **Algo Rust (Implementation):**
-- Faithful 501 -- cc-api Java also returns 501 in production (NOT_IMPLEMENTED_BILLING)
-- Conformity: faithful
+Discontinued: always answers 501 Not Implemented to an authenticated caller. Consumption and billing data are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

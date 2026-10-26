@@ -2,7 +2,7 @@
 
 package models
 
-// KubernetesServiceConfig Kubernetes service configuration (product info) — OVD's shape.  The previous flat `{replicationFa...
+// KubernetesServiceConfig Configuration of the Kubernetes product: the flavors and replication-factor bounds of each contro...
 type KubernetesServiceConfig struct {
 	Topologies []TopologyConstraints `json:"topologies"` // The three topologies with their constraints.
 	Versions   VersionsConfig        `json:"versions"`   // The configured version policy.

@@ -10,14 +10,9 @@ import (
 )
 
 /*
-RemindInternalInvoices POST /v2/internal/invoices/reminders — remind invoices (501 stub, matches Java).
+RemindInternalInvoices Send invoice reminders (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:96 remindInvoices()
-Issues: #709, #2016
-
-Legacy: billing-api InternalInvoiceService.remind()
-Algorithm: Internal auth, send payment reminders for unpaid invoices
-Conformity: stub -- 501 matching Java InternalInvoiceAPI
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request

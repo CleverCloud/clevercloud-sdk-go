@@ -12,24 +12,9 @@ import (
 )
 
 /*
-SetOrgDiscount **Legacy**: cc-api InternalOrganisationsAPI.java:155 setDiscount()
-**Algorithm**:
-  - UPDATE organisations SET discount = body.discount WHERE id
-  - 404 if rows_affected == 0
+SetOrgDiscount Set the discount of an organisation
 
-**Conformity**: YES — direct column update matches cc-api
-
-PUT /v2/internal/organisations/{id}/discount — set the discount percentage for an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:155 setDiscount()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal without BOTH
-
-	access_organisations and access_organisations_bills, 404 org not found,
-	200 on success. Body-signed: legacy signs the entity, so the route is
-	layered with buffer_internal_auth_payload.
-
-Issue: #386, #2018
+Sets the organisation's billing discount, as a percentage; 404 when the organisation is unknown. Restricted to platform services holding the organisation and billing access rights.
 
 Parameters:
   - ctx: context for the request

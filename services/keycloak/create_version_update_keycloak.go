@@ -12,19 +12,15 @@ import (
 )
 
 /*
-Createversionupdatekeycloak POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/version/update
+Createversionupdatekeycloak Update the Keycloak version of an add-on
 
-📥 **Algo Source (Legacy):** `applyKeycloakVersion` (`A:372`) sets the target
-version on the Java application and redeploys. Returns the addon view (200).
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:372
-Issues: #313
+Switches every application of the add-on to `targetVersion`, redeploys them without build cache and returns the updated add-on. Answers 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

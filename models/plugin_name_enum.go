@@ -2,7 +2,7 @@
 
 package models
 
-// PluginName represents In-cluster plugin (addon) name.  Source: references/legacy/ovd/modules/kubernetes/models/ClusterI...
+// PluginName represents Name of a plugin (add-on) the platform installs inside a cluster.
 type PluginName string
 
 const (
@@ -15,6 +15,7 @@ const (
 	PluginNameKubeStateMetrics PluginName = "KUBE_STATE_METRICS"
 	PluginNameCephCsi          PluginName = "CEPH_CSI"
 	PluginNameKARPENTER        PluginName = "KARPENTER"
+	PluginNameClusterCore      PluginName = "CLUSTER_CORE"
 )
 
 // String returns the underlying string value

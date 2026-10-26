@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Deleteproviderfeature DELETE /v2/organisations/{id}/addonproviders/{provider_id}/features/{feature_id}.
+Deleteproviderfeature Delete a feature of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java deleteFeature()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, DELETE from addon_provider_features by name.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java deleteFeature()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Removes the feature from the provider. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

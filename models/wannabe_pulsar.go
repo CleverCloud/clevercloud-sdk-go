@@ -2,7 +2,7 @@
 
 package models
 
-// WannabePulsar Request to create a Pulsar addon (v4 internal).  Source: references/legacy/ovd/modules/pulsar/mod...
+// WannabePulsar Request body to create a Pulsar add-on.
 type WannabePulsar struct {
 	AuthorID  *string `json:"authorId,omitempty"` // Author ID (optional, for audit)
 	ClusterID string  `json:"clusterId"`          // Target cluster ID

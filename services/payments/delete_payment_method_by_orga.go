@@ -11,10 +11,9 @@ import (
 )
 
 /*
-Deletepaymentmethodbyorga DELETE /v2/organisations/{id}/payments/methods/{mId} — discontinued.
+Deletepaymentmethodbyorga Delete a payment method of an organisation (discontinued)
 
-Source: cc-api OrganisationPaymentsAPI.java deletePaymentMethod() — 501
-Issues: #289, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

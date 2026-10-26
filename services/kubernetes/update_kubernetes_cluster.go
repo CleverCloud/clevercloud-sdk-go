@@ -12,34 +12,23 @@ import (
 )
 
 /*
-Updatekubernetescluster PATCH /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id} — update cluster (OVD-compat alias).
+Updatekubernetescluster Update a Kubernetes cluster
 
-Update a cluster's metadata and features. A feature change requires the cluster to
-be active and is carried out in the background; the reported `features` reflect
-what is installed, not what was just requested. Disabling
-`features.nodeAutoprovisioning` is refused while any Karpenter NodePool,
-NodeClaim, NodeOverlay or CleverNodeClass still exists. Disabling `features.csi`
-removes the storage driver and is refused while the cluster still carries a
-volume it manages (a PersistentVolume provisioned by `rbd.csi.ceph.com`, a
-PersistentVolumeClaim on `csi-rbd-sc`, or a VolumeSnapshot).
-
-Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:82-96 — org-scoped PATCH variant + its description (c37341c3d)
-Behavior: same as PUT /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}
-Issue: #667, #2990
+Updates the cluster's metadata and features as a JSON merge patch. A feature change requires an active cluster and is carried out in the background, so `features` reports what is installed, not what was just requested; disabling `features.nodeAutoprovisioning` is refused while Karpenter NodePools, NodeClaims, NodeOverlays or CleverNodeClasses exist, and disabling `features.csi` while the cluster holds volumes or snapshots of its storage driver. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Updatekubernetescluster(ctx, client, tracer, ownerId, clusterId, requestBody)
+	response := kubernetes.Updatekubernetescluster(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -48,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesCluster
 */
-func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
-	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Patch[models.KubernetesCluster](ctx, c, path, requestBody)

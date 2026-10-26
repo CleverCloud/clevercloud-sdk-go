@@ -12,24 +12,9 @@ import (
 )
 
 /*
-Listservicetokens GET /v2/organisations/{id}/service-tokens — list service tokens.
+Listservicetokens List the service tokens of an organisation
 
-Source: cc-api OrganisationServiceTokensAPI.java:69 listServiceTokens()
-Source: cc-api ServiceTokenHelper.java:180 list()
-Behavior: returns list of service tokens for the organisation (proxied from token API).
-
-	Returns 502 if token API communication fails.
-
-Issue: #855
-
-📥 **Algo Source (Legacy):**
-1. Auth: check caller is member of org with manage_organisations_services
-2. Build URL with optional limit/offset query params
-3. Forward GET to token API /v4/tenants/{tenantId}/tokens
-4. Return token API response (200 with list)
-
-🔧 **Algo Rust (Implementation):**
-Faithful reproduction. Uses reqwest to call local token API.
+Returns the organisation's service tokens, paginated with `limit` and `offset`. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

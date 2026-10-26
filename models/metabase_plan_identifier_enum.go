@@ -2,7 +2,7 @@
 
 package models
 
-// MetabasePlanIdentifier represents Plan identifier accepted in provision requests.  `serde`/`utoipa` emit the canonical `ALPHA`/`BET...
+// MetabasePlanIdentifier represents Plan of a Metabase add-on. A plan not recognised at provisioning resolves to `BETA`.
 type MetabasePlanIdentifier string
 
 const (

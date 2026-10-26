@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeUser Request body for PUT /v2/self — update user profile. Only non-null fields are applied (partial up...
+// WannabeUser Profile fields of the authenticated user to update. Only the fields present and not `null` are ch...
 type WannabeUser struct {
 	Address *string `json:"address,omitempty"`
 	City    *string `json:"city,omitempty"`

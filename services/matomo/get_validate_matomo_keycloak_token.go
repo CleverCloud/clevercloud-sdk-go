@@ -12,16 +12,9 @@ import (
 )
 
 /*
-Getvalidatematomokeycloaktoken GET /v4/addon-providers/addon-matomo/token/validate?keycloakToken=… — validate.
+Getvalidatematomokeycloaktoken Validate a Matomo sign-in token
 
-📥 Algo Source (Legacy): `validateToken` — AES-CBC/Base32 decrypt the token
-into `Info{ownerId,addonId}`, load the addon, require its PHP application id,
-return `InfoWithPHPApp`.
-
-🔧 Algo Rust: `keycloak::decrypt` → `repository::find` → require
-`php_application_id`. Internal endpoint — no per-user guard.
-
-Issue: #660
+Called by a Matomo instance to resolve the encrypted sign-in token it received at provisioning: answers 200 with the owner, add-on and PHP application IDs it designates, 400 for a token that does not decrypt or an add-on without application, and 404 for an unknown add-on. The encrypted token is the credential; the request must nonetheless present an API credential (an `Authorization` header or `authorization` query parameter), which this route does not verify.
 
 Parameters:
   - ctx: context for the request

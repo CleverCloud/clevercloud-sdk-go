@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Getpdfinvoicebyorga GET /v2/organisations/{id}/payments/billings/{bid}.pdf — discontinued.
+Getpdfinvoicebyorga Download an invoice of an organisation as PDF (discontinued)
 
-Documented, never routed: cc-api spells the PDF path with a `.pdf` suffix and
-this router with a `/pdf` segment. Both answer 501 now, so the discrepancy no
-longer changes what a caller gets.
-
-Source: cc-api OrganisationPaymentsAPI.java:120 getPdfInvoice() — 501
-Issues: #159, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

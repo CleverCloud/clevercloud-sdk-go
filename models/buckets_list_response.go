@@ -2,7 +2,7 @@
 
 package models
 
-// BucketsListResponse Response for listing buckets.  Source: references/legacy/ovd/modules/cellar/models/package.scala ...
+// BucketsListResponse The buckets of a Cellar add-on and their total count.
 type BucketsListResponse struct {
 	Buckets []BucketInfo `json:"buckets"` // List of bucket info objects
 	Total   int          `json:"total"`   // Total number of buckets

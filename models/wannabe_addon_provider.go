@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonProvider Addon provider input.  Source: cc-api WannabeAddonProvider.java
+// WannabeAddonProvider Add-on provider to register: its identifier, name and API settings.
 type WannabeAddonProvider struct {
 	API  *WannabeAddonProviderApi `json:"api,omitempty"`
 	ID   string                   `json:"id"`

@@ -2,10 +2,10 @@
 
 package models
 
-// InviteMemberRequest Request body for POST /v2/internal/organisations/{id}/invite.  TWO wire shapes are accepted, for ...
+// InviteMemberRequest User to add to an organisation, with the role to give them. Identify the user with `userId` or `e...
 type InviteMemberRequest struct {
-	Email  *string `json:"email,omitempty"`  // Email of the user to invite (`WannabeMember`, what legacy and the SPA send).
+	Email  *string `json:"email,omitempty"`  // Email address of the user to add; give it or `userId`.
 	Job    *string `json:"job,omitempty"`    // Job title (optional).
 	Role   string  `json:"role"`             // Role: ADMIN, MANAGER, or DEVELOPER.
-	UserID *string `json:"userId,omitempty"` // User ID to invite (`WannabeDirectMember`); mutually exclusive with `email`.
+	UserID *string `json:"userId,omitempty"` // Identifier of the user to add; give it or `email`.
 }

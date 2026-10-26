@@ -2,7 +2,7 @@
 
 package models
 
-// MigrationStrategyTag represents Public tag for a [`MigrationStrategy`] variant — exposed so consumers can discover the valid set ...
+// MigrationStrategyTag represents How a plugin is migrated when a cluster moves between two Kubernetes versions: `BEFORE_BASE` appl...
 type MigrationStrategyTag string
 
 const (

@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// DeploymentEvent Legacy wire format for `GET …/clusters/{id}/deployment-events`.  Note the OpenAPI name is `Deploy...
+// DeploymentEvent A deployment event of a cluster: the operation it belongs to, the step, its status, an optional d...
 type DeploymentEvent struct {
 	CreatedAt   time.Time                `json:"createdAt"`
 	Detail      *string                  `json:"detail,omitempty"`

@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfenvofaddonslinkedtoapplicationbyappid GET /v2/self/applications/{app_id}/addons/env — env of linked addons.
+Getselfenvofaddonslinkedtoapplicationbyappid List the environment variables of the linked add-ons
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationLinkedAddonsEnv()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:202-204 getEnvOfAddonsLinkedToApplication() -> ApplicationHelper.java:3838-3858 getEnvOfAddonsLinkedToApplication()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(canAddApp), owner-scoped 404 APPLICATION_NOT_FOUND lookup, then read linked-addon env.
-Conformity: faithful — personal org_id, canAddApp, and owner-scoped 404/4004. Refs #2228
+Returns, for each add-on linked to an application of the user's personal space, the environment variables it provides to the application.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

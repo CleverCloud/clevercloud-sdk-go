@@ -11,26 +11,16 @@ import (
 )
 
 /*
-V4GetAddonEnvFromProvider GET /v4/addon-providers/{provider_id}/addons/{real_id}/env
+V4GetAddonEnvFromProvider Get the environment of an add-on from its provider
 
-Proxy endpoint that forwards GET /addons/{real_id}/env to the addon provider.
-Used by Terraform (config-provider), Console3, clever-tools.
-
-Source: cc-api AuthorizationHelper.java:1292 authorize_v4_addonproviders()
-Source: terraform-provider-clevercloud — clevercloud_config_provider resource
-Spec: analysis-output/38-github-api-consumers.md §Terraform — config-provider
-Issue: #313
-
-Algorithm: Resolve provider URL, proxy GET /addons/{real_id}/env
-Legacy: cc-api — v4 addon provider env proxy
-Conformity: faithful -- Terraform config-provider resource uses this
+Returns the add-on's environment as its provider holds it (provider-defined JSON, forwarded with the provider's status). The caller must own the add-on or hold the admin, manager, developer or accounting role in its owner organisation; 404 otherwise.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - provider_id: Addon provider ID (e.g., config-provider)
-  - real_id: Provider-side addon real ID
+  - real_id: Add-on real ID
 
 # Returns the operation result or an error
 

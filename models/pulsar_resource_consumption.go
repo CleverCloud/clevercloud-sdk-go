@@ -2,7 +2,7 @@
 
 package models
 
-// PulsarResourceConsumption Batch consumption record.  Source: references/legacy/ovd/core/types/ResourceConsumption.scala Spe...
+// PulsarResourceConsumption Consumption request for one Pulsar add-on over a time window.
 type PulsarResourceConsumption struct {
 	AddonID string `json:"addonId"` // Provider-internal resource ID
 	From    string `json:"from"`    // Consumption window start (RFC 3339)

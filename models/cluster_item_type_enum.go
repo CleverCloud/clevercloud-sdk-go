@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterItemType represents Cluster item type (discriminator for the polymorphic `cluster_item` registry).  Source: reference...
+// ClusterItemType represents Kind of infrastructure resource a cluster item records: network group, load balancer, storage, co...
 type ClusterItemType string
 
 const (
@@ -15,6 +15,8 @@ const (
 	ClusterItemTypeOtelConfig          ClusterItemType = "OTEL_CONFIG"
 	ClusterItemTypeMateriaLogicaldb    ClusterItemType = "MATERIA_LOGICALDB"
 	ClusterItemTypePLUGIN              ClusterItemType = "PLUGIN"
+	ClusterItemTypeApiServerDns        ClusterItemType = "API_SERVER_DNS"
+	ClusterItemTypeApiServerSni        ClusterItemType = "API_SERVER_SNI"
 )
 
 // String returns the underlying string value

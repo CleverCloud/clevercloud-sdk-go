@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Preorderselfaddon POST /v2/self/addons/preorders — preview addon creation cost.
+Preorderselfaddon Preview the order of an add-on for the current user
 
-Source: cc-api SelfAddonsAPI.java preorderAddon()
-Source: cc-api AddonHelper.java:591-618 (preorder — returns zero-cost PurchaseOrder)
-Behavior: returns a preorder/invoice preview. cc-api always returns zeros ("No preorder").
-Issue: #108
-
-Algorithm: Return zero-cost PurchaseOrder (cc-api always returns "No preorder")
-Legacy: cc-api SelfAddonsAPI.java preorderAddon() -> AddonHelper.java:591
-Conformity: faithful -- matches cc-api behavior (zero-cost stub)
+Returns the invoice preview of an add-on order for the user's personal account. The request body is not read: the preview is a zero-amount order carrying the account's billing details. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

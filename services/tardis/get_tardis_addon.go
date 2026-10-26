@@ -14,7 +14,12 @@ import (
 /*
 GetTardisAddon GET /v4/addon-providers/addon-tardis/addons/{tardisId} — get addon by ID.
 
-Algorithm: Look up tardis addon by ID in database. Return 404 if not found.
+Algorithm: Look up tardis addon by ID in database. Return 404 if not found. The caller must be
+
+	the service account, be the stored owner when it is a personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation stored on the addon, else 404
+	like an unknown id (refs #4431).
+
 Legacy: ovd tardis addon CRUD
 Conformity: real
 

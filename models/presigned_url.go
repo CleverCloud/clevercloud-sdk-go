@@ -2,7 +2,7 @@
 
 package models
 
-// PresignedUrl Presigned URL response for kubeconfig download.  **`url` only** — OVD's `PresignedURL` encodes ex...
+// PresignedUrl A presigned URL: it performs the operation it was issued for without any other credential, until ...
 type PresignedUrl struct {
-	URL string `json:"url"` // The self-authenticating presigned URL (carries its capability token in `?authorization=`).
+	URL string `json:"url"` // The presigned URL. It carries its own access token in the `authorization` query parameter: keep i...
 }

@@ -11,25 +11,9 @@ import (
 )
 
 /*
-GrantOrgDomain **Legacy**: cc-api InternalOrganisationsAPI.java:224 makeOrganisationOwnDomain()
-**Algorithm**:
-  - Verify org exists (404)
-  - Check if domain_name exists in domains table; if not, INSERT with ownership_type=OWNED
-  - INSERT domain_owners ON CONFLICT DO NOTHING (idempotent)
+GrantOrgDomain Grant a domain to an organisation
 
-**Conformity**: YES — domain grant with upsert matches cc-api
-
-PUT /v2/internal/organisations/{id}/domains/{domain} — grant a domain to an organisation.
-
-Source: cc-api InternalOrganisationsAPI.java:224 grantDomain()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal without
-
-	access_organisations, 404 org not found, 204 on success (idempotent).
-	Bodyless: legacy signs authInternal(crc, null).
-
-Schema: V1__Initial_schema.sql — tables domains (706), domain_owners (695)
-Issue: #393, #2018
+Registers the domain as owned by the organisation; idempotent. The name is validated and normalised (lowercase, punycode), 400 when invalid; 404 when the organisation is unknown. Restricted to platform services holding the organisation access right.
 
 Parameters:
   - ctx: context for the request

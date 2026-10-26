@@ -11,27 +11,15 @@ import (
 )
 
 /*
-Undeployselfapplicationbyappid DELETE /v2/self/applications/{app_id}/instances — undeploy application.
+Undeployselfapplicationbyappid Stop an application of the current user
 
-Legacy: SelfApplicationsHelper.java:112-115 undeploy() -> ApplicationHelper.java:2256-2282 undeploy()
-Algorithm: Shape S2, then retain the sanctioned moderation check, BDS STOP, and state change.
-Conformity: faithful — state update + BDS STOP matches Java. The sanctioned check itself
-(legacy has no moderation rung in _undeploy at all) shares legacy's own 8601
-APPLICATION_MODERATED envelope as of #2528 — the deviation is that it runs, not its body.
-
-Source: cc-api SelfApplicationsAPI.java undeployApplication()
-Behavior: publishes BDS STOP instruction, updates app state to SHOULD_BE_DOWN.
-The instruction's cause, echoed into the ApplicationStop event payload, is the
-calling consumer's name, not a hardcoded string: legacy's undeploy() reads
-token.getConsumerName() and threads it into _undeploy() as cause
-(ApplicationHelper.java:2281).
-Issues: #2228, refs #2136, refs #2528
+Stops every instance of an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

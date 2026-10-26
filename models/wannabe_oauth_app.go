@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeOauthApp OAuth app details for WannabeApplication.  Source: cc-api openapi/ccapiv3.json WannabeOauthApp sc...
+// WannabeOauthApp A repository on a Git hosting service, identified by its owner and its name.
 type WannabeOauthApp struct {
 	Name  *string `json:"name,omitempty"`
 	Owner *string `json:"owner,omitempty"`

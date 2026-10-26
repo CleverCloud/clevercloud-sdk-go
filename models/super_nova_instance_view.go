@@ -2,7 +2,7 @@
 
 package models
 
-// SuperNovaInstanceView SuperNovaInstanceView — running instance info returned by GET /applications/{id}/instances.  Sour...
+// SuperNovaInstanceView A running instance of an application: its state, address, flavor, and the deployment and commit i...
 type SuperNovaInstanceView struct {
 	AppID          string           `json:"appId"`
 	AppPort        *int             `json:"appPort,omitempty"`

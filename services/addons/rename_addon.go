@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Renameaddon PUT /v2/self/addons/{addon_id} — rename an addon.
+Renameaddon Rename an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java updateAddon()
-Issue: #108
-
-Algorithm: Verify ownership, update name in DB, re-fetch for response, publish event
-Legacy: cc-api SelfAddonsAPI.java updateAddon()
-Conformity: faithful -- rename + messaging event
+Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

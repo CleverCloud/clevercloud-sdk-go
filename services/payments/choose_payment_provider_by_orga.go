@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Choosepaymentproviderbyorga PUT /v2/organisations/{id}/payments/billings/{bid} — discontinued.
+Choosepaymentproviderbyorga Choose the payment provider of an invoice (discontinued)
 
-This is the handler #2428 was opened against: it answered `200 {"status":
-"paid"}` and marked the invoice PAID without calling a payment processor.
-cc-api has answered 501 here throughout.
-
-Source: cc-api OrganisationPaymentsAPI.java:167 choosePaymentProvider() — 501
-Issues: #106, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

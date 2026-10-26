@@ -12,28 +12,16 @@ import (
 )
 
 /*
-Getmetabaseproductconsole POST /v4/metabase/organisations/{owner_id}/metabase/{addon_metabase_id}/consumption
+Getmetabaseproductconsole Get the consumption of a Metabase add-on
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getConsumption
-Behavior: enforce the internal Basic credential before the body is parsed
-
-	(401 on a missing / non-Basic / malformed / wrong pair), decode the path's
-	owner and addon ids through their typed extractors (400 on a malformed
-	one), then read the addon row excluding soft-deleted ones (404 when there
-	is none) and answer 200 with one `ResourceConsumption` over the requested
-	`[since, until]` window — licence-days clamped to the row's creation and
-	deletion dates, attributed to the **path** owner rather than the stored one
-	(legacy `getConsumption(ownerId, …)`). No org-membership check: this is the
-	billing collector's machine plane, not a user session.
-
-Issue: #8
+Called by the platform's billing to read the consumption of one active add-on over the `since`–`until` window given in the body. Answers 404 when the add-on is unknown, deleted or not owned by `ownerId`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (user or org) ID
-  - addonMetabaseId: Metabase addon ID
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -49,14 +37,14 @@ Example:
 x-service: metabase
 operationId: getMetabaseProductConsole
 */
-func Getmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonMetabaseId string, requestBody *models.MetabaseConsumptionQuery) client.Response[models.MetabaseResourceConsumption] {
+func Getmetabaseproductconsole(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonMetabaseId string, requestBody *models.MetabaseConsumptionQuery) client.Response[models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "getMetabaseProductConsole", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 
 	path := utils.Path("/v4/metabase/organisations/%s/metabase/%s/consumption", ownerId, addonMetabaseId)
 
 	// Make API call
-	response := client.Post[models.MetabaseResourceConsumption](ctx, c, path, requestBody)
+	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentState represents Deployment state — shared across all addon providers with BDS integration.  Source: addonprovider...
+// DeploymentState represents State of a deployment: `WIP` (in progress), `OK`, `FAIL` or `CANCELLED`.
 type DeploymentState string
 
 const (

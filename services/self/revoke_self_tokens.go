@@ -11,17 +11,9 @@ import (
 )
 
 /*
-Revokeselftokens DELETE /v2/self/tokens — revoke all tokens for the current user.
+Revokeselftokens Revoke all the current user's access tokens
 
-📥 **Algo Source (Legacy):**
-Require almighty token, DELETE FROM oauth1_access_tokens WHERE user_id
-- Legacy note: cc-api SelfTokensAPI.java revokeAllTokens() -> SelfOAuth1TokensHelper.java revokeAll(); cache invalidation pending
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfTokensAPI.java revokeAllTokens()
-Source: cc-api SelfOAuth1TokensHelper.java revokeAll()
-Issue: #102
+Deletes every OAuth1 access token of the user, the one signing this request included. Requires an almighty token.
 
 Parameters:
   - ctx: context for the request

@@ -2,9 +2,9 @@
 
 package models
 
-// ContainerRegistryWithTokens Response for createRegistry — includes registry view, created tokens, and any token creation erro...
+// ContainerRegistryWithTokens What creating a registry answers: the registry, the tokens created with it, and a per-position er...
 type ContainerRegistryWithTokens struct {
-	Errors   []TokenCreationError                `json:"errors,omitempty"` // Errors from token creation attempts
-	Registry ContainerRegistry                   `json:"registry"`         // Registry view
-	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens"`           // Successfully created tokens (with biscuit)
+	Errors   []TokenCreationError                `json:"errors,omitempty"` // One entry per requested token that could not be created.
+	Registry ContainerRegistryView               `json:"registry"`         // The registry.
+	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens"`           // The tokens that were created, with their credentials.
 }

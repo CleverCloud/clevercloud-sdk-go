@@ -12,15 +12,9 @@ import (
 )
 
 /*
-ArsGetAccess Legacy: cc-api InternalARSAPI.java:195 getAccess()
-Algorithm: Legacy: strip .git suffix from appId, get user + app; Legacy: if user.isAdmin() return true; Legacy: get app owner or...
-Conformity: faithful — full implementation with admin check + role-based access
+ArsGetAccess Check a user's access to an application repository
 
-Check if a user has access to push to an app's git repo.
-
-Source: cc-api InternalARSAPI.java:195 getAccess()
-Behavior: checks org membership + canAccessRepositories. Strips .git suffix from appId.
-Issue: #709
+Answers whether the user may access the application's Git repository: an ADMIN, MANAGER or DEVELOPER of its owner, or a platform administrator. A trailing `.git` on the application ID is ignored. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request

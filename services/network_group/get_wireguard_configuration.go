@@ -12,42 +12,17 @@ import (
 )
 
 /*
-Getwireguardconfiguration GET .../peers/{peer_id}/wireguard/configuration
+Getwireguardconfiguration Get a peer's WireGuard configuration
 
-Algo Source: ovd WireguardConfiguratorRequestHandler.scala createWgConfigurationForPeer —
-builds the WireGuard INI (`[Interface]` for the target peer, one `[Peer]` per
-other peer with a public key); OVD's controller decodes the actor's base64
-answer back to the INI text and serves it as `text/plain` (`stringBody`).
-
-Algo Rust: re-ported against [`crate::cache::NgCache`] — peers/members come
-from the hydrated NG, then [`crate::views::generate_wireguard_config`]
-(refs #849).
-
-AuthZ (refs #3024): the caller is an [`NgCaller`] in the
-`NetworkGroupWireguardConfigOp` family — a presigned token (header bearer
-or raw `?authorization=`) **verified** against the module's root key and
-checked for `GET` on the path tenant, or an organisation principal on
-`readOnlyRoles`. Presence
-alone is not enough: this response is the full mesh config (every peer's
-IP, endpoint and public key).
-
-Source: references/legacy/ovd/modules/networkgroup/controllers/NetworkGroupWireguardController.scala getWireguardConfiguration
-Source: references/legacy/ovd/modules/networkgroup/actors/WireguardConfiguratorRequestHandler.scala createWgConfigurationForPeer
-Behavior: 200 `text/plain` INI whatever `Accept` says; 401 no credentials,
-
-	or a token that does not parse or verify; 403 a token for another
-	tenant or operation, expired, or an organisation principal that is not
-	the path owner; 404 unknown NG or peer.
-
-Issue: #849, #3024
+Returns the peer's WireGuard configuration as INI text (`text/plain`): its `[Interface]` section and one `[Peer]` section per other peer that has a public key. Pass the presigned token in the `authorization` query parameter, or any other accepted credential; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
   - opts: optional query parameters
 
 # Returns the operation result or an error

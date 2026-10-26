@@ -12,26 +12,15 @@ import (
 )
 
 /*
-Createkeycloakjavaapplication POST /v4/addon-providers/addon-keycloak/addons/{keycloak_id}/application
+Createkeycloakjavaapplication Add an application to a Keycloak add-on
 
-📥 **Algo Source (Legacy):** `addAddonApplication` (`A:422`) attaches a second
-Java application to an existing Keycloak addon and returns **201 Created**.
-
-⚠ **Deliberate deviation.** Legacy discards the `{keycloak_id}` path segment and
-takes the parent addon from `provision_request.addon_id` in the **body**
-(`AddonKeycloakRoutes.scala:248-257`, `A:435`). This port uses the **path** id,
-which is what the URL means and what every client sends. Recorded as a scope
-decision; a body-vs-path mismatch under legacy silently attaches the application
-to a different addon.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:422
-Issues: #313
+Creates an additional Keycloak Java application for the add-on, with the add-on's plan and host, and answers 201 with the add-on ID. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

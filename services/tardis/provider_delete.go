@@ -13,7 +13,12 @@ import (
 /*
 ProviderDelete DELETE /v4/v2/providers/addon-tardis/resources/{tardisId} — delete via provider API.
 
-Algorithm: Heroku-compatible provider deprovision. Looks up addon by ID, soft-deletes it.
+Algorithm: Heroku-compatible provider deprovision. Looks up addon by ID, soft-deletes it. The
+
+	caller must be the service account, be the stored owner when it is a personal `user_…`
+	space, or hold the `ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation stored on
+	the addon, else 404 like an unknown id (refs #4431).
+
 Legacy: ovd v2 provider API bridge
 Conformity: real
 

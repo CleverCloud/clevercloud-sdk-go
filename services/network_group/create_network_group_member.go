@@ -12,25 +12,16 @@ import (
 )
 
 /*
-Createnetworkgroupmember POST /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/members
+Createnetworkgroupmember Add a member to a network group
 
-Source: ovd NetworkGroupRoutes.scala postMember → `MembershipCMD(CREATE)`
-Source: ovd NetworkGroupActionsActor.scala addMember — domain-name validation/derivation,
-re-registration compared on id+kind (`Member.isSameResourceAs`)
-Behavior: 202 after broker confirmation, or immediately when the member is
-already registered (same id and kind — a legacy domain name never turns a
-re-registration into a conflict); 500 publish failure; 400 invalid kind/id
-or a domain name outside the configured DNS suffix
-(`clever.network-group.bad-request.invalid-domain-name`); 404 unknown NG;
-403 owner mismatch; 409 when the member id exists with a different kind.
-Issue: #313, #665, #676, #849, #1127, #2790, #2801
+Requests the addition of an `APPLICATION`, `ADDON`, `EXTERNAL` or `LOADBALANCER` member, applied asynchronously. A given `domainName` must end with one of the configured DNS suffixes, otherwise one is derived; re-adding a member with the same ID and kind also answers 202, the same ID with another kind 409. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

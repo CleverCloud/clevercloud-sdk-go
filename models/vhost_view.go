@@ -2,7 +2,7 @@
 
 package models
 
-// VhostView VhostView — matches cc-api openapi/ccapiv3.json VhostView schema.  Source: cc-api Application.jav...
+// VhostView A domain name routed to an application.
 type VhostView struct {
-	Fqdn string `json:"fqdn"`
+	Fqdn string `json:"fqdn"` // Domain name followed by its path prefix, or by `/` when it has none, such as `example.com/`.
 }

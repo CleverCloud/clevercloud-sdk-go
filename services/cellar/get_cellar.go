@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getcellar Read a Cellar add-on's S3 endpoint and access keys
+Getcellar Read a Cellar add-on with its S3 credentials
 
-Returns the provider view of one Cellar add-on: its id, owner, cluster, plan, status, creation and deletion dates, plus the live S3 endpoint host, access key id and secret access key. Because the response carries the secret access key, the caller must be authenticated and must be the add-on's owner (personal add-ons) or a member of the organisation owning it. An unauthenticated request answers 401; any other refusal answers 404, which does not distinguish an unknown add-on from one this caller may not read.
+Returns one Cellar add-on: ID, owner, cluster, plan, status, creation and deletion dates, and its S3 endpoint host, access key ID and secret access key. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: 401 when unauthenticated, and 404 for any other refusal, as for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - CellarId: Cellar addon ID
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 

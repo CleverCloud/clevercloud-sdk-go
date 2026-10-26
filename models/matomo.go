@@ -2,17 +2,17 @@
 
 package models
 
-// Matomo Full Matomo addon view returned by `GET /v4/addon-providers/addon-matomo/addons/{id}`.  Source: r...
+// Matomo A Matomo add-on: its identifiers, plan, versions, access URL, the resources backing it and its ap...
 type Matomo struct {
-	AccessURL         string               `json:"accessUrl"`         // Public access URL (`MATOMO_URL` env).
-	AddonID           string               `json:"addonId"`           // cc-api addon id (legacy serialises `ccapiAddonId.toString`).
-	AvailableVersions []string             `json:"availableVersions"` // Versions offered (config list).
-	EnvVars           map[string]any       `json:"envVars"`           // All PHP app env vars exposed for the CLI view.
-	Name              string               `json:"name"`              // Human-readable addon name (from cc-api `getAddon`).
-	OwnerID           UserId               `json:"ownerId"`           // Owner (user or org) id.
-	PhpVersion        string               `json:"phpVersion"`        // PHP runtime version (`CC_PHP_VERSION` env).
+	AccessURL         string               `json:"accessUrl"`         // Public URL of the Matomo instance.
+	AddonID           string               `json:"addonId"`           // Add-on ID (`addon_…`).
+	AvailableVersions []string             `json:"availableVersions"` // Versions on offer.
+	EnvVars           map[string]string    `json:"envVars"`           // Environment variables of the add-on's application.
+	Name              string               `json:"name"`              // Add-on name.
+	OwnerID           UserId               `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	PhpVersion        string               `json:"phpVersion"`        // PHP version the add-on's application runs on.
 	Plan              MatomoPlanIdentifier `json:"plan"`              // Plan identifier (`BETA`).
-	ResourceID        MatomoId             `json:"resourceId"`        // Provider-internal resource id (`matomo_<uuid>`).
-	Resources         MatomoResources      `json:"resources"`         // Underlying infrastructure resource ids.
-	Version           string               `json:"version"`           // Matomo version — the **first** configured available version.
+	ResourceID        MatomoId             `json:"resourceId"`        // Matomo add-on ID (`matomo_…`).
+	Resources         MatomoResources      `json:"resources"`         // Resources backing the add-on.
+	Version           string               `json:"version"`           // Matomo version: the first of the versions on offer.
 }

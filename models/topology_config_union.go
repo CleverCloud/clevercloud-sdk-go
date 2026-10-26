@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// TopologyConfig Cluster control-plane topology configuration (stored as JSONB in `cluster.topology_config`).  Sou...
+// TopologyConfig Control-plane topology of a cluster, tagged by `topology`. `ALL_IN_ONE` and `DEDICATED_COMPUTE` t...
 // Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type TopologyConfig struct {
 	raw json.RawMessage

@@ -11,22 +11,15 @@ import (
 )
 
 /*
-Deletematomo DELETE /v2/providers/addon-matomo/resources/{id} — deprovision a Matomo addon.
+Deletematomo Deprovision a Matomo add-on
 
-📥 Algo Source (Legacy): `deprovision` — delete PHP app → delete backend
-addon → delete MySQL addon → unregister DNS → repo `delete` sets `TO_DELETE`
-+ `deletion_date` (only while `deletion_date IS NULL`). Repeat / unknown → 404.
-
-🔧 Algo Rust: same teardown then a single `UPDATE … SET status='TO_DELETE',
-deletion_date=now WHERE deletion_date IS NULL`. Internal endpoint — no guard.
-
-Issue: #660
+Called by the platform when a customer deletes a Matomo add-on. Deletes its DNS record, PHP application, Redis or Materia KV add-on and MySQL add-on, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers 500 and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId: Matomo addon ID
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

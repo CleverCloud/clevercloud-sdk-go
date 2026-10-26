@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Getkubernetesquota GET /v4/kubernetes/organisations/{owner_id}/quota — the tenant's ceiling.
+Getkubernetesquota Get the Kubernetes quota of an organisation
 
-Source: references/legacy/ovd/modules/kubernetes/routes/routes.scala:259-265 — getQuota
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala:216-224 — getQuota
-Spec: references/legacy/ovd/modules/kubernetes/doc/quota-management.md §Quota API
-Issues: #1580 (M4)
-
-Get-or-create: a tenant with no row gets one persisted from the configured
-defaults on first read, and any missing kubernetes ceiling kind is backfilled,
-so this always returns a value. There is no write API — ops change a ceiling
-with the SQL that OVD's `scripts/set-kubernetes-quota.sh` generates.
+Returns the organisation's Kubernetes resource ceilings, the platform defaults unless they were raised. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
 
 # Returns the operation result or an error
 

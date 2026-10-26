@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeExternalPeer Input to add an external peer to a network group.  Source: references/legacy/ovd/modules/networkg...
+// WannabeExternalPeer Input to add an external (customer-managed) peer to a network group.
 type WannabeExternalPeer struct {
 	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname.
 	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).

@@ -6,42 +6,26 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-SetInternalInvoiceCustomerOrderID PUT /v2/internal/invoices/{inv_id}/customer_order_id — set customer order ID on an invoice.
+SetInternalInvoiceCustomerOrderID Set the customer order ID of an invoice (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:124 setInvoiceCustomerOrderId()
-Source: billing-api AdminRoutes.scala — setCustomerOrderId()
-Issues: #709, #2016
-
-📥 **Algo Source (Legacy):**
-Set the customer_order_id field on an invoice (used for purchase order tracking).
-- Internal auth required
-- UPDATE invoice SET customer_order_id = $id WHERE invoice_number = $inv
-- Source: billing-api InvoiceDAO.scala
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- ccapi::db::billing::set_invoice_customer_order_id(pool, inv_id, order_id)
-- Return 200 or 404
-Conformity: real -- pure PG update, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - inv_id: Invoice number
-  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.SetInternalInvoiceCustomerOrderID(ctx, client, tracer, inv_id, requestBody)
+	response := internalapi.SetInternalInvoiceCustomerOrderID(ctx, client, tracer, inv_id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -50,14 +34,14 @@ Example:
 x-service: internal
 operationId: set_internal_invoice_customer_order_id
 */
-func SetInternalInvoiceCustomerOrderID(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string, requestBody *models.SetCustomerOrderIdBody) client.Response[client.Nothing] {
+func SetInternalInvoiceCustomerOrderID(ctx context.Context, c *client.Client, tracer trace.Tracer, inv_id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "set_internal_invoice_customer_order_id", trace.WithAttributes(attribute.String("inv_id", inv_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/%s/customer_order_id", inv_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, requestBody)
+	response := client.Put[any](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

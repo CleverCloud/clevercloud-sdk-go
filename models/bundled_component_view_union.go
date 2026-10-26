@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// BundledComponentView Tenant-facing view of [`BundledComponent`] (mirrors the hierarchy 1:1 — no secrets today).  Sourc...
+// BundledComponentView A component running on a control-plane VM, discriminated by `type`: API server (with its port, wh...
 // Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
 type BundledComponentView struct {
 	raw json.RawMessage

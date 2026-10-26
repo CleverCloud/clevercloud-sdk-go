@@ -12,24 +12,15 @@ import (
 )
 
 /*
-Getkeycloakwithoutownerid GET /v4/addon-providers/addon-keycloak/addons/{keycloak_id}
+Getkeycloakwithoutownerid Get a Keycloak add-on
 
-📥 **Algo Source (Legacy):** `getAddonKeycloak` (`A:1098`).
-
-⚠ **Deliberate deviation from legacy.** The legacy endpoint
-(`routes.scala:62-69`) never calls `.get`, so Tapir serves it for **any** HTTP
-method — `DELETE`/`PUT` on this path return 200 with the addon view. This port
-pins it to `GET`. Logged as a scope decision rather than reproduced, because
-reproducing it means a read handler answering destructive verbs.
-
-Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/clevercloud/keycloak/actors/AddonKeycloakAddonActor.scala:1098
-Issues: #313
+Returns the add-on: access URL, installed and available versions, initial admin credentials, backing resources, network group and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId: Keycloak addon id
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

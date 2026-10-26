@@ -11,6 +11,7 @@ type PostgresqlAddonView struct {
 	Features      []PostgresqlFeatureFlag      `json:"features"`
 	Host          string                       `json:"host"`
 	ID            string                       `json:"id"`
+	Locale        *string                      `json:"locale,omitempty"` // The locale recorded at provisioning (`provision_database.locale`, `en_GB` when none was), as `ll_...
 	OwnerID       *string                      `json:"owner_id,omitempty"`
 	Password      string                       `json:"password"`
 	Plan          string                       `json:"plan"`

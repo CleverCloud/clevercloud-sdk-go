@@ -4,39 +4,28 @@ package self
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Getselfclitokens GET /v2/self/cli_tokens — poll for a CLI-paired access token. PUBLIC (unauthenticated).
+Getselfclitokens Collect the tokens of a command-line login
 
-📥 **Algo Source (Legacy):**
-SelfOAuth1CliTokensHelper.get(cli_token): reads the CLI_TOKENS Redis cache entry
-keyed by cli_token, returns the pairing view {token, secret, expirationDate} (404 if
-absent), then DELETES the entry — a one-shot read. No authentication: `clever login`
-polls this endpoint before it holds any credentials at all.
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfOAuth1CliTokensHelper.java get()
-Was wrongly gated behind `Authenticated` and looked the token up in
-oauth1_access_tokens by DB query instead of the CLI_TOKENS cache — every poll
-401'd, so `clever login` could never complete. Fixed to the public,
-cache-backed one-shot read legacy actually implements.
-Issue: #102, #3100
+Polled by the command-line client while the user logs in through the browser: returns the access token and secret created for the `cli_token` pairing identifier, which are then discarded. Answers 404 until the login is complete and once the tokens have been collected. Takes no credential: the pairing identifier is the secret.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := self.Getselfclitokens(ctx, client, tracer)
+	response := self.Getselfclitokens(ctx, client, tracer, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -45,11 +34,17 @@ Example:
 x-service: self
 operationId: getSelfCliTokens
 */
-func Getselfclitokens(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getselfclitokens(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "getSelfCliTokens")
 	defer span.End()
 
 	path := utils.Path("/v2/self/cli_tokens")
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

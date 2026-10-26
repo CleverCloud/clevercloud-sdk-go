@@ -4,42 +4,26 @@ package internalapi
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-GetInternalInvoiceLinks GET /v2/internal/invoices/links — get invoice payment links.
+GetInternalInvoiceLinks Get invoice links (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:74 getLinks()
-Source: billing-api AdminRoutes.scala — getInvoiceLinks()
-Issue: #709, #1956
-
-📥 **Algo Source (Legacy):**
-Return list of invoice links (number, owner, status, emission date, button_id).
-- Internal auth required
-- SELECT from invoice table
-- Source: billing-api InvoiceDAO.scala
-
-🔧 **Algo Rust (Implementation):**
-- Verify internal auth
-- ccapi::db::billing::list_invoice_links(pool, owner)
-- Return `Vec<InvoiceLinkRow>` as JSON
-Conformity: real -- pure PG query, billing-api absorbed
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.GetInternalInvoiceLinks(ctx, client, tracer, opts...)
+	response := internalapi.GetInternalInvoiceLinks(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -48,20 +32,14 @@ Example:
 x-service: internal
 operationId: get_internal_invoice_links
 */
-func GetInternalInvoiceLinks(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func GetInternalInvoiceLinks(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_internal_invoice_links")
 	defer span.End()
 
 	path := utils.Path("/v2/internal/invoices/links")
 
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
-
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

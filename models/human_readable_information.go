@@ -2,10 +2,10 @@
 
 package models
 
-// HumanReadableInformation A squants quantity as OVD's `SquantsHumanReadableCodecs` encodes it.  Source: SquantsHumanReadabl...
+// HumanReadableInformation An amount of information (bytes), as a `number` in a `unit`. `readable` is a human-readable rende...
 type HumanReadableInformation struct {
-	Name     string  `json:"name"` // The squants dimension name — always `"Information"` here.
+	Name     string  `json:"name"` // The dimension name, always `"Information"`.
 	Number   float64 `json:"number"`
 	Readable string  `json:"readable"`
-	Unit     string  `json:"unit"` // The squants unit symbol (`"GB"`, `"B"`, `"GiB"`, …).
+	Unit     string  `json:"unit"` // The unit: `B`, decimal `KB`, `MB`, `GB`, `TB`, `PB` (powers of 1000) or binary `KiB`, `MiB`, `GiB...
 }

@@ -2,7 +2,7 @@
 
 package models
 
-// PluginBackfillResult One cluster's backfill report.  `error` is always `null` on the per-cluster route — its failures ...
+// PluginBackfillResult Plugin backfill report of one cluster: the plugins newly registered and those whose registered ve...
 type PluginBackfillResult struct {
 	ClusterID  string               `json:"clusterId"`
 	Drifted    []PluginDrift        `json:"drifted"`

@@ -2,7 +2,7 @@
 
 package models
 
-// AddMemberRequest Request body for POST /v2/internal/organisations/{id}/members — add member directly.  Source: cc-...
+// AddMemberRequest User to add directly to an organisation, with the role to give them.
 type AddMemberRequest struct {
 	Role   string `json:"role"`   // Role: ADMIN, MANAGER, or DEVELOPER.
 	UserID string `json:"userId"` // User ID to add.

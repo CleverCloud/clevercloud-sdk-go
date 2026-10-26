@@ -11,23 +11,15 @@ import (
 )
 
 /*
-Deletengotoroshiapplication DELETE /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/networkgroup
+Deletengotoroshiapplication Detach an Otoroshi add-on from its network group
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — deleteNGForAddon()
-
-📥 **Algo Source (Legacy):**
-- Fetch addon from DB
-- If networkgroup_id is present: delete NG via NG API, SET networkgroup_id=NULL in DB, redeploy
-- Return 204
-- Source: ovd OtoroshiProviderService.scala:559 deleteNGForAddon()
-
-Issue: #313
+Deletes the add-on's network group and restarts its application; answers 204 as well when the add-on has no network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

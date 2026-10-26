@@ -13,13 +13,24 @@ import (
 /*
 Getaddonproviderversions GET /v2/products/addonproviders/{provider_id}/versions — relay the provider's versions view.
 
-Source: cc-api ProductsAPI.java getAddonProviderVersions()
 Behavior: forwards the addon-api's `GET {base_url}/versions` (the
 
 	VersionsConsoleView `{clusters, dedicatedVersions}` the console migration
 	pane reads) — NOT the plans list, which crashed the pane on `.slice()`.
 
-Issue: #102, #1354
+Gated exactly like `{provider_id}`, minus `?orgaId=` which this route does
+not take: a token (`401 {id:2001}` without one) and then `apph.allowUser`,
+whose refusal is `404 ADDON_PROVIDER_NOT_FOUND`. The gate runs **before** any
+outbound call, so a caller who may not read the provider cannot probe its API
+through this relay. An unknown provider is the legacy NPE, a 500.
+
+Source: cc-api ProductsAPI.java:98-106 — getAddonProviderVersions(crc, id)
+Source: cc-api AuthHelper.java:79-104 — auth(), which has no internal-HMAC branch
+Source: cc-api AddonProviderHelper.java:322-332 — getProviderVersions() -> aah.getVersions()
+Source: cc-api AddonProviderHelper.java:284-286 — tk.isLeft(), then uph.find(getUserId())
+Source: cc-api AddonProviderPersistHelper.java:96-107 — allowUser(provider, userId)
+Source: cc-api AuthHelper.java:98-101 auth() — 401 EXPIRED_OAUTH_TOKEN (1503)
+Issues: #102, #1354, #3371, #2271, #3440
 
 Parameters:
   - ctx: context for the request

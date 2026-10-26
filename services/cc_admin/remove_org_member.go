@@ -11,24 +11,9 @@ import (
 )
 
 /*
-RemoveOrgMember **Legacy**: cc-api InternalOrganisationsAPI.java:601 removeMemberDirectly()
-**Algorithm**:
-  - Find membership by (org_id, user_id) — 404 if not found
-  - Transaction: DELETE organisation_members, DELETE organisation_member_info
+RemoveOrgMember Remove a member from an organisation
 
-**Conformity**: YES — member removal with info cleanup matches cc-api
-
-DELETE /v2/internal/organisations/{id}/members/{userId} — remove member directly.
-
-Source: cc-api InternalOrganisationsAPI.java:598 removeMemberDirectly()
-Schema: V1__Initial_schema.sql — tables organisation_members, organisation_member_info
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal, 403 internal without access_organisations, 404 if
-
-	org/member not found, 204 on success. Bodyless: the DELETE carries no
-	entity, so authInternal(crc, null) is the signing base.
-
-Issue: #634, #2018
+Removes the user's membership, answering 204; 404 when the organisation or the membership is unknown. Restricted to platform services holding the organisation access right.
 
 Parameters:
   - ctx: context for the request

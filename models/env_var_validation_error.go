@@ -2,10 +2,10 @@
 
 package models
 
-// EnvVarValidationError Structured error response for env var validation failures.  Source: ovd OVDProtocols.BadRequest +...
+// EnvVarValidationError Why a list of environment variables was refused. `code` is `clever.env-vars.bad-request.names.not...
 type EnvVarValidationError struct {
-	Code    string `json:"code"`    // OVD error code (e.g. `clever.env-vars.bad-request.names.not-unique`)
-	Context string `json:"context"` // Detail: the offending names serialized as JSON array
-	Field   string `json:"field"`   // Context field (always "body" for env var validation)
-	Message string `json:"message"` // Human-readable error message
+	Code    string `json:"code"`    // Error code, such as `clever.env-vars.bad-request.names.not-unique`.
+	Context string `json:"context"` // The offending variable names, as a JSON array encoded in a string.
+	Field   string `json:"field"`   // Part of the request at fault; always `body`.
+	Message string `json:"message"` // Human-readable error message.
 }

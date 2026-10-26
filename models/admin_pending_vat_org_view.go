@@ -2,7 +2,7 @@
 
 package models
 
-// AdminPendingVatOrgView View for orgs with pending VAT.  Source: cc-api InternalOrganisationsAPI.java:175 getPendingVAT()...
+// AdminPendingVatOrgView Organisation whose VAT number awaits validation.
 type AdminPendingVatOrgView struct {
 	Company  *string `json:"company,omitempty"` // Company name.
 	ID       string  `json:"id"`                // Organisation ID.

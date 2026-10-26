@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Addproviderfeature POST /v2/organisations/{id}/addonproviders/{provider_id}/features — add a feature.
+Addproviderfeature Add a feature to an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java addFeature()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, INSERT into addon_provider_features (name, type).
-- Legacy note: cc-api OrganisationAddonProviderAPI.java addFeature()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Declares a feature (`name`, `type`) that the provider's plans can set; 400 when the provider already has a feature with this name. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

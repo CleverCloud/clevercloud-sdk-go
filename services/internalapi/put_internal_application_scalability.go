@@ -11,22 +11,15 @@ import (
 )
 
 /*
-PutInternalApplicationScalability Legacy: cc-api InternalApplicationsAPI.java:123 editApplicationScalability()
-Algorithm: Legacy: authInternal(), then ApplicationHelper.editApplicationScalability(); Legacy: validate minInstances >= 1, maxI...
-Conformity: faithful — validates bounds (min >= 1, max <= 40), updates DB, publishes event
+PutInternalApplicationScalability Set the instance count bounds of an application
 
-PUT /v2/internal/applications/{id}/scalability — edit scalability (unchecked).
-
-Source: cc-api InternalApplicationsAPI.java:123 editApplicationScalability()
-Source: cc-api ApplicationHelper.java editApplicationScalability()
-Behavior: updates application scalability without access checks, internal auth required.
-Issue: #159
+Sets the minimum and maximum number of instances of any application, from the body's `minInstances` (at least 1) and `maxInstances` (at most 40). Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -11,13 +11,9 @@ import (
 )
 
 /*
-GetPulsarBatchConsumptions POST /v4/pulsar/consumptions — billed consumption for several addons at once.
+GetPulsarBatchConsumptions Compute the consumption of several Pulsar add-ons
 
-**Not a legacy route** either: it is axo's batch form of the same envelope,
-each body item naming an addon, its owner and its own window.
-
-Source: references/legacy/ovd/modules/pulsar/services/PulsarConsumptionService.scala
-Issue: #8, #416, #1063
+Called by the platform's billing service. Takes a list of add-on, owner and window items and returns the hourly billed consumption of each; an item naming an add-on its owner does not hold is skipped. 501 means consumption metrics are not available on this deployment.
 
 Parameters:
   - ctx: context for the request
@@ -38,14 +34,14 @@ Example:
 x-service: pulsar
 operationId: get_pulsar_batch_consumptions
 */
-func GetPulsarBatchConsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody []*models.PulsarResourceConsumption) client.Response[[]models.PulsarResourceConsumptionView] {
+func GetPulsarBatchConsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody []*models.PulsarResourceConsumption) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "get_pulsar_batch_consumptions")
 	defer span.End()
 
 	path := utils.Path("/v4/pulsar/consumptions")
 
 	// Make API call
-	response := client.Post[[]models.PulsarResourceConsumptionView](ctx, c, path, requestBody)
+	response := client.Post[[]models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,7 +2,7 @@
 
 package models
 
-// OAuthRightsView OAuth rights view.  Twelve booleans, all snake_case on the wire. `almighty` is the only one absen...
+// OAuthRightsView The rights an OAuth1 consumer asks for, one boolean per right. `almighty` is read-only: it cannot...
 type OAuthRightsView struct {
 	AccessOrganisations                      bool `json:"access_organisations"`
 	AccessOrganisationsBills                 bool `json:"access_organisations_bills"`

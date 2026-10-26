@@ -19,12 +19,13 @@ refine → 400, find → 404, else fresh run → 200/503).
 Doc carrier for `getStatsHealthConstraint`; the framework serves the route — do
 not mount.
 
-Sanitized, 200 or 503. An unknown name is the `clever.core.not-found` 404; a name failing
+The full result, 200 or 503. An unknown name is the `clever.core.not-found` 404; a name failing
 the refinement is a 400, the unpinned analogue of tapir rejecting the path param before
-OVD's logic runs.
+OVD's logic runs. All four sit behind the health credential (#3518), so an anonymous
+caller cannot tell which one it would have reached.
 
 Source: ModuleHealthCheckComponent.scala:67-104 (`constraintEndpoint`)
-Issue: #2375
+Issue: #2375, refs #3518
 
 Parameters:
   - ctx: context for the request

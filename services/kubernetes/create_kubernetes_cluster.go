@@ -12,31 +12,15 @@ import (
 )
 
 /*
-Createkubernetescluster **Legacy**: ovd ClusterController.scala:86 create()
-**Algorithm**:
-  - ClusterCRUDService.create inserts cluster + initial ClusterStatus(DEPLOYING)
-  - Topology config stored as JSONB, tags as TEXT[]
-  - Infra provisioning delegated to deployment pipeline (async)
+Createkubernetescluster Create a Kubernetes cluster
 
-**Conformity**: YES
-
-POST /v4/kubernetes/organisations/{owner_id}/clusters — create a new Kubernetes cluster.
-
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — create
-Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — queries.insert
-Behavior: creates cluster record with DEPLOYING status in the `cluster` table.
-
-	Inserts topology_config as JSONB, tags as TEXT[].
-	Also inserts initial cluster_status record (Scala: ClusterStatus(DEPLOYING)).
-	Actual infrastructure provisioning is handled by the deployment pipeline.
-
-Issue: #8
+Creates a cluster, with its optional initial node groups, and provisions it asynchronously. The deployment profile is `deploymentProfileId`, else the default profile of the zone `zoneId` or `zone`, else of the only zone the organisation may use: a zone or profile the organisation may not use answers 404, an exceeded Kubernetes quota 412, and two initial node groups sharing a name 400. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

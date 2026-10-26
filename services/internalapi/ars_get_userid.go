@@ -11,15 +11,9 @@ import (
 )
 
 /*
-ArsGetUserid Legacy: cc-api InternalARSAPI.java:134 getUserid()
-Algorithm: Legacy: try the token as a biscuit first — a robot fact yields the user id, a valid biscuit without one is 401 (no fall-through), a non-biscuit falls through; Legacy: if token=='Jenkins' return 'Jenkins'; Legacy: else look up OAuth1 token -> userId...
-Conformity: enhanced — biscuit robot + Jenkins cases work, OAuth1 via DB
+ArsGetUserid Resolve the user of a token
 
-Get user ID from a biscuit service token (robot fact) or an OAuth1 access token.
-
-Source: cc-api InternalARSAPI.java:134 getUserid() (+ :200-235 inline biscuit branch)
-Behavior: tries the token as a biscuit first (robot fact → user id; valid biscuit without one → 401, no fall-through); otherwise looks up the OAuth1 token, returns userId. Special case: "Jenkins" → "Jenkins".
-Issue: #709, #1299
+Returns the user ID an OAuth1 access token or a service token acts as. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request

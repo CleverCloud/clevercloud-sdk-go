@@ -2,7 +2,7 @@
 
 package models
 
-// CellarAcl An object ACL entry (grantee + permission).  Source: references/legacy/ovd/modules/cellar/models/...
+// CellarAcl An object ACL entry: a grantee and the permission it is granted.
 type CellarAcl struct {
 	Grantee    CellarGrantee `json:"grantee"`
 	Permission string        `json:"permission"`

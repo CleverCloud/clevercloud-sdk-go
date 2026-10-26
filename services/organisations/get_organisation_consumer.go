@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getorganisationconsumer GET /v2/organisations/{id}/consumers/{key} — get a specific consumer.
+Getorganisationconsumer Get an OAuth consumer of an organisation
 
-Source: cc-api OrganisationConsumersAPI.java getConsumer()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Query by key + org + not deleted; 404 if not found.
-- Legacy note: cc-api OrganisationConsumersAPI.java getConsumer()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the OAuth1 consumer with its rights; 404 when the organisation has no consumer with this key. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

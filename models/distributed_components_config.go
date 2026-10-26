@@ -2,7 +2,7 @@
 
 package models
 
-// DistributedComponentsConfig Per-component configuration for the distributed control-plane topology.  Source: references/legac...
+// DistributedComponentsConfig Flavor and replication factor of each control-plane component in the `DISTRIBUTED` topology: API ...
 type DistributedComponentsConfig struct {
 	Apiserver              ComponentConfig `json:"apiserver"`
 	CloudControllerManager ComponentConfig `json:"cloudControllerManager"`

@@ -2,7 +2,7 @@
 
 package models
 
-// PulsarStatus represents Pulsar addon status enum.  Source: references/legacy/ovd/modules/pulsar/models/PulsarStatus.scala...
+// PulsarStatus represents Lifecycle status of a Pulsar add-on: `ACTIVE`, `TO_DELETE` (deletion requested), `DELETED`, `NAME...
 type PulsarStatus string
 
 const (

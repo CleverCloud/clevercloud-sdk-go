@@ -11,21 +11,15 @@ import (
 )
 
 /*
-Linkselfaddontoapplicationbyappid POST /v2/self/applications/{app_id}/addons — link an addon.
+Linkselfaddontoapplicationbyappid Link an add-on to an application
 
-Source: cc-api SelfApplicationsAPI.java linkAddonToSelfApplication()
-Body is a bare JSON string with the addon ID.
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:160-163 linkAddon() -> ApplicationHelper.java:3422-3477 linkAddon()
-Algorithm: Shape S5 with an empty Jenkins header, then FTP relocation and org-scoped addon ownership checks before linking.
-Conformity: faithful — personal org_id, S5 errors, no almighty owner bypass, ownership answered ahead of existence, and unchanged messaging. Refs #2228
+Links an add-on of the user's personal space to an application of the user's personal space, which then receives the add-on's environment variables. The body is the add-on ID, as a JSON string.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

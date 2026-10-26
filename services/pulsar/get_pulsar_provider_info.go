@@ -11,23 +11,9 @@ import (
 )
 
 /*
-Getpulsarproviderinfo GET /v4/addon-providers/addon-pulsar — get Pulsar provider console view.
+Getpulsarproviderinfo Read the Pulsar provider description
 
-**Legacy**: ovd PulsarController.scala:100 getProviderInfosServerEndpoint()
-**Algorithm**:
-  - Delegates to PulsarProvisioningService.getProviderInfo (line 202)
-  - Lists all ACTIVE clusters, maps to ClusterConsoleView, returns ProviderConsoleView
-  - Legacy serves this public; axo deliberately diverges and requires any
-    valid token (Console3 always calls it authenticated) — the view
-    inventories the active cluster fleet (ids, zones, versions) and must
-    not double as anonymous reconnaissance. Refs #1146.
-
-**Conformity**: NO — deliberate divergence: auth required (legacy is public)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala getProviderInfosServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala getProviderInfos
-Behavior: returns static provider info for Console3 addon management UI.
-Issue: #8, #1146
+Returns the Pulsar provider's description for the console, listing its active clusters with their zone and version. Any authenticated caller may read it.
 
 Parameters:
   - ctx: context for the request

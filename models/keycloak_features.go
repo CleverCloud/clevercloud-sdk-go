@@ -2,7 +2,7 @@
 
 package models
 
-// KeycloakFeatures Optional per-addon features.  Source: references/legacy/ovd/modules/keycloak/src/main/scala/com/c...
+// KeycloakFeatures Optional features of a Keycloak add-on.
 type KeycloakFeatures struct {
 	NetworkGroup *NetworkGroupView `json:"networkGroup,omitempty"`
 }

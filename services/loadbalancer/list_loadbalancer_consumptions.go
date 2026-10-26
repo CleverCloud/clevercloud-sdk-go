@@ -50,7 +50,7 @@ Example:
 x-service: loadbalancer
 operationId: listLoadbalancerConsumptions
 */
-func Listloadbalancerconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumptionView] {
+func Listloadbalancerconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listLoadbalancerConsumptions", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -63,7 +63,7 @@ func Listloadbalancerconsumptions(ctx context.Context, c *client.Client, tracer 
 	}
 
 	// Make API call
-	response := client.Get[[]models.ResourceConsumptionView](ctx, c, path)
+	response := client.Get[[]models.ResourceConsumption](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

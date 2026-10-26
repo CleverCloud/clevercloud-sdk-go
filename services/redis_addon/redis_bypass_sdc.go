@@ -15,13 +15,19 @@ RedisBypassSdc POST /v2/providers/redis-addon/dashboard/bypassSDC — Bypass SDC
 
 **Legacy**: addon-api-redis Dashboard.scala bypassSDC()
 **Algorithm**:
-  - Returns 501 — requires SDC configuration access.
+  - A DEV plan answers 500; otherwise fetch the running VM over the Supernova RPC,
+    persist its HV coordinates, push the add-on's connection environment to its
+    cc-api callback (a failed push answers 500, the coordinates stay), and return it.
+  - **The 200 body carries credentials.** Beside the four `REDIS_DIRECT_*` it returns
+    `REDIS_PASSWORD`, `REDIS_TOKEN`, and the `REDIS_URL` / `REDIS_CLI_URL` pair, which embed
+    the password in the URL. A caller holding that add-on's SSO-minted dashboard session
+    reads its credentials from this route.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Dashboard.scala — bypassSDC
-Behavior: 501 conditional stub — requires CleverCloudOps.getSDCConfiguration.
-Issue: #713
+Behavior: real Supernova RPC + `update_direct_hv` + cc-api push; the only 501 comes from the session gate (no ENCRYPTION_KEY).
+Issue: #713, #4030
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonProviderInfos Body of `PUT /v2/organisations/{id}/addonproviders/{provider_id}`.  cc-api's update takes `Wannab...
+// WannabeAddonProviderInfos Descriptive details of an add-on provider to update. Every field is optional: an omitted field ke...
 type WannabeAddonProviderInfos struct {
 	AnalyticsID    *string `json:"analyticsId,omitempty"`
 	CanUpgrade     *bool   `json:"canUpgrade,omitempty"`

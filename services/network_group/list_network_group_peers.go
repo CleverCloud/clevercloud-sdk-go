@@ -11,18 +11,16 @@ import (
 )
 
 /*
-Listnetworkgrouppeers GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/peers
+Listnetworkgrouppeers List the peers of a network group
 
-Source: ovd NetworkGroupRoutes.scala getPeers — `ng.peers` from `ngMap`
-Behavior: 200 with the polymorphic peer list; 404 unknown NG; 403 owner mismatch.
-Issue: #313, #665, #676, #849, #1127
+Returns the WireGuard peers of the network group, Clever Cloud instances and external peers alike; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

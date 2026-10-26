@@ -25,7 +25,7 @@ Source: cc-api AddonVendorAPIHelper.java:90-103 createCallbackUrl()
 Issue: #105, refs #2649
 Algorithm: Authenticate the provider via vendor Basic auth, find addon by id-or-realId (404 if absent), reject (403) if it belongs to another provider, then REPLACE the stored config from `config` (an empty map clears it, an absent field skips the whole block) and redeploy every linked SHOULD_BE_UP application.
 Legacy: cc-api uses provider Basic auth; a non-Basic Authorization header makes extractAuthData throw → 500. Addon not found → 404, provider mismatch → 403, unbindable `config` → 400 BAD_JSON.
-Conformity: faithful for the config-replace and redeploy path; the success BODY is a Message where cc-api answers `addon.toView()` (AddonVendorAPIHelper.java:208), the redeploys reproduce `bds()` only (refs #2567, refs #2537), and the `name` write below is axo's own — `editConf` never touches it.
+Conformity: faithful for the config-replace path and its envelopes; the redeploys reproduce `bds()` only (refs #2567, refs #2537), and the `name` write below is axo's own — `editConf` never touches it.
 
 Parameters:
   - ctx: context for the request
@@ -46,14 +46,14 @@ Example:
 x-service: vendor
 operationId: editApplicationConfiguration
 */
-func Editapplicationconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.Message] {
+func Editapplicationconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "editApplicationConfiguration", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/vendor/apps/%s", addonId)
 
 	// Make API call
-	response := client.Put[models.Message](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

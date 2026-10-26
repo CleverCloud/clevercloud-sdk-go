@@ -12,41 +12,15 @@ import (
 )
 
 /*
-UpdateInternalApplication PUT /v2/internal/applications/{app_id} — edit an application from an addon API.
+UpdateInternalApplication Update an application
 
-Legacy authenticates the raw body, then requires an internal credential whose name ends in
-`-addon-api` and whose rights include `manage_organisations_applications`. It parses the body
-before resolving the application owner and delegates to the same typed `save()` flow as the
-organisation edit, with `currentUserId = "addon-api"` and the credential name as deployment
-cause.
-
-The Rust port preserves that guard and parsing order, resolves the owner globally, then reuses
-the established application-edit validation, persistence, ADC, event, and response pipeline.
-Like the self and organisation edit ports, that shared pipeline does not yet implement legacy
-zone relocation, FTP-folder rename, or every field accepted by `WannabeApplication`; #2516 does
-not widen those pre-existing save-port gaps while adding the independently authenticated route.
-
-Since #2666 it carries the same rescale-on-edit block as the org/self twins — save()'s
-:3313-3325, ported bug-for-bug (see [`rescale_after_edit`]) — with the legacy literal
-`"addon-api"` as author and the internal credential's consumer name as cause, plus the
-instance-count clamps ([`clamp_wannabe_instance_bounds`]). #2516 had recorded the rescale as
-deliberately skipped, reasoning from the OVD Metabase flow; the #2666 ruling supersedes that
-skip, and the Metabase flow itself (both flavor names changed, counts untouched) is exactly
-the buggy condition's one false case, so it still triggers no rescale — OVD keeps performing
-its explicit reboot after this PUT.
-
-Source: cc-api InternalApplicationsAPI.java:134-139 editApplication()
-Source: cc-api ApplicationHelper.java:2680-2725 editFromInternal()
-Source: cc-api ApplicationHelper.java:2776-3401 save(), :3313-3325 (the rescale block)
-Spec: OVD CCAPI.scala:128-140 editApplication()
-Spec: OVD MetabaseProviderService.scala:354-399 prepareApplicationUpdateIfNeeded()
-Issues: #2516, refs #2666, fixes #2830
+Edits any application from the given application definition and returns it. Restricted to add-on provider services allowed to manage organisation applications: another internal credential gets 403, a non-internal one 401 (error id 18001).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

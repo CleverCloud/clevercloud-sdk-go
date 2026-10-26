@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Getaddontagsbyorgaidandaddonid GET /v2/organisations/{id}/addons/{addon_id}/tags — get addon tags.
+Getaddontagsbyorgaidandaddonid List the tags of an add-on of an organisation
 
-Source: cc-api Addon.getTags() (tags collection table)
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, return tags
-Legacy: cc-api OrganisationAddonsAPI.java — addon tags
-Conformity: faithful -- IDOR fix: addon ownership check (#470)
+Returns the add-on's tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

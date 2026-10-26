@@ -11,16 +11,9 @@ import (
 )
 
 /*
-DeleteInternalUserEmail DELETE /internal/user/{userId}/emails/{email} — remove email address for user (internal).
+DeleteInternalUserEmail Remove a secondary email address from a user
 
-📥 **Algo Source (Legacy):**
-DELETE FROM secondary_emails WHERE user_id AND email
-- Legacy note: cc-api InternalUserEmailsAPI.java:43 removeInternalEmailAddress()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api InternalUserEmailsAPI.java:43 removeInternalEmailAddress()
-Issue: #709
+Deletes the secondary address from the account of the user named in the path; an address the user does not have is ignored. Callable only by platform services (403 otherwise).
 
 Parameters:
   - ctx: context for the request

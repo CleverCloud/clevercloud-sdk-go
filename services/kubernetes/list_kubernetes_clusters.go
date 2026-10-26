@@ -13,30 +13,15 @@ import (
 )
 
 /*
-Listkubernetesclusters **Legacy**: ovd ClusterController.scala:60 listByTenantAndStatus()
-**Algorithm**:
-  - ClusterCRUDService.listByTenantAndStatus queries cluster table
-  - Excludes DELETED status by default (values.toSet - DELETED)
+Listkubernetesclusters List the Kubernetes clusters of an organisation
 
-**Conformity**: YES
-
-GET /v4/kubernetes/organisations/{owner_id}/clusters — list Kubernetes clusters.
-
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — listByTenantAndStatus
-Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — queries.select
-Behavior: returns the path owner's clusters, optionally filtered by status.
-
-	Always scoped to `auth.raw_owner` (legacy `select` always binds ownerId —
-	no list-all-tenants variant), excluding DELETED by default (matches Scala:
-	values.toSet - DELETED).
-
-Issue: #8
+Returns the organisation's clusters whose stored status is in `status`, every status but `DELETED` by default; 400 on an unknown status. A failed cluster carries `failure`, one waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

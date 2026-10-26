@@ -2,7 +2,7 @@
 
 package models
 
-// PluginBackfillItem One plugin the backfill registered, at the version found deployed.  Source: ovd models/PluginBack...
+// PluginBackfillItem A plugin found running in the cluster without being registered, now registered at the version fou...
 type PluginBackfillItem struct {
 	Name    PluginName `json:"name"`
 	Version string     `json:"version"`

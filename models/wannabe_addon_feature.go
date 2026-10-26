@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonFeature Addon feature input.  Source: cc-api WannabeFeature.java
+// WannabeAddonFeature Feature the plans of an add-on provider can set: its name and the type of its value.
 type WannabeAddonFeature struct {
 	Name string `json:"name"`
 	Type string `json:"type"`

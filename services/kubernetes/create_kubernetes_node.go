@@ -12,32 +12,23 @@ import (
 )
 
 /*
-Createkubernetesnode POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/nodes — create a standalone node.
+Createkubernetesnode Create a standalone node
 
-Source: references/legacy/ovd/modules/kubernetes/controllers/StandaloneNodeController.scala — create
-Behavior: creates a standalone node (cluster_item with item_type STANDALONE_NODE).
-Issue: #667
-
-**Legacy**: ovd StandaloneNodeController.scala create()
-**Algorithm**:
-  - Insert cluster_item with STANDALONE_NODE type, DEPLOYING status
-  - data JSONB contains name, flavor, taints, labels, status
-
-**Conformity**: YES
+Creates a single standalone node in the cluster and deploys it asynchronously; 409 when a node group or node of the cluster already holds the name. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Createkubernetesnode(ctx, client, tracer, ownerId, clusterId, requestBody)
+	response := kubernetes.Createkubernetesnode(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -46,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNode
 */
-func Createkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
-	ctx, span := tracer.Start(ctx, "createKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Createkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
+	ctx, span := tracer.Start(ctx, "createKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Post[models.StandaloneNode](ctx, c, path, requestBody)

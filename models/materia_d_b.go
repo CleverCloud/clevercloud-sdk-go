@@ -2,7 +2,7 @@
 
 package models
 
-// MateriaDB Materia KV database view returned by GET endpoints.  Source: references/legacy/ovd/modules/materi...
+// MateriaDB A Materia KV database: its cluster, owner, plan, connection host and port, access token and status.
 type MateriaDB struct {
 	ClusterID string `json:"clusterId"`
 	Host      string `json:"host"`
@@ -12,6 +12,6 @@ type MateriaDB struct {
 	Plan      string `json:"plan"`
 	Port      int    `json:"port"`
 	Status    string `json:"status"`
-	Token     string `json:"token"` // Live KV bearer token — deliberately on the wire (OVD parity, internal-only GET); the `serialize_w...
+	Token     string `json:"token"` // Access token of the database; it is also the password of its Redis-compatible endpoint.
 	TokenID   string `json:"tokenId"`
 }

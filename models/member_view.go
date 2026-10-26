@@ -2,7 +2,7 @@
 
 package models
 
-// MemberView Organisation member view returned by GET /v2/organisations/{id}/members.  Source: cc-api Organisa...
+// MemberView A member of an organisation: the user, their role and their job title.
 type MemberView struct {
 	Job    *string                    `json:"job,omitempty"`
 	Member OrganisationMemberUserView `json:"member"`

@@ -13,9 +13,82 @@ type Option func(*Options)
 
 // Options holds query parameters for loadbalancer operations
 type Options struct {
-	Resourceid *string `url:"resourceId,omitempty"`
-	Since      *string `url:"since,omitempty"`
-	Until      *string `url:"until,omitempty"`
+	After          *string `url:"after,omitempty"`
+	Domainname     *string `url:"domainName,omitempty"`
+	Flavor         *string `url:"flavor,omitempty"`
+	IP             *string `url:"ip,omitempty"`
+	Limit          *int64  `url:"limit,omitempty"`
+	Loadbalancerid *string `url:"loadbalancerId,omitempty"`
+	Owner          *string `url:"owner,omitempty"`
+	Parent         *string `url:"parent,omitempty"`
+	Region         *string `url:"region,omitempty"`
+	Resourceid     *string `url:"resourceId,omitempty"`
+	Since          *string `url:"since,omitempty"`
+	Tag            *string `url:"tag,omitempty"`
+	Until          *string `url:"until,omitempty"`
+}
+
+// WithAfter sets the after query parameter
+func WithAfter(after string) Option {
+	return func(o *Options) {
+		o.After = &after
+	}
+}
+
+// WithDomainname sets the domainName query parameter
+func WithDomainname(domainName string) Option {
+	return func(o *Options) {
+		o.Domainname = &domainName
+	}
+}
+
+// WithFlavor sets the flavor query parameter
+func WithFlavor(flavor string) Option {
+	return func(o *Options) {
+		o.Flavor = &flavor
+	}
+}
+
+// WithIP sets the ip query parameter
+func WithIP(ip string) Option {
+	return func(o *Options) {
+		o.IP = &ip
+	}
+}
+
+// WithLimit sets the limit query parameter
+func WithLimit(limit int64) Option {
+	return func(o *Options) {
+		o.Limit = &limit
+	}
+}
+
+// WithLoadbalancerid sets the loadbalancerId query parameter
+func WithLoadbalancerid(loadbalancerId string) Option {
+	return func(o *Options) {
+		o.Loadbalancerid = &loadbalancerId
+	}
+}
+
+// WithOwner sets the owner query parameter
+func WithOwner(owner string) Option {
+	return func(o *Options) {
+		o.Owner = &owner
+	}
+}
+
+// WithParent sets the parent query parameter
+func WithParent(parent string) Option {
+	return func(o *Options) {
+		o.Parent = &parent
+	}
+}
+
+// WithRegion sets the region query parameter
+func WithRegion(region string) Option {
+	return func(o *Options) {
+		o.Region = &region
+	}
 }
 
 // WithResourceid sets the resourceId query parameter
@@ -29,6 +102,13 @@ func WithResourceid(resourceId string) Option {
 func WithSince(since string) Option {
 	return func(o *Options) {
 		o.Since = &since
+	}
+}
+
+// WithTag sets the tag query parameter
+func WithTag(tag string) Option {
+	return func(o *Options) {
+		o.Tag = &tag
 	}
 }
 
@@ -47,11 +127,41 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.After != nil {
+		params = append(params, fmt.Sprintf("after=%s", url.QueryEscape(*options.After)))
+	}
+	if options.Domainname != nil {
+		params = append(params, fmt.Sprintf("domainName=%s", url.QueryEscape(*options.Domainname)))
+	}
+	if options.Flavor != nil {
+		params = append(params, fmt.Sprintf("flavor=%s", url.QueryEscape(*options.Flavor)))
+	}
+	if options.IP != nil {
+		params = append(params, fmt.Sprintf("ip=%s", url.QueryEscape(*options.IP)))
+	}
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
+	if options.Loadbalancerid != nil {
+		params = append(params, fmt.Sprintf("loadbalancerId=%s", url.QueryEscape(*options.Loadbalancerid)))
+	}
+	if options.Owner != nil {
+		params = append(params, fmt.Sprintf("owner=%s", url.QueryEscape(*options.Owner)))
+	}
+	if options.Parent != nil {
+		params = append(params, fmt.Sprintf("parent=%s", url.QueryEscape(*options.Parent)))
+	}
+	if options.Region != nil {
+		params = append(params, fmt.Sprintf("region=%s", url.QueryEscape(*options.Region)))
+	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Tag != nil {
+		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
 	}
 	if options.Until != nil {
 		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))

@@ -13,26 +13,16 @@ import (
 )
 
 /*
-V4GetOrgApplicationDeployment Legacy: Console3 v4 orchestration (no cc-api equivalent — OVD OrchestrationRoutes)
-Algorithm: Shape S1 authorization and the same row as the v2 route, rendered as the v4 DeploymentView
-Conformity: faithful shape, partial data — see the list route
+V4GetOrgApplicationDeployment Get a deployment of an application
 
-GET /v4/orchestration/organisations/{id}/applications/{app_id}/deployments/{deployment_id}
-
-`{deployment_id}` is the deployment UUID, which is what the v4 body's `id`
-carries — not the numeric per-application `real_id` the v2 body calls `id`.
-The lookup is UUID-only, as the v2 handler's is.
-
-Source: ovd core/.../orchestration/models/Deployment.scala:100 (DeploymentView)
-Spec: analysis-output/38-github-api-consumers.md §Console3 — v4 orchestration
-Issue: #313
+Returns one deployment of an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation. Superseded by the `/v4/paas/` spelling of this path.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - app_id: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - app_id: Application ID (`app_…`)
   - deployment_id: Deployment ID
   - opts: optional query parameters
 

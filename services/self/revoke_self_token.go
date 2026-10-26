@@ -12,24 +12,15 @@ import (
 )
 
 /*
-Revokeselftoken DELETE /v2/self/tokens/{token} — revoke a specific token.
+Revokeselftoken Revoke an access token of the current user
 
-📥 **Algo Source (Legacy):**
-Non-almighty can only self-revoke, verify token ownership (IDOR), DELETE from oauth1_access_tokens
-- Legacy note: cc-api SelfTokensAPI.java revokeToken() -> SelfOAuth1TokensHelper.java revoke()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfTokensAPI.java revokeToken()
-Source: cc-api SelfOAuth1TokensHelper.java revoke()
-Security: non-almighty tokens can only revoke themselves
-Issue: #102
+Deletes one OAuth1 access token of the user. An almighty token can revoke any of the user's tokens; any other token can only revoke itself. A token that belongs to another user answers 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - token: Token to revoke
+  - token: The access token to revoke
 
 # Returns the operation result or an error
 

@@ -2,11 +2,11 @@
 
 package models
 
-// InstanceVariantView InstanceVariantView — matches cc-api openapi/ccapiv3.json InstanceVariantView schema.  Exactly fi...
+// InstanceVariantView A variant of an instance type, such as a runtime or framework: its identifier, slug, display name...
 type InstanceVariantView struct {
 	DeployType string  `json:"deployType"`
 	ID         string  `json:"id"`
-	Logo       *string `json:"logo,omitempty"`
+	Logo       *string `json:"logo,omitempty"` // URL of the variant's logo.
 	Name       string  `json:"name"`
 	Slug       string  `json:"slug"`
 }

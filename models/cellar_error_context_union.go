@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// CellarErrorContext Typed error `context` of the OVD error envelope, discriminated by `type` with the PascalCase Circ...
+// CellarErrorContext Context of an error, discriminated by `type`: `Resource` (the resource concerned), `Input` (the o...
 // Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type CellarErrorContext struct {
 	raw json.RawMessage

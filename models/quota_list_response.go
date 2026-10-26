@@ -2,7 +2,7 @@
 
 package models
 
-// QuotaListResponse Paginated list of quota entries.  Source: references/legacy/ovd/modules/ts/models/QuotaListRespon...
+// QuotaListResponse A page of Materia TS quota entries, with its pagination metadata.
 type QuotaListResponse struct {
 	Metadata PaginationMetadata `json:"metadata"`
 	Quotas   []QuotaEntry       `json:"quotas"`

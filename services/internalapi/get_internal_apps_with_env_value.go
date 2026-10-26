@@ -11,35 +11,9 @@ import (
 )
 
 /*
-GetInternalAppsWithEnvValue Legacy: cc-api InternalApplicationsAPI.java:249 getAppsAndEnvValueForEnvName()
-Algorithm: Legacy: authInternal() + isCCAdmin() check; Legacy: validate env_name is non-empty and in ALLOWED_ENVS whitelist (24 names);
-Legacy: resolve the name through SanitizedConfig.getAllNamesFor() (canonical key + aliases); Legacy: search the applications' own env
-AND the env exported by their linked add-ons; Legacy: group by value → distinct app ids.
-Conformity: faithful — same ALLOWED_ENVS whitelist, same alias resolution, same two lookups, same auth checks
+GetInternalAppsWithEnvValue Find the applications setting an environment variable
 
-GET /internal/applications/with_env_value — get apps having a specific env var.
-
-Source: cc-api InternalApplicationsAPI.java:249 getAppsAndEnvValueForEnvName()
-Source: cc-api SanitizedConfig.java getAllNamesFor() — canonical key + aliases
-Source: cc-api ApplicationPersistHelper.java getAppsHavingConfigEnvVariable() — own env
-
-	∪ linked add-ons' exported env, grouped by value
-
-Behavior: returns `{value: [app ids]}` for a given env name, looked up under the name and
-all its aliases (`JAVA_VERSION` for `CC_JAVA_VERSION`) in the applications' own env and in
-the env exported by their linked, non-deleted add-ons. Restricted to ALLOWED_ENVS whitelist.
-Only for cc-admin usage.
-
-Gate: legacy's, since #2018 — `authInternal()` answers 401 for a caller that is not
-an internal service (where an almighty OAuth1 token now lands), then `isCCAdmin()`
-answers 403. This path is not one legacy serves — legacy mounts the method under
-`/v2` only, which `get_apps_with_env_value` covers — but it stays mounted, so it
-carries the same gate as its twin rather than a laxer one any almighty-holding
-internal service could walk through.
-
-Source: cc-api AuthHelper.java:127-140 authInternal() — 401 when not internal
-Source: cc-api InternalApplicationsAPI.java:252-254 — `!etk.right().isCCAdmin()` → 403
-Issues: #159, #2018, refs core-team/cc-api!575
+Maps each value of the given environment variable to the IDs of the applications setting it. Only an allow-listed set of variable names can be queried. Restricted to the platform administration service.
 
 Parameters:
   - ctx: context for the request

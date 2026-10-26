@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getprovidertags GET /v2/organisations/{id}/addonproviders/{provider_id}/tags — list provider tags.
+Getprovidertags List the tags of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getTags()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + ownership, SELECT from addon_provider_tags by provider_id.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getTags()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the provider's tags, sorted. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

@@ -2,8 +2,8 @@
 
 package models
 
-// VersionsConfig The advertised version set — OVD `VersionsConfig`.  Source: references/legacy/ovd/modules/kuberne...
+// VersionsConfig The Kubernetes versions the platform offers, and the one a cluster creation uses when it names none.
 type VersionsConfig struct {
-	Available []Version `json:"available"` // Versions create and upgrade accept, **descending** — OVD renders this through `Ordering[Version]....
+	Available []Version `json:"available"` // Versions cluster creation and upgrade accept, newest first.
 	Default   Version   `json:"default"`   // Version a create payload gets when it names none.
 }

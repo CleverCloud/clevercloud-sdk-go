@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterLoadBalancer A load balancer, as embedded in the aggregate cluster view.  Source: references/legacy/ovd/module...
+// ClusterLoadBalancer A load balancer in front of the cluster, as embedded in a cluster's detail: its id, flavor, IP ad...
 type ClusterLoadBalancer struct {
 	DomainName string   `json:"domainName"`
 	Flavor     string   `json:"flavor"`

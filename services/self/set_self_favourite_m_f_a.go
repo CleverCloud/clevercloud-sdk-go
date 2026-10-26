@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Setselffavouritemfa PUT /v2/self/mfa/{kind} — set MFA as favourite.
+Setselffavouritemfa Set the preferred MFA
 
-📥 **Algo Source (Legacy):**
-Verify almighty + password re-auth, UPDATE users SET preferred_mfa_kind
-- Legacy note: cc-api SelfMFAAPI.java setFavoriteMFA()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfMFAAPI.java setFavoriteMFA()
-Issue: #102
+Makes this MFA kind the one asked at login. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). Answers 404 when no validated MFA of this kind is configured.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kind: MFA kind (TOTP, etc.)
+  - kind: MFA kind, case-insensitive: `TOTP`
 
 # Returns the operation result or an error
 

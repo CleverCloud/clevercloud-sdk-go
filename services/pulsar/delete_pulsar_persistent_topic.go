@@ -11,36 +11,16 @@ import (
 )
 
 /*
-Deletepulsarpersistenttopic DELETE /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/topics/{topic}
+Deletepulsarpersistenttopic Delete a persistent topic
 
-	— delete a persistent topic.
-
-**Legacy**: ovd PulsarController.scala:302 deletePersistentTopicServerEndpoint()
-**Algorithm**:
-  - Ownership verified via withTopicOwner helper (line 80)
-  - Delegates to PulsarTopicService.deletePersistentTopic (line 140)
-  - Scala calls HttpPulsarAdminClient.deletePersistentTopic with partitioned+force flags
-
-**Conformity**: FAITHFUL — proxies to
-
-	`PulsarAdminClient::delete_persistent_topic` (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala deletePersistentTopicServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala deletePersistentTopic
-Behavior: deletes the topic on the cluster, propagating
-
-	`partitioned`/`force` query params; returns 204 on success.
-	`partitioned` defaults to **true** on this route only — see
-	[`PersistentTopicDeleteQuery`].
-
-Issue: #8, #2875
+Deletes a persistent topic of the add-on's namespace; answers 204. `partitioned` defaults to `true` on this route (set it to `false` for a non-partitioned topic), and `force=true` deletes the topic even with connected producers or consumers. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
-  - topic: Topic name
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

@@ -14,6 +14,13 @@ import (
 CreateTardisAddon POST /v4/addon-providers/addon-tardis/addons — create addon (global).
 
 Algorithm: Insert new tardis addon record with ACTIVE status. Generate addon_id from UUID.
+
+	The owner is read from the request body: a user must be that owner when it is their personal
+	`user_…` space, or hold the `ADMIN`/`MANAGER`/`DEVELOPER` role in that `ACTIVE` organisation,
+	else 403, and `applicationId` must be an application it owns, else 404; the service account
+	is served, and 404 when the owner it names is not an existing user or an `ACTIVE`
+	organisation, and any other internal principal is refused 403 (refs #4431).
+
 Legacy: ovd tardis addon create
 Conformity: real
 

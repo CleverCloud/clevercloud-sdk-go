@@ -2,13 +2,13 @@
 
 package models
 
-// AvailableInstanceView AvailableInstanceView — matches cc-api openapi/ccapiv3.json AvailableInstanceView schema.  Source...
+// AvailableInstanceView AvailableInstanceView — matches cc-api openapi/ccapiv3.json AvailableInstanceView schema.  Thirte...
 type AvailableInstanceView struct {
 	BuildFlavor   *Flavor             `json:"buildFlavor,omitempty"`
 	ComingSoon    bool                `json:"comingSoon"`
 	DefaultFlavor *Flavor             `json:"defaultFlavor,omitempty"`
 	Deployments   []string            `json:"deployments"`
-	Description   string              `json:"description"`
+	Description   string              `json:"description"` // Nullable, as `ccapidto AvailableInstanceView.java:17` declares it: a NULL `instance_types.descrip...
 	Enabled       bool                `json:"enabled"`
 	Flavors       []Flavor            `json:"flavors"`
 	MaxInstances  InstanceCount       `json:"maxInstances"`
@@ -17,5 +17,4 @@ type AvailableInstanceView struct {
 	Type          string              `json:"type"`
 	Variant       InstanceVariantView `json:"variant"`
 	Version       string              `json:"version"`
-	Zones         []string            `json:"zones,omitempty"` // Available zones for this instance type. Source: cc-api AvailableInstanceView — zones field (list ...
 }

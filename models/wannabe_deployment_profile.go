@@ -2,9 +2,10 @@
 
 package models
 
-// WannabeDeploymentProfile The create / update request body — the same triple, un-redacted.  Source: ovd models/DeploymentPr...
+// WannabeDeploymentProfile Request body to create or replace a Kubernetes deployment profile: the zone it serves and its con...
 type WannabeDeploymentProfile struct {
-	LocationID  string `json:"locationId"`
-	ProfileData any    `json:"profileData"`
-	RegionID    string `json:"regionId"`
+	ProdDefault *bool   `json:"prodDefault,omitempty"` // `PUT` only, refused on `POST` (the first profile of a zone becomes its default, later ones do not...
+	ProfileData any     `json:"profileData"`
+	RegionID    *string `json:"regionId,omitempty"` // Optional; when sent, it must equal `profileData.regionId`.
+	ZoneID      string  `json:"zoneId"`             // The zone this profile serves, by uuid (zone names are not unique). Required; the zone must exist.
 }

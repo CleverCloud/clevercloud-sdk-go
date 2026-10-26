@@ -12,16 +12,9 @@ import (
 )
 
 /*
-Preorderaddonbyorgaid POST /v2/organisations/{id}/addons/preorders — preview addon creation cost for org.
+Preorderaddonbyorgaid Preview the order of an add-on for an organisation
 
-Source: cc-api OrganisationAddonsAPI.java preorderAddon()
-Source: cc-api AddonHelper.java:591-618 (preorder — returns zero-cost PurchaseOrder)
-Behavior: checks org membership, returns zero-cost preorder (same as cc-api).
-Issue: #108
-
-Algorithm: Verify org membership, return zero-cost preorder (same as cc-api)
-Legacy: cc-api OrganisationAddonsAPI.java preorderAddon()
-Conformity: faithful -- matches cc-api zero-cost behavior
+Returns the invoice preview of an add-on order for the organisation. The request body is not read: the preview is a zero-amount order carrying the organisation's billing details. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

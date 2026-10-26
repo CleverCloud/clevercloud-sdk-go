@@ -11,34 +11,21 @@ import (
 )
 
 /*
-Deletedeploymentprofile DELETE /v4/kubernetes/admin/deployment-profiles/{location_id}
+Deletedeploymentprofile Delete a Kubernetes deployment profile
 
-📥 **Algo Source (Legacy):**
-Delete a location's deployment profile.
-- `requireBasicAuth` → 403 otherwise
-- `repository.delete`; 0 affected rows → 404
-- 204 No Content on success
-- Source: ovd DeploymentProfileController.scala:119-139
-
-🔧 **Algo Rust (Implementation):**
-- `AdminAccess` extractor → 403; `validate_location_id` → 400
-- `delete` → 0 rows ⇒ 404; else 204 with no body
-
-Source: ovd controllers/DeploymentProfileController.scala:119-139
-Schema: deployment_profile (V2.18.0__create_deployment_profile_table.sql)
-Issue: #1625
+Deletes the profile; 404 when it does not exist, 409 when it is its zone's production default while the zone has other profiles, or when a cluster that is not deleted uses it. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId: Location id (location_<uuid>)
+  - profileId: Deployment profile ID (`kubernetes_deployment_profile_<uuid>` or `kubernetesDeploymentProfile_<uuid>`)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Deletedeploymentprofile(ctx, client, tracer, locationId)
+	response := kubernetes.Deletedeploymentprofile(ctx, client, tracer, profileId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -47,11 +34,11 @@ Example:
 x-service: kubernetes
 operationId: deleteDeploymentProfile
 */
-func Deletedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, locationId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteDeploymentProfile", trace.WithAttributes(attribute.String("locationId", locationId)))
+func Deletedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, profileId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteDeploymentProfile", trace.WithAttributes(attribute.String("profileId", profileId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", locationId)
+	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", profileId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

@@ -12,40 +12,22 @@ import (
 )
 
 /*
-Triggerkubernetesclusterredeploy POST /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id}/redeploy — redeploy cluster.
+Triggerkubernetesclusterredeploy Redeploy a cluster
 
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — triggerRedeploy
-Source: references/legacy/ovd/modules/kubernetes/services/ClusterCRUDService.scala:400-429, 616-666
-
-	— redeployControlPlane (hook validation, then the status transition)
-
-Behavior: triggers cluster redeployment; optional `beforeYamls`/`afterYamls`
-
-	hooks are validated synchronously (400) and recorded on the
-	`TO_REDEPLOY` status row's labels.
-
-Issues: #667, #2077
-
-**Legacy**: ovd ClusterController.scala triggerKubernetesClusterRedeploy()
-**Algorithm**:
-  - Validate the optional YAML hook payload — 400 before any status change
-  - Set cluster status=TO_REDEPLOY, insert cluster_status record carrying
-    the hooks in OVD's `RedeployHookLabels` shape
-  - Actual redeployment is async via the deployment pipeline, which reads
-    the hooks back in `reconciler::runtime::redeploy_hooks_from_labels`
+Starts a redeployment of the control plane and a roll of the worker nodes, carried out asynchronously. The optional body adds YAML manifests applied before and after the control plane switch (400 when invalid) and the `drainPolicy` of the roll; 409 when a node group is not ready to roll, the message naming each group and why. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -54,11 +36,11 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterRedeploy
 */
-func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
-	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)

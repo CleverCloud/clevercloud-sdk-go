@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Getapplicationdeployment GET /v2/self/applications/{app_id}/deployments/{deployment_id} — single deployment.
+Getapplicationdeployment Get a deployment of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationDeployment()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:58-61 getDeployment() -> ApplicationHelper.java:564-614 getDeployment()
-Algorithm: Shape S1 runs before the deployment lookup; a missing deployment remains 400 DEPLOYMENT_NOT_FOUND/4102.
-Conformity: faithful — personal org_id, canAccessApps, owner-scoped 404/4004, and SQL lookup by composite key; uuid-only
-like legacy (no deploy-number fallback), and an unresolvable id answers
-400 DEPLOYMENT_NOT_FOUND (id 4102) as legacy does, not 404. Issues: refs #2004, #2228
+Returns one deployment of an application of the user's personal space. An unknown deployment ID answers 400 (error id 4102).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - deploymentId: Deployment ID
 
 # Returns the operation result or an error

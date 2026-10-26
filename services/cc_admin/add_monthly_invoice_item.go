@@ -12,18 +12,9 @@ import (
 )
 
 /*
-AddMonthlyInvoiceItem **Legacy**: cc-api InternalOrganisationsAPI.java:210 addItemToMonthlyInvoice()
-**Algorithm**:
-  - Returns 501 NOT_IMPLEMENTED (faithful reproduction of Java behavior)
+AddMonthlyInvoiceItem Add an item to the monthly invoice of an organisation (not implemented)
 
-**Conformity**: YES — faithful 501, Java also returns NOT_IMPLEMENTED
-
-POST /v2/internal/organisations/{id}/monthlyinvoice — add item to monthly invoice.
-
-Source: cc-api InternalOrganisationsAPI.java — NOT_IMPLEMENTED in Java too
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: returns 501 NOT_IMPLEMENTED (faithful reproduction of Java behavior)
-Issue: #634
+Not implemented: answers 501 Not Implemented to any authenticated caller.
 
 Parameters:
   - ctx: context for the request

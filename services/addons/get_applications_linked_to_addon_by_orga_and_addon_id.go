@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getapplicationslinkedtoaddonbyorgaandaddonid GET /v2/organisations/{id}/addons/{addon_id}/applications — get linked applications.
+Getapplicationslinkedtoaddonbyorgaandaddonid List the applications linked to an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java getApplicationsLinkedToAddon()
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, return linked apps
-Legacy: cc-api OrganisationAddonsAPI.java getApplicationsLinkedToAddon()
-Conformity: faithful -- IDOR fix: addon ownership check
+Returns the applications the add-on is linked to. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

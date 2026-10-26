@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getproviderinfo GET /v2/organisations/{id}/addonproviders/{provider_id} — get one addon provider.
+Getproviderinfo Get an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getAddonProvider()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ownership + membership, fetch by provider_id.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getAddonProvider()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the add-on provider with its plans, features and zones; 404 when the organisation owns no such provider. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

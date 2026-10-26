@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Deleteprovider DELETE /v2/organisations/{id}/addonproviders/{provider_id} — soft-delete addon provider.
+Deleteprovider Delete an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java deleteAddonProvider()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN role + ownership, SET deletiondate = NOW().
-- Legacy note: cc-api OrganisationAddonProviderAPI.java deleteAddonProvider()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Marks the add-on provider as deleted. Requires the `ADMIN` or `MANAGER` role; 404 when the organisation owns no such provider. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

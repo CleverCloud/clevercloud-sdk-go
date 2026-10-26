@@ -11,24 +11,16 @@ import (
 )
 
 /*
-Getnetworkgroupstream GET /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}/stream
+Getnetworkgroupstream Stream a network group
 
-Source: ovd NetworkGroupController.scala networkGroupSSELogic → NetworkgroupConfStreamer
-Behavior: `text/event-stream`. Polls the NG every 15s (first read
-
-	immediate) and emits its JSON (sorted keys) whenever `version` grew; a
-	`HEARTBEAT` event fires after 5s of silence; the stream completes when
-	the NG disappears (or changes owner). 404 unknown NG / 403 owner
-	mismatch before any streaming, like the plain GET.
-
-Issue: #313, #849, #2805
+Server-Sent Events stream of the network group JSON, sent whenever its version changes (checked every 15 seconds), with a `HEARTBEAT` event after 5 seconds of silence; it ends when the group disappears. Browser clients that cannot set headers may pass the base64 of their `Authorization` header in the `authorization` query parameter. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

@@ -11,22 +11,17 @@ import (
 )
 
 /*
-Deleteapplicationdependencybyorgaandappid DELETE /v2/organisations/{id}/applications/{app_id}/dependencies/{dep_id} — remove org dep.
+Deleteapplicationdependencybyorgaandappid Remove a dependency from an application
 
-Legacy: cc-api ApplicationDependenciesHelper.java:143-151 removeDependency()
-Algorithm: Auth + org membership check; remove the RAW dependency link; success is a bodyless 200
-Conformity: faithful — matches the self twin: raw `{dependencyId}` path segment, 404 APPLICATION_NOT_FOUND, bodyless 200
-
-Source: cc-api OrganisationApplicationDependenciesAPI.java removeDependency()
-Issue: #107
+Removes a dependency of an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - dependencyId: Dependency application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - dependencyId: ID of the dependency application (`app_…`)
 
 # Returns the operation result or an error
 

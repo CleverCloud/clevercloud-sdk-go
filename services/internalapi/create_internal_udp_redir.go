@@ -12,22 +12,15 @@ import (
 )
 
 /*
-CreateInternalUdpRedir Legacy: cc-api InternalApplicationsAPI.java:168 addUdpRedirToApp()
-Algorithm: internal gate, then checkRedir's tail: resolve the application and its OWNER,
-resolve the namespace inside that owner (404), 409 on a duplicate, ALLOCATE the port,
-INSERT. No hayxorp — legacy commented the publish out.
-Conformity: partial — the tail is faithful; the `isCCAdmin() || isAddonAPI()` gate is not
+CreateInternalUdpRedir Create a UDP redirection for an application
 
-POST /v2/internal/applications/{appId}/udpRedirs — add UDP redir (internal).
-
-Source: cc-api InternalApplicationsAPI.java:168 addUdpRedirToApp()
-Issue: #159
+Allocates a port in the namespace named in the body and redirects its UDP traffic to any application, with no owner check. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

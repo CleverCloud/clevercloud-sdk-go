@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterStatusType represents Cluster status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/Clus...
+// ClusterStatusType represents Lifecycle status of a Kubernetes cluster. Responses never show a queued `TO_*` operation: they sh...
 type ClusterStatusType string
 
 const (

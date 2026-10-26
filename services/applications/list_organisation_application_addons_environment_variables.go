@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Listorganisationapplicationaddonsenvironmentvariables GET /v2/organisations/{id}/applications/{app_id}/addons/env — env of linked addons.
+Listorganisationapplicationaddonsenvironmentvariables List the environment variables of the linked add-ons
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationLinkedAddonsEnv()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:3838-3845 getEnvOfAddonsLinkedToApplication()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(canAddApp) then the owner-scoped application lookup answering 404 APPLICATION_NOT_FOUND; For each linked addon, fetch addon env vars (encrypted values decrypted); Return as Link...
-Conformity: faithful — shape S4: canAddApp (not a vague org-membership check), 404 APPLICATION_NOT_FOUND on the owner-scoped lookup miss; same query pattern, same LinkedAddonEnvironmentView shape. Refs #2211
+Returns, for each add-on linked to an organisation's application, the environment variables it provides to the application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Getnetworkgrouphealthconstraint `GET /v4/networkgroup/health/{constraintName}` — one constraint, run fresh;
-the thin documented wrapper over [`api_health::constraint_health`].
+Getnetworkgrouphealthconstraint Check one health constraint of the network group service
 
-Doc carrier for `getNetworkGroupHealthConstraint`; the framework serves the
-route — do not mount.
-
-Sanitized, 200 or 503. An unknown name is the `clever.core.not-found` 404; a
-name failing the refinement is a 400.
-
-Issues: #3025
+Runs the named health constraint now and returns its status, message and duration. Answers 200 when it is healthy, 503 otherwise, 404 for an unknown constraint. Reserved for platform monitoring, with the deployment's health credential.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`zookeeper`, `pulsar`, `cache`, `registry`)
+  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`zookeeper`, `pulsar`, `cache`, `registry`, `action-executor-requests-dropped`)
 
 # Returns the operation result or an error
 

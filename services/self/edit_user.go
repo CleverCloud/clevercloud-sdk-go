@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Edituser PUT /v2/self — update the current user profile.
+Edituser Update the current user
 
-📥 **Algo Source (Legacy):**
-Validate name<=254, apply non-null fields to users+owner_info, propagate name to self-org, publish AccountEditionEvent
-- Legacy note: cc-api SelfAPI.java:102 editUser() -> UsersHelper.java:370 edit(), User.java absorb(WannabeUser)
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java editUser()
-Source: cc-api User.java absorb(WannabeUser) — only non-null fields applied
-Side effect: if name changes, updates self-org name/customerFullName
-Issue: #102
+Updates the fields present in the body (name, phone, language, postal address, country) and leaves the others unchanged; a new name is also applied to the user's personal space. Returns the updated profile. Requires the `manage_personal_information` right; a name over 254 characters or an unknown country code answers 400.
 
 Parameters:
   - ctx: context for the request

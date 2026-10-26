@@ -4,7 +4,7 @@ package models
 
 import "encoding/json"
 
-// Peer A peer — Clever-managed (`CleverPeer`, a PaaS instance on a hypervisor) or customer-managed (`Ext...
+// Peer A WireGuard node of a network group, told apart by `type`: a `CleverPeer` is managed by Clever Cl...
 // Tagged union - can hold one of: map[string]any, map[string]any
 type Peer struct {
 	raw json.RawMessage

@@ -2,7 +2,7 @@
 
 package models
 
-// Message Standard cc-api message response, used for 501 faithful errors.  Source: cc-api Message.java — id...
+// Message Message returned by some operations: a numeric `id`, a `type` (`error`, `success`…) and a human-r...
 type Message struct {
 	ID      int    `json:"id"`
 	Message string `json:"message"`

@@ -12,33 +12,16 @@ import (
 )
 
 /*
-GetPulsarConsumption POST /v4/pulsar/organisations/{owner_id}/pulsar/{pulsar_id}/consumption
+GetPulsarConsumption Compute one Pulsar add-on's consumption
 
-	— billed consumption for a single Pulsar addon.
-
-**Not a legacy route.** The legacy exposes only the per-owner `GET`
-(`ProductConsumptionComponent.createEndpoint`); this is axo's own
-single-addon shorthand. It answers the same `ResourceConsumption` envelope,
-so a caller can use either.
-
-It resolves the addon through the same billable-addon query as the per-owner
-endpoint, so the two cannot disagree about what is billed. That narrows what
-it answers for: a system-plan (`ORGANISATION_*`) addon and a window that
-does not overlap the addon's lifetime are now `404` where an earlier
-revision returned an empty entry list. Both are the honest answer — there is
-no consumption to report — and the caller is the internal billing service,
-which reaches the per-owner endpoint for the billable set.
-
-Source: references/legacy/ovd/modules/pulsar/services/PulsarConsumptionService.scala
-Schema: addon (id, owner_id, namespace, creation_date, deletion_date, plan)
-Issue: #8, #416, #1063
+Called by the platform's billing service. Returns the hourly billed consumption of one add-on of the owner over the body's `from`/`to` window (RFC 3339; the last 30 days by default), clamped to the add-on's lifetime. An add-on the owner does not hold answers 404, and 501 means consumption metrics are not available on this deployment.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - owner_id: Owner (user or org) ID
-  - pulsar_id: Pulsar addon ID
+  - owner_id: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - pulsar_id: Pulsar add-on ID (`pulsar_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -54,14 +37,14 @@ Example:
 x-service: pulsar
 operationId: get_pulsar_consumption
 */
-func GetPulsarConsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, pulsar_id string, requestBody *models.PulsarConsumptionQuery) client.Response[models.PulsarResourceConsumptionView] {
+func GetPulsarConsumption(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string, pulsar_id string, requestBody *models.PulsarConsumptionQuery) client.Response[models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "get_pulsar_consumption", trace.WithAttributes(attribute.String("owner_id", owner_id), attribute.String("pulsar_id", pulsar_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/pulsar/organisations/%s/pulsar/%s/consumption", owner_id, pulsar_id)
 
 	// Make API call
-	response := client.Post[models.PulsarResourceConsumptionView](ctx, c, path, requestBody)
+	response := client.Post[models.ResourceConsumption](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -6,6 +6,7 @@ package models
 type DeploymentStepType string
 
 const (
+	DeploymentStepTypeApiServerDns                DeploymentStepType = "API_SERVER_DNS"
 	DeploymentStepTypeNetworkGroupCreation        DeploymentStepType = "NETWORK_GROUP_CREATION"
 	DeploymentStepTypeLoadBalancerNetworkCreation DeploymentStepType = "LOAD_BALANCER_NETWORK_CREATION"
 	DeploymentStepTypeMateriaLogicaldb            DeploymentStepType = "MATERIA_LOGICALDB"

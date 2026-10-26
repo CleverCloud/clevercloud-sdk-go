@@ -12,22 +12,9 @@ import (
 )
 
 /*
-ListOrgsPendingVat **Legacy**: cc-api InternalOrganisationsAPI.java:175 getPendingVAT()
-**Algorithm**:
-  - SELECT organisations WHERE vat_state = 'PENDING_VALIDATION', paginated
-  - Return id, name, company, vat_state
+ListOrgsPendingVat List the organisations whose VAT number awaits validation
 
-**Conformity**: YES — filter on vat_state matches cc-api
-
-GET /v2/internal/organisations/pending_vat — list organisations with pending VAT validation.
-
-Source: cc-api InternalOrganisationsAPI.java:175 getPendingVatOrganisations()
-Spec: analysis-output/34-ccadmin-analysis.md §Internal API Calls
-Behavior: 401 not internal (and no cc-admin session), 403 internal without BOTH
-
-	access_organisations and access_organisations_bills, 200 with list
-
-Issue: #389, #2018
+Returns the organisations in the `PENDING_VALIDATION` VAT state, paginated with `offset` and `limit`. Restricted to platform services holding the organisation and billing access rights.
 
 Parameters:
   - ctx: context for the request

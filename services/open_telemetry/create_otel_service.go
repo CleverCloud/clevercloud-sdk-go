@@ -14,7 +14,9 @@ import (
 /*
 Createotelservice POST /v4/otel/organisations/{owner_id}/namespaces/{otel_id}/services —
 register a service and obtain its write token. **Idempotent**: repeating a
-name answers the existing service with the same token, still 201.
+name answers the existing service with the same token, still 201. The
+first service of a reserved namespace provisions it on its gateway first;
+a gateway failure is the 500, and the namespace stays reserved.
 
 Parameters:
   - ctx: context for the request

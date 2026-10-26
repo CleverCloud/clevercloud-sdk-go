@@ -2,7 +2,7 @@
 
 package models
 
-// CellarAddonStatus represents Cellar addon lifecycle status.  Source: references/legacy/ovd/modules/cellar/models/package.scala...
+// CellarAddonStatus represents Lifecycle status of a Cellar add-on: `ACTIVE`, `TO_DELETE` (deletion requested), `DELETING` or `D...
 type CellarAddonStatus string
 
 const (

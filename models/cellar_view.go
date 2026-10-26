@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// CellarView Full Cellar addon view returned by GET /v4/addon-providers/addon-cellar/addons/{id}.  Source: ref...
+// CellarView A Cellar add-on: identity, plan, lifecycle status, traffic and bucket statistics.
 type CellarView struct {
-	AddonID      string       `json:"addonId"`                // cc-api addon ID
+	AddonID      string       `json:"addonId"`                // Add-on ID (`addon_…`).
 	Buckets      BucketsCount `json:"buckets"`                // Bucket statistics
 	CreationDate time.Time    `json:"creationDate"`           // Creation timestamp
 	DeletionDate *time.Time   `json:"deletionDate,omitempty"` // Deletion timestamp
-	ID           string       `json:"id"`                     // Provider-internal resource ID (cellar_*)
+	ID           string       `json:"id"`                     // Cellar resource ID (`cellar_…`).
 	Name         string       `json:"name"`                   // Human-readable name
 	OwnerID      string       `json:"ownerId"`                // Owner (user or org) ID
 	Plan         string       `json:"plan"`                   // Plan slug

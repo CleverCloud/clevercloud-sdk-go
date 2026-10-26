@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Renewtoken
+Renewtoken PUT /v4/tenants/{tenantId}/tokens/{tokenId}/refresh
 
 Parameters:
   - ctx: context for the request

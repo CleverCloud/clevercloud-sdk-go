@@ -13,32 +13,16 @@ import (
 )
 
 /*
-V4GetOrgApplicationDeployments Legacy: Console3 v4 orchestration (no cc-api equivalent — OVD OrchestrationRoutes)
-Algorithm: Shape D1 authorization and the same rows as the v2 route, rendered as the v4 DeploymentView
-Conformity: faithful shape, partial data — `steps` carries the current state only, `origin.source`/`priority`/`constraints` and `version.previousCommitId` are not columns of `deployments`
+V4GetOrgApplicationDeployments List the deployments of an application
 
-GET /v4/orchestration/organisations/{id}/applications/{app_id}/deployments
-
-Serves the v4 body, NOT the v2 one. This was a path alias delegating to the v2
-handler until #313 follow-up: it answered 200 with `{id, uuid, date, state,
-action, commit, cause, instances, author}` where the v4 consumer reads
-`{id, startDate, state, steps, version, origin}`. Console3's runtime-logs
-component reads `version.commitId` and `steps.find(...)` unguarded, so the v2
-body did not under-populate its view — it threw. And because that component
-falls back to the v2 endpoint only on a 404, answering 200 defeated the very
-fallback that would have rescued it.
-
-Source: ovd core/.../orchestration/models/Deployment.scala:100 (DeploymentView)
-Source: @clevercloud/components cc-logs-app-runtime.smart.js — _convertV4
-Spec: analysis-output/38-github-api-consumers.md §Console3 — v4 orchestration
-Issue: #313
+Returns the deployments of an organisation's application, paginated with `limit` and `offset`. Requires membership of the organisation. Superseded by the `/v4/paas/` spelling of this path.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - app_id: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - app_id: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

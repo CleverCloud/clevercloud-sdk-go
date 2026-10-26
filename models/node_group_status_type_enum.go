@@ -2,12 +2,13 @@
 
 package models
 
-// NodeGroupStatusType represents Node group status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/N...
+// NodeGroupStatusType represents Lifecycle status of a node group. Responses never show a queued operation: `TO_RESIZE` shows as `...
 type NodeGroupStatusType string
 
 const (
 	NodeGroupStatusTypePENDING     NodeGroupStatusType = "PENDING"
 	NodeGroupStatusTypeCREATED     NodeGroupStatusType = "CREATED"
+	NodeGroupStatusTypeToResume    NodeGroupStatusType = "TO_RESUME"
 	NodeGroupStatusTypeDEPLOYING   NodeGroupStatusType = "DEPLOYING"
 	NodeGroupStatusTypeDEPLOYED    NodeGroupStatusType = "DEPLOYED"
 	NodeGroupStatusTypeToResize    NodeGroupStatusType = "TO_RESIZE"

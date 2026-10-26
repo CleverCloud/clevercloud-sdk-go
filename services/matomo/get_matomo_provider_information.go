@@ -11,15 +11,9 @@ import (
 )
 
 /*
-Getmatomoproviderinformation GET /v4/addon-providers/addon-matomo — provider console view.
+Getmatomoproviderinformation Get the Matomo provider information
 
-📥 Algo Source (Legacy): `getProviderInformations` — `providerId="addon-matomo"`,
-`dedicated` = each available version → features `[materia-kv:true,
-access-domain:false]`, default = `availableVersions.last`.
-
-🔧 Algo Rust: same, built from config. `.authenticated`.
-
-Issue: #660
+Returns the Matomo versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
 Parameters:
   - ctx: context for the request

@@ -2,8 +2,9 @@
 
 package models
 
-// WannabePassword Change password input for PUT /v2/self/change_password.  Source: cc-api SelfAPI.java changePasswo...
+// WannabePassword A password change: the current password, the new one, and whether to revoke the user's other OAut...
 type WannabePassword struct {
+	DropTokens  *bool   `json:"dropTokens,omitempty"` // Revoke every other OAuth1 access token of the user, keeping the one that made this request.
 	NewPassword string  `json:"newPassword"`
 	OldPassword *string `json:"oldPassword,omitempty"`
 }

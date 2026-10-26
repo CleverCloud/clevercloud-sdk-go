@@ -15,12 +15,12 @@ RedisSetAsSlave PUT /v2/providers/redis-addon/dashboard/master — Set this addo
 
 **Legacy**: addon-api-redis Dashboard.scala setAsSlave()
 **Algorithm**:
-  - Returns 501 — requires direct instance replication command.
+  - Resolves the addon from the Sessioned token, then masterauth + SLAVEOF + CONFIG REWRITE.
 
-**Conformity**: YES (Cloud Versatile conditional — works when configured)
+**Conformity**: YES
 
 Source: references/legacy/addon-api/redis/app/controllers/Dashboard.scala — setAsSlave
-Behavior: 501 conditional stub — requires direct Redis SLAVEOF command.
+Behavior: real SLAVEOF via `crate::replication`; the only 501 comes from the session gate (no ENCRYPTION_KEY).
 Issue: #713
 
 Parameters:

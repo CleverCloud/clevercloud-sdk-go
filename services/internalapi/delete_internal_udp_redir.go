@@ -12,21 +12,15 @@ import (
 )
 
 /*
-DeleteInternalUdpRedir Legacy: cc-api InternalApplicationsAPI.java:182-187 removeUdpRedirFromApp()
-Algorithm: Legacy: authInternal(), reject a missing namespace with 400, resolve it by primary key, DELETE by (namespace, sourcePort). No hayxorp — legacy commented the publish out.
-Conformity: faithful on the namespace rungs; the `isCCAdmin() || isAddonAPI()` gate is still axo's broader `is_internal()`, and the `aph.find`/`aph.getOwner` probes (:2230-2235) are unported
+DeleteInternalUdpRedir Delete a UDP redirection of an application
 
-DELETE /v2/internal/applications/{appId}/udpRedirs/{sourcePort} — remove UDP redir (internal).
-
-Source: cc-api InternalApplicationsAPI.java:182-187 removeUdpRedirFromApp()
-Source: cc-api ApplicationHelper.java:2221-2240 removeUdpRedir()
-Issue: #159, refs #2403
+Removes the UDP redirection of the given port, in the namespace named by the `namespace` query parameter, from any application. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - app_id: Application ID
+  - app_id: Application ID (`app_…`)
   - source_port: Source port
   - opts: optional query parameters
 

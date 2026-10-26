@@ -2,7 +2,7 @@
 
 package models
 
-// UnloadTopicRequest Request to unload a topic from the broker.  Source: references/legacy/ovd/modules/pulsar/models/p...
+// UnloadTopicRequest Request body to unload a topic from its broker.
 type UnloadTopicRequest struct {
 	Persistent bool   `json:"persistent"` // Whether the topic is persistent
 	TopicName  string `json:"topicName"`  // Topic name to unload

@@ -11,15 +11,9 @@ import (
 )
 
 /*
-ArsGetGitInfo Legacy: cc-api InternalARSAPI.java:155 getGitInfo()
-Algorithm: Legacy: get user by ID, build greeting text; Legacy: list personal apps (owner_id = user_id); Legacy: list org apps w...
-Conformity: faithful — full implementation with personal + org apps, role check
+ArsGetGitInfo Get the Git welcome text of a user
 
-Get git info text for a user (SSH welcome message listing accessible apps).
-
-Source: cc-api InternalARSAPI.java:155 getGitInfo()
-Behavior: builds a text listing personal + org apps the user can access.
-Issue: #709
+Returns the text shown to a user connecting to the Git service, listing the applications the user can access. Restricted to the Git repository service.
 
 Parameters:
   - ctx: context for the request

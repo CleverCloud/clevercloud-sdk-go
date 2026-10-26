@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentEventStatus represents Legacy wire vocabulary for [`DeploymentEventView::status`].  `Skipped` is never produced by the f...
+// DeploymentEventStatus represents Status of a deployment event: `STARTED`, `COMPLETED` or `FAILED`. `SKIPPED` is part of the vocabu...
 type DeploymentEventStatus string
 
 const (

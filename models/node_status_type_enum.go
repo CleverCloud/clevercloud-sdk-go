@@ -2,7 +2,7 @@
 
 package models
 
-// NodeStatusType represents Node status type.  Source: references/legacy/ovd/modules/kubernetes/models/types/statuses/NodeSta...
+// NodeStatusType represents Lifecycle status of a Kubernetes node. `DRAINING` means the node is cordoned while its pods are e...
 type NodeStatusType string
 
 const (

@@ -4,13 +4,13 @@ package models
 
 import "time"
 
-// ContainerRegistryAddonView Legacy container registry addon view (Heroku addon protocol compatibility).  Source: references/l...
+// ContainerRegistryAddonView How the provider surface describes a provisioned registry.  `status` is `core-addon-provider`'s o...
 type ContainerRegistryAddonView struct {
-	AddonID      string    `json:"addonId"`      // cc-api addon ID (from provision request)
-	CreationDate time.Time `json:"creationDate"` // Creation timestamp
-	Host         string    `json:"host"`         // Registry host (e.g. registry-xxx.services.clever-cloud.com)
-	OwnerID      string    `json:"ownerId"`      // Owner (user or org) ID
-	Plan         string    `json:"plan"`         // Plan identifier
-	ResourceID   string    `json:"resourceId"`   // Container registry addon resource ID
-	Status       string    `json:"status"`       // Addon lifecycle status
+	AddonID      string      `json:"addonId"`      // The addon id cc-api knows the resource by.
+	CreationDate time.Time   `json:"creationDate"` // When it was provisioned.
+	Host         string      `json:"host"`         // The registry host a client authenticates against.
+	OwnerID      string      `json:"ownerId"`      // The owning organisation or user.
+	Plan         string      `json:"plan"`         // The plan the addon was provisioned on.
+	ResourceID   string      `json:"resourceId"`   // The provider-internal resource id — the registry.
+	Status       AddonStatus `json:"status"`       // The addon's lifecycle status.
 }

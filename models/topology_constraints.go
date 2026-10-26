@@ -2,9 +2,9 @@
 
 package models
 
-// TopologyConstraints One topology's constraints — OVD `TopologyConstraints`.  Source: references/legacy/ovd/modules/ku...
+// TopologyConstraints What a control-plane topology accepts: its flavors and its replication-factor bounds.
 type TopologyConstraints struct {
-	AvailableFlavors  []NodeFlavor            `json:"availableFlavors"`  // Flavors this topology accepts, **ascending by (cpu, ram)** — OVD's `SortedSet[Flavor]` under `Ord...
+	AvailableFlavors  []NodeFlavor            `json:"availableFlavors"`  // Flavors this topology accepts, sorted by ascending CPU count, then RAM.
 	ReplicationFactor ReplicationFactorConfig `json:"replicationFactor"` // Replication-factor bounds, the same on every topology.
 	Topology          TopologyType            `json:"topology"`          // The topology these constraints apply to.
 }

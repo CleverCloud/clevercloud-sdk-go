@@ -12,21 +12,9 @@ import (
 )
 
 /*
-Updateorganisation PUT /v2/organisations/{id} — update an organisation.
+Updateorganisation Update an organisation
 
-Source: cc-api OrganisationAPI.java editOrganisation()
-Source: cc-api Organisation.java absorb() — full replace, not partial
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify EditOrg permission (ADMIN, MANAGER only), Validate name (required, max 255), description (required, max 4096), Full replace (not partial) — absorb() overwrites all fields, VAT state reset to INVALID only if VAT value actually changed, Transaction: update organisations + owner_info atomically, Publish OrganisationEditionEvent (RabbitMQ + Pulsar)
-- Legacy note: cc-api OrganisationHelper.java:248 edit() -> Organisation.java:300 absorb()
-
-🔧 **Algo Rust (Implementation):**
-  - country is normalised through ccapi::db::country::country_code_safe before the
-    owner_info UPDATE — absorb()'s getCountryCodeSafe, Organisation.java:291-295;
-    an identity behind the validateCountryCode gate above (refs #2620)
-  - Conformity: faithful
+Replaces the organisation's details with the body and returns the result; `name` (at most 128 characters) and `description` (at most 256) are mandatory. Requires the `ADMIN` or `MANAGER` role; a deleted organisation answers 403. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

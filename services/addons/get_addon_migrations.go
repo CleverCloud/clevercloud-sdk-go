@@ -11,27 +11,16 @@ import (
 )
 
 /*
-Getaddonmigrations GET /v2/organisations/{id}/addons/{addon_id}/migrations — list addon migrations.
+Getaddonmigrations List the plan migrations of an add-on
 
-Source: cc-api OrganisationAddonsAPI.java getAddonMigrations()
-Source: cc-api AddonHelper.java:661-671 (getAddonMigrations)
-Source: cc-api AddonAPIHelper.java:278-298 (getMigrations — GET to provider)
-Behavior: checks membership + addon ownership, proxies GET /{real_id}/migrations
-
-	to the addon provider, forwards response.
-
-Issue: #108
-
-Algorithm: Verify org membership + addon ownership, proxy GET /{real_id}/migrations to provider
-Legacy: cc-api OrganisationAddonsAPI.java getAddonMigrations() -> AddonAPIHelper.getMigrations()
-Conformity: faithful -- provider proxy for migration list
+Returns the add-on's plan migrations as its provider reports them (provider-defined JSON, forwarded with the provider's status); an empty list for an add-on without provider. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 

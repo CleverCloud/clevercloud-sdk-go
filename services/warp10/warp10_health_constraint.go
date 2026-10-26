@@ -23,19 +23,22 @@ Three wire convergences landed with #2376, all deliberate:
     string is unchanged,
   - a name failing the `^[a-z][a-z0-9-]*$` refinement answers 400
     `clever.core.bad-request` instead of 404,
-  - the sanitized `message` is present-as-null on the wire instead of omitted.
+  - `message` is present-as-null on the wire instead of omitted.
 
 Doc carrier for `warp10_health_constraint`; the framework serves the route — do
 not mount.
 
+All four branches sit behind the health credential, so an anonymous caller cannot tell
+which one it would have reached (#3518).
+
 Source: ModuleHealthCheckComponent.scala:67-104 constraintEndpoint (Service.WARP10)
-Issues: #758, #2101, #2376, #2798
+Issues: #758, #2101, #2376, #2798, refs #3518
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`database`)
+  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`database`, `database-network`, `database-auth`, `database-schema`)
 
 # Returns the operation result or an error
 

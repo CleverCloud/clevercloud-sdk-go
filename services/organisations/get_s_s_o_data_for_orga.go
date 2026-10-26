@@ -12,18 +12,9 @@ import (
 )
 
 /*
-Getssodatafororga GET /v2/organisations/{id}/addonproviders/{provider_id}/sso — SSO data.
+Getssodatafororga Get the SSO data of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getSso()
-Phase 1: returns provider's SSO URL info.
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + ownership, SELECT production_sso_url/test_sso_url from addon_provider.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getSso()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the URL of the provider statistics dashboard and a macaroon, signed with the provider's password and valid for 15 minutes, to sign in to it. Requires the `ADMIN` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

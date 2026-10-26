@@ -2,8 +2,8 @@
 
 package models
 
-// ConsumptionDetail Per-interval consumption breakdown.  Source: references/legacy/ovd/core — ConsumptionDetail Schem...
+// ConsumptionDetail Per-interval breakdown of a consumption line: the width of each bucket (`interval`, an ISO 8601 d...
 type ConsumptionDetail struct {
-	Interval   string    `json:"interval"`   // Interval granularity (legacy uses `"hourly"`).
-	Quantities []float64 `json:"quantities"` // Quantity per interval period (`[1.0; days]`).
+	Interval   Interval  `json:"interval"`
+	Quantities []float64 `json:"quantities,omitempty"` // One value per `interval` bucket across the report's period.
 }

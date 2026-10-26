@@ -6,27 +6,22 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Getaddoninstances GET /v2/organisations/{id}/addons/{addon_id}/instances — list addon instances.
+Getaddoninstances List the running instances of an add-on
 
-Source: cc-api OrganisationAddonsAPI.java getAddonInstances()
-Phase 1: returns empty — addon instances come from OVD orchestration.
-Issue: #108
-
-Algorithm: Verify org RBAC + addon ownership, return empty (OVD integration pending)
-Legacy: cc-api OrganisationAddonsAPI.java getAddonInstances()
-Conformity: stub -- returns [] until OVD orchestration is wired
+Returns the running instances of an add-on of the organisation. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`)
 
 # Returns the operation result or an error
 
@@ -41,14 +36,14 @@ Example:
 x-service: addons
 operationId: getAddonInstances
 */
-func Getaddoninstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string) client.Response[client.Nothing] {
+func Getaddoninstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string) client.Response[[]models.SuperNovaInstanceView] {
 	ctx, span := tracer.Start(ctx, "getAddonInstances", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/%s/instances", id, addonId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]models.SuperNovaInstanceView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

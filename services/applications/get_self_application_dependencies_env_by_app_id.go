@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfapplicationdependenciesenvbyappid GET /v2/self/applications/{app_id}/dependencies/env — dependencies env vars.
+Getselfapplicationdependenciesenvbyappid List the environment variables of an application's dependencies
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationDependenciesEnv()
-Issue: #2228
-
-Legacy: SelfApplicationDependenciesHelper.java:30-33 getDependenciesEnv() -> ApplicationDependenciesHelper.java:56-73, :89-116
-Algorithm: Shape S3 — canAddApp and owner-scoped 404 APPLICATION_NOT_FOUND before the existing same-owner dependency-env filter.
-Conformity: enhanced — personal org_id and S3 guard are faithful. Refs #2228, #2594
+Returns, for each dependency of an application of the user's personal space, its ID, its name and its environment variables. A dependency owned by another owner is left out.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

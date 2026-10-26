@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Removeselfvhostbyappid DELETE /v2/self/applications/{app_id}/vhosts/{domain} — remove a vhost.
+Removeselfvhostbyappid Remove a domain name from an application
 
-Source: cc-api SelfApplicationsAPI.java removeSelfVhost()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:136-139 removeVhost() -> ApplicationHelper.java:1063-1088 removeVhost()
-Algorithm: Shape V4 without the internal exemption — canAddApp then owner-scoped 404 APPLICATION_NOT_FOUND before the unchanged vhost removal.
-Conformity: faithful — the whole self vhost resource is ah.auth(crc), so legacy's :1075 INTERNAL skip does not exist here and the guard does not carry it; DNS/ADC actions stay intact. Refs #2228
+Stops routing the given domain name to an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - domain: FQDN
+  - appId: Application ID (`app_…`)
+  - domain: Domain name (FQDN)
 
 # Returns the operation result or an error
 

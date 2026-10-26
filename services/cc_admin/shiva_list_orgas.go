@@ -12,21 +12,9 @@ import (
 )
 
 /*
-ShivaListOrgas **Legacy**: cc-api InternalShivaAPI.java:73 getOrgasForUser()
-**Algorithm**:
-  - Require `for` query param (user_id) — 400 if missing
-  - JOIN organisations -> organisation_members WHERE user_id, exclude deleted orgs
+ShivaListOrgas List the organisations of a user for the SSH gateway
 
-**Conformity**: PARTIAL — same org set; legacy floats the user's own org first then
-sorts case-insensitively and wraps the result in a `Choice`, this port sorts by name
-and answers a flat list. Left as-is (refs #1956).
-
-GET /v2/internal/shiva/orgas — Shiva: list organisations for a user.
-
-Source: cc-api InternalShivaAPI.java:73 getOrgasForUser()
-Schema: organisations JOIN organisation_members ON org.id = om.organisation_id
-Behavior: 401 no auth, 403 not almighty, 400 missing `for` param, 200 list
-Issues: #727, #1956
+Returns the organisations the user named by `for` belongs to, as a choice for the SSH gateway. Restricted to the SSH gateway service.
 
 Parameters:
   - ctx: context for the request
@@ -47,7 +35,7 @@ Example:
 x-service: cc_admin
 operationId: shiva_list_orgas
 */
-func ShivaListOrgas(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]models.ShivaOrgChoice] {
+func ShivaListOrgas(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.ShivaChoice] {
 	ctx, span := tracer.Start(ctx, "shiva_list_orgas")
 	defer span.End()
 
@@ -60,7 +48,7 @@ func ShivaListOrgas(ctx context.Context, c *client.Client, tracer trace.Tracer, 
 	}
 
 	// Make API call
-	response := client.Get[[]models.ShivaOrgChoice](ctx, c, path)
+	response := client.Get[models.ShivaChoice](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

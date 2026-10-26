@@ -13,18 +13,9 @@ import (
 )
 
 /*
-GetInternalAddonsByProvider GET /internal/addons/by-provider/{providerId} — list addons active between dates (internal).
+GetInternalAddonsByProvider List the add-ons of a provider active over a period
 
-Source: cc-api InternalAddonsAPI.java:146 getAddonsInternal()
-Behavior: returns addons from a specific provider that were active between `since` and `until`.
-
-	Active = created before `until` and (not deleted OR deleted after `since`).
-
-Issue: #709
-
-Algorithm: Internal auth, list addons for provider filtered by date range
-Legacy: cc-api InternalAddonsAPI.java getAddonsByProvider()
-Conformity: faithful -- used by billing/invoicing systems
+Returns, oldest first, the add-ons of the provider that existed at some point between `since` and `until`, deleted ones included. 400 when a date is missing or invalid, or when `until` is before `since`. Platform services only (403 otherwise).
 
 Parameters:
   - ctx: context for the request

@@ -26,7 +26,7 @@ a bare 500.
 
 Both publishes are AWAITED (the reference's `sendMessageAsJson` is
 synchronous on the channel) then discarded; an unconfigured publisher
-(no `messaging` feature / no broker) is the same discarded outcome — the
+(no broker) is the same discarded outcome — the
 200 still goes out, exactly like a broker the reference cannot reach.
 
 Source: references/legacy/addon-api/postgresql/app/controllers/Dashboard.scala:129-164 — startPIT

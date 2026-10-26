@@ -15,6 +15,10 @@ import (
 ListTardisAddons GET /v4/addon-providers/addon-tardis/organisations/{ownerId}/addons — list addons.
 
 Algorithm: Query tardis_addon table filtered by owner_id. Return all non-deleted addons.
+
+	The caller must be the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403 (refs #4431).
+
 Legacy: ovd tardis addon list
 Conformity: real
 

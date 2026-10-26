@@ -2,7 +2,7 @@
 
 package models
 
-// NamespaceView Namespace view for GET /v2/organisations/{id}/namespaces.  Source: cc-api Organisation.java getNa...
+// NamespaceView A namespace the organisation's applications can use for TCP redirections.
 type NamespaceView struct {
 	Namespace string `json:"namespace"`
 }

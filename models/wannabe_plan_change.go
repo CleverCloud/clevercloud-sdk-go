@@ -2,7 +2,7 @@
 
 package models
 
-// WannabePlanChange Request body for plan change / migration (PUT plan, POST migrations).  Source: cc-api WannabePlan...
+// WannabePlanChange Target plan, region and version of an add-on plan change or migration. A missing or blank `planId...
 type WannabePlanChange struct {
 	PlanID  *string `json:"planId,omitempty"`  // Target plan ID.
 	Region  *string `json:"region,omitempty"`  // Target region/zone name (e.g., "par").

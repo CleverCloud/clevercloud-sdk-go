@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationbranch PUT /v2/organisations/{id}/applications/{app_id}/branch — update org app branch.
+Updateorganisationapplicationbranch Set the deployed branch of an application
 
-Legacy: cc-api ApplicationHelper.java:397 setBranch()
-Algorithm: Auth + org membership; set app.branch, persist
-Conformity: faithful — DB UPDATE on branch column
-
-Source: cc-api OrganisationApplicationsAPI.java updateBranch()
-Issue: #107
+Sets the Git branch an organisation's application deploys from, named in the body's `branch`. Answers 400 (error id 3004) when the repository has no such branch. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

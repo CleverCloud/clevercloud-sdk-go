@@ -2,7 +2,7 @@
 
 package models
 
-// CellarPlan represents Cellar plan tier.  Source: references/legacy/ovd/modules/cellar/models/package.scala enum CellarP...
+// CellarPlan represents Plan of a Cellar add-on: `S`, `BACKUP`, `PULSAR_COLD_STORAGE` or `CONTAINER_REGISTRY`.
 type CellarPlan string
 
 const (

@@ -11,23 +11,9 @@ import (
 )
 
 /*
-Listorganisationinstances GET /v2/organisations/{id}/instances — list all running instances across org apps.
+Listorganisationinstances List the running instances of an organisation's applications
 
-📥 **Algo Source (Legacy):**
-Return a map of appId -> Vec<SuperNovaInstanceView> for all running instances
-owned by the organisation.
-- Verify membership + canAccessApps role
-- Call ApplicationHelper.getAllAppInstances(org.id) which queries Supernova
-- Source: cc-api OrganisationHelper.java:368-388 getInstancesForAllApps()
-- Source: cc-api ApplicationHelper.java:616-633 getAllAppInstances()
-
-🔧 **Algo Rust (Implementation):**
-- Verify org membership
-- Cloud Versatile: return empty map {} when no Supernova/orchestration configured
-- This matches cc-api when Supernova returns null (ApplicationHelper.java:619)
-
-Source: cc-api OrganisationHelper.java:368 getInstancesForAllApps()
-Issue: #103
+Returns a map from application ID (`app_…`) to that application's running instances. Requires membership (404 otherwise) and, for OAuth1, the right to manage the organisation's applications; members without the `ADMIN`, `MANAGER` or `DEVELOPER` role get an empty JSON array. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// AddonEnvironmentView AddonEnvironmentView — matches cc-api AddonEnvironmentView (env var key/value).  Source: cc-api A...
+// AddonEnvironmentView An environment variable: its name and its value.
 type AddonEnvironmentView struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`

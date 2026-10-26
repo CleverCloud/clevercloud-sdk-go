@@ -11,14 +11,9 @@ import (
 )
 
 /*
-Getmetabaseproviderinformation GET /v4/addon-providers/metabase — provider console view.
+Getmetabaseproviderinformation Get the Metabase provider information
 
-Source: references/legacy/ovd/modules/metabase/services/MetabaseProviderService.scala — getProviderInformations
-Behavior: `provider_id="metabase"`, dedicated map of every available version →
-
-	`access-domain` feature, default = configured default version.
-
-Issue: #8
+Returns the Metabase versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
 Parameters:
   - ctx: context for the request

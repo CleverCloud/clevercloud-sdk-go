@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeNetworkgroupMember Input to add a member to a network group.  `domainName` is optional: when it is not provided, the...
+// WannabeNetworkgroupMember Input to add a member to a network group. `domainName` is optional: when absent, it is derived fr...
 type WannabeNetworkgroupMember struct {
 	DomainName *NetworkGroupDomainName `json:"domainName,omitempty"`
 	ID         string                  `json:"id"`              // Member ID (application/addon ID).

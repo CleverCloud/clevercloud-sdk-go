@@ -2,7 +2,7 @@
 
 package models
 
-// Ownership represents Who a network group belongs to: a customer, or the platform itself. Lowercase on the wire, decode...
+// Ownership represents Who a network group belongs to: a customer, or the platform itself. Returned in lowercase; accept...
 type Ownership string
 
 const (

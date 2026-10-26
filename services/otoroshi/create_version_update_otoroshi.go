@@ -12,26 +12,15 @@ import (
 )
 
 /*
-Createversionupdateotoroshi POST /v4/addon-providers/addon-otoroshi/addons/{otoroshi_id}/version/update — update version.
+Createversionupdateotoroshi Update the Otoroshi version of an add-on
 
-Source: references/legacy/ovd/modules/otoroshi/services/OtoroshiProviderService.scala — updateVersion()
-
-📥 **Algo Source (Legacy):**
-- Fetch addon from DB
-- Verify targetVersion is in config.availableVersions
-- Get java_application_id
-- Update CC_OTOROSHI_VERSION env var on Java app via cc-api
-- Reboot Java app via PaaS
-- Return updated OtoroshiView
-- Source: ovd OtoroshiProviderService.scala:614 updateVersion()
-
-Issue: #313
+Switches the add-on's application to `targetVersion` and the Java version it needs, redeploys it without build cache and returns the updated add-on. A version that is not offered is refused. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId: Otoroshi instance ID
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

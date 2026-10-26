@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Getselfmonthlyinvoice GET /v2/self/payments/monthlyinvoice — discontinued.
+Getselfmonthlyinvoice Get the monthly invoice (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:382 getMonthlyInvoice() — 501
-Issues: #570, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

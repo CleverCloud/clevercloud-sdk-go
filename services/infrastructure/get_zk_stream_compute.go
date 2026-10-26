@@ -13,8 +13,38 @@ import (
 Getzkstreamcompute GET /v4/compute/events/stream
 
 Source: references/legacy/ovd/modules/compute/api/ZookeeperStreamController.scala
-Behavior: stub 501 — requires ZK stream infrastructure (deferred)
-Issue: #664
+Source: references/legacy/ovd/modules/compute/api/ZookeeperStreamService.scala
+Behavior: `text/event-stream` of the ZooKeeper scheduler tree
+
+	(`/{tenant}/{todo,stop,expire,assign,heartbeat,nodes,leader,archive}`)
+	and of the hypervisor store (`/{tenant}/hv/**`): the full
+	visible tree as `StateBatch` chunks (`isLast` on the final chunk), then
+	live `EventBatch` deltas from the shared broadcast, with a named
+	`HEARTBEAT` event while idle and a terminal in-stream `ErrorPayload`
+	when the client lags the broadcast. Payloads are OVD's externally-tagged
+	JSON, verbatim — the zk-web-viewer's contract.
+	DEVIATION: every znode is projected before it is streamed (OVD streamed
+	bytes raw; this stream is re-served to every ccadmin admin). Deployment
+	payloads keep only their scheduler envelope — `spec` arrives as the
+	literal string `<redacted>`, instructions and VM contents never leave
+	the process. The `hv` branch carries either layout of a host (#3766):
+	a legacy document or an exploded record at `hv/{name}`, the 10 s report
+	at `hv/{name}/status`, the `fence` and one record per VM at
+	`hv/{name}/vm/{uid}`. They keep identity (metadata), capacity
+	(`spec.allocatable`/`capacity`/`allowSchedule`/image names), consumption
+	(utilization, per-VM state/cpu/memory, device quantities), the report
+	instant and each VM's reservation and placement; VM images, constraints,
+	instructions, networks, volumes and the hardware inventory are dropped.
+	See `events_stream::parse_node_data`.
+	DEVIATION: OVD never streamed the `hv` branch; it is streamed here so
+	the ccadmin hypervisor view rides the same connection as the scheduler
+	view.
+	DEVIATION: OVD answers 200 with an in-stream error when its snapshot
+	fails; here a module with no stream backend (degraded, or bootstrap RAM
+	mode — no ZooKeeper) answers an honest 503 before streaming, like every
+	other compute route.
+
+Issue: #3077 (refs #664, the stub this replaced; #3766, the hv layout)
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +64,14 @@ Example:
 x-service: infrastructure
 operationId: getZkStreamCompute
 */
-func Getzkstreamcompute(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
+func Getzkstreamcompute(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "getZkStreamCompute")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/events/stream")
 
 	// Make API call
-	response := client.Get[any](ctx, c, path)
+	response := client.Get[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

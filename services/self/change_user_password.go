@@ -11,18 +11,9 @@ import (
 )
 
 /*
-Changeuserpassword PUT /v2/self/change_password — change the user's password.
+Changeuserpassword Change the current user's password
 
-📥 **Algo Source (Legacy):**
-Verify old password via bcrypt if exists, validate new>=12 chars (#934, tightened from cc-api Java's 6 chars), hash with bcrypt cost 12 (spawn_blocking), UPDATE users
-- Legacy note: cc-api SelfAPI.java:121 changeUserPassword() -> PasswordHelper.java; OAuth-only users can set first password without old
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java changePassword()
-Source: cc-api UsersHelper.java changePassword() — bcrypt hash
-Source: cc-api User.java — BCrypt.checkpw() and BCrypt.hashpw()
-Issue: #102
+Sets a new password (`newPassword`, at least 12 characters). When the account already has a password, `oldPassword` must match it, otherwise 403 (error id 7301). With `dropTokens: true`, every other access token of the user is revoked; pending password-reset links are always invalidated.
 
 Parameters:
   - ctx: context for the request

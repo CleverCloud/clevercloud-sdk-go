@@ -11,42 +11,9 @@ import (
 )
 
 /*
-Getselfapplications GET /v2/self/applications — list personal applications.
+Getselfapplications List the applications of the current user
 
-Source: cc-api SelfApplicationsAPI.java:50-58 getApplications()
-Source: cc-api SelfApplicationsHelper.java:32-35 getAll() -> ApplicationHelper.java:689-729 getAll()
-Schema: V1__Initial_schema.sql — organisations, organisation_members,
-
-	organisation_member_info, applications.owner_id
-
-Spec: analysis-output/02-ccapi-analysis.md §Self Applications
-Issues: #107, #2228
-
-📥 Algo Source (Legacy):
-The shim replays a failed authentication (`tk.isLeft()`), then delegates to the shared
-`getAll(crc, tk.right().getUserId(), tk, null)` — the *organisation* collection helper, with
-the caller's own user id as the organisation id and a null instance selector.
-
-🔧 Algo Rust (Implementation):
-  - `org_id = user_id` is legacy's own argument, not an id-equality shortcut: a user's personal
-    space is a real `organisations` row whose id IS the user id, with an ADMIN membership
-    (`OrganisationRepository::create_personal_space`).
-  - A service/biscuit principal never reaches that probe, and the earlier claim here that it
-    "answers 404/6004" because a robot id has no personal space was wrong. Legacy refuses one
-    layer up: no `/self` shim carries an `{id}` path segment, so `authBiscuit` has no tenant to
-    resolve and returns 403/1504 `INVALID_TOKEN_SCOPE` (`BiscuitAuthHelper.java:136-138`)
-    before any helper runs. Independently, axo's `Auth` extractor admits only the `OAuth ` and
-    `Basic ` schemes and answers 401/2001 to every other one
-    (`crates/utils/api/auth/src/middleware.rs:397-400`), so no request can present a service
-    principal at all. #2301 tracks that extractor gap.
-  - `guard_getall_org_apps` supplies legacy's exact order: organisation existence (404/6004),
-    the `manage_organisations_applications` scope bit (403/6201), membership (403/6201), then
-    `canAccessApps`, whose failure is a successful `200 []` and not an error.
-  - The shim passes a null instance selector, so legacy's `_getAll` instance branch and its
-    Jenkins channel are both unreachable on this route; the infallible `Auth` extractor keeps
-    them that way.
-
-Conformity: faithful — shares `getAll` with the organisation collection route. Refs #2228
+Returns the applications owned by the authenticated user's personal space. The applications of the user's organisations are listed by the organisation routes.
 
 Parameters:
   - ctx: context for the request

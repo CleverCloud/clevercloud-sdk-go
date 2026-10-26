@@ -11,17 +11,9 @@ import (
 )
 
 /*
-Getamountfororga GET /v2/organisations/{id}/credits — discontinued.
+Getamountfororga Get the credits of an organisation (discontinued)
 
-Not part of `OrganisationPaymentsAPI.java`, but discontinued all the same:
-`OrganisationCreditsAPI.java` holds one method, `getAmount()`, whose whole
-body is `NOT_IMPLEMENTED_BILLING`. It used to answer 200 with a balance read
-from `account_balance`/`billing_context` — figures cc-api refuses to serve,
-and which `crates/tooling/parity-runner/scenarios/26-billing-v2.json` already
-expected to be 501.
-
-Source: cc-api OrganisationCreditsAPI.java getAmount() — 501
-Issues: #267, #2428
+Discontinued: always answers 501 Not Implemented with error `19000`, without checking credentials. Billing and payments are served by the `/v4/billing` API.
 
 Parameters:
   - ctx: context for the request

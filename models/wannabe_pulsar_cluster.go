@@ -2,8 +2,9 @@
 
 package models
 
-// WannabePulsarCluster Request to create/update a Pulsar cluster.  Source: references/legacy/ovd/modules/pulsar/models/p...
+// WannabePulsarCluster Request body to register or update a Pulsar cluster.
 type WannabePulsarCluster struct {
+	AdminHost          *string  `json:"adminHost,omitempty"`     // Host the platform's own calls to the cluster's admin API use when it differs from `url`; omit it ...
 	Available          bool     `json:"available"`               // Whether available for provisioning
 	ID                 string   `json:"id"`                      // Cluster identifier
 	LocationID         string   `json:"locationId"`              // Zone/location identifier

@@ -12,36 +12,22 @@ import (
 )
 
 /*
-Deletekubernetescluster **Legacy**: ovd ClusterController.scala:98 delete()
-**Algorithm**:
-  - ClusterCRUDService.delete sets flag_for_deletion=true
-  - Actual infra cleanup handled by AsyncDeletionService (async)
+Deletekubernetescluster Delete a Kubernetes cluster
 
-**Conformity**: YES
-
-DELETE /v4/kubernetes/organisations/{owner_id}/clusters/{cluster_id} — delete a Kubernetes cluster.
-
-Source: references/legacy/ovd/modules/kubernetes/controllers/ClusterController.scala — delete
-Source: references/legacy/ovd/modules/kubernetes/repositories/ClusterRepository.scala — updateFlagForDeletion
-Behavior: marks cluster for deletion (flag_for_deletion=true, updated_at=now).
-
-	Returns view with DELETING display status. Actual cleanup is async (AsyncDeletionService).
-	Scala: clusterService.delete -> updateFlagForDeletion(id, true)
-
-Issue: #8
+Marks the cluster for deletion and returns it with the `DELETING` status; its resources are removed asynchronously. Deleting a cluster already being deleted returns it unchanged; 404 when the organisation has no such cluster. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - clusterId: Cluster ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Deletekubernetescluster(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Deletekubernetescluster(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -50,11 +36,11 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesCluster
 */
-func Deletekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.KubernetesCluster] {
-	ctx, span := tracer.Start(ctx, "deleteKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Deletekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "deleteKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Delete[models.KubernetesCluster](ctx, c, path)

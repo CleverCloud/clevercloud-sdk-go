@@ -11,24 +11,17 @@ import (
 )
 
 /*
-Getwireguardconfigurationstream GET /v4/…/{network_group_id}/peers/{peer_id}/wireguard/configuration/stream
+Getwireguardconfigurationstream Stream a peer's WireGuard configuration
 
-Source: ovd NetworkGroupController.scala wireguardConfigurationSSELogic → WireguardConfStreamer
-Behavior: `text/event-stream` of `WireGuardConfigurationB64` JSON (sorted
-
-	keys) whenever its `version` grew, polled every 15s; `HEARTBEAT` after
-	5s of silence; completes when the NG or the peer disappears. 404/403
-	before any streaming.
-
-Issue: #313, #849, #2805
+Server-Sent Events stream of the peer's WireGuard configuration (`WireGuardConfigurationB64` JSON, the INI text base64-encoded), sent whenever the network group's version changes (checked every 15 seconds), with a `HEARTBEAT` event after 5 seconds of silence; it ends when the group or the peer disappears. Browser clients that cannot set headers may pass the base64 of their `Authorization` header in the `authorization` query parameter. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
 
 # Returns the operation result or an error
 

@@ -12,23 +12,15 @@ import (
 )
 
 /*
-Getconfigurationproviderv2 GET /v2/providers/config-provider/resources/{addon_id} — get config-provider addon (internal v2).
+Getconfigurationproviderv2 Get a configuration provider add-on for the platform
 
-Legacy: ovd routes.scala:36 getAddonV2
-Algorithm:
-  - SELECT from configprovider_provision WHERE status!=DELETED, decrypt env, build view
-
-Conformity: YES
-
-Source: references/legacy/ovd/modules/configprovider/api/routes.scala getAddonV2
-Behavior: returns addon view, 404 if not found or deleted
-Issue: #2
+Called by the platform to read a configuration provider add-on with its variables. Answers 404 for an unknown or deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: ConfigProvider addon ID
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 

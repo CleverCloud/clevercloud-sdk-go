@@ -12,17 +12,9 @@ import (
 )
 
 /*
-GetConsumerTokens GET /v2/self/consumers/{key}/tokens — list tokens for a specific consumer.
+GetConsumerTokens List the access tokens of an OAuth consumer
 
-📥 **Algo Source (Legacy):**
-Require almighty token, verify consumer ownership, query tokens by user_id + consumer_key
-- Legacy note: cc-api SelfConsumersAPI.java getConsumerTokens()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfAPI.java — getConsumerTokens()
-Spec: analysis-output/02-ccapi-analysis.md §Self
-Issue: #313
+Returns the user's unexpired OAuth1 access tokens issued through this consumer, newest first. Requires an almighty token; an unknown key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

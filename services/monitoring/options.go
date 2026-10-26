@@ -17,9 +17,11 @@ type Options struct {
 	Drivereventid *string   `url:"driverEventId,omitempty"`
 	Kind          *[]string `url:"kind,omitempty"`
 	Limit         *int64    `url:"limit,omitempty"`
+	Productid     *string   `url:"productId,omitempty"`
 	Resourceid    *string   `url:"resourceId,omitempty"`
 	Since         *string   `url:"since,omitempty"`
 	Source        *string   `url:"source,omitempty"`
+	Tenantid      *string   `url:"tenantId,omitempty"`
 	Until         *string   `url:"until,omitempty"`
 }
 
@@ -51,6 +53,13 @@ func WithLimit(limit int64) Option {
 	}
 }
 
+// WithProductid sets the productId query parameter
+func WithProductid(productId string) Option {
+	return func(o *Options) {
+		o.Productid = &productId
+	}
+}
+
 // WithResourceid sets the resourceId query parameter
 func WithResourceid(resourceId string) Option {
 	return func(o *Options) {
@@ -69,6 +78,13 @@ func WithSince(since string) Option {
 func WithSource(source string) Option {
 	return func(o *Options) {
 		o.Source = &source
+	}
+}
+
+// WithTenantid sets the tenantId query parameter
+func WithTenantid(tenantId string) Option {
+	return func(o *Options) {
+		o.Tenantid = &tenantId
 	}
 }
 
@@ -99,6 +115,9 @@ func buildQueryString(opts ...Option) string {
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
+	if options.Productid != nil {
+		params = append(params, fmt.Sprintf("productId=%s", url.QueryEscape(*options.Productid)))
+	}
 	if options.Resourceid != nil {
 		params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(*options.Resourceid)))
 	}
@@ -107,6 +126,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Source != nil {
 		params = append(params, fmt.Sprintf("source=%s", url.QueryEscape(*options.Source)))
+	}
+	if options.Tenantid != nil {
+		params = append(params, fmt.Sprintf("tenantId=%s", url.QueryEscape(*options.Tenantid)))
 	}
 	if options.Until != nil {
 		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))

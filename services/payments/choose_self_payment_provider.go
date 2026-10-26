@@ -11,20 +11,15 @@ import (
 )
 
 /*
-Chooseselfpaymentprovider PUT /v2/self/payments/billings/{bid} — discontinued.
+Chooseselfpaymentprovider Choose how to pay an invoice (discontinued)
 
-This is the handler #2428 was opened against: it answered `200 {"status":
-"paid"}` and marked the invoice PAID without calling a payment processor.
-cc-api has answered 501 here throughout.
-
-Source: cc-api SelfPaymentsAPI.java:150 choosePaymentProvider() — 501
-Issues: #106, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - bid: Invoice/billing ID
+  - bid: Invoice ID
 
 # Returns the operation result or an error
 

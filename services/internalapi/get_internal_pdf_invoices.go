@@ -10,15 +10,9 @@ import (
 )
 
 /*
-GetInternalPdfInvoices GET /v2/internal/invoices/pdf — get PDF invoices (501 stub, matches Java).
+GetInternalPdfInvoices Get invoice PDFs (discontinued)
 
-Source: cc-api InternalInvoiceAPI.java:67 getPdfInvoices()
-Issue: #709, #1956
-
-Legacy: cc-api returns NOT_IMPLEMENTED_BILLING outright; the `from`,
-`status` and `owner_id` query params it declares are never read.
-Algorithm: Internal auth, batch generate invoice PDFs
-Conformity: stub -- 501 matching Java InternalInvoiceAPI
+Discontinued endpoint: answers 501 to platform services and 403 to any other caller.
 
 Parameters:
   - ctx: context for the request

@@ -2,7 +2,7 @@
 
 package models
 
-// InvitationView Invitation sent to a user to join an organisation.  Source: cc-api OrganisationMembersAPI.java ad...
+// InvitationView An invitation for a user to join an organisation with a role. Dates are RFC 3339 timestamps.
 type InvitationView struct {
 	AcceptedAt     *string `json:"acceptedAt,omitempty"`
 	CreatedAt      string  `json:"createdAt"`

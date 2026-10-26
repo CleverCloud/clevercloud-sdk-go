@@ -2,7 +2,7 @@
 
 package models
 
-// NetworkGroupsConfiguration Deployment-level NetworkGroups configuration, served on its own route so a client can discover it...
+// NetworkGroupsConfiguration Network group settings of this deployment, readable without touching any group. A member `domainN...
 type NetworkGroupsConfiguration struct {
 	DnsSuffixes []string `json:"dnsSuffixes"` // A member `domainName` must end with a dot followed by one of these.
 }

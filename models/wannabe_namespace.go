@@ -2,8 +2,8 @@
 
 package models
 
-// WannabeNamespace Request body for creating a TCP/UDP redirection.  `source_port` is **accepted and ignored** on th...
+// WannabeNamespace A TCP or UDP redirection to create in a namespace. The platform allocates the port.
 type WannabeNamespace struct {
-	Namespace  *string `json:"namespace,omitempty"`
-	SourcePort *int    `json:"sourcePort,omitempty"`
+	Namespace  *string `json:"namespace,omitempty"`  // Namespace to create the redirection in.
+	SourcePort *int    `json:"sourcePort,omitempty"` // Ignored: the platform allocates the port.
 }

@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Addselfapplicationdependencybyappid PUT /v2/self/applications/{app_id}/dependencies/{dep_id} — add a dependency.
+Addselfapplicationdependencybyappid Add a dependency to an application
 
-Legacy: SelfApplicationDependenciesHelper.java:42-45 addDependency() -> ApplicationDependenciesHelper.java:56-73,126-140
-Algorithm: raw loop rejection, then Shape S3b with the raw dep id before its unchanged resolution and insert.
-Conformity: faithful — personal org_id, 8101/4004, raw dependency owner probe, and unchanged messaging. Refs #2228
-
-Source: cc-api SelfApplicationDependenciesAPI.java addDependency()
-Issue: #2228
+Makes an application of the user's personal space depend on another application of the same owner, whose exposed variables it then receives. The ID of an add-on that runs as an application of the same owner is accepted too.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
-  - dependencyId: Dependency application ID
+  - appId: Application ID (`app_…`)
+  - dependencyId: ID of the dependency application (`app_…`)
 
 # Returns the operation result or an error
 

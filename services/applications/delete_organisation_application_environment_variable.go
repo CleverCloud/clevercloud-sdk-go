@@ -12,23 +12,17 @@ import (
 )
 
 /*
-Deleteorganisationapplicationenvironmentvariable DELETE /v2/organisations/{id}/applications/{app_id}/env/{env_name} — delete a single env var.
+Deleteorganisationapplicationenvironmentvariable Delete an environment variable of an application
 
-Legacy: cc-api ApplicationHelper.java:3773 removeApplicationEnv()
-Algorithm: Auth + canAddApp; create AddonEnvironment(name), call app.removeEnv() unconditionally, answer the edited ApplicationView
-Conformity: faithful — removes the variable unconditionally and answers the edited
-ApplicationView (#2036); missing the dependent-app redeploy.
-
-Source: cc-api OrganisationApplicationsAPI.java deleteOrganisationApplicationEnvironmentVariable()
-Issue: #107
+Removes one environment variable from an organisation's application and returns the edited application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
-  - envName: Env var name
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
+  - envName: Environment variable name
 
 # Returns the operation result or an error
 

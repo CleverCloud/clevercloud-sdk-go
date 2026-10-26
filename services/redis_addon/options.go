@@ -2,11 +2,26 @@
 
 package redis_addon
 
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+
 // Option defines a functional option for redis_addon operations
 type Option func(*Options)
 
 // Options holds query parameters for redis_addon operations
-type Options struct{}
+type Options struct {
+	Imageversion *string `url:"imageVersion,omitempty"`
+}
+
+// WithImageversion sets the imageVersion query parameter
+func WithImageversion(imageVersion string) Option {
+	return func(o *Options) {
+		o.Imageversion = &imageVersion
+	}
+}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -14,5 +29,14 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-	return ""
+
+	var params []string
+	if options.Imageversion != nil {
+		params = append(params, fmt.Sprintf("imageVersion=%s", url.QueryEscape(*options.Imageversion)))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+	return strings.Join(params, "&")
 }

@@ -21,15 +21,16 @@ do not mount.
 
 The global-layer responses (`301` under `x-forwarded-proto: http`, an
 `application/javascript` body under `?callback=`) are reachable here too and omitted
-for the same reason — see [`aggregate_health_handler`].
+for the same reason — see [`aggregate_health_handler`]. The 401 is not one of them: it
+is this surface's own (#3518), not a global layer's.
 
-Issue: #1722
+Issue: #1722, refs #3518
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`database`, `pulsar-heartbeat`)
+  - constraintName: Constraint name, `^[a-z][a-z0-9-]*$` (`database`, `database-network`, `database-auth`, `database-schema`, `pulsar-heartbeat`)
 
 # Returns the operation result or an error
 

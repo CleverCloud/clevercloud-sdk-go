@@ -13,22 +13,15 @@ import (
 )
 
 /*
-Getselfapplicationinstancesbyappid GET /v2/self/applications/{app_id}/instances — list running instances.
+Getselfapplicationinstancesbyappid List the instances of an application
 
-Legacy: cc-api ApplicationHelper.java:276 getAppInstances()
-Algorithm: Shape S7; a member without canAccessApps receives 200 [], and both branches owner-resolve the application (404/4004) before diverging.
-Conformity: faithful — mirrors the organisation twin's S7 guard, ownership gate included since cc-api!568 hoisted it out of the deploymentId branch. Refs #2228
-
-Source: cc-api SelfApplicationsAPI.java:90-99 getApplicationInstances()
-Spec: openapi-reference/cc-api-enriched.json /self/applications/{appId}/instances
-Note: Running instances come from OVD orchestration. Phase 1 returns empty list.
-Issue: #2228
+Returns the running instances of an application of the user's personal space, optionally only those of one deployment.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

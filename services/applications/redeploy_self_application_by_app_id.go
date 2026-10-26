@@ -13,25 +13,15 @@ import (
 )
 
 /*
-Redeployselfapplicationbyappid POST /v2/self/applications/{app_id}/instances — redeploy application.
+Redeployselfapplicationbyappid Redeploy an application of the current user
 
-Legacy: SelfApplicationsHelper.java:100-103 redeploy() -> ApplicationHelper.java:1501-1544 redeploy()
-Algorithm: Shape S8, then retain commit resolution, the APPLICATION_NO_DEPLOYS guard (a never-deployed GIT app with no oauth/public-git link and no resolvable commit gets a 400, ApplicationHelper.java:1536-1539), user moderation (runs AFTER the guard, matching legacy's redeploy() -> _redeploy() sequence), the owner-less divert to `_undeploy` (ApplicationHelper.java:1283-1285 — an unresolvable owner short-circuits straight to the undeploy response, before the CPU quota or `bh.startApp` ever run), the CPU quota, then `undeployIfModerated`'s 403 APPLICATION_MODERATED (BdsHelper.java:93-119, reached through bh.startApp at :1318), deployment creation, BDS START, and state changes.
-Conformity: enhanced — missing canStartApp, maintenance slots, boot deps
-
-Source: cc-api SelfApplicationsAPI.java redeployApplication()
-Behavior: creates deployment record, publishes BDS START instruction, updates app state, and returns the legacy redeploy success envelope with deploymentId.
-`deployments.cause` and the BDS instruction's cause are both the calling
-consumer's name, not a hardcoded string: legacy's redeploy() reads
-token.getConsumerName() once and threads it into _redeploy() as cause
-(ApplicationHelper.java:1543).
-Issues: #2228, refs #2136, refs #2471, refs #2472, refs #2509, refs #2532, refs #2937
+Starts a new deployment of an application of the user's personal space and returns its deployment ID. Without `commit`, the application's current commit is deployed.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

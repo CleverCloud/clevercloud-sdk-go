@@ -12,22 +12,16 @@ import (
 )
 
 /*
-Deprovisionaddonbyorgaandaddonid DELETE /v2/organisations/{id}/addons/{addon_id} — deprovision an org addon.
+Deprovisionaddonbyorgaandaddonid Delete an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java deleteAddon()
-Issues: #108, #2518
-
-Algorithm: Verify ADMIN/MANAGER role, reject FTP addons and SYSTEM ownership, then run
-the shared deprovision leaf (provider DELETE, soft-delete + unlink, recursion, events)
-Legacy: cc-api OrganisationAddonsAPI.java deleteAddon() -> AddonHelper deprovisionUnchecked()
-Conformity: faithful -- full deprovisionUnchecked flow through the shared leaf
+Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

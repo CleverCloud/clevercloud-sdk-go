@@ -2,9 +2,9 @@
 
 package models
 
-// KeycloakResources The three Clever resources backing a Keycloak addon.  `entrypoint` is the FIRST application's jav...
+// KeycloakResources Resources backing a Keycloak add-on.
 type KeycloakResources struct {
-	Entrypoint string  `json:"entrypoint"`
-	FsbucketID *string `json:"fsbucketId,omitempty"`
-	PgsqlID    *string `json:"pgsqlId,omitempty"`
+	Entrypoint string  `json:"entrypoint"`           // ID of the Java application running Keycloak; empty when there is none.
+	FsbucketID *string `json:"fsbucketId,omitempty"` // ID of the FS Bucket add-on, when there is one.
+	PgsqlID    *string `json:"pgsqlId,omitempty"`    // ID of the PostgreSQL add-on, when there is one.
 }

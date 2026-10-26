@@ -14,7 +14,12 @@ import (
 /*
 CreateTardisAddonForOrg POST /v4/addon-providers/addon-tardis/organisations/{ownerId}/addons — create addon for org.
 
-Algorithm: Insert new tardis addon with owner_id set. Generate addon_id from UUID.
+Algorithm: Insert new tardis addon with owner_id set. Generate addon_id from UUID. The caller
+
+	must be the path's owner when it is their personal `user_…` space, or hold the
+	`ADMIN`/`MANAGER`/`DEVELOPER` role in the `ACTIVE` organisation, else 403, and
+	`applicationId` must be an application it owns, else 404 (refs #4431).
+
 Legacy: ovd tardis addon create for org
 Conformity: real
 

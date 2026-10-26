@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Getnetworkgrouphealth `GET /v4/networkgroup/health` — the cached, sanitized aggregate report; the
-thin documented wrapper over [`api_health::aggregate_health`].
+Getnetworkgrouphealth Get the health of the network group service
 
-Doc carrier for `getNetworkGroupHealth`; the framework serves the route — do not mount.
-
-200 when every constraint is HEALTHY, 503 otherwise. `message` and `duration`
-are sanitized away on both, so an unauthenticated prober learns constraint
-names and statuses only.
-
-Issues: #3025
+Aggregated report of the service's health constraints, each with its status, message and duration. Answers 200 when every constraint is healthy, 503 otherwise. Reserved for platform monitoring, with the deployment's health credential.
 
 Parameters:
   - ctx: context for the request

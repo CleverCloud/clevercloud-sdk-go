@@ -11,31 +11,16 @@ import (
 )
 
 /*
-Triggerpulsarpersistenttopicunload PUT /v4/addon-providers/addon-pulsar/addons/{pulsar_id}/topics/{topic}/unload
+Triggerpulsarpersistenttopicunload Unload a persistent topic
 
-	— unload a persistent topic from broker.
-
-**Legacy**: ovd PulsarController.scala:338 unloadPersistentTopicServerEndpoint()
-**Algorithm**:
-  - Ownership verified via withTopicOwner helper (line 80)
-  - Delegates to PulsarTopicService.unloadTopic(persistent=true) (line 258)
-  - Scala calls HttpPulsarAdminClient.unloadTopic to trigger broker offloading
-
-**Conformity**: FAITHFUL — proxies to `PulsarAdminClient::unload_topic`
-
-	with `persistent=true` (refs #1066)
-
-Source: references/legacy/ovd/modules/pulsar/controller/PulsarController.scala unloadPersistentTopicServerEndpoint
-Source: references/legacy/ovd/modules/pulsar/api/routes.scala unloadPersistentTopic
-Behavior: instructs the broker to unload the topic; returns 204.
-Issue: #8
+Asks the cluster to unload the topic from the broker serving it, so another broker takes it over; answers 204. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId: Pulsar addon ID
-  - topic: Topic name
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

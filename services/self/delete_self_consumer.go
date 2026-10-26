@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Deleteselfconsumer DELETE /v2/self/consumers/{key} — soft-delete a consumer.
+Deleteselfconsumer Delete an OAuth consumer
 
-📥 **Algo Source (Legacy):**
-SET deletion_date = NOW() (soft delete); 404 if rows_affected == 0
-- Legacy note: cc-api SelfConsumersAPI.java deleteConsumer(); soft delete pattern
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
-Source: cc-api SelfConsumersAPI.java deleteConsumer()
-Soft delete: sets deletion_date = NOW()
-Issue: #102
+Deletes one OAuth1 consumer of the user's personal space. An unknown or already deleted key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

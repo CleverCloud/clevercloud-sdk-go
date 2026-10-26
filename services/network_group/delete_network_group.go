@@ -11,19 +11,16 @@ import (
 )
 
 /*
-Deletenetworkgroup DELETE /v4/networkgroups/organisations/{owner_id}/networkgroups/{network_group_id}
+Deletenetworkgroup Delete a network group
 
-Source: ovd NetworkGroupRoutes.scala deleteNetworkGroup → `NetworkGroupDeletionCMD`
-Behavior: 204 after broker confirmation; 500 publish failure; 404 unknown NG;
-403 owner mismatch.
-Issue: #313, #665, #676, #849, #1127, #2790
+Requests the deletion of the network group, which is applied asynchronously; 404 when it does not exist. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Organisation ID
-  - networkGroupId: Network group ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

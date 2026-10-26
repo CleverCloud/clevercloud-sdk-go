@@ -2,7 +2,7 @@
 
 package models
 
-// SecondaryEmailPayload Optional request body for `PUT /v2/self/emails/{email}`. Source: cc-api SecondaryEmailPayload `{ ...
+// SecondaryEmailPayload Options for adding an email address to the user's account.
 type SecondaryEmailPayload struct {
-	MakePrimary *bool `json:"make_primary,omitempty"`
+	MakePrimary *bool `json:"make_primary,omitempty"` // Make this address the user's primary email. Defaults to `false`.
 }

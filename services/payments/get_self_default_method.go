@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Getselfdefaultmethod GET /v2/self/payments/methods/default — discontinued.
+Getselfdefaultmethod Get the default payment method (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:276 getDefaultMethod() — 501
-Issues: #289, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

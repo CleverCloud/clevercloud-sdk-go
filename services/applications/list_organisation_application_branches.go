@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Listorganisationapplicationbranches GET /v2/organisations/{id}/applications/{app_id}/branches — git branches.
+Listorganisationapplicationbranches List the Git branches of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationBranches()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:353 _getBranches()
-Algorithm: Shape S1 — scope bit (403/6201), plain oph.find existence probe (404/6004), hasAccessToOrg + canAccessApps folded into one 403/6201, then the owner-scoped lookup (404/4004); Call OAuth service to list git branches for app's deploy_url; Return branch names; if OA...
-Conformity: stub — returns empty array; legacy proxies to git OAuth service
+Returns the branches of the GitHub repository linked to an organisation's application, the default branch first, read with the caller's GitHub access (anonymously when the caller has no linked GitHub account, as with a service token, so a private repository is then not readable), or only `master` when no repository is linked. Answers 400 (error id 1603) when GitHub rejects that access. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

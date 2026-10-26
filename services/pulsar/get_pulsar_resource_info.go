@@ -12,31 +12,16 @@ import (
 )
 
 /*
-Getpulsarresourceinfo GET /v4/pulsar/organisations/{owner_id}/pulsar/resources/{resource_id}
+Getpulsarresourceinfo Read the billing label of a Pulsar add-on
 
-	— the billing-facing description of one Pulsar addon.
-
-The second endpoint `ProductConsumptionComponent` generates
-(`createResourceInfoEndpoint`), and the reason billing can put a *name* on
-an invoice line rather than a `pulsar_<uuid>`.
-
-The legacy resolves the name with `ccAPI.getAddon` over HTTP
-(`GET /v2/internal/addons/{id}`). This reads the same row straight from the
-cc-api database through the pool the module already holds for org-membership
-checks: it is a single `SELECT`, the pool is read-only, and it needs no
-second credential or network hop.
-
-Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/consumption/ProductConsumptionComponent.scala:374 `createResourceInfoEndpoint`
-Source: references/legacy/ovd/modules/pulsar/src/main/scala/com/clevercloud/pulsar/services/PulsarConsumptionService.scala:56 `retrieveResourceInfo`
-Schema: addon (id, owner_id); ccapi addons (id, real_id, name)
-Issue: #1063
+Called by the platform's billing service. Returns the name to print on an invoice line for this add-on of the owner, whatever its status. An add-on the owner does not hold answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
-  - resourceId: Pulsar addon ID
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - resourceId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 
@@ -51,14 +36,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarResourceInfo
 */
-func Getpulsarresourceinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string) client.Response[models.PulsarResourceInfo] {
+func Getpulsarresourceinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, resourceId string) client.Response[models.ResourceInfo] {
 	ctx, span := tracer.Start(ctx, "getPulsarResourceInfo", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("resourceId", resourceId)))
 	defer span.End()
 
 	path := utils.Path("/v4/pulsar/organisations/%s/pulsar/resources/%s", ownerId, resourceId)
 
 	// Make API call
-	response := client.Get[models.PulsarResourceInfo](ctx, c, path)
+	response := client.Get[models.ResourceInfo](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,7 +2,9 @@
 
 package models
 
-// PatchClusterVersion Patch cluster version payload.  Source: references/legacy/ovd/modules/kubernetes/models/PatchClus...
+// PatchClusterVersion Request body to upgrade a cluster to another Kubernetes version, optionally limited to the contro...
 type PatchClusterVersion struct {
-	TargetVersion Version `json:"targetVersion"` // Target Kubernetes version to upgrade to
+	DrainPolicy   *DrainPolicy    `json:"drainPolicy,omitempty"` // How the upgrade treats a node whose pods will not leave — a worker node, or on an `ALL_IN_ONE` cl...
+	Scope         *OperationScope `json:"scope,omitempty"`       // Which part of the cluster to move. Absent means `ALL`: the control plane, then every node group.
+	TargetVersion Version         `json:"targetVersion"`         // Target Kubernetes version to upgrade to
 }

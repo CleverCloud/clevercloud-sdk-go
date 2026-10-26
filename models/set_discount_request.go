@@ -2,7 +2,7 @@
 
 package models
 
-// SetDiscountRequest Request body for PUT /v2/internal/organisations/{id}/discount.  TWO wire shapes are accepted. Leg...
+// SetDiscountRequest Billing discount of an organisation, as a percentage. Send either the bare number (`10.5`) or an ...
 type SetDiscountRequest struct {
 	Discount float64 `json:"discount"` // Discount percentage (0.00 to 100.00).
 }

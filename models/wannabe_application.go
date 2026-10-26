@@ -2,20 +2,20 @@
 
 package models
 
-// WannabeApplication Request body for POST /applications — create application.  Source: cc-api input/WannabeApplicatio...
+// WannabeApplication Settings of an application to create or update: name, runtime, region, scaling, build and deploym...
 type WannabeApplication struct {
-	ApplianceID            *string          `json:"applianceId,omitempty"` // Source: cc-api openapi/ccapiv3.json WannabeApplication.applianceId Used by Terraform provider for...
+	ApplianceID            *string          `json:"applianceId,omitempty"` // Identifier of the appliance whose repository the application deploys from.
 	Archived               *bool            `json:"archived,omitempty"`
 	Branch                 *string          `json:"branch,omitempty"`
 	BuildFlavor            *string          `json:"buildFlavor,omitempty"`
 	CancelOnPush           *bool            `json:"cancelOnPush,omitempty"`
 	Deploy                 *string          `json:"deploy,omitempty"`
 	Description            *string          `json:"description,omitempty"`
-	Env                    *any             `json:"env,omitempty"` // Source: cc-api openapi/ccapiv3.json — environment variables for the application.  A `serde_json::...
+	Env                    *any             `json:"env,omitempty"` // Environment variables of the application, as an object mapping each name to its value. A number o...
 	Favourite              *bool            `json:"favourite,omitempty"`
 	ForceHTTPS             *string          `json:"forceHttps,omitempty"`
 	Homogeneous            *bool            `json:"homogeneous,omitempty"`
-	InstanceLifetime       *string          `json:"instanceLifetime,omitempty"` // Source: cc-api WannabeApplication.instanceLifetime — enum REGULAR, MIGRATION, TASK
+	InstanceLifetime       *string          `json:"instanceLifetime,omitempty"` // Lifetime of the application's instances: `REGULAR`, `MIGRATION` or `TASK`.
 	InstanceType           *string          `json:"instanceType,omitempty"`
 	InstanceVariant        *string          `json:"instanceVariant,omitempty"`
 	InstanceVersion        *string          `json:"instanceVersion,omitempty"`
@@ -23,11 +23,11 @@ type WannabeApplication struct {
 	MaxInstances           *InstanceCount   `json:"maxInstances,omitempty"`
 	MinFlavor              *string          `json:"minFlavor,omitempty"`
 	MinInstances           *InstanceCount   `json:"minInstances,omitempty"`
-	Name                   *string          `json:"name,omitempty"` // Application name. Required for POST (create), optional for PUT (update). Console3 sends PUT witho...
+	Name                   *string          `json:"name,omitempty"` // Application name. Required on creation, optional on update.
 	OauthApp               *WannabeOauthApp `json:"oauthApp,omitempty"`
-	OauthAppID             *string          `json:"oauthAppId,omitempty"`             // Source: cc-api openapi/ccapiv3.json WannabeApplication schema
-	OauthService           *string          `json:"oauthService,omitempty"`           // Source: cc-api Application.java absorb() — creates ApplicationOauthData
-	PublicGitRepositoryURL *string          `json:"publicGitRepositoryUrl,omitempty"` // Source: cc-api Application.java absorb() — sets publicGitUrl from this field
+	OauthAppID             *string          `json:"oauthAppId,omitempty"`             // Identifier of the repository on that Git hosting service.
+	OauthService           *string          `json:"oauthService,omitempty"`           // Git hosting service the application's repository is linked through, such as `github`.
+	PublicGitRepositoryURL *string          `json:"publicGitRepositoryUrl,omitempty"` // URL of a public Git repository the application deploys from.
 	SeparateBuild          *bool            `json:"separateBuild,omitempty"`
 	Shutdownable           *bool            `json:"shutdownable,omitempty"`
 	StickySessions         *bool            `json:"stickySessions,omitempty"`

@@ -2,7 +2,7 @@
 
 package models
 
-// NodeFlavor represents Node flavor (VM size).  Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/cleve...
+// NodeFlavor represents Node flavor (VM size): `2XS` (4 vCPUs, 4 GB RAM), `XS` (6 vCPUs, 8 GB), `S` (8 vCPUs, 12 GB), `M`...
 type NodeFlavor string
 
 const (

@@ -2,7 +2,7 @@
 
 package models
 
-// SecretView Consumer secret view.  Source: cc-api output/oauth/SecretView.java Schema: V1__Initial_schema.sql...
+// SecretView The secret of an OAuth1 consumer.
 type SecretView struct {
-	Secret string `json:"secret"`
+	Secret string `json:"secret"` // Consumer secret, used with the consumer key to sign OAuth1 requests.
 }

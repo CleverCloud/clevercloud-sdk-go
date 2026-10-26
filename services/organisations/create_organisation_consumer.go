@@ -12,32 +12,9 @@ import (
 )
 
 /*
-Createorganisationconsumer POST /v2/organisations/{id}/consumers — create a new OAuth1 consumer for an org.
+Createorganisationconsumer Create an OAuth consumer
 
-Source: cc-api OrganisationConsumersAPI.java createConsumer()
-Generates a random key + secret. Persists the validated caller-supplied
-rights (refs #1181); any right the caller did not send stays `false`,
-matching the legacy default-false `CleverCloudOAuthRights()` +
-`updateWith()` flow. `almighty` is never granted to the consumer
-(`validateOAuthRight(..., false)`; refs #930 / F-021).
-Issue: #103, #930, #1181
-
-📥 **Algo Source (Legacy):**
-Verify org membership (ADMIN/MANAGER/DEVELOPER via canAddApp),
-generate UUID-based key (ck_) and secret (cs_), validate the rights map,
-then `new CleverCloudOAuthRights()` (all false) flipped by
-`updateWith()` for each caller-sent right, insert oauth1_consumers.
-  - Legacy note: cc-api OrganisationConsumersAPI.java createConsumer() ->
-    OAuth1ConsumersHelper.createOAuth1Consumer() ->
-    `new CleverCloudOAuth1Consumer(c, _orga.right().getInfo())` whose
-    constructor calls `updateWith(c)` to apply the validated rights map.
-
-🔧 **Algo Rust (Implementation):**
-  - ADMIN-only RBAC gate (refs #921, #922) on top of legacy validation:
-    minting a consumer is administrative. Rights are whatever the caller
-    validly requests; `almighty` is never granted (no escalation, F-021).
-  - 400 OAUTH1_CONSUMER on missing/empty/unknown rights keys (refs #1181).
-  - Conformity: faithful.
+Creates an OAuth1 consumer owned by the organisation with the requested rights and returns it with its generated key; fetch its secret separately. Requires the `ADMIN` role; the `almighty` right is never granted, and creation is rate-limited per organisation (403 when exceeded). Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

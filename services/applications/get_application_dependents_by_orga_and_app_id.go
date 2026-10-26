@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getapplicationdependentsbyorgaandappid GET /v2/organisations/{id}/applications/{app_id}/dependents — list org app dependents.
+Getapplicationdependentsbyorgaandappid List the applications depending on an application
 
-Legacy: cc-api ApplicationDependenciesHelper.java:119-123 getDependents()
-Algorithm: Auth + org membership; query dependent IDs, build views
-Conformity: faithful — matches Java behavior
-
-Source: cc-api OrganisationApplicationDependentsAPI.java getDependents()
-Issue: #107
+Returns the applications that depend on an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

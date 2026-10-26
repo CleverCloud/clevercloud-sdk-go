@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Addproviderplan POST /v2/organisations/{id}/addonproviders/{provider_id}/plans — create a plan.
+Addproviderplan Create a plan for an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java addPlan()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, INSERT addon_plan + feature instances if provided.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java addPlan()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Creates a plan (`plan_…`) with its name, slug, price and feature values; features left out get an empty value, and the plan is offered in the provider's zones. 400 when the provider already has a plan with this name. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

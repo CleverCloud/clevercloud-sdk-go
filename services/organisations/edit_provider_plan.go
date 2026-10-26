@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Editproviderplan PUT /v2/organisations/{id}/addonproviders/{provider_id}/plans/{plan_id}.
+Editproviderplan Update a plan of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java updatePlan()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify ADMIN + ownership, UPDATE addon_plan name/price/slug, publish event.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java updatePlan()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Updates the plan's name, price and slug (omitted ones keep their value) and the values of the features listed, then returns the plan; 404 when the provider has no such plan. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

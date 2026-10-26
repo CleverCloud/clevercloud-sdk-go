@@ -11,16 +11,15 @@ import (
 )
 
 /*
-Deleteselfpurchaseorder DELETE /v2/self/payments/billings/{bid} — discontinued.
+Deleteselfpurchaseorder Delete a purchase order (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:169 deletePurchaseOrder() — 501
-Issues: #106, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - bid: Invoice/billing ID
+  - bid: Invoice ID
 
 # Returns the operation result or an error
 

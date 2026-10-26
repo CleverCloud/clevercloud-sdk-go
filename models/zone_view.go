@@ -2,13 +2,9 @@
 
 package models
 
-// ZoneView Zone view returned by GET /v2/products/zones. Matches cc-api openapi/ccapiv3.json ZoneView schema...
+// ZoneView Zone view returned by GET /v2/products/zones — the ccapidto DTO, whole.  `ZoneView.java:11-13` de...
 type ZoneView struct {
-	City                *string `json:"city,omitempty"` // City name. Source: cc-api Zone.java — city field
-	CorrespondingRegion string  `json:"correspondingRegion"`
-	Country             *string `json:"country,omitempty"` // Country code (ISO 3166-1 alpha-2). Source: cc-api Zone.java — country field
-	Internal            bool    `json:"internal"`
-	Lat                 float64 `json:"lat"` // Latitude for map display. Console3 uses this for the zone selector. Source: cc-api Zone.java — la...
-	Lon                 float64 `json:"lon"` // Longitude for map display. Source: cc-api Zone.java — lon field
-	Name                string  `json:"name"`
+	CorrespondingRegion string `json:"correspondingRegion"`
+	Internal            bool   `json:"internal"`
+	Name                string `json:"name"`
 }

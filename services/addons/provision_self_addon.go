@@ -11,16 +11,9 @@ import (
 )
 
 /*
-Provisionselfaddon POST /v2/self/addons — provision a new addon.
+Provisionselfaddon Create an add-on for the current user
 
-Source: cc-api SelfAddonsAPI.java createAddon()
-Source: cc-api AddonAPIHelper.java:96-183 (_provision)
-Behavior: validates request, calls provider API, stores in DB, returns AddonView
-Issue: #108
-
-Algorithm: Validate provider+plan, call provider POST /resources (Heroku protocol); Store addon row, env vars, link to owner, publish event
-Legacy: cc-api SelfAddonsAPI.java createAddon() -> AddonAPIHelper._provision()
-Conformity: faithful -- full Heroku provisioning protocol
+Provisions an add-on at its provider for the user's personal account and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

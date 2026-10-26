@@ -4,7 +4,7 @@ package models
 
 import "time"
 
-// FailureCause Structured reason a cluster status transitioned to a failure state, stored as a single JSON-encod...
+// FailureCause Why an operation failed: the operation, the step it failed at (absent when the operation has no s...
 type FailureCause struct {
 	Message    string    `json:"message"`
 	OccurredAt time.Time `json:"occurredAt"`

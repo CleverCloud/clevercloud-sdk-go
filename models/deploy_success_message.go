@@ -2,7 +2,7 @@
 
 package models
 
-// DeploySuccessMessage Legacy redeploy success response.  Source: cc-api BdsHelper.java:303 — `DeploySuccessMessage(Succ...
+// DeploySuccessMessage Confirmation that a redeployment was started, with the identifier of the new deployment.
 type DeploySuccessMessage struct {
 	DeploymentID string `json:"deploymentId"`
 	ID           int    `json:"id"`

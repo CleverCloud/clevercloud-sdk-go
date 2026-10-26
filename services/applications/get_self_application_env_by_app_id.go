@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfapplicationenvbyappid GET /v2/self/applications/{app_id}/env — get environment variables.
+Getselfapplicationenvbyappid List the environment variables of an application
 
-Source: cc-api SelfApplicationsAPI.java getSelfApplicationEnvByAppId()
-Issue: #2228
-
-Legacy: SelfApplicationsHelper.java:184-186 getApplicationEnv() -> ApplicationHelper.java:3751-3769 getApplicationEnv()
-Algorithm: Shape S4 — userAllowedInOrgaGuard(canAddApp), owner-scoped 404 APPLICATION_NOT_FOUND lookup, then read application env.
-Conformity: faithful — personal org_id, canAddApp, and owner-scoped 404/4004. Refs #2228
+Returns the environment variables set on an application of the user's personal space, as name/value pairs.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

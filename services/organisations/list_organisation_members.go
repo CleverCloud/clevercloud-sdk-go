@@ -12,26 +12,9 @@ import (
 )
 
 /*
-Listorganisationmembers GET /v2/organisations/{id}/members — list members of an organisation.
+Listorganisationmembers List the members of an organisation
 
-Source: cc-api OrganisationMembersAPI.java GET /organisations/{id}/members
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Look the organisation up FIRST, then gate on membership — the order decides 404 vs 403
-  - `oph.find(id)` null → 404 ORGA_NOT_FOUND (6004)
-  - `!token.hasAccessToOrg(orga)` → 403 ORGA_MEMBER_NOT_FOUND (6501)
-  - `orga.getDeletionDate() != null` → 403 ORGANISATION_NOT_ACTIVE (6017)
-  - then join organisation_members + member_info + users + owner_info and return the
-    MemberView list with its nested user object (id, email, name, avatar, preferredMfa)
-  - Legacy note: cc-api OrganisationMemberHelper.java:340-350 getMembers()
-
-🔧 **Algo Rust (Implementation):**
-  - Conformity: faithful for the 404 + ORGA_MEMBER_NOT_FOUND branches; the deletionDate
-    gate is not implemented here (tracked with the other org-scoped envelopes, refs #2029)
-  - The membership denial is ORGA_MEMBER_NOT_FOUND (6501) here, NOT the ORGA_ACCESS (6200)
-    `get_organisation` returns — legacy really does use two different constants on the two
-    handlers (OrganisationHelper.java:145 vs OrganisationMemberHelper.java:345)
+Returns each member with their user profile, role and job title. The caller must be a member (403 otherwise), and the organisation's partner may forbid listing members. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

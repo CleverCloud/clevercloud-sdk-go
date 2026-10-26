@@ -2,8 +2,8 @@
 
 package models
 
-// PaasRestartInput Body of the PaaS restart endpoint (legacy `RedeploymentInput`).  Source: references/legacy/ovd/co...
+// PaasRestartInput Options of an application restart: the commit to deploy and whether to use the build cache.
 type PaasRestartInput struct {
-	Commit   *string `json:"commit,omitempty"`
-	UseCache *bool   `json:"useCache,omitempty"`
+	Commit   *string `json:"commit,omitempty"`   // Commit to deploy; the application's current commit when absent or empty.
+	UseCache *bool   `json:"useCache,omitempty"` // Use the build cache. Defaults to `true`.
 }

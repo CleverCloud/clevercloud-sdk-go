@@ -2,7 +2,7 @@
 
 package models
 
-// PartnerFlag represents A partner flag, spelled exactly as the `partner_flags.flag` column and the Java enum spell it (Ja...
+// PartnerFlag represents A restriction a partner imposes on its users and their organisations: `DENY_ORGA_CREATION` (no or...
 type PartnerFlag string
 
 const (
@@ -12,6 +12,7 @@ const (
 	PartnerFlagDenyOrgaMemberUpdate    PartnerFlag = "DENY_ORGA_MEMBER_UPDATE"
 	PartnerFlagDenyOrgaMemberList      PartnerFlag = "DENY_ORGA_MEMBER_LIST"
 	PartnerFlagDenySelfAccountDeletion PartnerFlag = "DENY_SELF_ACCOUNT_DELETION"
+	PartnerFlagDenyPersonalResources   PartnerFlag = "DENY_PERSONAL_RESOURCES"
 )
 
 // String returns the underlying string value

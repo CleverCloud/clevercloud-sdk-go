@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Getapplicationdependenciesenvbyorgaandappid GET /v2/organisations/{id}/applications/{app_id}/dependencies/env — dependencies env vars.
+Getapplicationdependenciesenvbyorgaandappid List the environment variables of an application's dependencies
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationDependenciesEnv()
-Issue: #107
-
-Legacy: cc-api ApplicationDependenciesHelper.java:56-73, :89-116 getDependenciesEnv()
-Algorithm: Shape S3 — the same shared private getApp() (:56-73) as getDependencies: canAddApp/8101 on both the scope miss and the role miss, then the owner-scoped lookup; Fetch dependency IDs, then env vars for each; Return as Vec<DependencyEnvView> {app_id, ...
-Conformity: enhanced — guard is shape S3 (canAddApp/8101, not canAccessApps); returns env per dep. Refs #2211, #2594
+Returns, for each dependency of an organisation's application, its ID, its name and its environment variables; a dependency owned by another owner is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

@@ -12,17 +12,9 @@ import (
 )
 
 /*
-Getproviderplans GET /v2/organisations/{id}/addonproviders/{provider_id}/plans — list plans.
+Getproviderplans List the plans of an add-on provider
 
-Source: cc-api OrganisationAddonProviderAPI.java getPlans()
-Issue: #103
-
-📥 **Algo Source (Legacy):**
-Verify membership + ownership, SELECT from addon_plan ORDER BY price.
-- Legacy note: cc-api OrganisationAddonProviderAPI.java getPlans()
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful
+Returns the provider's plans with their prices and feature values. Requires the `ADMIN`, `MANAGER` or `DEVELOPER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

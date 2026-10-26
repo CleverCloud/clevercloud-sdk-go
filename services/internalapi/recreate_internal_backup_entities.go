@@ -10,16 +10,9 @@ import (
 )
 
 /*
-RecreateInternalBackupEntities Legacy: cc-api InternalApplicationsAPI.java:262 recreateBackupEntities()
-Algorithm: Legacy: authInternal() + isCCAdmin() + canManageOrganisationsApplications(); Legacy: iterate ALL ApplianceRepositorie...
-Conformity: enhanced — handles applications but not ApplianceRepository entities
+RecreateInternalBackupEntities Register every application with the backup service again
 
-POST /v2/internal/applications/backup-entities/recreate — batch recreate backup entities.
-
-Source: cc-api InternalApplicationsAPI.java:262 recreateBackupEntities()
-Behavior: iterates all applications and recreates their backup-manager entities.
-Admin-only recovery endpoint.
-Issue: #159
+Registers every application with the backup service again and returns a report. Restricted to internal credentials with administration rights.
 
 Parameters:
   - ctx: context for the request

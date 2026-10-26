@@ -10,10 +10,9 @@ import (
 )
 
 /*
-Setselfdefaultmethod PUT /v2/self/payments/methods/default — discontinued.
+Setselfdefaultmethod Set the default payment method (discontinued)
 
-Source: cc-api SelfPaymentsAPI.java:295 setDefaultMethod() — 501
-Issues: #289, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

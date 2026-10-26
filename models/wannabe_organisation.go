@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeOrganisation Request body for POST/PUT /v2/organisations.  Source: cc-api WannabeOrganisation.java Source: cc-...
+// WannabeOrganisation Details to create an organisation with, or to replace an organisation's details with. `name` (at ...
 type WannabeOrganisation struct {
 	Address          *string `json:"address,omitempty"`
 	BillingEmail     *string `json:"billingEmail,omitempty"`

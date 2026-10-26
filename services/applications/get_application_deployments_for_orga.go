@@ -13,21 +13,16 @@ import (
 )
 
 /*
-Getapplicationdeploymentsfororga GET /v2/organisations/{id}/applications/{app_id}/deployments — deployment history.
+Getapplicationdeploymentsfororga List the deployments of an application
 
-Source: cc-api OrganisationApplicationsAPI.java getOrganisationApplicationDeployments()
-Issue: #107
-
-Legacy: cc-api ApplicationHelper.java:453-502 getDeployments(), pagination in :506 _getDeployments()
-Algorithm: Shape D1 — the scope bit then plain hasAccessToOrg, with NO role predicate, plus the Jenkins shared-secret fallback read only once ordinary authentication has failed; Query deployments table with limit (default 20, max 100), offset, option...
-Conformity: faithful — shape D1: no role predicate (not canAccessApps), Jenkins shared-secret channel with its runner-tags bodyless 403; same pagination, same action filter, same ordering. Refs #2211
+Returns the deployment history of an organisation's application, paginated with `limit` and `offset`; an `action` query parameter keeps only one kind of deployment (`DEPLOY`, `UNDEPLOY`, `UPSCALE` or `DOWNSCALE`). Requires membership of the organisation. The organisation's Jenkins token reads only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

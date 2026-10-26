@@ -2,7 +2,7 @@
 
 package models
 
-// DeploymentEventOperation represents Legacy wire vocabulary for [`DeploymentEventView::operation`].  Pure DTO — no Postgres binding (u...
+// DeploymentEventOperation represents Operation a deployment event belongs to: a cluster creation, redeploy, upgrade or deletion, or a ...
 type DeploymentEventOperation string
 
 const (

@@ -23,7 +23,6 @@ type Options struct {
 	Limit       *int64  `url:"limit,omitempty"`
 	Offset      *int64  `url:"offset,omitempty"`
 	Orga        *string `url:"orga,omitempty"`
-	Q           *string `url:"q,omitempty"`
 	User        *string `url:"user,omitempty"`
 }
 
@@ -97,13 +96,6 @@ func WithOrga(orga string) Option {
 	}
 }
 
-// WithQ sets the q query parameter
-func WithQ(q string) Option {
-	return func(o *Options) {
-		o.Q = &q
-	}
-}
-
 // WithUser sets the user query parameter
 func WithUser(user string) Option {
 	return func(o *Options) {
@@ -148,9 +140,6 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Orga != nil {
 		params = append(params, fmt.Sprintf("orga=%s", url.QueryEscape(*options.Orga)))
-	}
-	if options.Q != nil {
-		params = append(params, fmt.Sprintf("q=%s", url.QueryEscape(*options.Q)))
 	}
 	if options.User != nil {
 		params = append(params, fmt.Sprintf("user=%s", url.QueryEscape(*options.User)))

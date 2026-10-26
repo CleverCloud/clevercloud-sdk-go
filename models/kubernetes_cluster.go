@@ -4,21 +4,26 @@ package models
 
 import "time"
 
-// KubernetesCluster Cluster view returned by Kubernetes API endpoints (aggregate).  Source: references/legacy/ovd/mod...
+// KubernetesCluster A Kubernetes cluster. The detail response (`GET` of one cluster) also carries `features`, `apiSer...
 type KubernetesCluster struct {
-	CreationDate         time.Time                    `json:"creationDate"`          // Creation date
-	Description          *string                      `json:"description,omitempty"` // Optional description
+	APIServerURL         *string                      `json:"apiServerUrl,omitempty"`        // The URL clients reach the cluster's API server at: the `server:` of the default (`LOADBALANCER`) ...
+	CreationDate         time.Time                    `json:"creationDate"`                  // Creation date
+	DeploymentProfileID  *string                      `json:"deploymentProfileId,omitempty"` // The deployment profile the cluster was created with (`kubernetes_deployment_profile_<uuid>`); `nu...
+	Description          *string                      `json:"description,omitempty"`         // Optional description
+	Failure              *FailureCause                `json:"failure,omitempty"`
 	Features             *ClusterFeatures             `json:"features,omitempty"`
-	ID                   string                       `json:"id"`                             // Kubernetes cluster ID (kube_xxx)
-	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`        // Load balancers (empty in the base view)
-	LocationID           string                       `json:"locationId"`                     // Geographic / failure-domain location
+	ID                   string                       `json:"id"`                             // Kubernetes cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`)
+	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`        // Load balancers. Detail response only; empty elsewhere.
+	LocationID           *string                      `json:"locationId,omitempty"`           // Deprecated: read `zoneId`. Always the same value as `zoneId`, and `null` exactly when it is.
 	Name                 string                       `json:"name"`                           // Cluster name
-	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitempty"`           // Node groups (empty in the base view; assembled by the detail endpoint)
-	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitempty"` // Standalone node groups (empty in the base view)
+	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitempty"`           // Node groups, with their nodes. Detail response only; empty elsewhere.
+	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitempty"` // Standalone node groups. Detail response only; empty elsewhere.
 	Status               ClusterStatusType            `json:"status"`                         // Cluster status
-	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`    // Total storage usage in bytes (if known)
+	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`    // Total storage usage in bytes, when known.
 	Tags                 []SemanticTag                `json:"tags"`                           // Semantic tags
 	TenantID             string                       `json:"tenantId"`                       // Owner (organisation) ID
 	TopologyConfig       TopologyConfig               `json:"topologyConfig"`                 // Control-plane topology configuration
 	Version              Version                      `json:"version"`                        // Kubernetes version
+	Waiting              *ClusterWaitingView          `json:"waiting,omitempty"`
+	ZoneID               *string                      `json:"zoneId,omitempty"` // The zone (uuid) of the cluster's deployment profile, read at request time; `null` when that profi...
 }

@@ -12,21 +12,9 @@ import (
 )
 
 /*
-GetInternalBestAppForURI Legacy: cc-api InternalApplicationsAPI.java:353 getBestAppForUri()
-Source: cc-api ApplicationFacade.java:316 getBestAppForUri(uri) — URI host/path split, vhost join ordered by longest path_begin
-Source: cc-api ApplicationPersistHelper.java:211 getBestAppForUri(uri, userId) — owner + org-membership check, ApplicationWithOwner envelope
-Algorithm: parse uri via axum::http::Uri, percent-decode the path (java.net.URI.getPath() semantics), and reject any host outside the RFC2396 server-authority charset;
-a parse failure, missing scheme/host, invalid host, a malformed percent-escape, or a path that fails to decode all warn and fold into 404 APPLICATION_NOT_FOUND, mirroring Option.none() on a legacy IllegalArgumentException / null getHost();
-find_best_app_for_uri(host, decoded path) -> None -> 404 APPLICATION_NOT_FOUND (4004); owner_id NULL -> 404 ORGA_NOT_FOUND (6004);
-userId (first occurrence of a duplicated query param wins) absent or not a member of the owner org -> 404 ORGA_NOT_FOUND (6004); else 200 {appId, ownerId}.
-Conformity: faithful — legacy URI host/path vhost routing + owner-membership check; response is ApplicationWithOwner {appId, ownerId}, not ApplicationView.
-Documented divergences (legacy crashes to 500, we 404 instead — never the reverse): protocol-relative "//host/path" (no scheme, so we 404 where legacy would resolve host and match), opaque no-authority URIs like "http:example.com/x" (legacy NPEs on getHost()), and a NULL owner_id (legacy NPEs on the org lookup, we 404 6004).
+GetInternalBestAppForURI Find the application serving a URI
 
-GET /v2/internal/applications/best-app-for-uri/{uri} — find best app for a URI.
-
-Source: cc-api InternalApplicationsAPI.java:353 getBestAppForUri()
-Behavior: returns {appId, ownerId} for the app whose vhost best matches the URI's percent-decoded host+path (deletion_date IS NULL, longest path_begin wins), when userId (first occurrence wins) is a member of the app's owner org.
-Issue: #159, #1842
+Returns the application whose domain name and path prefix best match the URI (the longest matching prefix wins) with its owner, provided the user named by `userId` is a member of that owner; 404 otherwise. Restricted to internal credentials.
 
 Parameters:
   - ctx: context for the request

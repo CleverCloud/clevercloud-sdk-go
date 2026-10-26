@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeNetworkGroup Input to create a new network group.  Source: references/legacy/ovd/modules/networkgroup/models/N...
+// WannabeNetworkGroup Input to create a network group.
 type WannabeNetworkGroup struct {
 	Description *string                     `json:"description,omitempty"` // Optional description.
 	ID          *string                     `json:"id,omitempty"`          // Optional explicit ID; generated if absent.

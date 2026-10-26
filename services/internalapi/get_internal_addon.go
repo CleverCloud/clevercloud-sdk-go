@@ -12,21 +12,15 @@ import (
 )
 
 /*
-GetInternalAddon GET /internal/addons/{addonId} — get addon by ID or realId (internal).
+GetInternalAddon Get any add-on
 
-Source: cc-api InternalAddonsAPI.java:65 getAddon()
-Behavior: looks up addon by ID or real_id. Returns 404 if not found.
-Issue: #709
-
-Algorithm: Internal auth only, look up addon by ID or real_id
-Legacy: cc-api InternalAddonsAPI.java:65 getAddon()
-Conformity: faithful -- internal-only lookup
+Returns an add-on by add-on ID or real ID, whoever owns it; a deleted add-on is not found (404). Platform services only (403 otherwise).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addon_id: Addon ID or real ID
+  - addon_id: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

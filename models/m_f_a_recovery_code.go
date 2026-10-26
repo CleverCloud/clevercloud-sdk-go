@@ -2,7 +2,7 @@
 
 package models
 
-// MFARecoveryCode One recovery code returned by GET /v2/self/mfa/{kind}/backupcodes.  cc-api serializes `List<MFARe...
+// MFARecoveryCode A multi-factor authentication recovery code, usable once in place of a TOTP code.
 type MFARecoveryCode struct {
 	Code string `json:"code"`
 }

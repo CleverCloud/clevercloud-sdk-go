@@ -4,8 +4,8 @@ package models
 
 import "encoding/json"
 
-// ClusterItemDataView Public, tenant-facing view of [`ClusterItemData`].  Source: ClusterItemDataView.scala — ClusterIt...
-// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
+// ClusterItemDataView Data of a cluster item, discriminated by `type`: network group, load balancer, load-balancer netw...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
 type ClusterItemDataView struct {
 	raw json.RawMessage
 }

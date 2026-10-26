@@ -13,13 +13,18 @@ import (
 /*
 Deletegithublink DELETE /v2/github/link — unlink GitHub account.
 
-Source: cc-api GithubAPI.java deleteLink()
+Source: cc-api GithubAPI.java:99 unlinkGithub()
+Source: cc-api OAuth2ClientHelper.java:109-124 unlink()
 Behavior: Delete user's GitHub token from user_oauth_tokens
-Issues: #223, #2780
+Issues: #223, #2780, #3653
 
-Algorithm: Verify OAuth1 auth, delete user_oauth_tokens row for github service; Return success or 404 if not linked
-Legacy: cc-api GithubAPI.java deleteLink()
-Conformity: faithful — direct DB delete matching cc-api
+Algorithm: Verify OAuth1 auth and the manage_personal_information right, delete user_oauth_tokens row for github service; Return success or 404 if not linked
+Legacy: cc-api GithubHelper.java:72 unlink() -> OAuth2ClientHelper.java:109-124 unlink()
+Conformity: faithful on the right it demands — 403 USER_DATA_ACCESS without
+
+	`manage_personal_information`, as OAuth2ClientHelper.java:113-114 does. It still
+	answers 404 where legacy answers the success body whether or not a link existed,
+	which is deferred with the rest of the unlink body to #3655.
 
 Parameters:
   - ctx: context for the request

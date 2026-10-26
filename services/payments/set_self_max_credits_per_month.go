@@ -10,14 +10,9 @@ import (
 )
 
 /*
-Setselfmaxcreditspermonth PUT /v2/self/payments/monthlyinvoice/maxcredit — discontinued.
+Setselfmaxcreditspermonth Set the monthly credit limit (discontinued)
 
-Already answered 501 before this sweep, on its own reasoning (no
-`max_credits` column exists). Same answer, now for the same reason as its
-eighteen siblings.
-
-Source: cc-api SelfPaymentsAPI.java:404 setMaxCreditsPerMonth() — 501
-Issues: #267, #2428
+Discontinued endpoint: always answers 501, whatever the credentials. Use the `/v4/billing` endpoints instead.
 
 Parameters:
   - ctx: context for the request

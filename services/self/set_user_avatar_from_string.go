@@ -11,56 +11,9 @@ import (
 )
 
 /*
-Setuseravatarfromstring PUT /v2/self/avatar — replace the authenticated user's avatar.
+Setuseravatarfromstring Set the current user's avatar
 
-📥 **Algo Source (Legacy):**
-SelfAPI.java:142-164 declares the SAME two JAX-RS `@PUT @Path("avatar")` methods
-OrganisationAPI.java does — one consuming the five image types, one consuming JSON —
-and both delegate to `SelfAvatarHelper.replaceAvatar` (:25-28), which hands
-`tk.right().getUserId()` to `AvatarHelper.replaceAvatar(id, tk, mime, data)`:98-143 as
-the owner id. That method then re-runs its full organisation chain: 403 `8101` when
-the token cannot manage organisations, 404 `6004` when `oph.find(id)` finds nothing,
-403 `6200` when the caller has no access to what it found. All three clear on a real
-self-request, because every user is created with a same-id "Personal space"
-organisation of which they are the sole `ADMIN` — `UsersHelper.java:294`
-`oph.createForUser(user)`, and `Organisation(User user)`'s constructor
-(`Organisation.java:211-218`) reuses the caller's own `OwnerInfo`, so
-`orga.getInfo().getId() == token.getUserId()`. With that org resolved it deletes the
-previous Cellar object (`:109`), then resolves a URL — by uploading the image, or
-(source variant, gated on `!token.isServiceRequest()`, `:118`) by hashing the CALLING
-user's email for `gravatar` or reading their linked GitHub account for `github`. An
-unresolvable source is 400 `3026`; no linked GitHub account is `GithubHelper`'s own 404
-`1602`, propagated as-is. On success it writes `owner_info.avatar_url` and answers
-`UrlView` — `{"url": "…"}` — never a `Message`.
-
-🔧 **Algo Rust (Implementation):**
-  - The behaviour lives in `api-avatar`, shared with `PUT /v2/organisations/{id}/avatar`
-    (`organisations::put_org_avatar`); this handler owns the dispatch and the status codes.
-  - The auth chain is `guard_replace_avatar`: 401 `2001` with no credential, then the
-    403 `8101` `canManageOrganisations` gate legacy runs for EVERY caller including
-    this one, then 404 `6004` for a credential whose `getUserId()` is null (an internal
-    service). The capability reads oddly on a self route and is nonetheless what
-    `AvatarHelper.java:101-102` demands — `SelfAvatarHelper` delegates straight into it
-    with no self branch.
-  - Conformity divergence, deliberate and pre-existing (ruled faithful under #2248, kept
-    here rather than introduced): the PERSONAL-ORGANISATION half of that chain is not
-    re-run — no `oph.find` on the caller's own id, no membership/role check (403 `6200`).
-    #2248 found both invisible to a full-rights-token sweep and left them alone rather
-    than guess at them; the delete-old-avatar and the final write both read/write
-    `owner_info` by the caller's OWN id directly, which is the observable effect a
-    successful personal-organisation lookup would have had (same `OwnerInfo` row either
-    way) without needing that machinery to exist in this rebuild's data.
-  - Conformity: faithful otherwise, with the same 415-vs-400-`3026` divergence
-    `organisations::avatar_variant` documents (a body that is neither JSON nor one of
-    the five image types), and the same `BODY_SIZE_LIMIT_MB` bound
-    (`api/src/middleware.rs:29-43`) legacy has no counterpart to.
-
-Source: cc-api SelfAPI.java:142-164 setUserAvatarFromSource()/setUserAvatar()
-Source: cc-api helpers/user/self/orga/SelfAvatarHelper.java:25-28 replaceAvatar()
-Source: cc-api AvatarHelper.java:93-95,98-143 replaceAvatar()
-Source: cc-api AuthToken.java:99-108 getUserId()
-Schema: V1__Initial_schema.sql:1383-1391 — owner_info (id, avatar_url)
-Issues: #102, #2248, #2679, #2714
+Replaces the user's avatar and returns its URL. Send either the image itself (`image/bmp`, `image/gif`, `image/jpeg`, `image/png` or `image/tiff` body) or `{"source": "github"}` / `{"source": "gravatar"}` as JSON to use the linked GitHub account's avatar or the primary address's Gravatar; any other content type answers 415. Requires the `manage_organisations` right.
 
 Parameters:
   - ctx: context for the request

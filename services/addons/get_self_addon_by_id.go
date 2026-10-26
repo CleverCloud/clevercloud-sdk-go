@@ -12,20 +12,15 @@ import (
 )
 
 /*
-Getselfaddonbyid GET /v2/self/addons/{addon_id} — get a personal addon.
+Getselfaddonbyid Get an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java getAddon()
-Issue: #108
-
-Algorithm: Find addon by ID, verify ownership, build AddonView
-Legacy: cc-api SelfAddonsAPI.java getAddon()
-Conformity: faithful -- ownership check + 404 if not found
+Returns one add-on of the user's personal account, looked up by add-on ID or real ID; a deleted add-on is not found. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

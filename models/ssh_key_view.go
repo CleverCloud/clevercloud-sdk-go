@@ -2,7 +2,7 @@
 
 package models
 
-// SshKeyView SSH key view returned by GET /v2/self/keys.  Source: cc-api SshKey.java toView() Issue: #102
+// SshKeyView An SSH public key of the user: its name, the key itself and its fingerprint.
 type SshKeyView struct {
 	Fingerprint string `json:"fingerprint"`
 	Key         string `json:"key"`

@@ -12,21 +12,16 @@ import (
 )
 
 /*
-Updateorganisationapplicationfavouritevirtualhost PUT /v2/organisations/{id}/applications/{app_id}/vhosts/favourite — set favourite vhost.
+Updateorganisationapplicationfavouritevirtualhost Set the favourite domain name of an application
 
-Legacy: cc-api ApplicationHelper.java:1020 markFavouriteVhost()
-Algorithm: Auth + canAddApp; parse VhostView from body; Iterate app's vhosts, find matching fqdn (+path_begin); Set app.favourit...
-Conformity: faithful — DB UPDATE matches JPA setFavouriteVhost()
-
-Source: cc-api OrganisationApplicationsAPI.java markFavouriteOrganisationVhost()
-Issue: #107
+Marks one of the virtual hosts of an organisation's application as its favourite and returns it; the body is a virtual host whose `fqdn` must already be routed to the application (400, error id 3004, otherwise). Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by platform services.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

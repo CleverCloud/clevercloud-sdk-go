@@ -2,7 +2,7 @@
 
 package models
 
-// TcpRedirView TCP/UDP redirection view.  The port field is `port`, not `sourcePort`: `TcpRedirView.java:8` decl...
+// TcpRedirView A TCP or UDP redirection of an application: the namespace and the port allocated in it.
 type TcpRedirView struct {
 	Namespace string `json:"namespace"`
 	Port      int    `json:"port"`

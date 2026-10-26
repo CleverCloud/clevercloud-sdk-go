@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listrevocations
+Listrevocations GET /v4/tokens/revocations
 
 Parameters:
   - ctx: context for the request

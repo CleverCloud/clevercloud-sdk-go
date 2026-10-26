@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Addorganisationapplicationtag PUT /v2/organisations/{id}/applications/{app_id}/tags/{tag} — add a tag.
+Addorganisationapplicationtag Add a tag to an application
 
-Legacy: cc-api OrganisationApplicationTagsAPI.java addTag()
-Algorithm: Auth + org membership; add tag to app's tag list; Persist, return updated tag list
-Conformity: faithful — INSERT ON CONFLICT DO NOTHING matches JPA
-
-Source: cc-api OrganisationApplicationsAPI.java addOrganisationTag()
-Issue: #107
+Adds a tag to an organisation's application and returns its tags. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
   - tag: Tag
 
 # Returns the operation result or an error

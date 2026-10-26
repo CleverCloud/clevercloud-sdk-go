@@ -2,7 +2,7 @@
 
 package models
 
-// MetabasePatchRequest Request body for the version-update endpoint.  Source: references/legacy/ovd/modules/metabase/mod...
+// MetabasePatchRequest Version to switch a Metabase add-on to.
 type MetabasePatchRequest struct {
 	TargetVersion string `json:"targetVersion"` // Target version to upgrade/downgrade to.
 }

@@ -12,28 +12,16 @@ import (
 )
 
 /*
-Getaddonbyorgaandaddonid GET /v2/organisations/{id}/addons/{addon_id} — get an organisation addon.
+Getaddonbyorgaandaddonid Get an add-on of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java getAddon()
-Source: cc-api 080dc90f + 238bb5b5 (Sébastien Allema, 2026-05-25) — feat(addon):
-
-	allow internal auth on GET /v2/organisations/{id}/addons/{addonId}.
-	`getAddon` switched to `authAllowingInternal`, and `AddonHelper.java:150`
-	now scopes the `canAccessAddons()` role check to external/service
-	tokens only — internal service-to-service callers pass through.
-
-Issue: #108, #1045
-
-Algorithm: Verify org membership + addon ownership by org, build AddonView
-Legacy: cc-api OrganisationAddonsAPI.java getAddon()
-Conformity: faithful -- IDOR fix: verifies addon belongs to org
+Returns one add-on of the organisation, looked up by add-on ID or real ID; a deleted add-on is not found. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services allowed to manage organisation services.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

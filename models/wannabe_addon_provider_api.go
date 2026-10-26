@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeAddonProviderApi `api` on [`WannabeAddonProvider`].  `test` and `production` are OBJECTS, not URLs. cc-api binds e...
+// WannabeAddonProviderApi API settings of an add-on provider: its test and production endpoints, its SSO salt and its API p...
 type WannabeAddonProviderApi struct {
 	Password   *string                     `json:"password,omitempty"`
 	Production *WannabeAddonProviderApiUrl `json:"production,omitempty"`

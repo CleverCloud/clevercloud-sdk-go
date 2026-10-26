@@ -13,7 +13,8 @@ import (
 
 /*
 MysqlRedeployDedicated PUT /internal/{id}/redeploy?imageVersion=... — republish a BDS START for a
-dedicated addon (ops redeploy). Requires messaging. Source: Internal.redeployDedicated.
+dedicated addon (ops redeploy). Publishes, so it answers 501 with no broker
+configured. Source: Internal.redeployDedicated.
 
 Parameters:
   - ctx: context for the request

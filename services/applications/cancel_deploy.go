@@ -11,28 +11,15 @@ import (
 )
 
 /*
-Canceldeploy Legacy: SelfApplicationsHelper.java:106-109 cancelDeploy() -> ApplicationHelper.java:1650-1673 cancelDeploy()
-Algorithm: Shape S2, then find deployment by ID, check WIP, and build BDS cancellation.
-Conformity: faithful — full BDS cancel instruction with state validation. Resolves
-both the uuid and the deploy number (:1689 fallback), and every miss — unparseable
-id, unknown number, non-WIP deployment — collapses to 400 DEPLOYMENT_NOT_WIP
-(id 4101) like legacy, which never 404s a deployment here. The side-effects — the
-`WANTS_TO_BE_UP` → `SHOULD_BE_DOWN` transition and the normal-lane publish — are
-shared with the org route in `apply_deployment_cancel`.
-Issues: refs #2004, refs #2008, refs #2009, refs #2010, refs #2136, refs #2228
+Canceldeploy Cancel a deployment of an application
 
-DELETE /v2/self/applications/{app_id}/deployments/{deployment_id}/instances — cancel deployment.
-
-Source: cc-api SelfApplicationsAPI.java cancelDeployment()
-Behavior: publishes BDS CANCEL instruction on the normal queue, returns 200
-APPLICATION_DEPLOY_CANCELLED (id 325).
-Issue: #2228
+Cancels a deployment of an application of the user's personal space that is still in progress, designated by its ID or its number. Answers 400 (error id 4101) when the deployment is not in progress.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
   - deploymentId: Deployment ID
 
 # Returns the operation result or an error

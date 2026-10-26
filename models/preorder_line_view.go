@@ -2,11 +2,11 @@
 
 package models
 
-// PreorderLineView Simplified preorder line — a single line item in a preorder invoice.  Source: cc-api PurchaseOrde...
+// PreorderLineView A line of an add-on order's invoice preview.
 type PreorderLineView struct {
 	Description    string  `json:"description"`              // Description of the line item.
 	Pack           *string `json:"pack,omitempty"`           // Pack name, when the line came from one.
-	Price          float64 `json:"price"`                    // Line price — `getPriceTotalHT()`, or the discounted original.
+	Price          float64 `json:"price"`                    // Line price, excluding VAT.
 	SubDescription *string `json:"subDescription,omitempty"` // Second line of the description; null on a zero-cost preorder.
 	VAT            int     `json:"VAT"`                      // VAT amount.
 }

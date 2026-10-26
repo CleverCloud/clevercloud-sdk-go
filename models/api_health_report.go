@@ -4,10 +4,11 @@ package models
 
 import "time"
 
-// ApiHealthReport The aggregate module health report. `service` is the module's UPPERCASE service name (`"MONITORIN...
+// ApiHealthReport Health report of a module: its aggregate status and the result of each of its constraints, in a s...
 type ApiHealthReport struct {
-	Constraints []ApiHealthConstraintResult `json:"constraints"` // One entry per registered constraint, in report order.
-	Service     string                      `json:"service"`     // The UPPERCASE service name, e.g. `MONITORING`.
-	Status      ApiHealthStatus             `json:"status"`      // The aggregate status over `constraints`.
-	Timestamp   time.Time                   `json:"timestamp"`   // When the report was computed (ISO-8601).
+	Constraints   []ApiHealthConstraintResult `json:"constraints"`   // One entry per registered constraint, in report order.
+	Informational []string                    `json:"informational"` // The constraints, named among `constraints`, that this module reports without letting them decide:...
+	Service       string                      `json:"service"`       // The UPPERCASE service name, e.g. `MONITORING`.
+	Status        ApiHealthStatus             `json:"status"`        // The aggregate status over `constraints`.
+	Timestamp     time.Time                   `json:"timestamp"`     // When the report was computed (ISO-8601).
 }

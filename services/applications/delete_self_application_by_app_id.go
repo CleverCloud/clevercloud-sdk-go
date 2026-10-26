@@ -12,24 +12,15 @@ import (
 )
 
 /*
-Deleteselfapplicationbyappid DELETE /v2/self/applications/{app_id} — soft-delete an application.
+Deleteselfapplicationbyappid Delete an application of the current user
 
-Source: cc-api SelfApplicationsAPI.java:112-121 deleteApplication()
-Sets deletion_date = NOW(), removes vhosts.
-The STOP instruction's cause is the calling consumer's name, not a hardcoded
-string: legacy's delete() reads token.getConsumerName() and threads it into
-_delete() as cause (ApplicationHelper.java:929-932).
-Issues: #107, refs #2136, refs #2228
-
-Legacy: SelfApplicationsHelper.java:87-91 delete() -> ApplicationHelper.java:889-933 delete() -> :872-887 _delete() -> :766-858 doDeleteApp()
-Algorithm: Shape S11 with the caller's personal organisation as the owner and the Jenkins channel starved, then the owner-scoped 404/4004 resolution and the 9-step teardown.
-Conformity: faithful — all 9 steps implemented; BDS/DNS/events conditional on messaging feature
+Stops and deletes an application of the user's personal space.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - appId: Application ID
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

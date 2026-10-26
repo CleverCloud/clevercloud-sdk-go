@@ -11,16 +11,15 @@ import (
 )
 
 /*
-Rebootmatomo POST .../addons/{id}/reboot — restart the PHP app **with** build cache.
+Rebootmatomo Restart a Matomo add-on
 
-Source: references/legacy/ovd/modules/matomo/src/main/scala/com/clevercloud/matomo/services/MatomoProviderService.scala — rebootAddon(rebuild=false)
-Issue: #660
+Restarts the add-on's PHP application, reusing the build cache. Answers 400 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId: Matomo addon ID
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

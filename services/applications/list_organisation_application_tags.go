@@ -11,21 +11,16 @@ import (
 )
 
 /*
-Listorganisationapplicationtags GET /v2/organisations/{id}/applications/{app_id}/tags — application tags.
+Listorganisationapplicationtags List the tags of an application
 
-Source: cc-api OrganisationApplicationTagsAPI.java:54-55 getApplicationTags()
-Issue: #107
-
-Legacy: cc-api ApplicationTagsHelper.java:37-52 getApp(), :64-69 getTags()
-Algorithm: Shape S3 — canAddApp paired with OWNER_APP_ADDITION_RIGHT (8101) on both the scope miss and the role miss, then the owner-scoped lookup; Fetch tags from application_tags table for app_id; Return as Vec<String>
-Conformity: faithful — shape S3: canAddApp/8101 (not canAccessApps), same tag storage, same Vec<String> return. Refs #2211
+Returns the tags of an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - id: Organisation ID
-  - appId: Application ID
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
+  - appId: Application ID (`app_…`)
 
 # Returns the operation result or an error
 

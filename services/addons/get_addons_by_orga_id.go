@@ -12,14 +12,9 @@ import (
 )
 
 /*
-Getaddonsbyorgaid GET /v2/organisations/{id}/addons — list organisation addons.
+Getaddonsbyorgaid List the add-ons of an organisation
 
-Source: cc-api OrganisationAddonsAPI.java getAddons()
-Issue: #108
-
-Algorithm: Verify org membership (role-based), query addons by org owner_id
-Legacy: cc-api OrganisationAddonsAPI.java getAddons()
-Conformity: faithful -- org RBAC + full addon list
+Returns the add-ons owned by the organisation. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

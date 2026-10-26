@@ -2,7 +2,7 @@
 
 package models
 
-// SetContactsRequest Request body for PUT /v2/internal/organisations/{id}/contacts.  TWO wire shapes are accepted, and...
+// SetContactsRequest Security, privacy and abuse contacts of an organisation, replacing the current ones. Send either ...
 type SetContactsRequest struct {
 	BillingEmail *string        `json:"billing_email,omitempty"` // Billing email for the organisation.
 	Contacts     []ContactEntry `json:"contacts"`                // HDS/regulatory contacts (security, privacy, abuse).

@@ -2,9 +2,9 @@
 
 package models
 
-// FlavorMemory Memory object returned in FlavorView (unit + value).  Source: cc-api Flavor.java toView() — memor...
+// FlavorMemory Memory of a flavor, with its unit and a human-readable form.
 type FlavorMemory struct {
-	Formatted *string     `json:"formatted,omitempty"` // Human-readable formatted string like "256 MB".  Source: cc-api Flavor.java getMemoryWithUnit()
-	Unit      string      `json:"unit"`
+	Formatted *string     `json:"formatted,omitempty"` // Human-readable memory size, such as `256 MB`.
+	Unit      string      `json:"unit"`                // Unit of `value`: `B` (bytes).
 	Value     Information `json:"value"`
 }

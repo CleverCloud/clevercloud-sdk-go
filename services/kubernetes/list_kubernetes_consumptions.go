@@ -13,59 +13,15 @@ import (
 )
 
 /*
-Listkubernetesconsumptions GET /v4/kubernetes/organisations/{owner_id}/kubernetes/consumptions — the billing
-pull surface: prorated per-cluster `ResourceConsumption` records.
+Listkubernetesconsumptions List the Kubernetes consumption of an organisation
 
-⚠️ **Breaking change (#2353).** This route previously answered
-`Vec<ClusterItemUsageView>` under the console user's `OrgAdmission<ReadAccess>`
-— a stub whose `Source:` cited `ConsumptionController.scala` while returning a
-shape that file never produces. That data is unchanged at
-`/v4/kubernetes/organisations/{owner_id}/usage`; this path now serves the OVD
-contract billing actually consumes, with no compatibility shim.
-
-📥 **Algo Source (Legacy):**
-Report a tenant's prorated kubernetes consumption over `[since, until)`.
-  - Authenticate the module's machine Basic pair (`basicAuthLogic`); reject otherwise
-  - `since` defaults to `2025-01-01T00:00:00Z`; `until` is required; `since` after
-    `until` is a 400 "Since date must be before until date."
-  - Prorate every `COMPONENT_BUNDLE`/`NODE_GROUP` item and node overlapping the
-    window across hourly buckets (`BillingUsageService.computeUsageForPeriod`)
-  - Assemble one `ResourceConsumption` per cluster, filtered by `resourceId`
-    (`KubernetesConsumptionComponent.retrieveConsumption`)
-  - Source: ovd ProductConsumptionComponent.scala:338-356 + KubernetesConsumptionComponent.scala:45-66
-
-🔧 **Algo Rust (Implementation):**
-- `check_consumption_basic_auth` gates on the module's Basic pair
-- Parse/validate the query, then fetch the two overlapping row sets below
-- [`crate::consumption::compute_usage_for_period`] prorates (pure, sans-io)
-- [`crate::consumption::resource_consumptions`] assembles + filters
-
-**No billing message is published, and that is faithful**: OVD's
-`billingUsageService` feeds only this HTTP component — the module contains no
-AMQP/Pulsar producer at all (`KubernetesModule.scala:429,462`). Emission to
-billing *is* this endpoint, which cc-api's consumption collector polls.
-
-Source: references/legacy/ovd/core/src/main/scala/com/clevercloud/core/consumption/ProductConsumptionComponent.scala:338-356 — createEndpoint
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/services/KubernetesConsumptionComponent.scala:45-66 — retrieveConsumption
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/repositories/ClusterItemRepository.scala:351-362 — listActiveInPeriodByTenant
-Source: references/legacy/ovd/modules/kubernetes/src/main/scala/com/clevercloud/kubernetes/repositories/NodeRepository.scala:373-408 — findActiveInPeriodByNodeGroupIds
-Schema: cluster_item.created_at/deactivated_at (V2.0.0__resource_model.sql:10, V2.4.3__add_deactivated_at_to_cluster_item.sql:4),
-
-	node.activated_at/deactivated_at (V2.4.1__add_node_billing_timestamps.sql:6-7),
-	cluster.tenant_id (V0__init_kubernetes_tables.sql:10)
-
-Behavior: 401 unauthenticated or unconfigured; 400 on a missing/malformed `until`,
-
-	a malformed `since`, `since` after `until`, or a `resourceId` that is not
-	a kubernetes id; else 200.
-
-Issue: #2353
+Called by the billing service: returns the organisation's consumption per cluster over `[since, until)`, prorated hourly, optionally restricted to the clusters `resourceId` names. 400 when `until` is missing or a date or ID is malformed.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId: Owner (org) ID
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -81,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesConsumptions
 */
-func Listkubernetesconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.KubernetesResourceConsumptionView] {
+func Listkubernetesconsumptions(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.ResourceConsumption] {
 	ctx, span := tracer.Start(ctx, "listKubernetesConsumptions", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -94,7 +50,7 @@ func Listkubernetesconsumptions(ctx context.Context, c *client.Client, tracer tr
 	}
 
 	// Make API call
-	response := client.Get[[]models.KubernetesResourceConsumptionView](ctx, c, path)
+	response := client.Get[[]models.ResourceConsumption](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

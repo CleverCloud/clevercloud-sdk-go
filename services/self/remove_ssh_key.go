@@ -12,25 +12,15 @@ import (
 )
 
 /*
-Removesshkey DELETE /v2/self/keys/{key_name} — remove an SSH key.
+Removesshkey Remove an SSH key from the current user
 
-📥 **Algo Source (Legacy):**
-Verify token can manage ssh keys (403 USER_DATA_ACCESS otherwise), load user (404 USER_NOT_FOUND), call UserPersistHelper.removeSshKey: if user.removeSshKey returns null OR edit(user) returns null → fall-through to 500 + USER_SSHKEY_DELETION(7102). Otherwise broadcast REMOVE_KEY via Etilotig/Shiva and return 200 Success.SSH_KEY_DELETION.
-- Legacy note: cc-api SelfKeysAPI.java:54 removeSshKey() -> SelfSshKeyHelper.java:81-107 remove() — the `if (oldKey != null)` early-return is intentional, the unconditional `return Response.serverError().entity(Errors.USER_SSHKEY_DELETION.toJson()).build()` covers both "key absent" and any caught exception.
-- Legacy note: cc-api Errors.java:211 USER_SSHKEY_DELETION(7102, "A problem occured while removing your ssh key") — typo "occured" (single c) preserved verbatim.
-
-🔧 **Algo Rust (Implementation):**
-- Conformity: faithful — when the key row is absent, the handler returns 500 + Message{id:7102,type:"error",message:"A problem occured while removing your ssh key"} directly (Option A per #1030), bypassing AuthError whose variants map to fixed (status, code) tuples.
-Source: cc-api SelfKeysAPI.java:54 removeSshKey()
-Source: cc-api SelfSshKeyHelper.java:81-107 remove()
-Source: cc-api Errors.java:211 USER_SSHKEY_DELETION
-Issues: #102, #1030
+Deletes the user's SSH key of that name and revokes its Git and SSH access. An unknown name answers 500 with error id 7102. Requires the `manage_ssh_keys` right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - key: SSH key label
+  - key: Name of the key
 
 # Returns the operation result or an error
 

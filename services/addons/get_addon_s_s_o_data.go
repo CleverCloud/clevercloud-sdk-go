@@ -12,22 +12,15 @@ import (
 )
 
 /*
-Getaddonssodata GET /v2/self/addons/{addon_id}/sso — get SSO data for personal addon.
+Getaddonssodata Get the single sign-on data of an add-on of the current user
 
-Source: cc-api SelfAddonsAPI.java:140-149 getSSOData()
-Source: cc-api AddonHelper.java:481-503 getSSOData()
-Behavior: returns SSO token, signature, URL for addon provider dashboard
-Issue: #216
-
-Algorithm: Verify ownership, compute Heroku SSO token + URL
-Legacy: cc-api SelfAddonsAPI.java:140 getSSOData() -> AddonHelper.getSSOData()
-Conformity: faithful -- GET variant of SSO data
+Returns the signed data that opens the add-on's provider dashboard as the current user: the provider's SSO `url`, the add-on real `id`, `timestamp`, `token`, `signature` and `email`. The add-on is looked up by add-on ID or real ID among the user's own; 404 otherwise. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId: Addon ID
+  - addonId: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 

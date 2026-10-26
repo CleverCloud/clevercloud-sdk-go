@@ -2,10 +2,10 @@
 
 package models
 
-// KeycloakVersionChecker Result of the "is an update available" check.  Source: references/legacy/ovd/modules/keycloak/src...
+// KeycloakVersionChecker Whether a Keycloak add-on can move to a newer version.
 type KeycloakVersionChecker struct {
-	Available  []string `json:"available"`  // The whole catalogue the provider offers.
-	Installed  string   `json:"installed"`  // Version the instance currently runs (from `CC_KEYCLOAK_VERSION`).
-	Latest     string   `json:"latest"`     // Newest offered version — legacy takes the LAST entry, not a semver max.
-	NeedUpdate bool     `json:"needUpdate"` // `true` when `latest != installed`.
+	Available  []string `json:"available"`  // Versions on offer.
+	Installed  string   `json:"installed"`  // Version the add-on currently runs; a `NOT FOUND` marker when its application reports none.
+	Latest     string   `json:"latest"`     // Newest version on offer: the last entry of `available`.
+	NeedUpdate bool     `json:"needUpdate"` // `true` when `installed` differs from `latest`.
 }

@@ -12,13 +12,9 @@ import (
 )
 
 /*
-MysqlV4GetAddon GET /v4/addon-providers/mysql-addon/addons/{appId} — the broker/cc-api-facing
-view. Returns the credential-free [`crate::views::MysqlAddonPublicView`] (no
-host/user/password/database/read_only_users) — like addon-redis's
-`RedisAddonPublicView` (#884, NOT dead code: it is exactly what redis's v4
-serves), so the plaintext connection secrets never reach a broker-authed
-response. Defence-in-depth on top: the cc-api Host allow-list
-(`CCAPI_ALLOWED_DOMAINS`, fail-closed) gates the origin. Source: Application.scala getAddon.
+MysqlV4GetAddon GET /v4/addon-providers/mysql-addon/addons/{appId} — the full view, as the legacy: the
+console shows its credentials and read-only users. Redis's credential-free view is not this
+provider's. Source: Application.scala getAddon.
 
 Parameters:
   - ctx: context for the request
@@ -39,14 +35,14 @@ Example:
 x-service: my_sql_addon
 operationId: mysql_v4_get_addon
 */
-func MysqlV4GetAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string) client.Response[models.MysqlAddonPublicView] {
+func MysqlV4GetAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string) client.Response[models.MysqlAddonView] {
 	ctx, span := tracer.Start(ctx, "mysql_v4_get_addon", trace.WithAttributes(attribute.String("app_id", app_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/mysql-addon/addons/%s", app_id)
 
 	// Make API call
-	response := client.Get[models.MysqlAddonPublicView](ctx, c, path)
+	response := client.Get[models.MysqlAddonView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

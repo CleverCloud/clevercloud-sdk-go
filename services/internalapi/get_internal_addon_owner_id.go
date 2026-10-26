@@ -11,21 +11,15 @@ import (
 )
 
 /*
-GetInternalAddonOwnerID GET /internal/addons/{addonId}/ownerId — get addon owner org ID (internal).
+GetInternalAddonOwnerID Get the owner of an add-on
 
-Source: cc-api InternalAddonsAPI.java:92 getAppOwner()
-Behavior: looks up addon by ID or real_id, returns owner org ID. Returns 404 if not found.
-Issue: #709
-
-Algorithm: Internal auth only, return addon owner_id
-Legacy: cc-api InternalAddonsAPI.java getAddonOwnerId()
-Conformity: faithful -- simple owner lookup
+Returns `{"id": "<owner ID>"}`, the user (`user_…`) or organisation (`orga_…`) that owns the add-on. 404 when the add-on does not exist or is deleted. Platform services only (403 otherwise).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addon_id: Addon ID or real ID
+  - addon_id: Add-on ID (`addon_…`) or real ID
 
 # Returns the operation result or an error
 
