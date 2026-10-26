@@ -27,12 +27,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.InternalSetTags(ctx, client, tracer, id)
+	response := internalapi.InternalSetTags(ctx, client, tracer, id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -41,14 +42,14 @@ Example:
 x-service: Internal
 operationId: internal_set_tags
 */
-func InternalSetTags(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func InternalSetTags(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody []string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "internal_set_tags", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/internal/organisations/%s/tags", id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

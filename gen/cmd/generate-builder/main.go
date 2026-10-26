@@ -13,6 +13,7 @@ import (
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
 
+	"go.clever-cloud.dev/sdk/internal/gotype"
 	"go.clever-cloud.dev/sdk/internal/naming"
 	"go.clever-cloud.dev/sdk/internal/spec"
 )
@@ -26,15 +27,15 @@ type Config struct {
 
 // BuilderOperation represents an API operation
 type BuilderOperation struct {
-	Name         string
-	Path         string
-	Method       string
-	Package      string
-	PathParams   []Param
-	QueryParams  bool
-	RequestBody  bool
-	RequestType  string
-	ResponseType string
+	Name        string
+	Path        string
+	Method      string
+	Package     string
+	PathParams  []Param
+	QueryParams bool
+	RequestBody bool
+	Body        gotype.Type
+	Response    gotype.Type
 }
 
 type Param struct {
@@ -166,78 +167,34 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 				}
 			}
 
-			// Extract request body type
-			hasRequestBody := false
-			requestType := ""
+			// Request body and response: one derivation shared with the services generator.
+			functionName := naming.FunctionName(operationID)
+			body := gotype.None
 			if op.RequestBody != nil && op.RequestBody.RequestBody != nil {
-				for _, mediaType := range op.RequestBody.RequestBody.Content {
-					// Only set hasRequestBody if we have a proper model type (with $ref)
-					schemaRef := getSchemaRef(mediaType.Schema)
-					if schemaRef != "" {
-						requestType = schemaMapToGoType(mediaType.Schema)
-						hasRequestBody = true
-					} else if getSchemaType(mediaType.Schema) == "array" && getSchemaItemsRef(mediaType.Schema) != "" {
-						requestType = schemaMapToGoType(mediaType.Schema)
-						hasRequestBody = true
-					}
-					break
-				}
+				body = gotype.Body(op.RequestBody.RequestBody.Content, functionName)
 			}
-
-			// Extract response type - check 200, 201, 202, 204 status codes
-			responseType := ""
-			foundSuccessResponse := false
+			response := gotype.Unknown
 			if op.Responses != nil {
 				for _, statusCode := range []string{"200", "201", "202", "204"} {
 					if respOrRef, ok := op.Responses.MapOfResponseOrReferenceValues[statusCode]; ok {
-						foundSuccessResponse = true
-						resp := respOrRef.Response
-						if resp == nil {
-							responseType = "client.Nothing"
-							break
+						if resp := respOrRef.Response; resp != nil {
+							response = gotype.Response(resp.Content, functionName)
 						}
-						// Check if response has content
-						if len(resp.Content) == 0 {
-							responseType = "client.Nothing"
-							break
-						}
-						// Try to find application/json content type first
-						jsonFound := false
-						for contentType, mediaType := range resp.Content {
-							if contentType == "application/json" || contentType == "*/*" || contentType == "" {
-								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
-								jsonFound = true
-								break
-							}
-						}
-						// If no application/json, take first content type
-						if !jsonFound {
-							for _, mediaType := range resp.Content {
-								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
-								break
-							}
-						}
-						if responseType != "" && responseType != "any" {
-							break
-						}
+						break
 					}
 				}
 			}
-			// If we found a success response but no type, it means empty content
-			if foundSuccessResponse && (responseType == "" || responseType == "any") {
-				responseType = "client.Nothing"
-			}
 
 			operations = append(operations, BuilderOperation{
-				Name:         operationID,
-				Path:         path,
-				Method:       method,
-				Package:      packageName,
-				PathParams:   pathParams,
-				QueryParams:  hasQueryParams,
-				RequestBody:  hasRequestBody,
-				RequestType:  requestType,
-				ResponseType: responseType,
+				Name:        operationID,
+				Path:        path,
+				Method:      method,
+				Package:     packageName,
+				PathParams:  pathParams,
+				QueryParams: hasQueryParams,
+				RequestBody: !body.IsNone(),
+				Body:        body,
+				Response:    response,
 			})
 		}
 	}
@@ -318,36 +275,6 @@ func schemaMapToGoType(schema map[string]any) string {
 
 // schemaMapToGoTypeForResponse is like schemaMapToGoType but returns "any" for
 // non-model types to match what services generate
-func schemaMapToGoTypeForResponse(schema map[string]any) string {
-	// Handle $ref - only single model references get typed
-	if ref := getSchemaRef(schema); ref != "" {
-		parts := strings.Split(ref, "/")
-		if len(parts) > 0 {
-			modelName := parts[len(parts)-1]
-			switch strings.ToLower(modelName) {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return "any"
-			default:
-				return "models." + toGoStructName(modelName)
-			}
-		}
-	}
-
-	// Handle array responses: { "type": "array", "items": { "$ref": "..." } }
-	if getSchemaType(schema) == "array" {
-		if itemsRef := getSchemaItemsRef(schema); itemsRef != "" {
-			parts := strings.Split(itemsRef, "/")
-			if len(parts) > 0 {
-				modelName := parts[len(parts)-1]
-				return "[]models." + toGoStructName(modelName)
-			}
-		}
-	}
-
-	// Primitives and inline objects become 'any'
-	return "any"
-}
-
 // typePrefix is the TypePrefix of a node: its parent's followed by the segment in
 // PascalCase. When another node already took that name — `/v4/console/settings` and
 // `/v4/console-settings` both spell `V4ConsoleSettings` — the segment is kept as one word
@@ -562,23 +489,16 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 		// Build method signature
 		params := []Code{Id("ctx").Qual("context", "Context")}
 
+		inline := func(name string) Code { return Qual("go.clever-cloud.dev/sdk/services/"+op.Package, name) }
 		if op.RequestBody {
-			reqType := parseModelType(op.RequestType)
-			params = append(params, Id("request").Add(reqType))
+			params = append(params, Id("request").Add(op.Body.Code(inline)))
 		}
 
 		if op.QueryParams {
 			params = append(params, Id("opts").Op("...").Qual("go.clever-cloud.dev/sdk/services/"+op.Package, "Option"))
 		}
 
-		// Build return type as client.Response[T]
-		var returnType *Statement
-		if op.ResponseType != "" && op.ResponseType != "unknown" && op.ResponseType != "any" {
-			retType := parseModelTypeForResponse(op.ResponseType)
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(retType)
-		} else {
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(Any())
-		}
+		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
 		// Add method to interface
 		method := Id(toPascalCase(op.Name)).Params(params...).Add(returnType)
@@ -667,9 +587,9 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 			}
 		}
 
+		inline := func(name string) Code { return Qual("go.clever-cloud.dev/sdk/services/"+op.Package, name) }
 		if op.RequestBody {
-			reqType := parseModelType(op.RequestType)
-			params = append(params, Id("request").Add(reqType))
+			params = append(params, Id("request").Add(op.Body.Code(inline)))
 			callParams = append(callParams, Id("request"))
 		}
 
@@ -678,14 +598,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 			callParams = append(callParams, Id("opts").Op("..."))
 		}
 
-		// Build return type as client.Response[T]
-		var returnType *Statement
-		if op.ResponseType != "" && op.ResponseType != "unknown" && op.ResponseType != "any" {
-			retType := parseModelTypeForResponse(op.ResponseType)
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(retType)
-		} else {
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(Any())
-		}
+		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
 		f.Comment(fmt.Sprintf("%s calls %s.%s", toPascalCase(op.Name), op.Package, toPascalCase(op.Name)))
 		f.Func().Params(Id("b").Op("*").Id(implName)).Id(toPascalCase(op.Name)).
@@ -768,130 +681,12 @@ func parseGoType(typeName string) *Statement {
 	}
 }
 
-func parseModelType(typeName string) *Statement {
-	if typeName == "" || typeName == "unknown" || typeName == "any" {
-		return Any()
-	}
-
-	// Handle array types - must handle before removing pointer
-	if elementType, ok := strings.CutPrefix(typeName, "[]"); ok {
-
-		// Handle []*models.Something
-		if modelName, ok0 := strings.CutPrefix(elementType, "*models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-		}
-
-		// Handle []models.Something
-		if modelName, ok0 := strings.CutPrefix(elementType, "models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-		}
-
-		// Handle []*Something (assuming it's a model)
-		if modelName, ok0 := strings.CutPrefix(elementType, "*"); ok0 {
-			// Check if it's a basic type
-			switch modelName {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return Index().Add(parseGoType(modelName))
-			default:
-				return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-			}
-		}
-
-		// Handle []string or other basic types
-		return Index().Add(parseGoType(elementType))
-	}
-
-	// Remove pointer prefix if present
-	isPointer := strings.HasPrefix(typeName, "*")
-	if isPointer {
-		typeName = strings.TrimPrefix(typeName, "*")
-	}
-
-	// Remove models. prefix if present
-	typeName = strings.TrimPrefix(typeName, "models.")
-
-	if typeName == "any" {
-		return Any()
-	}
-
-	// Check if it's a basic type
-	switch typeName {
-	case "string", "int", "int64", "float64", "bool":
-		if isPointer {
-			return Op("*").Add(parseGoType(typeName))
-		}
-		return parseGoType(typeName)
-	}
-
-	// For models types, always return pointer
-	// Apply same Go struct name conversion as model generator
-	return Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(typeName))
-}
-
-// parseModelTypeForResponse is like parseModelType but doesn't add pointers
-// Used for Response[T] where T should match the service return type (without pointer)
-func parseModelTypeForResponse(typeName string) *Statement {
-	if typeName == "" || typeName == "unknown" || typeName == "any" {
-		return Any()
-	}
-
-	// Handle client.Nothing for empty responses (204, etc.)
-	if typeName == "client.Nothing" {
-		return Qual("go.clever-cloud.dev/client", "Nothing")
-	}
-
-	// Handle array types
-	if elementType, ok := strings.CutPrefix(typeName, "[]"); ok {
-		if modelName, ok0 := strings.CutPrefix(elementType, "*models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-		}
-		if modelName, ok0 := strings.CutPrefix(elementType, "models."); ok0 {
-			return Index().Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-		}
-		if modelName, ok0 := strings.CutPrefix(elementType, "*"); ok0 {
-			switch modelName {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return Index().Add(parseGoType(modelName))
-			default:
-				return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-			}
-		}
-		return Index().Add(parseGoType(elementType))
-	}
-
-	// Remove pointer prefix if present
-	isPointer := strings.HasPrefix(typeName, "*")
-	if isPointer {
-		typeName = strings.TrimPrefix(typeName, "*")
-	}
-
-	// Remove models. prefix if present
-	typeName = strings.TrimPrefix(typeName, "models.")
-
-	if typeName == "any" {
-		return Any()
-	}
-
-	// Check if it's a basic type
-	switch typeName {
-	case "string", "int", "int64", "float64", "bool":
-		return parseGoType(typeName)
-	}
-
-	// For models types, DON'T add pointer (services return value types in Response[T])
-	return Qual("go.clever-cloud.dev/sdk/models", toGoStructName(typeName))
-}
-
 func toPascalCase(s string) string {
 	return naming.PascalCase(s)
 }
 
 func toGoStructName(name string) string {
-	// Preserve exact casing for certain names to avoid conflicts
-	if name == "WireGuard" {
-		return "WireGuard"
-	}
-	return toPascalCaseForTypes(name)
+	return naming.StructName(name)
 }
 
 // toPascalCaseForTypes converts schema names to PascalCase for type names

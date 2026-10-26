@@ -7,8 +7,37 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
+
+/*
+Warp10GetTokenHistoryResponseItemsItem One entry of the token-history listing, served as `api_pagination::Page<TokenHistoryEntry>`.
+
+Rust-only DTO: the raw `generation_payload` is deliberately not exposed, and unlike
+[`TokenView`] this carries `cluster_id` since a biscuit listing spans several clusters.
+*/
+type Warp10GetTokenHistoryResponseItemsItem struct {
+	Clusterid    string              `json:"clusterId"`           // Cluster the token belongs to, prefixed: `cluster_<uuid>`.
+	Createdat    string              `json:"createdAt"`           // Creation timestamp.
+	Creator      string              `json:"creator"`             // Creator identifier, prefixed by kind: `sa_<uuid>`, `robot_<uuid>`, `identity_<uuid>`.
+	Expiresat    string              `json:"expiresAt"`           // Expiration timestamp.
+	ID           string              `json:"id"`                  // Token metadata ID, prefixed: `token_<uuid>`.
+	Resource     string              `json:"resource"`            // Resource identifier.
+	Revocationid models.RevocationId `json:"revocationId"`        // Revocation ID (16 hex characters).
+	Revokedat    *string             `json:"revokedAt,omitempty"` // Revocation timestamp — explicit JSON null when not revoked, matching the Circe convention every other warp10 DTO follows.
+	Scope        models.TokenScope   `json:"scope"`               // Token scope: "READ" or "WRITE".
+	Tenant       string              `json:"tenant"`              // Tenant identifier.
+}
+
+/*
+Warp10GetTokenHistoryResponse A cursor page: the items, plus the cursor to fetch the next page (absent
+when exhausted).
+*/
+type Warp10GetTokenHistoryResponse struct {
+	Items      []Warp10GetTokenHistoryResponseItemsItem `json:"items"`                // The page's items, at most the requested limit of them.
+	Nextcursor *string                                  `json:"nextCursor,omitempty"` // Opaque cursor for the next page; `null` when this is the last page.
+}
 
 /*
 Warp10GetTokenHistory GET /v4/warp10/token/history — the caller's token history, keyset-paginated.
@@ -35,7 +64,7 @@ Example:
 x-service: warp10
 operationId: warp10_get_token_history
 */
-func Warp10GetTokenHistory(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Warp10GetTokenHistory(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[Warp10GetTokenHistoryResponse] {
 	ctx, span := tracer.Start(ctx, "warp10_get_token_history")
 	defer span.End()
 
@@ -48,7 +77,7 @@ func Warp10GetTokenHistory(ctx context.Context, c *client.Client, tracer trace.T
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[Warp10GetTokenHistoryResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

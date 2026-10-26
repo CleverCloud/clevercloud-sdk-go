@@ -29,12 +29,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - migration_id: The migration's uuid (used only in the 'Can't find Migration' error text — the BODY's own migrationId drives the transition)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql_addon.PostgresqlMigrationUpdate(ctx, client, tracer, migration_id)
+	response := postgresql_addon.PostgresqlMigrationUpdate(ctx, client, tracer, migration_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -43,14 +44,14 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_migration_update
 */
-func PostgresqlMigrationUpdate(ctx context.Context, c *client.Client, tracer trace.Tracer, migration_id string) client.Response[client.Nothing] {
+func PostgresqlMigrationUpdate(ctx context.Context, c *client.Client, tracer trace.Tracer, migration_id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "postgresql_migration_update", trace.WithAttributes(attribute.String("migration_id", migration_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/internal/migrations/%s", migration_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

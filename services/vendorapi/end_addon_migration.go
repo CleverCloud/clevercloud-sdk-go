@@ -27,13 +27,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - addonId: Addon ID
+  - requestBody: the request payload
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := vendorapi.Endaddonmigration(ctx, client, tracer, addonId, opts...)
+	response := vendorapi.Endaddonmigration(ctx, client, tracer, addonId, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -42,7 +43,7 @@ Example:
 x-service: vendor
 operationId: endAddonMigration
 */
-func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, opts ...Option) client.Response[models.AddonView] {
+func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody any, opts ...Option) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "endAddonMigration", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
@@ -55,7 +56,7 @@ func Endaddonmigration(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Put[models.AddonView](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

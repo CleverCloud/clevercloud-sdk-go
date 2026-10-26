@@ -6,6 +6,7 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -21,12 +22,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - user_id: User ID
   - email: Email address
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.AddInternalUserEmail(ctx, client, tracer, user_id, email)
+	response := internalapi.AddInternalUserEmail(ctx, client, tracer, user_id, email, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +37,14 @@ Example:
 x-service: internal
 operationId: add_internal_user_email
 */
-func AddInternalUserEmail(ctx context.Context, c *client.Client, tracer trace.Tracer, user_id string, email string) client.Response[client.Nothing] {
+func AddInternalUserEmail(ctx context.Context, c *client.Client, tracer trace.Tracer, user_id string, email string, requestBody *models.SecondaryEmailPayload) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "add_internal_user_email", trace.WithAttributes(attribute.String("user_id", user_id), attribute.String("email", email)))
 	defer span.End()
 
 	path := utils.Path("/internal/user/%s/emails/%s", user_id, email)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -34,7 +34,7 @@ Example:
 x-service: base
 operationId: listIAMRevocations
 */
-func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "listIAMRevocations")
 	defer span.End()
 
@@ -47,7 +47,7 @@ func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Trac
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

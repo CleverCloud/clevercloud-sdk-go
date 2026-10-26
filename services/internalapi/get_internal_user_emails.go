@@ -39,14 +39,14 @@ Example:
 x-service: Internal
 operationId: get_internal_user_emails
 */
-func GetInternalUserEmails(ctx context.Context, c *client.Client, tracer trace.Tracer, user_id string) client.Response[client.Nothing] {
+func GetInternalUserEmails(ctx context.Context, c *client.Client, tracer trace.Tracer, user_id string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "get_internal_user_emails", trace.WithAttributes(attribute.String("user_id", user_id)))
 	defer span.End()
 
 	path := utils.Path("/internal/user/%s/emails", user_id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

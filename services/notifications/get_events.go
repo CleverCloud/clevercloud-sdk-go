@@ -36,14 +36,14 @@ Example:
 x-service: notifications
 operationId: get_events
 */
-func GetEvents(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func GetEvents(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_events")
 	defer span.End()
 
 	path := utils.Path("/v2/notifications/info/events")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -17,6 +17,7 @@ type Options struct {
 	Drivereventid *string   `url:"driverEventId,omitempty"`
 	Kind          *[]string `url:"kind,omitempty"`
 	Limit         *int64    `url:"limit,omitempty"`
+	Openpreview   *int64    `url:"openPreview,omitempty"`
 	Productid     *string   `url:"productId,omitempty"`
 	Resourceid    *string   `url:"resourceId,omitempty"`
 	Since         *string   `url:"since,omitempty"`
@@ -50,6 +51,13 @@ func WithKind(kind []string) Option {
 func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
+	}
+}
+
+// WithOpenpreview sets the openPreview query parameter
+func WithOpenpreview(openPreview int64) Option {
+	return func(o *Options) {
+		o.Openpreview = &openPreview
 	}
 }
 
@@ -114,6 +122,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
+	if options.Openpreview != nil {
+		params = append(params, fmt.Sprintf("openPreview=%d", *options.Openpreview))
 	}
 	if options.Productid != nil {
 		params = append(params, fmt.Sprintf("productId=%s", url.QueryEscape(*options.Productid)))

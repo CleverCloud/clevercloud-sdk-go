@@ -39,14 +39,14 @@ Example:
 x-service: products
 operationId: getCountryCodes
 */
-func Getcountrycodes(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getcountrycodes(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[map[string]string] {
 	ctx, span := tracer.Start(ctx, "getCountryCodes")
 	defer span.End()
 
 	path := utils.Path("/v2/products/countrycodes")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

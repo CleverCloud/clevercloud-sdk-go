@@ -23,13 +23,14 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
   - appId: Application ID (`app_…`)
+  - requestBody: the request payload
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := applications.Updateorganisationapplicationenvironmentvariables(ctx, client, tracer, id, appId, opts...)
+	response := applications.Updateorganisationapplicationenvironmentvariables(ctx, client, tracer, id, appId, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -38,7 +39,7 @@ Example:
 x-service: applications
 operationId: updateOrganisationApplicationEnvironmentVariables
 */
-func Updateorganisationapplicationenvironmentvariables(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, opts ...Option) client.Response[models.ApplicationView] {
+func Updateorganisationapplicationenvironmentvariables(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, requestBody map[string]string, opts ...Option) client.Response[models.ApplicationView] {
 	ctx, span := tracer.Start(ctx, "updateOrganisationApplicationEnvironmentVariables", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId)))
 	defer span.End()
 
@@ -51,7 +52,7 @@ func Updateorganisationapplicationenvironmentvariables(ctx context.Context, c *c
 	}
 
 	// Make API call
-	response := client.Put[models.ApplicationView](ctx, c, path, nil)
+	response := client.Put[models.ApplicationView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

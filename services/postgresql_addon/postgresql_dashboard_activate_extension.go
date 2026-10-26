@@ -26,12 +26,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql_addon.PostgresqlDashboardActivateExtension(ctx, client, tracer)
+	response := postgresql_addon.PostgresqlDashboardActivateExtension(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -40,14 +41,14 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_dashboard_activate_extension
 */
-func PostgresqlDashboardActivateExtension(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.PostgresqlProvisionResponse] {
+func PostgresqlDashboardActivateExtension(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody any) client.Response[models.PostgresqlProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "postgresql_dashboard_activate_extension")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/dashboard/activateExtension")
 
 	// Make API call
-	response := client.Post[models.PostgresqlProvisionResponse](ctx, c, path, nil)
+	response := client.Post[models.PostgresqlProvisionResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

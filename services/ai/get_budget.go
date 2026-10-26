@@ -46,14 +46,14 @@ Example:
 x-service: ai
 operationId: getBudget
 */
-func Getbudget(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, budgetId string) client.Response[client.Nothing] {
+func Getbudget(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, budgetId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getBudget", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId), attribute.String("budgetId", budgetId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/budgets/%s", ownerId, aiId, endpointId, budgetId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

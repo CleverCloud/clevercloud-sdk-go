@@ -43,14 +43,14 @@ Example:
 x-service: Organisations
 operationId: list_org_provider_testers
 */
-func ListOrgProviderTesters(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, provider_id string) client.Response[client.Nothing] {
+func ListOrgProviderTesters(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, provider_id string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "list_org_provider_testers", trace.WithAttributes(attribute.String("id", id), attribute.String("provider_id", provider_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addonproviders/%s/testers", id, provider_id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

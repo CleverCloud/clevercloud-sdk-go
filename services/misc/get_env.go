@@ -47,7 +47,7 @@ Example:
 x-service: misc
 operationId: getEnv
 */
-func Getenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, opts ...Option) client.Response[client.Nothing] {
+func Getenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, opts ...Option) client.Response[map[string]string] {
 	ctx, span := tracer.Start(ctx, "getEnv", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
@@ -60,7 +60,7 @@ func Getenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId st
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

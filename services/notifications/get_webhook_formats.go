@@ -36,14 +36,14 @@ Example:
 x-service: notifications
 operationId: get_webhook_formats
 */
-func GetWebhookFormats(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func GetWebhookFormats(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "get_webhook_formats")
 	defer span.End()
 
 	path := utils.Path("/v2/notifications/info/webhookformats")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -25,12 +25,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - addonId: Addon ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := vendorapi.PutVendorMigrationCallbackLegacy(ctx, client, tracer, addonId)
+	response := vendorapi.PutVendorMigrationCallbackLegacy(ctx, client, tracer, addonId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -39,14 +40,14 @@ Example:
 x-service: vendor
 operationId: put_vendor_migration_callback_legacy
 */
-func PutVendorMigrationCallbackLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.AddonView] {
+func PutVendorMigrationCallbackLegacy(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody any) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "put_vendor_migration_callback_legacy", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/vendor/apps/%s/migration_callback", addonId)
 
 	// Make API call
-	response := client.Put[models.AddonView](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

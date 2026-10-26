@@ -44,14 +44,14 @@ Example:
 x-service: Logs
 operationId: v4_get_org_app_logs
 */
-func V4GetOrgAppLogs(ctx context.Context, c *client.Client, tracer trace.Tracer, orgId string, appId string) client.Response[client.Nothing] {
+func V4GetOrgAppLogs(ctx context.Context, c *client.Client, tracer trace.Tracer, orgId string, appId string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "v4_get_org_app_logs", trace.WithAttributes(attribute.String("orgId", orgId), attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v4/logs/organisations/%s/applications/%s/logs", orgId, appId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

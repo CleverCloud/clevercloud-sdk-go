@@ -26,12 +26,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - id: PostgreSQL addon string id (postgresql_<uuid>)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql_addon.PostgresqlPutConfiguration(ctx, client, tracer, id)
+	response := postgresql_addon.PostgresqlPutConfiguration(ctx, client, tracer, id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -40,14 +41,14 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_put_configuration
 */
-func PostgresqlPutConfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func PostgresqlPutConfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "postgresql_put_configuration", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/internal/%s/configuration", id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

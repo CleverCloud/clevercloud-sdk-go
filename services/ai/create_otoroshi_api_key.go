@@ -50,14 +50,14 @@ Example:
 x-service: ai
 operationId: createOtoroshiApiKey
 */
-func Createotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, requestBody *models.CreateApiKeyRequest) client.Response[client.Nothing] {
+func Createotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, requestBody *models.CreateApiKeyRequest) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "createOtoroshiApiKey", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/apikeys", ownerId, aiId, endpointId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -43,7 +43,7 @@ Example:
 x-service: PostgreSQL Internal
 operationId: postgresql_list_addon_ids_by_owner
 */
-func PostgresqlListAddonIdsByOwner(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[client.Nothing] {
+func PostgresqlListAddonIdsByOwner(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "postgresql_list_addon_ids_by_owner", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
@@ -56,7 +56,7 @@ func PostgresqlListAddonIdsByOwner(ctx context.Context, c *client.Client, tracer
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

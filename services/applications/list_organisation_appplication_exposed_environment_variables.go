@@ -35,14 +35,14 @@ Example:
 x-service: applications
 operationId: listOrganisationAppplicationExposedEnvironmentVariables
 */
-func Listorganisationappplicationexposedenvironmentvariables(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string) client.Response[client.Nothing] {
+func Listorganisationappplicationexposedenvironmentvariables(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string) client.Response[map[string]string] {
 	ctx, span := tracer.Start(ctx, "listOrganisationAppplicationExposedEnvironmentVariables", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/applications/%s/exposed_env", id, appId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

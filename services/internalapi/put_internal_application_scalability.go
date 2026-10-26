@@ -20,12 +20,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - app_id: Application ID (`app_…`)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := internalapi.PutInternalApplicationScalability(ctx, client, tracer, app_id)
+	response := internalapi.PutInternalApplicationScalability(ctx, client, tracer, app_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +35,14 @@ Example:
 x-service: internal
 operationId: put_internal_application_scalability
 */
-func PutInternalApplicationScalability(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string) client.Response[client.Nothing] {
+func PutInternalApplicationScalability(ctx context.Context, c *client.Client, tracer trace.Tracer, app_id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "put_internal_application_scalability", trace.WithAttributes(attribute.String("app_id", app_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/applications/%s/scalability", app_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

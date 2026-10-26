@@ -34,14 +34,14 @@ Example:
 x-service: applications
 operationId: getSelfExposedEnvByAppId
 */
-func Getselfexposedenvbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[client.Nothing] {
+func Getselfexposedenvbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[map[string]string] {
 	ctx, span := tracer.Start(ctx, "getSelfExposedEnvByAppId", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/applications/%s/exposed_env", appId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

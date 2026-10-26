@@ -36,14 +36,14 @@ Example:
 x-service: addons
 operationId: addAddonTagByOrgaAndAddonId
 */
-func Addaddontagbyorgaandaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, tag string) client.Response[client.Nothing] {
+func Addaddontagbyorgaandaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, tag string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "addAddonTagByOrgaAndAddonId", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId), attribute.String("tag", tag)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/%s/tags/%s", id, addonId, tag)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[[]string](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

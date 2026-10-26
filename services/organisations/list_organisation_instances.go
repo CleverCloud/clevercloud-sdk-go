@@ -34,14 +34,14 @@ Example:
 x-service: organisations
 operationId: listOrganisationInstances
 */
-func Listorganisationinstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func Listorganisationinstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[map[string][]any] {
 	ctx, span := tracer.Start(ctx, "listOrganisationInstances", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/instances", id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string][]any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

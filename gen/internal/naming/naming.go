@@ -270,3 +270,45 @@ func OperationPackage(operationID, xService, path string, tags []string) string 
 	}
 	return PackageName(xService)
 }
+
+// StructName is the Go type a component schema is generated as, in the models
+// package: the models generator's spelling, which the services and builder
+// generators must reproduce exactly to refer to it.
+func StructName(name string) string {
+	if name == "WireGuard" {
+		return "WireGuard"
+	}
+	s := strings.NewReplacer(".", "_DOT_", "+", "_PLUS_", "*", "_STAR_", "/", "_SLASH_").Replace(name)
+	if !strings.ContainsAny(s, "_- ") {
+		if s == "" {
+			return s
+		}
+		return strings.ToUpper(s[:1]) + s[1:]
+	}
+	parts := strings.FieldsFunc(s, func(r rune) bool { return r == '_' || r == '-' || r == ' ' })
+	for i, part := range parts {
+		parts[i] = strings.ToUpper(part[:1]) + strings.ToLower(part[1:])
+	}
+	result := strings.Join(parts, "")
+	if result != "" && result[0] >= '0' && result[0] <= '9' {
+		result = "_" + result
+	}
+	return result
+}
+
+// FieldName is the Go field a JSON property is generated as.
+func FieldName(name string) string {
+	switch strings.ToLower(name) {
+	case "id":
+		return "ID"
+	case "url":
+		return "URL"
+	case "uri":
+		return "URI"
+	case "api":
+		return "API"
+	case "ttl":
+		return "TTL"
+	}
+	return PascalCase(name)
+}

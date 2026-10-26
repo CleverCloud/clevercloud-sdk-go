@@ -34,14 +34,14 @@ Example:
 x-service: applications
 operationId: getSelfApplicationTagsByAppId
 */
-func Getselfapplicationtagsbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[client.Nothing] {
+func Getselfapplicationtagsbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "getSelfApplicationTagsByAppId", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/applications/%s/tags", appId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

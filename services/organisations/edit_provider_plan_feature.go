@@ -24,12 +24,13 @@ Parameters:
   - providerId: Provider ID
   - planId: Plan ID
   - featureName: Feature name
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := organisations.Editproviderplanfeature(ctx, client, tracer, id, providerId, planId, featureName)
+	response := organisations.Editproviderplanfeature(ctx, client, tracer, id, providerId, planId, featureName, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -38,14 +39,14 @@ Example:
 x-service: organisations
 operationId: editProviderPlanFeature
 */
-func Editproviderplanfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, planId string, featureName string) client.Response[models.AddonPlanView] {
+func Editproviderplanfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, planId string, featureName string, requestBody any) client.Response[models.AddonPlanView] {
 	ctx, span := tracer.Start(ctx, "editProviderPlanFeature", trace.WithAttributes(attribute.String("id", id), attribute.String("providerId", providerId), attribute.String("planId", planId), attribute.String("featureName", featureName)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addonproviders/%s/plans/%s/features/%s", id, providerId, planId, featureName)
 
 	// Make API call
-	response := client.Put[models.AddonPlanView](ctx, c, path, nil)
+	response := client.Put[models.AddonPlanView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -22,12 +22,13 @@ Parameters:
   - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - loadbalancerId: Load balancer ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := loadbalancer.Updateloadbalancertimeouts(ctx, client, tracer, tenantId, regionId, loadbalancerId)
+	response := loadbalancer.Updateloadbalancertimeouts(ctx, client, tracer, tenantId, regionId, loadbalancerId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,14 +37,14 @@ Example:
 x-service: loadbalancer
 operationId: updateLoadBalancerTimeouts
 */
-func Updateloadbalancertimeouts(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[models.LoadBalancerView] {
+func Updateloadbalancertimeouts(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody map[string]any) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "updateLoadBalancerTimeouts", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/timeouts", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Put[models.LoadBalancerView](ctx, c, path, nil)
+	response := client.Put[models.LoadBalancerView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

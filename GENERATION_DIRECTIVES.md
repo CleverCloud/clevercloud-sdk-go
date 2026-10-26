@@ -217,6 +217,17 @@ journalise chaque décision :
   chemin ;
 - un paramètre de chemin nommé par le template mais non déclaré est déclaré (string).
 
+### Types des payloads (`gen/internal/gotype`)
+
+Le type Go d'un corps de requête ou d'une réponse est dérivé une seule fois, pour le
+générateur de services et celui du builder : composant (`*models.X` en entrée, `models.X`
+en sortie), tableau, map (`map[string]string`), scalaire, `any` pour un schéma vide. Un
+objet inline avec des propriétés devient une struct nommée d'après l'opération
+(`UpdateaddoninfoBody`, `<Opération>Response`), déclarée dans le package du service et
+référencée depuis le builder. Le media type est choisi de façon déterministe
+(`application/json` d'abord) ; un corps texte ou binaire que le client JSON ne sait pas
+envoyer ne produit pas de paramètre.
+
 ### Nommage (`gen/internal/naming`)
 
 Les noms de packages (`PackageName`, table `ServicePackageExceptions`), de fonctions

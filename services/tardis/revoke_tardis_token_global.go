@@ -10,6 +10,16 @@ import (
 )
 
 /*
+RevokeTardisTokenGlobalBody Request to revoke a token globally.
+
+Source: ovd tardis token revocation request
+Issue: #742
+*/
+type RevokeTardisTokenGlobalBody struct {
+	Tokenid string `json:"tokenId"` // ID of the token to revoke.
+}
+
+/*
 RevokeTardisTokenGlobal POST /v4/addon-providers/addon-tardis/token/revoke — revoke a token globally.
 
 Algorithm: Look up the token by token_id from JSON body, then its addon. The caller must be the
@@ -30,12 +40,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := tardis.RevokeTardisTokenGlobal(ctx, client, tracer)
+	response := tardis.RevokeTardisTokenGlobal(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -44,14 +55,14 @@ Example:
 x-service: tardis
 operationId: revoke_tardis_token_global
 */
-func RevokeTardisTokenGlobal(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func RevokeTardisTokenGlobal(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody RevokeTardisTokenGlobalBody) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "revoke_tardis_token_global")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-tardis/token/revoke")
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

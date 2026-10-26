@@ -22,12 +22,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, kubernetesId)
+	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,14 +37,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterResume
 */
-func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ResumeClusterPayload) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

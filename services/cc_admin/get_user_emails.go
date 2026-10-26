@@ -56,14 +56,14 @@ Example:
 x-service: cc_admin
 operationId: get_user_emails
 */
-func GetUserEmails(ctx context.Context, c *client.Client, tracer trace.Tracer, userId string) client.Response[client.Nothing] {
+func GetUserEmails(ctx context.Context, c *client.Client, tracer trace.Tracer, userId string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "get_user_emails", trace.WithAttributes(attribute.String("userId", userId)))
 	defer span.End()
 
 	path := utils.Path("/v2/internal/user/%s/emails", userId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

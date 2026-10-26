@@ -13,7 +13,23 @@ type Option func(*Options)
 
 // Options holds query parameters for notices operations
 type Options struct {
+	Cursor *string `url:"cursor,omitempty"`
+	Limit  *int64  `url:"limit,omitempty"`
 	Orgaid *string `url:"orgaId,omitempty"`
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
+}
+
+// WithLimit sets the limit query parameter
+func WithLimit(limit int64) Option {
+	return func(o *Options) {
+		o.Limit = &limit
+	}
 }
 
 // WithOrgaid sets the orgaId query parameter
@@ -31,6 +47,12 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
 	if options.Orgaid != nil {
 		params = append(params, fmt.Sprintf("orgaId=%s", url.QueryEscape(*options.Orgaid)))
 	}

@@ -11,6 +11,11 @@ import (
 	trace "go.opentelemetry.io/otel/trace"
 )
 
+// RenameaddonBody New name of the add-on.
+type RenameaddonBody struct {
+	Name string `json:"name"` // New name of the add-on; not blank, at most 255 characters.
+}
+
 /*
 Renameaddon Rename an add-on of the current user
 
@@ -21,12 +26,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - addonId: Add-on ID (`addon_…`) or real ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := addons.Renameaddon(ctx, client, tracer, addonId)
+	response := addons.Renameaddon(ctx, client, tracer, addonId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +41,14 @@ Example:
 x-service: addons
 operationId: renameAddon
 */
-func Renameaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[models.AddonView] {
+func Renameaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody RenameaddonBody) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "renameAddon", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/%s", addonId)
 
 	// Make API call
-	response := client.Put[models.AddonView](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

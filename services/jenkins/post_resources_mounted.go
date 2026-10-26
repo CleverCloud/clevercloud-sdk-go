@@ -17,12 +17,13 @@ Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := jenkins.PostResourcesMounted(ctx, client, tracer)
+	response := jenkins.PostResourcesMounted(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -31,14 +32,14 @@ Example:
 x-service: Jenkins
 operationId: post_resources_mounted
 */
-func PostResourcesMounted(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.JenkinsProvisionResponse] {
+func PostResourcesMounted(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody any) client.Response[models.JenkinsProvisionResponse] {
 	ctx, span := tracer.Start(ctx, "post_resources_mounted")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/jenkins/resources")
 
 	// Make API call
-	response := client.Post[models.JenkinsProvisionResponse](ctx, c, path, nil)
+	response := client.Post[models.JenkinsProvisionResponse](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

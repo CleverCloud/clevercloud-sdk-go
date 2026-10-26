@@ -22,13 +22,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - appId: Application ID (`app_…`)
+  - requestBody: the request payload
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := applications.Editselfapplicationenvbyappid(ctx, client, tracer, appId, opts...)
+	response := applications.Editselfapplicationenvbyappid(ctx, client, tracer, appId, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +38,7 @@ Example:
 x-service: applications
 operationId: editSelfApplicationEnvByAppId
 */
-func Editselfapplicationenvbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, opts ...Option) client.Response[models.ApplicationView] {
+func Editselfapplicationenvbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, requestBody map[string]string, opts ...Option) client.Response[models.ApplicationView] {
 	ctx, span := tracer.Start(ctx, "editSelfApplicationEnvByAppId", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
@@ -50,7 +51,7 @@ func Editselfapplicationenvbyappid(ctx context.Context, c *client.Client, tracer
 	}
 
 	// Make API call
-	response := client.Put[models.ApplicationView](ctx, c, path, nil)
+	response := client.Put[models.ApplicationView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

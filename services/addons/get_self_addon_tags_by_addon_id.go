@@ -34,14 +34,14 @@ Example:
 x-service: addons
 operationId: getSelfAddonTagsByAddonId
 */
-func Getselfaddontagsbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[client.Nothing] {
+func Getselfaddontagsbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "getSelfAddonTagsByAddonId", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/%s/tags", addonId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

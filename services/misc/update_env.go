@@ -33,13 +33,14 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - appId: Application ID
+  - requestBody: the request payload
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := misc.Updateenv(ctx, client, tracer, appId, opts...)
+	response := misc.Updateenv(ctx, client, tracer, appId, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -48,7 +49,7 @@ Example:
 x-service: misc
 operationId: updateEnv
 */
-func Updateenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, opts ...Option) client.Response[models.Message] {
+func Updateenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, requestBody map[string]string, opts ...Option) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "updateEnv", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
@@ -61,7 +62,7 @@ func Updateenv(ctx context.Context, c *client.Client, tracer trace.Tracer, appId
 	}
 
 	// Make API call
-	response := client.Put[models.Message](ctx, c, path, nil)
+	response := client.Put[models.Message](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

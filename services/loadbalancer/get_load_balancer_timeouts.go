@@ -34,14 +34,14 @@ Example:
 x-service: loadbalancer
 operationId: getLoadBalancerTimeouts
 */
-func Getloadbalancertimeouts(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[client.Nothing] {
+func Getloadbalancertimeouts(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string) client.Response[map[string]any] {
 	ctx, span := tracer.Start(ctx, "getLoadBalancerTimeouts", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/timeouts", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

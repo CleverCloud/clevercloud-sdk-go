@@ -35,14 +35,14 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_internal_ids_by_owner
 */
-func PostgresqlInternalIdsByOwner(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string) client.Response[client.Nothing] {
+func PostgresqlInternalIdsByOwner(ctx context.Context, c *client.Client, tracer trace.Tracer, owner_id string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "postgresql_internal_ids_by_owner", trace.WithAttributes(attribute.String("owner_id", owner_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/internal/addon-providers/postgresql-addon/idsByOwnerId/%s", owner_id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

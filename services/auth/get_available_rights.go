@@ -42,14 +42,14 @@ Example:
 x-service: auth
 operationId: getAvailableRights
 */
-func Getavailablerights(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getavailablerights(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[map[string]string] {
 	ctx, span := tracer.Start(ctx, "getAvailableRights")
 	defer span.End()
 
 	path := utils.Path("/v2/oauth/rights")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

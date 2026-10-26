@@ -21,12 +21,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - provider_id: Addon provider ID (e.g., config-provider)
   - real_id: Add-on real ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := addons.V4PutAddonEnvToProvider(ctx, client, tracer, provider_id, real_id)
+	response := addons.V4PutAddonEnvToProvider(ctx, client, tracer, provider_id, real_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +36,14 @@ Example:
 x-service: addons
 operationId: v4_put_addon_env_to_provider
 */
-func V4PutAddonEnvToProvider(ctx context.Context, c *client.Client, tracer trace.Tracer, provider_id string, real_id string) client.Response[client.Nothing] {
+func V4PutAddonEnvToProvider(ctx context.Context, c *client.Client, tracer trace.Tracer, provider_id string, real_id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "v4_put_addon_env_to_provider", trace.WithAttributes(attribute.String("provider_id", provider_id), attribute.String("real_id", real_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/%s/addons/%s/env", provider_id, real_id)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, nil)
+	response := client.Put[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

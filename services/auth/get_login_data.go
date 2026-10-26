@@ -40,7 +40,7 @@ Example:
 x-service: auth
 operationId: getLoginData
 */
-func Getlogindata(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Getlogindata(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getLoginData")
 	defer span.End()
 
@@ -53,7 +53,7 @@ func Getlogindata(ctx context.Context, c *client.Client, tracer trace.Tracer, op
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

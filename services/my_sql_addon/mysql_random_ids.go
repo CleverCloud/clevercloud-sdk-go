@@ -33,7 +33,7 @@ Example:
 x-service: my_sql_addon
 operationId: mysql_random_ids
 */
-func MysqlRandomIds(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func MysqlRandomIds(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "mysql_random_ids")
 	defer span.End()
 
@@ -46,7 +46,7 @@ func MysqlRandomIds(ctx context.Context, c *client.Client, tracer trace.Tracer, 
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

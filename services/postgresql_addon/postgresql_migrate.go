@@ -33,12 +33,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - addon_id: PostgreSQL addon string id (postgresql_<uuid>)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql_addon.PostgresqlMigrate(ctx, client, tracer, addon_id)
+	response := postgresql_addon.PostgresqlMigrate(ctx, client, tracer, addon_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -47,14 +48,14 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_migrate
 */
-func PostgresqlMigrate(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[models.PostgresqlMigrationConsoleView] {
+func PostgresqlMigrate(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string, requestBody any) client.Response[models.PostgresqlMigrationConsoleView] {
 	ctx, span := tracer.Start(ctx, "postgresql_migrate", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/resources/%s/migrations", addon_id)
 
 	// Make API call
-	response := client.Post[models.PostgresqlMigrationConsoleView](ctx, c, path, nil)
+	response := client.Post[models.PostgresqlMigrationConsoleView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -36,7 +37,7 @@ Example:
 x-service: organisations
 operationId: listOrganisationDeployments
 */
-func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[client.Nothing] {
+func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[map[string][]models.DeploymentView] {
 	ctx, span := tracer.Start(ctx, "listOrganisationDeployments", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
@@ -49,7 +50,7 @@ func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer t
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[map[string][]models.DeploymentView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

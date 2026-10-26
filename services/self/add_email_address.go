@@ -21,12 +21,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - email: Email address to add
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := self.Addemailaddress(ctx, client, tracer, email)
+	response := self.Addemailaddress(ctx, client, tracer, email, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +36,14 @@ Example:
 x-service: self
 operationId: addEmailAddress
 */
-func Addemailaddress(ctx context.Context, c *client.Client, tracer trace.Tracer, email string) client.Response[models.Message] {
+func Addemailaddress(ctx context.Context, c *client.Client, tracer trace.Tracer, email string, requestBody *models.SecondaryEmailPayload) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "addEmailAddress", trace.WithAttributes(attribute.String("email", email)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/emails/%s", email)
 
 	// Make API call
-	response := client.Put[models.Message](ctx, c, path, nil)
+	response := client.Put[models.Message](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

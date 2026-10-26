@@ -36,14 +36,14 @@ Example:
 x-service: products
 operationId: getMFAKinds
 */
-func Getmfakinds(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getmfakinds(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "getMFAKinds")
 	defer span.End()
 
 	path := utils.Path("/v2/products/mfa_kinds")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

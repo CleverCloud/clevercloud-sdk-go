@@ -51,14 +51,14 @@ Example:
 x-service: products
 operationId: getAddonProviderVersions
 */
-func Getaddonproviderversions(ctx context.Context, c *client.Client, tracer trace.Tracer, provider_id string) client.Response[client.Nothing] {
+func Getaddonproviderversions(ctx context.Context, c *client.Client, tracer trace.Tracer, provider_id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getAddonProviderVersions", trace.WithAttributes(attribute.String("provider_id", provider_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/products/addonproviders/%s/versions", provider_id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

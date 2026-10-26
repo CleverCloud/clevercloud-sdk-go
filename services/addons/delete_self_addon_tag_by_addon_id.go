@@ -35,14 +35,14 @@ Example:
 x-service: addons
 operationId: deleteSelfAddonTagByAddonId
 */
-func Deleteselfaddontagbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, tag string) client.Response[client.Nothing] {
+func Deleteselfaddontagbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, tag string) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "deleteSelfAddonTagByAddonId", trace.WithAttributes(attribute.String("addonId", addonId), attribute.String("tag", tag)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/%s/tags/%s", addonId, tag)
 
 	// Make API call
-	response := client.Delete[client.Nothing](ctx, c, path)
+	response := client.Delete[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

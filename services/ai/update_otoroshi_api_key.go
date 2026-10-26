@@ -32,12 +32,13 @@ Parameters:
   - aiId: AI addon ID
   - endpointId: Otoroshi endpoint ID
   - apikeyId: Otoroshi API key ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ai.Updateotoroshiapikey(ctx, client, tracer, ownerId, aiId, endpointId, apikeyId)
+	response := ai.Updateotoroshiapikey(ctx, client, tracer, ownerId, aiId, endpointId, apikeyId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -46,14 +47,14 @@ Example:
 x-service: ai
 operationId: updateOtoroshiApiKey
 */
-func Updateotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, apikeyId string) client.Response[client.Nothing] {
+func Updateotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, apikeyId string, requestBody any) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "updateOtoroshiApiKey", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId), attribute.String("apikeyId", apikeyId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/apikeys/%s", ownerId, aiId, endpointId, apikeyId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

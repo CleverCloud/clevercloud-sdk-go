@@ -37,7 +37,7 @@ Example:
 x-service: postgresql_addon
 operationId: postgresql_internal_random_ids
 */
-func PostgresqlInternalRandomIds(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func PostgresqlInternalRandomIds(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "postgresql_internal_random_ids")
 	defer span.End()
 
@@ -50,7 +50,7 @@ func PostgresqlInternalRandomIds(ctx context.Context, c *client.Client, tracer t
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

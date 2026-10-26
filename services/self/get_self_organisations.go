@@ -32,14 +32,14 @@ Example:
 x-service: self
 operationId: get_self_organisations
 */
-func GetSelfOrganisations(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func GetSelfOrganisations(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]any] {
 	ctx, span := tracer.Start(ctx, "get_self_organisations")
 	defer span.End()
 
 	path := utils.Path("/v2/self/organisations")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

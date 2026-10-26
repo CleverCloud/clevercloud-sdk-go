@@ -21,15 +21,21 @@ tenant and resource in that scope. A token granting tenants, products or resourc
 own checks are honoured per tenant × product × resource; `tenantId`, `productId` and
 `resourceId` narrow further, and must stay within the grants.
 
-**Refusals** carry the module's OVD error envelope. `400` names a malformed filter; `401`
-means the biscuit could not be read; `403` that it does not grant
+**`openPreview`** (`0..=10`, default `0`): above 0, each summary also carries
+`open_alerts_preview`, the product's `openPreview` newest alerts whose current state is
+`PROBLEM`, newest `updated_at` first, ties to the greater `driver_event_id`, each shaped
+as a product alert listing item — read in the same statement, under the same scope and
+the same `product_alerts_read` authorization. At `0` the field is absent.
+
+**Refusals** carry the module's OVD error envelope. `400` names a malformed filter or
+`openPreview`; `401` means the biscuit could not be read; `403` that it does not grant
 `allowed_monitoring_op("product_alerts_read")` (or `"root"`), that a filter falls
 outside its grants, that it excludes everything, that it names a tenant, product or
 resource it grants none of and no filter pins one, or that its scope needs more than
 sixteen authorization runs — never retry. `503` with `Retry-After` means the authorizer
 ran out of its wall-clock budget, which is transient and must be retried.
 
-Issue: #4613, #4648
+Issue: #4613, #4648, #4759
 
 Parameters:
   - ctx: context for the request

@@ -11,6 +11,11 @@ import (
 	trace "go.opentelemetry.io/otel/trace"
 )
 
+// UpdateaddoninfoBody New name of the add-on.
+type UpdateaddoninfoBody struct {
+	Name string `json:"name"` // New name of the add-on; not blank, at most 255 characters.
+}
+
 /*
 Updateaddoninfo Rename an add-on of an organisation
 
@@ -22,12 +27,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
   - addonId: Add-on ID (`addon_…`) or real ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := addons.Updateaddoninfo(ctx, client, tracer, id, addonId)
+	response := addons.Updateaddoninfo(ctx, client, tracer, id, addonId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,14 +42,14 @@ Example:
 x-service: addons
 operationId: updateAddonInfo
 */
-func Updateaddoninfo(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string) client.Response[models.AddonView] {
+func Updateaddoninfo(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, requestBody UpdateaddoninfoBody) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "updateAddonInfo", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/%s", id, addonId)
 
 	// Make API call
-	response := client.Put[models.AddonView](ctx, c, path, nil)
+	response := client.Put[models.AddonView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

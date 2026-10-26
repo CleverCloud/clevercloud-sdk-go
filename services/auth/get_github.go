@@ -42,14 +42,14 @@ Example:
 x-service: auth
 operationId: getGithub
 */
-func Getgithub(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Getgithub(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getGithub")
 	defer span.End()
 
 	path := utils.Path("/v2/github")
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

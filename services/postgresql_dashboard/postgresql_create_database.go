@@ -28,12 +28,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - addon_id: Addon ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := postgresql_dashboard.PostgresqlCreateDatabase(ctx, client, tracer, addon_id)
+	response := postgresql_dashboard.PostgresqlCreateDatabase(ctx, client, tracer, addon_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -42,14 +43,14 @@ Example:
 x-service: PostgreSQL Dashboard
 operationId: postgresql_create_database
 */
-func PostgresqlCreateDatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[client.Nothing] {
+func PostgresqlCreateDatabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "postgresql_create_database", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/postgresql-addon/addons/%s/databases", addon_id)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -19,12 +19,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - tenant_id:
   - product_id:
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := base.BaseCreateTenantProductResource(ctx, client, tracer, tenant_id, product_id)
+	response := base.BaseCreateTenantProductResource(ctx, client, tracer, tenant_id, product_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,14 +34,14 @@ Example:
 x-service: Base
 operationId: base_create_tenant_product_resource
 */
-func BaseCreateTenantProductResource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, product_id string) client.Response[client.Nothing] {
+func BaseCreateTenantProductResource(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, product_id string, requestBody any) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "base_create_tenant_product_resource", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("product_id", product_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/tenants/%s/products/%s/resources", tenant_id, product_id)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

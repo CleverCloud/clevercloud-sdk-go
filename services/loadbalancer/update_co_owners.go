@@ -31,12 +31,13 @@ Parameters:
   - tenant_id: Organisation/tenant ID
   - region_id: Region ID
   - lb_id: Load balancer ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := loadbalancer.UpdateCoOwners(ctx, client, tracer, tenant_id, region_id, lb_id)
+	response := loadbalancer.UpdateCoOwners(ctx, client, tracer, tenant_id, region_id, lb_id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -45,14 +46,14 @@ Example:
 x-service: LoadBalancer
 operationId: update_co_owners
 */
-func UpdateCoOwners(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, region_id string, lb_id string) client.Response[models.LoadBalancerView] {
+func UpdateCoOwners(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, region_id string, lb_id string, requestBody []string) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "update_co_owners", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("region_id", region_id), attribute.String("lb_id", lb_id)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/co-owners", tenant_id, region_id, lb_id)
 
 	// Make API call
-	response := client.Put[models.LoadBalancerView](ctx, c, path, nil)
+	response := client.Put[models.LoadBalancerView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

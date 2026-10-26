@@ -45,14 +45,14 @@ Example:
 x-service: Drains v4
 operationId: v4_get_drain_test_command
 */
-func V4GetDrainTestCommand(ctx context.Context, c *client.Client, tracer trace.Tracer, orgId string, appId string, drainId string) client.Response[client.Nothing] {
+func V4GetDrainTestCommand(ctx context.Context, c *client.Client, tracer trace.Tracer, orgId string, appId string, drainId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "v4_get_drain_test_command", trace.WithAttributes(attribute.String("orgId", orgId), attribute.String("appId", appId), attribute.String("drainId", drainId)))
 	defer span.End()
 
 	path := utils.Path("/v4/drains/organisations/%s/applications/%s/drains/%s/test-command", orgId, appId, drainId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

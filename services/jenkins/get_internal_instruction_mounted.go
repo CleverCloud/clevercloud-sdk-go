@@ -32,14 +32,14 @@ Example:
 x-service: Jenkins
 operationId: get_internal_instruction_mounted
 */
-func GetInternalInstructionMounted(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[client.Nothing] {
+func GetInternalInstructionMounted(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "get_internal_instruction_mounted", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/jenkins/internal/%s/instruction", id)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
