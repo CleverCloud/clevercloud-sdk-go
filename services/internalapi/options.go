@@ -22,7 +22,7 @@ type Options struct {
 	Consumer    *string `url:"consumer,omitempty"`
 	EmployeeID  *string `url:"employee_id,omitempty"`
 	EnvName     *string `url:"env_name,omitempty"`
-	Forparam    *string `url:"forParam,omitempty"`
+	Forparam    *string `url:"for,omitempty"`
 	LifetimeSec *int64  `url:"lifetime_sec,omitempty"`
 	Limit       *int64  `url:"limit,omitempty"`
 	Message     *string `url:"message,omitempty"`
@@ -101,7 +101,7 @@ func WithEnvName(env_name string) Option {
 	}
 }
 
-// WithForparam sets the forParam query parameter
+// WithForparam sets the for query parameter
 func WithForparam(forParam string) Option {
 	return func(o *Options) {
 		o.Forparam = &forParam
@@ -235,7 +235,7 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("env_name=%s", url.QueryEscape(*options.EnvName)))
 	}
 	if options.Forparam != nil {
-		params = append(params, fmt.Sprintf("forParam=%s", url.QueryEscape(*options.Forparam)))
+		params = append(params, fmt.Sprintf("for=%s", url.QueryEscape(*options.Forparam)))
 	}
 	if options.LifetimeSec != nil {
 		params = append(params, fmt.Sprintf("lifetime_sec=%d", *options.LifetimeSec))

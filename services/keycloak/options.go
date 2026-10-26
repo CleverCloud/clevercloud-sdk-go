@@ -48,7 +48,9 @@ func buildQueryString(opts ...Option) string {
 
 	var params []string
 	if options.Resourceid != nil {
-		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
+		for _, v := range *options.Resourceid {
+			params = append(params, fmt.Sprintf("resourceId=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))

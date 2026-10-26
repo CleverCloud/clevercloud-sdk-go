@@ -17,7 +17,7 @@ type Options struct {
 	Context  *string `url:"context,omitempty"`
 	Coupon   *string `url:"coupon,omitempty"`
 	Currency *string `url:"currency,omitempty"`
-	Forparam *string `url:"forParam,omitempty"`
+	Forparam *string `url:"for,omitempty"`
 	Orgaid   *string `url:"orgaId,omitempty"`
 }
 
@@ -49,7 +49,7 @@ func WithCurrency(currency string) Option {
 	}
 }
 
-// WithForparam sets the forParam query parameter
+// WithForparam sets the for query parameter
 func WithForparam(forParam string) Option {
 	return func(o *Options) {
 		o.Forparam = &forParam
@@ -84,7 +84,7 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("currency=%s", url.QueryEscape(*options.Currency)))
 	}
 	if options.Forparam != nil {
-		params = append(params, fmt.Sprintf("forParam=%s", url.QueryEscape(*options.Forparam)))
+		params = append(params, fmt.Sprintf("for=%s", url.QueryEscape(*options.Forparam)))
 	}
 	if options.Orgaid != nil {
 		params = append(params, fmt.Sprintf("orgaId=%s", url.QueryEscape(*options.Orgaid)))

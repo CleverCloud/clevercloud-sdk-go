@@ -119,7 +119,9 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("interval=%s", url.QueryEscape(*options.Interval)))
 	}
 	if options.Only != nil {
-		params = append(params, fmt.Sprintf("only=%v", *options.Only))
+		for _, v := range *options.Only {
+			params = append(params, fmt.Sprintf("only=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))

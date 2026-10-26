@@ -65,7 +65,9 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("state=%s", url.QueryEscape(*options.State)))
 	}
 	if options.Tag != nil {
-		params = append(params, fmt.Sprintf("tag=%v", *options.Tag))
+		for _, v := range *options.Tag {
+			params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 
 	if len(params) == 0 {

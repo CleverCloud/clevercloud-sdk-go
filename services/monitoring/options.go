@@ -118,7 +118,9 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("driverEventId=%s", url.QueryEscape(*options.Drivereventid)))
 	}
 	if options.Kind != nil {
-		params = append(params, fmt.Sprintf("kind=%v", *options.Kind))
+		for _, v := range *options.Kind {
+			params = append(params, fmt.Sprintf("kind=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))

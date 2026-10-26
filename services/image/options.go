@@ -14,7 +14,7 @@ type Option func(*Options)
 // Options holds query parameters for image operations
 type Options struct {
 	Date       *string   `url:"date,omitempty"`
-	MultiSlots *bool     `url:"multi_slots,omitempty"`
+	MultiSlots *bool     `url:"multi-slots,omitempty"`
 	Runtime    *string   `url:"runtime,omitempty"`
 	Tag        *[]string `url:"tag,omitempty"`
 }
@@ -26,7 +26,7 @@ func WithDate(date string) Option {
 	}
 }
 
-// WithMultiSlots sets the multi_slots query parameter
+// WithMultiSlots sets the multi-slots query parameter
 func WithMultiSlots(multi_slots bool) Option {
 	return func(o *Options) {
 		o.MultiSlots = &multi_slots
@@ -59,13 +59,15 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("date=%s", url.QueryEscape(*options.Date)))
 	}
 	if options.MultiSlots != nil {
-		params = append(params, fmt.Sprintf("multi_slots=%t", *options.MultiSlots))
+		params = append(params, fmt.Sprintf("multi-slots=%t", *options.MultiSlots))
 	}
 	if options.Runtime != nil {
 		params = append(params, fmt.Sprintf("runtime=%s", url.QueryEscape(*options.Runtime)))
 	}
 	if options.Tag != nil {
-		params = append(params, fmt.Sprintf("tag=%v", *options.Tag))
+		for _, v := range *options.Tag {
+			params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 
 	if len(params) == 0 {

@@ -41,7 +41,12 @@ type ServiceOperation struct {
 }
 
 type ServiceParam struct {
-	Name        string
+	// Name is the Go identifier: the spec's name, made legal (`for` is `forParam`,
+	// `multi-slots` is `multi_slots`).
+	Name string
+	// WireName is the name the API expects, exactly as the spec spells it. A query
+	// string built from Name sent `forParam=` where the API reads `for=`.
+	WireName    string
 	GoName      string
 	Type        string
 	Required    bool
@@ -186,6 +191,7 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 
 			serviceParam := ServiceParam{
 				Name:        paramName,
+				WireName:    param.Name,
 				GoName:      toCamelCase(paramName),
 				Type:        mapSchemaMapToGoType(param.Schema),
 				Required:    required,
@@ -441,7 +447,7 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 	for _, op := range operations {
 		for _, qp := range op.QueryParams {
 			// Use the original name as key to avoid duplicates
-			if _, exists := queryParamMap[qp.Name]; !exists {
+			if _, exists := queryParamMap[qp.WireName]; !exists {
 				// For options, use PascalCase for GoName and simplify complex types to string
 				param := qp
 				param.GoName = toPascalCase(qp.Name)
@@ -454,7 +460,7 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 						param.Type = "string"
 					}
 				}
-				queryParamMap[qp.Name] = param
+				queryParamMap[qp.WireName] = param
 			}
 		}
 	}
@@ -489,14 +495,14 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 	// Options struct
 	var fields []Code
 	for _, qp := range queryParams {
-		fields = append(fields, Id(qp.GoName).Op("*").Id(qp.Type).Tag(map[string]string{"url": qp.Name + ",omitempty"}))
+		fields = append(fields, Id(qp.GoName).Op("*").Id(qp.Type).Tag(map[string]string{"url": qp.WireName + ",omitempty"}))
 	}
 	f.Comment(fmt.Sprintf("Options holds query parameters for %s operations", packageName))
 	f.Type().Id("Options").Struct(fields...)
 
 	// With* functions for each query param
 	for _, qp := range queryParams {
-		f.Comment(fmt.Sprintf("With%s sets the %s query parameter", qp.GoName, qp.Name))
+		f.Comment(fmt.Sprintf("With%s sets the %s query parameter", qp.GoName, qp.WireName))
 		f.Func().Id("With" + qp.GoName).Params(Id(qp.Name).Id(qp.Type)).Id("Option").Block(
 			Return(Func().Params(Id("o").Op("*").Id("Options")).Block(
 				Id("o").Dot(qp.GoName).Op("=").Op("&").Id(qp.Name),
@@ -528,7 +534,7 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 			default:
 				formatVerb = "%v"
 			}
-			formatStr = qp.Name + "=" + formatVerb
+			formatStr = qp.WireName + "=" + formatVerb
 
 			var valueExpr Code
 			if qp.Type == "string" {
@@ -537,6 +543,17 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 				valueExpr = Op("*").Id("options").Dot(qp.GoName)
 			}
 
+			if strings.HasPrefix(qp.Type, "[]") {
+				// OpenAPI's default for a query array is `form` + `explode`: the key once per
+				// value (`status=A&status=B`). `%v` of the slice sent `status=[A B]`.
+				buildBody = append(buildBody, If(Id("options").Dot(qp.GoName).Op("!=").Nil()).Block(
+					For(List(Id("_"), Id("v")).Op(":=").Range().Op("*").Id("options").Dot(qp.GoName)).Block(
+						Id("params").Op("=").Append(Id("params"), Qual("fmt", "Sprintf").Call(Lit(qp.WireName+"=%s"),
+							Qual("net/url", "QueryEscape").Call(Qual("fmt", "Sprint").Call(Id("v"))))),
+					),
+				))
+				continue
+			}
 			buildBody = append(buildBody, If(Id("options").Dot(qp.GoName).Op("!=").Nil()).Block(
 				Id("params").Op("=").Append(Id("params"), Qual("fmt", "Sprintf").Call(Lit(formatStr), valueExpr)),
 			))
