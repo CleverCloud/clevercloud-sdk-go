@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listcellarconsumptions
+Listcellarconsumptions List an owner's Cellar consumption
 
-# List cellar consumptions
+Called by the platform's billing service. Returns one record per billable Cellar add-on of the owner over the `since`/`until` window (RFC 3339; `until` required, `since` defaults to 2025-01-01T00:00:00Z and must not be after `until`, else 400), with hourly consumption lines; repeat `resourceId` to restrict it. 401 without the billing credentials.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

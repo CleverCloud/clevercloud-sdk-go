@@ -2,10 +2,10 @@
 
 package models
 
-// PublicBaseEntry
+// PublicBaseEntry The version of a plugin the platform installs on clusters running a given Kubernetes version, and...
 type PublicBaseEntry struct {
 	InstallOrder  int        `json:"installOrder"`
 	K8sVersion    string     `json:"k8sVersion"`
-	Plugin        PluginName `json:"plugin"`
+	Plugin        PluginName `json:"plugin"` // The plugin, e.g. `CORE_DNS`.
 	PluginVersion string     `json:"pluginVersion"`
 }

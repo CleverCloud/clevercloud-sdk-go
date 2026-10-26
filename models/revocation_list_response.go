@@ -2,8 +2,8 @@
 
 package models
 
-// RevocationListResponse
+// RevocationListResponse A page of revoked Materia TS tokens, with its pagination metadata.
 type RevocationListResponse struct {
-	Items    []string           `json:"items,omitempty"`
-	Metadata PaginationMetadata `json:"metadata"`
+	Metadata      PaginationMetadata `json:"metadata"`
+	RevokedTokens []RevocationEntry  `json:"revokedTokens"`
 }

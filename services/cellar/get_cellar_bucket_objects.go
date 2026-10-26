@@ -13,17 +13,17 @@ import (
 )
 
 /*
-Getcellarbucketobjects
+Getcellarbucketobjects List a bucket's objects
 
-get object(s) from a bucket
+Returns one page of a bucket: its objects, the directories implied by their common prefixes, and a `cursor` for the next page (`null` at the end). Filter with `prefix` or `objectKey`, page with `cursor` and `count` (default 50), and add `withMetadata=true` for each object's content type and user metadata (slower). The caller must be the owner in the path (personal add-on) or a member of that organisation with the admin, manager or developer role: 401 when unauthenticated, 403 otherwise. 404 for an unknown add-on or bucket.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
+  - bucketName: Bucket name
   - opts: optional query parameters
 
 # Returns the operation result or an error

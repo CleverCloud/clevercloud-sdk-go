@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listnetworkgroups
+Listnetworkgroups List the network groups of an organisation
 
-# List NetworkGroups
+Returns every network group the organisation owns, possibly none. Repeat `tags` to keep only the groups that carry every given tag. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: listNetworkGroups
 */
-func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup1] {
+func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroups", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Get[[]models.NetworkGroup1](ctx, c, path)
+	response := client.Get[[]models.NetworkGroup](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

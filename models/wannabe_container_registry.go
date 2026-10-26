@@ -2,7 +2,7 @@
 
 package models
 
-// WannabeContainerRegistry
+// WannabeContainerRegistry Ask for a registry, optionally with tokens created alongside it.  Source: specs/001-api-surface-p...
 type WannabeContainerRegistry struct {
-	Tokens []IndexedWannabeToken `json:"tokens,omitempty"`
+	Tokens []WannabeContainerRegistryToken `json:"tokens,omitempty"` // Tokens to create with the registry. Each is honoured or reported on its own.
 }

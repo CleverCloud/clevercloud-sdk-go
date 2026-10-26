@@ -2,9 +2,9 @@
 
 package models
 
-// CellarGrantee
+// CellarGrantee The grantee of an object ACL entry: its ID, display name and type.
 type CellarGrantee struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
-	Type string `json:"type"`
+	Type string `json:"type"` // Grantee type (e.g. "CanonicalUser")
 }

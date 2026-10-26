@@ -2,8 +2,8 @@
 
 package models
 
-// SignedUrlRequest
+// SignedUrlRequest Request body to presign a URL for one object of the bucket named in the path: an upload URL (PUT)...
 type SignedUrlRequest struct {
-	ExpiresIn *int   `json:"expiresIn,omitempty"`
-	ObjectKey string `json:"objectKey"`
+	ExpiresIn *int   `json:"expiresIn,omitempty"` // Validity of the URL, in seconds. Defaults to 300. Used as given, without clamping: a duration the...
+	ObjectKey string `json:"objectKey"`           // Object key to presign.
 }

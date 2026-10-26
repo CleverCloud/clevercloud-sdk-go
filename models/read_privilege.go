@@ -2,7 +2,7 @@
 
 package models
 
-// ReadPrivilege
+// ReadPrivilege Read privilege request (database-level).  Source: ovd users.scala — ReadPrivilege
 type ReadPrivilege struct {
 	Read bool `json:"read"`
 }

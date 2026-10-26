@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletematomo
+Deletematomo Deprovision a Matomo add-on
 
-deprovision an existing Matomo
+Called by the platform when a customer deletes a Matomo add-on. Deletes its DNS record, PHP application, Redis or Materia KV add-on and MySQL add-on, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers 500 and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

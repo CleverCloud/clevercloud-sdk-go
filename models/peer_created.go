@@ -2,7 +2,7 @@
 
 package models
 
-// PeerCreated
+// PeerCreated Result of a peer creation.
 type PeerCreated struct {
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerId"` // The newly created peer's ID.
 }

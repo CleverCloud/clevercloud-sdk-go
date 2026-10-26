@@ -2,15 +2,15 @@
 
 package models
 
-// TokenType represents
+// TokenType represents The access-token type. Mirrors the `token_type` Postgres enum (migration 0) exactly — there is **...
 type TokenType string
 
 const (
-	TokenTypeACCESS                  TokenType = "ACCESS"
 	TokenTypeIDENTIFIED              TokenType = "IDENTIFIED"
+	TokenTypeACCESS                  TokenType = "ACCESS"
 	TokenTypeRESOURCE                TokenType = "RESOURCE"
-	TokenTypeSelfSustainedAccess     TokenType = "SELF_SUSTAINED_ACCESS"
 	TokenTypeSelfSustainedIdentified TokenType = "SELF_SUSTAINED_IDENTIFIED"
+	TokenTypeSelfSustainedAccess     TokenType = "SELF_SUSTAINED_ACCESS"
 )
 
 // String returns the underlying string value

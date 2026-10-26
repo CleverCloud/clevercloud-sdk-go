@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// QuotaEntry
+// QuotaEntry Quotas of one Materia TS add-on: its maximum monthly Geo Time Series (GTS) count and maximum data...
 type QuotaEntry struct {
 	AddonID            string    `json:"addonId"`
-	CreationDate       time.Time `json:"creationDate"`
+	CreationDate       time.Time `json:"creationDate"` // ISO 8601 creation timestamp.
 	MaxMonthlyGtsCount int       `json:"maxMonthlyGtsCount"`
 	MaxPointsPerDay    int       `json:"maxPointsPerDay"`
-	ProducerUUID       string    `json:"producerUuid"`
+	ProducerUUID       string    `json:"producerUuid"` // UUID of the token owner. Always present.
 }

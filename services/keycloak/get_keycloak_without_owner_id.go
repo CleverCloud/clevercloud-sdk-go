@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getkeycloakwithoutownerid
+Getkeycloakwithoutownerid Get a Keycloak add-on
 
-get a keycloak
+Returns the add-on: access URL, installed and available versions, initial admin credentials, backing resources, network group and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

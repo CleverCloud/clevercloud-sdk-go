@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletepulsarcluster
+Deletepulsarcluster Delete a Pulsar cluster
 
-# Delete Pulsar cluster
+Removes a registered Pulsar cluster; answers 204. An unknown cluster answers 404. Platform-operations route: it requires a bearer token granting the delete operation on Pulsar clusters, and answers 401 without a valid token and 403 when the token is not accepted or lacks the grant.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId:
+  - clusterId: Pulsar cluster ID
 
 # Returns the operation result or an error
 

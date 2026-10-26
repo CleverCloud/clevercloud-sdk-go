@@ -2,13 +2,11 @@
 
 package models
 
-// FunctionCreateOpts
+// FunctionCreateOpts Body of `POST /functions` (publish first version). The `build_context` tarball is uploaded as mul...
 type FunctionCreateOpts struct {
-	Description  *FunctionDescription `json:"description,omitempty"`
-	Environment  FunctionEnvironment  `json:"environment"`
-	MaxInstances int                  `json:"maxInstances"`
-	MaxMemory    int                  `json:"maxMemory"`
-	Name         *FunctionName        `json:"name,omitempty"`
-	OwnerID      *OwnerID             `json:"ownerId,omitempty"`
-	Tag          *FunctionTag         `json:"tag,omitempty"`
+	Entrypoint     Entrypoint          `json:"entrypoint"`
+	Name           string              `json:"name"` // DNS-friendly subset; must match `^[a-z][a-z0-9-]{0,62}$`.
+	NetworkPolicy  *NetworkPolicy      `json:"network_policy,omitempty"`
+	ResourceLimits ResourceLimits      `json:"resource_limits"`
+	Triggers       []TriggerCreateOpts `json:"triggers,omitempty"` // Optional triggers to register atomically with the function. Empty = register the function with no...
 }

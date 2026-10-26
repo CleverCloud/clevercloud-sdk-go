@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Createnetworkgroupexternalpeer
+Createnetworkgroupexternalpeer Add an external peer to a network group
 
-# Add an External Peer to a Member of a NetworkGroup
+Requests the addition of a WireGuard peer running outside Clever Cloud under the member `parentMember`, and answers with its generated ID; the peer is created asynchronously. A `SERVER` peer needs `ip` and `port`. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

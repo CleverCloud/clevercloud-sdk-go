@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletengotoroshiapplication
+Deletengotoroshiapplication Detach an Otoroshi add-on from its network group
 
-request to unlink a the otoroshi's java application to a networkgroup
+Deletes the add-on's network group and restarts its application; answers 204 as well when the add-on has no network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

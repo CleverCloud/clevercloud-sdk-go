@@ -2,8 +2,8 @@
 
 package models
 
-// VersionsConfig
+// VersionsConfig The Kubernetes versions the platform offers, and the one a cluster creation uses when it names none.
 type VersionsConfig struct {
-	Available []string `json:"available,omitempty"`
-	Default   string   `json:"default"`
+	Available []Version `json:"available"` // Versions cluster creation and upgrade accept, newest first.
+	Default   Version   `json:"default"`   // Version a create payload gets when it names none.
 }

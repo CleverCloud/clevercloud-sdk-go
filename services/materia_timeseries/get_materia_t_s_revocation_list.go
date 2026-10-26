@@ -12,9 +12,9 @@ import (
 )
 
 /*
-Getmateriatsrevocationlist
+Getmateriatsrevocationlist List revoked Materia TS tokens
 
-get revocation list for deleted MateriaTS tokens
+Returns the read and write tokens of deleted add-ons, ordered by revocation date and paginated with a `since` cursor; the response says whether more entries follow and the cursor to use next. Answers 400 when `location` is not the location this provider serves or `limit` is out of range.
 
 Parameters:
   - ctx: context for the request
@@ -35,7 +35,7 @@ Example:
 x-service: materia_timeseries
 operationId: getMateriaTSRevocationList
 */
-func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse1] {
+func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse] {
 	ctx, span := tracer.Start(ctx, "getMateriaTSRevocationList")
 	defer span.End()
 
@@ -48,7 +48,7 @@ func Getmateriatsrevocationlist(ctx context.Context, c *client.Client, tracer tr
 	}
 
 	// Make API call
-	response := client.Get[models.RevocationListResponse1](ctx, c, path)
+	response := client.Get[models.RevocationListResponse](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

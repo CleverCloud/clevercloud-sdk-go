@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Getconfigurationproviderv2
+Getconfigurationproviderv2 Get a configuration provider add-on for the platform
+
+Called by the platform to read a configuration provider add-on with its variables. Answers 404 for an unknown or deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 

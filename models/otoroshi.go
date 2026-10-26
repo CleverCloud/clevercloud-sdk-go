@@ -2,19 +2,19 @@
 
 package models
 
-// Otoroshi
+// Otoroshi An Otoroshi add-on: its identifiers, plan, deployed versions, access URLs and credentials, and th...
 type Otoroshi struct {
-	API                OtoroshiApi       `json:"api"`
-	AccessURL          string            `json:"accessUrl"` // Absolute URL
-	AddonID            string            `json:"addonId"`
-	AvailableVersions  []string          `json:"availableVersions,omitempty"`
-	Features           OtoroshiFeatures  `json:"features"`
-	InitialCredentials BasicCredentials  `json:"initialCredentials"`
-	JavaVersion        string            `json:"javaVersion"`
-	Name               string            `json:"name"`
-	OwnerID            OwnerID           `json:"ownerId"`
-	Plan               OtoroshiPlan      `json:"plan"`
-	ResourceID         string            `json:"resourceId"`
-	Resources          OtoroshiResources `json:"resources"`
-	Version            string            `json:"version"`
+	API                OtoroshiApi              `json:"api"`                // Access to the Otoroshi admin API.
+	AccessURL          string                   `json:"accessUrl"`          // Public URL of the Otoroshi back office.
+	AddonID            string                   `json:"addonId"`            // Add-on ID (`addon_…`).
+	AvailableVersions  []string                 `json:"availableVersions"`  // Versions offered for upgrade.
+	Features           OtoroshiFeatures         `json:"features"`           // Optional features of the add-on (network group).
+	InitialCredentials OtoroshiBasicCredentials `json:"initialCredentials"` // Initial administrator credentials of the back office.
+	JavaVersion        string                   `json:"javaVersion"`        // Java version the add-on's application runs on; empty when unknown.
+	Name               string                   `json:"name"`               // Add-on name.
+	OwnerID            UserId                   `json:"ownerId"`
+	Plan               OtoroshiPlanIdentifier   `json:"plan"`
+	ResourceID         OtoroshiId               `json:"resourceId"`
+	Resources          OtoroshiResources        `json:"resources"` // Resources backing the add-on.
+	Version            string                   `json:"version"`   // Deployed Otoroshi version; a `NOT FOUND` marker when the add-on's application reports none.
 }

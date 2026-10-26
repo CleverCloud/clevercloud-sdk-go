@@ -2,7 +2,9 @@
 
 package models
 
-// StoragePatch
+// StoragePatch Request body for patching a storage.  Deliberately carries NO `statuses` field: the statuses arra...
 type StoragePatch struct {
-	Label *string `json:"label,omitempty"`
+	Configuration *any     `json:"configuration,omitempty"` // Updated configuration blob (optional).
+	Label         *string  `json:"label,omitempty"`         // New label (optional).
+	Tags          []string `json:"tags,omitempty"`          // Updated tags (optional).
 }

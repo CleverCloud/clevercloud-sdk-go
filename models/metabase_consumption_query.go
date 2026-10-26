@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// MetabaseConsumptionQuery
+// MetabaseConsumptionQuery Time window of a consumption report.
 type MetabaseConsumptionQuery struct {
-	Since time.Time `json:"since"`
-	Until time.Time `json:"until"`
+	Since time.Time `json:"since"` // Start of the consumption window (inclusive).
+	Until time.Time `json:"until"` // End of the consumption window (exclusive).
 }

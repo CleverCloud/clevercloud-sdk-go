@@ -2,7 +2,7 @@
 
 package models
 
-// DebugMode represents
+// DebugMode represents The `mode` of `POST /v4/compute/placement/dry-run/debug`: report every hypervisor (`all`) or only...
 type DebugMode string
 
 const (

@@ -11,36 +11,47 @@ import (
 )
 
 /*
-Dryrunplacement
+Dryrunplacement POST /v4/compute/placement/dry-run
 
-# Run the placement algorithm without actually scheduling anything
+Source: references/legacy/ovd/modules/compute/api/routes.scala:252-261 (dryRunPlacement)
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:153-169 (dryRunPlacement)
+Behavior: run the placement algorithm against every cached hypervisor
+without scheduling anything, and answer OVD's `Map[String, Hypervisor]`:
+VM name → the full `Hypervisor` document it would land on, as it was
+read (no reservation applied). A VM nothing can host is simply absent
+from the map — OVD returns `placementResult.hypervisors` and drops its
+`failures` (the `TODO` at `:153`); per-hypervisor reasons are what
+`POST /v4/compute/placement/dry-run/debug` is for. The body is OVD's
+bare `[VirtualMachineSpecInput, …]` (`jsonBody[Seq[…]]`, #2767).
+Issue: #664, #2767, #3504
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := infrastructure.Dryrunplacement(ctx, client, tracer)
+	response := infrastructure.Dryrunplacement(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: dryRunPlacement
 */
-func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.MapHypervisor] {
+func Dryrunplacement(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody []*models.VirtualMachineSpecInput) client.Response[models.MapHypervisor] {
 	ctx, span := tracer.Start(ctx, "dryRunPlacement")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/placement/dry-run")
 
 	// Make API call
-	response := client.Post[models.MapHypervisor](ctx, c, path, nil)
+	response := client.Post[models.MapHypervisor](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

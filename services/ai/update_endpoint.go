@@ -11,23 +11,36 @@ import (
 )
 
 /*
-Updateendpoint
+Updateendpoint **Legacy**: ovd AIProviderController.scala:132 updateEndpointEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, forward update to Otoroshi, deploy updated endpoint
 
-# Create endpoint to otoroshi cluster
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+POST /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id} — update endpoint.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — updateEndpointEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — updateEndpoint()
+Behavior: verifies addon + tenancy, forwards to otoroshiClient.updateEndpoint,
+
+	extracts uid from response, deploys the updated endpoint. Returns Otoroshi JSON.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ai.Updateendpoint(ctx, client, tracer, ownerId, aiId, endpointId)
+	response := ai.Updateendpoint(ctx, client, tracer, ownerId, aiId, endpointId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,14 +49,14 @@ Example:
 x-service: ai
 operationId: updateEndpoint
 */
-func Updateendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string) client.Response[client.Nothing] {
+func Updateendpoint(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, requestBody any) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "updateEndpoint", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s", ownerId, aiId, endpointId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

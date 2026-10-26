@@ -2,16 +2,16 @@
 
 package models
 
-// Region
+// Region A zone where resources can be deployed: its location, outbound IP ranges and tags.
 type Region struct {
-	City        string   `json:"city"`
-	Country     string   `json:"country"`
-	CountryCode string   `json:"countryCode"`
-	DisplayName *string  `json:"displayName,omitempty"`
-	ID          string   `json:"id"`
-	Lat         float64  `json:"lat"`
-	Lon         float64  `json:"lon"`
-	Name        string   `json:"name"`
-	OutboundIPs []string `json:"outboundIPs,omitempty"`
-	Tags        []string `json:"tags,omitempty"`
+	City        string   `json:"city"`                  // City name.
+	Country     string   `json:"country"`               // Country name.
+	CountryCode string   `json:"countryCode"`           // ISO country code.
+	DisplayName *string  `json:"displayName,omitempty"` // Display name of the zone, when it overrides the default one; always present, `null` when unset.
+	ID          string   `json:"id"`                    // Zone UUID.
+	Lat         float64  `json:"lat"`                   // Latitude.
+	Lon         float64  `json:"lon"`                   // Longitude.
+	Name        string   `json:"name"`                  // Zone short name (e.g. "par", "mtl").
+	OutboundIPs []string `json:"outboundIPs"`           // Outbound IP ranges of the zone, in CIDR notation.
+	Tags        []string `json:"tags"`                  // Zone tags (e.g. "infra:clever-cloud").
 }

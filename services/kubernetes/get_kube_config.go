@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Getkubeconfig
+Getkubeconfig Download the kubeconfig of a cluster
+
+Returns a kubeconfig YAML file holding a newly issued cluster-admin (`system:masters`) client certificate. `type` selects the API server address it points at; 412 when that address does not exist or the API server is not reachable in the cluster's current state. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The holder of a presigned token in the `authorization` query parameter can call it too.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubeconfig(ctx, client, tracer, ownerId, clusterId, opts...)
+	response := kubernetes.Getkubeconfig(ctx, client, tracer, ownerId, kubernetesId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: getKubeConfig
 */
-func Getkubeconfig(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, opts ...Option) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "getKubeConfig", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Getkubeconfig(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, opts ...Option) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "getKubeConfig", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/kubeconfig.yaml", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/kubeconfig.yaml", ownerId, kubernetesId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)

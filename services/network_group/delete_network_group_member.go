@@ -11,17 +11,17 @@ import (
 )
 
 /*
-Deletenetworkgroupmember
+Deletenetworkgroupmember Remove a member from a network group
 
-# Delete a Member of a NetworkGroup
+Requests the removal of the member, which is applied asynchronously; 404 when the network group or the member does not exist. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - memberId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - memberId: Member ID: the application, add-on, load balancer or external resource ID
 
 # Returns the operation result or an error
 

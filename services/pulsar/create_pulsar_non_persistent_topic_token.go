@@ -11,16 +11,16 @@ import (
 )
 
 /*
-Createpulsarnonpersistenttopictoken
+Createpulsarnonpersistenttopictoken Issue an access token for a non-persistent topic
 
-# Craft a token with rights on a specific topic
+Returns a new access token (Biscuit) restricted to this topic of the add-on's namespace, to hand to a producer or consumer that must reach this topic only. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

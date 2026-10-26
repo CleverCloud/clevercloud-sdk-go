@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getmateriats
+Getmateriats Get a Materia TS add-on
 
-get a MateriaTS
+Called by the platform to read an active Materia TS add-on, its read token included. Answers 404 for an unknown add-on or one being deleted.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId:
+  - addonTsId: Materia TS add-on ID (`ts_…`)
 
 # Returns the operation result or an error
 

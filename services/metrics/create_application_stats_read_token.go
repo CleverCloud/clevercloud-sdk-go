@@ -12,16 +12,29 @@ import (
 )
 
 /*
-Createapplicationstatsreadtoken
+Createapplicationstatsreadtoken POST /v4/stats/organisations/{owner_id}/resources/{resource_id}/tokens/read — resource-scoped read token.
 
-# Generate a Warp10 READ token scoped to a specific application resource
+📥 **Algo Source (Legacy):**
+ovd `UserTokenService.generateApplicationReadToken` — same `doGenerateToken` validation/defaults as
+the org variant (ttl→P5D, apps→{METRICS, METRICS_ACCESSLOGS}, maxTtl P20D), then
+`client.createResourceReadToken(ownerId, resourceId, request)`.
+Source: ovd modules/metrics/.../services/UserTokenService.scala:44-50, api/UserTokenEndpoints.scala:33-40.
+
+🔧 **Algo Rust (Implementation):**
+  - Same `validate`/defaults + mapResponse + OVD envelope as the org variant, but
+    `build_stats_read_token(.., Some(resource_id), ..)` → `module.metrics().create_resource_read_token(
+    owner_id, resource_id, &applications, &lifespan_iso)` (`resource_id` is now threaded — owner
+  - app_id scoping — no longer bound-and-ignored; `lifespan_iso` = the effective TTL's ISO).
+
+Source: ovd modules/metrics/src/main/scala/com/clevercloud/metrics/api/UserTokenEndpoints.scala:33-40 (createApplicationStatsReadToken)
+Issue: #1046
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - resourceId:
+  - ownerId: Owner ID (orga_ or user_ prefix)
+  - resourceId: Resource ID
   - requestBody: the request payload
 
 # Returns the operation result or an error

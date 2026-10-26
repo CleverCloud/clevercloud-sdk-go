@@ -2,7 +2,7 @@
 
 package models
 
-// UpdateBucketRequest
+// UpdateBucketRequest Request body to change the versioning setting of a bucket.
 type UpdateBucketRequest struct {
-	Versioning bool `json:"versioning"`
+	Versioning bool `json:"versioning"` // Whether to enable versioning
 }

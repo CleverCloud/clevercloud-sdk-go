@@ -2,11 +2,11 @@
 
 package models
 
-// TS
+// TS A Materia TS (time series) add-on: its resource and add-on IDs, owner, access token and plan.
 type TS struct {
 	AddonID    string      `json:"addonId"`
-	OwnerID    OwnerID     `json:"ownerId"`
+	OwnerID    string      `json:"ownerId"`
 	Plan       TSPlan      `json:"plan"`
-	ResourceID string      `json:"resourceId"`
-	Resources  TSResources `json:"resources"`
+	ResourceID TsId        `json:"resourceId"`
+	Resources  TsResources `json:"resources"`
 }

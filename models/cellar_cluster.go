@@ -2,10 +2,10 @@
 
 package models
 
-// CellarCluster
+// CellarCluster A Cellar storage cluster: its S3 endpoint host, zone and whether it accepts new add-ons.
 type CellarCluster struct {
-	Available bool   `json:"available"`
-	Host      string `json:"host"`
-	ID        int    `json:"id"`
-	Zone      string `json:"zone"`
+	Available bool   `json:"available"` // Whether the cluster accepts new provisions
+	Host      string `json:"host"`      // S3 endpoint host
+	ID        int    `json:"id"`        // Cluster numeric ID
+	Zone      string `json:"zone"`      // Availability zone
 }

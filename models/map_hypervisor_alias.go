@@ -2,5 +2,5 @@
 
 package models
 
-// MapHypervisor
-type MapHypervisor = map[string]map[string]any
+// MapHypervisor The `POST /v4/compute/placement/dry-run` answer: VM name → the full `Hypervisor` document the pla...
+type MapHypervisor = map[string]Hypervisor

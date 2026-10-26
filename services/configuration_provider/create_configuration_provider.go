@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Createconfigurationprovider
+Createconfigurationprovider Provision a configuration provider add-on
+
+Called by the platform when a customer creates a configuration provider add-on. Creates the add-on with no variables and answers 201 with its ID (`config_…`); a repeated call for the same add-on and owner answers 201 with the add-on already created.
 
 Parameters:
   - ctx: context for the request

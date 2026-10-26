@@ -2,7 +2,7 @@
 
 package models
 
-// ContainerRegistryTokenRights represents
+// ContainerRegistryTokenRights represents What a token may do, in the customer-facing vocabulary.  These map, at the point of enforcement, ...
 type ContainerRegistryTokenRights string
 
 const (

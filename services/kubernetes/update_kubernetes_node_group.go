@@ -12,22 +12,24 @@ import (
 )
 
 /*
-Updatekubernetesnodegroup
+Updatekubernetesnodegroup Update a node group
+
+Updates the name, description, tag and node counts; flavor, taints and labels cannot change. A node count change resizes the group asynchronously and needs a ready group (or, with `drainPolicy`, a failed group still draining nodes); an upscale counts against the organisation's Kubernetes quota (412 when exceeded), and a name another node group holds is a 409. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeGroupId: Node group ID (`node_group_` or `nodeGroup_` followed by a ULID or a UUID; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Updatekubernetesnodegroup(ctx, client, tracer, ownerId, clusterId, nodeGroupId, requestBody)
+	response := kubernetes.Updatekubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +38,11 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesNodeGroup
 */
-func Updatekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "updateKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
+func Updatekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "updateKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, clusterId, nodeGroupId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, kubernetesId, nodeGroupId)
 
 	// Make API call
 	response := client.Patch[models.NodeGroup](ctx, c, path, requestBody)

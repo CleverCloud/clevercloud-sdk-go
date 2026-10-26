@@ -12,15 +12,18 @@ import (
 )
 
 /*
-Creatematerialayeraddon
+Creatematerialayeraddon POST /v2/providers/materia/{layerId}/resources — provision.
 
-# Provision a new addon in the given Materia layer
+Source: ovd materia-incubator api/routes.scala provisionEndpoint (createMateriaLayerAddon)
+Behavior: two-stage Basic auth → decode `{"owner_id": ...}` (malformed → 400) →
+
+	mint token + create LogicalDB + persist → 201 `{id, message: "Created", config}`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - layerId:
+  - layerId: Configured Materia layer id
   - requestBody: the request payload
 
 # Returns the operation result or an error

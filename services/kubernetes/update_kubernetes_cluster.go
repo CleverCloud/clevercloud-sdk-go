@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Updatekubernetescluster
+Updatekubernetescluster Update a Kubernetes cluster
+
+Updates the cluster's metadata and features as a JSON merge patch. A feature change requires an active cluster and is carried out in the background, so `features` reports what is installed, not what was just requested; disabling `features.nodeAutoprovisioning` is refused while Karpenter NodePools, NodeClaims, NodeOverlays or CleverNodeClasses exist, and disabling `features.csi` while the cluster holds volumes or snapshots of its storage driver. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Updatekubernetescluster(ctx, client, tracer, ownerId, clusterId, requestBody)
+	response := kubernetes.Updatekubernetescluster(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +37,14 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesCluster
 */
-func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.ClusterPatchPayload) client.Response[models.Cluster1] {
-	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Patch[models.Cluster1](ctx, c, path, requestBody)
+	response := client.Patch[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

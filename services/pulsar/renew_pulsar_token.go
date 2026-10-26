@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Renewpulsartoken
+Renewpulsartoken Renew a Pulsar add-on's access token
 
-# Revoke and generate the Pulsar authentication token
+Issues a new access token (Biscuit) for the add-on, stores it and updates the add-on's environment so that linked applications are redeployed with it; returns the updated add-on. The previous token stays valid until it expires. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

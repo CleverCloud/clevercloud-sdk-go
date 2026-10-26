@@ -2,5 +2,5 @@
 
 package models
 
-// NodeGroupName A lowercase RFC 1123 name limited to 63 characters (to fit in Kubernetes label values)
+// NodeGroupName Name of a node group or standalone node: a lowercase RFC 1123 subdomain of at most 63 characters,...
 type NodeGroupName = string

@@ -4,19 +4,19 @@ package models
 
 import "time"
 
-// LoadBalancerOutput
+// LoadBalancerOutput OVD `LoadBalancerOutput` (LoadBalancer.scala:117-132) — the listing view.
 type LoadBalancerOutput struct {
-	AppliedConfigVersion         *int                          `json:"appliedConfigVersion,omitempty"`
-	CoOwners                     []TenantID                    `json:"coOwners,omitempty"`
-	CreatedAt                    time.Time                     `json:"createdAt"`
-	DomainName                   DnsDomainName                 `json:"domainName"`
-	Flavor                       Flavor                        `json:"flavor"`
-	Frozen                       bool                          `json:"frozen"`
-	ID                           LoadBalancerId                `json:"id"`
-	Ips                          []string                      `json:"ips,omitempty"`
-	LoadbalancerParentResourceID *LoadBalancerParentResourceId `json:"loadbalancerParentResourceId,omitempty"`
-	Mutualized                   bool                          `json:"mutualized"`
-	OwnerID                      TenantID                      `json:"ownerId"`
-	RegionID                     RegionId                      `json:"regionId"`
-	Tags                         []string                      `json:"tags,omitempty"`
+	AppliedConfigVersion         *int      `json:"appliedConfigVersion,omitempty"`
+	CoOwners                     []string  `json:"coOwners"`
+	CreatedAt                    time.Time `json:"createdAt"`
+	DomainName                   string    `json:"domainName"`
+	Flavor                       string    `json:"flavor"`
+	Frozen                       bool      `json:"frozen"`
+	ID                           string    `json:"id"`
+	Ips                          []string  `json:"ips"`
+	LoadbalancerParentResourceID *string   `json:"loadbalancerParentResourceId,omitempty"`
+	Mutualized                   bool      `json:"mutualized"`
+	OwnerID                      string    `json:"ownerId"`
+	RegionID                     string    `json:"regionId"`
+	Tags                         []string  `json:"tags"`
 }

@@ -12,19 +12,21 @@ import (
 )
 
 /*
-Triggerclusterpluginsbackfill
+Triggerclusterpluginsbackfill Backfill the plugin records of a cluster
+
+Observes the plugins installed on an active cluster of any organisation, records the unrecorded ones and reports drift without fixing it. 404 when the cluster does not exist, 409 when it is not active. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId: A Kubernetes cluster identifier
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerclusterpluginsbackfill(ctx, client, tracer, clusterId)
+	response := kubernetes.Triggerclusterpluginsbackfill(ctx, client, tracer, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,11 +35,11 @@ Example:
 x-service: kubernetes
 operationId: triggerClusterPluginsBackfill
 */
-func Triggerclusterpluginsbackfill(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string) client.Response[models.PluginBackfillResult] {
-	ctx, span := tracer.Start(ctx, "triggerClusterPluginsBackfill", trace.WithAttributes(attribute.String("clusterId", clusterId)))
+func Triggerclusterpluginsbackfill(ctx context.Context, c *client.Client, tracer trace.Tracer, kubernetesId string) client.Response[models.PluginBackfillResult] {
+	ctx, span := tracer.Start(ctx, "triggerClusterPluginsBackfill", trace.WithAttributes(attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/admin/clusters/%s/plugins/backfill", clusterId)
+	path := utils.Path("/v4/kubernetes/admin/clusters/%s/plugins/backfill", kubernetesId)
 
 	// Make API call
 	response := client.Post[models.PluginBackfillResult](ctx, c, path, nil)

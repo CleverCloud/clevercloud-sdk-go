@@ -11,16 +11,14 @@ import (
 )
 
 /*
-Deletetoken
-
-Revoke a token.
+Deletetoken DELETE /v4/tenants/{tenantId}/tokens/{tokenId}
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - tokenId:
+  - tenantId: Tenant the token belongs to
+  - tokenId: The token to revoke
 
 # Returns the operation result or an error
 

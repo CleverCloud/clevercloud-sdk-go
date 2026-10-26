@@ -2,7 +2,7 @@
 
 package models
 
-// CellarTag
+// CellarTag A tag (key and value) attached to an object.
 type CellarTag struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`

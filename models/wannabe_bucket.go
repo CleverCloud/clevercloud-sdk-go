@@ -2,8 +2,8 @@
 
 package models
 
-// WannabeBucket
+// WannabeBucket Request body to create a bucket.
 type WannabeBucket struct {
-	Name       string `json:"name"`
-	Versioning bool   `json:"versioning"`
+	Name       string `json:"name"`                 // Bucket name
+	Versioning *bool  `json:"versioning,omitempty"` // Whether to enable versioning
 }

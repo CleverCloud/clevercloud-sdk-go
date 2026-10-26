@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Deletepulsarv2
+Deletepulsarv2 Deprovision a Pulsar add-on
 
-# Deprovision a Pulsar addon
+Called by the platform's add-on broker when a customer deletes a Pulsar add-on. Marks the add-on for deletion and returns its view; its namespace and topics are removed shortly afterwards. An unknown add-on answers 404, and an add-on whose plan cannot be deleted answers 412.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

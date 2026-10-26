@@ -11,35 +11,44 @@ import (
 )
 
 /*
-Deleteresourceacl
+DeleteResourceAcl **Legacy**: ovd IpamController.scala:390 deleteResourceAcl()
+**Algorithm**:
+  - IpamService.deleteResourceAcl(tenantId, resourceId)
+  - Hard-deletes the resource_acl row, returns 204 or 404
 
-# Delete ACL of a specific resource
+**Conformity**: YES
+
+DELETE /v4/ipam/organisations/{tenant_id}/acl/resources/{resource_id} — delete resource ACL.
+
+Source: ovd/modules/ipam/api/routes.scala deleteResourceAcl
+Behavior: hard delete, 204 on success, 404 if not found
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - resourceId: Resource ID
+  - tenant_id: Organisation/tenant ID
+  - resource_id: Resource ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ipam.Deleteresourceacl(ctx, client, tracer, tenantId, resourceId)
+	response := ipam.DeleteResourceAcl(ctx, client, tracer, tenant_id, resource_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: ipam
-operationId: deleteResourceAcl
+x-service: IPAM
+operationId: delete_resource_acl
 */
-func Deleteresourceacl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteResourceAcl", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("resourceId", resourceId)))
+func DeleteResourceAcl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, resource_id string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "delete_resource_acl", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("resource_id", resource_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/ipam/organisations/%s/acl/resources/%s", tenantId, resourceId)
+	path := utils.Path("/v4/ipam/organisations/%s/acl/resources/%s", tenant_id, resource_id)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

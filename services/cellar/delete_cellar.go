@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletecellar
+Deletecellar Deprovision a Cellar add-on
 
-deprovision a Cellar account
+Called by the platform's add-on broker when a customer deletes a Cellar add-on. Suspends its storage account at once, so its access keys stop working, and marks it for deletion; calling it again succeeds. An unknown add-on answers 404, and an add-on on the Backup plan answers 403 because it cannot be removed this way.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - CellarId:
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 

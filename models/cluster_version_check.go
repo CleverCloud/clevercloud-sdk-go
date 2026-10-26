@@ -2,10 +2,12 @@
 
 package models
 
-// ClusterVersionCheck
+// ClusterVersionCheck A cluster's Kubernetes version compared with the versions the platform offers, and optionally the...
 type ClusterVersionCheck struct {
-	Available  []string `json:"available"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available      []Version      `json:"available"`                // Available Kubernetes versions
+	Installed      Version        `json:"installed"`                // Currently installed version
+	Latest         Version        `json:"latest"`                   // Latest available version
+	NeedUpdate     bool           `json:"needUpdate"`               // Whether an update is available
+	WorkerVersions map[string]int `json:"workerVersions,omitempty"` // Observed kubelet versions across the cluster's nodes, tallied — e.g. `{"v1.33.4": 3, "v1.34.1": 1...
+	WorkersInSync  *bool          `json:"workersInSync,omitempty"`  // Whether every observed kubelet matches `installed` on `MAJOR.MINOR`. Present under the same condi...
 }

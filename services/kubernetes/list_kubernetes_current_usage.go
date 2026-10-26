@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Listkubernetescurrentusage
+Listkubernetescurrentusage Get the current Kubernetes usage of an organisation
+
+Returns the resources the organisation currently uses, one entry per active control plane and node group: what the Kubernetes quota is checked against. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
 
 # Returns the operation result or an error
 

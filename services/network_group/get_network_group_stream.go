@@ -11,16 +11,16 @@ import (
 )
 
 /*
-Getnetworkgroupstream
+Getnetworkgroupstream Stream a network group
 
-# Stream real-time NetworkGroup updates
+Server-Sent Events stream of the network group JSON, sent whenever its version changes (checked every 15 seconds), with a `HEARTBEAT` event after 5 seconds of silence; it ends when the group disappears. Browser clients that cannot set headers may pass the base64 of their `Authorization` header in the `authorization` query parameter. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

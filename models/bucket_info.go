@@ -4,11 +4,11 @@ package models
 
 import "time"
 
-// BucketInfo
+// BucketInfo A bucket in a bucket listing, with its object count and size.
 type BucketInfo struct {
-	CreatedAt    time.Time `json:"createdAt"`
-	Name         string    `json:"name"`
-	ObjectsCount int       `json:"objectsCount"`
-	SizeInBytes  int       `json:"sizeInBytes"`
-	UpdatedAt    time.Time `json:"updatedAt"`
+	CreatedAt    time.Time `json:"createdAt"`    // Creation timestamp
+	Name         string    `json:"name"`         // Bucket name
+	ObjectsCount int       `json:"objectsCount"` // Number of objects
+	SizeInBytes  int       `json:"sizeInBytes"`  // Total size in bytes
+	UpdatedAt    time.Time `json:"updatedAt"`    // Last update timestamp
 }

@@ -11,17 +11,17 @@ import (
 )
 
 /*
-Assignloadbalancertonetwork
-
-# Attach loadbalancer to network
+Assignloadbalancertonetwork Row 33 — local checks (409 already-attached, 404s), then 503 at the
+NetworkGroup step (client not wired in WP3 — the repository applier is
+ready). `{regionId}` validated then never checked (pinned quirk).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
   - networkId: Network ID
 
 # Returns the operation result or an error

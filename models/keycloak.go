@@ -2,19 +2,19 @@
 
 package models
 
-// Keycloak
+// Keycloak A Keycloak add-on: its identifiers, plan, deployed versions, access URL and initial credentials, ...
 type Keycloak struct {
-	AccessURL          string            `json:"accessUrl"` // Absolute URL
-	AddonID            string            `json:"addonId"`
-	AvailableVersions  []string          `json:"availableVersions,omitempty"`
-	EnvVars            MapString         `json:"envVars"`
-	Features           KeycloakFeatures  `json:"features"`
-	InitialCredentials BasicCredentials  `json:"initialCredentials"`
-	JavaVersion        string            `json:"javaVersion"`
-	Name               string            `json:"name"`
-	OwnerID            OwnerID           `json:"ownerId"`
-	Plan               KeycloakPlan      `json:"plan"`
-	ResourceID         AddonID           `json:"resourceId"`
-	Resources          KeycloakResources `json:"resources"`
-	Version            string            `json:"version"`
+	AccessURL          string            `json:"accessUrl"`          // URL of the Keycloak administration console.
+	AddonID            string            `json:"addonId"`            // Add-on ID (`addon_…`).
+	AvailableVersions  []string          `json:"availableVersions"`  // Versions on offer.
+	EnvVars            map[string]string `json:"envVars"`            // Environment variables of the add-on's application.
+	Features           KeycloakFeatures  `json:"features"`           // Optional features of the add-on (network group).
+	InitialCredentials BasicCredentials  `json:"initialCredentials"` // Initial administrator credentials.
+	JavaVersion        string            `json:"javaVersion"`        // Java version the add-on's application runs on.
+	Name               string            `json:"name"`               // Add-on name; the add-on ID when the name cannot be read.
+	OwnerID            string            `json:"ownerId"`            // ID of the owner: a user or an organisation.
+	Plan               string            `json:"plan"`               // Plan identifier.
+	ResourceID         string            `json:"resourceId"`         // Keycloak add-on ID (`keycloak_…`).
+	Resources          KeycloakResources `json:"resources"`          // Resources backing the add-on.
+	Version            string            `json:"version"`            // Deployed Keycloak version.
 }

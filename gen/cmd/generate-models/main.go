@@ -2,19 +2,20 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
-	"gopkg.in/yaml.v3"
+
+	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
 // Configuration for the generator
@@ -211,6 +212,97 @@ func getSchemaOneOf(schema Schema) []Schema {
 	return nil
 }
 
+func getSchemaAllOf(schema Schema) []Schema {
+	if arr, ok := schema["allOf"].([]any); ok {
+		result := make([]Schema, 0, len(arr))
+		for _, v := range arr {
+			if m, ok := v.(map[string]any); ok {
+				result = append(result, m)
+			}
+		}
+		return result
+	}
+	return nil
+}
+
+// allSchemas is every component schema of the document, for resolving the parts
+// of an allOf.
+var allSchemas map[string]Schema
+
+// flattenAllOf turns an `allOf` composition into one object schema carrying the
+// properties of every part, the way serde's `#[serde(flatten)]` lays them out
+// on the wire — which is what the AXO document describes with it:
+// `UndrainedNode` is the fields of a `DrainOutcome` beside a node id and name,
+// `TriggerCreateOpts` is a `TriggerConfig` and nothing else.
+//
+// A part that is a `$ref` contributes the referenced schema's properties; one
+// that is itself an `allOf` contributes its parts'; one that is a `oneOf`
+// contributes the properties of every variant, none of them required, since
+// which variant is on the wire is only known at runtime. A property defined by
+// two parts keeps the first definition. The composition's own `properties`,
+// when it has any beside the `allOf`, count as one more part.
+func flattenAllOf(schema Schema) Schema {
+	merged := Schema{
+		"type":       "object",
+		"properties": map[string]any{},
+	}
+	if desc, ok := schema["description"]; ok {
+		merged["description"] = desc
+	}
+	if title, ok := schema["title"]; ok {
+		merged["title"] = title
+	}
+	required := []string{}
+	seen := map[string]bool{}
+	for _, part := range getSchemaAllOf(schema) {
+		required = mergeSchemaPart(merged, part, false, required, seen)
+	}
+	if _, hasOwn := schema["properties"]; hasOwn {
+		own := Schema{"properties": schema["properties"], "required": schema["required"]}
+		required = mergeSchemaPart(merged, own, false, required, seen)
+	}
+	merged["required"] = required
+	return merged
+}
+
+// mergeSchemaPart adds one part of a composition to merged and returns the
+// required list extended with the part's own, unless optional.
+func mergeSchemaPart(merged Schema, part Schema, optional bool, required []string, seen map[string]bool) []string {
+	if ref := getSchemaRef(part); ref != "" {
+		name := strings.TrimPrefix(ref, "#/components/schemas/")
+		if seen[name] {
+			return required
+		}
+		seen[name] = true
+		resolved, ok := allSchemas[name]
+		if !ok {
+			log.Printf("Warning: allOf part references undefined schema %s; its fields are left out", name)
+			return required
+		}
+		return mergeSchemaPart(merged, resolved, optional, required, seen)
+	}
+	for _, sub := range getSchemaAllOf(part) {
+		required = mergeSchemaPart(merged, sub, optional, required, seen)
+	}
+	for _, variant := range getSchemaOneOf(part) {
+		required = mergeSchemaPart(merged, variant, true, required, seen)
+	}
+	properties := merged["properties"].(map[string]any)
+	for propName, prop := range getSchemaProperties(part) {
+		if _, exists := properties[propName]; !exists {
+			properties[propName] = map[string]any(prop)
+		}
+	}
+	if !optional {
+		for _, name := range getSchemaRequired(part) {
+			if !slices.Contains(required, name) {
+				required = append(required, name)
+			}
+		}
+	}
+	return required
+}
+
 func getSchemaConst(schema Schema) (string, bool) {
 	if c, ok := schema["const"].(string); ok {
 		return c, true
@@ -233,46 +325,12 @@ func getSchemaAdditionalProperties(schema Schema) (Schema, bool) {
 }
 
 func parseOpenAPISpec(specFile string) (*openapi31.Spec, error) {
-	// Read OpenAPI spec file
-	specBytes, err := os.ReadFile(specFile)
+	document, report, err := spec.Load(specFile)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read spec file: %w", err)
+		return nil, err
 	}
-
-	var spec openapi31.Spec
-
-	// Detect format based on file extension
-	ext := strings.ToLower(filepath.Ext(specFile))
-
-	switch ext {
-	case ".json":
-		// Parse JSON document
-		if err := json.Unmarshal(specBytes, &spec); err != nil {
-			return nil, fmt.Errorf("failed to parse OpenAPI JSON: %w", err)
-		}
-	case ".yaml", ".yml":
-		// Parse YAML document
-		if err := yaml.Unmarshal(specBytes, &spec); err != nil {
-			return nil, fmt.Errorf("failed to parse OpenAPI YAML: %w", err)
-		}
-	default:
-		// Try to auto-detect format
-		log.Printf("Unknown file extension %s, attempting auto-detection...", ext)
-
-		// Try JSON first
-		err := json.Unmarshal(specBytes, &spec)
-		if err == nil {
-			log.Printf("Auto-detected JSON format")
-		} else {
-			// Try YAML
-			if err := yaml.Unmarshal(specBytes, &spec); err != nil {
-				return nil, fmt.Errorf("failed to parse OpenAPI file (tried both JSON and YAML): %w", err)
-			}
-			log.Printf("Auto-detected YAML format")
-		}
-	}
-
-	return &spec, nil
+	log.Printf("Loaded %s: %s", specFile, report)
+	return document, nil
 }
 
 func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
@@ -288,6 +346,8 @@ func generateModels(spec *openapi31.Spec) ([]ModelStruct, error) {
 		schemaNames = append(schemaNames, schemaName)
 	}
 	sort.Strings(schemaNames)
+
+	allSchemas = spec.Components.Schemas
 
 	// Process each schema in components/schemas
 	for _, schemaName := range schemaNames {
@@ -345,6 +405,11 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 		return processOneOfSchema(name, schema)
 	}
 
+	// Handle allOf compositions: one object carrying the fields of every part.
+	if getSchemaAllOf(schema) != nil {
+		return processObjectSchema(name, flattenAllOf(schema))
+	}
+
 	// Handle object types
 	schemaTypes := getSchemaType(schema)
 	if len(schemaTypes) > 0 && schemaTypes[0] == "object" {
@@ -362,8 +427,14 @@ func processSchema(name string, schema Schema) (*ModelStruct, error) {
 		return processObjectSchema(name, schema)
 	}
 
-	// Handle scalar types with titles (type aliases)
-	if len(schemaTypes) > 0 && getSchemaTitle(schema) != "" {
+	// Handle named scalar types (type aliases).
+	//
+	// A `title` used to be required here, which silently dropped every scalar component that
+	// documents itself with `description` instead — the AXO spec has 33 of them (`SemanticTag`,
+	// `Gpus`, `ScalingFactor`, …). They are named components and other schemas `$ref` them, so
+	// emitting nothing left the package referring to types that did not exist. Being a named
+	// component is what makes the alias necessary; the title never was.
+	if len(schemaTypes) > 0 {
 		return processTypeAliasSchema(name, schema)
 	}
 
@@ -559,12 +630,57 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 	}
 
 	field.Type = goType
-	field.IsPointer = isPointer
+	// Slices and maps carry their own nil, so a pointer adds a dereference before
+	// every len, range and index and expresses nothing extra. `*map[string]any` is
+	// what the Terraform provider could neither range over nor index.
+	field.IsPointer = isPointer &&
+		!strings.HasPrefix(goType, "[]") &&
+		!strings.HasPrefix(goType, "map[")
 
 	return field, nil
 }
 
+// unwrapNullable returns the meaningful half of OpenAPI 3.1's nullable idiom,
+// `oneOf: [{"type": "null"}, X]`, and whether the schema was of that shape.
+//
+// 3.0 spelled a nullable property `$ref` plus `nullable: true`; 3.1 has no
+// `nullable` keyword and unions with the null type instead. Without this, such a
+// property carries neither `$ref` nor `type`, so getGoType fell through to `any`
+// and every nullable reference in the document lost its type — 109 fields across
+// 70 models, where the previous document produced none.
+func unwrapNullable(schema Schema) (Schema, bool) {
+	members := getSchemaOneOf(schema)
+	if len(members) != 2 {
+		return nil, false
+	}
+	var inner Schema
+	var sawNull bool
+	for _, member := range members {
+		types := getSchemaType(member)
+		if len(types) == 1 && types[0] == "null" {
+			sawNull = true
+			continue
+		}
+		inner = member
+	}
+	if !sawNull || inner == nil {
+		return nil, false
+	}
+	return inner, true
+}
+
 func getGoType(schema Schema, isRequired bool) (string, bool, error) {
+	// A nullable reference is the referenced type, behind a pointer — except for
+	// slices and maps, which carry their own nil and would otherwise become the
+	// unusable `*map[string]any`.
+	if inner, ok := unwrapNullable(schema); ok {
+		goType, isPointer, err := getGoType(inner, false)
+		if strings.HasPrefix(goType, "[]") || strings.HasPrefix(goType, "map[") {
+			isPointer = false
+		}
+		return goType, isPointer, err
+	}
+
 	// Handle $ref types
 	if ref := getSchemaRef(schema); ref != "" {
 		refName := strings.TrimPrefix(ref, "#/components/schemas/")
@@ -616,7 +732,18 @@ func getGoType(schema Schema, isRequired bool) (string, bool, error) {
 		return "[]any", false, nil
 
 	case "object":
-		return "map[string]any", isPointer, nil
+		// An inline object with typed additionalProperties is a map of that type
+		// (`envVars: {additionalProperties: {type: string}}` is `map[string]string`); with
+		// untyped ones, or with none, a map of anything. Maps carry their own nil, so never a
+		// pointer.
+		if apSchema, hasAP := getSchemaAdditionalProperties(schema); hasAP && apSchema != nil {
+			valueType, _, err := getGoType(apSchema, true)
+			if err != nil {
+				return "", false, err
+			}
+			return "map[string]" + valueType, false, nil
+		}
+		return "map[string]any", false, nil
 
 	default:
 		return "any", isPointer, nil
@@ -749,9 +876,14 @@ func formatComment(description string) string {
 	desc := strings.TrimSpace(description)
 	desc = strings.ReplaceAll(desc, "\n", " ")
 
-	// Limit length
-	if len(desc) > 100 {
-		desc = desc[:97] + "..."
+	// Limit length, counting runes rather than bytes.
+	//
+	// Slicing a Go string by byte offset cuts a multi-byte character in half, and the result is
+	// not valid UTF-8 — `gofmt` then refuses the file and the model is silently dropped. Latent
+	// while descriptions were ASCII; the AXO spec's descriptions are the handlers' Rust doc
+	// comments, which use em-dashes and accented text, so `WannabeToken` disappeared this way.
+	if runes := []rune(desc); len(runes) > 100 {
+		desc = string(runes[:97]) + "..."
 	}
 
 	return desc
@@ -1002,7 +1134,6 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 		Return(Id("u").Dot("raw"), Nil()),
 	)
 	f.Line()
-
 
 	// UnmarshalJSON just stores the bytes — discriminator is read lazily.
 	// "null" / empty inputs are stored verbatim; Type()/As<Member>() handle

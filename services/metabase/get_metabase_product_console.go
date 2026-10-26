@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getmetabaseproductconsole
+Getmetabaseproductconsole Get the consumption of a Metabase add-on
 
-get metabase product consumption
+Called by the platform's billing to read the consumption of one active add-on over the `since`–`until` window given in the body. Answers 404 when the add-on is unknown, deleted or not owned by `ownerId`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonMetabaseId:
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

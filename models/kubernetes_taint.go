@@ -2,9 +2,9 @@
 
 package models
 
-// KubernetesTaint
+// KubernetesTaint A Kubernetes taint applied to the nodes of a node group: key, optional value and effect.
 type KubernetesTaint struct {
-	Effect TaintEffect `json:"effect"`
-	Key    string      `json:"key"`
-	Value  *string     `json:"value,omitempty"`
+	Effect TaintEffect `json:"effect"`          // Taint effect
+	Key    string      `json:"key"`             // Taint key
+	Value  *string     `json:"value,omitempty"` // Taint value
 }

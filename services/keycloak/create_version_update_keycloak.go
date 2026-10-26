@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createversionupdatekeycloak
+Createversionupdatekeycloak Update the Keycloak version of an add-on
 
-# Patch Keycloak
+Switches every application of the add-on to `targetVersion`, redeploys them without build cache and returns the updated add-on. Answers 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

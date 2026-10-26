@@ -4,8 +4,8 @@ package models
 
 import "encoding/json"
 
-// LoadMetric
-// Tagged union - can hold one of: CONNECTIONS, ConnectionTime, REQUESTS, Unrecognized1
+// LoadMetric Load-balancing metric (OVD `v1.loadbalancer.LoadMetric`, circe ADT wire).  Source: references/leg...
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any
 type LoadMetric struct {
 	raw json.RawMessage
 }

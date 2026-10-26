@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Listiamrevocations
+Listiamrevocations List revoked token IDs
 
-# Get revocation list
+Returns the revocation IDs of revoked Materia tokens, oldest revocation first, paginated with `from` and `size` (20 by default); `cluster` narrows the list to one cluster. Called by the data planes that verify Materia tokens. Answers 400 for a negative `from` or `size`.
 
 Parameters:
   - ctx: context for the request
@@ -34,7 +34,7 @@ Example:
 x-service: base
 operationId: listIAMRevocations
 */
-func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[[]string] {
 	ctx, span := tracer.Start(ctx, "listIAMRevocations")
 	defer span.End()
 
@@ -47,7 +47,7 @@ func Listiamrevocations(ctx context.Context, c *client.Client, tracer trace.Trac
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[[]string](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

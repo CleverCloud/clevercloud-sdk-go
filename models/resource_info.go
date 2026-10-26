@@ -2,7 +2,7 @@
 
 package models
 
-// ResourceInfo
+// ResourceInfo Customer-facing information about a resource.
 type ResourceInfo struct {
-	Name string `json:"name"`
+	Name string `json:"name"` // Name of the resource, as set by the customer.
 }

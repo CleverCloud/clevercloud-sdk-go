@@ -2,17 +2,19 @@
 
 package models
 
-// ProvisionRequest
+// ProvisionRequest Provisioning request the platform sends to an add-on provider (Heroku add-on provider protocol). ...
 type ProvisionRequest struct {
-	AddonID       string    `json:"addon_id"`
-	AddonName     *string   `json:"addon_name,omitempty"`
-	CallbackURL   string    `json:"callback_url"`
-	LogplexToken  string    `json:"logplex_token"`
-	LogsCollector *string   `json:"logs_collector,omitempty"`
-	Options       MapString `json:"options"`
-	OwnerID       string    `json:"owner_id"`
-	Plan          string    `json:"plan"`
-	Region        string    `json:"region"`
-	UserID        *string   `json:"user_id,omitempty"`
-	Version       *string   `json:"version,omitempty"`
+	AddonID       string         `json:"addon_id"`                 // Add-on ID (`addon_…`).
+	AddonName     *string        `json:"addon_name,omitempty"`     // Name the user gave the add-on. Optional: providers that display a name read it, the others ignore...
+	CallbackURL   *string        `json:"callback_url,omitempty"`   // URL the provider calls to report asynchronous status updates to the platform.
+	HerokuID      *string        `json:"heroku_id,omitempty"`      // Resource ID the platform assigns to the add-on, as in the Heroku add-on protocol.
+	LogplexToken  *string        `json:"logplex_token,omitempty"`  // Heroku logplex token for log forwarding
+	LogsCollector *string        `json:"logs_collector,omitempty"` // Logs collector endpoint
+	Options       map[string]any `json:"options,omitempty"`        // Provider-specific options (e.g. encryption, version). `null` is treated as an empty object.
+	OwnerID       string         `json:"owner_id"`                 // Owner (user or org) ID
+	Plan          string         `json:"plan"`                     // Requested plan slug
+	Region        *string        `json:"region,omitempty"`         // Region/zone for provisioning
+	Tags          []Tag          `json:"tags,omitempty"`           // Tags for constraints (e.g. contract:hds)
+	UserID        *string        `json:"user_id,omitempty"`        // ID of the user who requested the add-on, when known.
+	Version       *string        `json:"version,omitempty"`        // Dedicated version to boot (e.g. PostgreSQL 16, Redis 7)
 }

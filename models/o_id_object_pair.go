@@ -2,7 +2,7 @@
 
 package models
 
-// OIdObjectPair
+// OIdObjectPair OID-name pair (generic, used in migration pre/post).  Source: ovd OIdPair.scala — OIdObjectPair
 type OIdObjectPair struct {
 	Name string `json:"name"`
 	Oid  int    `json:"oid"`

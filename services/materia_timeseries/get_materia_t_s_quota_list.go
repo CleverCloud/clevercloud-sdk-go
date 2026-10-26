@@ -12,9 +12,9 @@ import (
 )
 
 /*
-Getmateriatsquotalist
+Getmateriatsquotalist List the quotas of Materia TS add-ons
 
-get quota list for MateriaTS addons
+Returns the quota of every active add-on, ordered by creation date and paginated with a `since` cursor; the response says whether more entries follow and the cursor to use next. Answers 400 when `location` is not the location this provider serves or `limit` is out of range.
 
 Parameters:
   - ctx: context for the request

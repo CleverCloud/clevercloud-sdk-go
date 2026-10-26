@@ -12,9 +12,7 @@ import (
 )
 
 /*
-Listrevocations
-
-List revoked token IDs for data plane verification with cursor-based pagination.
+Listrevocations GET /v4/tokens/revocations
 
 Parameters:
   - ctx: context for the request
@@ -35,7 +33,7 @@ Example:
 x-service: tokens
 operationId: listRevocations
 */
-func Listrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationListResponse] {
+func Listrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[models.RevocationFeed] {
 	ctx, span := tracer.Start(ctx, "listRevocations")
 	defer span.End()
 
@@ -48,7 +46,7 @@ func Listrevocations(ctx context.Context, c *client.Client, tracer trace.Tracer,
 	}
 
 	// Make API call
-	response := client.Get[models.RevocationListResponse](ctx, c, path)
+	response := client.Get[models.RevocationFeed](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Listallkeycloakconsumption
+Listallkeycloakconsumption List the consumption of all Keycloak add-ons
 
-get all keycloak resources consumptions
+Called by the platform's billing to read the consumption of every Keycloak add-on billed over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request

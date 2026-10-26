@@ -15,11 +15,13 @@ type Option func(*Options)
 type Options struct {
 	Image       *string `url:"image,omitempty"`
 	Label       *string `url:"label,omitempty"`
+	Limit       *int64  `url:"limit,omitempty"`
 	Mode        *string `url:"mode,omitempty"`
 	Region      *string `url:"region,omitempty"`
 	Resourceid  *string `url:"resourceId,omitempty"`
 	Schedulable *bool   `url:"schedulable,omitempty"`
 	State       *string `url:"state,omitempty"`
+	Status      *string `url:"status,omitempty"`
 	Tag         *string `url:"tag,omitempty"`
 	Zone        *string `url:"zone,omitempty"`
 }
@@ -35,6 +37,13 @@ func WithImage(image string) Option {
 func WithLabel(label string) Option {
 	return func(o *Options) {
 		o.Label = &label
+	}
+}
+
+// WithLimit sets the limit query parameter
+func WithLimit(limit int64) Option {
+	return func(o *Options) {
+		o.Limit = &limit
 	}
 }
 
@@ -73,6 +82,13 @@ func WithState(state string) Option {
 	}
 }
 
+// WithStatus sets the status query parameter
+func WithStatus(status string) Option {
+	return func(o *Options) {
+		o.Status = &status
+	}
+}
+
 // WithTag sets the tag query parameter
 func WithTag(tag string) Option {
 	return func(o *Options) {
@@ -101,6 +117,9 @@ func buildQueryString(opts ...Option) string {
 	if options.Label != nil {
 		params = append(params, fmt.Sprintf("label=%s", url.QueryEscape(*options.Label)))
 	}
+	if options.Limit != nil {
+		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
+	}
 	if options.Mode != nil {
 		params = append(params, fmt.Sprintf("mode=%s", url.QueryEscape(*options.Mode)))
 	}
@@ -115,6 +134,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.State != nil {
 		params = append(params, fmt.Sprintf("state=%s", url.QueryEscape(*options.State)))
+	}
+	if options.Status != nil {
+		params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(*options.Status)))
 	}
 	if options.Tag != nil {
 		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))

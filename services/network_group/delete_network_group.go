@@ -11,16 +11,16 @@ import (
 )
 
 /*
-Deletenetworkgroup
+Deletenetworkgroup Delete a network group
 
-# Delete a NetworkGroup
+Requests the deletion of the network group, which is applied asynchronously; 404 when it does not exist. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

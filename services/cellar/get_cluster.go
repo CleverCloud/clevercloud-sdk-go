@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getcluster
+Getcluster Read a Cellar storage cluster
 
-get a Cellar cluster by ID
+Returns one storage cluster as `{ id, host, zone, available }`, available or not; credentials are never returned. An unknown cluster answers 404. Platform-operations route: it requires a bearer token granting this cluster operation for the organisation in the path, and answers 401 without a usable token and 403 when the token does not cover it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - ClusterIndex:
+  - ownerId: Organisation ID (`orga_…`) the token must cover
+  - ClusterIndex: Cluster numeric ID
 
 # Returns the operation result or an error
 

@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Getkubernetesnode
+Getkubernetesnode Get a standalone node
+
+Returns the standalone node; 404 when the cluster or the node does not exist. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeId: A standalone node identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeId: Node ID (`standalone_node_` or `standaloneNode_` followed by a ULID or a UUID; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubernetesnode(ctx, client, tracer, ownerId, clusterId, nodeId)
+	response := kubernetes.Getkubernetesnode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesNode
 */
-func Getkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeId string) client.Response[models.StandaloneNode] {
-	ctx, span := tracer.Start(ctx, "getKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeId", nodeId)))
+func Getkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
+	ctx, span := tracer.Start(ctx, "getKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeId", nodeId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes/%s", ownerId, clusterId, nodeId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes/%s", ownerId, kubernetesId, nodeId)
 
 	// Make API call
 	response := client.Get[models.StandaloneNode](ctx, c, path)

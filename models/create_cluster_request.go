@@ -2,11 +2,11 @@
 
 package models
 
-// CreateClusterRequest
+// CreateClusterRequest Request body to register a Cellar storage cluster.
 type CreateClusterRequest struct {
-	Available bool   `json:"available"`
-	Host      string `json:"host"`
-	Password  string `json:"password"`
-	Username  string `json:"username"`
-	Zone      string `json:"zone"`
+	Available *bool  `json:"available,omitempty"` // Whether the cluster accepts new provisions
+	Host      string `json:"host"`                // S3 endpoint host
+	Password  string `json:"password"`            // Administrative password of the cluster's storage backend.
+	Username  string `json:"username"`            // Administrative username of the cluster's storage backend.
+	Zone      string `json:"zone"`                // Availability zone
 }

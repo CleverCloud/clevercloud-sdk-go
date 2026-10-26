@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Createkubernetescluster
+Createkubernetescluster Create a Kubernetes cluster
+
+Creates a cluster, with its optional initial node groups, and provisions it asynchronously. The deployment profile is `deploymentProfileId`, else the default profile of the zone `zoneId` or `zone`, else of the only zone the organisation may use: a zone or profile the organisation may not use answers 404, an exceeded Kubernetes quota 412, and two initial node groups sharing a name 400. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -34,14 +36,14 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesCluster
 */
-func Createkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.ClusterCreationPayload) client.Response[models.Cluster1] {
+func Createkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.ClusterCreationPayload) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "createKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/kubernetes/organisations/%s/clusters", ownerId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, requestBody)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

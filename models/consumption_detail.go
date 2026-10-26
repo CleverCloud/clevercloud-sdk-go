@@ -2,8 +2,8 @@
 
 package models
 
-// ConsumptionDetail
+// ConsumptionDetail Per-interval breakdown of a consumption line: the width of each bucket (`interval`, an ISO 8601 d...
 type ConsumptionDetail struct {
-	Interval   string    `json:"interval"`
-	Quantities []float64 `json:"quantities,omitempty"`
+	Interval   Interval  `json:"interval"`
+	Quantities []float64 `json:"quantities,omitempty"` // One value per `interval` bucket across the report's period.
 }

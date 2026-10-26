@@ -11,15 +11,13 @@ import (
 )
 
 /*
-Deletekms
-
-deprovision an existing Kms
+Deletekms `DELETE /v2/providers/addon-kms/resources/{addon_kms_id}`
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKmsId:
+  - addonKmsId: KMS resource identifier (`kms_<uuid>`)
 
 # Returns the operation result or an error
 

@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getkeycloakconsumption
+Getkeycloakconsumption Get the consumption of a Keycloak add-on
 
-get keycloak resource consumption
+Called by the platform's billing to read the consumption of one active add-on over the `since`–`until` window given in the body. Answers 404 when the add-on is unknown, deleted or not owned by `ownerId`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonKeycloakId:
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

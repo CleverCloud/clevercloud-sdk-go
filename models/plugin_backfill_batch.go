@@ -2,7 +2,7 @@
 
 package models
 
-// PluginBackfillBatch
+// PluginBackfillBatch Plugin backfill reports of every cluster processed, one per cluster.
 type PluginBackfillBatch struct {
-	Results []PluginBackfillResult `json:"results,omitempty"`
+	Results []PluginBackfillResult `json:"results"`
 }

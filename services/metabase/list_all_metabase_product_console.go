@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Listallmetabaseproductconsole
+Listallmetabaseproductconsole List the consumption of all Metabase add-ons
 
-get all metabase product consumption
+Called by the platform's billing to read the consumption of every Metabase add-on active over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request

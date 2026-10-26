@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createpulsarv4
+Createpulsarv4 Create a Pulsar add-on
 
-# Create Pulsar product
+Creates a Pulsar add-on for the owner named in the body (`ownerId`) on the given cluster and plan, with its tenant and namespace, and returns it with 201. The caller must be that user, or a member of that organisation with any role other than none; otherwise 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

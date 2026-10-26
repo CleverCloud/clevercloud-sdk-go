@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createmateriats
+Createmateriats Provision a Materia TS add-on
 
-provision a MateriaTS
+Called by the platform when a customer creates a Materia TS add-on. Creates its time series tenant with a read and a write token and answers 201 with the add-on ID (`ts_…`) and its connection variables (`TS_HOST`, `TS_URL` and each token with its creation date, expiration date and revocation ID). Answers 400 for an invalid owner or a plan other than `BETA` or `BASE`, and 409 when the add-on already exists.
 
 Parameters:
   - ctx: context for the request

@@ -2,11 +2,11 @@
 
 package models
 
-// ConsumptionItem
+// ConsumptionItem One metered line of a consumption report: what is metered, its total over the period, its unit an...
 type ConsumptionItem struct {
 	Details    ConsumptionDetail `json:"details"`
-	Quantity   float64           `json:"quantity"`
-	Reference  string            `json:"reference"`
-	ResourceID *string           `json:"resourceId,omitempty"`
-	Unit       string            `json:"unit"`
+	Quantity   float64           `json:"quantity"`  // Total over the period: the sum of `details.quantities`.
+	Reference  string            `json:"reference"` // What is metered (e.g. `cellar.storage`, `pulsar.traffic.in`).
+	ResourceID *AddonId          `json:"resourceId,omitempty"`
+	Unit       string            `json:"unit"` // Unit of `quantity` (e.g. `byte`).
 }

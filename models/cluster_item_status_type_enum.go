@@ -2,7 +2,7 @@
 
 package models
 
-// ClusterItemStatusType represents
+// ClusterItemStatusType represents Lifecycle status of a cluster item: `ACTIVE`, `DELETED`, or `FAILED_TO_DELETE` when its removal d...
 type ClusterItemStatusType string
 
 const (

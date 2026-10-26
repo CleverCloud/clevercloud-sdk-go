@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Createdeploymentprofile
+Createdeploymentprofile Create a Kubernetes deployment profile
+
+Creates a deployment profile in the zone `zoneId`; the first profile of a zone becomes its production default. 400 when the zone is unknown, the profile does not decode or the body sets `prodDefault`. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request

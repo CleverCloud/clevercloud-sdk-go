@@ -7,34 +7,47 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Dryrunplacementdebug
+Dryrunplacementdebug POST /v4/compute/placement/dry-run/debug
 
-# Run the placement algorithm with debug evaluation report
+Source: references/legacy/ovd/modules/compute/api/routes.scala:263-277 (dryRunPlacementDebug)
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:187-218 (dryRunPlacementDebug)
+Behavior: evaluate each VM spec's constraints against EVERY hypervisor
+and render the per-hypervisor plain-text report — all hypervisors with
+`mode=all`, only the passing ones with `mode=passed`; `mode` is mandatory
+(400 when absent or unknown). Unlike `dryRunPlacement` this never runs the
+placement service: no cheap filters (a non-schedulable or image-less
+hypervisor still reads `PASSED`, with `schedulable:` / `images:` printed
+for the operator), no capacity, no scoring, no ranking. OVD re-evaluates
+by hand precisely because `PlacementResult` keeps per-hypervisor detail
+only for the VMs it failed to place (`:187-191`). 503 when degraded.
+Issue: #2767, #664
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - requestBody: the request payload
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := infrastructure.Dryrunplacementdebug(ctx, client, tracer, opts...)
+	response := infrastructure.Dryrunplacementdebug(ctx, client, tracer, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: dryRunPlacementDebug
 */
-func Dryrunplacementdebug(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[client.Nothing] {
+func Dryrunplacementdebug(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody []*models.VirtualMachineSpecInput, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "dryRunPlacementDebug")
 	defer span.End()
 
@@ -47,7 +60,7 @@ func Dryrunplacementdebug(ctx context.Context, c *client.Client, tracer trace.Tr
 	}
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

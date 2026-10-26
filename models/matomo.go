@@ -2,17 +2,17 @@
 
 package models
 
-// Matomo
+// Matomo A Matomo add-on: its identifiers, plan, versions, access URL, the resources backing it and its ap...
 type Matomo struct {
-	AccessURL         string          `json:"accessUrl"`
-	AddonID           string          `json:"addonId"`
-	AvailableVersions []string        `json:"availableVersions,omitempty"`
-	EnvVars           MapString       `json:"envVars"`
-	Name              string          `json:"name"`
-	OwnerID           OwnerID         `json:"ownerId"`
-	PhpVersion        string          `json:"phpVersion"`
-	Plan              MatomoPlan      `json:"plan"`
-	ResourceID        string          `json:"resourceId"`
-	Resources         MatomoResources `json:"resources"`
-	Version           string          `json:"version"`
+	AccessURL         string               `json:"accessUrl"`         // Public URL of the Matomo instance.
+	AddonID           string               `json:"addonId"`           // Add-on ID (`addon_…`).
+	AvailableVersions []string             `json:"availableVersions"` // Versions on offer.
+	EnvVars           map[string]string    `json:"envVars"`           // Environment variables of the add-on's application.
+	Name              string               `json:"name"`              // Add-on name.
+	OwnerID           UserId               `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	PhpVersion        string               `json:"phpVersion"`        // PHP version the add-on's application runs on.
+	Plan              MatomoPlanIdentifier `json:"plan"`              // Plan identifier (`BETA`).
+	ResourceID        MatomoId             `json:"resourceId"`        // Matomo add-on ID (`matomo_…`).
+	Resources         MatomoResources      `json:"resources"`         // Resources backing the add-on.
+	Version           string               `json:"version"`           // Matomo version: the first of the versions on offer.
 }

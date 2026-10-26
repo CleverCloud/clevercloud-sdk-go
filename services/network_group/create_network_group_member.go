@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Createnetworkgroupmember
+Createnetworkgroupmember Add a member to a network group
 
-# Add a Member to a NetworkGroup
+Requests the addition of an `APPLICATION`, `ADDON`, `EXTERNAL` or `LOADBALANCER` member, applied asynchronously. A given `domainName` must end with one of the configured DNS suffixes, otherwise one is derived; re-adding a member with the same ID and kind also answers 202, the same ID with another kind 409. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

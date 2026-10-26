@@ -12,35 +12,44 @@ import (
 )
 
 /*
-Getresourceacl
+GetResourceAcl **Legacy**: ovd IpamController.scala:354 getResourceAcl()
+**Algorithm**:
+  - IpamService.getResourceAcl(tenantId, resourceId) via Doobie repository
+  - Returns 404 if no ACL row exists for the resource
 
-# Get ACL of a specific resource
+**Conformity**: YES
+
+GET /v4/ipam/organisations/{tenant_id}/acl/resources/{resource_id} — get resource ACL.
+
+Source: ovd/modules/ipam/api/routes.scala getResourceAcl
+Behavior: returns resource_acl row, 404 if none
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - resourceId: Resource ID
+  - tenant_id: Organisation/tenant ID
+  - resource_id: Resource ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ipam.Getresourceacl(ctx, client, tracer, tenantId, resourceId)
+	response := ipam.GetResourceAcl(ctx, client, tracer, tenant_id, resource_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: ipam
-operationId: getResourceAcl
+x-service: IPAM
+operationId: get_resource_acl
 */
-func Getresourceacl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, resourceId string) client.Response[models.ResourceACL] {
-	ctx, span := tracer.Start(ctx, "getResourceAcl", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("resourceId", resourceId)))
+func GetResourceAcl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string, resource_id string) client.Response[models.ResourceACL] {
+	ctx, span := tracer.Start(ctx, "get_resource_acl", trace.WithAttributes(attribute.String("tenant_id", tenant_id), attribute.String("resource_id", resource_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/ipam/organisations/%s/acl/resources/%s", tenantId, resourceId)
+	path := utils.Path("/v4/ipam/organisations/%s/acl/resources/%s", tenant_id, resource_id)
 
 	// Make API call
 	response := client.Get[models.ResourceACL](ctx, c, path)

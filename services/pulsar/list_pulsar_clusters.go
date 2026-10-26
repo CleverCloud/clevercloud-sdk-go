@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Listpulsarclusters
+Listpulsarclusters List the Pulsar clusters
 
-# List all Pulsar clusters
+Returns the active Pulsar clusters: endpoints, ports, version, zone, availability, cold storage support and supported plans. Platform-operations route: it requires a bearer token granting the list operation on Pulsar clusters, and answers 401 without a valid token and 403 when the token is not accepted or lacks the grant.
 
 Parameters:
   - ctx: context for the request

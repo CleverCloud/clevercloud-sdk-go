@@ -2,16 +2,16 @@
 
 package models
 
-// MateriaDB
+// MateriaDB A Materia KV database: its cluster, owner, plan, connection host and port, access token and status.
 type MateriaDB struct {
-	ClusterID string  `json:"clusterId"`
-	Host      string  `json:"host"`
-	ID        string  `json:"id"`
-	Kind      Kind    `json:"kind"`
-	OwnerID   OwnerID `json:"ownerId"`
-	Plan      Plan    `json:"plan"`
-	Port      int     `json:"port"`
-	Status    Status  `json:"status"`
-	Token     string  `json:"token"`
-	TokenID   string  `json:"tokenId"`
+	ClusterID string `json:"clusterId"`
+	Host      string `json:"host"`
+	ID        string `json:"id"`
+	Kind      string `json:"kind"`
+	OwnerID   string `json:"ownerId"`
+	Plan      string `json:"plan"`
+	Port      int    `json:"port"`
+	Status    string `json:"status"`
+	Token     string `json:"token"` // Access token of the database; it is also the password of its Redis-compatible endpoint.
+	TokenID   string `json:"tokenId"`
 }

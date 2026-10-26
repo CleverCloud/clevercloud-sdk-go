@@ -13,15 +13,28 @@ import (
 )
 
 /*
-Listloadbalancerconsumptions
+Listloadbalancerconsumptions Row 46 — `GET /v4/loadbalancer/organisations/{ownerId}/loadbalancer/
+consumptions` (⚠️ singular segment; captures an OwnerId). Basic,
+owner-scoped OAuth1, or Biscuit. Bearer is bound to the exact owner-derived
+tenant, product, and `loadbalancer_consumption_op("get")`. `until` required; `since` defaults to
+2025-01-01; `since` after `until` → 400. `200 []` on empty — never 404.
 
-# List loadbalancer consumptions
+⚠️ **Recorded deviation — the computable window is bounded.** OVD accepts
+any `until` and then materialises one hourly slot per hour of the clamped
+interval, eagerly, per overlapping row
+(`LoadBalancerConsumption.computeHourlySlots`, :37-63) — `until` in the year
+9999 is ~70 million allocations behind one Basic credential. A window wider
+than [`MAX_CONSUMPTION_WINDOW_HOURS`] (87 600 h = ten years; billing asks
+for a month, 744 h) is refused here with OVD's own semantic
+query-parameter envelope — 400, `clever.core.bad-request`, `Field` context
+named `until` — rather than computed. Rationale and the choice of the
+number: [`crate::core::consumption`] module docs.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner ID — orga_<uuid> or user_<uuid>
   - opts: optional query parameters
 
 # Returns the operation result or an error

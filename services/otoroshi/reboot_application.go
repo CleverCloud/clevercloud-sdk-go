@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Rebootapplication
+Rebootapplication Restart an Otoroshi add-on
 
-# Ask for reboot Otoroshi application
+Restarts the add-on's application, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

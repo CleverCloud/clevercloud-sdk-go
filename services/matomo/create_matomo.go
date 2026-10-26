@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Creatematomo
+Creatematomo Provision a Matomo add-on
 
-provision a new Matomo instance
+Called by the platform when a customer creates a Matomo add-on. Creates the Matomo instance and its backing resources (a PHP application, a MySQL add-on and a Redis or Materia KV add-on), registers its domain and answers 201 with the add-on ID (`matomo_…`). An invalid request answers 400; once the add-on is recorded, a failure in a later step still answers 201 with the add-on marked as failed.
 
 Parameters:
   - ctx: context for the request

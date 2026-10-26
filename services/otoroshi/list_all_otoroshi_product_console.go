@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Listallotoroshiproductconsole
+Listallotoroshiproductconsole List the consumption of all Otoroshi add-ons
 
-get all otoroshi product consumption
+Called by the platform's billing to read the consumption of every Otoroshi add-on active over the `since`–`until` window given in the body.
 
 Parameters:
   - ctx: context for the request

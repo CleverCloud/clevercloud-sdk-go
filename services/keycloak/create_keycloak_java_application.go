@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createkeycloakjavaapplication
+Createkeycloakjavaapplication Add an application to a Keycloak add-on
 
-add a Java application to Keycloak
+Creates an additional Keycloak Java application for the add-on, with the add-on's plan and host, and answers 201 with the add-on ID. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -36,14 +36,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloakJavaApplication
 */
-func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func Createkeycloakjavaapplication(ctx context.Context, c *client.Client, tracer trace.Tracer, addonKeycloakId string, requestBody *models.ProvisionRequest) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createKeycloakJavaApplication", trace.WithAttributes(attribute.String("addonKeycloakId", addonKeycloakId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-keycloak/addons/%s/application", addonKeycloakId)
 
 	// Make API call
-	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

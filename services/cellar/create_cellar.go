@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createcellar
+Createcellar Provision a Cellar add-on
 
-provision a new Cellar account
+Called by the platform's add-on broker when a customer creates a Cellar add-on. Places it on a storage cluster available in the requested region and returns the provider-side ID (`cellar_…`) with the `CELLAR_ADDON_HOST`, `CELLAR_ADDON_KEY_ID` and `CELLAR_ADDON_KEY_SECRET` values exposed to linked applications. A request that cannot succeed (unknown plan, missing region, malformed add-on or owner ID, unusable `initial_buckets` option) answers 400 before anything is created.
 
 Parameters:
   - ctx: context for the request

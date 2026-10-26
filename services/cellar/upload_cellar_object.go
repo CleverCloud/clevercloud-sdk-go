@@ -12,18 +12,18 @@ import (
 )
 
 /*
-Uploadcellarobject
+Uploadcellarobject Upload an object through an issued upload link
 
-Stream upload an object to a bucket. Custom metadata can be attached via x-amz-meta-* headers (e.g. x-amz-meta-author: John). Keys are normalized to lowercase, matching AWS S3 conventions.
+Redeems a link issued by the `objects/{objectKey}/presigned-url` route: streams the request body, with no size limit, into the bucket as the named object and returns its key, size, ETag and content type. The link's token travels in the `authorization` query parameter or a `Bearer` header and is valid only for its add-on, bucket and key; `Content-Type` (default `application/octet-stream`) and `x-amz-meta-*` headers are stored with the object. 401 without a verifiable token, 403 for an expired or mismatched one, 404 for an unknown add-on or bucket.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
-  - objectKey:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
+  - bucketName: Bucket name
+  - objectKey: Object key
 
 # Returns the operation result or an error
 

@@ -2,12 +2,12 @@
 
 package models
 
-// TSPlan represents
+// TSPlan represents Plan of a Materia TS add-on: `BETA` or `BASE`.
 type TSPlan string
 
 const (
-	TSPlanBASE TSPlan = "BASE"
 	TSPlanBETA TSPlan = "BETA"
+	TSPlanBASE TSPlan = "BASE"
 )
 
 // String returns the underlying string value

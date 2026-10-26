@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Deleteconfigurationprovider
+Deleteconfigurationprovider Deprovision a configuration provider add-on
+
+Called by the platform when a customer deletes a configuration provider add-on. Marks the add-on as deleted and answers 200 with its last state, variables included; 404 for an unknown or already deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 

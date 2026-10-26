@@ -12,9 +12,9 @@ import (
 )
 
 /*
-Getvalidatematomokeycloaktoken
+Getvalidatematomokeycloaktoken Validate a Matomo sign-in token
 
-validate a Matomo Keycloak token
+Called by a Matomo instance to resolve the encrypted sign-in token it received at provisioning: answers 200 with the owner, add-on and PHP application IDs it designates, 400 for a token that does not decrypt or an add-on without application, and 404 for an unknown add-on. The encrypted token is the credential; the request must nonetheless present an API credential (an `Authorization` header or `authorization` query parameter), which this route does not verify.
 
 Parameters:
   - ctx: context for the request

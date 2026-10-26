@@ -2,7 +2,7 @@
 
 package models
 
-// BasicCredentials
+// BasicCredentials A username and password pair.
 type BasicCredentials struct {
 	Password string `json:"password"`
 	User     string `json:"user"`

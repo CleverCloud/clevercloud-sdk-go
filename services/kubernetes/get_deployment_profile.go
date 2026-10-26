@@ -12,19 +12,21 @@ import (
 )
 
 /*
-Getdeploymentprofile
+Getdeploymentprofile Get a Kubernetes deployment profile
+
+Returns the deployment profile, secrets redacted; 404 when it does not exist. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId:
+  - profileId: Deployment profile ID (`kubernetes_deployment_profile_<uuid>` or `kubernetesDeploymentProfile_<uuid>`)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getdeploymentprofile(ctx, client, tracer, locationId)
+	response := kubernetes.Getdeploymentprofile(ctx, client, tracer, profileId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,11 +35,11 @@ Example:
 x-service: kubernetes
 operationId: getDeploymentProfile
 */
-func Getdeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, locationId string) client.Response[models.DeploymentProfile] {
-	ctx, span := tracer.Start(ctx, "getDeploymentProfile", trace.WithAttributes(attribute.String("locationId", locationId)))
+func Getdeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, profileId string) client.Response[models.DeploymentProfile] {
+	ctx, span := tracer.Start(ctx, "getDeploymentProfile", trace.WithAttributes(attribute.String("profileId", profileId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", locationId)
+	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", profileId)
 
 	// Make API call
 	response := client.Get[models.DeploymentProfile](ctx, c, path)

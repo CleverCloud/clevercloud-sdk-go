@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createotoroshi
+Createotoroshi Provision an Otoroshi add-on
 
-provision a new Otoroshi instance
+Called by the platform when a customer creates an Otoroshi add-on. Creates the Otoroshi instance and its backing resources (a Java application, a Redis add-on and, depending on the options, a Cellar bucket, a data exporter and a network group), registers its domains and answers 201 with the add-on ID (`otoroshi_…`). Once the add-on is recorded, a failure in a later step still answers 201 with the add-on marked as failed.
 
 Parameters:
   - ctx: context for the request

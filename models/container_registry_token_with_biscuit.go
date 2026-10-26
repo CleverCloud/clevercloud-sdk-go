@@ -2,9 +2,9 @@
 
 package models
 
-// ContainerRegistryTokenWithBiscuit
+// ContainerRegistryTokenWithBiscuit A token together with the credential the customer copies.  Returned **only** by creation and rene...
 type ContainerRegistryTokenWithBiscuit struct {
-	BiscuitToken string                 `json:"biscuitToken"`
-	Index        int                    `json:"index"`
-	Token        ContainerRegistryToken `json:"token"`
+	BiscuitToken string                     `json:"biscuitToken"` // The credential. In this feature it is a visibly synthetic placeholder that no system accepts (FR-...
+	Index        int                        `json:"index"`        // Position in the creation request. `0` when a single token was asked for.
+	Token        ContainerRegistryTokenView `json:"token"`        // The token itself.
 }

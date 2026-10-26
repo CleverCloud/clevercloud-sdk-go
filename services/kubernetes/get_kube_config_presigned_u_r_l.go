@@ -12,20 +12,22 @@ import (
 )
 
 /*
-Getkubeconfigpresignedurl
+Getkubeconfigpresignedurl Get a presigned kubeconfig download URL
+
+Returns a URL that downloads the cluster's kubeconfig with no other credential, valid 60 minutes, even while the cluster is still deploying. Keep it secret: its token grants the kubeconfig download for every cluster of the organisation until it expires. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubeconfigpresignedurl(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Getkubeconfigpresignedurl(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +36,14 @@ Example:
 x-service: kubernetes
 operationId: getKubeConfigPresignedURL
 */
-func Getkubeconfigpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.PresignedURL] {
-	ctx, span := tracer.Start(ctx, "getKubeConfigPresignedURL", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Getkubeconfigpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.PresignedUrl] {
+	ctx, span := tracer.Start(ctx, "getKubeConfigPresignedURL", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/kubeconfig/presigned-url", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/kubeconfig/presigned-url", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Get[models.PresignedURL](ctx, c, path)
+	response := client.Get[models.PresignedUrl](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

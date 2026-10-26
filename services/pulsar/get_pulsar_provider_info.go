@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Getpulsarproviderinfo
+Getpulsarproviderinfo Read the Pulsar provider description
 
-# Get Pulsar provider infos
+Returns the Pulsar provider's description for the console, listing its active clusters with their zone and version. Any authenticated caller may read it.
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +33,14 @@ Example:
 x-service: pulsar
 operationId: getPulsarProviderInfo
 */
-func Getpulsarproviderinfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getpulsarproviderinfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getPulsarProviderInfo")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

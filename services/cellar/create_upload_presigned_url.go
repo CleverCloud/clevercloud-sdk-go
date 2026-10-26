@@ -12,18 +12,18 @@ import (
 )
 
 /*
-Createuploadpresignedurl
+Createuploadpresignedurl Issue a self-authenticating upload link
 
-generate a Biscuit presigned URL for uploading an object through OVD
+Returns `{ url }`: a short-lived link to this API's `objects/upload/{objectKey}` route, valid only for this add-on, bucket and object key; whoever holds it uploads by POSTing the raw bytes to it, with no S3 client or credential. Treat it as a secret. The caller must be the owner in the path (personal add-on) or a member of that organisation with the admin or manager role: 401 when unauthenticated, 403 otherwise. 404 when the owner does not own the add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
-  - bucketName:
-  - objectKey:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
+  - bucketName: Bucket name
+  - objectKey: Object key
 
 # Returns the operation result or an error
 
@@ -38,14 +38,14 @@ Example:
 x-service: cellar
 operationId: createUploadPresignedUrl
 */
-func Createuploadpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, objectKey string) client.Response[models.PresignedURL] {
+func Createuploadpresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string, bucketName string, objectKey string) client.Response[models.PresignedUrl] {
 	ctx, span := tracer.Start(ctx, "createUploadPresignedUrl", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId), attribute.String("bucketName", bucketName), attribute.String("objectKey", objectKey)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/buckets/%s/objects/%s/presigned-url", ownerId, CellarId, bucketName, objectKey)
 
 	// Make API call
-	response := client.Post[models.PresignedURL](ctx, c, path, nil)
+	response := client.Post[models.PresignedUrl](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

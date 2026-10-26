@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Deletekubernetesnodegroup
+Deletekubernetesnodegroup Delete a node group
+
+Marks the node group for deletion and returns it with the `TERMINATING` status; its nodes are drained and removed asynchronously. 409 when the cluster is not active. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeGroupId: Node group ID (`node_group_` or `nodeGroup_` followed by a ULID or a UUID; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Deletekubernetesnodegroup(ctx, client, tracer, ownerId, clusterId, nodeGroupId)
+	response := kubernetes.Deletekubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesNodeGroup
 */
-func Deletekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string) client.Response[models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "deleteKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
+func Deletekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "deleteKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, clusterId, nodeGroupId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, kubernetesId, nodeGroupId)
 
 	// Make API call
 	response := client.Delete[models.NodeGroup](ctx, c, path)

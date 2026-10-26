@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createpulsarv2
+Createpulsarv2 Provision a Pulsar add-on
 
-# Provision a Pulsar addon
+Called by the platform's add-on broker when a customer creates a Pulsar add-on. Places the add-on on a cluster serving the requested region and plan, creates its Pulsar tenant and namespace, and returns the provider-side ID (`pulsar_…`) with the configuration to expose to linked applications. An unknown plan answers 400.
 
 Parameters:
   - ctx: context for the request

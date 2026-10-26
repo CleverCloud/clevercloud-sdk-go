@@ -4,14 +4,14 @@ package models
 
 import "time"
 
-// ResourceConsumption
+// ResourceConsumption Consumption of one resource over a period, as reported for billing: its owner, product (`productI...
 type ResourceConsumption struct {
-	Consumptions []ConsumptionItem `json:"consumptions,omitempty"`
-	OwnerID      OwnerID           `json:"ownerId"`
-	ProductID    string            `json:"productId"`
-	RegionID     string            `json:"regionId"`
-	ResourceID   string            `json:"resourceId"`
-	Since        time.Time         `json:"since"`
-	Until        time.Time         `json:"until"`
-	Version      int               `json:"version"`
+	Consumptions []ConsumptionItem `json:"consumptions,omitempty"` // One line per metered quantity.
+	OwnerID      string            `json:"ownerId"`                // ID of the resource owner (`orga_…` or `user_…`).
+	ProductID    ProductId         `json:"productId"`
+	RegionID     string            `json:"regionId"`   // Region where the resource is deployed (e.g. `eu-fr-1`).
+	ResourceID   string            `json:"resourceId"` // ID of the consumed resource; may be empty.
+	Since        time.Time         `json:"since"`      // Start of the consumption period (ISO 8601, UTC).
+	Until        time.Time         `json:"until"`      // End of the consumption period (ISO 8601, UTC).
+	Version      int               `json:"version"`    // Version of the consumption record format (currently `1`).
 }

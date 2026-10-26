@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Rebuildapplication
+Rebuildapplication Rebuild an Otoroshi add-on
 
-# Ask for rebuild Otoroshi application
+Redeploys the add-on's application without build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

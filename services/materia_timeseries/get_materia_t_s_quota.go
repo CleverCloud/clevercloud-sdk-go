@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getmateriatsquota
+Getmateriatsquota Get the quota of a Materia TS add-on
 
-get quota for a MateriaTS addon
+Returns the quota of an active add-on: its maximum number of time series per month and of data points per day. Answers 404 for an unknown add-on or one being deleted.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId:
+  - addonTsId: Materia TS add-on ID (`ts_…`)
 
 # Returns the operation result or an error
 

@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Updateloadbalancerconfiguration
-
-# Update loadbalancer configuration
+Updateloadbalancerconfiguration Row 24 — replace listeners+clusters; response `specification: null`
+(S:1454, unlike rows 21-23); 409 remapped
+(`Configuration update conflict: …`).
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
-  - loadbalancerId: LoadBalancer ID
+  - loadbalancerId: Load balancer ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -38,14 +38,14 @@ Example:
 x-service: loadbalancer
 operationId: updateLoadBalancerConfiguration
 */
-func Updateloadbalancerconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.LoadBalancerListenersAndClusters) client.Response[models.LoadBalancer] {
+func Updateloadbalancerconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, loadbalancerId string, requestBody *models.ReplaceLoadBalancerConfigurationInput) client.Response[models.LoadBalancerView] {
 	ctx, span := tracer.Start(ctx, "updateLoadBalancerConfiguration", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("loadbalancerId", loadbalancerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/loadbalancers/organisations/%s/regions/%s/loadbalancers/%s/configuration", tenantId, regionId, loadbalancerId)
 
 	// Make API call
-	response := client.Put[models.LoadBalancer](ctx, c, path, requestBody)
+	response := client.Put[models.LoadBalancerView](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

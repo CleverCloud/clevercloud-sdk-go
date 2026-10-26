@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Listnetworkgroupmembers
+Listnetworkgroupmembers List the members of a network group
 
-# List Members of a NetworkGroup
+Returns the applications, add-ons, load balancers and external resources that belong to the network group; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 

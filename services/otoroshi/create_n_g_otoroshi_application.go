@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createngotoroshiapplication
+Createngotoroshiapplication Attach an Otoroshi add-on to a network group
 
-request to link a the otoroshi's java application to a networkgroup
+Puts the add-on's application in a network group (created unless the add-on already has a live one), restarts it and returns the updated add-on. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

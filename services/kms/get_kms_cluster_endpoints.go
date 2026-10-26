@@ -12,15 +12,13 @@ import (
 )
 
 /*
-Getkmsclusterendpoints
-
-get the cluster-api endpoint of a KMS cluster
+Getkmsclusterendpoints `GET /v4/kms/clusters/{kms_cluster_id}/endpoints`
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kmsClusterId: KMS cluster identifier (e.g. kms.eu-fr-1)
+  - kmsClusterId: KMS cluster identifier (e.g. `kms.eu-fr-1`)
 
 # Returns the operation result or an error
 

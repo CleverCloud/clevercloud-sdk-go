@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Deletepulsarv4
+Deletepulsarv4 Delete a Pulsar add-on
 
-# Delete Pulsar product
+Marks the add-on for deletion and returns its view; its namespace and topics are removed shortly afterwards. An add-on whose plan cannot be deleted answers 412. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

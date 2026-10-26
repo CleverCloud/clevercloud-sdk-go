@@ -2,7 +2,7 @@
 
 package models
 
-// KeycloakPatchRequest
+// KeycloakPatchRequest Version to switch a Keycloak add-on to.
 type KeycloakPatchRequest struct {
-	TargetVersion string `json:"targetVersion"`
+	TargetVersion string `json:"targetVersion"` // Target version; it must be one of the versions on offer.
 }

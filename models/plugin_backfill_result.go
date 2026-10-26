@@ -2,10 +2,10 @@
 
 package models
 
-// PluginBackfillResult
+// PluginBackfillResult Plugin backfill report of one cluster: the plugins newly registered and those whose registered ve...
 type PluginBackfillResult struct {
 	ClusterID  string               `json:"clusterId"`
-	Drifted    []PluginDrift        `json:"drifted,omitempty"`
+	Drifted    []PluginDrift        `json:"drifted"`
 	Error      *string              `json:"error,omitempty"`
-	Registered []PluginBackfillItem `json:"registered,omitempty"`
+	Registered []PluginBackfillItem `json:"registered"`
 }

@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createpulsarcluster
+Createpulsarcluster Register a Pulsar cluster
 
-# Create Pulsar cluster
+Registers a Pulsar cluster that add-ons can then be placed on, and returns it with 201; a `url` or `adminHost` that is not a plain DNS host name answers 400. Platform-operations route: it requires a bearer token granting the create operation on Pulsar clusters, and answers 401 without a valid token and 403 when the token is not accepted or lacks the grant.
 
 Parameters:
   - ctx: context for the request

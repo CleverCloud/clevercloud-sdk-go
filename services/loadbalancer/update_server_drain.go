@@ -12,15 +12,14 @@ import (
 )
 
 /*
-Updateserverdrain
-
-Drain or undrain a server. Drained servers are excluded from new load balancer placements.
+Updateserverdrain Row 4 — `drainServer`, the divergence WP3 closes (decision 6): drain is a
+placement exclusion, never a reassignment. 204 empty.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenantId: Organisation/tenant ID
   - regionId: Region ID
   - serverId: Server ID
   - requestBody: the request payload
@@ -38,7 +37,7 @@ Example:
 x-service: loadbalancer
 operationId: updateServerDrain
 */
-func Updateserverdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string, requestBody *models.DrainInput) client.Response[client.Nothing] {
+func Updateserverdrain(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string, regionId string, serverId string, requestBody *models.Drain) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "updateServerDrain", trace.WithAttributes(attribute.String("tenantId", tenantId), attribute.String("regionId", regionId), attribute.String("serverId", serverId)))
 	defer span.End()
 

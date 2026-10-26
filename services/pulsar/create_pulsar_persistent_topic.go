@@ -4,7 +4,6 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -12,23 +11,22 @@ import (
 )
 
 /*
-Createpulsarpersistenttopic
+Createpulsarpersistenttopic Create a persistent topic
 
-# Create a persistent topic on this namespace
+Creates a persistent topic in the add-on's namespace; answers 201. Pass `partitions_number` to create a partitioned topic with that many partitions. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
-  - opts: optional query parameters
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Createpulsarpersistenttopic(ctx, client, tracer, pulsarId, topic, opts...)
+	response := pulsar.Createpulsarpersistenttopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,17 +35,11 @@ Example:
 x-service: pulsar
 operationId: createPulsarPersistentTopic
 */
-func Createpulsarpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string, opts ...Option) client.Response[client.Nothing] {
+func Createpulsarpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createPulsarPersistentTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/topics/%s", pulsarId, topic)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
 
 	// Make API call
 	response := client.Post[client.Nothing](ctx, c, path, nil)

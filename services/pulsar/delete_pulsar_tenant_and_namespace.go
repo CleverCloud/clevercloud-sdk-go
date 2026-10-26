@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletepulsartenantandnamespace
+Deletepulsartenantandnamespace Delete the add-on's Pulsar tenant and namespace
 
-# Delete Pulsar tenant and namespace
+Deletes the add-on's namespace on its cluster, then its tenant unless another namespace still uses it; answers 204. The add-on itself is not deleted. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

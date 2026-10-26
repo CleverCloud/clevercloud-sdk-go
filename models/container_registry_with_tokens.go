@@ -2,9 +2,9 @@
 
 package models
 
-// ContainerRegistryWithTokens
+// ContainerRegistryWithTokens What creating a registry answers: the registry, the tokens created with it, and a per-position er...
 type ContainerRegistryWithTokens struct {
-	Errors   []TokenCreationError                `json:"errors,omitempty"`
-	Registry ContainerRegistry                   `json:"registry"`
-	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens,omitempty"`
+	Errors   []TokenCreationError                `json:"errors,omitempty"` // One entry per requested token that could not be created.
+	Registry ContainerRegistryView               `json:"registry"`         // The registry.
+	Tokens   []ContainerRegistryTokenWithBiscuit `json:"tokens"`           // The tokens that were created, with their credentials.
 }

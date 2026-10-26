@@ -2,9 +2,9 @@
 
 package models
 
-// MatomoWithPHPApp
+// MatomoWithPHPApp What a Matomo sign-in token designates: the owner, the Matomo add-on and the PHP application runn...
 type MatomoWithPHPApp struct {
-	AddonID  string  `json:"addonId"`
-	OwnerID  OwnerID `json:"ownerId"`
-	PhpAppID string  `json:"phpAppId"`
+	AddonID  MatomoId `json:"addonId"`  // Matomo add-on ID (`matomo_…`).
+	OwnerID  UserId   `json:"ownerId"`  // ID of the owner: a user or an organisation.
+	PhpAppID AppId    `json:"phpAppId"` // PHP application id hosting the Matomo instance.
 }

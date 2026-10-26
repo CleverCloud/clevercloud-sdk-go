@@ -2,8 +2,8 @@
 
 package models
 
-// QuotaListResponse
+// QuotaListResponse A page of Materia TS quota entries, with its pagination metadata.
 type QuotaListResponse struct {
-	Metadata QuotaMetadata `json:"metadata"`
-	Quotas   []QuotaEntry  `json:"quotas,omitempty"`
+	Metadata PaginationMetadata `json:"metadata"`
+	Quotas   []QuotaEntry       `json:"quotas"`
 }

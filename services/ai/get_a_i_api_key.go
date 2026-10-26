@@ -11,18 +11,27 @@ import (
 )
 
 /*
-Getaiapikey
+Getaiapikey **Legacy**: ovd AIProviderController.scala:181 getApiKeyEndpoint()
+**Algorithm**:
+  - Verify addon + endpoint tenancy, call Otoroshi getApiKey
 
-get Apikey information
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/.../endpoints/{endpoint_id}/apikeys/{apikey_id} — get API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getApiKeyEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getApiKey()
+Behavior: verifies addon + tenancy, calls otoroshiClient.getApiKey.
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - apikeyId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - apikeyId: Otoroshi API key ID
 
 # Returns the operation result or an error
 
@@ -37,14 +46,14 @@ Example:
 x-service: ai
 operationId: getAIApiKey
 */
-func Getaiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, apikeyId string) client.Response[client.Nothing] {
+func Getaiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, apikeyId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getAIApiKey", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId), attribute.String("apikeyId", apikeyId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/apikeys/%s", ownerId, aiId, endpointId, apikeyId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

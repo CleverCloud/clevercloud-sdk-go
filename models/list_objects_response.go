@@ -2,9 +2,9 @@
 
 package models
 
-// ListObjectsResponse
+// ListObjectsResponse A page of the objects and directories of a bucket, with the cursor of the next page.
 type ListObjectsResponse struct {
-	Content     []CellarObject    `json:"content,omitempty"`
-	Cursor      *string           `json:"cursor,omitempty"`
-	Directories []CellarDirectory `json:"directories,omitempty"`
+	Content     []CellarObject    `json:"content"`          // List of object entries
+	Cursor      *string           `json:"cursor,omitempty"` // Cursor for pagination (`null` when no more results).
+	Directories []CellarDirectory `json:"directories"`      // List of common prefix directories
 }

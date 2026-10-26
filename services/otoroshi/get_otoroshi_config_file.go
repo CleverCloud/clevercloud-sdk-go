@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Getotoroshiconfigfile
+Getotoroshiconfigfile Get the otoroshictl configuration of an add-on
 
-get Otoroshi configuration file for otoroshictl
+Returns a YAML configuration file for the `otoroshictl` command-line tool, holding the add-on's admin API URL and credentials. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

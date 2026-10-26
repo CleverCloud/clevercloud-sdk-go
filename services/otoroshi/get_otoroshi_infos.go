@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getotoroshiinfos
+Getotoroshiinfos Get an Otoroshi add-on for a platform service
 
-get all otoroshi info via internal path
+Returns the same view of an active add-on as the customer read, without any owner check. Called by platform services with the provider's machine credentials. Answers 404 for an unknown or deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

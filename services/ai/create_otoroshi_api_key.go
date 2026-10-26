@@ -12,17 +12,29 @@ import (
 )
 
 /*
-Createotoroshiapikey
+Createotoroshiapikey **Legacy**: ovd AIProviderController.scala:155 createApiKeys()
+**Algorithm**:
+  - Verify addon + endpoint tenancy, create apikey on Otoroshi, deploy
 
-# Create route APIKey
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+POST /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id}/apikeys — create API key.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — createApiKeys
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — createApiKeys()
+Behavior: verifies addon + endpoint tenancy, creates apikey on Otoroshi,
+
+	deploys apikey on target. Returns Otoroshi JSON.
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -38,14 +50,14 @@ Example:
 x-service: ai
 operationId: createOtoroshiApiKey
 */
-func Createotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, requestBody *models.CreateApiKeyRequest) client.Response[client.Nothing] {
+func Createotoroshiapikey(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, requestBody *models.CreateApiKeyRequest) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "createOtoroshiApiKey", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/apikeys", ownerId, aiId, endpointId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

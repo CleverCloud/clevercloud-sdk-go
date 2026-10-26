@@ -2,12 +2,12 @@
 
 package models
 
-// CephPoolType represents
+// CephPoolType represents Pool data-protection scheme — 1:1 with ovd `CephPoolType` (`models/Ceph.scala:230-246`, SCREAM_CA...
 type CephPoolType string
 
 const (
-	CephPoolTypeERASURE    CephPoolType = "ERASURE"
 	CephPoolTypeREPLICATED CephPoolType = "REPLICATED"
+	CephPoolTypeERASURE    CephPoolType = "ERASURE"
 )
 
 // String returns the underlying string value

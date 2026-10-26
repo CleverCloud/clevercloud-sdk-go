@@ -13,13 +13,15 @@ import (
 )
 
 /*
-Listkubernetesclusters
+Listkubernetesclusters List the Kubernetes clusters of an organisation
+
+Returns the organisation's clusters whose stored status is in `status`, every status but `DELETED` by default; 400 on an unknown status. A failed cluster carries `failure`, one waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error
@@ -35,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesClusters
 */
-func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.Cluster1] {
+func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "listKubernetesClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 
@@ -48,7 +50,7 @@ func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.
 	}
 
 	// Make API call
-	response := client.Get[[]models.Cluster1](ctx, c, path)
+	response := client.Get[[]models.KubernetesCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

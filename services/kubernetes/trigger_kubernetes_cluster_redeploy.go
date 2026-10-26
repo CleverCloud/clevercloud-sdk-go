@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Triggerkubernetesclusterredeploy
+Triggerkubernetesclusterredeploy Redeploy a cluster
+
+Starts a redeployment of the control plane and a roll of the worker nodes, carried out asynchronously. The optional body adds YAML manifests applied before and after the control plane switch (400 when invalid) and the `drainPolicy` of the roll; 409 when a node group is not ready to roll, the message naming each group and why. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, clusterId, requestBody)
+	response := kubernetes.Triggerkubernetesclusterredeploy(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +37,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterRedeploy
 */
-func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.RedeployControlPlanePayload) client.Response[models.Cluster1] {
-	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Triggerkubernetesclusterredeploy(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.RedeployControlPlanePayload) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterRedeploy", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/redeploy", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, requestBody)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

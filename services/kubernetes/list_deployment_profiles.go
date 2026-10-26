@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Listdeploymentprofiles
+Listdeploymentprofiles List the Kubernetes deployment profiles
+
+Returns every deployment profile, secrets redacted, ordered by zone. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request

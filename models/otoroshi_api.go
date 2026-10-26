@@ -2,11 +2,11 @@
 
 package models
 
-// OtoroshiApi
+// OtoroshiApi Access to the admin API of an Otoroshi add-on: its URL, the client ID (`user`) and secret to call...
 type OtoroshiApi struct {
-	Openapi    string `json:"openapi"` // Absolute URL
+	Openapi    string `json:"openapi"`
 	Secret     string `json:"secret"`
-	SwaggerURL string `json:"swaggerUrl"` // Absolute URL
-	URL        string `json:"url"`        // Absolute URL
+	SwaggerURL string `json:"swaggerUrl"`
+	URL        string `json:"url"`
 	User       string `json:"user"`
 }

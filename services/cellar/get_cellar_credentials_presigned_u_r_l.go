@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getcellarcredentialspresignedurl
+Getcellarcredentialspresignedurl Issue a download link for the add-on's credentials file
 
-generate a presigned URL for Cellar credentials retrieval
+Returns `{ url }`: a short-lived, self-authenticating link that serves the add-on's s3cmd configuration file from the `credentials.cfg` route to whoever holds it; treat it as a secret. Its expiry is carried inside the link. The caller must be the owner in the path (personal add-on) or a member of that organisation with the admin, manager or developer role: 401 when unauthenticated, 403 otherwise. 404 when the owner does not own the add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 
@@ -36,14 +36,14 @@ Example:
 x-service: cellar
 operationId: getCellarCredentialsPresignedURL
 */
-func Getcellarcredentialspresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.PresignedURL] {
+func Getcellarcredentialspresignedurl(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.PresignedUrl] {
 	ctx, span := tracer.Start(ctx, "getCellarCredentialsPresignedURL", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/credentials/presigned-url", ownerId, CellarId)
 
 	// Make API call
-	response := client.Get[models.PresignedURL](ctx, c, path)
+	response := client.Get[models.PresignedUrl](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

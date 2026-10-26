@@ -2,7 +2,7 @@
 
 package models
 
-// KeycloakFeatures
+// KeycloakFeatures Optional features of a Keycloak add-on.
 type KeycloakFeatures struct {
-	NetworkGroup *KeycloakNetworkGroup `json:"networkGroup,omitempty"`
+	NetworkGroup *NetworkGroupView `json:"networkGroup,omitempty"`
 }

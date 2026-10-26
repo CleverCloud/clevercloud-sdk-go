@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletemateriakvv2
+Deletemateriakvv2 Deprovision a Materia KV add-on
 
-# Deprovision an existing MateriaKV
+Called by the platform when a customer deletes a Materia KV add-on. Revokes its access token, erases its data and marks it as deleted; if the data cannot be erased, the add-on is kept and the call answers an error. Answers 404 for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kvId:
+  - kvId: Materia KV add-on ID (`kv_…`)
 
 # Returns the operation result or an error
 

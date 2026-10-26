@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getkeycloak
+Getkeycloak Get a Keycloak add-on of an owner
 
-get a keycloak
+Returns the add-on, as the read without owner does, and answers 404 when the add-on does not belong to `ownerId`. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - addonKeycloakId:
+  - ownerId: Owner ID (`user_…` or `orga_…`); must be the add-on's owner
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

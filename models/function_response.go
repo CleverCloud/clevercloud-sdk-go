@@ -2,18 +2,17 @@
 
 package models
 
-import "time"
-
-// FunctionResponse
+// FunctionResponse Summary view returned by `GET /functions` (list).
 type FunctionResponse struct {
-	CreatedAt    time.Time            `json:"createdAt"`
-	Description  *FunctionDescription `json:"description,omitempty"`
-	Environment  FunctionEnvironment  `json:"environment"`
-	ID           FunctionID           `json:"id"`
-	MaxInstances int                  `json:"maxInstances"`
-	MaxMemory    int                  `json:"maxMemory"`
-	Name         *FunctionName        `json:"name,omitempty"`
-	OwnerID      OwnerID              `json:"ownerId"`
-	Tag          *FunctionTag         `json:"tag,omitempty"`
-	UpdatedAt    time.Time            `json:"updatedAt"`
+	CreatedAt           string            `json:"createdAt"`
+	CurrentVersionID    *string           `json:"currentVersionId,omitempty"`
+	FunctionID          string            `json:"functionId"`
+	LastRunAt           *string           `json:"lastRunAt,omitempty"`           // `null` until the function's first invocation reaches a terminal outcome; thereafter the start of ...
+	LastSuccessfulRunAt *string           `json:"lastSuccessfulRunAt,omitempty"` // `null` until the function's first *successful* invocation. `null` here with `lastRunAt` set reads...
+	Name                string            `json:"name"`
+	NetworkPolicy       NetworkPolicy     `json:"networkPolicy"`
+	OwnerID             string            `json:"ownerId"`
+	State               FunctionState     `json:"state"`
+	Triggers            []TriggerResponse `json:"triggers"` // Configured triggers for this function (full set, including paused).
+	UpdatedAt           string            `json:"updatedAt"`
 }

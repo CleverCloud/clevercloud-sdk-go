@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getotoroshiproductconsole
+Getotoroshiproductconsole Get the consumption of an Otoroshi add-on
 
-get otoroshi product consumption
+Called by the platform's billing to read the consumption of one active add-on over the `since`–`until` window given in the body. Answers 404 when the add-on is unknown, deleted or not owned by `ownerId`.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - OtoroshiId:
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

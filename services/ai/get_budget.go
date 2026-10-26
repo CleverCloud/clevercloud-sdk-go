@@ -11,18 +11,27 @@ import (
 )
 
 /*
-Getbudget
+Getbudget **Legacy**: ovd AIProviderController.scala:307 getSpecificBudgetEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, resolve config, call Otoroshi getBudget
 
-# Get a specific budget by ID from an otoroshi endpoint
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/.../endpoints/{endpoint_id}/budgets/{budget_id} — get specific budget.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getSpecificBudgetEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getBudget()
+Behavior: verifies addon + tenancy, resolves config, calls otoroshiClient.getBudget.
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
-  - budgetId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
+  - budgetId: Budget ID
 
 # Returns the operation result or an error
 
@@ -37,14 +46,14 @@ Example:
 x-service: ai
 operationId: getBudget
 */
-func Getbudget(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, budgetId string) client.Response[client.Nothing] {
+func Getbudget(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string, endpointId string, budgetId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getBudget", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId), attribute.String("endpointId", endpointId), attribute.String("budgetId", budgetId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/endpoints/%s/budgets/%s", ownerId, aiId, endpointId, budgetId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

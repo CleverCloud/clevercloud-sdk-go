@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Listconfigurationproviderenv
+Listconfigurationproviderenv List the variables of a configuration provider add-on
+
+Returns the add-on's environment variables. Answers 404 for an unknown or deleted add-on. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 
@@ -33,14 +35,14 @@ Example:
 x-service: configuration_provider
 operationId: listConfigurationProviderEnv
 */
-func Listconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[[]models.EnvVar] {
+func Listconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string) client.Response[[]models.WannabeEnvVar] {
 	ctx, span := tracer.Start(ctx, "listConfigurationProviderEnv", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s/env", addonId)
 
 	// Make API call
-	response := client.Get[[]models.EnvVar](ctx, c, path)
+	response := client.Get[[]models.WannabeEnvVar](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

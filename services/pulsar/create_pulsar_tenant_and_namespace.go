@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createpulsartenantandnamespace
+Createpulsartenantandnamespace Create the add-on's Pulsar tenant and namespace
 
-# Create Pulsar tenant and namespace
+Creates the add-on's tenant and namespace on its cluster when they do not exist yet, and returns the add-on. The caller must own the add-on (personal add-on) or be a member of the owning organisation with any role other than none: a non-member gets 404 and the none role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

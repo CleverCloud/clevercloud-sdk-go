@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Triggerallclusterspluginsbackfill
+Triggerallclusterspluginsbackfill Backfill the plugin records of every active cluster
+
+Runs the plugin backfill on every active cluster, a few at a time, and returns one report per cluster; a cluster that fails carries its `error` without failing the batch. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request

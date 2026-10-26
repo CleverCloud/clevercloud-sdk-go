@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getmateriakv
+Getmateriakv Get a Materia KV add-on of an owner
 
-# Get a MateriaKV
+Returns the add-on of `ownerId`, its access token included. With OAuth1, the token needs the organisation access and service management rights (403 otherwise) and the caller must hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in `ownerId`; a caller without that role gets 404, as for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - kvId:
+  - ownerId: Owner ID (`user_…` or `orga_…`)
+  - kvId: Materia KV add-on ID (`kv_…`)
 
 # Returns the operation result or an error
 

@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createngkeycloakapplication
+Createngkeycloakapplication Attach a Keycloak add-on to a network group
 
-# Ask for create a networkgroup
+Puts the add-on's application in a network group (created unless the add-on already has one), scales it to two instances, restarts it and returns the updated add-on. Answers an error when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

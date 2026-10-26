@@ -12,15 +12,37 @@ import (
 )
 
 /*
-Getai
+Getai **Legacy**: ovd AIProviderController.scala:63 getAIEndpoint()
+**Algorithm**:
+  - Fetch active addon by ID, bind the caller to its stored owner, return
+    AIView (ownerId, id, plan)
 
-# Get AI Addon information
+**Conformity**: YES
+
+GET /v4/addon-providers/addon-ai/addons/{ai_id} — get AI addon (deprecated).
+
+The caller is a cc-api user (`RequireUser`, 401 otherwise) and is bound to
+the addon's **stored** owner by `authorize_owner` (403 otherwise): OVD
+declares this route `.authenticated`, and the path carries no `owner_id`
+the extractor could draw the boundary at, so before #3557 knowing an
+`ai_…` id was enough to read any tenant's `{id, ownerId, plan}`.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getAIEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getAI()
+Source: crates/addons/otoroshi/src/controller.rs — `get_otoroshi_addon`, the same route shape bound the same way
+Behavior: returns AIView (ownerId, id, planIdentifier). 404 if not found, 403 if the
+
+	caller is not the owner (or an active member of the owner organisation).
+	This endpoint is marked deprecated in Scala (.deprecated()).
+
+Schema: addon_ai — SELECT by id WHERE deletion_date IS NULL
+Issue: #647, #3557
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - aiId:
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 

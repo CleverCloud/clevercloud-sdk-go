@@ -2,15 +2,17 @@
 
 package models
 
-// ClusterCreationPayload
+// ClusterCreationPayload Request body to create a Kubernetes cluster. Only `name` is required; the zone and the deployment...
 type ClusterCreationPayload struct {
-	Description    *string                    `json:"description,omitempty"`
-	Features       *ClusterFeatures           `json:"features,omitempty"`
-	LocationID     *string                    `json:"locationId,omitempty"`
-	Name           string                     `json:"name"`
-	NetworkGroupID *string                    `json:"networkGroupId,omitempty"`
-	NodeGroups     []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`
-	Tags           []string                   `json:"tags,omitempty"`
-	TopologyConfig *TopologyConfig            `json:"topologyConfig,omitempty"`
-	Version        *string                    `json:"version,omitempty"`
+	DeploymentProfileID *string                    `json:"deploymentProfileId,omitempty"` // The deployment profile to create the cluster with (`kubernetes_deployment_profile_<uuid>`). When ...
+	Description         *string                    `json:"description,omitempty"`         // Cluster description
+	Features            *ClusterFeatures           `json:"features,omitempty"`
+	Name                string                     `json:"name"`                     // Cluster name (required, 1-128 chars)
+	NetworkGroupID      *string                    `json:"networkGroupId,omitempty"` // Network group ID for cluster networking
+	NodeGroups          []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`     // Initial node groups to create with the cluster
+	Tags                []SemanticTag              `json:"tags,omitempty"`           // Semantic tags
+	TopologyConfig      *TopologyConfig            `json:"topologyConfig,omitempty"`
+	Version             *Version                   `json:"version,omitempty"`
+	Zone                *string                    `json:"zone,omitempty"`   // The zone to create in, by name (`par`), as other products' creation requests take it. Optional un...
+	ZoneID              *string                    `json:"zoneId,omitempty"` // The zone to create in, by id: the exact, unambiguous form (zone names are not unique). Optional w...
 }

@@ -6,13 +6,19 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listhypervisorsbyquery
+Listhypervisorsbyquery POST /v4/compute/hypervisors/query
 
-# Query hypervisors using a CEL expression
+Source: references/legacy/ovd/modules/compute/api/routes.scala:196-205 (listHypervisorsByQuery)
+Source: references/legacy/ovd/modules/compute/routes/HypervisorController.scala:134-152 (queryHypervisors)
+Behavior: parse the CEL body, refuse affinity terms, return the matching
+hypervisors. Affinity is refused because the query evaluates against an
+empty affinity index, where such a term would not mean what was written.
+Issue: #1644
 
 Parameters:
   - ctx: context for the request
@@ -29,17 +35,17 @@ Example:
 	}
 	result := response.Payload()
 
-x-service: compute
+x-service: infrastructure
 operationId: listHypervisorsByQuery
 */
-func Listhypervisorsbyquery(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.Nothing] {
+func Listhypervisorsbyquery(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.Hypervisor] {
 	ctx, span := tracer.Start(ctx, "listHypervisorsByQuery")
 	defer span.End()
 
 	path := utils.Path("/v4/compute/hypervisors/query")
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[[]models.Hypervisor](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

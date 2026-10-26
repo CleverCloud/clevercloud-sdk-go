@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getmateriakvv2
+Getmateriakvv2 Get a Materia KV add-on for the platform
 
-# Get a MateriaKV
+Called by the platform to read a Materia KV add-on, its access token included. Answers 404 for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - kvId:
+  - kvId: Materia KV add-on ID (`kv_…`)
 
 # Returns the operation result or an error
 

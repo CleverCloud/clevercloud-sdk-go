@@ -2,7 +2,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"go/format"
@@ -13,7 +12,10 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
-	"gopkg.in/yaml.v3"
+
+	"go.clever-cloud.dev/sdk/internal/gotype"
+	"go.clever-cloud.dev/sdk/internal/naming"
+	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
 // Config holds the generator configuration
@@ -25,15 +27,15 @@ type Config struct {
 
 // BuilderOperation represents an API operation
 type BuilderOperation struct {
-	Name         string
-	Path         string
-	Method       string
-	Package      string
-	PathParams   []Param
-	QueryParams  bool
-	RequestBody  bool
-	RequestType  string
-	ResponseType string
+	Name        string
+	Path        string
+	Method      string
+	Package     string
+	PathParams  []Param
+	QueryParams bool
+	RequestBody bool
+	Body        gotype.Type
+	Response    gotype.Type
 }
 
 type Param struct {
@@ -43,7 +45,13 @@ type Param struct {
 
 // BuilderNode represents a node in the builder hierarchy
 type BuilderNode struct {
-	Segment    string
+	Segment string
+	// TypePrefix names the builder types of this node: `V4AddonProviders` for
+	// `/v4/addon-providers`, whose interface is `V4AddonProvidersBuilder`. Derived once,
+	// when the node is created, so that two routes whose segments spell the same
+	// identifier (`/v4/console/settings`, `/v4/console-settings`) get two type names
+	// rather than one declared twice.
+	TypePrefix string
 	IsParam    bool
 	ParamName  string
 	ParamType  string
@@ -89,22 +97,12 @@ func parseFlags() *Config {
 }
 
 func parseOpenAPISpec(specFile string) (*openapi31.Spec, error) {
-	data, err := os.ReadFile(specFile)
+	document, report, err := spec.Load(specFile)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read spec file: %w", err)
+		return nil, err
 	}
-
-	spec := &openapi31.Spec{}
-
-	// Try JSON first
-	if err := json.Unmarshal(data, spec); err != nil {
-		// Try YAML
-		if err := yaml.Unmarshal(data, spec); err != nil {
-			return nil, fmt.Errorf("failed to parse spec as JSON or YAML: %w", err)
-		}
-	}
-
-	return spec, nil
+	log.Printf("Loaded %s: %s", specFile, report)
+	return document, nil
 }
 
 func extractOperations(spec *openapi31.Spec) []BuilderOperation {
@@ -139,35 +137,15 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 				continue
 			}
 
-			// Apply operationId overrides for duplicate IDs
+			// Ids are unique and x-service is set on every operation: spec.Load saw to it.
 			operationID := ""
 			if op.ID != nil {
 				operationID = *op.ID
 			}
-			overrideKey := method + ":" + path
-			if override, exists := OPERATION_ID_OVERRIDES[overrideKey]; exists {
-				operationID = override
-			}
-
-			// Get x-service from MapOfAnything
-			xService := ""
-			if xs, ok := op.MapOfAnything["x-service"].(string); ok {
-				xService = xs
-			}
-
-			// If no x-service, try to derive from tags or path
-			if xService == "" {
-				if len(op.Tags) > 0 {
-					xService = op.Tags[0]
-				} else {
-					continue
-				}
-			}
-
-			// Map to package name (check operation exceptions first, then service mapping)
-			packageName := getPackageForOperation(operationID, xService, path)
+			xService, _ := op.MapOfAnything["x-service"].(string)
+			packageName := naming.OperationPackage(operationID, xService, path, op.Tags)
 			if packageName == "" {
-				continue // Skip operations without a service
+				log.Fatalf("%s %s (%s): no x-service and no tag to name a package after", method, path, operationID)
 			}
 
 			// Extract parameters
@@ -189,183 +167,39 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 				}
 			}
 
-			// Extract request body type
-			hasRequestBody := false
-			requestType := ""
+			// Request body and response: one derivation shared with the services generator.
+			functionName := naming.FunctionName(operationID)
+			body := gotype.None
 			if op.RequestBody != nil && op.RequestBody.RequestBody != nil {
-				for _, mediaType := range op.RequestBody.RequestBody.Content {
-					// Only set hasRequestBody if we have a proper model type (with $ref)
-					schemaRef := getSchemaRef(mediaType.Schema)
-					if schemaRef != "" {
-						requestType = schemaMapToGoType(mediaType.Schema)
-						hasRequestBody = true
-					} else if getSchemaType(mediaType.Schema) == "array" && getSchemaItemsRef(mediaType.Schema) != "" {
-						requestType = schemaMapToGoType(mediaType.Schema)
-						hasRequestBody = true
-					}
-					break
-				}
+				body = gotype.Body(op.RequestBody.RequestBody.Content, functionName)
 			}
-
-			// Extract response type - check 200, 201, 202, 204 status codes
-			responseType := ""
-			foundSuccessResponse := false
+			response := gotype.Unknown
 			if op.Responses != nil {
 				for _, statusCode := range []string{"200", "201", "202", "204"} {
 					if respOrRef, ok := op.Responses.MapOfResponseOrReferenceValues[statusCode]; ok {
-						foundSuccessResponse = true
-						resp := respOrRef.Response
-						if resp == nil {
-							responseType = "client.Nothing"
-							break
+						if resp := respOrRef.Response; resp != nil {
+							response = gotype.Response(resp.Content, functionName)
 						}
-						// Check if response has content
-						if len(resp.Content) == 0 {
-							responseType = "client.Nothing"
-							break
-						}
-						// Try to find application/json content type first
-						jsonFound := false
-						for contentType, mediaType := range resp.Content {
-							if contentType == "application/json" || contentType == "*/*" || contentType == "" {
-								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
-								jsonFound = true
-								break
-							}
-						}
-						// If no application/json, take first content type
-						if !jsonFound {
-							for _, mediaType := range resp.Content {
-								responseType = schemaMapToGoTypeForResponse(mediaType.Schema)
-								break
-							}
-						}
-						if responseType != "" && responseType != "any" {
-							break
-						}
+						break
 					}
 				}
 			}
-			// If we found a success response but no type, it means empty content
-			if foundSuccessResponse && (responseType == "" || responseType == "any") {
-				responseType = "client.Nothing"
-			}
 
 			operations = append(operations, BuilderOperation{
-				Name:         operationID,
-				Path:         path,
-				Method:       method,
-				Package:      packageName,
-				PathParams:   pathParams,
-				QueryParams:  hasQueryParams,
-				RequestBody:  hasRequestBody,
-				RequestType:  requestType,
-				ResponseType: responseType,
+				Name:        operationID,
+				Path:        path,
+				Method:      method,
+				Package:     packageName,
+				PathParams:  pathParams,
+				QueryParams: hasQueryParams,
+				RequestBody: !body.IsNone(),
+				Body:        body,
+				Response:    response,
 			})
 		}
 	}
 
 	return operations
-}
-
-// SERVICE_NAME_EXCEPTIONS maps x-service values to package names
-// Must match generate-services/main.go SERVICE_NAME_EXCEPTIONS
-var SERVICE_NAME_EXCEPTIONS = map[string]string{
-	"addon-pulsar":     "pulsar",
-	"addon-storage":    "storage",
-	"addon-cellar":     "storage",
-	"config-provider":  "configuration_provider",
-	"network-group":    "network_group",
-	"infrastructure":   "infrastructure",
-	"compute":          "infrastructure",
-	"drain":            "drains",
-	"drains":           "drains",
-	"materia-kv":       "materia_kv",
-	"addon-ai":         "ai",
-	"addon-cumulocity": "cumulocity",
-	"addon-keycloak":   "keycloak",
-	"addon-matomo":     "matomo",
-	"addon-metabase":   "metabase",
-	"addon-otoroshi":   "otoroshi",
-	"addon-postgresql": "postgresql",
-	"loadbalancer":     "loadbalancer",
-}
-
-// OPERATION_ID_OVERRIDES fixes duplicate operationId issues in the OpenAPI spec
-// Must match generate-services/main.go OPERATION_ID_OVERRIDES
-var OPERATION_ID_OVERRIDES = map[string]string{
-	// Fix duplicate "createEndpoint" operationId
-	"DELETE:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints/{endpointId}": "deleteAIEndpoint",
-	"POST:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints":                "createAIEndpoint",
-	// Fix duplicate getMateriaKv/deleteMateriaKv (exist on both /v2 and /v4 paths)
-	"GET:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}":    "getMateriaKvV4",
-	"DELETE:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}": "deleteMateriaKvV4",
-}
-
-// OPERATION_MAPPING_EXCEPTIONS maps specific operations to target services
-// Must match generate-services/main.go OPERATION_MAPPING_EXCEPTIONS
-var OPERATION_MAPPING_EXCEPTIONS = map[string]string{
-	// Pulsar operations mal classées (x-service: product → pulsar)
-	"getPulsar":                      "pulsar",
-	"deletePulsar":                   "pulsar",
-	"getPulsarPolicies":              "pulsar",
-	"setStoragePolicies":             "pulsar",
-	"renewPulsarToken":               "pulsar",
-	"createPulsarTenantAndNamespace": "pulsar",
-	"deletePulsarTenantAndNamespace": "pulsar",
-	"createPulsar":                   "pulsar",
-	"getPulsarProviderInfo":          "pulsar",
-	"getPulsarCluster":               "pulsar",
-	"listPulsarConsumptions":         "pulsar",
-	"getTriggerPulsar":               "pulsar",
-	"createTriggerPulsar":            "pulsar",
-	"deleteTriggerPulsar":            "pulsar",
-
-	// V2 Pulsar operations (x-service: product → pulsar)
-	"provisionPulsar": "pulsar",
-	"getPulsarV2":     "pulsar",
-}
-
-func mapServiceToPackage(xService string) string {
-	if pkg, ok := SERVICE_NAME_EXCEPTIONS[xService]; ok {
-		return pkg
-	}
-
-	// Default: replace hyphens with underscores
-	return strings.ReplaceAll(xService, "-", "_")
-}
-
-// getPackageForOperation returns the package for a specific operation, checking exceptions first
-func getPackageForOperation(operationID, xService, path string) string {
-	// Check operation-specific exceptions first
-	if pkg, ok := OPERATION_MAPPING_EXCEPTIONS[operationID]; ok {
-		return pkg
-	}
-
-	// Apply mapping rules (must match generate-services applyMappingRules)
-	if pkg := applyMappingRules(operationID, path); pkg != "" {
-		return pkg
-	}
-
-	// Fall back to service-level mapping
-	return mapServiceToPackage(xService)
-}
-
-// applyMappingRules applies path-based and operationId-based mapping rules
-// Must match generate-services/main.go applyMappingRules
-func applyMappingRules(operationID, path string) string {
-	// Rule 1: Toute opération avec "pulsar" dans le path → service pulsar
-	if strings.Contains(strings.ToLower(path), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 2: Toute opération avec "Pulsar" dans l'operationId → service pulsar
-	if strings.Contains(operationID, "Pulsar") || strings.Contains(strings.ToLower(operationID), "pulsar") {
-		return "pulsar"
-	}
-
-	// No mapping rule applies
-	return ""
 }
 
 // Helper functions to extract values from map[string]any schemas
@@ -441,34 +275,29 @@ func schemaMapToGoType(schema map[string]any) string {
 
 // schemaMapToGoTypeForResponse is like schemaMapToGoType but returns "any" for
 // non-model types to match what services generate
-func schemaMapToGoTypeForResponse(schema map[string]any) string {
-	// Handle $ref - only single model references get typed
-	if ref := getSchemaRef(schema); ref != "" {
-		parts := strings.Split(ref, "/")
-		if len(parts) > 0 {
-			modelName := parts[len(parts)-1]
-			switch strings.ToLower(modelName) {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return "any"
-			default:
-				return "models." + toGoStructName(modelName)
-			}
+// typePrefix is the TypePrefix of a node: its parent's followed by the segment in
+// PascalCase. When another node already took that name — `/v4/console/settings` and
+// `/v4/console-settings` both spell `V4ConsoleSettings` — the segment is kept as one word
+// (`V4Consolesettings`), and failing that numbered. The accessor method keeps the
+// PascalCase spelling either way; only the type's name has to be unique.
+func typePrefix(parent, segment string, taken map[string]bool) string {
+	candidates := []string{
+		parent + toPascalCase(segment),
+		parent + toPascalCase(strings.NewReplacer("-", "", "_", "", ".", "").Replace(segment)),
+	}
+	for _, candidate := range candidates {
+		if !taken[candidate] {
+			taken[candidate] = true
+			return candidate
 		}
 	}
-
-	// Handle array responses: { "type": "array", "items": { "$ref": "..." } }
-	if getSchemaType(schema) == "array" {
-		if itemsRef := getSchemaItemsRef(schema); itemsRef != "" {
-			parts := strings.Split(itemsRef, "/")
-			if len(parts) > 0 {
-				modelName := parts[len(parts)-1]
-				return "[]models." + toGoStructName(modelName)
-			}
+	for i := 2; ; i++ {
+		candidate := fmt.Sprintf("%s%d", candidates[0], i)
+		if !taken[candidate] {
+			taken[candidate] = true
+			return candidate
 		}
 	}
-
-	// Primitives and inline objects become 'any'
-	return "any"
 }
 
 func buildPathTree(operations []BuilderOperation) *BuilderNode {
@@ -476,6 +305,7 @@ func buildPathTree(operations []BuilderOperation) *BuilderNode {
 		Segment:  "root",
 		Children: make(map[string]*BuilderNode),
 	}
+	typePrefixes := map[string]bool{}
 
 	for _, op := range operations {
 		// Parse path segments
@@ -489,6 +319,23 @@ func buildPathTree(operations []BuilderOperation) *BuilderNode {
 			var key string
 			var paramName string
 			var paramType string
+
+			// A compound segment mixes a parameter with literal text or holds two of them —
+			// `{bid}.pdf` and `{type}-{version}` are both real routes. The builder models one
+			// path slot per parameter and cannot express either, and the two cases do not even
+			// share a calling convention: `.pdf` is a suffix the caller should not type, while
+			// `{type}-{version}` is two values joined by a dash. Rather than invent a semantic,
+			// the route is left out of the fluent builder — it stays fully available through the
+			// level-1 services API, which formats the path correctly.
+			if strings.Count(segment, "{") > 1 ||
+				(strings.Contains(segment, "{") &&
+					!(strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}"))) {
+				log.Printf("Note: %s is not exposed in the fluent builder (compound path segment %q); use the services API",
+					op.Path, segment)
+				// Breaking before the last segment is what drops the route: the operation is
+				// only recorded once the walk reaches it.
+				break
+			}
 
 			if isParam {
 				// Extract parameter name from {paramName}
@@ -513,11 +360,12 @@ func buildPathTree(operations []BuilderOperation) *BuilderNode {
 			child, exists := current.Children[key]
 			if !exists {
 				child = &BuilderNode{
-					Segment:   segment,
-					IsParam:   isParam,
-					ParamName: paramName,
-					ParamType: paramType,
-					Children:  make(map[string]*BuilderNode),
+					Segment:    segment,
+					TypePrefix: typePrefix(current.TypePrefix, segment, typePrefixes),
+					IsParam:    isParam,
+					ParamName:  paramName,
+					ParamType:  paramType,
+					Children:   make(map[string]*BuilderNode),
 				}
 				current.Children[key] = child
 			}
@@ -620,7 +468,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Methods for child nodes
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		if child.IsParam {
 			// Parameter method
@@ -641,23 +489,16 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 		// Build method signature
 		params := []Code{Id("ctx").Qual("context", "Context")}
 
+		inline := func(name string) Code { return Qual("go.clever-cloud.dev/sdk/services/"+op.Package, name) }
 		if op.RequestBody {
-			reqType := parseModelType(op.RequestType)
-			params = append(params, Id("request").Add(reqType))
+			params = append(params, Id("request").Add(op.Body.Code(inline)))
 		}
 
 		if op.QueryParams {
 			params = append(params, Id("opts").Op("...").Qual("go.clever-cloud.dev/sdk/services/"+op.Package, "Option"))
 		}
 
-		// Build return type as client.Response[T]
-		var returnType *Statement
-		if op.ResponseType != "" && op.ResponseType != "unknown" && op.ResponseType != "any" {
-			retType := parseModelTypeForResponse(op.ResponseType)
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(retType)
-		} else {
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(Any())
-		}
+		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
 		// Add method to interface
 		method := Id(toPascalCase(op.Name)).Params(params...).Add(returnType)
@@ -696,7 +537,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Generate method implementations for child nodes
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		if child.IsParam {
 			// Parameter method
@@ -746,9 +587,9 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 			}
 		}
 
+		inline := func(name string) Code { return Qual("go.clever-cloud.dev/sdk/services/"+op.Package, name) }
 		if op.RequestBody {
-			reqType := parseModelType(op.RequestType)
-			params = append(params, Id("request").Add(reqType))
+			params = append(params, Id("request").Add(op.Body.Code(inline)))
 			callParams = append(callParams, Id("request"))
 		}
 
@@ -757,14 +598,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 			callParams = append(callParams, Id("opts").Op("..."))
 		}
 
-		// Build return type as client.Response[T]
-		var returnType *Statement
-		if op.ResponseType != "" && op.ResponseType != "unknown" && op.ResponseType != "any" {
-			retType := parseModelTypeForResponse(op.ResponseType)
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(retType)
-		} else {
-			returnType = Qual("go.clever-cloud.dev/client", "Response").Types(Any())
-		}
+		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
 		f.Comment(fmt.Sprintf("%s calls %s.%s", toPascalCase(op.Name), op.Package, toPascalCase(op.Name)))
 		f.Func().Params(Id("b").Op("*").Id(implName)).Id(toPascalCase(op.Name)).
@@ -775,7 +609,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 	// Recursively generate child builders
 	for _, child := range sortedChildren(node.Children) {
-		childPrefix := prefix + toPascalCase(child.Segment)
+		childPrefix := child.TypePrefix
 
 		// Prepare fields for child builder
 		childFields := make([]FieldInfo, len(fieldInfos))
@@ -847,147 +681,12 @@ func parseGoType(typeName string) *Statement {
 	}
 }
 
-func parseModelType(typeName string) *Statement {
-	if typeName == "" || typeName == "unknown" || typeName == "any" {
-		return Any()
-	}
-
-	// Handle array types - must handle before removing pointer
-	if elementType, ok := strings.CutPrefix(typeName, "[]"); ok {
-
-		// Handle []*models.Something
-		if modelName, ok0 := strings.CutPrefix(elementType, "*models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-		}
-
-		// Handle []models.Something
-		if modelName, ok0 := strings.CutPrefix(elementType, "models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-		}
-
-		// Handle []*Something (assuming it's a model)
-		if modelName, ok0 := strings.CutPrefix(elementType, "*"); ok0 {
-			// Check if it's a basic type
-			switch modelName {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return Index().Add(parseGoType(modelName))
-			default:
-				return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", modelName)
-			}
-		}
-
-		// Handle []string or other basic types
-		return Index().Add(parseGoType(elementType))
-	}
-
-	// Remove pointer prefix if present
-	isPointer := strings.HasPrefix(typeName, "*")
-	if isPointer {
-		typeName = strings.TrimPrefix(typeName, "*")
-	}
-
-	// Remove models. prefix if present
-	typeName = strings.TrimPrefix(typeName, "models.")
-
-	if typeName == "any" {
-		return Any()
-	}
-
-	// Check if it's a basic type
-	switch typeName {
-	case "string", "int", "int64", "float64", "bool":
-		if isPointer {
-			return Op("*").Add(parseGoType(typeName))
-		}
-		return parseGoType(typeName)
-	}
-
-	// For models types, always return pointer
-	// Apply same Go struct name conversion as model generator
-	return Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(typeName))
-}
-
-// parseModelTypeForResponse is like parseModelType but doesn't add pointers
-// Used for Response[T] where T should match the service return type (without pointer)
-func parseModelTypeForResponse(typeName string) *Statement {
-	if typeName == "" || typeName == "unknown" || typeName == "any" {
-		return Any()
-	}
-
-	// Handle client.Nothing for empty responses (204, etc.)
-	if typeName == "client.Nothing" {
-		return Qual("go.clever-cloud.dev/client", "Nothing")
-	}
-
-	// Handle array types
-	if elementType, ok := strings.CutPrefix(typeName, "[]"); ok {
-		if modelName, ok0 := strings.CutPrefix(elementType, "*models."); ok0 {
-			return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-		}
-		if modelName, ok0 := strings.CutPrefix(elementType, "models."); ok0 {
-			return Index().Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-		}
-		if modelName, ok0 := strings.CutPrefix(elementType, "*"); ok0 {
-			switch modelName {
-			case "string", "int", "int64", "float64", "bool", "any":
-				return Index().Add(parseGoType(modelName))
-			default:
-				return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", toGoStructName(modelName))
-			}
-		}
-		return Index().Add(parseGoType(elementType))
-	}
-
-	// Remove pointer prefix if present
-	isPointer := strings.HasPrefix(typeName, "*")
-	if isPointer {
-		typeName = strings.TrimPrefix(typeName, "*")
-	}
-
-	// Remove models. prefix if present
-	typeName = strings.TrimPrefix(typeName, "models.")
-
-	if typeName == "any" {
-		return Any()
-	}
-
-	// Check if it's a basic type
-	switch typeName {
-	case "string", "int", "int64", "float64", "bool":
-		return parseGoType(typeName)
-	}
-
-	// For models types, DON'T add pointer (services return value types in Response[T])
-	return Qual("go.clever-cloud.dev/sdk/models", toGoStructName(typeName))
-}
-
 func toPascalCase(s string) string {
-	// Remove special characters
-	s = strings.Trim(s, "{}")
-	s = strings.ReplaceAll(s, "-", "_")
-	s = strings.ReplaceAll(s, ".", "_")
-
-	// Split by underscore
-	parts := strings.Split(s, "_")
-
-	var result string
-	for _, part := range parts {
-		if len(part) > 0 {
-			result += strings.ToUpper(string(part[0])) + strings.ToLower(part[1:])
-		}
-	}
-
-	return fixIDSuffixes(result)
+	return naming.PascalCase(s)
 }
 
-// toGoStructName converts OpenAPI schema names to Go struct names
-// Must match the logic in generate-models/main.go
 func toGoStructName(name string) string {
-	// Preserve exact casing for certain names to avoid conflicts
-	if name == "WireGuard" {
-		return "WireGuard"
-	}
-	return toPascalCaseForTypes(name)
+	return naming.StructName(name)
 }
 
 // toPascalCaseForTypes converts schema names to PascalCase for type names
@@ -1074,22 +773,5 @@ func toCamelCase(s string) string {
 }
 
 func fixIDSuffixes(s string) string {
-	replacements := map[string]string{
-		"Id":   "ID",
-		"Ip":   "IP",
-		"Url":  "URL",
-		"Api":  "API",
-		"Tls":  "TLS",
-		"Http": "HTTP",
-		"Https": "HTTPS",
-		"Json": "JSON",
-		"Xml":  "XML",
-		"Yaml": "YAML",
-	}
-
-	for old, new := range replacements {
-		s = strings.ReplaceAll(s, old, new)
-	}
-
-	return s
+	return naming.FixIDSuffixes(s)
 }

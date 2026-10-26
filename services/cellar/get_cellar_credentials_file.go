@@ -11,35 +11,48 @@ import (
 )
 
 /*
-Getcellarcredentialsfile
+GetCellarCredentialsFile GET /v4/addon-providers/addon-cellar/addons/{addon_id}/credentials.cfg -- download s3cfg file.
 
-get Cellar credentials as s3cfg file (supports OAuth or presigned token)
+**Legacy**: ovd CellarRoutes.scala:145 getCellarCredentialsFileEndpoint / CellarConfigFileService.scala generateS3ConfigFile()
+**Algorithm**:
+  - Fetch credentials, generate s3cmd-compatible .s3cfg file
+  - Return as text/plain with Content-Disposition attachment header
+
+**Conformity**: YES
+
+Source: ovd/modules/cellar/routes/CellarRoutes.scala getCellarCredentialsFileEndpoint
+Source: ovd/modules/cellar/services/CellarConfigFileService.scala generateS3ConfigFile()
+Behavior: Fetches credentials from provision_config, generates an s3cmd-compatible
+
+	config file (.s3cfg format) with host, access_key, and secret_key.
+	Returns as text/plain with Content-Disposition attachment header.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - addon_id: Cellar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Getcellarcredentialsfile(ctx, client, tracer, ownerId, CellarId)
+	response := cellar.GetCellarCredentialsFile(ctx, client, tracer, addon_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: cellar
-operationId: getCellarCredentialsFile
+x-service: Cellar
+operationId: get_cellar_credentials_file
 */
-func Getcellarcredentialsfile(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "getCellarCredentialsFile", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
+func GetCellarCredentialsFile(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "get_cellar_credentials_file", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/credentials.cfg", ownerId, CellarId)
+	path := utils.Path("/v4/addon-providers/addon-cellar/addons/%s/credentials.cfg", addon_id)
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

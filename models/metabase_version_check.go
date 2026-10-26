@@ -2,10 +2,11 @@
 
 package models
 
-// MetabaseVersionCheck
+// MetabaseVersionCheck Whether a Metabase add-on can move to a newer version.
 type MetabaseVersionCheck struct {
-	Available  []string `json:"available,omitempty"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available                 []string `json:"available"`                 // Versions on offer.
+	Installed                 string   `json:"installed"`                 // Version the add-on currently runs.
+	Latest                    string   `json:"latest"`                    // Newest version on offer: the catalog's rolling tag when it declares one (`latest`, `lts`), otherw...
+	NeedUpdate                bool     `json:"needUpdate"`                // Whether an update is available.
+	RequiresApplicationUpdate bool     `json:"requiresApplicationUpdate"` // Whether moving to `latest` also resizes the add-on's application (flavor and scalability). Always...
 }

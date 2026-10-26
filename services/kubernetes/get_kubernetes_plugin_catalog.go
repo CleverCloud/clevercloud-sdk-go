@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Getkubernetesplugincatalog
+Getkubernetesplugincatalog Get the Kubernetes plugin catalog
+
+Returns the plugins the platform installs, the Kubernetes versions each one supports, and the migrations between their versions. The answer depends on no organisation, but the request must carry credentials.
 
 Parameters:
   - ctx: context for the request

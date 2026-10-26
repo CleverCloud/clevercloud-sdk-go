@@ -4,7 +4,6 @@ package pulsar
 
 import (
 	"context"
-	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -12,23 +11,22 @@ import (
 )
 
 /*
-Deletepulsartopic
+Deletepulsartopic Delete a persistent topic of a Pulsar add-on
 
-# Delete a Pulsar topic
+Called by the platform to delete a persistent topic of the add-on's namespace; answers 204. Query parameters: `partitioned` (default `false`) targets a partitioned topic, and `force` (default `false`) deletes it even with connected producers or consumers. An invalid topic name answers 400 and an unknown add-on 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
-  - opts: optional query parameters
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 
 Example:
 
-	response := pulsar.Deletepulsartopic(ctx, client, tracer, pulsarId, topic, opts...)
+	response := pulsar.Deletepulsartopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,17 +35,11 @@ Example:
 x-service: pulsar
 operationId: deletePulsarTopic
 */
-func Deletepulsartopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string, opts ...Option) client.Response[client.Nothing] {
+func Deletepulsartopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deletePulsarTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-pulsar/resources/%s/topics/%s", pulsarId, topic)
-
-	// Build query parameters
-	query := buildQueryString(opts...)
-	if query != "" {
-		path = fmt.Sprintf("%s?%s", path, query)
-	}
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

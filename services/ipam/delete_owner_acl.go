@@ -11,34 +11,43 @@ import (
 )
 
 /*
-Deleteowneracl
+DeleteOwnerAcl **Legacy**: ovd IpamController.scala:414 deleteOwnerAcl()
+**Algorithm**:
+  - IpamService.deleteOwnerAcl(tenantId)
+  - Hard-deletes the owner_acl row, returns 204 or 404
 
-# Delete ACL of a specific owner
+**Conformity**: YES
+
+DELETE /v4/ipam/organisations/{tenant_id}/acl — delete owner ACL.
+
+Source: ovd/modules/ipam/api/routes.scala deleteOwnerAcl
+Behavior: hard delete, 204 on success, 404 if not found
+Issue: #313
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
+  - tenant_id: Organisation/tenant ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := ipam.Deleteowneracl(ctx, client, tracer, tenantId)
+	response := ipam.DeleteOwnerAcl(ctx, client, tracer, tenant_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: ipam
-operationId: deleteOwnerAcl
+x-service: IPAM
+operationId: delete_owner_acl
 */
-func Deleteowneracl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenantId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteOwnerAcl", trace.WithAttributes(attribute.String("tenantId", tenantId)))
+func DeleteOwnerAcl(ctx context.Context, c *client.Client, tracer trace.Tracer, tenant_id string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "delete_owner_acl", trace.WithAttributes(attribute.String("tenant_id", tenant_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/ipam/organisations/%s/acl", tenantId)
+	path := utils.Path("/v4/ipam/organisations/%s/acl", tenant_id)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

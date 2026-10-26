@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getcheckversionkeycloakapplication
+Getcheckversionkeycloakapplication Check the Keycloak version of an add-on
 
-# For the current addon check if the version is correct
+Returns the installed Keycloak version, the latest version offered, every available version and whether an update is available. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

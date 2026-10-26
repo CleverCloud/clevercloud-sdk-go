@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createversionupdatemetabase
+Createversionupdatemetabase Update the Metabase version of an add-on
 
-update version
+Switches the add-on's application to `targetVersion`, moving it to a larger instance size first when that version needs one, redeploys it without build cache and returns the updated add-on. Answers 409 when the add-on has no application and 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

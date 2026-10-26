@@ -2,9 +2,9 @@
 
 package models
 
-// ClusterMetadataResponse
+// ClusterMetadataResponse Cluster metadata response returned by GET /v4/warp10/clusters/{clusterId}.  Source: references/le...
 type ClusterMetadataResponse struct {
-	Endpoints []ClusterEndpoint `json:"endpoints,omitempty"`
-	ID        string            `json:"id"`
-	Name      string            `json:"name"`
+	Endpoints []ClusterEndpoint    `json:"endpoints"` // Resolved endpoints with full URLs
+	ID        Warp10ClusterIdParam `json:"id"`        // Cluster ID with `cluster_` prefix, e.g. `cluster_00000000-...`.  Source: Warp10ClusterId.scala — ...
+	Name      string               `json:"name"`      // Cluster name
 }

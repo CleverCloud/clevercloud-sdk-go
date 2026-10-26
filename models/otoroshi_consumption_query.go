@@ -4,8 +4,8 @@ package models
 
 import "time"
 
-// OtoroshiConsumptionQuery
+// OtoroshiConsumptionQuery Time window of a consumption report.
 type OtoroshiConsumptionQuery struct {
-	Since time.Time `json:"since"`
-	Until time.Time `json:"until"`
+	Since time.Time `json:"since"` // Start of the window (RFC 3339).
+	Until time.Time `json:"until"` // End of the window (RFC 3339).
 }

@@ -12,17 +12,15 @@ import (
 )
 
 /*
-Replacesigningkey
-
-Rotate a signing key (creates new active key, old becomes rotated).
+Replacesigningkey POST /v4/tenants/{tenantId}/products/{productId}/keys/{keyId}/rotate
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
-  - keyId:
+  - tenantId: Tenant that owns the product
+  - productId: Product the key belongs to
+  - keyId: The active key to rotate
 
 # Returns the operation result or an error
 

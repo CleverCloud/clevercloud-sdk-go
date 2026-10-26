@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Getkubernetesnodegroup
+Getkubernetesnodegroup Get a node group
+
+Returns the node group; a failed one carries `failure`, the latest failure cause and the nodes a worker roll could not drain. 404 when the cluster or the node group does not exist. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeGroupId: Node group ID (`node_group_` or `nodeGroup_` followed by a ULID or a UUID; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubernetesnodegroup(ctx, client, tracer, ownerId, clusterId, nodeGroupId)
+	response := kubernetes.Getkubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesNodeGroup
 */
-func Getkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string) client.Response[models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "getKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
+func Getkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "getKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, clusterId, nodeGroupId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s", ownerId, kubernetesId, nodeGroupId)
 
 	// Make API call
 	response := client.Get[models.NodeGroup](ctx, c, path)

@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createmetabase
+Createmetabase Provision a Metabase add-on
 
-provision a new metabase instance
+Called by the platform when a customer creates a Metabase add-on. Creates the Metabase instance and its backing resources (a Java application and a PostgreSQL add-on), registers its domain and answers 201 with the add-on ID (`metabase_…`). An invalid request or `access-domain` option answers 400 before anything is created; once the add-on is recorded, a failure in a later step still answers 201 with the add-on marked as failed.
 
 Parameters:
   - ctx: context for the request

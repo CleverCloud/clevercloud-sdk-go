@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createmateriakv
+Createmateriakv Provision a Materia KV add-on
 
-# Provision a new MateriaKV
+Called by the platform when a customer creates a Materia KV add-on. Creates the database and its access token and answers 201 with the add-on ID (`kv_…`) and its connection variables (`KV_HOST`, `KV_PORT`, `KV_TOKEN` and their Redis-compatible equivalents). An invalid author ID answers 400.
 
 Parameters:
   - ctx: context for the request

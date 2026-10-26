@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Getmateriakvprovider
+Getmateriakvprovider Get the Materia KV provider information
 
-# Get MateriaKV provider
+Returns the Materia KV cluster add-ons are created on. Requires no authentication.
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +33,14 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKvProvider
 */
-func Getmateriakvprovider(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getmateriakvprovider(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMateriaKvProvider")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/kv")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

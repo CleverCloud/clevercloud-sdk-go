@@ -12,16 +12,14 @@ import (
 )
 
 /*
-Createsigningkey
-
-Create a signing key for a product/location.
+Createsigningkey POST /v4/tenants/{tenantId}/products/{productId}/keys
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - tenantId:
-  - productId:
+  - tenantId: Tenant that owns the product
+  - productId: Product the key is scoped to
   - requestBody: the request payload
 
 # Returns the operation result or an error

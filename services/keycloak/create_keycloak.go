@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Createkeycloak
+Createkeycloak Provision a Keycloak add-on
 
-provision a new Keycloak instance
+Called by the platform when a customer creates a Keycloak add-on. Creates the Keycloak instance and its backing resources (a Java application, a PostgreSQL add-on and an FS Bucket) and answers 201 with the add-on ID (`keycloak_…`). Once the add-on is recorded, a failure in a later step still answers 201 with a degraded message and the add-on marked as failed, so that it can be deleted; an invalid request answers 400 and an add-on that already exists 409.
 
 Parameters:
   - ctx: context for the request
@@ -34,14 +34,14 @@ Example:
 x-service: keycloak
 operationId: createKeycloak
 */
-func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[models.ProvisionResponse] {
+func Createkeycloak(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.ProvisionRequest) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createKeycloak")
 	defer span.End()
 
 	path := utils.Path("/v2/providers/addon-keycloak/resources")
 
 	// Make API call
-	response := client.Post[models.ProvisionResponse](ctx, c, path, requestBody)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

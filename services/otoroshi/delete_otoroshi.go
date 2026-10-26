@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deleteotoroshi
+Deleteotoroshi Deprovision an Otoroshi add-on
 
-deprovision an existing Otoroshi
+Called by the platform when a customer deletes an Otoroshi add-on. Deletes its Java application, Redis add-on, Cellar bucket, data exporters, DNS records and network group, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

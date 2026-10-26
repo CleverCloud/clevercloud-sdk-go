@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createnetworkgroup
+Createnetworkgroup Create a network group
 
-# Create a new NetworkGroup
+Requests the creation of a network group, optionally with an ID, a label, tags and initial members. The group is created asynchronously and cannot be read until it is; 409 when its ID or label is already being created. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

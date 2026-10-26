@@ -13,16 +13,25 @@ import (
 )
 
 /*
-Updatedatabase
+Updatedatabase **Legacy**: ovd databases.scala:48 patchDatabase()
+**Algorithm**:
+  - Verify addon, ALTER DATABASE on addon instance, UPDATE metadata DB
 
-Update the read/write mode of the database
+**Conformity**: YES (metadata update + ALTER DATABASE on addon instance)
+
+PATCH /v4/postgresql/organisations/{ownerId}/postgresql/{postgreSQLId}/databases/{databaseId}
+
+Source: ovd PostgreSQLDatabaseRepository.scala — updateDatabaseMode
+Source: ovd PostgreSQLDatabaseService.scala — patchPostgreSQLDatabase
+Behavior: updates the database read/write mode
+Issue: #646
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - postgreSQLId: PostgreSQL ID
+  - ownerId: Owner (org) ID
+  - postgreSQLId: PostgreSQL addon ID
   - databaseId: Database ID
   - requestBody: the request payload
   - opts: optional query parameters

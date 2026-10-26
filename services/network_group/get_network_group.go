@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getnetworkgroup
+Getnetworkgroup Get a network group
 
-# Get a NetworkGroup
+Returns the network group with its members and peers; 404 when it does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 
@@ -36,14 +36,14 @@ Example:
 x-service: network_group
 operationId: getNetworkGroup
 */
-func Getnetworkgroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[models.NetworkGroup1] {
+func Getnetworkgroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[models.NetworkGroup] {
 	ctx, span := tracer.Start(ctx, "getNetworkGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s", ownerId, networkGroupId)
 
 	// Make API call
-	response := client.Get[models.NetworkGroup1](ctx, c, path)
+	response := client.Get[models.NetworkGroup](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

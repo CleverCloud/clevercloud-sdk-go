@@ -11,19 +11,21 @@ import (
 )
 
 /*
-Deletedeploymentprofile
+Deletedeploymentprofile Delete a Kubernetes deployment profile
+
+Deletes the profile; 404 when it does not exist, 409 when it is its zone's production default while the zone has other profiles, or when a cluster that is not deleted uses it. Reserved for platform automation: other credentials get 403.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - locationId:
+  - profileId: Deployment profile ID (`kubernetes_deployment_profile_<uuid>` or `kubernetesDeploymentProfile_<uuid>`)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Deletedeploymentprofile(ctx, client, tracer, locationId)
+	response := kubernetes.Deletedeploymentprofile(ctx, client, tracer, profileId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -32,11 +34,11 @@ Example:
 x-service: kubernetes
 operationId: deleteDeploymentProfile
 */
-func Deletedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, locationId string) client.Response[client.Nothing] {
-	ctx, span := tracer.Start(ctx, "deleteDeploymentProfile", trace.WithAttributes(attribute.String("locationId", locationId)))
+func Deletedeploymentprofile(ctx context.Context, c *client.Client, tracer trace.Tracer, profileId string) client.Response[client.Nothing] {
+	ctx, span := tracer.Start(ctx, "deleteDeploymentProfile", trace.WithAttributes(attribute.String("profileId", profileId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", locationId)
+	path := utils.Path("/v4/kubernetes/admin/deployment-profiles/%s", profileId)
 
 	// Make API call
 	response := client.Delete[client.Nothing](ctx, c, path)

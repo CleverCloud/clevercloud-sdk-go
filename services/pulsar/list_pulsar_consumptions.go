@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listpulsarconsumptions
+Listpulsarconsumptions List an owner's Pulsar consumption
 
-# List pulsar consumptions
+Called by the platform's billing service. Returns the hourly billed consumption of every billable Pulsar add-on of the owner over the `since`/`until` window (the last 30 days by default), including add-ons deleted within it; repeat `resourceId` to restrict the report. 501 means consumption metrics are not available on this deployment.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

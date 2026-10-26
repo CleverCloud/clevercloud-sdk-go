@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getpulsarresourceinfo
+Getpulsarresourceinfo Read the billing label of a Pulsar add-on
 
-# Get pulsar resource information
+Called by the platform's billing service. Returns the name to print on an invoice line for this add-on of the owner, whatever its status. An add-on the owner does not hold answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - resourceId:
+  - ownerId: Owner ID: organisation (`orga_…`) or user (`user_…`)
+  - resourceId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

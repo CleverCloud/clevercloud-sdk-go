@@ -2,14 +2,14 @@
 
 package models
 
-// MemberKind represents
+// MemberKind represents Kind of resource a network group member stands for. Returned in lowercase; accepted in any case o...
 type MemberKind string
 
 const (
-	MemberKindADDON        MemberKind = "ADDON"
-	MemberKindAPPLICATION  MemberKind = "APPLICATION"
-	MemberKindEXTERNAL     MemberKind = "EXTERNAL"
-	MemberKindLOADBALANCER MemberKind = "LOADBALANCER"
+	MemberKindApplication  MemberKind = "application"
+	MemberKindAddon        MemberKind = "addon"
+	MemberKindExternal     MemberKind = "external"
+	MemberKindLoadbalancer MemberKind = "loadbalancer"
 )
 
 // String returns the underlying string value

@@ -13,16 +13,25 @@ type Option func(*Options)
 
 // Options holds query parameters for kubernetes operations
 type Options struct {
-	Limit      *int      `url:"limit,omitempty"`
-	Resourceid *[]string `url:"resourceId,omitempty"`
-	Since      *string   `url:"since,omitempty"`
-	Status     *[]string `url:"status,omitempty"`
-	Typeparam  *string   `url:"typeParam,omitempty"`
-	Until      *string   `url:"until,omitempty"`
+	Authorization *string   `url:"authorization,omitempty"`
+	Limit         *int64    `url:"limit,omitempty"`
+	Resourceid    *[]string `url:"resourceId,omitempty"`
+	Since         *string   `url:"since,omitempty"`
+	Status        *[]string `url:"status,omitempty"`
+	Typeparam     *string   `url:"typeParam,omitempty"`
+	Until         *string   `url:"until,omitempty"`
+	Workers       *bool     `url:"workers,omitempty"`
+}
+
+// WithAuthorization sets the authorization query parameter
+func WithAuthorization(authorization string) Option {
+	return func(o *Options) {
+		o.Authorization = &authorization
+	}
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}
@@ -63,6 +72,13 @@ func WithUntil(until string) Option {
 	}
 }
 
+// WithWorkers sets the workers query parameter
+func WithWorkers(workers bool) Option {
+	return func(o *Options) {
+		o.Workers = &workers
+	}
+}
+
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
 	options := &Options{}
@@ -71,6 +87,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Authorization != nil {
+		params = append(params, fmt.Sprintf("authorization=%s", url.QueryEscape(*options.Authorization)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
@@ -88,6 +107,9 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Until != nil {
 		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+	}
+	if options.Workers != nil {
+		params = append(params, fmt.Sprintf("workers=%t", *options.Workers))
 	}
 
 	if len(params) == 0 {

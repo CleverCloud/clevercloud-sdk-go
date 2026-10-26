@@ -2,7 +2,7 @@
 
 package models
 
-// RenewContainerRegistryTokenRequest
+// RenewContainerRegistryTokenRequest Ask for a token's expiry to be pushed out.  Source: specs/001-api-surface-placeholders/data-model...
 type RenewContainerRegistryTokenRequest struct {
-	ExpiresInDays int `json:"expiresInDays"`
+	ExpiresInDays int `json:"expiresInDays"` // The new lifetime, in days, counted from the token's creation.
 }

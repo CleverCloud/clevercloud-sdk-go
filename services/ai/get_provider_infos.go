@@ -11,16 +11,28 @@ import (
 )
 
 /*
-Getproviderinfos
+Getproviderinfos **Legacy**: ovd AIProviderController.scala:71 getProviderInfosEndpoint()
+**Algorithm**:
+  - Verify addon exists, forward to otoroshiClient.getProvider()
 
-# Direct access to otoroshi cluster and request the providers information
+**Conformity**: YES (Cloud Versatile: 501 when Otoroshi not configured)
+
+GET /v4/ai/organisations/{owner_id}/ai/{ai_id}/providers — get Otoroshi provider info.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — getProviderInfosEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — getProviderInfos()
+Behavior: Verifies addon exists, calls otoroshiClient.getProvider(addonId).
+
+	Returns 501 when Otoroshi client not configured (Cloud Versatile).
+
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
 
 # Returns the operation result or an error
 
@@ -35,14 +47,14 @@ Example:
 x-service: ai
 operationId: getProviderInfos
 */
-func Getproviderinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string) client.Response[client.Nothing] {
+func Getproviderinfos(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, aiId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getProviderInfos", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("aiId", aiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/ai/organisations/%s/ai/%s/providers", ownerId, aiId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

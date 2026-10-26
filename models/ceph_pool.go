@@ -2,7 +2,7 @@
 
 package models
 
-// CephPool
+// CephPool A Ceph pool, as an object holding its `name`.
 type CephPool struct {
 	Name string `json:"name"`
 }

@@ -2,9 +2,9 @@
 
 package models
 
-// WannabeContainerRegistryToken
+// WannabeContainerRegistryToken Ask for a token on a registry.  Source: specs/001-api-surface-placeholders/data-model.md §Wannabe...
 type WannabeContainerRegistryToken struct {
-	ExpiresInDays *int                         `json:"expiresInDays,omitempty"`
-	Rights        ContainerRegistryTokenRights `json:"rights"`
-	Scope         []string                     `json:"scope,omitempty"`
+	ExpiresInDays *int                         `json:"expiresInDays,omitempty"` // How long it lives, in days. Absent means it does not expire.
+	Rights        ContainerRegistryTokenRights `json:"rights"`                  // What the token may do.
+	Scope         []string                     `json:"scope"`                   // Which repositories it covers.
 }

@@ -2,13 +2,14 @@
 
 package models
 
-// CellarPlan represents
+// CellarPlan represents Plan of a Cellar add-on: `S`, `BACKUP`, `PULSAR_COLD_STORAGE` or `CONTAINER_REGISTRY`.
 type CellarPlan string
 
 const (
+	CellarPlanS                 CellarPlan = "S"
 	CellarPlanBACKUP            CellarPlan = "BACKUP"
 	CellarPlanPulsarColdStorage CellarPlan = "PULSAR_COLD_STORAGE"
-	CellarPlanS                 CellarPlan = "S"
+	CellarPlanContainerRegistry CellarPlan = "CONTAINER_REGISTRY"
 )
 
 // String returns the underlying string value

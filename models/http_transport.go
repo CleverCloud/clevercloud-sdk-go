@@ -2,7 +2,7 @@
 
 package models
 
-// HttpTransport
+// HttpTransport HTTP frontend leaf (:367-371).
 type HttpTransport struct {
-	Clusters []string `json:"clusters,omitempty"`
+	Clusters []string `json:"clusters"` // Identifiers of clusters forming the routing table.
 }

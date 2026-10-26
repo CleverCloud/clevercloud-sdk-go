@@ -11,17 +11,17 @@ import (
 )
 
 /*
-Deletenetworkgrouppeer
+Deletenetworkgrouppeer Remove a peer from a network group
 
-# Delete a Peer of a NetworkGroup by its id
+Requests the removal of an external peer, which is applied asynchronously; 404 when the network group or the peer does not exist. A Clever Cloud instance peer cannot be removed this way (401): it leaves the group with its instance or its member. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
 
 # Returns the operation result or an error
 

@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Createversionupdateotoroshi
+Createversionupdateotoroshi Update the Otoroshi version of an add-on
 
-update version
+Switches the add-on's application to `targetVersion` and the Java version it needs, redeploys it without build cache and returns the updated add-on. A version that is not offered is refused. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error

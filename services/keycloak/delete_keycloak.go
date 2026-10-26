@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletekeycloak
+Deletekeycloak Deprovision a Keycloak add-on
 
-deprovision an existing Keycloak
+Called by the platform when a customer deletes a Keycloak add-on. Deletes its Java applications, DNS records, PostgreSQL add-on, FS Bucket and network group, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers an error and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonKeycloakId:
+  - addonKeycloakId: Keycloak add-on ID (`keycloak_…`)
 
 # Returns the operation result or an error
 

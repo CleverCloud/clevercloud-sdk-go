@@ -2,10 +2,10 @@
 
 package models
 
-// KeycloakVersionChecker
+// KeycloakVersionChecker Whether a Keycloak add-on can move to a newer version.
 type KeycloakVersionChecker struct {
-	Available  []string `json:"available,omitempty"`
-	Installed  string   `json:"installed"`
-	Latest     string   `json:"latest"`
-	NeedUpdate bool     `json:"needUpdate"`
+	Available  []string `json:"available"`  // Versions on offer.
+	Installed  string   `json:"installed"`  // Version the add-on currently runs; a `NOT FOUND` marker when its application reports none.
+	Latest     string   `json:"latest"`     // Newest version on offer: the last entry of `available`.
+	NeedUpdate bool     `json:"needUpdate"` // `true` when `installed` differs from `latest`.
 }

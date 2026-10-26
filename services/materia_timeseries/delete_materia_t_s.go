@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletemateriats
+Deletemateriats Deprovision a Materia TS add-on
 
-deprovision a MateriaTS
+Called by the platform when a customer deletes a Materia TS add-on. Marks it for deletion and revokes its tokens; its data is erased later. Answers 404 for an unknown add-on or one already being deleted.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonTsId:
+  - addonTsId: Materia TS add-on ID (`ts_…`)
 
 # Returns the operation result or an error
 

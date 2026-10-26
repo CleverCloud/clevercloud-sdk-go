@@ -12,35 +12,48 @@ import (
 )
 
 /*
-Getcellarcredentials
+GetCellarCredentials GET /v4/addon-providers/addon-cellar/addons/{addon_id}/credentials -- get credentials.
 
-get Cellar credentials (host, keyId, keySecret)
+**Legacy**: ovd CellarRoutes.scala:135 getCellarCredentialsEndpoint / CellarProviderService.scala getCredentials()
+**Algorithm**:
+  - Auth via CCAPI, fetch HOST/KEY_ID/KEY_SECRET from provision_config table
+
+**Conformity**: YES
+
+Source: ovd/modules/cellar/routes/CellarRoutes.scala getCellarCredentialsEndpoint
+Source: ovd/modules/cellar/services/CellarProviderService.scala getCredentials()
+Source: ovd/modules/cellar/repositories/CellarProvisionConfigRepository.scala findCredentials()
+Behavior: Fetches CELLAR_ADDON_HOST, CELLAR_ADDON_KEY_ID, CELLAR_ADDON_KEY_SECRET
+
+	from provision_config table for the given provision ID. Returns 404 if
+	provision not found or credentials not configured.
+
+Issue: #8
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - CellarId:
+  - addon_id: Cellar addon ID
 
 # Returns the operation result or an error
 
 Example:
 
-	response := cellar.Getcellarcredentials(ctx, client, tracer, ownerId, CellarId)
+	response := cellar.GetCellarCredentials(ctx, client, tracer, addon_id)
 	if response.HasError() {
 		// Handle error
 	}
 	result := response.Payload()
 
-x-service: cellar
-operationId: getCellarCredentials
+x-service: Cellar
+operationId: get_cellar_credentials
 */
-func Getcellarcredentials(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, CellarId string) client.Response[models.CellarCredentials] {
-	ctx, span := tracer.Start(ctx, "getCellarCredentials", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("CellarId", CellarId)))
+func GetCellarCredentials(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string) client.Response[models.CellarCredentials] {
+	ctx, span := tracer.Start(ctx, "get_cellar_credentials", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
-	path := utils.Path("/v4/cellar/organisations/%s/cellar/%s/credentials", ownerId, CellarId)
+	path := utils.Path("/v4/addon-providers/addon-cellar/addons/%s/credentials", addon_id)
 
 	// Make API call
 	response := client.Get[models.CellarCredentials](ctx, c, path)

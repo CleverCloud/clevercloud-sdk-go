@@ -2,17 +2,17 @@
 
 package models
 
-// Metabase
+// Metabase A Metabase add-on: its identifiers, plan, deployed versions, access URL, the resources backing it...
 type Metabase struct {
-	AccessURL         string                 `json:"accessUrl"`
-	AddonID           string                 `json:"addonId"`
-	AvailableVersions []string               `json:"availableVersions,omitempty"`
-	EnvVars           MapString              `json:"envVars"`
-	JavaVersion       string                 `json:"javaVersion"`
-	Name              string                 `json:"name"`
-	OwnerID           OwnerID                `json:"ownerId"`
-	Plan              MetabasePlanIdentifier `json:"plan"`
-	ResourceID        string                 `json:"resourceId"`
-	Resources         MetabaseResources      `json:"resources"`
-	Version           string                 `json:"version"`
+	AccessURL         string                 `json:"accessUrl"`         // Public URL of the Metabase instance.
+	AddonID           AddonId                `json:"addonId"`           // Add-on ID (`addon_…`).
+	AvailableVersions []string               `json:"availableVersions"` // Versions on offer.
+	EnvVars           map[string]string      `json:"envVars"`           // Environment variables of the add-on's application.
+	JavaVersion       string                 `json:"javaVersion"`       // Java version the add-on's application runs on.
+	Name              string                 `json:"name"`              // Add-on name.
+	OwnerID           UserId                 `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	Plan              MetabasePlanIdentifier `json:"plan"`              // Plan identifier.
+	ResourceID        MetabaseId             `json:"resourceId"`        // Metabase add-on ID (`metabase_…`).
+	Resources         MetabaseResources      `json:"resources"`         // Resources backing the add-on.
+	Version           string                 `json:"version"`           // Deployed Metabase version.
 }

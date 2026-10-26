@@ -2,7 +2,7 @@
 
 package models
 
-// TopologyType represents
+// TopologyType represents Control-plane topology: `ALL_IN_ONE` (control plane and workloads share the same VMs), `DEDICATED...
 type TopologyType string
 
 const (

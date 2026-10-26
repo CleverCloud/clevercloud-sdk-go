@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Getwireguardconfigpresignedurl
+Getwireguardconfigpresignedurl Get a presigned URL for a peer's WireGuard configuration
 
-# Get a presigned URL for wireguard configuration
+Returns a URL that downloads the peer's WireGuard configuration with no other credential, valid 60 minutes; keep it secret, as its token grants that download for every peer of the organisation's network groups until it expires. 404 when the network group or the peer does not exist; a biscuit cannot obtain one. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
 
 # Returns the operation result or an error
 

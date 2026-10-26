@@ -4,6 +4,7 @@ package network_group
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	attribute "go.opentelemetry.io/otel/attribute"
@@ -11,23 +12,24 @@ import (
 )
 
 /*
-Getwireguardconfiguration
+Getwireguardconfiguration Get a peer's WireGuard configuration
 
-# Get wireguard configuration for a peer
+Returns the peer's WireGuard configuration as INI text (`text/plain`): its `[Interface]` section and one `[Peer]` section per other peer that has a public key. Pass the presigned token in the `authorization` query parameter, or any other accepted credential; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - peerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - peerId: Peer ID
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := network_group.Getwireguardconfiguration(ctx, client, tracer, ownerId, networkGroupId, peerId)
+	response := network_group.Getwireguardconfiguration(ctx, client, tracer, ownerId, networkGroupId, peerId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +38,17 @@ Example:
 x-service: network_group
 operationId: getWireguardConfiguration
 */
-func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[client.Nothing] {
+func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "getWireguardConfiguration", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/peers/%s/wireguard/configuration", ownerId, networkGroupId, peerId)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[client.Nothing](ctx, c, path)

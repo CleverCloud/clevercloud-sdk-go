@@ -2,9 +2,9 @@
 
 package models
 
-// CellarDirectory
+// CellarDirectory A directory (common key prefix) in a bucket listing.
 type CellarDirectory struct {
-	Key  string `json:"key"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Key  string `json:"key"`  // Full directory key
+	Name string `json:"name"` // Directory display name
+	Type string `json:"type"` // Object type ("directory")
 }

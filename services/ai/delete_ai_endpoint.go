@@ -11,17 +11,31 @@ import (
 )
 
 /*
-Deleteaiendpoint
+Deleteaiendpoint **Legacy**: ovd AIProviderController.scala:143 deleteEndpointEndpoint()
+**Algorithm**:
+  - Verify addon + tenancy, undeploy + delete on Otoroshi (best-effort)
+  - Always delete tenant row from addon_ai_tenancy
 
-# Delete endpoint from otoroshi cluster
+**Conformity**: YES (Otoroshi calls best-effort, DB cleanup always runs)
+
+DELETE /v4/ai/organisations/{owner_id}/ai/{ai_id}/endpoints/{endpoint_id} — delete endpoint.
+
+Source: references/legacy/ovd/modules/ai/controllers/AIProviderController.scala — deleteEndpointEndpoint
+Source: references/legacy/ovd/modules/ai/services/AIProviderService.scala — deleteEndpoint()
+Behavior: verifies addon + tenancy, resolves config, calls otoroshiClient.undeployEndpoint,
+
+	then otoroshiClient.delete, then deletes tenant row from addon_ai_tenancy.
+
+Schema: addon_ai_tenancy — DELETE WHERE addon_id = $1 AND otoroshi_id = $2
+Issue: #647
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - aiId:
-  - endpointId:
+  - ownerId: Owner (user or org) ID
+  - aiId: AI addon ID
+  - endpointId: Otoroshi endpoint ID
 
 # Returns the operation result or an error
 

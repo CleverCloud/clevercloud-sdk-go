@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getcellar
+Getcellar Read a Cellar add-on with its S3 credentials
 
-get a Cellar account
+Returns one Cellar add-on: ID, owner, cluster, plan, status, creation and deletion dates, and its S3 endpoint host, access key ID and secret access key. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: 401 when unauthenticated, and 404 for any other refusal, as for an unknown add-on.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - CellarId:
+  - CellarId: Cellar add-on ID (`cellar_…`)
 
 # Returns the operation result or an error
 
@@ -35,14 +35,14 @@ Example:
 x-service: cellar
 operationId: getCellar
 */
-func Getcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, CellarId string) client.Response[models.Cellar1] {
+func Getcellar(ctx context.Context, c *client.Client, tracer trace.Tracer, CellarId string) client.Response[models.Cellar] {
 	ctx, span := tracer.Start(ctx, "getCellar", trace.WithAttributes(attribute.String("CellarId", CellarId)))
 	defer span.End()
 
 	path := utils.Path("/v4/providers/addon-cellar/%s", CellarId)
 
 	// Make API call
-	response := client.Get[models.Cellar1](ctx, c, path)
+	response := client.Get[models.Cellar](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

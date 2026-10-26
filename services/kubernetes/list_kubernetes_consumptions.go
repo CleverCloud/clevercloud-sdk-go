@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listkubernetesconsumptions
+Listkubernetesconsumptions List the Kubernetes consumption of an organisation
 
-# List kubernetes consumptions
+Called by the billing service: returns the organisation's consumption per cluster over `[since, until)`, prorated hourly, optionally restricted to the clusters `resourceId` names. 400 when `until` is missing or a date or ID is malformed.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

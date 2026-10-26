@@ -12,16 +12,16 @@ import (
 )
 
 /*
-Getkubernetesresourceinfo
+Getkubernetesresourceinfo Get the display name of a cluster
 
-# Get kubernetes resource information
+Called by the billing service: returns the name of the organisation's cluster, for invoices. 404 when the organisation has no such cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - resourceId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - resourceId: Cluster ID
 
 # Returns the operation result or an error
 

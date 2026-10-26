@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -12,90 +11,33 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
-	"gopkg.in/yaml.v3"
+
+	"go.clever-cloud.dev/sdk/internal/gotype"
+	"go.clever-cloud.dev/sdk/internal/naming"
+	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
-// SERVICE_NAME_EXCEPTIONS maps x-service values to specific package names
-// This handles special cases where the x-service name needs to be mapped to a different package name
-var SERVICE_NAME_EXCEPTIONS = map[string]string{
-	// Map addon services to their dedicated packages if needed
-	"addon-pulsar":  "pulsar",
-	"addon-storage": "storage",
-	"addon-cellar":  "storage",
-
-	// Map config-provider to product since it's product-related
-	"config-provider": "product",
-
-	// Map network-related services appropriately
-	"network-group": "networkgroup",
-
-	// Map infrastructure-related services
-	"infrastructure": "infrastructure",
-	"compute":        "infrastructure",
-
-	// Map drain services
-	"drain":  "drains",
-	"drains": "drains",
-
-	// Example of consolidating related services
-	// "keycloak":        "product", // Move keycloak operations to product package
-	// "matomo":          "product", // Move matomo operations to product package
-	// "otoroshi":        "product", // Move otoroshi operations to product package
-}
-
-// OPERATION_ID_OVERRIDES fixes duplicate operationId issues in the OpenAPI spec
-// Key format: "METHOD:path" -> new operationId
-var OPERATION_ID_OVERRIDES = map[string]string{
-	// Fix duplicate "createEndpoint" operationId
-	"DELETE:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints/{endpointId}": "deleteAIEndpoint",
-	"POST:/v4/ai/organisations/{ownerId}/ai/{addonAIId}/endpoints":                "createAIEndpoint",
-	// Fix duplicate getMateriaKv/deleteMateriaKv (exist on both /v2 and /v4 paths)
-	"GET:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}":    "getMateriaKvV4",
-	"DELETE:/v4/materia/organisations/{ownerId}/materia/databases/{resourceId}": "deleteMateriaKvV4",
-}
-
-// OPERATION_MAPPING_EXCEPTIONS maps specific operations to target services
-// This handles operations that should be moved to different services based on SERVICE_MAPPING_EXCEPTIONS.md
-var OPERATION_MAPPING_EXCEPTIONS = map[string]string{
-	// Pulsar operations mal classées (x-service: product → pulsar)
-	"getPulsar":                      "pulsar",
-	"deletePulsar":                   "pulsar",
-	"getPulsarPolicies":              "pulsar",
-	"setStoragePolicies":             "pulsar",
-	"renewPulsarToken":               "pulsar",
-	"createPulsarTenantAndNamespace": "pulsar",
-	"deletePulsarTenantAndNamespace": "pulsar",
-	"createPulsar":                   "pulsar",
-	"getPulsarProviderInfo":          "pulsar",
-	"getPulsarCluster":               "pulsar",
-	"listPulsarConsumptions":         "pulsar",
-	"getTriggerPulsar":               "pulsar",
-	"createTriggerPulsar":            "pulsar",
-	"deleteTriggerPulsar":            "pulsar",
-
-	// V2 Pulsar operations (x-service: product → pulsar)
-	"provisionPulsar": "pulsar",
-	"getPulsarV2":     "pulsar",
-}
+// Package names, function names and the exception tables live in internal/naming; the
+// document is pruned and normalised by internal/spec. Both are shared with the builder
+// generator so the two cannot drift apart.
 
 // Service generation structures
 type ServiceOperation struct {
-	OperationID       string
-	FunctionName      string
-	PackageName       string
-	Path              string
-	Method            string
-	Summary           string
-	Description       string
-	PathParams        []ServiceParam
-	QueryParams       []ServiceParam
-	RequestBodyType   string
-	RequestBodyGoType string // Full Go type including models. prefix and array handling
-	ResponseType      string
-	XService          string
-	TraceSpanName     string
-	HasRequestBody    bool
-	HasQueryParams    bool
+	OperationID    string
+	FunctionName   string
+	PackageName    string
+	Path           string
+	Method         string
+	Summary        string
+	Description    string
+	PathParams     []ServiceParam
+	QueryParams    []ServiceParam
+	Body           gotype.Type
+	Response       gotype.Type
+	XService       string
+	TraceSpanName  string
+	HasRequestBody bool
+	HasQueryParams bool
 }
 
 type ServiceParam struct {
@@ -110,9 +52,8 @@ type ServiceParam struct {
 
 func main() {
 	var (
-		specFile       = flag.String("spec", "openapi.json", "Path to OpenAPI specification file")
-		outputDir      = flag.String("output", "services", "Output directory for generated services")
-		exceptionsFile = flag.String("exceptions", "", "Path to service mapping exceptions file")
+		specFile  = flag.String("spec", "openapi.json", "Path to OpenAPI specification file")
+		outputDir = flag.String("output", "services", "Output directory for generated services")
 	)
 	flag.Parse()
 
@@ -120,56 +61,14 @@ func main() {
 		log.Fatal("Please provide -spec flag with path to OpenAPI specification")
 	}
 
-	// Load exceptions file if provided
-	if *exceptionsFile != "" && fileExists(*exceptionsFile) {
-		log.Printf("Loading service mapping exceptions from: %s", *exceptionsFile)
-		// Note: The exceptions are currently hardcoded in OPERATION_MAPPING_EXCEPTIONS
-		// In the future, we could parse the markdown file to populate the map dynamically
-	}
-
-	// Read OpenAPI spec
-	data, err := os.ReadFile(*specFile)
+	document, report, err := spec.Load(*specFile)
 	if err != nil {
-		log.Fatalf("Failed to read spec file: %v", err)
+		log.Fatalf("Failed to load spec: %v", err)
 	}
-
-	var spec openapi31.Spec
-
-	// Detect format based on file extension
-	ext := strings.ToLower(filepath.Ext(*specFile))
-
-	switch ext {
-	case ".json":
-		// Parse JSON document
-		if err := json.Unmarshal(data, &spec); err != nil {
-			log.Fatalf("Failed to parse OpenAPI JSON: %v", err)
-		}
-		log.Printf("Parsed OpenAPI JSON specification")
-	case ".yaml", ".yml":
-		// Parse YAML document
-		if err := yaml.Unmarshal(data, &spec); err != nil {
-			log.Fatalf("Failed to parse OpenAPI YAML: %v", err)
-		}
-		log.Printf("Parsed OpenAPI YAML specification")
-	default:
-		// Try to auto-detect format
-		log.Printf("Unknown file extension %s, attempting auto-detection...", ext)
-
-		// Try JSON first
-		err := json.Unmarshal(data, &spec)
-		if err == nil {
-			log.Printf("Auto-detected JSON format")
-		} else {
-			// Try YAML
-			if err := yaml.Unmarshal(data, &spec); err != nil {
-				log.Fatalf("Failed to parse OpenAPI file (tried both JSON and YAML): %v", err)
-			}
-			log.Printf("Auto-detected YAML format")
-		}
-	}
+	log.Printf("Loaded %s: %s", *specFile, report)
 
 	// Process operations
-	operations := extractOperations(spec)
+	operations := extractOperations(*document)
 
 	if len(operations) == 0 {
 		log.Println("No operations found in OpenAPI spec")
@@ -230,14 +129,10 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 			continue
 		}
 
-		// Apply operationId overrides for duplicate IDs
+		// Ids are unique and x-service is set on every operation: spec.Load saw to it.
 		operationID := ""
 		if operation.ID != nil {
 			operationID = *operation.ID
-		}
-		overrideKey := method + ":" + path
-		if override, exists := OPERATION_ID_OVERRIDES[overrideKey]; exists {
-			operationID = override
 		}
 
 		summary := ""
@@ -251,7 +146,7 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 
 		op := ServiceOperation{
 			OperationID:   operationID,
-			FunctionName:  toPascalCase(operationID),
+			FunctionName:  naming.FunctionName(operationID),
 			Path:          convertPathToGoFormat(path),
 			Method:        method,
 			Summary:       summary,
@@ -259,37 +154,11 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 			TraceSpanName: operationID,
 		}
 
-		// Check operation mapping exceptions first
-		if targetService, hasException := OPERATION_MAPPING_EXCEPTIONS[operationID]; hasException {
-			op.XService = targetService
-			op.PackageName = getPackageNameFromService(targetService)
-		} else {
-			// Apply mapping rules from SERVICE_MAPPING_EXCEPTIONS.md
-			targetService := applyMappingRules(operationID, path, operation.Tags)
-			if targetService != "" {
-				op.XService = targetService
-				op.PackageName = getPackageNameFromService(targetService)
-			} else {
-				// Extract x-service from MapOfAnything
-				if xService, exists := operation.MapOfAnything["x-service"]; exists {
-					if xServiceStr, ok := xService.(string); ok {
-						op.XService = xServiceStr
-						op.PackageName = getPackageNameFromService(xServiceStr)
-					}
-				}
-
-				// If no x-service, use first tag or derive from path
-				if op.PackageName == "" {
-					if len(operation.Tags) > 0 {
-						tagValue := operation.Tags[0]
-						op.XService = tagValue
-						op.PackageName = getPackageNameFromService(tagValue)
-					} else {
-						op.PackageName = derivePackageFromPath(path)
-						op.XService = op.PackageName
-					}
-				}
-			}
+		xService, _ := operation.MapOfAnything["x-service"].(string)
+		op.XService = xService
+		op.PackageName = naming.OperationPackage(operationID, xService, path, operation.Tags)
+		if op.PackageName == "" {
+			log.Fatalf("%s %s (%s): no x-service and no tag to name a package after", method, path, operationID)
 		}
 
 		// Extract parameters
@@ -333,75 +202,21 @@ func extractOperationsFromPath(path string, pathItem openapi31.PathItem) []Servi
 			}
 		}
 
-		// Extract request body
+		// Request body and response: one derivation shared with the builder generator.
 		if operation.RequestBody != nil && operation.RequestBody.RequestBody != nil {
-			for _, mediaType := range operation.RequestBody.RequestBody.Content {
-				schemaRef := getSchemaRef(mediaType.Schema)
-				if schemaRef != "" {
-					typeName := extractTypeFromRef(schemaRef)
-					op.RequestBodyType = typeName
-					op.RequestBodyGoType = "*models." + toGoStructName(typeName)
-					op.HasRequestBody = true
-					break
-				}
-				// Handle array types with items.$ref
-				schemaType := getSchemaType(mediaType.Schema)
-				if schemaType == "array" {
-					itemsRef := getSchemaItemsRef(mediaType.Schema)
-					if itemsRef != "" {
-						itemType := extractTypeFromRef(itemsRef)
-						op.RequestBodyType = "[]*" + itemType
-						op.RequestBodyGoType = "[]*models." + toGoStructName(itemType)
-						op.HasRequestBody = true
-						break
-					}
-				}
-			}
+			op.Body = gotype.Body(operation.RequestBody.RequestBody.Content, op.FunctionName)
+			op.HasRequestBody = !op.Body.IsNone()
 		}
-
-		// Extract response type - check 200, 201, 202, 204 status codes
-		foundSuccessResponse := false
+		op.Response = gotype.Unknown
 		if operation.Responses != nil {
 			for _, statusCode := range []string{"200", "201", "202", "204"} {
 				if respOrRef, exists := operation.Responses.MapOfResponseOrReferenceValues[statusCode]; exists {
-					foundSuccessResponse = true
-					resp := respOrRef.Response
-					if resp == nil {
-						op.ResponseType = "NOTHING"
-						break
+					if resp := respOrRef.Response; resp != nil {
+						op.Response = gotype.Response(resp.Content, op.FunctionName)
 					}
-					// Check if response has content
-					if len(resp.Content) == 0 {
-						// No content = use client.Nothing
-						op.ResponseType = "NOTHING"
-						break
-					}
-					for _, mediaType := range resp.Content {
-						schemaRef := getSchemaRef(mediaType.Schema)
-						if schemaRef != "" {
-							op.ResponseType = extractTypeFromRef(schemaRef)
-							break
-						}
-						// Handle array responses
-						schemaType := getSchemaType(mediaType.Schema)
-						if schemaType == "array" {
-							itemsRef := getSchemaItemsRef(mediaType.Schema)
-							if itemsRef != "" {
-								itemType := extractTypeFromRef(itemsRef)
-								op.ResponseType = "[]" + itemType
-								break
-							}
-						}
-					}
-					if op.ResponseType != "" {
-						break
-					}
+					break
 				}
 			}
-		}
-		// If we found a success response but no type, it means empty content
-		if foundSuccessResponse && op.ResponseType == "" {
-			op.ResponseType = "NOTHING"
 		}
 
 		operations = append(operations, op)
@@ -426,9 +241,18 @@ func generatePackage(outputDir, packageName string, operations []ServiceOperatio
 		return fmt.Errorf("failed to create package directory: %v", err)
 	}
 
-	// Generate one file per operation
+	// Generate one file per operation. Two ids can share a file name — `deleteCephPool` and
+	// `delete_ceph_pool` are distinct functions on distinct routes but both spell
+	// `delete_ceph_pool.go` — so the second takes its method as a suffix rather than
+	// overwriting the first.
+	fileNames := map[string]bool{}
 	for _, op := range operations {
-		if err := generateOperationFile(packageDir, op); err != nil {
+		fileName := operationFileName(op.OperationID)
+		if fileNames[fileName] {
+			fileName = strings.TrimSuffix(fileName, ".go") + "_" + strings.ToLower(op.Method) + ".go"
+		}
+		fileNames[fileName] = true
+		if err := generateOperationFile(packageDir, fileName, op); err != nil {
 			return fmt.Errorf("failed to generate operation %s: %v", op.OperationID, err)
 		}
 	}
@@ -441,21 +265,21 @@ func generatePackage(outputDir, packageName string, operations []ServiceOperatio
 	return nil
 }
 
-func generateOperationFile(packageDir string, op ServiceOperation) error {
+func generateOperationFile(packageDir, fileName string, op ServiceOperation) error {
 	f := NewFile(op.PackageName)
 	f.HeaderComment("Code generated by generate-services. DO NOT EDIT.")
 
-	// Build response type
-	responseType := formatResponseTypeJen(op.ResponseType)
+	inline := func(name string) Code { return Id(name) }
+	responseType := op.Response.Code(inline)
 
 	// Build function comment
-	commentLines := []string{op.FunctionName + " " + op.Summary}
+	commentLines := []string{op.FunctionName + " " + sanitizeComment(op.Summary)}
 	if op.Description != "" {
-		commentLines = append(commentLines, "", op.Description)
+		commentLines = append(commentLines, "", sanitizeComment(op.Description))
 	}
 	commentLines = append(commentLines, "", "Parameters:", "  - ctx: context for the request", "  - client: the Clever Cloud client", "  - tracer: OpenTelemetry tracer for observability")
 	for _, p := range op.PathParams {
-		commentLines = append(commentLines, fmt.Sprintf("  - %s: %s", p.Name, p.Description))
+		commentLines = append(commentLines, fmt.Sprintf("  - %s: %s", p.Name, sanitizeComment(p.Description)))
 	}
 	if op.HasRequestBody {
 		commentLines = append(commentLines, "  - requestBody: the request payload")
@@ -497,7 +321,7 @@ func generateOperationFile(packageDir string, op ServiceOperation) error {
 		params = append(params, Id(p.Name).Id(p.Type))
 	}
 	if op.HasRequestBody {
-		params = append(params, Id("requestBody").Add(formatRequestBodyTypeJen(op.RequestBodyGoType)))
+		params = append(params, Id("requestBody").Add(op.Body.Code(inline)))
 	}
 	if op.HasQueryParams {
 		params = append(params, Id("opts").Op("...").Id("Option"))
@@ -591,51 +415,26 @@ func generateOperationFile(packageDir string, op ServiceOperation) error {
 	body = append(body, Return(Id("response")))
 
 	// Add the function
+	// An inline object schema has no component to refer to: its struct is declared here,
+	// named after the operation, and the builder refers to it through this package.
+	for _, st := range append(append([]gotype.Struct{}, op.Body.Inline...), op.Response.Inline...) {
+		if st.Description != "" {
+			f.Comment(st.Name + " " + sanitizeComment(st.Description))
+		}
+		f.Add(st.Declare())
+		f.Line()
+	}
+
 	f.Comment(strings.Join(commentLines, "\n"))
 	f.Func().Id(op.FunctionName).Params(params...).Qual("go.clever-cloud.dev/client", "Response").Types(responseType).Block(body...)
 
 	// Write file
-	filename := toSnakeCase(op.OperationID) + ".go"
+	filename := fileName
 	outputPath := filepath.Join(packageDir, filename)
 	return f.Save(outputPath)
 }
 
 // formatResponseTypeJen returns a jennifer Code for the response type
-func formatResponseTypeJen(t string) Code {
-	if t == "" {
-		return Id("any")
-	}
-	if t == "NOTHING" {
-		return Qual("go.clever-cloud.dev/client", "Nothing")
-	}
-	if after, ok := strings.CutPrefix(t, "[]"); ok {
-		return Index().Qual("go.clever-cloud.dev/sdk/models", after)
-	}
-	return Qual("go.clever-cloud.dev/sdk/models", t)
-}
-
-// formatRequestBodyTypeJen returns a jennifer Code for request body type like "*models.SomeType" or "[]*models.SomeType"
-func formatRequestBodyTypeJen(t string) Code {
-	// Handle []*models.SomeType
-	if after, ok := strings.CutPrefix(t, "[]*models."); ok {
-		return Index().Op("*").Qual("go.clever-cloud.dev/sdk/models", after)
-	}
-	// Handle []models.SomeType
-	if after, ok := strings.CutPrefix(t, "[]models."); ok {
-		return Index().Qual("go.clever-cloud.dev/sdk/models", after)
-	}
-	// Handle *models.SomeType
-	if after, ok := strings.CutPrefix(t, "*models."); ok {
-		return Op("*").Qual("go.clever-cloud.dev/sdk/models", after)
-	}
-	// Handle models.SomeType
-	if after, ok := strings.CutPrefix(t, "models."); ok {
-		return Qual("go.clever-cloud.dev/sdk/models", after)
-	}
-	// Fallback
-	return Id(t)
-}
-
 func generateOptionsFile(packageDir, packageName string, operations []ServiceOperation) error {
 	// Collect unique query params from all operations in this package
 	queryParamMap := make(map[string]ServiceParam)
@@ -646,9 +445,14 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 				// For options, use PascalCase for GoName and simplify complex types to string
 				param := qp
 				param.GoName = toPascalCase(qp.Name)
-				// Query params should be simple types - convert complex refs to string
-				if strings.HasPrefix(param.Type, "*") || strings.HasPrefix(param.Type, "models.") {
-					param.Type = "string"
+				// Query params should be simple types - convert complex refs to string,
+				// and a list of them (`status=[]*models.ClusterStatusType`) to a list of strings.
+				if strings.Contains(param.Type, "models.") {
+					if strings.HasPrefix(param.Type, "[]") {
+						param.Type = "[]string"
+					} else {
+						param.Type = "string"
+					}
 				}
 				queryParamMap[qp.Name] = param
 			}
@@ -755,25 +559,7 @@ func generateOptionsFile(packageDir, packageName string, operations []ServiceOpe
 
 // Utility functions
 func toPascalCase(s string) string {
-	if s == "" {
-		return ""
-	}
-
-	// Split by common delimiters
-	words := strings.FieldsFunc(s, func(c rune) bool {
-		return c == '_' || c == '-' || c == ' '
-	})
-
-	var result strings.Builder
-	for _, word := range words {
-		if len(word) > 0 {
-			result.WriteString(strings.ToUpper(string(word[0])))
-			result.WriteString(strings.ToLower(word[1:]))
-		}
-	}
-
-	// Apply ID suffix fix
-	return fixIDSuffixes(result.String())
+	return naming.PascalCase(s)
 }
 
 func toCamelCase(s string) string {
@@ -784,20 +570,18 @@ func toCamelCase(s string) string {
 	return strings.ToLower(string(pascal[0])) + pascal[1:]
 }
 
-func toSnakeCase(s string) string {
-	if s == "" {
-		return ""
-	}
-
+// operationFileName is the file an operation is written to: its id with every capital
+// turned into an underscore and a lower-case letter. Only a file name, not an identifier,
+// so acronyms are not kept together (`getAIEndpoint` is `get_a_i_endpoint.go`).
+func operationFileName(operationID string) string {
 	var result strings.Builder
-	for i, r := range s {
+	for i, r := range operationID {
 		if i > 0 && r >= 'A' && r <= 'Z' {
 			result.WriteRune('_')
 		}
 		result.WriteRune(r)
 	}
-
-	return strings.ToLower(result.String())
+	return strings.ToLower(result.String()) + ".go"
 }
 
 func convertPathToGoFormat(path string) string {
@@ -892,12 +676,7 @@ func extractTypeFromRef(ref string) string {
 }
 
 func toGoStructName(name string) string {
-	// Preserve exact casing for certain names to avoid conflicts
-	if name == "WireGuard" {
-		return "WireGuard"
-	}
-	// Use the same PascalCase logic as the model generator
-	return toPascalCaseForTypes(name)
+	return naming.StructName(name)
 }
 
 func toPascalCaseForTypes(s string) string {
@@ -941,74 +720,6 @@ func toPascalCaseForTypes(s string) string {
 	return result
 }
 
-func derivePackageFromPath(path string) string {
-	// Extract package name from path like /v4/addon-providers/addon-pulsar/...
-	parts := strings.Split(strings.Trim(path, "/"), "/")
-	for i, part := range parts {
-		if part == "addon-providers" && i+1 < len(parts) {
-			next := parts[i+1]
-			if after, ok := strings.CutPrefix(next, "addon-"); ok {
-				return after
-			}
-		}
-	}
-
-	// Fallback to first meaningful part
-	if len(parts) > 1 {
-		return toSnakeCase(parts[1])
-	}
-
-	return "unknown"
-}
-
-func fixIDSuffixes(s string) string {
-	// Fix common Go naming conventions for ID-related suffixes
-	// This ensures getPulsar becomes GetPulsar, getId becomes GetID, etc.
-	replacements := map[string]string{
-		"Id":   "ID",
-		"Ip":   "IP",
-		"Ipam": "IPAM",
-		"Url":  "URL",
-		"Uri":  "URI",
-		"Api":  "API",
-		"Tls":  "TLS",
-		"Ttl":  "TTL",
-		"Sql":  "SQL",
-		"Http": "HTTP",
-		"Https": "HTTPS",
-		"Json": "JSON",
-		"Xml":  "XML",
-		"Uuid": "UUID",
-	}
-
-	for old, new := range replacements {
-		// Replace at the end of the string (suffix)
-		if strings.HasSuffix(s, old) {
-			s = strings.TrimSuffix(s, old) + new
-			continue
-		}
-
-		// Replace in the middle when followed by another capital letter (A-Z)
-		for i := 'A'; i <= 'Z'; i++ {
-			next := string(i)
-			s = strings.ReplaceAll(s, old+next, new+next)
-		}
-	}
-
-	return s
-}
-
-// getPackageNameFromService determines the package name for a given service name
-// using SERVICE_NAME_EXCEPTIONS and falling back to snake_case conversion
-func getPackageNameFromService(serviceName string) string {
-	// Check SERVICE_NAME_EXCEPTIONS first
-	if exceptionName, hasException := SERVICE_NAME_EXCEPTIONS[serviceName]; hasException {
-		return exceptionName
-	}
-	// Fall back to snake_case conversion
-	return toSnakeCase(serviceName)
-}
-
 func isReservedWord(word string) bool {
 	reservedWords := map[string]bool{
 		"break": true, "case": true, "chan": true, "const": true, "continue": true,
@@ -1020,31 +731,15 @@ func isReservedWord(word string) bool {
 	return reservedWords[word]
 }
 
-// applyMappingRules applies the mapping rules from SERVICE_MAPPING_EXCEPTIONS.md
-func applyMappingRules(operationID, path string, tags []string) string {
-	// Rule 1: Toute opération avec "pulsar" dans le path → service pulsar
-	if strings.Contains(strings.ToLower(path), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 2: Toute opération avec "Pulsar" dans l'operationId → service pulsar
-	if strings.Contains(operationID, "Pulsar") || strings.Contains(strings.ToLower(operationID), "pulsar") {
-		return "pulsar"
-	}
-
-	// Rule 3: Operations avec tag "pulsar" → service pulsar
-	for _, tag := range tags {
-		if strings.ToLower(tag) == "pulsar" {
-			return "pulsar"
-		}
-	}
-
-	// No mapping rule applies
-	return ""
-}
-
-// fileExists checks if a file exists
-func fileExists(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil
+// sanitizeComment makes spec prose safe to embed in a Go block comment.
+//
+// Descriptions in the AXO spec are the handlers' Rust doc comments, so they carry prose that a
+// Scala-generated spec never did: Markdown, MIME wildcards like `*/*`, and globs like
+// `KV_*/REDIS_*`. Each of those contains `*/`, which closes the generated block comment early
+// and leaves the remainder of the description as bare tokens — "expected declaration, found '*'".
+// Three operations trip this today (updateOrganisationAvatar, get_ping, createMateriaKv).
+//
+// The sequence is spaced rather than dropped so the prose still reads correctly.
+func sanitizeComment(text string) string {
+	return strings.ReplaceAll(text, "*/", "* /")
 }

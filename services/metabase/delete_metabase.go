@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Deletemetabase
+Deletemetabase Deprovision a Metabase add-on
 
-deprovision an existing metabase
+Called by the platform when a customer deletes a Metabase add-on. Deletes its Java application, PostgreSQL add-on and DNS record, then marks the add-on as deleted. Answers 404 for an unknown or already deleted add-on; a failed teardown answers 500 and keeps the add-on, so the call can be retried.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
 
 # Returns the operation result or an error
 

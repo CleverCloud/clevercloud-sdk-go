@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getpulsarv2
+Getpulsarv2 Read a Pulsar add-on (provider view)
 
-# Get a Pulsar
+Called by the platform's add-on broker. Returns the add-on's view, including its tenant, namespace, cluster, plan, status and access token. An unknown or inactive add-on answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 
