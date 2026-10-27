@@ -12,9 +12,9 @@ import (
 )
 
 /*
-Listregions
+Listregions List the available zones
 
-# List available regions
+Returns the active zones the caller may deploy to. No credential is required: an anonymous caller gets the public zones, and an OAuth1 caller also gets the private zones granted to their organisations, minus the zones those organisations are restricted from. A repeated or malformed query parameter answers 400 (plain text).
 
 Parameters:
   - ctx: context for the request

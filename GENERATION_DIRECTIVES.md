@@ -185,16 +185,50 @@ var (
 ## Commandes de Génération
 
 ```bash
-# Télécharger la spec
-curl -o api-spec.yaml https://api.clever-cloud.com/v4/ovd/swagger/docs.yaml
-
-# Générer le code (à implémenter)
-go run cmd/generate/main.go -spec api-spec.yaml -output .
+# Le document source est le document OpenAPI public servi par l'API Clever Cloud
+# (https://api.clever-cloud.com/openapi.json). `make build` le télécharge dans gen/openapi.json ;
+# OPENAPI=<fichier> pour en utiliser une autre copie, `make fetch-openapi` pour le rafraîchir.
+cd gen
+make build                                   # téléchargement + clean + models + services + builder
+make build OPENAPI=/chemin/vers/openapi.json
+make check                                   # les générateurs et le SDK compilent
+make test-generators                         # tests de gen/internal (normalisation, nommage, types)
 
 # Mettre à jour les dépendances
-go mod tidy
-go mod vendor
+cd .. && go mod tidy && go mod vendor
 ```
+
+### Normalisation du document (`gen/internal/spec`)
+
+`spec.Load` charge le document et garantit ce que les générateurs supposent ; le document public
+le respecte déjà, ces règles servent de garde-fou et chaque décision est journalisée :
+
+- une opération dont un `$ref` ne résout pas est abandonnée ;
+- deux chemins qui ne diffèrent que par le nom d'un paramètre (`{addon_id}` / `{addonId}`)
+  sont une seule route : on garde celle qui porte un `x-service`, sinon celle qui a des
+  tags, sinon la première par ordre alphabétique ;
+- un `operationId` déjà pris reçoit un suffixe dérivé du chemin, après application de
+  `naming.OperationIDOverrides` ; le journal indique la clé à ajouter pour choisir ;
+- une opération sans `x-service` en reçoit un depuis son premier tag, sinon depuis son
+  chemin ;
+- un paramètre de chemin nommé par le template mais non déclaré est déclaré (string).
+
+### Types des payloads (`gen/internal/gotype`)
+
+Le type Go d'un corps de requête ou d'une réponse est dérivé une seule fois, pour le
+générateur de services et celui du builder : composant (`*models.X` en entrée, `models.X`
+en sortie), tableau, map (`map[string]string`), scalaire, `any` pour un schéma vide. Un
+objet inline avec des propriétés devient une struct nommée d'après l'opération
+(`UpdateaddoninfoBody`, `<Opération>Response`), déclarée dans le package du service et
+référencée depuis le builder. Le media type est choisi de façon déterministe
+(`application/json` d'abord) ; un corps texte ou binaire que le client JSON ne sait pas
+envoyer ne produit pas de paramètre.
+
+### Nommage (`gen/internal/naming`)
+
+Les noms de packages (`PackageName`, table `ServicePackageExceptions`), de fonctions
+(`FunctionName`) et les exceptions par opération vivent dans un seul package utilisé par
+les générateurs de services et de builder.
 
 ## Points d'Extension
 

@@ -11,16 +11,16 @@ import (
 )
 
 /*
-Triggerpulsarnonpersistenttopicunload
+Triggerpulsarnonpersistenttopicunload Unload a non-persistent topic
 
-# Unload a non-persistent topic from Pulsar broker
+Asks the cluster to unload the topic from the broker serving it, so another broker takes it over; answers 204. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
-  - topic:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
+  - topic: Topic name, without the `persistent://` or `non-persistent://` prefix and the tenant/namespace part
 
 # Returns the operation result or an error
 

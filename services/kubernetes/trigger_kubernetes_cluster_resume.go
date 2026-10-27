@@ -12,20 +12,23 @@ import (
 )
 
 /*
-Triggerkubernetesclusterresume
+Triggerkubernetesclusterresume Resume a failed cluster
+
+Retries the operation that left the cluster `FAILED`: deployment, redeployment, upgrade or plugin reconcile; a failed deletion is a 409. The optional body sets the `drainPolicy` of the drains the retried operation runs, `STRICT` by default. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Triggerkubernetesclusterresume(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +37,14 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesClusterResume
 */
-func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
-	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Triggerkubernetesclusterresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ResumeClusterPayload) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "triggerKubernetesClusterResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/resume", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, nil)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

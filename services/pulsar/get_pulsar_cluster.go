@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getpulsarcluster
+Getpulsarcluster Read a Pulsar cluster
 
-# Get Pulsar cluster
+Returns one Pulsar cluster: endpoints, ports, version, zone, availability, cold storage support and supported plans. Any authenticated caller may read it. An unknown cluster answers 404.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - clusterId:
+  - clusterId: Pulsar cluster ID
 
 # Returns the operation result or an error
 

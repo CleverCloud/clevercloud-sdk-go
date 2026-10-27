@@ -12,20 +12,22 @@ import (
 )
 
 /*
-Assignkubernetescephcsiplugin
+Assignkubernetescephcsiplugin Enable the Ceph CSI storage driver of a cluster
+
+Deprecated: use the cluster update with `{"features":{"csi":true}}`. Records the storage driver enablement and returns the cluster; the driver is installed asynchronously. 404 when the cluster does not exist, 409 on a concurrent update, 412 unless the cluster is active. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Assignkubernetescephcsiplugin(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Assignkubernetescephcsiplugin(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +36,14 @@ Example:
 x-service: kubernetes
 operationId: assignKubernetesCephCSIPlugin
 */
-func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
-	ctx, span := tracer.Start(ctx, "assignKubernetesCephCSIPlugin", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Assignkubernetescephcsiplugin(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "assignKubernetesCephCSIPlugin", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/csi/ceph", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/csi/ceph", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Post[models.Cluster1](ctx, c, path, nil)
+	response := client.Post[models.KubernetesCluster](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

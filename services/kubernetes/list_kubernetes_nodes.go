@@ -12,20 +12,22 @@ import (
 )
 
 /*
-Listkubernetesnodes
+Listkubernetesnodes List the standalone nodes of a cluster
+
+Returns the cluster's standalone nodes that are not deleted, newest first; 404 when the organisation has no such cluster. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Listkubernetesnodes(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Listkubernetesnodes(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +36,11 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesNodes
 */
-func Listkubernetesnodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[[]models.StandaloneNode] {
-	ctx, span := tracer.Start(ctx, "listKubernetesNodes", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Listkubernetesnodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[[]models.StandaloneNode] {
+	ctx, span := tracer.Start(ctx, "listKubernetesNodes", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/nodes", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Get[[]models.StandaloneNode](ctx, c, path)

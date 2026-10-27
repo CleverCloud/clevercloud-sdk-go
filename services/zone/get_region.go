@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Getregion
+Getregion Get a zone
 
-# Get given region
+Returns one active zone by name, under the visibility rules of the zone list: no credential is required, and a private zone is found only by an OAuth1 caller whose organisation it is granted to. 404 when the zone is unknown, inactive or not visible to the caller; 400 (plain text) on a repeated or malformed query parameter.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - zoneName:
+  - zoneName: Zone name (e.g. `par`, `mtl`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

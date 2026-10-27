@@ -12,17 +12,17 @@ import (
 )
 
 /*
-Getnetworkgroupmember
+Getnetworkgroupmember Get a member of a network group
 
-# Get a Member of a NetworkGroup
+Returns the member; 404 when the network group or the member does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
-  - memberId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
+  - memberId: Member ID: the application, add-on, load balancer or external resource ID
 
 # Returns the operation result or an error
 

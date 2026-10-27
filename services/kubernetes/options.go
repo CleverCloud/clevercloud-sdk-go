@@ -13,32 +13,24 @@ type Option func(*Options)
 
 // Options holds query parameters for kubernetes operations
 type Options struct {
-	Limit      *int      `url:"limit,omitempty"`
-	Resourceid *[]string `url:"resourceId,omitempty"`
-	Since      *string   `url:"since,omitempty"`
-	Status     *[]string `url:"status,omitempty"`
-	Typeparam  *string   `url:"typeParam,omitempty"`
-	Until      *string   `url:"until,omitempty"`
+	Authorization *string   `url:"authorization,omitempty"`
+	Limit         *int64    `url:"limit,omitempty"`
+	Status        *[]string `url:"status,omitempty"`
+	Typeparam     *string   `url:"type,omitempty"`
+	Workers       *bool     `url:"workers,omitempty"`
+}
+
+// WithAuthorization sets the authorization query parameter
+func WithAuthorization(authorization string) Option {
+	return func(o *Options) {
+		o.Authorization = &authorization
+	}
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
-	}
-}
-
-// WithResourceid sets the resourceId query parameter
-func WithResourceid(resourceId []string) Option {
-	return func(o *Options) {
-		o.Resourceid = &resourceId
-	}
-}
-
-// WithSince sets the since query parameter
-func WithSince(since string) Option {
-	return func(o *Options) {
-		o.Since = &since
 	}
 }
 
@@ -49,17 +41,17 @@ func WithStatus(status []string) Option {
 	}
 }
 
-// WithTypeparam sets the typeParam query parameter
+// WithTypeparam sets the type query parameter
 func WithTypeparam(typeParam string) Option {
 	return func(o *Options) {
 		o.Typeparam = &typeParam
 	}
 }
 
-// WithUntil sets the until query parameter
-func WithUntil(until string) Option {
+// WithWorkers sets the workers query parameter
+func WithWorkers(workers bool) Option {
 	return func(o *Options) {
-		o.Until = &until
+		o.Workers = &workers
 	}
 }
 
@@ -71,23 +63,22 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Authorization != nil {
+		params = append(params, fmt.Sprintf("authorization=%s", url.QueryEscape(*options.Authorization)))
+	}
 	if options.Limit != nil {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
-	if options.Resourceid != nil {
-		params = append(params, fmt.Sprintf("resourceId=%v", *options.Resourceid))
-	}
-	if options.Since != nil {
-		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
-	}
 	if options.Status != nil {
-		params = append(params, fmt.Sprintf("status=%v", *options.Status))
+		for _, v := range *options.Status {
+			params = append(params, fmt.Sprintf("status=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 	if options.Typeparam != nil {
-		params = append(params, fmt.Sprintf("typeParam=%s", url.QueryEscape(*options.Typeparam)))
+		params = append(params, fmt.Sprintf("type=%s", url.QueryEscape(*options.Typeparam)))
 	}
-	if options.Until != nil {
-		params = append(params, fmt.Sprintf("until=%s", url.QueryEscape(*options.Until)))
+	if options.Workers != nil {
+		params = append(params, fmt.Sprintf("workers=%t", *options.Workers))
 	}
 
 	if len(params) == 0 {

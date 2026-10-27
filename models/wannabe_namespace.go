@@ -2,7 +2,8 @@
 
 package models
 
-// WannabeNamespace
+// WannabeNamespace A TCP or UDP redirection to create in a namespace. The platform allocates the port.
 type WannabeNamespace struct {
-	Location string `json:"location"`
+	Namespace  *string `json:"namespace,omitempty"`  // Namespace to create the redirection in.
+	SourcePort *int    `json:"sourcePort,omitempty"` // Ignored: the platform allocates the port.
 }

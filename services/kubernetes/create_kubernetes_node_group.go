@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Createkubernetesnodegroup
+Createkubernetesnodegroup Create a node group
+
+Creates a node group in the cluster and deploys it asynchronously; 409 when another node group of the cluster holds the name, 412 when the organisation's Kubernetes quota would be exceeded. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Createkubernetesnodegroup(ctx, client, tracer, ownerId, clusterId, requestBody)
+	response := kubernetes.Createkubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNodeGroup
 */
-func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "createKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "createKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, kubernetesId)
 
 	// Make API call
 	response := client.Post[models.NodeGroup](ctx, c, path, requestBody)

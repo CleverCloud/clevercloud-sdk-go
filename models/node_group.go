@@ -4,22 +4,23 @@ package models
 
 import "time"
 
-// NodeGroup
+// NodeGroup A node group of a Kubernetes cluster: a set of worker nodes sharing a flavor, taints and labels, ...
 type NodeGroup struct {
-	AutoscalingEnabled bool                  `json:"autoscalingEnabled"`
-	ClusterID          string                `json:"clusterId"`
-	CreatedAt          time.Time             `json:"createdAt"`
-	CurrentNodeCount   int                   `json:"currentNodeCount"`
-	Description        *StringMaxLength4096  `json:"description,omitempty"`
-	Flavor             NodeFlavor            `json:"flavor"`
-	ID                 string                `json:"id"`
-	Labels             MapLabelkeyLabelvalue `json:"labels"`
-	MaxNodeCount       int                   `json:"maxNodeCount"`
-	MinNodeCount       int                   `json:"minNodeCount"`
-	Name               NodeGroupName         `json:"name"`
-	Status             NodeGroupStatusType   `json:"status"`
-	Tag                *StringMaxLength1024  `json:"tag,omitempty"`
-	Taints             []KubernetesTaint     `json:"taints,omitempty"`
-	TargetNodeCount    int                   `json:"targetNodeCount"`
-	UpdatedAt          *time.Time            `json:"updatedAt,omitempty"`
+	AutoscalingEnabled bool                  `json:"autoscalingEnabled"`    // Whether node autoscaling is enabled for this group
+	ClusterID          string                `json:"clusterId"`             // Parent cluster ID
+	CreatedAt          time.Time             `json:"createdAt"`             // Creation date
+	CurrentNodeCount   int                   `json:"currentNodeCount"`      // Current number of nodes in the `READY` status
+	Description        *string               `json:"description,omitempty"` // Optional description
+	Failure            *NodeGroupFailureView `json:"failure,omitempty"`
+	Flavor             NodeFlavor            `json:"flavor"`              // Node flavor (VM size)
+	ID                 string                `json:"id"`                  // Node group ID
+	Labels             map[string]string     `json:"labels"`              // Kubernetes labels applied to nodes
+	MaxNodeCount       NodeGroupNodeCount    `json:"maxNodeCount"`        // Maximum number of nodes
+	MinNodeCount       NodeGroupNodeCount    `json:"minNodeCount"`        // Minimum number of nodes
+	Name               NodeGroupName         `json:"name"`                // Node group name
+	Status             NodeGroupStatusType   `json:"status"`              // Node group status
+	Tag                *string               `json:"tag,omitempty"`       // Optional tag
+	Taints             []KubernetesTaint     `json:"taints"`              // Kubernetes taints applied to nodes
+	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"`     // Target number of nodes
+	UpdatedAt          *time.Time            `json:"updatedAt,omitempty"` // Last update date
 }

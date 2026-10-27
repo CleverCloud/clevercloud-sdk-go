@@ -2,7 +2,7 @@
 
 package models
 
-// PublicMigrationEntry
+// PublicMigrationEntry A special migration step for one plugin when a cluster moves from one Kubernetes version (`fromK8...
 type PublicMigrationEntry struct {
 	FromK8s  string               `json:"fromK8s"`
 	Plugin   PluginName           `json:"plugin"`

@@ -2,19 +2,21 @@
 
 package models
 
-// ClusterItemType represents
+// ClusterItemType represents Kind of infrastructure resource a cluster item records: network group, load balancer, storage, co...
 type ClusterItemType string
 
 const (
-	ClusterItemTypeComponentBundle     ClusterItemType = "COMPONENT_BUNDLE"
-	ClusterItemTypeLoadbalancerNetwork ClusterItemType = "LOADBALANCER_NETWORK"
-	ClusterItemTypeLoadBalancer        ClusterItemType = "LOAD_BALANCER"
-	ClusterItemTypeMateriaLogicaldb    ClusterItemType = "MATERIA_LOGICALDB"
 	ClusterItemTypeNetworkGroup        ClusterItemType = "NETWORK_GROUP"
-	ClusterItemTypeNodeGroup           ClusterItemType = "NODE_GROUP"
-	ClusterItemTypeOtelConfig          ClusterItemType = "OTEL_CONFIG"
-	ClusterItemTypePLUGIN              ClusterItemType = "PLUGIN"
+	ClusterItemTypeLoadBalancer        ClusterItemType = "LOAD_BALANCER"
 	ClusterItemTypeSTORAGE             ClusterItemType = "STORAGE"
+	ClusterItemTypeComponentBundle     ClusterItemType = "COMPONENT_BUNDLE"
+	ClusterItemTypeNodeGroup           ClusterItemType = "NODE_GROUP"
+	ClusterItemTypeLoadbalancerNetwork ClusterItemType = "LOADBALANCER_NETWORK"
+	ClusterItemTypeOtelConfig          ClusterItemType = "OTEL_CONFIG"
+	ClusterItemTypeMateriaLogicaldb    ClusterItemType = "MATERIA_LOGICALDB"
+	ClusterItemTypePLUGIN              ClusterItemType = "PLUGIN"
+	ClusterItemTypeApiServerDns        ClusterItemType = "API_SERVER_DNS"
+	ClusterItemTypeApiServerSni        ClusterItemType = "API_SERVER_SNI"
 )
 
 // String returns the underlying string value

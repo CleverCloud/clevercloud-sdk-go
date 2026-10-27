@@ -2,17 +2,18 @@
 
 package models
 
-// PulsarCluster
+// PulsarCluster A Pulsar cluster: its endpoints and ports, version, zone, availability and the plans it supports.
 type PulsarCluster struct {
-	Available          bool         `json:"available"`
-	ID                 string       `json:"id"`
-	PulsarPort         int          `json:"pulsar_port"`
-	PulsarTLSPort      *int         `json:"pulsar_tls_port,omitempty"`
-	SupportColdStorage bool         `json:"support_cold_storage"`
-	SupportedPlans     []PulsarPlan `json:"supported_plans,omitempty"`
-	URL                string       `json:"url"`
-	Version            string       `json:"version"`
-	WebPort            *int         `json:"web_port,omitempty"`
-	WebTLSPort         *int         `json:"web_tls_port,omitempty"`
-	Zone               string       `json:"zone"`
+	AdminHost          *string  `json:"admin_host,omitempty"`      // Host the platform's own calls to the cluster's admin API use when it differs from `url`; `null` m...
+	Available          bool     `json:"available"`                 // Whether this cluster is available for new addons
+	ID                 string   `json:"id"`                        // Cluster identifier
+	PulsarPort         int      `json:"pulsar_port"`               // Pulsar binary protocol port
+	PulsarTLSPort      *int     `json:"pulsar_tls_port,omitempty"` // Pulsar TLS binary protocol port
+	SupportColdStorage bool     `json:"support_cold_storage"`      // Whether cold storage (Cellar offload) is supported
+	SupportedPlans     []string `json:"supported_plans"`           // Plans available on this cluster
+	URL                string   `json:"url"`                       // Cluster hostname/URL
+	Version            string   `json:"version"`                   // Pulsar version running on this cluster
+	WebPort            *int     `json:"web_port,omitempty"`        // HTTP admin port
+	WebTLSPort         *int     `json:"web_tls_port,omitempty"`    // HTTPS admin port
+	Zone               string   `json:"zone"`                      // Zone/location identifier
 }

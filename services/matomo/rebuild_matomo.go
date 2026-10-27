@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Rebuildmatomo
+Rebuildmatomo Rebuild a Matomo add-on
 
-rebuild Matomo application
+Redeploys the add-on's PHP application without build cache. Answers 400 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

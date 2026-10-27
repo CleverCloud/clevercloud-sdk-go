@@ -1,5 +1,11 @@
 module go.clever-cloud.dev/sdk
 
+// v0.3.0 and v0.3.1 were generated from a document that is not the public one.
+retract (
+	v0.3.1
+	v0.3.0
+)
+
 go 1.24.0
 
 require (

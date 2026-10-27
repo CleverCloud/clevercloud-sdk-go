@@ -2,8 +2,8 @@
 
 package models
 
-// StorageConfigurationPolicies
+// StorageConfigurationPolicies One side of a namespace storage policy: a size limit and a duration limit. In a response, an abse...
 type StorageConfigurationPolicies struct {
-	DurationInMinutes *int `json:"durationInMinutes,omitempty"`
-	SizeInBytes       *int `json:"sizeInBytes,omitempty"`
+	DurationInMinutes *int `json:"durationInMinutes,omitempty"` // Duration limit in minutes.
+	SizeInBytes       *int `json:"sizeInBytes,omitempty"`       // Size limit, in bytes. A retention size is applied in whole MiB, rounded down.
 }

@@ -2,11 +2,18 @@
 
 package models
 
-// NetworkGroup
+// NetworkGroup A network group: a private WireGuard mesh with its address range, its members and their peers.
 type NetworkGroup struct {
-	ID         string             `json:"id"`
-	Network    Network1           `json:"network"`
-	OwnerID    string             `json:"ownerId"`
-	Peers      []NetworkGroupPeer `json:"peers,omitempty"`
-	PrivateKey string             `json:"privateKey"`
+	Description       *string    `json:"description,omitempty"`       // Optional description.
+	DnsSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"` // The label sanitized for DNS use, when it was derived at creation; null on older groups.
+	ID                string     `json:"id"`                          // Unique network group ID.
+	Label             string     `json:"label"`                       // Human-readable label.
+	LastAllocatedIP   string     `json:"lastAllocatedIp"`             // The mesh address allocated last: the next peer address is allocated after it, wrapping around the...
+	Members           []Member   `json:"members"`                     // Members of this network group.
+	NetworkIP         string     `json:"networkIp"`                   // CIDR block for this network group (e.g. "10.101.0.0/16").
+	OwnerID           string     `json:"ownerId"`                     // Owner organisation ID.
+	Ownership         *Ownership `json:"ownership,omitempty"`
+	Peers             []Peer     `json:"peers"`   // Peers.
+	Tags              []string   `json:"tags"`    // Semantic tags.
+	Version           int        `json:"version"` // Optimistic concurrency version: a monotonically increasing counter.
 }

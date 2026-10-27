@@ -2,7 +2,7 @@
 
 package models
 
-// MetabasePatchRequest
+// MetabasePatchRequest Version to switch a Metabase add-on to.
 type MetabasePatchRequest struct {
-	TargetVersion string `json:"targetVersion"`
+	TargetVersion string `json:"targetVersion"` // Target version to upgrade/downgrade to.
 }

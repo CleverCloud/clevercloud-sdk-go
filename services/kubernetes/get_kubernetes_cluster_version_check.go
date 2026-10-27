@@ -4,6 +4,7 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -12,20 +13,23 @@ import (
 )
 
 /*
-Getkubernetesclusterversioncheck
+Getkubernetesclusterversioncheck Check whether a cluster can be upgraded
+
+Returns the cluster's installed Kubernetes version, the available and latest versions, and whether an upgrade is available. With `workers=true`, also reports the kubelet versions the nodes actually run. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubernetesclusterversioncheck(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Getkubernetesclusterversioncheck(ctx, client, tracer, ownerId, kubernetesId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,11 +38,17 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesClusterVersionCheck
 */
-func Getkubernetesclusterversioncheck(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.ClusterVersionCheck] {
-	ctx, span := tracer.Start(ctx, "getKubernetesClusterVersionCheck", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Getkubernetesclusterversioncheck(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, opts ...Option) client.Response[models.ClusterVersionCheck] {
+	ctx, span := tracer.Start(ctx, "getKubernetesClusterVersionCheck", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/version/check", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/version/check", ownerId, kubernetesId)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Get[models.ClusterVersionCheck](ctx, c, path)

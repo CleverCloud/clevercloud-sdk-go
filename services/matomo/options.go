@@ -2,26 +2,11 @@
 
 package matomo
 
-import (
-	"fmt"
-	"net/url"
-	"strings"
-)
-
 // Option defines a functional option for matomo operations
 type Option func(*Options)
 
 // Options holds query parameters for matomo operations
-type Options struct {
-	Keycloaktoken *string `url:"keycloakToken,omitempty"`
-}
-
-// WithKeycloaktoken sets the keycloakToken query parameter
-func WithKeycloaktoken(keycloakToken string) Option {
-	return func(o *Options) {
-		o.Keycloaktoken = &keycloakToken
-	}
-}
+type Options struct{}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -29,14 +14,5 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-
-	var params []string
-	if options.Keycloaktoken != nil {
-		params = append(params, fmt.Sprintf("keycloakToken=%s", url.QueryEscape(*options.Keycloaktoken)))
-	}
-
-	if len(params) == 0 {
-		return ""
-	}
-	return strings.Join(params, "&")
+	return ""
 }

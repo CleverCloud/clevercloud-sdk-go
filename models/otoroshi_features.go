@@ -2,7 +2,7 @@
 
 package models
 
-// OtoroshiFeatures
+// OtoroshiFeatures Optional features of an Otoroshi add-on. `networkGroup` is null when the add-on is not linked to ...
 type OtoroshiFeatures struct {
-	NetworkGroup *OtoroshiNetworkGroup `json:"networkGroup,omitempty"`
+	NetworkGroup *OtoroshiNetworkGroupView `json:"networkGroup,omitempty"`
 }

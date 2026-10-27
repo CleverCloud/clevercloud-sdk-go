@@ -2,7 +2,7 @@
 
 package models
 
-// OtoroshiPatchRequest
+// OtoroshiPatchRequest Version to switch an Otoroshi add-on to.
 type OtoroshiPatchRequest struct {
-	TargetVersion string `json:"targetVersion"`
+	TargetVersion string `json:"targetVersion"` // Target version; it must be one of the versions on offer.
 }

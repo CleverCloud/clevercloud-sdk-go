@@ -2,7 +2,7 @@
 
 package models
 
-// StoragePolicies
+// StoragePolicies Storage policies of a Pulsar namespace: its retention limits (`retentionPolicies`) and the thresh...
 type StoragePolicies struct {
 	OffloadPolicies   *StorageConfigurationPolicies `json:"offloadPolicies,omitempty"`
 	RetentionPolicies *StorageConfigurationPolicies `json:"retentionPolicies,omitempty"`

@@ -13,15 +13,15 @@ import (
 )
 
 /*
-Listnetworkgroupcomponents
+Listnetworkgroupcomponents Search the network groups of an organisation
 
-# Search a Network Group component (network group, member, or peer by its id or label
+Case-insensitive substring search of `query` over the IDs, labels and tags of the organisation's network groups and the IDs and labels of their members and peers. Returns every match as one flat list of groups, members and peers. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

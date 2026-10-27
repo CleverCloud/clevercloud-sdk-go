@@ -2,7 +2,7 @@
 
 package models
 
-// NetworkGroupOrigin represents
+// NetworkGroupOrigin represents Origin of a cluster's network group: `SYSTEM_CREATED` when the platform created it with the clust...
 type NetworkGroupOrigin string
 
 const (

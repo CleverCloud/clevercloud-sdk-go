@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Getconfigurationprovider
+Getconfigurationprovider Get a configuration provider add-on
+
+Returns the add-on with its environment variables. Answers 404 for an unknown or deleted add-on. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: Configuration provider add-on ID (`config_…`)
 
 # Returns the operation result or an error
 

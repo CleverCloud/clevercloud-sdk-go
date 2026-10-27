@@ -12,21 +12,23 @@ import (
 )
 
 /*
-Triggerkubernetesnodegroupresume
+Triggerkubernetesnodegroupresume Resume a node group stuck while deploying
+
+Asks for the deployment of a `DEPLOYING` node group to be resumed; the node group is returned still `DEPLOYING`. 409 when the cluster is not active or the node group is already being handled, 412 when the node group is not `DEPLOYING` (a `FAILED` one is retried automatically). Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
-  - nodeGroupId: A Kubernetes node group identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
+  - nodeGroupId: Node group ID (`node_group_` or `nodeGroup_` followed by a ULID or a UUID; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Triggerkubernetesnodegroupresume(ctx, client, tracer, ownerId, clusterId, nodeGroupId)
+	response := kubernetes.Triggerkubernetesnodegroupresume(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,11 +37,11 @@ Example:
 x-service: kubernetes
 operationId: triggerKubernetesNodeGroupResume
 */
-func Triggerkubernetesnodegroupresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, nodeGroupId string) client.Response[models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "triggerKubernetesNodeGroupResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId), attribute.String("nodeGroupId", nodeGroupId)))
+func Triggerkubernetesnodegroupresume(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "triggerKubernetesNodeGroupResume", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s/resume", ownerId, clusterId, nodeGroupId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups/%s/resume", ownerId, kubernetesId, nodeGroupId)
 
 	// Make API call
 	response := client.Post[models.NodeGroup](ctx, c, path, nil)

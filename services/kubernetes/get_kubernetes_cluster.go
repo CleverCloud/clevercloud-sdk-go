@@ -12,20 +12,22 @@ import (
 )
 
 /*
-Getkubernetescluster
+Getkubernetescluster Get a Kubernetes cluster
+
+Returns the cluster; 404 when the organisation has no such cluster. `apiServerUrl` is the API server URL the default kubeconfig uses, absent until the cluster has one; a failed cluster or node group carries `failure`, a cluster waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Getkubernetescluster(ctx, client, tracer, ownerId, clusterId)
+	response := kubernetes.Getkubernetescluster(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +36,14 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesCluster
 */
-func Getkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string) client.Response[models.Cluster1] {
-	ctx, span := tracer.Start(ctx, "getKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Getkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+	ctx, span := tracer.Start(ctx, "getKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s", ownerId, kubernetesId)
 
 	// Make API call
-	response := client.Get[models.Cluster1](ctx, c, path)
+	response := client.Get[models.KubernetesCluster](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

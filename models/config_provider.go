@@ -4,10 +4,10 @@ package models
 
 import "time"
 
-// ConfigProvider
+// ConfigProvider A configuration provider add-on with the environment variables it holds.
 type ConfigProvider struct {
-	CreationDate time.Time `json:"creation_date"`
-	Env          []EnvVar  `json:"env,omitempty"`
-	ID           AddonID   `json:"id"`
-	OwnerID      *OwnerID  `json:"owner_id,omitempty"`
+	CreationDate time.Time       `json:"creation_date"`      // Creation date of the add-on (RFC 3339).
+	Env          []WannabeEnvVar `json:"env"`                // Environment variables the add-on holds.
+	ID           string          `json:"id"`                 // Configuration provider add-on ID (`config_…`).
+	OwnerID      *string         `json:"owner_id,omitempty"` // ID of the owner: a user or an organisation.
 }

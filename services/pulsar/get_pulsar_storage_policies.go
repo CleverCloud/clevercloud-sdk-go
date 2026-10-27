@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getpulsarstoragepolicies
+Getpulsarstoragepolicies Read a Pulsar add-on's storage policies
 
-# Get Pulsar namespace policies
+Returns the retention and offload (cold storage) policies of the add-on's namespace: sizes in bytes, durations in minutes, an unset limit omitted. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - pulsarId:
+  - pulsarId: Pulsar add-on ID (`pulsar_…`)
 
 # Returns the operation result or an error
 

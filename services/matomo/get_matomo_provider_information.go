@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Getmatomoproviderinformation
+Getmatomoproviderinformation Get the Matomo provider information
 
-retrieve the Matomo provider information
+Returns the Matomo versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +33,14 @@ Example:
 x-service: matomo
 operationId: getMatomoProviderInformation
 */
-func Getmatomoproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getmatomoproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMatomoProviderInformation")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-matomo")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

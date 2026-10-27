@@ -13,21 +13,23 @@ import (
 )
 
 /*
-Listkubernetesnodegroups
+Listkubernetesnodegroups List the node groups of a cluster
+
+Returns the cluster's node groups, standalone nodes excluded, whose stored status is in `status` (every status but `DELETED` by default); `currentNodeCount` counts the ready nodes. 404 when the organisation has no such cluster, 400 on an unknown status. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - clusterId: A Kubernetes cluster identifier
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - kubernetesId: Cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`; any other shape is a 400)
   - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := kubernetes.Listkubernetesnodegroups(ctx, client, tracer, ownerId, clusterId, opts...)
+	response := kubernetes.Listkubernetesnodegroups(ctx, client, tracer, ownerId, kubernetesId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +38,11 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesNodeGroups
 */
-func Listkubernetesnodegroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, clusterId string, opts ...Option) client.Response[[]models.NodeGroup] {
-	ctx, span := tracer.Start(ctx, "listKubernetesNodeGroups", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("clusterId", clusterId)))
+func Listkubernetesnodegroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, opts ...Option) client.Response[[]models.NodeGroup] {
+	ctx, span := tracer.Start(ctx, "listKubernetesNodeGroups", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
-	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, clusterId)
+	path := utils.Path("/v4/kubernetes/organisations/%s/clusters/%s/node-groups", ownerId, kubernetesId)
 
 	// Build query parameters
 	query := buildQueryString(opts...)

@@ -2,17 +2,20 @@
 
 package models
 
-// PluginName represents
+// PluginName represents Name of a plugin (add-on) the platform installs inside a cluster.
 type PluginName string
 
 const (
 	PluginNameCILIUM           PluginName = "CILIUM"
 	PluginNameCoreDns          PluginName = "CORE_DNS"
 	PluginNameCsrApprover      PluginName = "CSR_APPROVER"
-	PluginNameKONNECTIVITY     PluginName = "KONNECTIVITY"
-	PluginNameKubeStateMetrics PluginName = "KUBE_STATE_METRICS"
 	PluginNameMetricsServer    PluginName = "METRICS_SERVER"
+	PluginNameKONNECTIVITY     PluginName = "KONNECTIVITY"
 	PluginNameOtelCollector    PluginName = "OTEL_COLLECTOR"
+	PluginNameKubeStateMetrics PluginName = "KUBE_STATE_METRICS"
+	PluginNameCephCsi          PluginName = "CEPH_CSI"
+	PluginNameKARPENTER        PluginName = "KARPENTER"
+	PluginNameClusterCore      PluginName = "CLUSTER_CORE"
 )
 
 // String returns the underlying string value

@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Getkubernetesquota
+Getkubernetesquota Get the Kubernetes quota of an organisation
+
+Returns the organisation's Kubernetes resource ceilings, the platform defaults unless they were raised. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
 
 # Returns the operation result or an error
 

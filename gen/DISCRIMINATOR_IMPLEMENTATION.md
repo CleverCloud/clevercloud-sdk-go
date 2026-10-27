@@ -292,7 +292,7 @@ Si d'autres types union sont découverts dans l'API :
 
 ## 📚 Références
 
-- **Spec OpenAPI** : `/home/miton/code/scala/ovd3/server/openapi.all.json`
+- **Spec OpenAPI** : https://api.clever-cloud.com/openapi.json
 - **Implémentation Peer** : `models/peer_union_impl.go`
 - **Implémentation WireguardEndpoint** : `models/wireguard_endpoint_impl.go`
 - **Tests** : `models/peer_union_test.go`

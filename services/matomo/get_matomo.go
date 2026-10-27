@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getmatomo
+Getmatomo Get a Matomo add-on
 
-get a Matomo
+Returns the add-on: access URL, installed and available versions, PHP version, backing resources and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMatomoId:
+  - addonMatomoId: Matomo add-on ID (`matomo_…`)
 
 # Returns the operation result or an error
 

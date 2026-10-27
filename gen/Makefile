@@ -1,8 +1,18 @@
 # Makefile for Clever Cloud SDK
 
+# The document the SDK is generated from: the public OpenAPI document the Clever Cloud
+# API serves. `make build` downloads it to $(OPENAPI) first; to generate from another
+# copy, pass its path and skip the download:
+#   make build OPENAPI=/path/to/openapi.json
+# (SPEC is the variables file of `make generate-app`, a different document.)
+OPENAPI_URL ?= https://api.clever-cloud.com/openapi.json
+OPENAPI ?= openapi.json
+
 .PHONY: help
 help:
 	@echo "Clever Cloud SDK - Code Generation"
+	@echo ""
+	@echo "OpenAPI document: $(OPENAPI)"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  make all                - Generate all code and run checks"
@@ -14,6 +24,7 @@ help:
 	@echo "  make check              - Check that generators and SDK compile"
 	@echo "  make check-generators   - Check that all generators compile"
 	@echo "  make check-sdk          - Check that SDK compiles"
+	@echo "  make test-generators    - Run the generators' own tests"
 	@echo "  make test-sdk           - Run SDK tests"
 	@echo "  make clean              - Remove all generated files"
 	@echo ""
@@ -27,14 +38,24 @@ all: build check
 # for schemas present in the spec — they never delete — so orphans must be
 # swept before each build.
 .PHONY: build
-build: clean generate-models generate-services generate-builder
+build: $(OPENAPI) clean generate-models generate-services generate-builder
+
+# Download the public document. Delete the file (or `make fetch-openapi`) to refresh it.
+openapi.json:
+	@echo "📥 Downloading $(OPENAPI_URL)..."
+	@curl -fsSL -o $@ $(OPENAPI_URL)
+
+.PHONY: fetch-openapi
+fetch-openapi:
+	@rm -f openapi.json
+	@$(MAKE) openapi.json
 
 .PHONY: generate-models
 generate-models:
 	@echo "🔨 Generating models..."
 	go run \
 		./cmd/generate-models/main.go \
-		--spec ../../../scala/ovd3/server/openapi.all.json \
+		--spec $(OPENAPI) \
 		--output ../models
 
 .PHONY: generate-services
@@ -42,7 +63,7 @@ generate-services:
 	@echo "🔨 Generating services..."
 	go run \
 		./cmd/generate-services/main.go \
-		--spec ../../../scala/ovd3/server/openapi.all.json \
+		--spec $(OPENAPI) \
 		--output ../services
 
 .PHONY: generate-builder
@@ -50,7 +71,7 @@ generate-builder:
 	@echo "🔨 Generating builder..."
 	go run \
 		./cmd/generate-builder/main.go \
-		--spec ../../../scala/ovd3/server/openapi.all.json \
+		--spec $(OPENAPI) \
 		--output ../builder.go
 
 # The description of the application environment variables is not part of
@@ -82,6 +103,11 @@ check-sdk:
 	@cd .. && go build ./...
 	@echo "✅ SDK compiles successfully"
 
+.PHONY: test-generators
+test-generators:
+	@echo "🧪 Running generator tests..."
+	@go test ./internal/...
+
 .PHONY: test-sdk
 test-sdk:
 	@echo "🧪 Running SDK tests..."
@@ -96,4 +122,6 @@ clean:
 	@# is rewritten on the next `make generate-models`.
 	@find ../models -type f -name '*.go' ! -name '*_test.go' -delete 2>/dev/null || true
 	@find ../services -type f -name '*.go' ! -name '*_test.go' -delete 2>/dev/null || true
+	@# A package the spec no longer tags leaves an empty directory behind; sweep those too.
+	@find ../services -mindepth 1 -type d -empty -delete 2>/dev/null || true
 	@echo "✅ Clean complete"

@@ -2,15 +2,15 @@
 
 package models
 
-// StandaloneNode
+// StandaloneNode A standalone node of a cluster: a single node managed on its own, with its flavor, taints, labels...
 type StandaloneNode struct {
-	ClusterID   string                `json:"clusterId"`
-	Description *string               `json:"description,omitempty"`
-	Flavor      NodeFlavor            `json:"flavor"`
-	ID          string                `json:"id"`
-	Labels      MapLabelkeyLabelvalue `json:"labels"`
-	Name        string                `json:"name"`
-	Status      NodeStatusType        `json:"status"`
-	Tag         *string               `json:"tag,omitempty"`
-	Taints      []KubernetesTaint     `json:"taints,omitempty"`
+	ClusterID   string            `json:"clusterId"`             // Parent cluster ID
+	Description *string           `json:"description,omitempty"` // Optional description
+	Flavor      NodeFlavor        `json:"flavor"`                // Node flavor
+	ID          string            `json:"id"`                    // Node ID (the standalone node group's id)
+	Labels      map[string]string `json:"labels"`                // Kubernetes labels
+	Name        NodeGroupName     `json:"name"`                  // Node name
+	Status      NodeStatusType    `json:"status"`                // Node status
+	Tag         *string           `json:"tag,omitempty"`         // Optional tag
+	Taints      []KubernetesTaint `json:"taints"`                // Kubernetes taints
 }

@@ -2,8 +2,8 @@
 
 package models
 
-// ReplicationFactorConfig
+// ReplicationFactorConfig Bounds of the control-plane replication factor, inclusive.
 type ReplicationFactorConfig struct {
-	Max int `json:"max"`
-	Min int `json:"min"`
+	Max int `json:"max"` // Maximum replication factor
+	Min int `json:"min"` // Minimum replication factor
 }

@@ -2,8 +2,8 @@
 
 package models
 
-// KubernetesServiceConfig
+// KubernetesServiceConfig Configuration of the Kubernetes product: the flavors and replication-factor bounds of each contro...
 type KubernetesServiceConfig struct {
-	Topologies []TopologyConstraints `json:"topologies,omitempty"`
-	Versions   VersionsConfig        `json:"versions"`
+	Topologies []TopologyConstraints `json:"topologies"` // The three topologies with their constraints.
+	Versions   VersionsConfig        `json:"versions"`   // The configured version policy.
 }

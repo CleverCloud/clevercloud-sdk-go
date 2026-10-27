@@ -2,13 +2,13 @@
 
 package models
 
-// MetabasePlanIdentifier represents
+// MetabasePlanIdentifier represents Plan of a Metabase add-on. A plan not recognised at provisioning resolves to `BETA`.
 type MetabasePlanIdentifier string
 
 const (
 	MetabasePlanIdentifierALPHA MetabasePlanIdentifier = "ALPHA"
-	MetabasePlanIdentifierBASE  MetabasePlanIdentifier = "BASE"
 	MetabasePlanIdentifierBETA  MetabasePlanIdentifier = "BETA"
+	MetabasePlanIdentifierBASE  MetabasePlanIdentifier = "BASE"
 )
 
 // String returns the underlying string value

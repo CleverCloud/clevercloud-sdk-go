@@ -2,10 +2,10 @@
 
 package models
 
-// ClusterPatchPayload
+// ClusterPatchPayload Request body to update a cluster. Every field is optional: an absent field keeps its current valu...
 type ClusterPatchPayload struct {
-	Description *string               `json:"description,omitempty"`
+	Description *string               `json:"description,omitempty"` // New description
 	Features    *ClusterFeaturesPatch `json:"features,omitempty"`
-	Name        *string               `json:"name,omitempty"`
-	Tags        []string              `json:"tags,omitempty"`
+	Name        *string               `json:"name,omitempty"` // New cluster name
+	Tags        []SemanticTag         `json:"tags,omitempty"` // New tags
 }

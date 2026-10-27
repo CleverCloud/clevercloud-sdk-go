@@ -6,22 +6,21 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
 
 /*
-Listnetworkgrouppeers
+Listnetworkgrouppeers List the peers of a network group
 
-# Get Peers of a NetworkGroup
+Returns the WireGuard peers of the network group, Clever Cloud instances and external peers alike; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - ownerId:
-  - networkGroupId:
+  - ownerId: Organisation ID (`orga_…`) or user ID (`user_…`)
+  - networkGroupId: Network group ID (`ng_…`)
 
 # Returns the operation result or an error
 
@@ -36,14 +35,14 @@ Example:
 x-service: network_group
 operationId: listNetworkGroupPeers
 */
-func Listnetworkgrouppeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Peer] {
+func Listnetworkgrouppeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroupPeers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/peers", ownerId, networkGroupId)
 
 	// Make API call
-	response := client.Get[[]models.Peer](ctx, c, path)
+	response := client.Get[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

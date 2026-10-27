@@ -2,7 +2,7 @@
 
 package models
 
-// PresignedURL
+// PresignedURL A presigned URL to download a peer's WireGuard configuration from object storage.
 type PresignedURL struct {
-	URL string `json:"url"` // URL
+	URL string `json:"url"` // Presigned URL (Cellar/S3 compatible).
 }

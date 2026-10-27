@@ -11,7 +11,9 @@ import (
 )
 
 /*
-Getkubernetesserviceconfig
+Getkubernetesserviceconfig Get the Kubernetes service configuration
+
+Returns the available topologies with their flavors and replication bounds, and the Kubernetes versions on offer with the default one. The answer depends on no organisation, but the request must carry credentials.
 
 Parameters:
   - ctx: context for the request

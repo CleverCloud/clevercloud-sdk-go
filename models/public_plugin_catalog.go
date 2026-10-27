@@ -2,8 +2,8 @@
 
 package models
 
-// PublicPluginCatalog
+// PublicPluginCatalog The catalog of plugins the platform installs in clusters: the plugin versions per Kubernetes vers...
 type PublicPluginCatalog struct {
-	Bases      []PublicBaseEntry      `json:"bases,omitempty"`
-	Migrations []PublicMigrationEntry `json:"migrations,omitempty"`
+	Bases      []PublicBaseEntry      `json:"bases"`
+	Migrations []PublicMigrationEntry `json:"migrations"`
 }

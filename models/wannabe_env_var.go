@@ -2,8 +2,8 @@
 
 package models
 
-// WannabeEnvVar
+// WannabeEnvVar An environment variable: a name and its value.
 type WannabeEnvVar struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  string `json:"name"`  // Variable name.
+	Value string `json:"value"` // Variable value.
 }

@@ -4,10 +4,10 @@ package models
 
 import "time"
 
-// FailureCause
+// FailureCause Why an operation failed: the operation, the step it failed at (absent when the operation has no s...
 type FailureCause struct {
-	Message    string              `json:"message"`
-	OccurredAt time.Time           `json:"occurredAt"`
-	Operation  DeploymentOperation `json:"operation"`
-	Step       *DeploymentStepName `json:"step,omitempty"`
+	Message    string    `json:"message"`
+	OccurredAt time.Time `json:"occurredAt"`
+	Operation  string    `json:"operation"`
+	Step       *string   `json:"step,omitempty"`
 }

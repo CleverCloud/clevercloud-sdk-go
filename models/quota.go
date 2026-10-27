@@ -2,10 +2,10 @@
 
 package models
 
-// Quota
+// Quota The Kubernetes quota of an organisation: its CPU and RAM ceilings.
 type Quota struct {
-	ID       string      `json:"id"`
-	Quotas   []QuotaItem `json:"quotas,omitempty"`
-	Tags     []string    `json:"tags,omitempty"`
-	TenantID TenantID    `json:"tenantId"`
+	ID       string           `json:"id"`     // The quota id, `quota_<uuid>`.
+	Quotas   []KnownQuotaItem `json:"quotas"` // The Kubernetes ceilings: CPU and RAM.
+	Tags     []string         `json:"tags"`
+	TenantID string           `json:"tenantId"`
 }

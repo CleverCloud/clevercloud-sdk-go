@@ -11,15 +11,15 @@ import (
 )
 
 /*
-Rebootmetabaseapplication
+Rebootmetabaseapplication Restart a Metabase add-on
 
-# Ask for reboot metabase application
+Restarts the add-on's application, reusing the build cache. Answers 404 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonMetabaseId:
+  - addonMetabaseId: Metabase add-on ID (`metabase_…`)
 
 # Returns the operation result or an error
 

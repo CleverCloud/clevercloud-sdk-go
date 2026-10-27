@@ -12,15 +12,15 @@ import (
 )
 
 /*
-Getotoroshi
+Getotoroshi Get an Otoroshi add-on
 
-get a Otoroshi
+Returns the add-on: access URL, installed and available versions, initial admin credentials, admin API URL and credentials, backing resources and network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - OtoroshiId:
+  - OtoroshiId: Otoroshi add-on ID (`otoroshi_…`)
 
 # Returns the operation result or an error
 

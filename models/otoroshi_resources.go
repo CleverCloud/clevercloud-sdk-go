@@ -2,11 +2,11 @@
 
 package models
 
-// OtoroshiResources
+// OtoroshiResources Resources backing an Otoroshi add-on.
 type OtoroshiResources struct {
-	CellarID   *string `json:"cellarId,omitempty"`
-	ElasticID  *string `json:"elasticId,omitempty"`
-	Entrypoint string  `json:"entrypoint"`
-	PulsarID   *string `json:"pulsarId,omitempty"`
-	RedisID    string  `json:"redisId"`
+	CellarID   *CellarId        `json:"cellarId,omitempty"`
+	ElasticID  *ElasticsearchId `json:"elasticId,omitempty"`
+	Entrypoint AppId            `json:"entrypoint"` // ID of the Java application running Otoroshi, or the all-zero ID (`app_00000000-0000-0000-0000-000...
+	PulsarID   *PulsarId        `json:"pulsarId,omitempty"`
+	RedisID    RedisId          `json:"redisId"` // ID of the Redis add-on, or the all-zero ID (`redis_00000000-0000-0000-0000-000000000000`) when th...
 }

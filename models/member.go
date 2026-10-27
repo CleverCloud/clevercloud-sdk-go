@@ -2,10 +2,10 @@
 
 package models
 
-// Member
+// Member A member of a network group: the application, add-on, external resource or load balancer whose pe...
 type Member struct {
-	DomainName string             `json:"domainName"`
-	ID         string             `json:"id"`
-	Kind       MemberKind         `json:"kind"`
-	Label      StringMaxLength128 `json:"label"`
+	DomainName string     `json:"domainName"` // Domain name for WireGuard routing.
+	ID         string     `json:"id"`         // Member ID (application/addon ID).
+	Kind       MemberKind `json:"kind"`       // Member kind.
+	Label      string     `json:"label"`      // Human-readable label.
 }

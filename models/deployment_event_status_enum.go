@@ -2,14 +2,14 @@
 
 package models
 
-// DeploymentEventStatus represents
+// DeploymentEventStatus represents Status of a deployment event: `STARTED`, `COMPLETED` or `FAILED`. `SKIPPED` is part of the vocabu...
 type DeploymentEventStatus string
 
 const (
+	DeploymentEventStatusSTARTED   DeploymentEventStatus = "STARTED"
 	DeploymentEventStatusCOMPLETED DeploymentEventStatus = "COMPLETED"
 	DeploymentEventStatusFAILED    DeploymentEventStatus = "FAILED"
 	DeploymentEventStatusSKIPPED   DeploymentEventStatus = "SKIPPED"
-	DeploymentEventStatusSTARTED   DeploymentEventStatus = "STARTED"
 )
 
 // String returns the underlying string value

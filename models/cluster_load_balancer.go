@@ -2,10 +2,10 @@
 
 package models
 
-// ClusterLoadBalancer
+// ClusterLoadBalancer A load balancer in front of the cluster, as embedded in a cluster's detail: its id, flavor, IP ad...
 type ClusterLoadBalancer struct {
-	DomainName string         `json:"domainName"`
-	Flavor     Flavor         `json:"flavor"`
-	ID         LoadBalancerId `json:"id"`
-	Ips        []string       `json:"ips,omitempty"`
+	DomainName string   `json:"domainName"`
+	Flavor     string   `json:"flavor"`
+	ID         string   `json:"id"`
+	Ips        []string `json:"ips"`
 }

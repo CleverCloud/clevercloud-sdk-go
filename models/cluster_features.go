@@ -2,9 +2,10 @@
 
 package models
 
-// ClusterFeatures
+// ClusterFeatures Optional features of a cluster. An absent or `null` flag means the feature is off. Node autoscali...
 type ClusterFeatures struct {
-	AutoscalingEnabled *bool   `json:"autoscalingEnabled,omitempty"`
-	Csi                *bool   `json:"csi,omitempty"`
-	Registries         *string `json:"registries,omitempty"`
+	AutoscalingEnabled   *bool             `json:"autoscalingEnabled,omitempty"`   // Whether node autoscaling (cluster-autoscaler) is enabled
+	Csi                  *bool             `json:"csi,omitempty"`                  // Whether CSI (Container Storage Interface) is enabled
+	NodeAutoprovisioning *bool             `json:"nodeAutoprovisioning,omitempty"` // Whether node autoprovisioning (Karpenter) is enabled.
+	Registries           *RegistriesConfig `json:"registries,omitempty"`
 }

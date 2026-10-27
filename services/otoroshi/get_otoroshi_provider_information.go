@@ -11,9 +11,9 @@ import (
 )
 
 /*
-Getotoroshiproviderinformation
+Getotoroshiproviderinformation Get the Otoroshi provider information
 
-retrieve the Otoroshi provider information
+Returns the Otoroshi versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
 Parameters:
   - ctx: context for the request
@@ -33,14 +33,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiProviderInformation
 */
-func Getotoroshiproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderInfos] {
+func Getotoroshiproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiProviderInformation")
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/otoroshi")
 
 	// Make API call
-	response := client.Get[models.ProviderInfos](ctx, c, path)
+	response := client.Get[models.ProviderConsoleView](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -12,13 +12,15 @@ import (
 )
 
 /*
-Replaceconfigurationproviderenv
+Replaceconfigurationproviderenv Replace the variables of a configuration provider add-on
+
+Replaces all the add-on's environment variables with the given list, updates the variables it exposes to its linked applications and returns the new list. Answers 400 for a duplicate name, a name outside `[a-zA-Z0-9-_.]` or a name or value over the size limit, and 413 for an oversized body. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
-  - addonId:
+  - addonId: Configuration provider add-on ID (`config_…`)
   - requestBody: the request payload
 
 # Returns the operation result or an error
@@ -34,14 +36,14 @@ Example:
 x-service: configuration_provider
 operationId: replaceConfigurationProviderEnv
 */
-func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.WannabeEnvVar) client.Response[[]models.EnvVar] {
+func Replaceconfigurationproviderenv(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar] {
 	ctx, span := tracer.Start(ctx, "replaceConfigurationProviderEnv", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/config-provider/addons/%s/env", addonId)
 
 	// Make API call
-	response := client.Put[[]models.EnvVar](ctx, c, path, requestBody)
+	response := client.Put[[]models.WannabeEnvVar](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())
