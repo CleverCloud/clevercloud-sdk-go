@@ -14,7 +14,7 @@ import (
 /*
 Updatekubernetesnodegroup Update a node group
 
-Updates the name, description, tag and node counts; flavor, taints and labels cannot change. A node count change resizes the group asynchronously and needs a ready group (or, with `drainPolicy`, a failed group still draining nodes); an upscale counts against the organisation's Kubernetes quota (412 when exceeded), and a name another node group holds is a 409. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
+Updates the name, description, tag and node counts; an omitted or `null` `description` or `tag` keeps its current value and an empty string clears it. Flavor, taints and labels cannot change. Every update, a rename alone included, needs an active cluster and a `READY` node group (409 otherwise); the one exception is a `FAILED` group that still holds draining nodes, which a body carrying `drainPolicy` and not raising `targetNodeCount` may retry. `targetNodeCount` must lie within `minNodeCount` and `maxNodeCount` (412), a standalone node cannot be updated (412), and an upscale counts against the organisation's Kubernetes quota (412 when exceeded). A name another node group of the cluster holds, or a group whose state changes while the request runs, is a 409. A node count change resizes the group asynchronously. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request

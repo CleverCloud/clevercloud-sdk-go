@@ -14,7 +14,7 @@ import (
 /*
 Getaddoninstances List the running instances of an add-on
 
-Returns the running instances of an add-on of the organisation. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the running instances of an add-on of the organisation. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

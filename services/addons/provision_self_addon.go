@@ -13,7 +13,7 @@ import (
 /*
 Provisionselfaddon Create an add-on for the current user
 
-Provisions an add-on at its provider for the user's personal account and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. Requires the `manage_organisations_services` OAuth right.
+Provisions an add-on at its provider for the user's personal account and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. A provider still in private beta is open only to its own members and beta testers (403, error id 10002). Requires the `manage_organisations_services` OAuth right, a validated e-mail address and an active account (403).
 
 Parameters:
   - ctx: context for the request

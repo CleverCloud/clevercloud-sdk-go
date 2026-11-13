@@ -14,7 +14,7 @@ import (
 /*
 Editproviderplanfeature Set a feature value on a plan
 
-Sets the plan's value for the provider feature `featureName` from a JSON body `{"name": "<featureName>", "value": "…"}` and returns the plan; an existing value is replaced only when `name` equals `featureName` and `value` is present. A feature the provider does not declare is ignored. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Sets the plan's value for the provider feature `featureName` from a JSON body `{"name": "<featureName>", "value": "…"}` and returns the plan; an existing value is replaced only when `name` equals `featureName` and `value` is present. A feature the provider does not declare is ignored. The value may contain basic formatting HTML and links to `http://` or `https://` URLs; 400 when it holds any other markup. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

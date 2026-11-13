@@ -14,7 +14,7 @@ import (
 /*
 V4GetOrgResourceAccesslogs Stream the access logs of an application or an add-on
 
-Server-Sent Events stream of the HTTP access logs of an application or an add-on (`ACCESS_LOG` events), sorted by date within short windows. The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Also callable by platform services.
+Server-Sent Events stream of the HTTP access logs of an application or an add-on (`ACCESS_LOG` events), sorted by date within short windows. The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

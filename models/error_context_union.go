@@ -5,7 +5,7 @@ package models
 import "encoding/json"
 
 // ErrorContext Structured details of an error, discriminated by `type`.
-// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
+// Tagged union - can hold one of: map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any, map[string]any
 type ErrorContext struct {
 	raw json.RawMessage
 }

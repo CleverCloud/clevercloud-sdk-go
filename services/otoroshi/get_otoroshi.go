@@ -14,7 +14,7 @@ import (
 /*
 Getotoroshi Get an Otoroshi add-on
 
-Returns the add-on: access URL, installed and available versions, initial admin credentials, admin API URL and credentials, backing resources and network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Returns the add-on: access URL, installed and available versions, initial admin credentials, admin API URL and credentials, backing resources and network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

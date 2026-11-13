@@ -14,7 +14,7 @@ import (
 /*
 Editproviderplan Update a plan of an add-on provider
 
-Updates the plan's name, price and slug (omitted ones keep their value) and the values of the features listed, then returns the plan; 404 when the provider has no such plan. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Updates the plan's name, price and slug (omitted ones keep their value) and the values of the features listed, then returns the plan; 404 when the provider has no such plan. Feature values may contain basic formatting HTML and links to `http://` or `https://` URLs; 400 when one holds any other markup. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

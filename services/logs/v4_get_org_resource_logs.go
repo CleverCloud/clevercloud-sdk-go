@@ -12,16 +12,16 @@ import (
 )
 
 /*
-V4GetOrgResourceLogs Stream the runtime logs of an application or an add-on
+V4GetOrgResourceLogs Stream the runtime logs of an application, an add-on or a Kubernetes cluster
 
-Server-Sent Events stream of an add-on's runtime logs (`RESOURCE_LOG` events). The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Add-on services are streamed by default: for an application, use the `applications` route or set `service=all`. Also callable by platform services.
+Server-Sent Events stream of an add-on's or a Kubernetes cluster's runtime logs (`RESOURCE_LOG` events). The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Add-on services are streamed by default: for an application, use the `applications` route or set `service=all`. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service. For a Kubernetes cluster (`kubernetes_…`), the stream carries its control-plane and system-pod lines: without `since` it follows the live lines, with `since` it starts at that date, as far back as lines are retained, and with `until` it ends at that date; it requires the ADMIN, MANAGER or DEVELOPER role. `search`, `tag` and `severity` apply to clusters only, and `deploymentId` is refused there.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - orgId: Organisation ID
-  - resourceId: Application ID (`app_…`), add-on ID (`addon_…`) or add-on real ID
+  - resourceId: Application ID (`app_…`), add-on ID (`addon_…`), add-on real ID or Kubernetes cluster ID (`kubernetes_…`)
   - opts: optional query parameters
 
 # Returns the operation result or an error

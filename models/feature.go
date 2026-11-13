@@ -4,6 +4,6 @@ package models
 
 // Feature A feature of an add-on provider's dedicated version, and whether it is enabled.
 type Feature struct {
-	Enabled *bool  `json:"enabled,omitempty"`
+	Enabled bool   `json:"enabled"`
 	Name    string `json:"name"`
 }

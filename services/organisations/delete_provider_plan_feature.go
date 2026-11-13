@@ -6,7 +6,6 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -38,14 +37,14 @@ Example:
 x-service: organisations
 operationId: deleteProviderPlanFeature
 */
-func Deleteproviderplanfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, planId string, featureName string) client.Response[models.Message] {
+func Deleteproviderplanfeature(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, providerId string, planId string, featureName string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteProviderPlanFeature", trace.WithAttributes(attribute.String("id", id), attribute.String("providerId", providerId), attribute.String("planId", planId), attribute.String("featureName", featureName)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addonproviders/%s/plans/%s/features/%s", id, providerId, planId, featureName)
 
 	// Make API call
-	response := client.Delete[models.Message](ctx, c, path)
+	response := client.Delete[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

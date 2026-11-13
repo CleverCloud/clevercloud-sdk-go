@@ -2,5 +2,5 @@
 
 package models
 
-// ScalingFactor
+// ScalingFactor A dimensionless scaling factor.
 type ScalingFactor = float64

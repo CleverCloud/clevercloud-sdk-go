@@ -4,10 +4,10 @@ package models
 
 // WannabeStandaloneNode Request body to create a standalone node in a cluster.
 type WannabeStandaloneNode struct {
-	Description *string           `json:"description,omitempty"` // Optional description
-	Flavor      NodeFlavor        `json:"flavor"`                // Node flavor (VM size)
-	Labels      map[string]string `json:"labels,omitempty"`      // Kubernetes labels
-	Name        NodeGroupName     `json:"name"`                  // Node name (kubernetes resource name format)
-	Tag         *string           `json:"tag,omitempty"`         // Optional tag
-	Taints      []KubernetesTaint `json:"taints,omitempty"`      // Kubernetes taints
+	Description *string               `json:"description,omitempty"` // Optional description, at most 4096 characters, no NUL character
+	Flavor      NodeFlavor            `json:"flavor"`                // Node flavor (VM size)
+	Labels      map[string]LabelValue `json:"labels,omitempty"`      // Kubernetes labels: a map from label key to label value (see each one's rule).
+	Name        NodeGroupName         `json:"name"`                  // Node name (kubernetes resource name format)
+	Tag         *string               `json:"tag,omitempty"`         // Optional tag, at most 1024 characters, no NUL character
+	Taints      []KubernetesTaint     `json:"taints,omitempty"`      // Kubernetes taints
 }

@@ -13,7 +13,7 @@ import (
 /*
 Deletengotoroshiapplication Detach an Otoroshi add-on from its network group
 
-Deletes the add-on's network group and restarts its application; answers 204 as well when the add-on has no network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Deletes the add-on's network group and restarts its application; answers 204 as well when the add-on has no network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

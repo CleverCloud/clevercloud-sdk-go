@@ -19,7 +19,7 @@ type UpdateaddoninfoBody struct {
 /*
 Updateaddoninfo Rename an add-on of an organisation
 
-Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

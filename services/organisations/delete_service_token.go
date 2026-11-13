@@ -13,7 +13,7 @@ import (
 /*
 Deleteservicetoken Revoke a service token
 
-Revokes the service token, which then stops being accepted; answers 204. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
+Revokes the service token, which then stops being accepted; answers 204. `tokenId` may also be the token's revocation ID. Requires membership and the right to manage the organisation's services; a member without the `ADMIN` role may only revoke a token they created (403 otherwise). Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

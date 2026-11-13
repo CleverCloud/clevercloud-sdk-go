@@ -15,7 +15,7 @@ import (
 /*
 Preordermigration Preview the cost of an add-on plan change
 
-Returns, as an invoice preview, the monthly price difference between the add-on's current plan and the `planId` plan; without `planId`, a zero-amount preview. 400 when the provider does not allow plan changes, 404 when the plan is unknown. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns, as an invoice preview, the monthly price difference between the add-on's current plan and the `planId` plan; without `planId`, a zero-amount preview. 400 when the provider does not allow plan changes, 404 when the plan is unknown. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

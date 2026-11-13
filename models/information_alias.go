@@ -2,5 +2,5 @@
 
 package models
 
-// Information
+// Information A quantity of data, in bytes.
 type Information = int

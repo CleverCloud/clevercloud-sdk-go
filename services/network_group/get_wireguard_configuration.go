@@ -14,7 +14,7 @@ import (
 /*
 Getwireguardconfiguration Get a peer's WireGuard configuration
 
-Returns the peer's WireGuard configuration as INI text (`text/plain`): its `[Interface]` section and one `[Peer]` section per other peer that has a public key. Pass the presigned token in the `authorization` query parameter, or any other accepted credential; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns the peer's WireGuard configuration as INI text (`text/plain`): its `[Interface]` section and one `[Peer]` section per other peer that has a valid WireGuard public key. Pass the presigned token in the `authorization` query parameter, or any other accepted credential; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

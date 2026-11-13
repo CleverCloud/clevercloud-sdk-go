@@ -14,7 +14,7 @@ import (
 /*
 Getkubeconfigpresignedurl Get a presigned kubeconfig download URL
 
-Returns a URL that downloads the cluster's kubeconfig with no other credential, valid 60 minutes, even while the cluster is still deploying. Keep it secret: its token grants the kubeconfig download for every cluster of the organisation until it expires. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
+Returns a URL that downloads the cluster's kubeconfig with no other credential, valid 60 minutes, even while the cluster is still deploying. Keep it secret: its token grants the kubeconfig download for this cluster until it expires. Callable by members of the organisation with the `ADMIN`, `MANAGER` or `DEVELOPER` role, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request

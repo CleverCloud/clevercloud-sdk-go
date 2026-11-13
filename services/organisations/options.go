@@ -13,9 +13,18 @@ type Option func(*Options)
 
 // Options holds query parameters for organisations operations
 type Options struct {
+	Cursor        *string `url:"cursor,omitempty"`
 	Invitationkey *string `url:"invitationKey,omitempty"`
 	Limit         *int64  `url:"limit,omitempty"`
-	Offset        *any    `url:"offset,omitempty"`
+	Offset        *int64  `url:"offset,omitempty"`
+	Paginate      *any    `url:"paginate,omitempty"`
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
+	}
 }
 
 // WithInvitationkey sets the invitationKey query parameter
@@ -33,9 +42,16 @@ func WithLimit(limit int64) Option {
 }
 
 // WithOffset sets the offset query parameter
-func WithOffset(offset any) Option {
+func WithOffset(offset int64) Option {
 	return func(o *Options) {
 		o.Offset = &offset
+	}
+}
+
+// WithPaginate sets the paginate query parameter
+func WithPaginate(paginate any) Option {
+	return func(o *Options) {
+		o.Paginate = &paginate
 	}
 }
 
@@ -47,6 +63,9 @@ func buildQueryString(opts ...Option) string {
 	}
 
 	var params []string
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
 	if options.Invitationkey != nil {
 		params = append(params, fmt.Sprintf("invitationKey=%s", url.QueryEscape(*options.Invitationkey)))
 	}
@@ -54,7 +73,10 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("limit=%d", *options.Limit))
 	}
 	if options.Offset != nil {
-		params = append(params, fmt.Sprintf("offset=%v", *options.Offset))
+		params = append(params, fmt.Sprintf("offset=%d", *options.Offset))
+	}
+	if options.Paginate != nil {
+		params = append(params, fmt.Sprintf("paginate=%v", *options.Paginate))
 	}
 
 	if len(params) == 0 {

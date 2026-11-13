@@ -14,7 +14,7 @@ import (
 /*
 Listconfigurationproviderenv List the variables of a configuration provider add-on
 
-Returns the add-on's environment variables. Answers 404 for an unknown or deleted add-on. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
+Returns the add-on's environment variables. Answers 404 for an unknown or deleted add-on. The caller must own the add-on or be `ADMIN`, `MANAGER` or `DEVELOPER` of its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

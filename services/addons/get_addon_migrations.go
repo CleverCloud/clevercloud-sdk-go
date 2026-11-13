@@ -13,7 +13,7 @@ import (
 /*
 Getaddonmigrations List the plan migrations of an add-on
 
-Returns the add-on's plan migrations as its provider reports them (provider-defined JSON, forwarded with the provider's status); an empty list for an add-on without provider. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the add-on's plan migrations as its provider reports them (provider-defined JSON, forwarded with the provider's status); an empty list for an add-on without provider. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
@@ -35,14 +35,14 @@ Example:
 x-service: addons
 operationId: getAddonMigrations
 */
-func Getaddonmigrations(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string) client.Response[client.Nothing] {
+func Getaddonmigrations(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getAddonMigrations", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/%s/migrations", id, addonId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

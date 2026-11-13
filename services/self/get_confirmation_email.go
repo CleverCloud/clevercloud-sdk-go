@@ -13,7 +13,7 @@ import (
 /*
 Getconfirmationemail Resend the account confirmation email
 
-Sends a new validation link to the user's primary address. Answers 400 when the address is already validated or missing. Sending is rate-limited: a rate-limited request still answers 200, without sending.
+Sends a new validation link to the user's primary address. Requires the `access_personal_information` right (403, error id 7301). Answers 400 when the address is already validated or missing. Sending is rate-limited: a rate-limited request still answers 200, without sending.
 
 Parameters:
   - ctx: context for the request

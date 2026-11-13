@@ -13,7 +13,7 @@ import (
 /*
 Getotoroshiconfigfile Get the otoroshictl configuration of an add-on
 
-Returns a YAML configuration file for the `otoroshictl` command-line tool, holding the add-on's admin API URL and credentials. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Returns a YAML configuration file for the `otoroshictl` command-line tool, holding the add-on's admin API URL and credentials. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

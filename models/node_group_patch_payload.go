@@ -5,11 +5,11 @@ package models
 // NodeGroupPatchPayload Request body to update a node group: name, description, tag, node counts, autoscaling, and the dr...
 type NodeGroupPatchPayload struct {
 	AutoscalingEnabled *bool               `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled
-	Description        *string             `json:"description,omitempty"`        // Optional description
+	Description        *string             `json:"description,omitempty"`        // Description, at most 4096 characters, no NUL character. Absent or `null` keeps the current value;...
 	DrainPolicy        *DrainPolicy        `json:"drainPolicy,omitempty"`
 	MaxNodeCount       *NodeGroupNodeCount `json:"maxNodeCount,omitempty"`
 	MinNodeCount       *NodeGroupNodeCount `json:"minNodeCount,omitempty"`
 	Name               NodeGroupName       `json:"name"`            // Node group name
-	Tag                *string             `json:"tag,omitempty"`   // Optional tag
+	Tag                *string             `json:"tag,omitempty"`   // Tag, at most 1024 characters, no NUL character. Absent or `null` keeps the current value; an empt...
 	TargetNodeCount    NodeGroupNodeCount  `json:"targetNodeCount"` // Target number of nodes
 }

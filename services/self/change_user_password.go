@@ -13,7 +13,7 @@ import (
 /*
 Changeuserpassword Change the current user's password
 
-Sets a new password (`newPassword`, at least 12 characters). Requires an almighty token (the console's), otherwise 403 (error id 7301). `oldPassword` must match the current password, otherwise 403 (error id 7301). An account that has no password yet answers 400 (error id 504): its first password is set through `POST /v2/password_forgotten`. With `dropTokens: true`, every other access token of the user is revoked; pending password-reset links are always invalidated.
+Sets a new password (`newPassword`, 12 to 4096 characters). Requires an almighty token (the console's), otherwise 403 (error id 7301). `oldPassword` must match the current password, otherwise 403 (error id 7301). An account that has no password yet answers 400 (error id 504): its first password is set through `POST /v2/password_forgotten`. With `dropTokens: true`, every other access token of the user is revoked; pending password-reset links are always invalidated.
 
 Parameters:
   - ctx: context for the request

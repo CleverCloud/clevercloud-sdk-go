@@ -14,7 +14,7 @@ import (
 /*
 Provisionaddonbyorgaid Create an add-on for an organisation
 
-Provisions an add-on at its provider for the organisation and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Provisions an add-on at its provider for the organisation and returns it. Creation is rate-limited (403 when the limit is hit), and plans of 60 € a month or more are refused (403) to organisations less than a month old and personal accounts less than two months old. A provider still in private beta is open only to its own members and beta testers (403, error id 10002). Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, error id 8108 for the developer and accounting roles, or when the organisation is deleted); the caller's e-mail address must be validated and the account active (403). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

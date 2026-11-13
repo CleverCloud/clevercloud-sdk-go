@@ -2,5 +2,5 @@
 
 package models
 
-// NiceValue
+// NiceValue A scheduler priority, as a Unix nice value (typically -20 to 19).
 type NiceValue = int

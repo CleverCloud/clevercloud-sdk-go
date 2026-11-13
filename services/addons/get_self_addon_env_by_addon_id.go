@@ -14,7 +14,7 @@ import (
 /*
 Getselfaddonenvbyaddonid List the environment variables of an add-on of the current user
 
-Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
+Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

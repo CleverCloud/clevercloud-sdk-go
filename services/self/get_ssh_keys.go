@@ -13,7 +13,7 @@ import (
 /*
 Getsshkeys List the current user's SSH keys
 
-Returns the user's SSH public keys with their name and fingerprint, sorted by name.
+Returns the user's SSH public keys with their name and fingerprint, sorted by name. Requires the `manage_ssh_keys` right (403, error id 7301).
 
 Parameters:
   - ctx: context for the request

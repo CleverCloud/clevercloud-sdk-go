@@ -13,7 +13,7 @@ import (
 /*
 Addaddontagbyorgaandaddonid Add a tag to an add-on of an organisation
 
-Adds the tag to the add-on and returns all its tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Adds the tag to the add-on and returns all its tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

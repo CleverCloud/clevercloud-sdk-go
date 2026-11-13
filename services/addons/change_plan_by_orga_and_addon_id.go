@@ -14,7 +14,7 @@ import (
 /*
 Changeplanbyorgaandaddonid Change the plan of an add-on of an organisation
 
-Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist or is deleted, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist, is deleted or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
@@ -37,14 +37,14 @@ Example:
 x-service: addons
 operationId: changePlanByOrgaAndAddonId
 */
-func Changeplanbyorgaandaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, requestBody *models.WannabePlanChange) client.Response[client.Nothing] {
+func Changeplanbyorgaandaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, requestBody *models.WannabePlanChange) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "changePlanByOrgaAndAddonId", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons/%s/migrations", id, addonId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -14,7 +14,7 @@ import (
 /*
 Updatepulsarstoragepolicies Update a Pulsar add-on's storage policies
 
-Sets the retention policy of the add-on's namespace and, when `offloadPolicies` is sent, its offload (cold storage) thresholds; returns the policies the cluster then applies. Sizes are in bytes and durations in minutes. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
+Sets the retention policy of the add-on's namespace and, when `offloadPolicies` is sent, its offload (cold storage) thresholds; returns the policies the cluster then applies. Sizes are in bytes and durations in minutes. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

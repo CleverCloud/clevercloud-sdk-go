@@ -13,7 +13,7 @@ import (
 /*
 Rebootkeycloakapplication Restart a Keycloak add-on
 
-Restarts every application of the add-on, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
+Restarts every application of the add-on, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

@@ -14,7 +14,7 @@ import (
 /*
 Getkubeconfig Download the kubeconfig of a cluster
 
-Returns a kubeconfig YAML file holding a newly issued cluster-admin (`system:masters`) client certificate. `type` selects the API server address it points at; 412 when that address does not exist or the API server is not reachable in the cluster's current state. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The holder of a presigned token in the `authorization` query parameter can call it too.
+Returns a kubeconfig YAML file holding a newly issued cluster-admin (`system:masters`) client certificate. `type` selects the API server address it points at; 412 when that address does not exist or the API server is not reachable in the cluster's current state. Callable by members of the organisation with the `ADMIN`, `MANAGER` or `DEVELOPER` role, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The holder of a presigned token minted for this cluster in the `authorization` query parameter can call it too.
 
 Parameters:
   - ctx: context for the request

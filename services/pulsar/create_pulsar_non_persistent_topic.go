@@ -13,7 +13,7 @@ import (
 /*
 Createpulsarnonpersistenttopic Create a non-persistent topic
 
-Creates a non-persistent topic in the add-on's namespace; answers 201. Pass `partitions_number` to create a partitioned topic with that many partitions. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
+Creates a non-persistent topic in the add-on's namespace; answers 201. Pass `partitions_number` to create a partitioned topic with that many partitions. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

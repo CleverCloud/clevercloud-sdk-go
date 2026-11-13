@@ -14,7 +14,7 @@ import (
 /*
 Removeorganisationmember Remove a member from an organisation
 
-Removes the user from the organisation. Requires the `manage_organisations_members` OAuth right, leaving the organisation included; removing someone else also requires the `ADMIN` or `MANAGER` role and being allowed to assign their current role (a member with no valid role, by an `ADMIN` only). The last member and the last `ADMIN` cannot be removed. Also callable by platform services with administrative rights.
+Removes the user from the organisation. Requires the `manage_organisations_members` OAuth right, leaving the organisation included; removing someone else also requires the `ADMIN` or `MANAGER` role and being allowed to assign their current role (a member with no valid role, by an `ADMIN` only). The last member and the last `ADMIN` cannot be removed. The invitations the removed member sent that are still waiting for an answer are cancelled with the membership. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

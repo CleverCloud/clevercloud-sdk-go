@@ -14,7 +14,7 @@ import (
 /*
 Getselfapplicationslinkedtoaddonbyaddonid List the applications linked to an add-on of the current user
 
-Returns the applications the add-on is linked to. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
+Returns the applications the add-on is linked to. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

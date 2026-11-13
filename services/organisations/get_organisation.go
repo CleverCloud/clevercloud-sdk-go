@@ -14,7 +14,7 @@ import (
 /*
 Getorganisation Get an organisation
 
-Returns the organisation, which may be a personal space (`user_…`). The caller must be a member: a non-member gets 403, an unknown ID 404. Requires the `access_organisations` OAuth right. Also callable by platform services with administrative rights.
+Returns the organisation, which may be a personal space (`user_…`). The caller must be a member: a non-member gets 403, an unknown ID 404, and an organisation that is moderated, destroyed or deleted 403. Requires the `access_organisations` OAuth right. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

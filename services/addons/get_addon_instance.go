@@ -14,7 +14,7 @@ import (
 /*
 Getaddoninstance Get a running instance of an add-on
 
-Returns one running instance of an add-on of the organisation. 404 when no running instance of the add-on has this ID. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns one running instance of an add-on of the organisation. 404 when no running instance of the add-on has this ID. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

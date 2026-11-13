@@ -14,7 +14,7 @@ import (
 /*
 Getapplicationslinkedtoaddonbyorgaandaddonid List the applications linked to an add-on of an organisation
 
-Returns the applications the add-on is linked to. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the applications the add-on is linked to. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

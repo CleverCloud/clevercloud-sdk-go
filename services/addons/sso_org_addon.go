@@ -14,7 +14,7 @@ import (
 /*
 SsoOrgAddon Generate the single sign-on data of an add-on of an organisation
 
-Same answer as the `GET` variant: the signed data that opens the add-on's provider dashboard as the caller. The add-on is looked up by add-on ID or real ID among the organisation's own; 404 otherwise. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Same answer as the `GET` variant: the signed data that opens the add-on's provider dashboard as the caller. The add-on is looked up by add-on ID or real ID among the organisation's own; 404 otherwise. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request
