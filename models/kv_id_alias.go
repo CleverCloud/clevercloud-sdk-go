@@ -2,5 +2,5 @@
 
 package models
 
-// KvId materia-KV addon id (`kv_<ulid>`, e.g. `kv_01ARZ3NDEKTSV4RRFFQ69G5FAV`)
+// KvId Materia KV add-on ID (`kv_<ulid>`, e.g. `kv_01ARZ3NDEKTSV4RRFFQ69G5FAV`)
 type KvId = string

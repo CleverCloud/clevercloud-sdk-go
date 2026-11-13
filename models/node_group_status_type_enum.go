@@ -13,6 +13,8 @@ const (
 	NodeGroupStatusTypeDEPLOYED    NodeGroupStatusType = "DEPLOYED"
 	NodeGroupStatusTypeToResize    NodeGroupStatusType = "TO_RESIZE"
 	NodeGroupStatusTypeRESIZING    NodeGroupStatusType = "RESIZING"
+	NodeGroupStatusTypeToHeal      NodeGroupStatusType = "TO_HEAL"
+	NodeGroupStatusTypeHEALING     NodeGroupStatusType = "HEALING"
 	NodeGroupStatusTypeREADY       NodeGroupStatusType = "READY"
 	NodeGroupStatusTypeFAILED      NodeGroupStatusType = "FAILED"
 	NodeGroupStatusTypeToTerminate NodeGroupStatusType = "TO_TERMINATE"

@@ -2,5 +2,5 @@
 
 package models
 
-// NodeGroupName Name of a node group or standalone node: a lowercase RFC 1123 subdomain of at most 63 characters,...
+// NodeGroupName Name of a node group or standalone node: a lowercase RFC 1123 subdomain (labels of letters, digit...
 type NodeGroupName = string

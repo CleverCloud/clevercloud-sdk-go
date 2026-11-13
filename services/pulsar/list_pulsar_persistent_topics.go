@@ -14,7 +14,7 @@ import (
 /*
 Listpulsarpersistenttopics List a Pulsar add-on's persistent topics
 
-Returns the persistent topics of the add-on's namespace as full names (`persistent://tenant/namespace/topic`). Pass `partitioned=true` to list the partitioned topics instead. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. Platform services may also call it.
+Returns the persistent topics of the add-on's namespace as full names (`persistent://tenant/namespace/topic`). Pass `partitioned=true` to list the partitioned topics instead. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `access_organisations`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

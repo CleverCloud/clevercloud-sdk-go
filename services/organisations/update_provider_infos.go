@@ -14,7 +14,7 @@ import (
 /*
 Updateproviderinfos Update an add-on provider
 
-Updates the provider's name, short and long descriptions, logo URL, website, support email, social account names and analytics ID; omitted fields keep their value. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Updates the provider's name, short and long descriptions, logo URL, website, support email, social account names and analytics ID; omitted fields keep their value. The website and logo URL must be absolute `http://` or `https://` URLs, or empty to clear them; 400 otherwise, naming the field. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

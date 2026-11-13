@@ -2,9 +2,10 @@
 
 package models
 
-// Message Message returned by some operations: a numeric `id`, a `type` (`error`, `success`…) and a human-r...
+// Message Message returned by some operations, and on error: a numeric `id`, a `type` (`error`, `success`…)...
 type Message struct {
-	ID      int    `json:"id"`
-	Message string `json:"message"`
-	Type    string `json:"type"`
+	Fields  map[string]string `json:"fields,omitempty"` // On a validation error only: why each rejected field was refused, keyed by field name.
+	ID      int               `json:"id"`               // Numeric identifier of the message.
+	Message string            `json:"message"`          // Human-readable message.
+	Type    string            `json:"type"`             // Kind of message: `error`, `info`, `success`…
 }

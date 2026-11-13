@@ -2,5 +2,5 @@
 
 package models
 
-// Vcpus
+// Vcpus A number of virtual CPUs.
 type Vcpus = int

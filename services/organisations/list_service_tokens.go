@@ -7,6 +7,7 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -14,7 +15,7 @@ import (
 /*
 Listservicetokens List the service tokens of an organisation
 
-Returns the organisation's service tokens, paginated with `limit` and `offset`. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
+Returns the organisation's service tokens, each with the `creatorUserId` of the member who created it; a member without the `ADMIN` or `MANAGER` role only sees the tokens they created. Without `paginate`, the response is an array of every token, newest first, from which `offset` skips entries and `limit` keeps at most that many; with `paginate=1`, it is one page `{items, nextCursor}` of at most `limit` tokens (50 by default, at most 200): pass `nextCursor` back as `cursor` for the next page until it is `null`. Pages run oldest first, except for a member who only sees their own tokens: theirs run newest first, and their cursor is issued by this route for their own list only, so a cursor from another caller, or naming a token since revoked, is refused. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request
@@ -36,7 +37,7 @@ Example:
 x-service: organisations
 operationId: listServiceTokens
 */
-func Listservicetokens(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[client.Nothing] {
+func Listservicetokens(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[models.ListresponseServicetoken] {
 	ctx, span := tracer.Start(ctx, "listServiceTokens", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
@@ -49,7 +50,7 @@ func Listservicetokens(ctx context.Context, c *client.Client, tracer trace.Trace
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.ListresponseServicetoken](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

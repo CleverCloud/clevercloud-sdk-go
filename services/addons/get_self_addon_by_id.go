@@ -14,7 +14,7 @@ import (
 /*
 Getselfaddonbyid Get an add-on of the current user
 
-Returns one add-on of the user's personal account, looked up by add-on ID or real ID; a deleted add-on is not found. 403 when the add-on belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
+Returns one add-on of the user's personal account, looked up by add-on ID or real ID; a deleted add-on is not found. 404 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

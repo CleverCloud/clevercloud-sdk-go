@@ -14,7 +14,7 @@ import (
 /*
 Createversionupdateotoroshi Update the Otoroshi version of an add-on
 
-Switches the add-on's application to `targetVersion` and the Java version it needs, redeploys it without build cache and returns the updated add-on. A version that is not offered is refused. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Switches the add-on's application to `targetVersion` and the Java version it needs, redeploys it without build cache and returns the updated add-on. A version that is not offered is refused. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

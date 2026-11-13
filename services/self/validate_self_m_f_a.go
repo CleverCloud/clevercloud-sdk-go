@@ -14,7 +14,7 @@ import (
 /*
 Validateselfmfa Confirm an MFA enrolment
 
-Checks `code`, from the authenticator app, against the pending enrolment and activates the MFA, which becomes the preferred kind when none was set; with `revokeTokens: true`, every other access token of the user is revoked. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). A wrong code answers 400 (error id 3103), no pending enrolment 404.
+Checks `code`, from the authenticator app, against the pending enrolment and activates the MFA, which becomes the preferred kind when none was set; with `revokeTokens: true`, every other access token of the user is revoked. Returns the recovery codes of the MFA: save them, this response is meant to be the only one that shows them. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong). A wrong code answers 400 (error id 3103), no pending enrolment 404.
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +36,14 @@ Example:
 x-service: self
 operationId: validateSelfMFA
 */
-func Validateselfmfa(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string, requestBody *models.WannabeMFACreds) client.Response[models.Message] {
+func Validateselfmfa(ctx context.Context, c *client.Client, tracer trace.Tracer, kind string, requestBody *models.WannabeMFACreds) client.Response[models.MFABackupCodes] {
 	ctx, span := tracer.Start(ctx, "validateSelfMFA", trace.WithAttributes(attribute.String("kind", kind)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/mfa/%s/confirmation", kind)
 
 	// Make API call
-	response := client.Post[models.Message](ctx, c, path, requestBody)
+	response := client.Post[models.MFABackupCodes](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

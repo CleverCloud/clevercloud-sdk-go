@@ -13,7 +13,7 @@ import (
 /*
 Getselfconsumers List the current user's OAuth consumers
 
-Returns the OAuth1 consumers (client applications) registered in the user's personal space, with their rights, sorted by name. Secrets are not included.
+Returns the OAuth1 consumers (client applications) registered in the user's personal space, with their rights, sorted by name. Secrets are not included. Requires the `manage_organisations_services` right (403, error id 6200).
 
 Parameters:
   - ctx: context for the request

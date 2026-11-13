@@ -14,7 +14,7 @@ import (
 /*
 Listorganisationmembers List the members of an organisation
 
-Returns each member with their user profile, role and job title. The caller must be a member (403 otherwise), and the organisation's partner may forbid listing members. Also callable by platform services with administrative rights.
+Returns each member with their user profile, role and job title. The caller must be a member (403 otherwise), the organisation must not be deleted (403), and the organisation's partner may forbid listing members. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

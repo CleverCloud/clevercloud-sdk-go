@@ -4,17 +4,18 @@ package models
 
 // Keycloak A Keycloak add-on: its identifiers, plan, deployed versions, access URL and initial credentials, ...
 type Keycloak struct {
-	AccessURL          string            `json:"accessUrl"`          // URL of the Keycloak administration console.
-	AddonID            string            `json:"addonId"`            // Add-on ID (`addon_…`).
-	AvailableVersions  []string          `json:"availableVersions"`  // Versions on offer.
-	EnvVars            map[string]string `json:"envVars"`            // Environment variables of the add-on's application.
-	Features           KeycloakFeatures  `json:"features"`           // Optional features of the add-on (network group).
-	InitialCredentials BasicCredentials  `json:"initialCredentials"` // Initial administrator credentials.
-	JavaVersion        string            `json:"javaVersion"`        // Java version the add-on's application runs on.
-	Name               string            `json:"name"`               // Add-on name; the add-on ID when the name cannot be read.
-	OwnerID            string            `json:"ownerId"`            // ID of the owner: a user or an organisation.
-	Plan               string            `json:"plan"`               // Plan identifier.
-	ResourceID         string            `json:"resourceId"`         // Keycloak add-on ID (`keycloak_…`).
-	Resources          KeycloakResources `json:"resources"`          // Resources backing the add-on.
-	Version            string            `json:"version"`            // Deployed Keycloak version.
+	AccessURL          string            `json:"accessUrl"`                    // URL of the Keycloak administration console.
+	AddonID            string            `json:"addonId"`                      // Add-on ID (`addon_…`).
+	AvailableVersions  []string          `json:"availableVersions"`            // Versions on offer.
+	EnvVars            map[string]string `json:"envVars"`                      // Environment variables of the add-on's application.
+	Features           KeycloakFeatures  `json:"features"`                     // Optional features of the add-on (network group).
+	InitialCredentials BasicCredentials  `json:"initialCredentials"`           // Initial administrator credentials.
+	JavaVersion        string            `json:"javaVersion"`                  // Java version the add-on's application runs on.
+	MonthlyActiveUsers *int              `json:"monthlyActiveUsers,omitempty"` // Distinct users with any session activity on the add-on since midnight UTC on the first day of the...
+	Name               string            `json:"name"`                         // Add-on name; the add-on ID when the name cannot be read.
+	OwnerID            string            `json:"ownerId"`                      // ID of the owner: a user or an organisation.
+	Plan               KeycloakPlan      `json:"plan"`                         // Plan identifier.
+	ResourceID         string            `json:"resourceId"`                   // Keycloak add-on ID (`keycloak_…`).
+	Resources          KeycloakResources `json:"resources"`                    // Resources backing the add-on.
+	Version            string            `json:"version"`                      // Deployed Keycloak version.
 }

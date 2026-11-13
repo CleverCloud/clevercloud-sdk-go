@@ -13,7 +13,7 @@ import (
 /*
 Rebootapplication Restart an Otoroshi add-on
 
-Restarts the add-on's application, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Restarts the add-on's application, reusing the build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

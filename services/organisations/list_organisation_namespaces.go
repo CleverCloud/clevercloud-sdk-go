@@ -14,7 +14,7 @@ import (
 /*
 Listorganisationnamespaces List the TCP redirection namespaces of an organisation
 
-Returns the namespaces the organisation's applications can use for TCP redirections, always including `default` and `cleverapps`. The caller must be a member (404 otherwise).
+Returns the namespaces the organisation's applications can use for TCP redirections, always including `default` and `cleverapps`. Requires the right to manage the organisation's applications, and the caller must be a member (404 otherwise).
 
 Parameters:
   - ctx: context for the request

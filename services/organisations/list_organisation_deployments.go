@@ -7,7 +7,6 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -15,7 +14,7 @@ import (
 /*
 Listorganisationdeployments List the recent deployments of an organisation's applications
 
-Returns a map from application ID (`app_…`) to its most recent deployments, newest first, at most `limit` per application. The caller must be a member (404 otherwise). Also callable by platform services with administrative rights.
+Returns a map from application ID (`app_…`) to its most recent deployments, newest first, at most `limit` per application. Requires the right to manage the organisation's applications, for OAuth1 and platform-service tokens alike (403 otherwise; an almighty token holds it), then membership (404 otherwise); a member whose role is not `ADMIN`, `MANAGER` or `DEVELOPER` (an `ACCOUNTING` member, for instance) gets a 200 with an empty JSON array `[]` instead of the map. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request
@@ -37,7 +36,7 @@ Example:
 x-service: organisations
 operationId: listOrganisationDeployments
 */
-func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[map[string][]models.DeploymentView] {
+func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, opts ...Option) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "listOrganisationDeployments", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
@@ -50,7 +49,7 @@ func Listorganisationdeployments(ctx context.Context, c *client.Client, tracer t
 	}
 
 	// Make API call
-	response := client.Get[map[string][]models.DeploymentView](ctx, c, path)
+	response := client.Get[any](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -2,5 +2,5 @@
 
 package models
 
-// Gpus
+// Gpus A number of GPUs.
 type Gpus = int

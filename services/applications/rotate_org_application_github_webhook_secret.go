@@ -14,7 +14,7 @@ import (
 /*
 RotateOrgApplicationGithubWebhookSecret Rotate the GitHub webhook secret of an application
 
-Generates a new secret for the GitHub push webhook of the repository linked to an organisation's application, for every application deploying from that repository. Answers 400 when the application is not linked to GitHub, 501 when GitHub integration is not available. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
+Generates a new secret for the GitHub push webhook of the repository linked to an organisation's application, for every application that webhook serves: the organisation's own when it has a webhook of its own on the repository, otherwise every application deploying from the repository whose owner has none. Answers 400 when the application is not linked to GitHub, 501 when GitHub integration is not available. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

@@ -13,7 +13,7 @@ import (
 /*
 Triggerpulsarpersistenttopicunload Unload a persistent topic
 
-Asks the cluster to unload the topic from the broker serving it, so another broker takes it over; answers 204. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
+Asks the cluster to unload the topic from the broker serving it, so another broker takes it over; answers 204. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

@@ -14,7 +14,7 @@ import (
 /*
 Createversionupdatekeycloak Update the Keycloak version of an add-on
 
-Switches every application of the add-on to `targetVersion`, redeploys them without build cache and returns the updated add-on. Answers 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
+Switches every application of the add-on to `targetVersion`, redeploys them without build cache and returns the updated add-on. Answers 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

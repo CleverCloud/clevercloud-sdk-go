@@ -2,8 +2,8 @@
 
 package models
 
-// FieldError Why one field was rejected: a machine-matchable `code` and a human-readable `error`.
+// FieldError Why one field was rejected: the offending `value`, and a `reason` (`null` when the error names th...
 type FieldError struct {
-	Code  string `json:"code"`
-	Error string `json:"error"`
+	Reason string `json:"reason"` // Why it was rejected; `null` on a single-field error.
+	Value  string `json:"value"`  // The rejected value.
 }

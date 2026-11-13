@@ -2,5 +2,5 @@
 
 package models
 
-// InstanceCount
+// InstanceCount A number of instances.
 type InstanceCount = int

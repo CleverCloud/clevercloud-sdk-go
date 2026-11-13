@@ -13,7 +13,7 @@ import (
 /*
 Deletepulsarnonpersistenttopic Delete a non-persistent topic
 
-Deletes a non-persistent topic of the add-on's namespace; answers 204. `partitioned=true` targets a partitioned topic (default `false`), and `force=true` deletes it even with connected producers or consumers. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. Platform services may also call it.
+Deletes a non-persistent topic of the add-on's namespace; answers 204. `partitioned=true` targets a partitioned topic (default `false`), and `force=true` deletes it even with connected producers or consumers. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
 Parameters:
   - ctx: context for the request

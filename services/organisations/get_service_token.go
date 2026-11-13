@@ -6,6 +6,7 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -13,7 +14,7 @@ import (
 /*
 Getservicetoken Get a service token
 
-Returns the service token's details; 404 when unknown. Requires membership and the right to manage the organisation's services. Also callable by platform services with administrative rights.
+Returns the service token's details, with the `creatorUserId` of the member who created it; 404 when unknown. `tokenId` may also be the token's revocation ID. Requires membership and the right to manage the organisation's services; a member without the `ADMIN` or `MANAGER` role may only read a token they created (403 otherwise). Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request
@@ -35,14 +36,14 @@ Example:
 x-service: organisations
 operationId: getServiceToken
 */
-func Getservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[client.Nothing] {
+func Getservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[models.ServiceToken] {
 	ctx, span := tracer.Start(ctx, "getServiceToken", trace.WithAttributes(attribute.String("id", id), attribute.String("tokenId", tokenId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/service-tokens/%s", id, tokenId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.ServiceToken](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -14,7 +14,7 @@ import (
 /*
 Updateorganisationapplicationexposedenvironmentvariables Replace the exposed environment variables of an application
 
-Replaces the variables an organisation's application exposes to the applications that depend on it with the given name-to-value map. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
+Replaces the variables an organisation's application exposes to the applications that depend on it with the given name-to-value map, then redeploys each of those applications that is running. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

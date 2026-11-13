@@ -13,7 +13,7 @@ import (
 /*
 Rebuildmatomo Rebuild a Matomo add-on
 
-Redeploys the add-on's PHP application without build cache. Answers 400 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
+Redeploys the add-on's PHP application without build cache. Answers 400 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

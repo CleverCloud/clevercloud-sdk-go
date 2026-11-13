@@ -36,14 +36,14 @@ Example:
 x-service: organisations
 operationId: createServiceToken
 */
-func Createservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeServiceToken) client.Response[client.Nothing] {
+func Createservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeServiceToken) client.Response[models.CreatedServiceToken] {
 	ctx, span := tracer.Start(ctx, "createServiceToken", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/service-tokens", id)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, requestBody)
+	response := client.Post[models.CreatedServiceToken](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

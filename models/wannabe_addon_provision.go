@@ -4,7 +4,7 @@ package models
 
 // WannabeAddonProvision Add-on to create: its name, provider, plan, region and provider-specific options.
 type WannabeAddonProvision struct {
-	Name       string            `json:"name"`              // Addon display name.
+	Name       string            `json:"name"`              // Add-on display name.
 	Options    map[string]string `json:"options,omitempty"` // Provider-specific options, passed to the provider as strings; `null` is read as no options.
 	Plan       string            `json:"plan"`              // Plan identifier.
 	ProviderID string            `json:"providerId"`        // Provider ID (e.g., "postgresql-addon").

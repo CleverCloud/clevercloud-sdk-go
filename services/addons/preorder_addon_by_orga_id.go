@@ -14,7 +14,7 @@ import (
 /*
 Preorderaddonbyorgaid Preview the order of an add-on for an organisation
 
-Returns the invoice preview of an add-on order for the organisation. The request body is not read: the preview is a zero-amount order carrying the organisation's billing details. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the invoice preview of an add-on order for the organisation. The request body is not read: the preview is a zero-amount order carrying the organisation's billing details. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

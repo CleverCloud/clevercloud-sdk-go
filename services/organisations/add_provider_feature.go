@@ -14,7 +14,7 @@ import (
 /*
 Addproviderfeature Add a feature to an add-on provider
 
-Declares a feature (`name`, `type`) that the provider's plans can set; 400 when the provider already has a feature with this name. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Declares a feature (`name`, `type`) that the provider's plans can set; 400 when the provider already has a feature with this name, or when the name contains HTML markup (a bare `<`, as in `Storage < 25TB`, is allowed). Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

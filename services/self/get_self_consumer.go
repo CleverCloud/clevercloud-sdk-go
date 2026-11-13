@@ -14,7 +14,7 @@ import (
 /*
 Getselfconsumer Get an OAuth consumer of the current user
 
-Returns one OAuth1 consumer of the user's personal space with its rights. An unknown or deleted key answers 404 (error id 13509).
+Returns one OAuth1 consumer of the user's personal space with its rights. Requires the `manage_organisations_services` right (403, error id 6200); an unknown or deleted key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

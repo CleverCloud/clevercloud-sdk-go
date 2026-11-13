@@ -13,7 +13,7 @@ import (
 /*
 Rebuildapplication Rebuild an Otoroshi add-on
 
-Redeploys the add-on's application without build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Redeploys the add-on's application without build cache. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

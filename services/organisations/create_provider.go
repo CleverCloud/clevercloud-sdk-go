@@ -14,7 +14,7 @@ import (
 /*
 Createprovider Create an add-on provider
 
-Registers an add-on provider owned by the organisation, with its ID, name, test and production API URLs, SSO salt and password. The provider starts in the `ALPHA` status and is offered in every public zone. Requires the `access_organisations` OAuth right and the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Registers an add-on provider owned by the organisation, with its ID, name, test and production API URLs, SSO salt and password. Every API URL must be an absolute `http://` or `https://` URL, or empty: an empty one is accepted and stored as is; 400 otherwise, with `fields` naming each refused URL. The provider starts in the `ALPHA` status and is offered in every public zone. Requires the `access_organisations` OAuth right and the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

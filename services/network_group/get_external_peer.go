@@ -6,6 +6,7 @@ import (
 	"context"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
+	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -36,14 +37,14 @@ Example:
 x-service: network_group
 operationId: get_external_peer
 */
-func GetExternalPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[client.Nothing] {
+func GetExternalPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[models.Peer] {
 	ctx, span := tracer.Start(ctx, "get_external_peer", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/external-peers/%s", ownerId, networkGroupId, peerId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[models.Peer](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

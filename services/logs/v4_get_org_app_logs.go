@@ -14,7 +14,7 @@ import (
 /*
 V4GetOrgAppLogs Stream the runtime logs of an application
 
-Server-Sent Events stream of an application's runtime logs (`APPLICATION_LOG` events). The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Also callable by platform services.
+Server-Sent Events stream of an application's runtime logs (`APPLICATION_LOG` events). The stream ends with an `END_OF_STREAM` event when `limit`, `until` or the timeout is reached. Resume it with the `Last-Event-ID` header. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

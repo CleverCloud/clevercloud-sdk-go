@@ -14,7 +14,7 @@ import (
 /*
 Getaddonenvbyorgaandaddonid List the environment variables of an add-on of an organisation
 
-Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the environment variables the add-on exposes to the applications linked to it, credentials included. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

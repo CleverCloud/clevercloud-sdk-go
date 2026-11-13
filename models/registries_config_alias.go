@@ -2,5 +2,5 @@
 
 package models
 
-// RegistriesConfig Custom image registries configuration of a cluster, as a free-form string of at most 65,536 bytes.
+// RegistriesConfig Custom image registries configuration of a cluster, as a free-form string of at most 65,536 bytes...
 type RegistriesConfig = string

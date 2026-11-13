@@ -13,7 +13,7 @@ import (
 /*
 Getaddontagsbyorgaidandaddonid List the tags of an add-on of an organisation
 
-Returns the add-on's tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the add-on's tags. 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

@@ -14,7 +14,7 @@ import (
 /*
 Deprovisionaddonbyorgaandaddonid Delete an add-on of an organisation
 
-Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin or manager role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

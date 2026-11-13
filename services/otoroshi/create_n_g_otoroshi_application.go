@@ -14,7 +14,7 @@ import (
 /*
 Createngotoroshiapplication Attach an Otoroshi add-on to a network group
 
-Puts the add-on's application in a network group (created unless the add-on already has a live one), restarts it and returns the updated add-on. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Puts the add-on's application in a network group (created unless the add-on already has a live one), restarts it and returns the updated add-on. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

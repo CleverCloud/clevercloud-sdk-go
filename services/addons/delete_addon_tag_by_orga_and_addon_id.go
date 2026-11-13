@@ -13,7 +13,7 @@ import (
 /*
 Deleteaddontagbyorgaandaddonid Remove a tag from an add-on of an organisation
 
-Removes the tag from the add-on and returns the remaining tags. 404 when the add-on does not carry this tag, 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Removes the tag from the add-on and returns the remaining tags. 404 when the add-on does not carry this tag, 403 when the add-on does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

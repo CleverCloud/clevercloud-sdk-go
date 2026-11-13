@@ -14,14 +14,18 @@ type Option func(*Options)
 // Options holds query parameters for logs operations
 type Options struct {
 	Color                     *bool   `url:"color,omitempty"`
+	Cursor                    *string `url:"cursor,omitempty"`
 	Deploymentid              *string `url:"deploymentId,omitempty"`
 	Field                     *string `url:"field,omitempty"`
 	Filter                    *string `url:"filter,omitempty"`
 	Instanceid                *string `url:"instanceId,omitempty"`
-	Limit                     *int    `url:"limit,omitempty"`
+	Limit                     *int64  `url:"limit,omitempty"`
 	Maxretrydurationinseconds *int64  `url:"maxRetryDurationInSeconds,omitempty"`
+	Search                    *string `url:"search,omitempty"`
 	Service                   *string `url:"service,omitempty"`
+	Severity                  *string `url:"severity,omitempty"`
 	Since                     *string `url:"since,omitempty"`
+	Tag                       *string `url:"tag,omitempty"`
 	Throttleelements          *int    `url:"throttleElements,omitempty"`
 	Throttleperinmilliseconds *int64  `url:"throttlePerInMilliseconds,omitempty"`
 	Until                     *string `url:"until,omitempty"`
@@ -31,6 +35,13 @@ type Options struct {
 func WithColor(color bool) Option {
 	return func(o *Options) {
 		o.Color = &color
+	}
+}
+
+// WithCursor sets the cursor query parameter
+func WithCursor(cursor string) Option {
+	return func(o *Options) {
+		o.Cursor = &cursor
 	}
 }
 
@@ -63,7 +74,7 @@ func WithInstanceid(instanceId string) Option {
 }
 
 // WithLimit sets the limit query parameter
-func WithLimit(limit int) Option {
+func WithLimit(limit int64) Option {
 	return func(o *Options) {
 		o.Limit = &limit
 	}
@@ -76,6 +87,13 @@ func WithMaxretrydurationinseconds(maxRetryDurationInSeconds int64) Option {
 	}
 }
 
+// WithSearch sets the search query parameter
+func WithSearch(search string) Option {
+	return func(o *Options) {
+		o.Search = &search
+	}
+}
+
 // WithService sets the service query parameter
 func WithService(service string) Option {
 	return func(o *Options) {
@@ -83,10 +101,24 @@ func WithService(service string) Option {
 	}
 }
 
+// WithSeverity sets the severity query parameter
+func WithSeverity(severity string) Option {
+	return func(o *Options) {
+		o.Severity = &severity
+	}
+}
+
 // WithSince sets the since query parameter
 func WithSince(since string) Option {
 	return func(o *Options) {
 		o.Since = &since
+	}
+}
+
+// WithTag sets the tag query parameter
+func WithTag(tag string) Option {
+	return func(o *Options) {
+		o.Tag = &tag
 	}
 }
 
@@ -122,6 +154,9 @@ func buildQueryString(opts ...Option) string {
 	if options.Color != nil {
 		params = append(params, fmt.Sprintf("color=%t", *options.Color))
 	}
+	if options.Cursor != nil {
+		params = append(params, fmt.Sprintf("cursor=%s", url.QueryEscape(*options.Cursor)))
+	}
 	if options.Deploymentid != nil {
 		params = append(params, fmt.Sprintf("deploymentId=%s", url.QueryEscape(*options.Deploymentid)))
 	}
@@ -140,11 +175,20 @@ func buildQueryString(opts ...Option) string {
 	if options.Maxretrydurationinseconds != nil {
 		params = append(params, fmt.Sprintf("maxRetryDurationInSeconds=%d", *options.Maxretrydurationinseconds))
 	}
+	if options.Search != nil {
+		params = append(params, fmt.Sprintf("search=%s", url.QueryEscape(*options.Search)))
+	}
 	if options.Service != nil {
 		params = append(params, fmt.Sprintf("service=%s", url.QueryEscape(*options.Service)))
 	}
+	if options.Severity != nil {
+		params = append(params, fmt.Sprintf("severity=%s", url.QueryEscape(*options.Severity)))
+	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))
+	}
+	if options.Tag != nil {
+		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
 	}
 	if options.Throttleelements != nil {
 		params = append(params, fmt.Sprintf("throttleElements=%d", *options.Throttleelements))

@@ -14,7 +14,7 @@ import (
 /*
 Deprovisionselfaddonbyid Delete an add-on of the current user
 
-Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right.
+Deprovisions the add-on at its provider and deletes it. The add-on is looked up by add-on ID or real ID; 400 for an application's FTP add-on, 412 for a system add-on, 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

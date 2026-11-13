@@ -4,7 +4,7 @@ package models
 
 // HTTPErrorBody Error returned by the API: branch on `code`, show `error` to a human, read `context` for details,...
 type HTTPErrorBody struct {
-	APIRequestID string       `json:"apiRequestId"` // `request_<uuid>` — correlates the response with the request's traces and logs.
+	APIRequestID string       `json:"apiRequestId"` // `request_<uuid>` or `request_http_<uuid>` — correlates the response with the request's traces and...
 	Code         string       `json:"code"`         // Machine-matchable code, e.g. `clever.core.not-found`.
 	Context      ErrorContext `json:"context"`      // Structured detail, discriminated by `type`.
 	Error        string       `json:"error"`        // Human-readable message. Not a stable contract; branch on `code`.

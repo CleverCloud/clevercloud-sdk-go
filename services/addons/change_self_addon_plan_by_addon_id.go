@@ -14,7 +14,7 @@ import (
 /*
 Changeselfaddonplanbyaddonid Change the plan of an add-on of the current user
 
-Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist or is deleted, 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right.
+Asks the add-on's provider to move the add-on to the plan given in the body, and forwards the provider's answer. 404 when the add-on does not exist, is deleted or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request
@@ -36,14 +36,14 @@ Example:
 x-service: addons
 operationId: changeSelfAddonPlanByAddonId
 */
-func Changeselfaddonplanbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody *models.WannabePlanChange) client.Response[client.Nothing] {
+func Changeselfaddonplanbyaddonid(ctx context.Context, c *client.Client, tracer trace.Tracer, addonId string, requestBody *models.WannabePlanChange) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "changeSelfAddonPlanByAddonId", trace.WithAttributes(attribute.String("addonId", addonId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/%s/plan", addonId)
 
 	// Make API call
-	response := client.Put[client.Nothing](ctx, c, path, requestBody)
+	response := client.Put[any](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

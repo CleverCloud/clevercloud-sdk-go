@@ -5,12 +5,12 @@ package models
 // ClusterCreationPayload Request body to create a Kubernetes cluster. Only `name` is required; the zone and the deployment...
 type ClusterCreationPayload struct {
 	DeploymentProfileID *string                    `json:"deploymentProfileId,omitempty"` // The deployment profile to create the cluster with (`kubernetes_deployment_profile_<uuid>`). When ...
-	Description         *string                    `json:"description,omitempty"`         // Cluster description
+	Description         *string                    `json:"description,omitempty"`         // Cluster description, at most 4096 characters, no NUL character
 	Features            *ClusterFeatures           `json:"features,omitempty"`
-	Name                string                     `json:"name"`                     // Cluster name (required, 1-128 chars)
-	NetworkGroupID      *string                    `json:"networkGroupId,omitempty"` // Network group ID for cluster networking
+	Name                string                     `json:"name"`                     // Cluster name, at most 128 characters. Spaces, tabs, line breaks and other characters up to U+0020...
+	NetworkGroupID      *string                    `json:"networkGroupId,omitempty"` // Network group ID for cluster networking (no NUL character)
 	NodeGroups          []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`     // Initial node groups to create with the cluster
-	Tags                []SemanticTag              `json:"tags,omitempty"`           // Semantic tags
+	Tags                []SemanticTag              `json:"tags,omitempty"`           // Semantic tags: at most 64, each at most 256 characters; duplicates are dropped
 	TopologyConfig      *TopologyConfig            `json:"topologyConfig,omitempty"`
 	Version             *Version                   `json:"version,omitempty"`
 	Zone                *string                    `json:"zone,omitempty"`   // The zone to create in, by name (`par`), as other products' creation requests take it. Optional un...

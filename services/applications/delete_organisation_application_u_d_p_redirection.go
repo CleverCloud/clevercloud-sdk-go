@@ -7,7 +7,6 @@ import (
 	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
-	models "go.clever-cloud.dev/sdk/models"
 	attribute "go.opentelemetry.io/otel/attribute"
 	trace "go.opentelemetry.io/otel/trace"
 )
@@ -39,7 +38,7 @@ Example:
 x-service: applications
 operationId: deleteOrganisationApplicationUDPRedirection
 */
-func Deleteorganisationapplicationudpredirection(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, sourcePort int64, opts ...Option) client.Response[models.Message] {
+func Deleteorganisationapplicationudpredirection(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, sourcePort int64, opts ...Option) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteOrganisationApplicationUDPRedirection", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId), attribute.Int64("sourcePort", sourcePort)))
 	defer span.End()
 
@@ -52,7 +51,7 @@ func Deleteorganisationapplicationudpredirection(ctx context.Context, c *client.
 	}
 
 	// Make API call
-	response := client.Delete[models.Message](ctx, c, path)
+	response := client.Delete[client.Nothing](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

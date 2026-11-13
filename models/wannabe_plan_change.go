@@ -6,5 +6,5 @@ package models
 type WannabePlanChange struct {
 	PlanID  *string `json:"planId,omitempty"`  // Target plan ID.
 	Region  *string `json:"region,omitempty"`  // Target region/zone name (e.g., "par").
-	Version *string `json:"version,omitempty"` // Addon version (e.g., PostgreSQL version).
+	Version *string `json:"version,omitempty"` // Add-on version (e.g., PostgreSQL version).
 }

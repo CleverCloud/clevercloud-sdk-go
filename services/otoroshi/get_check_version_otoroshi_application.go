@@ -14,7 +14,7 @@ import (
 /*
 Getcheckversionotoroshiapplication Check the Otoroshi version of an add-on
 
-Returns the installed Otoroshi version, the latest version offered, every available version and whether an update is available. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation.
+Returns the installed Otoroshi version, the latest version offered, every available version and whether an update is available. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

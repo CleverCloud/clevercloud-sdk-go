@@ -14,7 +14,7 @@ import (
 /*
 Getaddonssodatafororga Get the single sign-on data of an add-on of an organisation
 
-Returns the signed data that opens the add-on's provider dashboard as the caller: the provider's SSO `url`, the add-on real `id`, `timestamp`, `token`, `signature` and `email`. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager, developer or accounting role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
+Returns the signed data that opens the add-on's provider dashboard as the caller: the provider's SSO `url`, the add-on real `id`, `timestamp`, `token`, `signature` and `email`. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
 Parameters:
   - ctx: context for the request

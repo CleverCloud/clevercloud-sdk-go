@@ -19,7 +19,7 @@ type RenameaddonBody struct {
 /*
 Renameaddon Rename an add-on of the current user
 
-Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 403 when it belongs to another owner, 404 when it does not exist. Requires the `manage_organisations_services` OAuth right.
+Sets the add-on's name (not blank, at most 255 characters) and returns the updated add-on. The add-on is looked up by add-on ID or real ID; 404 when it does not exist or belongs to another owner. Requires the `manage_organisations_services` OAuth right.
 
 Parameters:
   - ctx: context for the request

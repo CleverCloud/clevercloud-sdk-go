@@ -14,7 +14,7 @@ import (
 /*
 GetMfa Get the status of an MFA
 
-Tells whether a validated MFA of this kind is configured, as `{"kind": "TOTP", "configured": true}`. Requires an almighty token and the account password, base64-encoded, in the `X-Clever-Password` header (401, error id 3029, when missing or wrong).
+Tells whether a validated MFA of this kind is configured and, when it is, how many of its recovery codes are left and when they were generated, never the codes themselves. Requires an almighty token (403, error id 7301, otherwise).
 
 Parameters:
   - ctx: context for the request

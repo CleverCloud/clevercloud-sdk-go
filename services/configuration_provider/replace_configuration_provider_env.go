@@ -14,7 +14,7 @@ import (
 /*
 Replaceconfigurationproviderenv Replace the variables of a configuration provider add-on
 
-Replaces all the add-on's environment variables with the given list, updates the variables it exposes to its linked applications and returns the new list. Answers 400 for a duplicate name, a name outside `[a-zA-Z0-9-_.]` or a name or value over the size limit, and 413 for an oversized body. The caller must own the add-on or hold a role other than `NONE` (`ADMIN`, `MANAGER`, `DEVELOPER` or `ACCOUNTING`) in its organisation, which must be active.
+Replaces all the add-on's environment variables with the given list, updates the variables it exposes to its linked applications and returns the new list. Answers 400 for a duplicate name, a name outside `[a-zA-Z0-9-_.]` or a name or value over the size limit, and 413 for an oversized body. The caller must own the add-on or be `ADMIN`, `MANAGER` or `DEVELOPER` of its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

@@ -14,7 +14,7 @@ import (
 /*
 Getcheckversionmetabaseapplication Check the Metabase version of an add-on
 
-Returns the installed Metabase version, the latest version offered, every available version, whether an update is available and whether it needs a larger instance size. Answers 409 when the installed version cannot be read. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
+Returns the installed Metabase version, the latest version offered, every available version, whether an update is available and whether it needs a larger instance size. Answers 409 when the installed version cannot be read. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

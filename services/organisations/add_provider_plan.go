@@ -14,7 +14,7 @@ import (
 /*
 Addproviderplan Create a plan for an add-on provider
 
-Creates a plan (`plan_…`) with its name, slug, price and feature values; features left out get an empty value, and the plan is offered in the provider's zones. 400 when the provider already has a plan with this name. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
+Creates a plan (`plan_…`) with its name, slug, price and feature values; features left out get an empty value, and the plan is offered in the provider's zones. 400 when the provider already has a plan with this name. Feature values may contain basic formatting HTML and links to `http://` or `https://` URLs; 400 when one holds any other markup. Requires the `ADMIN` or `MANAGER` role. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

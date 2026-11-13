@@ -14,7 +14,7 @@ import (
 /*
 Deleteselfconsumer Delete an OAuth consumer
 
-Deletes one OAuth1 consumer of the user's personal space. An unknown or already deleted key answers 404 (error id 13509).
+Deletes one OAuth1 consumer of the user's personal space. Requires the `manage_organisations_services` right (403, error id 6200); an unknown or already deleted key answers 404 (error id 13509).
 
 Parameters:
   - ctx: context for the request

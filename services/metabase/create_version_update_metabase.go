@@ -14,7 +14,7 @@ import (
 /*
 Createversionupdatemetabase Update the Metabase version of an add-on
 
-Switches the add-on's application to `targetVersion`, moving it to a larger instance size first when that version needs one, redeploys it without build cache and returns the updated add-on. Answers 409 when the add-on has no application and 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active.
+Switches the add-on's application to `targetVersion`, moving it to a larger instance size first when that version needs one, redeploys it without build cache and returns the updated add-on. Answers 409 when the add-on has no application and 400 when the version is not offered. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
 Parameters:
   - ctx: context for the request

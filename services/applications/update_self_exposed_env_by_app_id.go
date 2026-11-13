@@ -14,7 +14,7 @@ import (
 /*
 Updateselfexposedenvbyappid Replace the exposed environment variables of an application
 
-Replaces the variables an application of the user's personal space exposes to the applications that depend on it with the given name-to-value map.
+Replaces the variables an application of the user's personal space exposes to the applications that depend on it with the given name-to-value map, then redeploys each of those applications that is running.
 
 Parameters:
   - ctx: context for the request
