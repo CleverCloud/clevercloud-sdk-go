@@ -19,7 +19,7 @@ type ServiceToken struct {
 	RevocationID  *string             `json:"revocationId,omitempty"`  // Revocation ID of the token, accepted in place of its ID to read or revoke it.
 	RevokedAt     *time.Time          `json:"revokedAt,omitempty"`     // Revocation date (RFC 3339), `null` while the token is not revoked.
 	Status        *ServiceTokenStatus `json:"status,omitempty"`        // Lifecycle state of the token.
-	Tags          []string            `json:"tags,omitempty"`          // Tags of the token; empty for one created through the service-token creation route.
+	Tags          []string            `json:"tags,omitzero"`           // Tags of the token; empty for one created through the service-token creation route.
 	TenantID      *string             `json:"tenantId,omitempty"`      // The organisation the token belongs to, as a `tenant_…` ID: the organisation ID with `tenant_` in ...
 	TokenType     *string             `json:"tokenType,omitempty"`     // Kind of token; `SELF_SUSTAINED_ACCESS` for one created through the service-token creation route.
 }

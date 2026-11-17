@@ -15,6 +15,7 @@ import (
 	. "github.com/dave/jennifer/jen"
 	"github.com/swaggest/openapi-go/openapi31"
 
+	"go.clever-cloud.dev/sdk/internal/gotype"
 	"go.clever-cloud.dev/sdk/internal/spec"
 )
 
@@ -613,7 +614,6 @@ func processObjectSchema(name string, schema Schema) (*ModelStruct, error) {
 func processProperty(propName string, propSchema Schema, isRequired bool) (*ModelField, error) {
 	field := &ModelField{
 		Name:       toGoFieldName(propName),
-		JSONTag:    buildJSONTag(propName, isRequired),
 		Comment:    formatComment(getSchemaDescription(propSchema)),
 		IsRequired: isRequired,
 	}
@@ -630,6 +630,7 @@ func processProperty(propName string, propSchema Schema, isRequired bool) (*Mode
 	}
 
 	field.Type = goType
+	field.JSONTag = buildJSONTag(propName, goType, isRequired)
 	// Slices and maps carry their own nil, so a pointer adds a dereference before
 	// every len, range and index and expresses nothing extra. `*map[string]any` is
 	// what the Terraform provider could neither range over nor index.
@@ -750,11 +751,11 @@ func getGoType(schema Schema, isRequired bool) (string, bool, error) {
 	}
 }
 
-func buildJSONTag(propName string, isRequired bool) string {
+func buildJSONTag(propName, goType string, isRequired bool) string {
 	if isRequired {
 		return fmt.Sprintf("`json:\"%s\"`", propName)
 	}
-	return fmt.Sprintf("`json:\"%s,omitempty\"`", propName)
+	return fmt.Sprintf("`json:\"%s\"`", gotype.OptionalTag(propName, goType))
 }
 
 func toGoStructName(name string) string {

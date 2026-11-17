@@ -9,7 +9,7 @@ type UserView struct {
 	Avatar            *string       `json:"avatar,omitempty"`
 	CanPay            bool          `json:"canPay"` // Whether the profile holds what paying requires: name, phone, full postal address and a validated ...
 	City              *string       `json:"city,omitempty"`
-	ContextFlags      []PartnerFlag `json:"contextFlags,omitempty"` // Restrictions the user's partner imposes; always present, empty when there are none.
+	ContextFlags      []PartnerFlag `json:"contextFlags,omitzero"` // Restrictions the user's partner imposes; always present, empty when there are none.
 	Country           *string       `json:"country,omitempty"`
 	CreationDate      *int          `json:"creationDate,omitempty"` // Account creation date, in milliseconds since the Unix epoch.
 	Email             *string       `json:"email,omitempty"`

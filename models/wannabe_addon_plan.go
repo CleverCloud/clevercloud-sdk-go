@@ -4,7 +4,7 @@ package models
 
 // WannabeAddonPlan Add-on plan to create or update: its name, slug, price and feature values.
 type WannabeAddonPlan struct {
-	Features []WannabeAddonPlanFeature `json:"features,omitempty"`
+	Features []WannabeAddonPlanFeature `json:"features,omitzero"`
 	Name     string                    `json:"name"`
 	Price    float64                   `json:"price"`
 	Slug     *string                   `json:"slug,omitempty"`

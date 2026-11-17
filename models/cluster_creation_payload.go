@@ -9,8 +9,8 @@ type ClusterCreationPayload struct {
 	Features            *ClusterFeatures           `json:"features,omitempty"`
 	Name                string                     `json:"name"`                     // Cluster name, at most 128 characters. Spaces, tabs, line breaks and other characters up to U+0020...
 	NetworkGroupID      *string                    `json:"networkGroupId,omitempty"` // Network group ID for cluster networking (no NUL character)
-	NodeGroups          []NodeGroupCreationPayload `json:"nodeGroups,omitempty"`     // Initial node groups to create with the cluster
-	Tags                []SemanticTag              `json:"tags,omitempty"`           // Semantic tags: at most 64, each at most 256 characters; duplicates are dropped
+	NodeGroups          []NodeGroupCreationPayload `json:"nodeGroups,omitzero"`      // Initial node groups to create with the cluster
+	Tags                []SemanticTag              `json:"tags,omitzero"`            // Semantic tags: at most 64, each at most 256 characters; duplicates are dropped
 	TopologyConfig      *TopologyConfig            `json:"topologyConfig,omitempty"`
 	Version             *Version                   `json:"version,omitempty"`
 	Zone                *string                    `json:"zone,omitempty"`   // The zone to create in, by name (`par`), as other products' creation requests take it. Optional un...

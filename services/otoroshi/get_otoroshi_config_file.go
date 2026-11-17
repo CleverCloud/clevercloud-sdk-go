@@ -34,14 +34,14 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshiConfigFile
 */
-func Getotoroshiconfigfile(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[client.Nothing] {
+func Getotoroshiconfigfile(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getOtoroshiConfigFile", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-otoroshi/addons/%s/config.yaml", OtoroshiId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[client.PlainTextString](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

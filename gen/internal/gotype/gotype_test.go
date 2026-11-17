@@ -50,7 +50,11 @@ func TestResponseShapes(t *testing.T) {
 		{"array by value", "application/json", map[string]any{"type": "array", "items": ref("AddonView")}, "[]models.AddonView"},
 		{"map of arrays", "application/json", map[string]any{"type": "object", "additionalProperties": map[string]any{"type": "array", "items": ref("DeploymentView")}}, "map[string][]models.DeploymentView"},
 		{"nullable string", "application/json", map[string]any{"type": []any{"string", "null"}}, "*string"},
-		{"text is not decodable", "text/plain", map[string]any{"type": "string"}, Nothing.Expr},
+		{"text", "text/plain", map[string]any{"type": "string"}, Text.Expr},
+		{"yaml", "application/x-yaml", map[string]any{"type": "string"}, Text.Expr},
+		{"nullable text", "text/plain", map[string]any{"type": []any{"string", "null"}}, Text.Expr},
+		{"binary is not text", "application/octet-stream", map[string]any{"type": "string", "format": "binary"}, Nothing.Expr},
+		{"text media type without a string", "text/plain", map[string]any{"type": "integer"}, Nothing.Expr},
 		{"html is not decodable", "text/html", nil, Nothing.Expr},
 	}
 	for _, c := range cases {
@@ -93,7 +97,7 @@ func TestInlineObjectBecomesANamedStruct(t *testing.T) {
 		t.Fatal(err)
 	}
 	rendered := strings.Join(strings.Fields(buf.String()), " ")
-	for _, snippet := range []string{"type UpdateaddoninfoBody struct", "Name string `json:\"name\"`", "Tags []string `json:\"tags,omitempty\"`", "Owner *UpdateaddoninfoBodyOwner `json:\"owner,omitempty\"`"} {
+	for _, snippet := range []string{"type UpdateaddoninfoBody struct", "Name string `json:\"name\"`", "Tags []string `json:\"tags,omitzero\"`", "Owner *UpdateaddoninfoBodyOwner `json:\"owner,omitempty\"`"} {
 		if !strings.Contains(rendered, snippet) {
 			t.Errorf("declaration lacks %q:\n%s", snippet, buf.String())
 		}
@@ -135,6 +139,20 @@ func TestCodeRendersQualifiedTypes(t *testing.T) {
 		}
 		if !bytes.Contains(buf.Bytes(), []byte("var v "+want)) {
 			t.Errorf("%s rendered as\n%s", expr, buf.String())
+		}
+	}
+}
+
+// The API tells an absent array from an empty one: the tag has to let both out.
+func TestOptionalTag(t *testing.T) {
+	for goType, want := range map[string]string{
+		"[]string":          "tags,omitzero",
+		"[]models.Tag":      "tags,omitzero",
+		"*string":           "tags,omitempty",
+		"map[string]string": "tags,omitempty",
+	} {
+		if got := OptionalTag("tags", goType); got != want {
+			t.Errorf("OptionalTag(%s) = %q, want %q", goType, got, want)
 		}
 	}
 }

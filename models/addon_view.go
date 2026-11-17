@@ -12,6 +12,6 @@ type AddonView struct {
 	Provider     AddonProviderEmbeddedView `json:"provider"`         // The add-on's provider, without its plans and features.
 	RealID       *string                   `json:"realId,omitempty"` // Identifier of the add-on at its provider.
 	Region       string                    `json:"region"`
-	Tags         []SemanticTag             `json:"tags,omitempty"`
+	Tags         []SemanticTag             `json:"tags,omitzero"`
 	ZoneID       *string                   `json:"zoneId,omitempty"`
 }

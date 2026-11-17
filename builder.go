@@ -6537,7 +6537,7 @@ func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilderImpl) Getotoroshi(c
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder interface {
-	Getotoroshiconfigfile(ctx context.Context) client.Response[client.Nothing]
+	Getotoroshiconfigfile(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder
@@ -6555,7 +6555,7 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder(sdk *sdkI
 }
 
 // Getotoroshiconfigfile calls otoroshi.Getotoroshiconfigfile
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl) Getotoroshiconfigfile(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl) Getotoroshiconfigfile(ctx context.Context) client.Response[client.PlainTextString] {
 	return otoroshi.Getotoroshiconfigfile(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
@@ -6879,7 +6879,7 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilde
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder interface {
-	Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.Nothing]
+	Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
@@ -6899,7 +6899,7 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBu
 }
 
 // Createpulsarnonpersistenttopictoken calls pulsar.Createpulsarnonpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl) Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl) Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString] {
 	return pulsar.Createpulsarnonpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
@@ -7035,7 +7035,7 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Create
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder interface {
-	Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.Nothing]
+	Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
@@ -7055,7 +7055,7 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder(sdk *sd
 }
 
 // Createpulsarpersistenttopictoken calls pulsar.Createpulsarpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl) Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.Nothing] {
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl) Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString] {
 	return pulsar.Createpulsarpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
@@ -7701,7 +7701,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresigned
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder interface {
-	Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.Nothing]
+	Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder
@@ -7721,7 +7721,7 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilde
 }
 
 // Getkubeconfig calls kubernetes.Getkubeconfig
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl) Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.Nothing] {
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl) Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString] {
 	return kubernetes.Getkubeconfig(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
@@ -9025,7 +9025,7 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeer
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilder interface {
 	PresignedURL() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilder
 	Stream() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder
-	Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.Nothing]
+	Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilder
@@ -9057,7 +9057,7 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeer
 }
 
 // Getwireguardconfiguration calls network_group.Getwireguardconfiguration
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl) Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.Nothing] {
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl) Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString] {
 	return networkgroup.Getwireguardconfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid, opts...)
 }
 

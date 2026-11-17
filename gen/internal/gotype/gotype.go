@@ -56,6 +56,10 @@ var None = Type{}
 // Nothing is a response without a body.
 var Nothing = Type{Expr: "client.Nothing"}
 
+// Text is a response the API answers as text rather than JSON (a kubeconfig, a
+// log export): the client hands the body over as it came.
+var Text = Type{Expr: "client.PlainTextString"}
+
 // Unknown is the response of an operation that documents no success response
 // at all: whatever comes back is decoded as `any`, as the SDK has always done,
 // so a caller can still look at it.
@@ -86,7 +90,9 @@ func Body(content map[string]openapi31.MediaType, name string) Type {
 // Response is the type of a response body. A component type is taken by value
 // (`models.X`, `[]models.X`), as `client.Response[T]` has always carried it; an
 // inline object becomes a struct named after the operation (`<Name>Response`).
-// No content, or content the JSON client cannot decode, is Nothing.
+// A string answered under another media type than JSON (`text/plain`,
+// `application/x-yaml`) is Text. No content, or content the client cannot
+// hand over (binary, HTML without a schema), is Nothing.
 func Response(content map[string]openapi31.MediaType, name string) Type {
 	schema, mediaType, ok := pick(content)
 	if !ok {
@@ -94,9 +100,38 @@ func Response(content map[string]openapi31.MediaType, name string) Type {
 	}
 	t := of(schema, name+"Response", false)
 	if !isJSON(mediaType) && !strings.Contains(t.Expr, "models.") && len(t.Inline) == 0 {
+		if isText(schema) {
+			return Text
+		}
 		return Nothing
 	}
 	return t
+}
+
+// isText reports whether the schema is a string of text, nullable or not:
+// `format: binary` is a file, not text.
+func isText(schema map[string]any) bool {
+	if schema == nil || schema["format"] == "binary" {
+		return false
+	}
+	for _, t := range schemaTypes(schema) {
+		if t != "string" && t != "null" {
+			return false
+		}
+	}
+	return len(schemaTypes(schema)) > 0
+}
+
+// OptionalTag is the JSON tag of a property the schema does not require.
+//
+// A slice takes `omitzero`: a nil slice is left out, an empty one is sent as
+// `[]`. With `omitempty` both were left out, so a payload could not say "remove
+// them all" where the API tells an absent array (keep) from an empty one.
+func OptionalTag(jsonName, goType string) string {
+	if strings.HasPrefix(goType, "[]") {
+		return jsonName + ",omitzero"
+	}
+	return jsonName + ",omitempty"
 }
 
 // pick chooses the media type a payload is generated from: `application/json`,
@@ -299,6 +334,8 @@ func exprCode(expr string, inline func(name string) jen.Code) jen.Code {
 		return jen.Any()
 	case expr == Nothing.Expr:
 		return jen.Qual("go.clever-cloud.dev/client", "Nothing")
+	case expr == Text.Expr:
+		return jen.Qual("go.clever-cloud.dev/client", "PlainTextString")
 	case expr == "any":
 		return jen.Any()
 	case strings.HasPrefix(expr, "*"):
@@ -330,7 +367,7 @@ func (s Struct) Declare() jen.Code {
 	for _, f := range s.Fields {
 		tag := f.JSONName
 		if !f.Required {
-			tag += ",omitempty"
+			tag = OptionalTag(f.JSONName, f.Expr)
 		}
 		field := jen.Id(f.Name).Add(exprCode(f.Expr, func(name string) jen.Code { return jen.Id(name) })).Tag(map[string]string{"json": tag})
 		if f.Description != "" {
