@@ -15,7 +15,7 @@ import (
 /*
 Listlogsexports List the log exports of an organisation
 
-The organisation's log exports, newest first, without their items: `GET …/exports/{exportId}` carries those. Paginated: up to `limit` exports per page, and `nextCursor` to pass as `cursor` for the next one, `null` on the last page. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403).
+The organisation's log exports, newest first, without their items: `GET …/exports/{exportId}` carries those. Paginated: up to `limit` exports per page, and `nextCursor` to pass as `cursor` for the next one, `null` on the last page. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

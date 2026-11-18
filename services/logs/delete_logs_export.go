@@ -13,7 +13,7 @@ import (
 /*
 Deletelogsexport Delete a log export
 
-Deletes an export whatever its status: one in flight stops, and the archive of a finished one is deleted at once. The export is gone afterwards: it is no longer listed, and reading it answers 404. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403).
+Deletes an export whatever its status: one in flight stops, and the archive of a finished one is deleted at once. The export is gone afterwards: it is no longer listed, and reading it answers 404. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

@@ -21,12 +21,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - key: Name of the key
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := self.Addsshkey(ctx, client, tracer, key)
+	response := self.Addsshkey(ctx, client, tracer, key, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +36,14 @@ Example:
 x-service: self
 operationId: addSshKey
 */
-func Addsshkey(ctx context.Context, c *client.Client, tracer trace.Tracer, key string) client.Response[models.Message] {
+func Addsshkey(ctx context.Context, c *client.Client, tracer trace.Tracer, key string, requestBody string) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "addSshKey", trace.WithAttributes(attribute.String("key", key)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/keys/%s", key)
 
 	// Make API call
-	response := client.Put[models.Message](ctx, c, path, nil)
+	response := client.Put[models.Message](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

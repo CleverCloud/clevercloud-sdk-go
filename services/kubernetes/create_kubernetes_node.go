@@ -14,7 +14,7 @@ import (
 /*
 Createkubernetesnode Create a standalone node
 
-Creates a single standalone node in the cluster and deploys it asynchronously; 409 when a node group or node of the cluster already holds the name. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Creates a single standalone node in the cluster and deploys it asynchronously; 409 when a node group or node of the cluster already holds the name, 412 when the organisation's Kubernetes quota would be exceeded or the cluster already holds 256 node groups and standalone nodes. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

@@ -6,26 +6,26 @@ import "time"
 
 // LogExport One export, as listed and fetched.
 type LogExport struct {
-	Accesslogs    bool                 `json:"accesslogs"`
+	Accesslogs    bool                 `json:"accesslogs"` // Whether HTTP access logs are exported.
 	Archive       *LogExportArchive    `json:"archive"`
 	ArchiveSha256 string               `json:"archiveSha256"` // Hex SHA-256 of the archive once `DONE`, to check the download against.
 	ArchiveSize   int                  `json:"archiveSize"`   // Size of the archive in bytes once `DONE`, compressed as it is downloaded.
 	Color         bool                 `json:"color"`         // Whether the log lines keep their colours, as asked.
-	CreatedAt     time.Time            `json:"createdAt"`
-	Error         string               `json:"error"`     // Why the export failed, in one sentence.
-	ExpiresAt     time.Time            `json:"expiresAt"` // When the archive is deleted from storage and the export turns `EXPIRED`.
+	CreatedAt     time.Time            `json:"createdAt"`     // When the export was asked, as an RFC 3339 date.
+	Error         string               `json:"error"`         // Why the export failed, in one sentence.
+	ExpiresAt     time.Time            `json:"expiresAt"`     // When the archive is deleted from storage and the export turns `EXPIRED`.
 	FileFormat    *LogExportFileFormat `json:"fileFormat"`
-	FileName      string               `json:"fileName"` // The archive's file name once `DONE`.
-	FinishedAt    time.Time            `json:"finishedAt"`
-	ID            string               `json:"id"`
-	Items         []LogExportItem      `json:"items"` // One per (resource, kind) on a fetch; always empty in a listing.
-	Logs          bool                 `json:"logs"`
-	OwnerID       string               `json:"ownerId"`
+	FileName      string               `json:"fileName"`   // The archive's file name once `DONE`.
+	FinishedAt    time.Time            `json:"finishedAt"` // When the export reached a final status, as an RFC 3339 date; `null` until then.
+	ID            string               `json:"id"`         // The export's identifier (`export_<uuid>`), to fetch, download or delete it with.
+	Items         []LogExportItem      `json:"items"`      // One per (resource, kind) on a fetch; always empty in a listing.
+	Logs          bool                 `json:"logs"`       // Whether runtime logs are exported.
+	OwnerID       string               `json:"ownerId"`    // The owner of the export, as resolved from the path: an organisation (`orga_…`) or a personal spac...
 	Progress      LogExportProgress    `json:"progress"`
-	RequestedBy   string               `json:"requestedBy"`
+	RequestedBy   string               `json:"requestedBy"` // Who asked for the export: a user (`user_…`), or the name of the platform service when the platfor...
 	ResourceIds   []string             `json:"resourceIds"` // The resources asked, sorted and without duplicates; `null` when the whole organisation was.
 	Since         time.Time            `json:"since"`       // Start of the window.
-	StartedAt     time.Time            `json:"startedAt"`
+	StartedAt     time.Time            `json:"startedAt"`   // When work on the export started, as an RFC 3339 date; `null` while it is `PENDING`.
 	Status        LogExportStatus      `json:"status"`
 	Until         time.Time            `json:"until"` // End of the window.
 }

@@ -1922,7 +1922,7 @@ type V2OrganisationsIDApplicationsAppidAddonsBuilder interface {
 	Addonid(addonid string) V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder
 	Env() V2OrganisationsIDApplicationsAppidAddonsEnvBuilder
 	Listorganisationapplicationaddons(ctx context.Context) client.Response[[]models.AddonView]
-	Linkorganisationapplicationaddon(ctx context.Context) client.Response[client.Nothing]
+	Linkorganisationapplicationaddon(ctx context.Context, request string) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidAddonsBuilderImpl implements V2OrganisationsIDApplicationsAppidAddonsBuilder
@@ -1957,8 +1957,8 @@ func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Listorganisationap
 }
 
 // Linkorganisationapplicationaddon calls applications.Linkorganisationapplicationaddon
-func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Linkorganisationapplicationaddon(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Linkorganisationapplicationaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Linkorganisationapplicationaddon(ctx context.Context, request string) client.Response[client.Nothing] {
+	return applications.Linkorganisationapplicationaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder provides access to operations
@@ -4114,7 +4114,7 @@ type V2SelfApplicationsAppidAddonsBuilder interface {
 	Addonid(addonid string) V2SelfApplicationsAppidAddonsAddonidBuilder
 	Env() V2SelfApplicationsAppidAddonsEnvBuilder
 	Getselfaddonslinkedtoapplicationbyappid(ctx context.Context) client.Response[[]models.AddonView]
-	Linkselfaddontoapplicationbyappid(ctx context.Context) client.Response[client.Nothing]
+	Linkselfaddontoapplicationbyappid(ctx context.Context, request string) client.Response[client.Nothing]
 }
 
 // v2SelfApplicationsAppidAddonsBuilderImpl implements V2SelfApplicationsAppidAddonsBuilder
@@ -4147,8 +4147,8 @@ func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Getselfaddonslinkedtoapplicat
 }
 
 // Linkselfaddontoapplicationbyappid calls applications.Linkselfaddontoapplicationbyappid
-func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Linkselfaddontoapplicationbyappid(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Linkselfaddontoapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Linkselfaddontoapplicationbyappid(ctx context.Context, request string) client.Response[client.Nothing] {
+	return applications.Linkselfaddontoapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidAddonsAddonidBuilder provides access to operations
@@ -5110,7 +5110,7 @@ func (b *v2SelfKeysBuilderImpl) Getsshkeys(ctx context.Context) client.Response[
 // V2SelfKeysKeyBuilder provides access to operations
 type V2SelfKeysKeyBuilder interface {
 	Removesshkey(ctx context.Context) client.Response[models.Message]
-	Addsshkey(ctx context.Context) client.Response[models.Message]
+	Addsshkey(ctx context.Context, request string) client.Response[models.Message]
 }
 
 // v2SelfKeysKeyBuilderImpl implements V2SelfKeysKeyBuilder
@@ -5133,8 +5133,8 @@ func (b *v2SelfKeysKeyBuilderImpl) Removesshkey(ctx context.Context) client.Resp
 }
 
 // Addsshkey calls self.Addsshkey
-func (b *v2SelfKeysKeyBuilderImpl) Addsshkey(ctx context.Context) client.Response[models.Message] {
-	return self.Addsshkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+func (b *v2SelfKeysKeyBuilderImpl) Addsshkey(ctx context.Context, request string) client.Response[models.Message] {
+	return self.Addsshkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key, request)
 }
 
 // V2SelfMfaBuilder provides access to operations
@@ -8883,6 +8883,7 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBu
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder interface {
+	Resync() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder
 	Deletenetworkgroupmember(ctx context.Context) client.Response[client.Nothing]
 	Getnetworkgroupmember(ctx context.Context) client.Response[models.Member]
 }
@@ -8905,6 +8906,11 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMem
 	}
 }
 
+// Resync returns Resync builder
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) Resync() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder {
+	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder(b.sdk, b.ownerid, b.networkgroupid, b.memberid)
+}
+
 // Deletenetworkgroupmember calls network_group.Deletenetworkgroupmember
 func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) Deletenetworkgroupmember(ctx context.Context) client.Response[client.Nothing] {
 	return networkgroup.Deletenetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
@@ -8913,6 +8919,34 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMe
 // Getnetworkgroupmember calls network_group.Getnetworkgroupmember
 func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) Getnetworkgroupmember(ctx context.Context) client.Response[models.Member] {
 	return networkgroup.Getnetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
+}
+
+// V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder provides access to operations
+type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder interface {
+	Resyncnetworkgroupmember(ctx context.Context) client.Response[models.NetworkGroupMemberResync]
+}
+
+// v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder
+type v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl struct {
+	sdk            *sdkImpl
+	ownerid        string
+	networkgroupid string
+	memberid       string
+}
+
+// newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder creates a new V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder
+func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder(sdk *sdkImpl, ownerid string, networkgroupid string, memberid string) V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder {
+	return &v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl{
+		memberid:       memberid,
+		networkgroupid: networkgroupid,
+		ownerid:        ownerid,
+		sdk:            sdk,
+	}
+}
+
+// Resyncnetworkgroupmember calls network_group.Resyncnetworkgroupmember
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl) Resyncnetworkgroupmember(ctx context.Context) client.Response[models.NetworkGroupMemberResync] {
+	return networkgroup.Resyncnetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder provides access to operations

@@ -20,12 +20,13 @@ Parameters:
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
   - appId: Application ID (`app_…`)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := applications.Linkselfaddontoapplicationbyappid(ctx, client, tracer, appId)
+	response := applications.Linkselfaddontoapplicationbyappid(ctx, client, tracer, appId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,14 +35,14 @@ Example:
 x-service: applications
 operationId: linkSelfAddonToApplicationByAppId
 */
-func Linkselfaddontoapplicationbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[client.Nothing] {
+func Linkselfaddontoapplicationbyappid(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, requestBody string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "linkSelfAddonToApplicationByAppId", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/applications/%s/addons", appId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

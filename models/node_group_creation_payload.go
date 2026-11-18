@@ -13,5 +13,5 @@ type NodeGroupCreationPayload struct {
 	Name               NodeGroupName         `json:"name"`            // Node group name
 	Tag                *string               `json:"tag,omitempty"`   // Optional tag, at most 1024 characters, no NUL character
 	Taints             []KubernetesTaint     `json:"taints,omitzero"` // Kubernetes taints
-	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"` // Target number of nodes
+	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"` // Target number of nodes. Must lie within `minNodeCount` and `maxNodeCount` (their defaults when om...
 }

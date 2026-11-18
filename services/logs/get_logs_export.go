@@ -14,7 +14,7 @@ import (
 /*
 Getlogsexport Get a log export
 
-One log export, with its progress and the files of its archive. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403).
+One log export, with its progress and the files of its archive. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request
