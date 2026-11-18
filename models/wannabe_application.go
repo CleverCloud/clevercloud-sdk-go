@@ -31,6 +31,6 @@ type WannabeApplication struct {
 	SeparateBuild          *bool            `json:"separateBuild,omitempty"`
 	Shutdownable           *bool            `json:"shutdownable,omitempty"`
 	StickySessions         *bool            `json:"stickySessions,omitempty"`
-	Tags                   []SemanticTag    `json:"tags,omitempty"`
+	Tags                   []SemanticTag    `json:"tags,omitzero"`
 	Zone                   *string          `json:"zone,omitempty"`
 }

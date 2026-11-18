@@ -4,7 +4,7 @@ package models
 
 // ClusterConsoleView A cluster of an add-on provider: its ID, label, zone, version and features.
 type ClusterConsoleView struct {
-	Features []string `json:"features,omitempty"`
+	Features []string `json:"features,omitzero"`
 	ID       string   `json:"id"`
 	Label    string   `json:"label"`
 	Version  string   `json:"version"`

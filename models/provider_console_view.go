@@ -4,7 +4,7 @@ package models
 
 // ProviderConsoleView An add-on provider as the console shows it: its clusters, the dedicated versions it offers and th...
 type ProviderConsoleView struct {
-	Clusters                []ClusterConsoleView     `json:"clusters,omitempty"`
+	Clusters                []ClusterConsoleView     `json:"clusters,omitzero"`
 	Dedicated               map[string]DedicatedView `json:"dedicated"` // Offered dedicated versions, keyed by version, in the order the provider declares them.
 	DefaultDedicatedVersion string                   `json:"defaultDedicatedVersion"`
 	ProviderID              string                   `json:"providerId"`

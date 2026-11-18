@@ -38,7 +38,7 @@ Example:
 x-service: network_group
 operationId: getWireguardConfiguration
 */
-func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string, opts ...Option) client.Response[client.Nothing] {
+func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string, opts ...Option) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getWireguardConfiguration", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 
@@ -51,7 +51,7 @@ func Getwireguardconfiguration(ctx context.Context, c *client.Client, tracer tra
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[client.PlainTextString](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

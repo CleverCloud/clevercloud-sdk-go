@@ -9,7 +9,7 @@ type ClusterNodeGroup struct {
 	Flavor           NodeFlavor            `json:"flavor"`
 	ID               string                `json:"id"`
 	Name             NodeGroupName         `json:"name"`
-	Nodes            []ClusterNode         `json:"nodes,omitempty"`
+	Nodes            []ClusterNode         `json:"nodes,omitzero"`
 	Status           NodeGroupStatusType   `json:"status"`
 	TargetNodeCount  NodeGroupNodeCount    `json:"targetNodeCount"`
 }

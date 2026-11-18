@@ -9,5 +9,5 @@ type WannabeStandaloneNode struct {
 	Labels      map[string]LabelValue `json:"labels,omitempty"`      // Kubernetes labels: a map from label key to label value (see each one's rule).
 	Name        NodeGroupName         `json:"name"`                  // Node name (kubernetes resource name format)
 	Tag         *string               `json:"tag,omitempty"`         // Optional tag, at most 1024 characters, no NUL character
-	Taints      []KubernetesTaint     `json:"taints,omitempty"`      // Kubernetes taints
+	Taints      []KubernetesTaint     `json:"taints,omitzero"`       // Kubernetes taints
 }

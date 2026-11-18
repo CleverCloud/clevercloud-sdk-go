@@ -12,18 +12,18 @@ type KubernetesCluster struct {
 	Description          *string                      `json:"description,omitempty"`         // Optional description
 	Failure              *FailureCause                `json:"failure,omitempty"`
 	Features             *ClusterFeatures             `json:"features,omitempty"`
-	ID                   string                       `json:"id"`                             // Kubernetes cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`)
-	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitempty"`        // Load balancers. Detail response only; empty elsewhere.
-	LocationID           *string                      `json:"locationId,omitempty"`           // Deprecated: read `zoneId`. Always the same value as `zoneId`, and `null` exactly when it is.
-	Name                 string                       `json:"name"`                           // Cluster name
-	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitempty"`           // Node groups, with their nodes. Detail response only; empty elsewhere.
-	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitempty"` // Standalone node groups. Detail response only; empty elsewhere.
-	Status               ClusterStatusType            `json:"status"`                         // Cluster status
-	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`    // Total storage usage in bytes, when known.
-	Tags                 []SemanticTag                `json:"tags"`                           // Semantic tags
-	TenantID             string                       `json:"tenantId"`                       // Owner (organisation) ID
-	TopologyConfig       TopologyConfig               `json:"topologyConfig"`                 // Control-plane topology configuration
-	Version              Version                      `json:"version"`                        // Kubernetes version
+	ID                   string                       `json:"id"`                            // Kubernetes cluster ID (`kubernetes_<ULID>` or `kubernetes_<UUID>`)
+	LoadBalancers        []ClusterLoadBalancer        `json:"loadBalancers,omitzero"`        // Load balancers. Detail response only; empty elsewhere.
+	LocationID           *string                      `json:"locationId,omitempty"`          // Deprecated: read `zoneId`. Always the same value as `zoneId`, and `null` exactly when it is.
+	Name                 string                       `json:"name"`                          // Cluster name
+	NodeGroups           []ClusterNodeGroup           `json:"nodeGroups,omitzero"`           // Node groups, with their nodes. Detail response only; empty elsewhere.
+	StandaloneNodeGroups []ClusterStandaloneNodeGroup `json:"standaloneNodeGroups,omitzero"` // Standalone node groups. Detail response only; empty elsewhere.
+	Status               ClusterStatusType            `json:"status"`                        // Cluster status
+	StorageUsageBytes    *int                         `json:"storageUsageBytes,omitempty"`   // Total storage usage in bytes, when known.
+	Tags                 []SemanticTag                `json:"tags"`                          // Semantic tags
+	TenantID             string                       `json:"tenantId"`                      // Owner (organisation) ID
+	TopologyConfig       TopologyConfig               `json:"topologyConfig"`                // Control-plane topology configuration
+	Version              Version                      `json:"version"`                       // Kubernetes version
 	Waiting              *ClusterWaitingView          `json:"waiting,omitempty"`
 	ZoneID               *string                      `json:"zoneId,omitempty"` // The zone (uuid) of the cluster's deployment profile, read at request time; `null` when that profi...
 }

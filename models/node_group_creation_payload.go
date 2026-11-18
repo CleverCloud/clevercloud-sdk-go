@@ -10,8 +10,8 @@ type NodeGroupCreationPayload struct {
 	Labels             map[string]LabelValue `json:"labels,omitempty"`             // Kubernetes labels: a map from label key to label value (see each one's rule).
 	MaxNodeCount       *NodeGroupNodeCount   `json:"maxNodeCount,omitempty"`
 	MinNodeCount       *NodeGroupNodeCount   `json:"minNodeCount,omitempty"`
-	Name               NodeGroupName         `json:"name"`             // Node group name
-	Tag                *string               `json:"tag,omitempty"`    // Optional tag, at most 1024 characters, no NUL character
-	Taints             []KubernetesTaint     `json:"taints,omitempty"` // Kubernetes taints
-	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"`  // Target number of nodes
+	Name               NodeGroupName         `json:"name"`            // Node group name
+	Tag                *string               `json:"tag,omitempty"`   // Optional tag, at most 1024 characters, no NUL character
+	Taints             []KubernetesTaint     `json:"taints,omitzero"` // Kubernetes taints
+	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"` // Target number of nodes
 }

@@ -4,5 +4,5 @@ package models
 
 // DedicatedView A dedicated version offered by an add-on provider, with its features.
 type DedicatedView struct {
-	Features []Feature `json:"features,omitempty"`
+	Features []Feature `json:"features,omitzero"`
 }

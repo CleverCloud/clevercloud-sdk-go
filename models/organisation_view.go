@@ -12,7 +12,7 @@ type OrganisationView struct {
 	City             *string       `json:"city,omitempty"`
 	CleverEnterprise bool          `json:"cleverEnterprise"`
 	Company          *string       `json:"company,omitempty"`
-	ContextFlags     []PartnerFlag `json:"contextFlags,omitempty"` // Flags of the organisation's partner; always present, an empty array when there are none.
+	ContextFlags     []PartnerFlag `json:"contextFlags,omitzero"` // Flags of the organisation's partner; always present, an empty array when there are none.
 	Country          *string       `json:"country,omitempty"`
 	CustomerFullName *string       `json:"customerFullName,omitempty"`
 	Description      string        `json:"description"`

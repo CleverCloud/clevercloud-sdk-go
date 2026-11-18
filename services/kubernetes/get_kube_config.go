@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: getKubeConfig
 */
-func Getkubeconfig(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, opts ...Option) client.Response[client.Nothing] {
+func Getkubeconfig(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, opts ...Option) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getKubeConfig", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 
@@ -50,7 +50,7 @@ func Getkubeconfig(ctx context.Context, c *client.Client, tracer trace.Tracer, o
 	}
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[client.PlainTextString](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

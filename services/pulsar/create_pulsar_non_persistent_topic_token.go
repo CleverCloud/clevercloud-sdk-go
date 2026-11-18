@@ -35,14 +35,14 @@ Example:
 x-service: pulsar
 operationId: createPulsarNonPersistentTopicToken
 */
-func Createpulsarnonpersistenttopictoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
+func Createpulsarnonpersistenttopictoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "createPulsarNonPersistentTopicToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 
 	path := utils.Path("/v4/addon-providers/addon-pulsar/addons/%s/non-persistent-topics/%s/token", pulsarId, topic)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.PlainTextString](ctx, c, path, nil)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

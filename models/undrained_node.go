@@ -4,11 +4,11 @@ package models
 
 // UndrainedNode A node an operation left undrained: still `DRAINING`, cordoned, with its VM running. Carries the ...
 type UndrainedNode struct {
-	Attachments []string `json:"attachments,omitempty"`
+	Attachments []string `json:"attachments,omitzero"`
 	Detail      *string  `json:"detail,omitempty"`
 	Name        *string  `json:"name,omitempty"`   // The Kubernetes node name.
 	NodeID      *string  `json:"nodeId,omitempty"` // The node id.
 	Outcome     *string  `json:"outcome,omitempty"`
-	Pods        []string `json:"pods,omitempty"`
+	Pods        []string `json:"pods,omitzero"`
 	Reason      *string  `json:"reason,omitempty"`
 }
