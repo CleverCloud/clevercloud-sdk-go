@@ -41,7 +41,7 @@ func Resyncnetworkgroupmember(ctx context.Context, c *client.Client, tracer trac
 	ctx, span := tracer.Start(ctx, "resyncNetworkGroupMember", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("memberId", memberId)))
 	defer span.End()
 
-	path := utils.Path("/networkgroups/organisations/%s/networkgroups/%s/members/%s/resync", ownerId, networkGroupId, memberId)
+	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/members/%s/resync", ownerId, networkGroupId, memberId)
 
 	// Make API call
 	response := client.Post[models.NetworkGroupMemberResync](ctx, c, path, nil)

@@ -21,12 +21,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
   - appId: Application ID (`app_…`)
+  - requestBody: the request payload
 
 # Returns the operation result or an error
 
 Example:
 
-	response := applications.Linkorganisationapplicationaddon(ctx, client, tracer, id, appId)
+	response := applications.Linkorganisationapplicationaddon(ctx, client, tracer, id, appId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,14 +36,14 @@ Example:
 x-service: applications
 operationId: linkOrganisationApplicationAddon
 */
-func Linkorganisationapplicationaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string) client.Response[client.Nothing] {
+func Linkorganisationapplicationaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, requestBody string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "linkOrganisationApplicationAddon", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/applications/%s/addons", id, appId)
 
 	// Make API call
-	response := client.Post[client.Nothing](ctx, c, path, nil)
+	response := client.Post[client.Nothing](ctx, c, path, requestBody)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

@@ -4,10 +4,10 @@ package models
 
 // LogExportProgress How far an export has gone.
 type LogExportProgress struct {
-	ItemsDone    int `json:"itemsDone"`
-	ItemsFailed  int `json:"itemsFailed"`
-	ItemsSkipped int `json:"itemsSkipped"`
-	ItemsTotal   int `json:"itemsTotal"`
-	LineCount    int `json:"lineCount"`
-	ReadBytes    int `json:"readBytes"` // Bytes of logs read so far, before compression.
+	ItemsDone    int `json:"itemsDone"`    // Items whose export is complete.
+	ItemsFailed  int `json:"itemsFailed"`  // Items whose export failed.
+	ItemsSkipped int `json:"itemsSkipped"` // Items skipped: the resource has no logs of that kind to read.
+	ItemsTotal   int `json:"itemsTotal"`   // Number of items of the export. An item is a (resource, kind) pair: a resource exported with both ...
+	LineCount    int `json:"lineCount"`    // Lines exported so far, all items together.
+	ReadBytes    int `json:"readBytes"`    // Bytes of logs read so far, before compression.
 }

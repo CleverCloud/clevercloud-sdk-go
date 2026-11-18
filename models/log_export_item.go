@@ -8,9 +8,9 @@ import "time"
 type LogExportItem struct {
 	FirstLineAt time.Time           `json:"firstLineAt"` // Date of the earliest line exported for this item; `null` when it has none. Later than the export'...
 	Kind        LogExportKind       `json:"kind"`
-	LineCount   int                 `json:"lineCount"`
-	ReadBytes   int                 `json:"readBytes"` // Bytes of logs read for this item, before compression.
-	Reason      string              `json:"reason"`    // Why the item was skipped, how it failed, or why a `DONE` item's read may be short; `null` when th...
-	ResourceID  string              `json:"resourceId"`
+	LineCount   int                 `json:"lineCount"`  // Lines exported for this item.
+	ReadBytes   int                 `json:"readBytes"`  // Bytes of logs read for this item, before compression.
+	Reason      string              `json:"reason"`     // Why the item was skipped, how it failed, or why a `DONE` item's read may be short; `null` when th...
+	ResourceID  string              `json:"resourceId"` // The resource the item reads: an application (`app_…`) or an add-on by its real id (`postgresql_…`...
 	Status      LogExportItemStatus `json:"status"`
 }

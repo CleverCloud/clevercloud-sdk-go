@@ -13,7 +13,7 @@ import (
 /*
 Downloadlogsexport Download a log export
 
-Redirects (302) to a short-lived download URL of the export's archive. 409 while the export is not `DONE`, 410 once its archive has expired. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403).
+Redirects (302) to a short-lived download URL of the export's archive. 409 while the export is not `DONE`, 410 once its archive has expired. Requires the `access_organisations` right and a membership of the organisation: a member with no role is refused (403). Also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

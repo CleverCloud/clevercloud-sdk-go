@@ -14,6 +14,7 @@ type OrganisationView struct {
 	Company          *string       `json:"company,omitempty"`
 	ContextFlags     []PartnerFlag `json:"contextFlags,omitzero"` // Flags of the organisation's partner; always present, an empty array when there are none.
 	Country          *string       `json:"country,omitempty"`
+	CountryCode      *string       `json:"countryCode,omitempty"` // ISO 3166-1 alpha-2 code of `country` (`FR` for `FRANCE`), in the form `PUT /v2/organisations/{id}...
 	CustomerFullName *string       `json:"customerFullName,omitempty"`
 	Description      string        `json:"description"`
 	EmergencyNumber  *string       `json:"emergencyNumber,omitempty"`
