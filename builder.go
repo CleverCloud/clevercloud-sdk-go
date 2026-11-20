@@ -8,9 +8,11 @@ import (
 	applications "go.clever-cloud.dev/sdk/services/applications"
 	auth "go.clever-cloud.dev/sdk/services/auth"
 	configurationprovider "go.clever-cloud.dev/sdk/services/configuration_provider"
+	esaddon "go.clever-cloud.dev/sdk/services/es_addon"
 	events "go.clever-cloud.dev/sdk/services/events"
 	github "go.clever-cloud.dev/sdk/services/github"
 	instances "go.clever-cloud.dev/sdk/services/instances"
+	jenkins "go.clever-cloud.dev/sdk/services/jenkins"
 	keycloak "go.clever-cloud.dev/sdk/services/keycloak"
 	kubernetes "go.clever-cloud.dev/sdk/services/kubernetes"
 	loadbalancerinfo "go.clever-cloud.dev/sdk/services/loadbalancerinfo"
@@ -18,13 +20,16 @@ import (
 	materiakv "go.clever-cloud.dev/sdk/services/materia_kv"
 	matomo "go.clever-cloud.dev/sdk/services/matomo"
 	metabase "go.clever-cloud.dev/sdk/services/metabase"
+	mysqladdon "go.clever-cloud.dev/sdk/services/my_sql_addon"
 	networkgroup "go.clever-cloud.dev/sdk/services/network_group"
 	notifications "go.clever-cloud.dev/sdk/services/notifications"
 	organisations "go.clever-cloud.dev/sdk/services/organisations"
 	otoroshi "go.clever-cloud.dev/sdk/services/otoroshi"
 	payments "go.clever-cloud.dev/sdk/services/payments"
+	postgresqladdon "go.clever-cloud.dev/sdk/services/postgresql_addon"
 	products "go.clever-cloud.dev/sdk/services/products"
 	pulsar "go.clever-cloud.dev/sdk/services/pulsar"
+	redisaddon "go.clever-cloud.dev/sdk/services/redis_addon"
 	self "go.clever-cloud.dev/sdk/services/self"
 	zone "go.clever-cloud.dev/sdk/services/zone"
 )
@@ -38,6 +43,7 @@ type V2Builder interface {
 	Oauth() V2OauthBuilder
 	Organisations() V2OrganisationsBuilder
 	Products() V2ProductsBuilder
+	Providers() V2ProvidersBuilder
 	Self() V2SelfBuilder
 	Summary() V2SummaryBuilder
 }
@@ -80,6 +86,11 @@ func (b *v2BuilderImpl) Organisations() V2OrganisationsBuilder {
 // Products returns Products builder
 func (b *v2BuilderImpl) Products() V2ProductsBuilder {
 	return newV2ProductsBuilder(b.sdk)
+}
+
+// Providers returns Providers builder
+func (b *v2BuilderImpl) Providers() V2ProvidersBuilder {
+	return newV2ProvidersBuilder(b.sdk)
 }
 
 // Self returns Self builder
@@ -3476,6 +3487,474 @@ func (b *v2ProductsInstancesBuilderImpl) Getavailableinstances(ctx context.Conte
 	return products.Getavailableinstances(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
+// V2ProvidersBuilder provides access to operations
+type V2ProvidersBuilder interface {
+	EsAddon() V2ProvidersEsAddonBuilder
+	MysqlAddon() V2ProvidersMysqlAddonBuilder
+	PostgresqlAddon() V2ProvidersPostgresqlAddonBuilder
+	RedisAddon() V2ProvidersRedisAddonBuilder
+}
+
+// v2ProvidersBuilderImpl implements V2ProvidersBuilder
+type v2ProvidersBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersBuilder creates a new V2ProvidersBuilder
+func newV2ProvidersBuilder(sdk *sdkImpl) V2ProvidersBuilder {
+	return &v2ProvidersBuilderImpl{sdk: sdk}
+}
+
+// EsAddon returns EsAddon builder
+func (b *v2ProvidersBuilderImpl) EsAddon() V2ProvidersEsAddonBuilder {
+	return newV2ProvidersEsAddonBuilder(b.sdk)
+}
+
+// MysqlAddon returns MysqlAddon builder
+func (b *v2ProvidersBuilderImpl) MysqlAddon() V2ProvidersMysqlAddonBuilder {
+	return newV2ProvidersMysqlAddonBuilder(b.sdk)
+}
+
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v2ProvidersBuilderImpl) PostgresqlAddon() V2ProvidersPostgresqlAddonBuilder {
+	return newV2ProvidersPostgresqlAddonBuilder(b.sdk)
+}
+
+// RedisAddon returns RedisAddon builder
+func (b *v2ProvidersBuilderImpl) RedisAddon() V2ProvidersRedisAddonBuilder {
+	return newV2ProvidersRedisAddonBuilder(b.sdk)
+}
+
+// V2ProvidersEsAddonBuilder provides access to operations
+type V2ProvidersEsAddonBuilder interface {
+	ApmServerSetup() V2ProvidersEsAddonApmServerSetupBuilder
+	KibanaSetup() V2ProvidersEsAddonKibanaSetupBuilder
+	Resources() V2ProvidersEsAddonResourcesBuilder
+}
+
+// v2ProvidersEsAddonBuilderImpl implements V2ProvidersEsAddonBuilder
+type v2ProvidersEsAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonBuilder creates a new V2ProvidersEsAddonBuilder
+func newV2ProvidersEsAddonBuilder(sdk *sdkImpl) V2ProvidersEsAddonBuilder {
+	return &v2ProvidersEsAddonBuilderImpl{sdk: sdk}
+}
+
+// ApmServerSetup returns ApmServerSetup builder
+func (b *v2ProvidersEsAddonBuilderImpl) ApmServerSetup() V2ProvidersEsAddonApmServerSetupBuilder {
+	return newV2ProvidersEsAddonApmServerSetupBuilder(b.sdk)
+}
+
+// KibanaSetup returns KibanaSetup builder
+func (b *v2ProvidersEsAddonBuilderImpl) KibanaSetup() V2ProvidersEsAddonKibanaSetupBuilder {
+	return newV2ProvidersEsAddonKibanaSetupBuilder(b.sdk)
+}
+
+// Resources returns Resources builder
+func (b *v2ProvidersEsAddonBuilderImpl) Resources() V2ProvidersEsAddonResourcesBuilder {
+	return newV2ProvidersEsAddonResourcesBuilder(b.sdk)
+}
+
+// V2ProvidersEsAddonApmServerSetupBuilder provides access to operations
+type V2ProvidersEsAddonApmServerSetupBuilder interface {
+	Version(version string) V2ProvidersEsAddonApmServerSetupVersionBuilder
+	Getelasticsearchapmserversetupforversion7(ctx context.Context) client.Response[client.PlainTextString]
+}
+
+// v2ProvidersEsAddonApmServerSetupBuilderImpl implements V2ProvidersEsAddonApmServerSetupBuilder
+type v2ProvidersEsAddonApmServerSetupBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonApmServerSetupBuilder creates a new V2ProvidersEsAddonApmServerSetupBuilder
+func newV2ProvidersEsAddonApmServerSetupBuilder(sdk *sdkImpl) V2ProvidersEsAddonApmServerSetupBuilder {
+	return &v2ProvidersEsAddonApmServerSetupBuilderImpl{sdk: sdk}
+}
+
+// Version returns builder for version
+func (b *v2ProvidersEsAddonApmServerSetupBuilderImpl) Version(version string) V2ProvidersEsAddonApmServerSetupVersionBuilder {
+	return newV2ProvidersEsAddonApmServerSetupVersionBuilder(b.sdk, version)
+}
+
+// Getelasticsearchapmserversetupforversion7 calls es_addon.Getelasticsearchapmserversetupforversion7
+func (b *v2ProvidersEsAddonApmServerSetupBuilderImpl) Getelasticsearchapmserversetupforversion7(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.Getelasticsearchapmserversetupforversion7(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersEsAddonApmServerSetupVersionBuilder provides access to operations
+type V2ProvidersEsAddonApmServerSetupVersionBuilder interface {
+	Getelasticsearchapmserversetup(ctx context.Context) client.Response[client.PlainTextString]
+}
+
+// v2ProvidersEsAddonApmServerSetupVersionBuilderImpl implements V2ProvidersEsAddonApmServerSetupVersionBuilder
+type v2ProvidersEsAddonApmServerSetupVersionBuilderImpl struct {
+	sdk     *sdkImpl
+	version string
+}
+
+// newV2ProvidersEsAddonApmServerSetupVersionBuilder creates a new V2ProvidersEsAddonApmServerSetupVersionBuilder
+func newV2ProvidersEsAddonApmServerSetupVersionBuilder(sdk *sdkImpl, version string) V2ProvidersEsAddonApmServerSetupVersionBuilder {
+	return &v2ProvidersEsAddonApmServerSetupVersionBuilderImpl{
+		sdk:     sdk,
+		version: version,
+	}
+}
+
+// Getelasticsearchapmserversetup calls es_addon.Getelasticsearchapmserversetup
+func (b *v2ProvidersEsAddonApmServerSetupVersionBuilderImpl) Getelasticsearchapmserversetup(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.Getelasticsearchapmserversetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+}
+
+// V2ProvidersEsAddonKibanaSetupBuilder provides access to operations
+type V2ProvidersEsAddonKibanaSetupBuilder interface {
+	Version(version string) V2ProvidersEsAddonKibanaSetupVersionBuilder
+	Getelasticsearchkibanasetupforversion7(ctx context.Context) client.Response[client.PlainTextString]
+}
+
+// v2ProvidersEsAddonKibanaSetupBuilderImpl implements V2ProvidersEsAddonKibanaSetupBuilder
+type v2ProvidersEsAddonKibanaSetupBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonKibanaSetupBuilder creates a new V2ProvidersEsAddonKibanaSetupBuilder
+func newV2ProvidersEsAddonKibanaSetupBuilder(sdk *sdkImpl) V2ProvidersEsAddonKibanaSetupBuilder {
+	return &v2ProvidersEsAddonKibanaSetupBuilderImpl{sdk: sdk}
+}
+
+// Version returns builder for version
+func (b *v2ProvidersEsAddonKibanaSetupBuilderImpl) Version(version string) V2ProvidersEsAddonKibanaSetupVersionBuilder {
+	return newV2ProvidersEsAddonKibanaSetupVersionBuilder(b.sdk, version)
+}
+
+// Getelasticsearchkibanasetupforversion7 calls es_addon.Getelasticsearchkibanasetupforversion7
+func (b *v2ProvidersEsAddonKibanaSetupBuilderImpl) Getelasticsearchkibanasetupforversion7(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.Getelasticsearchkibanasetupforversion7(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersEsAddonKibanaSetupVersionBuilder provides access to operations
+type V2ProvidersEsAddonKibanaSetupVersionBuilder interface {
+	Getelasticsearchkibanasetup(ctx context.Context) client.Response[client.PlainTextString]
+}
+
+// v2ProvidersEsAddonKibanaSetupVersionBuilderImpl implements V2ProvidersEsAddonKibanaSetupVersionBuilder
+type v2ProvidersEsAddonKibanaSetupVersionBuilderImpl struct {
+	sdk     *sdkImpl
+	version string
+}
+
+// newV2ProvidersEsAddonKibanaSetupVersionBuilder creates a new V2ProvidersEsAddonKibanaSetupVersionBuilder
+func newV2ProvidersEsAddonKibanaSetupVersionBuilder(sdk *sdkImpl, version string) V2ProvidersEsAddonKibanaSetupVersionBuilder {
+	return &v2ProvidersEsAddonKibanaSetupVersionBuilderImpl{
+		sdk:     sdk,
+		version: version,
+	}
+}
+
+// Getelasticsearchkibanasetup calls es_addon.Getelasticsearchkibanasetup
+func (b *v2ProvidersEsAddonKibanaSetupVersionBuilderImpl) Getelasticsearchkibanasetup(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.Getelasticsearchkibanasetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+}
+
+// V2ProvidersEsAddonResourcesBuilder provides access to operations
+type V2ProvidersEsAddonResourcesBuilder interface {
+	Providerinfos() V2ProvidersEsAddonResourcesProviderinfosBuilder
+	Versions() V2ProvidersEsAddonResourcesVersionsBuilder
+}
+
+// v2ProvidersEsAddonResourcesBuilderImpl implements V2ProvidersEsAddonResourcesBuilder
+type v2ProvidersEsAddonResourcesBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonResourcesBuilder creates a new V2ProvidersEsAddonResourcesBuilder
+func newV2ProvidersEsAddonResourcesBuilder(sdk *sdkImpl) V2ProvidersEsAddonResourcesBuilder {
+	return &v2ProvidersEsAddonResourcesBuilderImpl{sdk: sdk}
+}
+
+// Providerinfos returns Providerinfos builder
+func (b *v2ProvidersEsAddonResourcesBuilderImpl) Providerinfos() V2ProvidersEsAddonResourcesProviderinfosBuilder {
+	return newV2ProvidersEsAddonResourcesProviderinfosBuilder(b.sdk)
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersEsAddonResourcesBuilderImpl) Versions() V2ProvidersEsAddonResourcesVersionsBuilder {
+	return newV2ProvidersEsAddonResourcesVersionsBuilder(b.sdk)
+}
+
+// V2ProvidersEsAddonResourcesProviderinfosBuilder provides access to operations
+type V2ProvidersEsAddonResourcesProviderinfosBuilder interface {
+	Getelasticsearchproviderinformationv2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2]
+}
+
+// v2ProvidersEsAddonResourcesProviderinfosBuilderImpl implements V2ProvidersEsAddonResourcesProviderinfosBuilder
+type v2ProvidersEsAddonResourcesProviderinfosBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonResourcesProviderinfosBuilder creates a new V2ProvidersEsAddonResourcesProviderinfosBuilder
+func newV2ProvidersEsAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2ProvidersEsAddonResourcesProviderinfosBuilder {
+	return &v2ProvidersEsAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
+}
+
+// Getelasticsearchproviderinformationv2 calls es_addon.Getelasticsearchproviderinformationv2
+func (b *v2ProvidersEsAddonResourcesProviderinfosBuilderImpl) Getelasticsearchproviderinformationv2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2] {
+	return esaddon.Getelasticsearchproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersEsAddonResourcesVersionsBuilder provides access to operations
+type V2ProvidersEsAddonResourcesVersionsBuilder interface {
+	Getelasticsearchaddonversions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole]
+}
+
+// v2ProvidersEsAddonResourcesVersionsBuilderImpl implements V2ProvidersEsAddonResourcesVersionsBuilder
+type v2ProvidersEsAddonResourcesVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersEsAddonResourcesVersionsBuilder creates a new V2ProvidersEsAddonResourcesVersionsBuilder
+func newV2ProvidersEsAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersEsAddonResourcesVersionsBuilder {
+	return &v2ProvidersEsAddonResourcesVersionsBuilderImpl{sdk: sdk}
+}
+
+// Getelasticsearchaddonversions calls es_addon.Getelasticsearchaddonversions
+func (b *v2ProvidersEsAddonResourcesVersionsBuilderImpl) Getelasticsearchaddonversions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole] {
+	return esaddon.Getelasticsearchaddonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersMysqlAddonBuilder provides access to operations
+type V2ProvidersMysqlAddonBuilder interface {
+	Resources() V2ProvidersMysqlAddonResourcesBuilder
+}
+
+// v2ProvidersMysqlAddonBuilderImpl implements V2ProvidersMysqlAddonBuilder
+type v2ProvidersMysqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersMysqlAddonBuilder creates a new V2ProvidersMysqlAddonBuilder
+func newV2ProvidersMysqlAddonBuilder(sdk *sdkImpl) V2ProvidersMysqlAddonBuilder {
+	return &v2ProvidersMysqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Resources returns Resources builder
+func (b *v2ProvidersMysqlAddonBuilderImpl) Resources() V2ProvidersMysqlAddonResourcesBuilder {
+	return newV2ProvidersMysqlAddonResourcesBuilder(b.sdk)
+}
+
+// V2ProvidersMysqlAddonResourcesBuilder provides access to operations
+type V2ProvidersMysqlAddonResourcesBuilder interface {
+	Providerinfos() V2ProvidersMysqlAddonResourcesProviderinfosBuilder
+	Versions() V2ProvidersMysqlAddonResourcesVersionsBuilder
+}
+
+// v2ProvidersMysqlAddonResourcesBuilderImpl implements V2ProvidersMysqlAddonResourcesBuilder
+type v2ProvidersMysqlAddonResourcesBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersMysqlAddonResourcesBuilder creates a new V2ProvidersMysqlAddonResourcesBuilder
+func newV2ProvidersMysqlAddonResourcesBuilder(sdk *sdkImpl) V2ProvidersMysqlAddonResourcesBuilder {
+	return &v2ProvidersMysqlAddonResourcesBuilderImpl{sdk: sdk}
+}
+
+// Providerinfos returns Providerinfos builder
+func (b *v2ProvidersMysqlAddonResourcesBuilderImpl) Providerinfos() V2ProvidersMysqlAddonResourcesProviderinfosBuilder {
+	return newV2ProvidersMysqlAddonResourcesProviderinfosBuilder(b.sdk)
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersMysqlAddonResourcesBuilderImpl) Versions() V2ProvidersMysqlAddonResourcesVersionsBuilder {
+	return newV2ProvidersMysqlAddonResourcesVersionsBuilder(b.sdk)
+}
+
+// V2ProvidersMysqlAddonResourcesProviderinfosBuilder provides access to operations
+type V2ProvidersMysqlAddonResourcesProviderinfosBuilder interface {
+	Getmysqlproviderinformationv2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2]
+}
+
+// v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl implements V2ProvidersMysqlAddonResourcesProviderinfosBuilder
+type v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersMysqlAddonResourcesProviderinfosBuilder creates a new V2ProvidersMysqlAddonResourcesProviderinfosBuilder
+func newV2ProvidersMysqlAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2ProvidersMysqlAddonResourcesProviderinfosBuilder {
+	return &v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
+}
+
+// Getmysqlproviderinformationv2 calls my_sql_addon.Getmysqlproviderinformationv2
+func (b *v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl) Getmysqlproviderinformationv2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2] {
+	return mysqladdon.Getmysqlproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersMysqlAddonResourcesVersionsBuilder provides access to operations
+type V2ProvidersMysqlAddonResourcesVersionsBuilder interface {
+	Getmysqladdonversions(ctx context.Context) client.Response[models.MysqlVersionsConsole]
+}
+
+// v2ProvidersMysqlAddonResourcesVersionsBuilderImpl implements V2ProvidersMysqlAddonResourcesVersionsBuilder
+type v2ProvidersMysqlAddonResourcesVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersMysqlAddonResourcesVersionsBuilder creates a new V2ProvidersMysqlAddonResourcesVersionsBuilder
+func newV2ProvidersMysqlAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersMysqlAddonResourcesVersionsBuilder {
+	return &v2ProvidersMysqlAddonResourcesVersionsBuilderImpl{sdk: sdk}
+}
+
+// Getmysqladdonversions calls my_sql_addon.Getmysqladdonversions
+func (b *v2ProvidersMysqlAddonResourcesVersionsBuilderImpl) Getmysqladdonversions(ctx context.Context) client.Response[models.MysqlVersionsConsole] {
+	return mysqladdon.Getmysqladdonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonBuilder provides access to operations
+type V2ProvidersPostgresqlAddonBuilder interface {
+	Resources() V2ProvidersPostgresqlAddonResourcesBuilder
+}
+
+// v2ProvidersPostgresqlAddonBuilderImpl implements V2ProvidersPostgresqlAddonBuilder
+type v2ProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonBuilder creates a new V2ProvidersPostgresqlAddonBuilder
+func newV2ProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonBuilder {
+	return &v2ProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Resources returns Resources builder
+func (b *v2ProvidersPostgresqlAddonBuilderImpl) Resources() V2ProvidersPostgresqlAddonResourcesBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonResourcesBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesBuilder interface {
+	Providerinfos() V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+	Versions() V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+}
+
+// v2ProvidersPostgresqlAddonResourcesBuilderImpl implements V2ProvidersPostgresqlAddonResourcesBuilder
+type v2ProvidersPostgresqlAddonResourcesBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesBuilder creates a new V2ProvidersPostgresqlAddonResourcesBuilder
+func newV2ProvidersPostgresqlAddonResourcesBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesBuilderImpl{sdk: sdk}
+}
+
+// Providerinfos returns Providerinfos builder
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) Providerinfos() V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder(b.sdk)
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) Versions() V2ProvidersPostgresqlAddonResourcesVersionsBuilder {
+	return newV2ProvidersPostgresqlAddonResourcesVersionsBuilder(b.sdk)
+}
+
+// V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder interface {
+	Getpostgresqlproviderinformationv2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2]
+}
+
+// v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl implements V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+type v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder creates a new V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
+func newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
+}
+
+// Getpostgresqlproviderinformationv2 calls postgresql_addon.Getpostgresqlproviderinformationv2
+func (b *v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl) Getpostgresqlproviderinformationv2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2] {
+	return postgresqladdon.Getpostgresqlproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersPostgresqlAddonResourcesVersionsBuilder provides access to operations
+type V2ProvidersPostgresqlAddonResourcesVersionsBuilder interface {
+	Getpostgresqladdonversions(ctx context.Context) client.Response[models.PostgresqlVersionsView]
+}
+
+// v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl implements V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+type v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersPostgresqlAddonResourcesVersionsBuilder creates a new V2ProvidersPostgresqlAddonResourcesVersionsBuilder
+func newV2ProvidersPostgresqlAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersPostgresqlAddonResourcesVersionsBuilder {
+	return &v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl{sdk: sdk}
+}
+
+// Getpostgresqladdonversions calls postgresql_addon.Getpostgresqladdonversions
+func (b *v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl) Getpostgresqladdonversions(ctx context.Context) client.Response[models.PostgresqlVersionsView] {
+	return postgresqladdon.Getpostgresqladdonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V2ProvidersRedisAddonBuilder provides access to operations
+type V2ProvidersRedisAddonBuilder interface {
+	Resources() V2ProvidersRedisAddonResourcesBuilder
+}
+
+// v2ProvidersRedisAddonBuilderImpl implements V2ProvidersRedisAddonBuilder
+type v2ProvidersRedisAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersRedisAddonBuilder creates a new V2ProvidersRedisAddonBuilder
+func newV2ProvidersRedisAddonBuilder(sdk *sdkImpl) V2ProvidersRedisAddonBuilder {
+	return &v2ProvidersRedisAddonBuilderImpl{sdk: sdk}
+}
+
+// Resources returns Resources builder
+func (b *v2ProvidersRedisAddonBuilderImpl) Resources() V2ProvidersRedisAddonResourcesBuilder {
+	return newV2ProvidersRedisAddonResourcesBuilder(b.sdk)
+}
+
+// V2ProvidersRedisAddonResourcesBuilder provides access to operations
+type V2ProvidersRedisAddonResourcesBuilder interface {
+	Versions() V2ProvidersRedisAddonResourcesVersionsBuilder
+}
+
+// v2ProvidersRedisAddonResourcesBuilderImpl implements V2ProvidersRedisAddonResourcesBuilder
+type v2ProvidersRedisAddonResourcesBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersRedisAddonResourcesBuilder creates a new V2ProvidersRedisAddonResourcesBuilder
+func newV2ProvidersRedisAddonResourcesBuilder(sdk *sdkImpl) V2ProvidersRedisAddonResourcesBuilder {
+	return &v2ProvidersRedisAddonResourcesBuilderImpl{sdk: sdk}
+}
+
+// Versions returns Versions builder
+func (b *v2ProvidersRedisAddonResourcesBuilderImpl) Versions() V2ProvidersRedisAddonResourcesVersionsBuilder {
+	return newV2ProvidersRedisAddonResourcesVersionsBuilder(b.sdk)
+}
+
+// V2ProvidersRedisAddonResourcesVersionsBuilder provides access to operations
+type V2ProvidersRedisAddonResourcesVersionsBuilder interface {
+	Getredisaddonversions(ctx context.Context) client.Response[models.RedisVersions]
+}
+
+// v2ProvidersRedisAddonResourcesVersionsBuilderImpl implements V2ProvidersRedisAddonResourcesVersionsBuilder
+type v2ProvidersRedisAddonResourcesVersionsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV2ProvidersRedisAddonResourcesVersionsBuilder creates a new V2ProvidersRedisAddonResourcesVersionsBuilder
+func newV2ProvidersRedisAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersRedisAddonResourcesVersionsBuilder {
+	return &v2ProvidersRedisAddonResourcesVersionsBuilderImpl{sdk: sdk}
+}
+
+// Getredisaddonversions calls redis_addon.Getredisaddonversions
+func (b *v2ProvidersRedisAddonResourcesVersionsBuilderImpl) Getredisaddonversions(ctx context.Context) client.Response[models.RedisVersions] {
+	return redisaddon.Getredisaddonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
 // V2SelfBuilder provides access to operations
 type V2SelfBuilder interface {
 	Addons() V2SelfAddonsBuilder
@@ -5721,10 +6200,14 @@ type V4AddonProvidersBuilder interface {
 	AddonOtoroshi() V4AddonProvidersAddonOtoroshiBuilder
 	AddonPulsar() V4AddonProvidersAddonPulsarBuilder
 	ConfigProvider() V4AddonProvidersConfigProviderBuilder
+	EsAddon() V4AddonProvidersEsAddonBuilder
+	Jenkins() V4AddonProvidersJenkinsBuilder
 	Keycloak() V4AddonProvidersKeycloakBuilder
 	Kv() V4AddonProvidersKvBuilder
 	Metabase() V4AddonProvidersMetabaseBuilder
+	MysqlAddon() V4AddonProvidersMysqlAddonBuilder
 	Otoroshi() V4AddonProvidersOtoroshiBuilder
+	RedisAddon() V4AddonProvidersRedisAddonBuilder
 }
 
 // v4AddonProvidersBuilderImpl implements V4AddonProvidersBuilder
@@ -5772,6 +6255,16 @@ func (b *v4AddonProvidersBuilderImpl) ConfigProvider() V4AddonProvidersConfigPro
 	return newV4AddonProvidersConfigProviderBuilder(b.sdk)
 }
 
+// EsAddon returns EsAddon builder
+func (b *v4AddonProvidersBuilderImpl) EsAddon() V4AddonProvidersEsAddonBuilder {
+	return newV4AddonProvidersEsAddonBuilder(b.sdk)
+}
+
+// Jenkins returns Jenkins builder
+func (b *v4AddonProvidersBuilderImpl) Jenkins() V4AddonProvidersJenkinsBuilder {
+	return newV4AddonProvidersJenkinsBuilder(b.sdk)
+}
+
 // Keycloak returns Keycloak builder
 func (b *v4AddonProvidersBuilderImpl) Keycloak() V4AddonProvidersKeycloakBuilder {
 	return newV4AddonProvidersKeycloakBuilder(b.sdk)
@@ -5787,9 +6280,19 @@ func (b *v4AddonProvidersBuilderImpl) Metabase() V4AddonProvidersMetabaseBuilder
 	return newV4AddonProvidersMetabaseBuilder(b.sdk)
 }
 
+// MysqlAddon returns MysqlAddon builder
+func (b *v4AddonProvidersBuilderImpl) MysqlAddon() V4AddonProvidersMysqlAddonBuilder {
+	return newV4AddonProvidersMysqlAddonBuilder(b.sdk)
+}
+
 // Otoroshi returns Otoroshi builder
 func (b *v4AddonProvidersBuilderImpl) Otoroshi() V4AddonProvidersOtoroshiBuilder {
 	return newV4AddonProvidersOtoroshiBuilder(b.sdk)
+}
+
+// RedisAddon returns RedisAddon builder
+func (b *v4AddonProvidersBuilderImpl) RedisAddon() V4AddonProvidersRedisAddonBuilder {
+	return newV4AddonProvidersRedisAddonBuilder(b.sdk)
 }
 
 // V4AddonProvidersProviderIDBuilder provides access to operations
@@ -7236,6 +7739,176 @@ func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) Replaceconfi
 	return configurationprovider.Replaceconfigurationproviderenv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
 }
 
+// V4AddonProvidersEsAddonBuilder provides access to operations
+type V4AddonProvidersEsAddonBuilder interface {
+	Addons() V4AddonProvidersEsAddonAddonsBuilder
+	Getelasticsearchproviderinformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole]
+}
+
+// v4AddonProvidersEsAddonBuilderImpl implements V4AddonProvidersEsAddonBuilder
+type v4AddonProvidersEsAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersEsAddonBuilder creates a new V4AddonProvidersEsAddonBuilder
+func newV4AddonProvidersEsAddonBuilder(sdk *sdkImpl) V4AddonProvidersEsAddonBuilder {
+	return &v4AddonProvidersEsAddonBuilderImpl{sdk: sdk}
+}
+
+// Addons returns Addons builder
+func (b *v4AddonProvidersEsAddonBuilderImpl) Addons() V4AddonProvidersEsAddonAddonsBuilder {
+	return newV4AddonProvidersEsAddonAddonsBuilder(b.sdk)
+}
+
+// Getelasticsearchproviderinformation calls es_addon.Getelasticsearchproviderinformation
+func (b *v4AddonProvidersEsAddonBuilderImpl) Getelasticsearchproviderinformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole] {
+	return esaddon.Getelasticsearchproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersEsAddonAddonsBuilder provides access to operations
+type V4AddonProvidersEsAddonAddonsBuilder interface {
+	Appid(appid string) V4AddonProvidersEsAddonAddonsAppidBuilder
+}
+
+// v4AddonProvidersEsAddonAddonsBuilderImpl implements V4AddonProvidersEsAddonAddonsBuilder
+type v4AddonProvidersEsAddonAddonsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersEsAddonAddonsBuilder creates a new V4AddonProvidersEsAddonAddonsBuilder
+func newV4AddonProvidersEsAddonAddonsBuilder(sdk *sdkImpl) V4AddonProvidersEsAddonAddonsBuilder {
+	return &v4AddonProvidersEsAddonAddonsBuilderImpl{sdk: sdk}
+}
+
+// Appid returns builder for appid
+func (b *v4AddonProvidersEsAddonAddonsBuilderImpl) Appid(appid string) V4AddonProvidersEsAddonAddonsAppidBuilder {
+	return newV4AddonProvidersEsAddonAddonsAppidBuilder(b.sdk, appid)
+}
+
+// V4AddonProvidersEsAddonAddonsAppidBuilder provides access to operations
+type V4AddonProvidersEsAddonAddonsAppidBuilder interface {
+	Getelasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView]
+}
+
+// v4AddonProvidersEsAddonAddonsAppidBuilderImpl implements V4AddonProvidersEsAddonAddonsAppidBuilder
+type v4AddonProvidersEsAddonAddonsAppidBuilderImpl struct {
+	sdk   *sdkImpl
+	appid string
+}
+
+// newV4AddonProvidersEsAddonAddonsAppidBuilder creates a new V4AddonProvidersEsAddonAddonsAppidBuilder
+func newV4AddonProvidersEsAddonAddonsAppidBuilder(sdk *sdkImpl, appid string) V4AddonProvidersEsAddonAddonsAppidBuilder {
+	return &v4AddonProvidersEsAddonAddonsAppidBuilderImpl{
+		appid: appid,
+		sdk:   sdk,
+	}
+}
+
+// Getelasticsearch calls es_addon.Getelasticsearch
+func (b *v4AddonProvidersEsAddonAddonsAppidBuilderImpl) Getelasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView] {
+	return esaddon.Getelasticsearch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+}
+
+// V4AddonProvidersJenkinsBuilder provides access to operations
+type V4AddonProvidersJenkinsBuilder interface {
+	Addons() V4AddonProvidersJenkinsAddonsBuilder
+	Getjenkinsproviderinformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView]
+}
+
+// v4AddonProvidersJenkinsBuilderImpl implements V4AddonProvidersJenkinsBuilder
+type v4AddonProvidersJenkinsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersJenkinsBuilder creates a new V4AddonProvidersJenkinsBuilder
+func newV4AddonProvidersJenkinsBuilder(sdk *sdkImpl) V4AddonProvidersJenkinsBuilder {
+	return &v4AddonProvidersJenkinsBuilderImpl{sdk: sdk}
+}
+
+// Addons returns Addons builder
+func (b *v4AddonProvidersJenkinsBuilderImpl) Addons() V4AddonProvidersJenkinsAddonsBuilder {
+	return newV4AddonProvidersJenkinsAddonsBuilder(b.sdk)
+}
+
+// Getjenkinsproviderinformation calls jenkins.Getjenkinsproviderinformation
+func (b *v4AddonProvidersJenkinsBuilderImpl) Getjenkinsproviderinformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView] {
+	return jenkins.Getjenkinsproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersJenkinsAddonsBuilder provides access to operations
+type V4AddonProvidersJenkinsAddonsBuilder interface {
+	ID(id string) V4AddonProvidersJenkinsAddonsIDBuilder
+}
+
+// v4AddonProvidersJenkinsAddonsBuilderImpl implements V4AddonProvidersJenkinsAddonsBuilder
+type v4AddonProvidersJenkinsAddonsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersJenkinsAddonsBuilder creates a new V4AddonProvidersJenkinsAddonsBuilder
+func newV4AddonProvidersJenkinsAddonsBuilder(sdk *sdkImpl) V4AddonProvidersJenkinsAddonsBuilder {
+	return &v4AddonProvidersJenkinsAddonsBuilderImpl{sdk: sdk}
+}
+
+// ID returns builder for id
+func (b *v4AddonProvidersJenkinsAddonsBuilderImpl) ID(id string) V4AddonProvidersJenkinsAddonsIDBuilder {
+	return newV4AddonProvidersJenkinsAddonsIDBuilder(b.sdk, id)
+}
+
+// V4AddonProvidersJenkinsAddonsIDBuilder provides access to operations
+type V4AddonProvidersJenkinsAddonsIDBuilder interface {
+	Updates() V4AddonProvidersJenkinsAddonsIDUpdatesBuilder
+	Getjenkins(ctx context.Context) client.Response[models.JenkinsAddonView]
+}
+
+// v4AddonProvidersJenkinsAddonsIDBuilderImpl implements V4AddonProvidersJenkinsAddonsIDBuilder
+type v4AddonProvidersJenkinsAddonsIDBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV4AddonProvidersJenkinsAddonsIDBuilder creates a new V4AddonProvidersJenkinsAddonsIDBuilder
+func newV4AddonProvidersJenkinsAddonsIDBuilder(sdk *sdkImpl, id string) V4AddonProvidersJenkinsAddonsIDBuilder {
+	return &v4AddonProvidersJenkinsAddonsIDBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Updates returns Updates builder
+func (b *v4AddonProvidersJenkinsAddonsIDBuilderImpl) Updates() V4AddonProvidersJenkinsAddonsIDUpdatesBuilder {
+	return newV4AddonProvidersJenkinsAddonsIDUpdatesBuilder(b.sdk, b.id)
+}
+
+// Getjenkins calls jenkins.Getjenkins
+func (b *v4AddonProvidersJenkinsAddonsIDBuilderImpl) Getjenkins(ctx context.Context) client.Response[models.JenkinsAddonView] {
+	return jenkins.Getjenkins(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
+// V4AddonProvidersJenkinsAddonsIDUpdatesBuilder provides access to operations
+type V4AddonProvidersJenkinsAddonsIDUpdatesBuilder interface {
+	Getjenkinsavailableupdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView]
+}
+
+// v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl implements V4AddonProvidersJenkinsAddonsIDUpdatesBuilder
+type v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl struct {
+	sdk *sdkImpl
+	id  string
+}
+
+// newV4AddonProvidersJenkinsAddonsIDUpdatesBuilder creates a new V4AddonProvidersJenkinsAddonsIDUpdatesBuilder
+func newV4AddonProvidersJenkinsAddonsIDUpdatesBuilder(sdk *sdkImpl, id string) V4AddonProvidersJenkinsAddonsIDUpdatesBuilder {
+	return &v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl{
+		id:  id,
+		sdk: sdk,
+	}
+}
+
+// Getjenkinsavailableupdates calls jenkins.Getjenkinsavailableupdates
+func (b *v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl) Getjenkinsavailableupdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView] {
+	return jenkins.Getjenkinsavailableupdates(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+}
+
 // V4AddonProvidersKeycloakBuilder provides access to operations
 type V4AddonProvidersKeycloakBuilder interface {
 	Getkeycloakproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
@@ -7296,6 +7969,26 @@ func (b *v4AddonProvidersMetabaseBuilderImpl) Getmetabaseproviderinformation(ctx
 	return metabase.Getmetabaseproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
+// V4AddonProvidersMysqlAddonBuilder provides access to operations
+type V4AddonProvidersMysqlAddonBuilder interface {
+	Getmysqlproviderinformation(ctx context.Context) client.Response[models.MysqlProvidersConsole]
+}
+
+// v4AddonProvidersMysqlAddonBuilderImpl implements V4AddonProvidersMysqlAddonBuilder
+type v4AddonProvidersMysqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersMysqlAddonBuilder creates a new V4AddonProvidersMysqlAddonBuilder
+func newV4AddonProvidersMysqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersMysqlAddonBuilder {
+	return &v4AddonProvidersMysqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Getmysqlproviderinformation calls my_sql_addon.Getmysqlproviderinformation
+func (b *v4AddonProvidersMysqlAddonBuilderImpl) Getmysqlproviderinformation(ctx context.Context) client.Response[models.MysqlProvidersConsole] {
+	return mysqladdon.Getmysqlproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
 // V4AddonProvidersOtoroshiBuilder provides access to operations
 type V4AddonProvidersOtoroshiBuilder interface {
 	Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
@@ -7314,6 +8007,26 @@ func newV4AddonProvidersOtoroshiBuilder(sdk *sdkImpl) V4AddonProvidersOtoroshiBu
 // Getotoroshiproviderinformation calls otoroshi.Getotoroshiproviderinformation
 func (b *v4AddonProvidersOtoroshiBuilderImpl) Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
 	return otoroshi.Getotoroshiproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersRedisAddonBuilder provides access to operations
+type V4AddonProvidersRedisAddonBuilder interface {
+	Getredisproviderinformation(ctx context.Context) client.Response[models.RedisProviderInfo]
+}
+
+// v4AddonProvidersRedisAddonBuilderImpl implements V4AddonProvidersRedisAddonBuilder
+type v4AddonProvidersRedisAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersRedisAddonBuilder creates a new V4AddonProvidersRedisAddonBuilder
+func newV4AddonProvidersRedisAddonBuilder(sdk *sdkImpl) V4AddonProvidersRedisAddonBuilder {
+	return &v4AddonProvidersRedisAddonBuilderImpl{sdk: sdk}
+}
+
+// Getredisproviderinformation calls redis_addon.Getredisproviderinformation
+func (b *v4AddonProvidersRedisAddonBuilderImpl) Getredisproviderinformation(ctx context.Context) client.Response[models.RedisProviderInfo] {
+	return redisaddon.Getredisproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4KubernetesBuilder provides access to operations
