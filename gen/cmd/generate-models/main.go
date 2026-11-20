@@ -795,6 +795,7 @@ func fixIdSuffixes(s string) string {
 	// This ensures clusterId becomes ClusterID, ownerId becomes OwnerID, etc.
 	replacements := map[string]string{
 		"Id":    "ID",
+		"Dns":   "DNS",
 		"Ip":    "IP",
 		"Ipam":  "IPAM",
 		"Url":   "URL",
