@@ -94,6 +94,7 @@ var OperationPackageExceptions = map[string]string{
 // into `IDs` and `Idle` into `IDle`.
 var acronyms = map[string]string{
 	"Api":   "API",
+	"Dns":   "DNS",
 	"Http":  "HTTP",
 	"Https": "HTTPS",
 	"Id":    "ID",
@@ -280,6 +281,8 @@ func FieldName(name string) string {
 		return "URI"
 	case "api":
 		return "API"
+	case "dns":
+		return "DNS"
 	case "ttl":
 		return "TTL"
 	}

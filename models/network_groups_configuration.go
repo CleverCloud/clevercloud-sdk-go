@@ -4,5 +4,5 @@ package models
 
 // NetworkGroupsConfiguration Network group settings of this deployment, readable without touching any group. A member `domainN...
 type NetworkGroupsConfiguration struct {
-	DnsSuffixes []string `json:"dnsSuffixes"` // A member `domainName` must end with a dot followed by one of these.
+	DNSSuffixes []string `json:"dnsSuffixes"` // A member `domainName` must end with a dot followed by one of these.
 }

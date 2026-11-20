@@ -4,8 +4,8 @@ package models
 
 // NetworkGroup A network group: a private WireGuard mesh with its address range, its members and their peers.
 type NetworkGroup struct {
+	DNSSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"` // The label sanitized for DNS use, when it was derived at creation; null on older groups.
 	Description       *string    `json:"description,omitempty"`       // Optional description.
-	DnsSanitizedLabel *string    `json:"dnsSanitizedLabel,omitempty"` // The label sanitized for DNS use, when it was derived at creation; null on older groups.
 	ID                string     `json:"id"`                          // Unique network group ID.
 	Label             string     `json:"label"`                       // Human-readable label.
 	LastAllocatedIP   string     `json:"lastAllocatedIp"`             // The mesh address allocated last: the next peer address is allocated after it, wrapping around the...
