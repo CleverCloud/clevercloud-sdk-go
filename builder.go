@@ -13,6 +13,7 @@ import (
 	instances "go.clever-cloud.dev/sdk/services/instances"
 	keycloak "go.clever-cloud.dev/sdk/services/keycloak"
 	kubernetes "go.clever-cloud.dev/sdk/services/kubernetes"
+	loadbalancerinfo "go.clever-cloud.dev/sdk/services/loadbalancerinfo"
 	logs "go.clever-cloud.dev/sdk/services/logs"
 	materiakv "go.clever-cloud.dev/sdk/services/materia_kv"
 	matomo "go.clever-cloud.dev/sdk/services/matomo"
@@ -5427,6 +5428,7 @@ type V4Builder interface {
 	AddonProviders() V4AddonProvidersBuilder
 	Kubernetes() V4KubernetesBuilder
 	KubernetesProduct() V4KubernetesProductBuilder
+	LoadBalancers() V4LoadBalancersBuilder
 	Logs() V4LogsBuilder
 	Materia() V4MateriaBuilder
 	Networkgroups() V4NetworkgroupsBuilder
@@ -5461,6 +5463,11 @@ func (b *v4BuilderImpl) Kubernetes() V4KubernetesBuilder {
 // KubernetesProduct returns KubernetesProduct builder
 func (b *v4BuilderImpl) KubernetesProduct() V4KubernetesProductBuilder {
 	return newV4KubernetesProductBuilder(b.sdk)
+}
+
+// LoadBalancers returns LoadBalancers builder
+func (b *v4BuilderImpl) LoadBalancers() V4LoadBalancersBuilder {
+	return newV4LoadBalancersBuilder(b.sdk)
 }
 
 // Logs returns Logs builder
@@ -8253,6 +8260,284 @@ func newV4KubernetesProductBuilder(sdk *sdkImpl) V4KubernetesProductBuilder {
 // Getkubernetesserviceconfig calls kubernetes.Getkubernetesserviceconfig
 func (b *v4KubernetesProductBuilderImpl) Getkubernetesserviceconfig(ctx context.Context) client.Response[models.KubernetesServiceConfig] {
 	return kubernetes.Getkubernetesserviceconfig(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4LoadBalancersBuilder provides access to operations
+type V4LoadBalancersBuilder interface {
+	Organisations() V4LoadBalancersOrganisationsBuilder
+}
+
+// v4LoadBalancersBuilderImpl implements V4LoadBalancersBuilder
+type v4LoadBalancersBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4LoadBalancersBuilder creates a new V4LoadBalancersBuilder
+func newV4LoadBalancersBuilder(sdk *sdkImpl) V4LoadBalancersBuilder {
+	return &v4LoadBalancersBuilderImpl{sdk: sdk}
+}
+
+// Organisations returns Organisations builder
+func (b *v4LoadBalancersBuilderImpl) Organisations() V4LoadBalancersOrganisationsBuilder {
+	return newV4LoadBalancersOrganisationsBuilder(b.sdk)
+}
+
+// V4LoadBalancersOrganisationsBuilder provides access to operations
+type V4LoadBalancersOrganisationsBuilder interface {
+	Ownerid(ownerid string) V4LoadBalancersOrganisationsOwneridBuilder
+}
+
+// v4LoadBalancersOrganisationsBuilderImpl implements V4LoadBalancersOrganisationsBuilder
+type v4LoadBalancersOrganisationsBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4LoadBalancersOrganisationsBuilder creates a new V4LoadBalancersOrganisationsBuilder
+func newV4LoadBalancersOrganisationsBuilder(sdk *sdkImpl) V4LoadBalancersOrganisationsBuilder {
+	return &v4LoadBalancersOrganisationsBuilderImpl{sdk: sdk}
+}
+
+// Ownerid returns builder for ownerid
+func (b *v4LoadBalancersOrganisationsBuilderImpl) Ownerid(ownerid string) V4LoadBalancersOrganisationsOwneridBuilder {
+	return newV4LoadBalancersOrganisationsOwneridBuilder(b.sdk, ownerid)
+}
+
+// V4LoadBalancersOrganisationsOwneridBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridBuilder interface {
+	Addons() V4LoadBalancersOrganisationsOwneridAddonsBuilder
+	Applications() V4LoadBalancersOrganisationsOwneridApplicationsBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridBuilderImpl implements V4LoadBalancersOrganisationsOwneridBuilder
+type v4LoadBalancersOrganisationsOwneridBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridBuilder creates a new V4LoadBalancersOrganisationsOwneridBuilder
+func newV4LoadBalancersOrganisationsOwneridBuilder(sdk *sdkImpl, ownerid string) V4LoadBalancersOrganisationsOwneridBuilder {
+	return &v4LoadBalancersOrganisationsOwneridBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Addons returns Addons builder
+func (b *v4LoadBalancersOrganisationsOwneridBuilderImpl) Addons() V4LoadBalancersOrganisationsOwneridAddonsBuilder {
+	return newV4LoadBalancersOrganisationsOwneridAddonsBuilder(b.sdk, b.ownerid)
+}
+
+// Applications returns Applications builder
+func (b *v4LoadBalancersOrganisationsOwneridBuilderImpl) Applications() V4LoadBalancersOrganisationsOwneridApplicationsBuilder {
+	return newV4LoadBalancersOrganisationsOwneridApplicationsBuilder(b.sdk, b.ownerid)
+}
+
+// V4LoadBalancersOrganisationsOwneridAddonsBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridAddonsBuilder interface {
+	Addonid(addonid string) V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridAddonsBuilderImpl implements V4LoadBalancersOrganisationsOwneridAddonsBuilder
+type v4LoadBalancersOrganisationsOwneridAddonsBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridAddonsBuilder creates a new V4LoadBalancersOrganisationsOwneridAddonsBuilder
+func newV4LoadBalancersOrganisationsOwneridAddonsBuilder(sdk *sdkImpl, ownerid string) V4LoadBalancersOrganisationsOwneridAddonsBuilder {
+	return &v4LoadBalancersOrganisationsOwneridAddonsBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Addonid returns builder for addonid
+func (b *v4LoadBalancersOrganisationsOwneridAddonsBuilderImpl) Addonid(addonid string) V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder {
+	return newV4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder(b.sdk, b.ownerid, addonid)
+}
+
+// V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder interface {
+	LoadBalancers() V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridAddonsAddonidBuilderImpl implements V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder
+type v4LoadBalancersOrganisationsOwneridAddonsAddonidBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	addonid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder creates a new V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder
+func newV4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder(sdk *sdkImpl, ownerid string, addonid string) V4LoadBalancersOrganisationsOwneridAddonsAddonidBuilder {
+	return &v4LoadBalancersOrganisationsOwneridAddonsAddonidBuilderImpl{
+		addonid: addonid,
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// LoadBalancers returns LoadBalancers builder
+func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidBuilderImpl) LoadBalancers() V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder {
+	return newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder(b.sdk, b.ownerid, b.addonid)
+}
+
+// V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder interface {
+	Kind(kind string) V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilderImpl implements V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder
+type v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	addonid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder creates a new V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder
+func newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder(sdk *sdkImpl, ownerid string, addonid string) V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilder {
+	return &v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilderImpl{
+		addonid: addonid,
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Kind returns builder for kind
+func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilderImpl) Kind(kind string) V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder {
+	return newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder(b.sdk, b.ownerid, b.addonid, kind)
+}
+
+// V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder interface {
+	Listaddonloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
+}
+
+// v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl implements V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder
+type v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+	addonid string
+	kind    string
+}
+
+// newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder creates a new V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder
+func newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder(sdk *sdkImpl, ownerid string, addonid string, kind string) V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder {
+	return &v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl{
+		addonid: addonid,
+		kind:    kind,
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Listaddonloadbalancers calls loadbalancerinfo.Listaddonloadbalancers
+func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl) Listaddonloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
+	return loadbalancerinfo.Listaddonloadbalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonid, b.kind)
+}
+
+// V4LoadBalancersOrganisationsOwneridApplicationsBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridApplicationsBuilder interface {
+	Applicationid(applicationid string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridApplicationsBuilderImpl implements V4LoadBalancersOrganisationsOwneridApplicationsBuilder
+type v4LoadBalancersOrganisationsOwneridApplicationsBuilderImpl struct {
+	sdk     *sdkImpl
+	ownerid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridApplicationsBuilder creates a new V4LoadBalancersOrganisationsOwneridApplicationsBuilder
+func newV4LoadBalancersOrganisationsOwneridApplicationsBuilder(sdk *sdkImpl, ownerid string) V4LoadBalancersOrganisationsOwneridApplicationsBuilder {
+	return &v4LoadBalancersOrganisationsOwneridApplicationsBuilderImpl{
+		ownerid: ownerid,
+		sdk:     sdk,
+	}
+}
+
+// Applicationid returns builder for applicationid
+func (b *v4LoadBalancersOrganisationsOwneridApplicationsBuilderImpl) Applicationid(applicationid string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder {
+	return newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder(b.sdk, b.ownerid, applicationid)
+}
+
+// V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder interface {
+	LoadBalancers() V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilderImpl implements V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder
+type v4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilderImpl struct {
+	sdk           *sdkImpl
+	ownerid       string
+	applicationid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder creates a new V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder
+func newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder(sdk *sdkImpl, ownerid string, applicationid string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilder {
+	return &v4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilderImpl{
+		applicationid: applicationid,
+		ownerid:       ownerid,
+		sdk:           sdk,
+	}
+}
+
+// LoadBalancers returns LoadBalancers builder
+func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidBuilderImpl) LoadBalancers() V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder {
+	return newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder(b.sdk, b.ownerid, b.applicationid)
+}
+
+// V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder interface {
+	Kind(kind string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder
+}
+
+// v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilderImpl implements V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder
+type v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilderImpl struct {
+	sdk           *sdkImpl
+	ownerid       string
+	applicationid string
+}
+
+// newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder creates a new V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder
+func newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder(sdk *sdkImpl, ownerid string, applicationid string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilder {
+	return &v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilderImpl{
+		applicationid: applicationid,
+		ownerid:       ownerid,
+		sdk:           sdk,
+	}
+}
+
+// Kind returns builder for kind
+func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersBuilderImpl) Kind(kind string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder {
+	return newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder(b.sdk, b.ownerid, b.applicationid, kind)
+}
+
+// V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder provides access to operations
+type V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder interface {
+	Listapplicationloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
+}
+
+// v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl implements V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder
+type v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl struct {
+	sdk           *sdkImpl
+	ownerid       string
+	applicationid string
+	kind          string
+}
+
+// newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder creates a new V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder
+func newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder(sdk *sdkImpl, ownerid string, applicationid string, kind string) V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder {
+	return &v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl{
+		applicationid: applicationid,
+		kind:          kind,
+		ownerid:       ownerid,
+		sdk:           sdk,
+	}
+}
+
+// Listapplicationloadbalancers calls loadbalancerinfo.Listapplicationloadbalancers
+func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl) Listapplicationloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
+	return loadbalancerinfo.Listapplicationloadbalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.applicationid, b.kind)
 }
 
 // V4LogsBuilder provides access to operations
