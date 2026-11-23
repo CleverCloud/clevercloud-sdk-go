@@ -35,14 +35,14 @@ Example:
 x-service: network_group
 operationId: getNetworkGroupStream
 */
-func Getnetworkgroupstream(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.Nothing] {
+func Getnetworkgroupstream(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getNetworkGroupStream", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 
 	path := utils.Path("/v4/networkgroups/organisations/%s/networkgroups/%s/stream", ownerId, networkGroupId)
 
 	// Make API call
-	response := client.Get[client.Nothing](ctx, c, path)
+	response := client.Get[client.PlainTextString](ctx, c, path)
 
 	if response.HasError() {
 		span.RecordError(response.Error())

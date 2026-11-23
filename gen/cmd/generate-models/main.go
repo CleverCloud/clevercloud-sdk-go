@@ -1148,6 +1148,16 @@ func generateSingleUnionFile(union ModelStruct, packageData *PackageData, output
 	)
 	f.Line()
 
+	// Decode is the way into a union whose members carry no discriminator:
+	// such a union gets no As<Member>() below, and the caller knows from the
+	// operation which member to expect.
+	f.Comment("Decode decodes the held payload into v, a pointer to the member the caller expects.")
+	f.Comment("It is the only typed access to a union whose members carry no discriminator.")
+	f.Func().Params(Id("u").Id(union.Name)).Id("Decode").Params(Id("v").Any()).Error().Block(
+		Return(Qual("encoding/json", "Unmarshal").Call(Id("u").Dot("raw"), Id("v"))),
+	)
+	f.Line()
+
 	dispatchable := unionDispatchableMembers(union, packageData.Models)
 
 	// Format implements fmt.Formatter so that fmt verbs (%v, %+v, %#v, %s, …)

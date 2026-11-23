@@ -31,3 +31,9 @@ func (u *ListresponseServicetoken) UnmarshalJSON(data []byte) error {
 	u.raw = append(u.raw[:0], data...)
 	return nil
 }
+
+// Decode decodes the held payload into v, a pointer to the member the caller expects.
+// It is the only typed access to a union whose members carry no discriminator.
+func (u ListresponseServicetoken) Decode(v any) error {
+	return json.Unmarshal(u.raw, v)
+}

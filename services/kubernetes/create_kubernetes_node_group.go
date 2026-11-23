@@ -14,7 +14,7 @@ import (
 /*
 Createkubernetesnodegroup Create a node group
 
-Creates a node group in the cluster and deploys it asynchronously; 409 when another node group of the cluster holds the name, 412 when `targetNodeCount` is outside `minNodeCount` and `maxNodeCount`, when the organisation's Kubernetes quota would be exceeded, or when the cluster already holds 256 node groups, standalone nodes included. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
+Creates a node group in the cluster and deploys it asynchronously; 409 when another node group of the cluster holds the name, 412 when the organisation's Kubernetes quota would be exceeded or when the cluster already holds 256 node groups, standalone nodes included. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
 Parameters:
   - ctx: context for the request
