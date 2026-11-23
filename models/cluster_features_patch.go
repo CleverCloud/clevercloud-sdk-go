@@ -4,7 +4,7 @@ package models
 
 // ClusterFeaturesPatch Change to a cluster's feature flags, as a JSON merge patch (RFC 7386), field by field: an absent ...
 type ClusterFeaturesPatch struct {
-	AutoscalingEnabled   *bool             `json:"autoscalingEnabled,omitempty"`   // Whether node autoscaling is enabled (`null` unsets)
+	AutoscalingEnabled   *bool             `json:"autoscalingEnabled,omitempty"`   // Deprecated: set `nodeAutoprovisioning` instead; will be removed. Whether node autoprovisioning (K...
 	Csi                  *bool             `json:"csi,omitempty"`                  // Whether CSI is enabled (`null` unsets)
 	NodeAutoprovisioning *bool             `json:"nodeAutoprovisioning,omitempty"` // Whether node autoprovisioning (Karpenter) is enabled (`null` unsets)
 	Registries           *RegistriesConfig `json:"registries,omitempty"`

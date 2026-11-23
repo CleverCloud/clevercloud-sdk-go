@@ -14,7 +14,7 @@ import (
 /*
 Createkubernetescluster Create a Kubernetes cluster
 
-Creates a cluster, with its optional initial node groups, and provisions it asynchronously. The deployment profile is `deploymentProfileId`, else the default profile of the zone `zoneId` or `zone`, else of the only zone the organisation may use: a zone or profile the organisation may not use answers 404, an exceeded Kubernetes quota 412, and two initial node groups sharing a name, more than 256 of them, or one whose `targetNodeCount` is outside its `minNodeCount` and `maxNodeCount`, 400. A `networkGroupId` attaches the cluster to an existing network group of the organisation: one that does not exist there answers 404, and 503 when it cannot be looked up; without it, a network group is created for the cluster. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Creates a cluster, with its optional initial node groups, and provisions it asynchronously. The deployment profile is `deploymentProfileId`, else the default profile of the zone `zoneId` or `zone`, else of the only zone the organisation may use: a zone or profile the organisation may not use answers 404, an exceeded Kubernetes quota 412, and two initial node groups sharing a name, or more than 256 of them, 400. A `networkGroupId` attaches the cluster to an existing network group of the organisation: one that does not exist there answers 404, and 503 when it cannot be looked up; without it, a network group is created for the cluster. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

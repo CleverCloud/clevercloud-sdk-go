@@ -13,9 +13,9 @@ type Option func(*Options)
 
 // Options holds query parameters for network_group operations
 type Options struct {
-	Authorization *string `url:"authorization,omitempty"`
-	Query         *string `url:"query,omitempty"`
-	Tags          *string `url:"tags,omitempty"`
+	Authorization *string   `url:"authorization,omitempty"`
+	Query         *string   `url:"query,omitempty"`
+	Tags          *[]string `url:"tags,omitempty"`
 }
 
 // WithAuthorization sets the authorization query parameter
@@ -33,7 +33,7 @@ func WithQuery(query string) Option {
 }
 
 // WithTags sets the tags query parameter
-func WithTags(tags string) Option {
+func WithTags(tags []string) Option {
 	return func(o *Options) {
 		o.Tags = &tags
 	}
@@ -54,7 +54,9 @@ func buildQueryString(opts ...Option) string {
 		params = append(params, fmt.Sprintf("query=%s", url.QueryEscape(*options.Query)))
 	}
 	if options.Tags != nil {
-		params = append(params, fmt.Sprintf("tags=%s", url.QueryEscape(*options.Tags)))
+		for _, v := range *options.Tags {
+			params = append(params, fmt.Sprintf("tags=%s", url.QueryEscape(fmt.Sprint(v))))
+		}
 	}
 
 	if len(params) == 0 {

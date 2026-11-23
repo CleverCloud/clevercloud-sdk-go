@@ -4,14 +4,14 @@ package models
 
 // NodeGroupCreationPayload Request body to create a node group in a cluster. Taints, labels and flavor cannot be changed onc...
 type NodeGroupCreationPayload struct {
-	AutoscalingEnabled *bool                 `json:"autoscalingEnabled,omitempty"` // Whether node autoscaling is enabled. When omitted, inherits the cluster's `features.autoscalingEn...
+	AutoscalingEnabled *bool                 `json:"autoscalingEnabled,omitempty"` // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Wh...
 	Description        *string               `json:"description,omitempty"`        // Optional description, at most 4096 characters, no NUL character
 	Flavor             NodeFlavor            `json:"flavor"`                       // Node flavor (VM size)
 	Labels             map[string]LabelValue `json:"labels,omitempty"`             // Kubernetes labels: a map from label key to label value (see each one's rule).
-	MaxNodeCount       *NodeGroupNodeCount   `json:"maxNodeCount,omitempty"`
-	MinNodeCount       *NodeGroupNodeCount   `json:"minNodeCount,omitempty"`
-	Name               NodeGroupName         `json:"name"`            // Node group name
-	Tag                *string               `json:"tag,omitempty"`   // Optional tag, at most 1024 characters, no NUL character
-	Taints             []KubernetesTaint     `json:"taints,omitzero"` // Kubernetes taints
-	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"` // Target number of nodes. Must lie within `minNodeCount` and `maxNodeCount` (their defaults when om...
+	MaxNodeCount       *int                  `json:"maxNodeCount,omitempty"`       // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Ma...
+	MinNodeCount       *int                  `json:"minNodeCount,omitempty"`       // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Mi...
+	Name               NodeGroupName         `json:"name"`                         // Node group name
+	Tag                *string               `json:"tag,omitempty"`                // Optional tag, at most 1024 characters, no NUL character
+	Taints             []KubernetesTaint     `json:"taints,omitzero"`              // Kubernetes taints
+	TargetNodeCount    NodeGroupNodeCount    `json:"targetNodeCount"`              // Target number of nodes
 }
