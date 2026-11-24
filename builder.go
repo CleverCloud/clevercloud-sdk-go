@@ -6283,6 +6283,7 @@ type V4AddonProvidersBuilder interface {
 	Metabase() V4AddonProvidersMetabaseBuilder
 	MysqlAddon() V4AddonProvidersMysqlAddonBuilder
 	Otoroshi() V4AddonProvidersOtoroshiBuilder
+	PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder
 	RedisAddon() V4AddonProvidersRedisAddonBuilder
 }
 
@@ -6364,6 +6365,11 @@ func (b *v4AddonProvidersBuilderImpl) MysqlAddon() V4AddonProvidersMysqlAddonBui
 // Otoroshi returns Otoroshi builder
 func (b *v4AddonProvidersBuilderImpl) Otoroshi() V4AddonProvidersOtoroshiBuilder {
 	return newV4AddonProvidersOtoroshiBuilder(b.sdk)
+}
+
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v4AddonProvidersBuilderImpl) PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder {
+	return newV4AddonProvidersPostgresqlAddonBuilder(b.sdk)
 }
 
 // RedisAddon returns RedisAddon builder
@@ -8083,6 +8089,26 @@ func newV4AddonProvidersOtoroshiBuilder(sdk *sdkImpl) V4AddonProvidersOtoroshiBu
 // Getotoroshiproviderinformation calls otoroshi.Getotoroshiproviderinformation
 func (b *v4AddonProvidersOtoroshiBuilderImpl) Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
 	return otoroshi.Getotoroshiproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersPostgresqlAddonBuilder provides access to operations
+type V4AddonProvidersPostgresqlAddonBuilder interface {
+	Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole]
+}
+
+// v4AddonProvidersPostgresqlAddonBuilderImpl implements V4AddonProvidersPostgresqlAddonBuilder
+type v4AddonProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersPostgresqlAddonBuilder creates a new V4AddonProvidersPostgresqlAddonBuilder
+func newV4AddonProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersPostgresqlAddonBuilder {
+	return &v4AddonProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Getpostgresqlproviderinformation calls postgresql_addon.Getpostgresqlproviderinformation
+func (b *v4AddonProvidersPostgresqlAddonBuilderImpl) Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole] {
+	return postgresqladdon.Getpostgresqlproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4AddonProvidersRedisAddonBuilder provides access to operations
