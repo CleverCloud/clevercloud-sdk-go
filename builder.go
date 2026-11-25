@@ -6283,6 +6283,7 @@ type V4AddonProvidersBuilder interface {
 	Metabase() V4AddonProvidersMetabaseBuilder
 	MysqlAddon() V4AddonProvidersMysqlAddonBuilder
 	Otoroshi() V4AddonProvidersOtoroshiBuilder
+	PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder
 	RedisAddon() V4AddonProvidersRedisAddonBuilder
 }
 
@@ -6364,6 +6365,11 @@ func (b *v4AddonProvidersBuilderImpl) MysqlAddon() V4AddonProvidersMysqlAddonBui
 // Otoroshi returns Otoroshi builder
 func (b *v4AddonProvidersBuilderImpl) Otoroshi() V4AddonProvidersOtoroshiBuilder {
 	return newV4AddonProvidersOtoroshiBuilder(b.sdk)
+}
+
+// PostgresqlAddon returns PostgresqlAddon builder
+func (b *v4AddonProvidersBuilderImpl) PostgresqlAddon() V4AddonProvidersPostgresqlAddonBuilder {
+	return newV4AddonProvidersPostgresqlAddonBuilder(b.sdk)
 }
 
 // RedisAddon returns RedisAddon builder
@@ -6739,6 +6745,7 @@ func (b *v4AddonProvidersAddonMatomoAddonsBuilderImpl) Addonmatomoid(addonmatomo
 type V4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilder interface {
 	Reboot() V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder
 	Rebuild() V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder
+	Version() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder
 	Getmatomo(ctx context.Context) client.Response[models.Matomo]
 }
 
@@ -6764,6 +6771,11 @@ func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) Reboot() V4A
 // Rebuild returns Rebuild builder
 func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) Rebuild() V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder {
 	return newV4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder(b.sdk, b.addonmatomoid)
+}
+
+// Version returns Version builder
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) Version() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder {
+	return newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder(b.sdk, b.addonmatomoid)
 }
 
 // Getmatomo calls matomo.Getmatomo
@@ -6817,6 +6829,84 @@ func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder(sdk *sdkImp
 // Rebuildmatomo calls matomo.Rebuildmatomo
 func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilderImpl) Rebuildmatomo(ctx context.Context) client.Response[client.Nothing] {
 	return matomo.Rebuildmatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+}
+
+// V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder provides access to operations
+type V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder interface {
+	Check() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder
+	Update() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder
+}
+
+// v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder
+type v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl struct {
+	sdk           *sdkImpl
+	addonmatomoid string
+}
+
+// newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder creates a new V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder
+func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder(sdk *sdkImpl, addonmatomoid string) V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder {
+	return &v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl{
+		addonmatomoid: addonmatomoid,
+		sdk:           sdk,
+	}
+}
+
+// Check returns Check builder
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl) Check() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder {
+	return newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder(b.sdk, b.addonmatomoid)
+}
+
+// Update returns Update builder
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl) Update() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder {
+	return newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder(b.sdk, b.addonmatomoid)
+}
+
+// V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder provides access to operations
+type V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder interface {
+	Getcheckversionmatomoapplication(ctx context.Context) client.Response[models.MatomoVersionCheck]
+}
+
+// v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder
+type v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl struct {
+	sdk           *sdkImpl
+	addonmatomoid string
+}
+
+// newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder creates a new V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder
+func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder(sdk *sdkImpl, addonmatomoid string) V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder {
+	return &v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl{
+		addonmatomoid: addonmatomoid,
+		sdk:           sdk,
+	}
+}
+
+// Getcheckversionmatomoapplication calls matomo.Getcheckversionmatomoapplication
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl) Getcheckversionmatomoapplication(ctx context.Context) client.Response[models.MatomoVersionCheck] {
+	return matomo.Getcheckversionmatomoapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+}
+
+// V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder provides access to operations
+type V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder interface {
+	Createversionupdatematomo(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo]
+}
+
+// v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder
+type v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl struct {
+	sdk           *sdkImpl
+	addonmatomoid string
+}
+
+// newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder creates a new V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder
+func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder(sdk *sdkImpl, addonmatomoid string) V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder {
+	return &v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl{
+		addonmatomoid: addonmatomoid,
+		sdk:           sdk,
+	}
+}
+
+// Createversionupdatematomo calls matomo.Createversionupdatematomo
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl) Createversionupdatematomo(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo] {
+	return matomo.Createversionupdatematomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid, request)
 }
 
 // V4AddonProvidersAddonMetabaseBuilder provides access to operations
@@ -8083,6 +8173,26 @@ func newV4AddonProvidersOtoroshiBuilder(sdk *sdkImpl) V4AddonProvidersOtoroshiBu
 // Getotoroshiproviderinformation calls otoroshi.Getotoroshiproviderinformation
 func (b *v4AddonProvidersOtoroshiBuilderImpl) Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
 	return otoroshi.Getotoroshiproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+}
+
+// V4AddonProvidersPostgresqlAddonBuilder provides access to operations
+type V4AddonProvidersPostgresqlAddonBuilder interface {
+	Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole]
+}
+
+// v4AddonProvidersPostgresqlAddonBuilderImpl implements V4AddonProvidersPostgresqlAddonBuilder
+type v4AddonProvidersPostgresqlAddonBuilderImpl struct {
+	sdk *sdkImpl
+}
+
+// newV4AddonProvidersPostgresqlAddonBuilder creates a new V4AddonProvidersPostgresqlAddonBuilder
+func newV4AddonProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersPostgresqlAddonBuilder {
+	return &v4AddonProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
+}
+
+// Getpostgresqlproviderinformation calls postgresql_addon.Getpostgresqlproviderinformation
+func (b *v4AddonProvidersPostgresqlAddonBuilderImpl) Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole] {
+	return postgresqladdon.Getpostgresqlproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4AddonProvidersRedisAddonBuilder provides access to operations

@@ -23,7 +23,6 @@ type Options struct {
 	Maxretrydurationinseconds *int64  `url:"maxRetryDurationInSeconds,omitempty"`
 	Search                    *string `url:"search,omitempty"`
 	Service                   *string `url:"service,omitempty"`
-	Severity                  *string `url:"severity,omitempty"`
 	Since                     *string `url:"since,omitempty"`
 	Tag                       *string `url:"tag,omitempty"`
 	Throttleelements          *int    `url:"throttleElements,omitempty"`
@@ -101,13 +100,6 @@ func WithService(service string) Option {
 	}
 }
 
-// WithSeverity sets the severity query parameter
-func WithSeverity(severity string) Option {
-	return func(o *Options) {
-		o.Severity = &severity
-	}
-}
-
 // WithSince sets the since query parameter
 func WithSince(since string) Option {
 	return func(o *Options) {
@@ -180,9 +172,6 @@ func buildQueryString(opts ...Option) string {
 	}
 	if options.Service != nil {
 		params = append(params, fmt.Sprintf("service=%s", url.QueryEscape(*options.Service)))
-	}
-	if options.Severity != nil {
-		params = append(params, fmt.Sprintf("severity=%s", url.QueryEscape(*options.Severity)))
 	}
 	if options.Since != nil {
 		params = append(params, fmt.Sprintf("since=%s", url.QueryEscape(*options.Since)))

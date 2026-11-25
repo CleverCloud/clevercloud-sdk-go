@@ -14,5 +14,5 @@ type Matomo struct {
 	Plan              MatomoPlanIdentifier `json:"plan"`              // Plan identifier (`BETA`).
 	ResourceID        MatomoId             `json:"resourceId"`        // Matomo add-on ID (`matomo_…`).
 	Resources         MatomoResources      `json:"resources"`         // Resources backing the add-on.
-	Version           string               `json:"version"`           // Matomo version: the first of the versions on offer.
+	Version           string               `json:"version"`           // Matomo version the add-on's application is pinned to: `latest`, a major (`6`), a minor (`6.0`) or...
 }

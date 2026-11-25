@@ -2,11 +2,26 @@
 
 package postgresql_addon
 
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+
 // Option defines a functional option for postgresql_addon operations
 type Option func(*Options)
 
 // Options holds query parameters for postgresql_addon operations
-type Options struct{}
+type Options struct {
+	Target *string `url:"target,omitempty"`
+}
+
+// WithTarget sets the target query parameter
+func WithTarget(target string) Option {
+	return func(o *Options) {
+		o.Target = &target
+	}
+}
 
 // buildQueryString builds a query string from options
 func buildQueryString(opts ...Option) string {
@@ -14,5 +29,14 @@ func buildQueryString(opts ...Option) string {
 	for _, opt := range opts {
 		opt(options)
 	}
-	return ""
+
+	var params []string
+	if options.Target != nil {
+		params = append(params, fmt.Sprintf("target=%s", url.QueryEscape(*options.Target)))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+	return strings.Join(params, "&")
 }

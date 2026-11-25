@@ -6,12 +6,12 @@ package models
 type AddonView struct {
 	ConfigKeys   []string                  `json:"configKeys"`             // Names of the environment variables the add-on exposes.
 	CreationDate *int                      `json:"creationDate,omitempty"` // Creation date, in milliseconds since the Unix epoch.
-	ID           string                    `json:"id"`
-	Name         *string                   `json:"name,omitempty"`
-	Plan         AddonPlanView             `json:"plan"`
-	Provider     AddonProviderEmbeddedView `json:"provider"`         // The add-on's provider, without its plans and features.
-	RealID       *string                   `json:"realId,omitempty"` // Identifier of the add-on at its provider.
-	Region       string                    `json:"region"`
+	ID           string                    `json:"id"`                     // Public identifier of the add-on, of the form `addon_<uuid>`.
+	Name         *string                   `json:"name,omitempty"`         // Display name of the add-on.
+	Plan         AddonPlanView             `json:"plan"`                   // Pricing plan the add-on is currently subscribed to.
+	Provider     AddonProviderEmbeddedView `json:"provider"`               // The add-on's provider, without its plans and features.
+	RealID       *string                   `json:"realId,omitempty"`       // Identifier of the add-on at its provider.
+	Region       string                    `json:"region"`                 // Name of the zone the add-on is hosted in.
 	Tags         []SemanticTag             `json:"tags,omitzero"`
-	ZoneID       *string                   `json:"zoneId,omitempty"`
+	ZoneID       *string                   `json:"zoneId,omitempty"` // Identifier of the zone the add-on is hosted in.
 }

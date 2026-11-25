@@ -4,18 +4,18 @@ package models
 
 // AddonProviderEmbeddedView The provider of an add-on, as embedded in the add-on: identity, contact and display details and t...
 type AddonProviderEmbeddedView struct {
-	AnalyticsID    *string  `json:"analyticsId,omitempty"`
-	CanUpgrade     bool     `json:"canUpgrade"`
-	GooglePlusName *string  `json:"googlePlusName,omitempty"`
-	ID             string   `json:"id"`
-	LogoURL        *string  `json:"logoUrl,omitempty"`
-	LongDesc       *string  `json:"longDesc,omitempty"`
-	Name           *string  `json:"name,omitempty"`
-	OpenInNewTab   bool     `json:"openInNewTab"`
-	Regions        []string `json:"regions"`
-	ShortDesc      *string  `json:"shortDesc,omitempty"`
-	Status         string   `json:"status"`
-	SupportEmail   *string  `json:"supportEmail,omitempty"`
-	TwitterName    *string  `json:"twitterName,omitempty"`
-	Website        *string  `json:"website,omitempty"`
+	AnalyticsID    *string  `json:"analyticsId,omitempty"`    // Analytics identifier the provider declared.
+	CanUpgrade     bool     `json:"canUpgrade"`               // Whether an add-on of this provider can change plan.
+	GooglePlusName *string  `json:"googlePlusName,omitempty"` // Google Plus handle of the provider, as the provider declared it.
+	ID             string   `json:"id"`                       // Identifier of the provider.
+	LogoURL        *string  `json:"logoUrl,omitempty"`        // URL of the provider logo.
+	LongDesc       *string  `json:"longDesc,omitempty"`       // Full description shown on the provider page.
+	Name           *string  `json:"name,omitempty"`           // Display name of the provider.
+	OpenInNewTab   bool     `json:"openInNewTab"`             // Display hint: whether the provider's dashboard is meant to open in a new browser tab.
+	Regions        []string `json:"regions"`                  // Names of the zones the provider can provision add-ons in.
+	ShortDesc      *string  `json:"shortDesc,omitempty"`      // One line description shown in listings.
+	Status         string   `json:"status"`                   // Release status of the provider, one of `ALPHA`, `BETA_PRIV`, `BETA_PUB`, `RELEASE` or `DELETED`, ...
+	SupportEmail   *string  `json:"supportEmail,omitempty"`   // Email address users should contact for support on this provider.
+	TwitterName    *string  `json:"twitterName,omitempty"`    // Twitter handle of the provider.
+	Website        *string  `json:"website,omitempty"`        // Public website of the provider.
 }
