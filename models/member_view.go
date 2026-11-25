@@ -4,7 +4,7 @@ package models
 
 // MemberView A member of an organisation: the user, their role and their job title.
 type MemberView struct {
-	Job    *string                    `json:"job,omitempty"`
+	Job    *string                    `json:"job,omitempty"` // Free text job title of the user within the organisation.
 	Member OrganisationMemberUserView `json:"member"`
-	Role   string                     `json:"role"`
+	Role   string                     `json:"role"` // Role of the user in the organisation, one of `ADMIN`, `MANAGER`, `DEVELOPER`, `ACCOUNTING` or `NO...
 }

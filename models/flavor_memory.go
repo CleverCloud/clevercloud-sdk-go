@@ -6,5 +6,5 @@ package models
 type FlavorMemory struct {
 	Formatted *string     `json:"formatted,omitempty"` // Human-readable memory size, such as `256 MB`.
 	Unit      string      `json:"unit"`                // Unit of `value`: `B` (bytes).
-	Value     Information `json:"value"`
+	Value     Information `json:"value"`               // Amount of memory in that unit.
 }

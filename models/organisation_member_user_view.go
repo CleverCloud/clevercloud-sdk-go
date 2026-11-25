@@ -4,9 +4,9 @@ package models
 
 // OrganisationMemberUserView The user behind an organisation membership: identifier, email, name, avatar and preferred multi-f...
 type OrganisationMemberUserView struct {
-	Avatar       *string `json:"avatar,omitempty"`
-	Email        *string `json:"email,omitempty"`
-	ID           string  `json:"id"`
-	Name         *string `json:"name,omitempty"`
-	PreferredMFA string  `json:"preferredMFA"`
+	Avatar       *string `json:"avatar,omitempty"` // URL of the user avatar.
+	Email        *string `json:"email,omitempty"`  // Email address of the user.
+	ID           string  `json:"id"`               // Identifier of the user, of the form `user_<uuid>`.
+	Name         *string `json:"name,omitempty"`   // Display name of the user.
+	PreferredMFA string  `json:"preferredMFA"`     // Preferred multi-factor authentication kind of the user, `TOTP` or `NONE` when none is configured.
 }

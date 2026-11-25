@@ -4,11 +4,11 @@ package models
 
 // AddonPlanView A plan of an add-on provider: its price, the zones it is available in and the value of each feature.
 type AddonPlanView struct {
-	Features []AddonFeatureInstanceView `json:"features"`
-	ID       string                     `json:"id"`
-	Name     *string                    `json:"name,omitempty"`
-	Price    float64                    `json:"price"`
+	Features []AddonFeatureInstanceView `json:"features"`       // Values the plan gives to the provider features.
+	ID       string                     `json:"id"`             // Identifier of the plan.
+	Name     *string                    `json:"name,omitempty"` // Display name of the plan.
+	Price    float64                    `json:"price"`          // Monthly price of the plan in euros; the catalogue routes scale it by the price factor of the orga...
 	PriceID  *string                    `json:"price_id,omitempty"`
-	Slug     *string                    `json:"slug,omitempty"`
-	Zones    []string                   `json:"zones"`
+	Slug     *string                    `json:"slug,omitempty"` // URL-friendly name of the plan, the value add-on creation accepts to select it; `null` when the pl...
+	Zones    []string                   `json:"zones"`          // Names of the zones this specific plan can be provisioned in.
 }

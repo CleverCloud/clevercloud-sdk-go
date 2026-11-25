@@ -6,14 +6,14 @@ package models
 type SuperNovaInstanceView struct {
 	AppID          string           `json:"appId"`
 	AppPort        *int             `json:"appPort,omitempty"`
-	Commit         *string          `json:"commit,omitempty"`
-	CreationDate   *int             `json:"creationDate,omitempty"`
-	DeployID       *string          `json:"deployId,omitempty"`
-	DeployNumber   *int             `json:"deployNumber,omitempty"`
-	DisplayName    *string          `json:"displayName,omitempty"`
+	Commit         *string          `json:"commit,omitempty"`       // Identifier of the commit deployed on the instance.
+	CreationDate   *int             `json:"creationDate,omitempty"` // When the instance was created, as a Unix timestamp in milliseconds.
+	DeployID       *string          `json:"deployId,omitempty"`     // Identifier of the deployment that created the instance; `null` when not recorded.
+	DeployNumber   *int             `json:"deployNumber,omitempty"` // Sequence number, within the application, of the deployment that created the instance; `null` when...
+	DisplayName    *string          `json:"displayName,omitempty"`  // Human-readable name the platform assigned to the instance when it started; `null` when none was a...
 	Flavor         *SuperNovaFlavor `json:"flavor,omitempty"`
-	ID             string           `json:"id"`
+	ID             string           `json:"id"` // Identifier of the instance, a bare UUID.
 	IP             *string          `json:"ip,omitempty"`
-	InstanceNumber *int             `json:"instanceNumber,omitempty"`
-	State          string           `json:"state"`
+	InstanceNumber *int             `json:"instanceNumber,omitempty"` // Index of the instance among the instances of its application, starting at 0; 0 when unknown, and ...
+	State          string           `json:"state"`                    // Current lifecycle state of the instance.
 }

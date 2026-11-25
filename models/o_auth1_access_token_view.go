@@ -4,11 +4,11 @@ package models
 
 // OAuth1AccessTokenView An OAuth1 access token of the user: the consumer it was issued to, its rights, and its creation, ...
 type OAuth1AccessTokenView struct {
-	Consumer        OAuth1ConsumerView `json:"consumer"`
-	CreationDate    *int               `json:"creationDate,omitempty"`
-	EmployeeID      *string            `json:"employeeId,omitempty"`
-	ExpirationDate  *int               `json:"expirationDate,omitempty"`
-	LastUtilisation *int               `json:"lastUtilisation,omitempty"`
-	Rights          OAuthRightsView    `json:"rights"`
-	Token           string             `json:"token"`
+	Consumer        OAuth1ConsumerView `json:"consumer"`                  // The consumer the token was issued to.
+	CreationDate    *int               `json:"creationDate,omitempty"`    // When the token was issued, as a Unix timestamp in milliseconds.
+	EmployeeID      *string            `json:"employeeId,omitempty"`      // Identifier of the Clever Cloud employee acting on the account, on a support impersonation token.
+	ExpirationDate  *int               `json:"expirationDate,omitempty"`  // When the token stops being accepted, as a Unix timestamp in milliseconds; `null` when it never ex...
+	LastUtilisation *int               `json:"lastUtilisation,omitempty"` // When the token was last used, as a Unix timestamp in milliseconds, refreshed at most once an hour...
+	Rights          OAuthRightsView    `json:"rights"`                    // Rights this token holds, one boolean per right; the nested consumer repeats the same values.
+	Token           string             `json:"token"`                     // The token value, which also identifies it.
 }

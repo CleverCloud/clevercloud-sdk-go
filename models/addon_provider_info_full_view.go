@@ -6,14 +6,14 @@ package models
 type AddonProviderInfoFullView struct {
 	AnalyticsID    *string            `json:"analyticsId,omitempty"`
 	CanUpgrade     bool               `json:"canUpgrade"`
-	Features       []AddonFeatureView `json:"features"`
+	Features       []AddonFeatureView `json:"features"` // Features the provider's plans are described by.
 	GooglePlusName *string            `json:"googlePlusName,omitempty"`
 	ID             string             `json:"id"`
 	LogoURL        *string            `json:"logoUrl,omitempty"`
 	LongDesc       *string            `json:"longDesc,omitempty"`
 	Name           *string            `json:"name,omitempty"`
 	OpenInNewTab   bool               `json:"openInNewTab"`
-	Plans          []AddonPlanView    `json:"plans"`
+	Plans          []AddonPlanView    `json:"plans"` // Pricing plans offered by the provider.
 	Regions        []string           `json:"regions"`
 	ShortDesc      *string            `json:"shortDesc,omitempty"`
 	Status         string             `json:"status"`

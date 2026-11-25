@@ -4,25 +4,25 @@ package models
 
 // UserView A user's profile: identity, contact and postal details, account status, preferred multi-factor au...
 type UserView struct {
-	Address           *string       `json:"address,omitempty"`
-	Admin             bool          `json:"admin"`
-	Avatar            *string       `json:"avatar,omitempty"`
-	CanPay            bool          `json:"canPay"` // Whether the profile holds what paying requires: name, phone, full postal address and a validated ...
-	City              *string       `json:"city,omitempty"`
-	ContextFlags      []PartnerFlag `json:"contextFlags,omitzero"` // Restrictions the user's partner imposes; always present, empty when there are none.
-	Country           *string       `json:"country,omitempty"`
-	CreationDate      *int          `json:"creationDate,omitempty"` // Account creation date, in milliseconds since the Unix epoch.
-	Email             *string       `json:"email,omitempty"`
-	EmailValidated    bool          `json:"emailValidated"`
-	HasPassword       bool          `json:"hasPassword"`
-	ID                string        `json:"id"`
-	Lang              *string       `json:"lang,omitempty"`
-	Name              *string       `json:"name,omitempty"`
-	OauthApps         []string      `json:"oauthApps"` // Git hosting services the user has linked, such as `github`.
-	PartnerConsoleURL *string       `json:"partnerConsoleUrl,omitempty"`
-	PartnerID         *string       `json:"partnerId,omitempty"`
-	PartnerName       *string       `json:"partnerName,omitempty"`
-	Phone             *string       `json:"phone,omitempty"`
-	PreferredMFA      string        `json:"preferredMFA"` // Preferred multi-factor authentication kind; `NONE` when none is configured.
-	Zipcode           *string       `json:"zipcode,omitempty"`
+	Address           *string       `json:"address,omitempty"`           // Street address of the user; `null` until they fill it.
+	Admin             bool          `json:"admin"`                       // Whether the user is a platform administrator.
+	Avatar            *string       `json:"avatar,omitempty"`            // URL of the user's avatar; `null` when none is set.
+	CanPay            bool          `json:"canPay"`                      // Whether the profile holds what paying requires: name, phone, full postal address and a validated ...
+	City              *string       `json:"city,omitempty"`              // City of the user's postal address; `null` until they fill it.
+	ContextFlags      []PartnerFlag `json:"contextFlags,omitzero"`       // Restrictions the user's partner imposes; always present, empty when there are none.
+	Country           *string       `json:"country,omitempty"`           // Country of the user's address as an upper-case English display name; `null` until they fill it.
+	CreationDate      *int          `json:"creationDate,omitempty"`      // Account creation date, in milliseconds since the Unix epoch.
+	Email             *string       `json:"email,omitempty"`             // Primary email address of the user.
+	EmailValidated    bool          `json:"emailValidated"`              // Whether the primary email address has been confirmed.
+	HasPassword       bool          `json:"hasPassword"`                 // Whether the account has a password, as opposed to signing in only through an external provider.
+	ID                string        `json:"id"`                          // Identifier of the user, of the form `user_<uuid>`.
+	Lang              *string       `json:"lang,omitempty"`              // Preferred language of the user as a lowercase language code, set at signup; `null` only on accoun...
+	Name              *string       `json:"name,omitempty"`              // Display name of the user; `null` until they set one.
+	OauthApps         []string      `json:"oauthApps"`                   // Git hosting services the user has linked, such as `github`.
+	PartnerConsoleURL *string       `json:"partnerConsoleUrl,omitempty"` // URL of the console of the partner the user signed up through.
+	PartnerID         *string       `json:"partnerId,omitempty"`         // Identifier of the partner the user's account belongs to, a bare UUID; every user has one, the def...
+	PartnerName       *string       `json:"partnerName,omitempty"`       // Display name of the partner the user signed up through.
+	Phone             *string       `json:"phone,omitempty"`             // Phone number of the user; `null` until they set one.
+	PreferredMFA      string        `json:"preferredMFA"`                // Preferred multi-factor authentication kind; `NONE` when none is configured.
+	Zipcode           *string       `json:"zipcode,omitempty"`           // Postal code of the user's address; `null` until they fill it.
 }

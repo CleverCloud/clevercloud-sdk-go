@@ -4,13 +4,13 @@ package models
 
 // DeploymentView A deployment of an application: when it ran, its action, state and cause, the commit it deployed,...
 type DeploymentView struct {
-	Action    string  `json:"action"`
+	Action    string  `json:"action"` // What the deployment does to the application.
 	Author    Author  `json:"author"`
-	Cause     *string `json:"cause,omitempty"`
-	Commit    *string `json:"commit,omitempty"`
-	Date      *int    `json:"date,omitempty"`
-	ID        int     `json:"id"`
-	Instances int     `json:"instances"`
-	State     string  `json:"state"`
-	UUID      string  `json:"uuid"`
+	Cause     *string `json:"cause,omitempty"`  // Free-form reason recorded by whatever triggered the deployment, when it recorded one.
+	Commit    *string `json:"commit,omitempty"` // Identifier of the git commit that was deployed; `null` when the deployment does not ship a commit.
+	Date      *int    `json:"date,omitempty"`   // When the deployment started, as a Unix timestamp in milliseconds; `null` when unknown.
+	ID        int     `json:"id"`               // Sequence number of the deployment within its application, starting at 1 and incremented at each d...
+	Instances int     `json:"instances"`        // Number of instances the deployment targets; -1 when not recorded.
+	State     string  `json:"state"`            // Current state of the deployment.
+	UUID      string  `json:"uuid"`             // Public identifier of the deployment, of the form `deployment_<uuid>`.
 }

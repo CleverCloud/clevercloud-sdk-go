@@ -4,9 +4,9 @@ package models
 
 // DeploymentInfoView How an application is deployed: whether it can be stopped, the deployment type, the state of its ...
 type DeploymentInfoView struct {
-	HTTPURL      *string `json:"httpUrl,omitempty"`
-	RepoState    string  `json:"repoState"`
-	Shutdownable bool    `json:"shutdownable"`
-	Type         string  `json:"type"`
-	URL          *string `json:"url,omitempty"`
+	HTTPURL      *string `json:"httpUrl,omitempty"` // HTTP URL of the application's git repository; `null` when the application is not deployed with git.
+	RepoState    string  `json:"repoState"`         // Provisioning state of the deployment repository.
+	Shutdownable bool    `json:"shutdownable"`      // Flag given when the application is created or edited and returned as stored; `false` when never set.
+	Type         string  `json:"type"`              // Protocol used to push the code.
+	URL          *string `json:"url,omitempty"`     // URL the application's code is deployed from: the linked third-party repository when there is one,...
 }
