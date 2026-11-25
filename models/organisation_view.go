@@ -4,24 +4,24 @@ package models
 
 // OrganisationView An organisation: its identity, billing details and payment capabilities.
 type OrganisationView struct {
-	Address          *string       `json:"address,omitempty"`
-	Avatar           *string       `json:"avatar,omitempty"`
-	BillingEmail     *string       `json:"billingEmail,omitempty"`
-	CanPay           bool          `json:"canPay"`
-	CanSEPA          bool          `json:"canSEPA"`
-	City             *string       `json:"city,omitempty"`
-	CleverEnterprise bool          `json:"cleverEnterprise"`
-	Company          *string       `json:"company,omitempty"`
-	ContextFlags     []PartnerFlag `json:"contextFlags,omitzero"` // Flags of the organisation's partner; always present, an empty array when there are none.
-	Country          *string       `json:"country,omitempty"`
-	CountryCode      *string       `json:"countryCode,omitempty"` // ISO 3166-1 alpha-2 code of `country` (`FR` for `FRANCE`), in the form `PUT /v2/organisations/{id}...
-	CustomerFullName *string       `json:"customerFullName,omitempty"`
-	Description      string        `json:"description"`
-	EmergencyNumber  *string       `json:"emergencyNumber,omitempty"`
-	ID               string        `json:"id"`
-	IsTrusted        bool          `json:"isTrusted"`
-	Name             string        `json:"name"`
-	VAT              *string       `json:"VAT,omitempty"`
-	VatState         string        `json:"vatState"`
-	Zipcode          *string       `json:"zipcode,omitempty"`
+	Address          *string       `json:"address,omitempty"`          // Street address of the organisation.
+	Avatar           *string       `json:"avatar,omitempty"`           // URL of the organisation avatar.
+	BillingEmail     *string       `json:"billingEmail,omitempty"`     // Extra address that receives the billing emails, in addition to the administrators and accounting ...
+	CanPay           bool          `json:"canPay"`                     // Whether the billing identity is complete: name, address, city, zip code and country are filled, a...
+	CanSEPA          bool          `json:"canSEPA"`                    // Whether SEPA direct debit is offered: true when the organisation is trusted, is a Clever Enterpri...
+	City             *string       `json:"city,omitempty"`             // City of the organisation address.
+	CleverEnterprise bool          `json:"cleverEnterprise"`           // Whether the organisation is a Clever Enterprise customer.
+	Company          *string       `json:"company,omitempty"`          // Legal name of the company, when the organisation is one.
+	ContextFlags     []PartnerFlag `json:"contextFlags,omitzero"`      // Flags of the organisation's partner; always present, an empty array when there are none.
+	Country          *string       `json:"country,omitempty"`          // Country of the organisation as an upper-case English display name, derived from the VAT number wh...
+	CountryCode      *string       `json:"countryCode,omitempty"`      // ISO 3166-1 alpha-2 code of `country` (`FR` for `FRANCE`), in the form `PUT /v2/organisations/{id}...
+	CustomerFullName *string       `json:"customerFullName,omitempty"` // Full name of the customer, required for `canPay` when the organisation has no company; `null` whe...
+	Description      string        `json:"description"`                // Free text description of the organisation.
+	EmergencyNumber  *string       `json:"emergencyNumber,omitempty"`  // Emergency phone number recorded for the organisation when it became a Clever Enterprise customer;...
+	ID               string        `json:"id"`                         // Identifier of the organisation, of the form `orga_<uuid>`, or `user_<uuid>` for a personal organi...
+	IsTrusted        bool          `json:"isTrusted"`                  // Whether the organisation was manually flagged as trusted.
+	Name             string        `json:"name"`                       // Display name of the organisation.
+	VAT              *string       `json:"VAT,omitempty"`              // VAT number of the organisation; `null` when it has no company.
+	VatState         string        `json:"vatState"`                   // State of the VAT number, one of `VALID`, `PENDING_VALIDATION`, `INVALID`, `NOT_NEEDED` (a company...
+	Zipcode          *string       `json:"zipcode,omitempty"`          // Zip code of the organisation address.
 }

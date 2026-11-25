@@ -4,9 +4,9 @@ package models
 
 // InstanceVariantView A variant of an instance type, such as a runtime or framework: its identifier, slug, display name...
 type InstanceVariantView struct {
-	DeployType string  `json:"deployType"`
-	ID         string  `json:"id"`
+	DeployType string  `json:"deployType"`     // Deployment type recorded on the variant, informative only; the methods an application may use are...
+	ID         string  `json:"id"`             // Identifier of the variant.
 	Logo       *string `json:"logo,omitempty"` // URL of the variant's logo.
-	Name       string  `json:"name"`
-	Slug       string  `json:"slug"`
+	Name       string  `json:"name"`           // Display name of the variant.
+	Slug       string  `json:"slug"`           // URL friendly name, the one an application can be created from.
 }

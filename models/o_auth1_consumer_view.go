@@ -4,11 +4,11 @@ package models
 
 // OAuth1ConsumerView An OAuth1 consumer: a third-party application allowed to act on behalf of users, with its display...
 type OAuth1ConsumerView struct {
-	BaseURL     *string         `json:"baseUrl,omitempty"`
-	Description *string         `json:"description,omitempty"`
-	Key         string          `json:"key"`
-	Name        *string         `json:"name,omitempty"`
-	Picture     *string         `json:"picture,omitempty"`
-	Rights      OAuthRightsView `json:"rights"`
-	URL         *string         `json:"url,omitempty"`
+	BaseURL     *string         `json:"baseUrl,omitempty"`     // Base URL of the consumer: an OAuth callback is accepted only when its scheme and host match it.
+	Description *string         `json:"description,omitempty"` // Free-text description of the consumer.
+	Key         string          `json:"key"`                   // OAuth consumer key, which also identifies the consumer in the API.
+	Name        *string         `json:"name,omitempty"`        // Display name shown on the consent screen.
+	Picture     *string         `json:"picture,omitempty"`     // URL of the consumer's logo.
+	Rights      OAuthRightsView `json:"rights"`                // Which rights the consumer holds, keyed by right.
+	URL         *string         `json:"url,omitempty"`         // URL of the application's home page.
 }

@@ -7,14 +7,14 @@ type AvailableInstanceView struct {
 	BuildFlavor   *Flavor             `json:"buildFlavor"`
 	ComingSoon    bool                `json:"comingSoon"` // Always `false`.
 	DefaultFlavor *Flavor             `json:"defaultFlavor"`
-	Deployments   []string            `json:"deployments"` // Deployment methods the instance type accepts (e.g. `git`).
-	Description   string              `json:"description"` // Description of the instance type; `null` when it has none.
-	Enabled       bool                `json:"enabled"`     // Whether the instance type is enabled in the catalogue.
-	Flavors       []Flavor            `json:"flavors"`     // Flavors an application of this instance type can use.
-	MaxInstances  InstanceCount       `json:"maxInstances"`
-	Name          string              `json:"name"` // Display name of the variant (e.g. `Static Apache` for `php`).
+	Deployments   []string            `json:"deployments"`  // Deployment methods the instance type accepts (e.g. `git`).
+	Description   string              `json:"description"`  // Description of the instance type; `null` when it has none.
+	Enabled       bool                `json:"enabled"`      // Whether the instance type is enabled in the catalogue.
+	Flavors       []Flavor            `json:"flavors"`      // Flavors an application of this instance type can use.
+	MaxInstances  InstanceCount       `json:"maxInstances"` // Highest number of instances an application may scale to: the platform-wide ceiling in the catalog...
+	Name          string              `json:"name"`         // Display name of the variant (e.g. `Static Apache` for `php`).
 	Tags          []SemanticTag       `json:"tags"`
-	Type          string              `json:"type"` // Instance type (e.g. `node`).
-	Variant       InstanceVariantView `json:"variant"`
+	Type          string              `json:"type"`    // Instance type (e.g. `node`).
+	Variant       InstanceVariantView `json:"variant"` // Variant of the instance type this entry describes.
 	Version       string              `json:"version"` // Instance version (e.g. `20250909`).
 }
