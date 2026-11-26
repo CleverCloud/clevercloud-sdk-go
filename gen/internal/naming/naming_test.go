@@ -22,6 +22,23 @@ func TestPascalCase(t *testing.T) {
 	}
 }
 
+func TestFunctionName(t *testing.T) {
+	cases := map[string]string{
+		"listSelfCliTokens":           "ListSelfCliTokens",
+		"getAppId":                    "GetAppID",
+		"listAppIds":                  "ListAppIds",
+		"getEventSocket":              "GetEventSocket",
+		"listOauth1Consumers":         "ListOauth1Consumers",
+		"create_internal_application": "CreateInternalApplication",
+		"validOrder":                  "ValidOrder",
+	}
+	for in, want := range cases {
+		if got := FunctionName(in); got != want {
+			t.Errorf("FunctionName(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
 func TestSnakeCase(t *testing.T) {
 	cases := map[string]string{
 		"NetworkGroup":     "network_group",
