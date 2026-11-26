@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createnetworkgroup Create a network group
+CreateNetworkGroup Create a network group
 
 Requests the creation of a network group, optionally with an ID, a label, tags and initial members. The group is created asynchronously and cannot be read until it is; 409 when its ID or label is already being created. Organisation members need the ADMIN or MANAGER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Createnetworkgroup(ctx, client, tracer, ownerId, requestBody)
+	response := network_group.CreateNetworkGroup(ctx, client, tracer, ownerId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: createNetworkGroup
 */
-func Createnetworkgroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.WannabeNetworkGroup) client.Response[client.Nothing] {
+func CreateNetworkGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, requestBody *models.WannabeNetworkGroup) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createNetworkGroup", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 

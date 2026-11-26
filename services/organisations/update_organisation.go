@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updateorganisation Update an organisation
+UpdateOrganisation Update an organisation
 
 Replaces the organisation's details with the body and returns the result; `name` (at most 128 characters) and `description` (at most 256) are mandatory. Requires the `manage_organisations` OAuth right and the `ADMIN` or `MANAGER` role; a deleted organisation answers 403. Also callable by platform services with administrative rights.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Updateorganisation(ctx, client, tracer, id, requestBody)
+	response := organisations.UpdateOrganisation(ctx, client, tracer, id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: organisations
 operationId: updateOrganisation
 */
-func Updateorganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeOrganisation) client.Response[models.OrganisationView] {
+func UpdateOrganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeOrganisation) client.Response[models.OrganisationView] {
 	ctx, span := tracer.Start(ctx, "updateOrganisation", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listnetworkgroupmembers List the members of a network group
+ListNetworkGroupMembers List the members of a network group
 
 Returns the applications, add-ons, load balancers and external resources that belong to the network group; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Listnetworkgroupmembers(ctx, client, tracer, ownerId, networkGroupId)
+	response := network_group.ListNetworkGroupMembers(ctx, client, tracer, ownerId, networkGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: listNetworkGroupMembers
 */
-func Listnetworkgroupmembers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Member] {
+func ListNetworkGroupMembers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Member] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroupMembers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

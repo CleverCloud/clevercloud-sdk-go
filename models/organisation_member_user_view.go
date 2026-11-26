@@ -8,5 +8,5 @@ type OrganisationMemberUserView struct {
 	Email        *string `json:"email,omitempty"`  // Email address of the user.
 	ID           string  `json:"id"`               // Identifier of the user, of the form `user_<uuid>`.
 	Name         *string `json:"name,omitempty"`   // Display name of the user.
-	PreferredMFA string  `json:"preferredMFA"`     // Preferred multi-factor authentication kind of the user, `TOTP` or `NONE` when none is configured.
+	PreferredMFA MfaKind `json:"preferredMFA"`     // Preferred multi-factor authentication kind of the user.
 }

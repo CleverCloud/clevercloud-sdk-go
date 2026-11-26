@@ -12,14 +12,15 @@ import (
 )
 
 /*
-Getapplicationdeployment Get a deployment of an application
+GetApplicationDeployment Get a deployment of an application
 
-Returns one deployment of an application of the user's personal space. An unknown deployment ID answers 400 (error id 4102).
+Returns one deployment of an organisation's application. An unknown deployment ID answers 400 (error id 4102). Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request
   - client: the Clever Cloud client
   - tracer: OpenTelemetry tracer for observability
+  - id: Organisation ID (`orga_…`, or `user_…` for a personal space)
   - appId: Application ID (`app_…`)
   - deploymentId: Deployment ID
 
@@ -27,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := applications.Getapplicationdeployment(ctx, client, tracer, appId, deploymentId)
+	response := applications.GetApplicationDeployment(ctx, client, tracer, id, appId, deploymentId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +37,11 @@ Example:
 x-service: applications
 operationId: getApplicationDeployment
 */
-func Getapplicationdeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string, deploymentId string) client.Response[models.DeploymentView] {
-	ctx, span := tracer.Start(ctx, "getApplicationDeployment", trace.WithAttributes(attribute.String("appId", appId), attribute.String("deploymentId", deploymentId)))
+func GetApplicationDeployment(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, appId string, deploymentId string) client.Response[models.DeploymentView] {
+	ctx, span := tracer.Start(ctx, "getApplicationDeployment", trace.WithAttributes(attribute.String("id", id), attribute.String("appId", appId), attribute.String("deploymentId", deploymentId)))
 	defer span.End()
 
-	path := utils.Path("/v2/self/applications/%s/deployments/%s", appId, deploymentId)
+	path := utils.Path("/v2/organisations/%s/applications/%s/deployments/%s", id, appId, deploymentId)
 
 	// Make API call
 	response := client.Get[models.DeploymentView](ctx, c, path)

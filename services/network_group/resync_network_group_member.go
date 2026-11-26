@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Resyncnetworkgroupmember Resync the peers of a network group member
+ResyncNetworkGroupMember Resync the peers of a network group member
 
 Walks the running instances of an `APPLICATION` or `ADDON` member once and, for each, reports what it found and did: the peer is present, its WireGuard key request was sent again (its creation waits for the key), its creation was started, or the instance was skipped, with the reason. A failure on one instance is that instance's `skipped`, never an error of the call; a creation already under way is reported `creation_started` with the reason `creation already in flight`. 503 when the running instances cannot be listed. 404 when the network group or the member does not exist; 422 for an `EXTERNAL` or `LOADBALANCER` member, which has no instances. Organisation members need the ADMIN or MANAGER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Resyncnetworkgroupmember(ctx, client, tracer, ownerId, networkGroupId, memberId)
+	response := network_group.ResyncNetworkGroupMember(ctx, client, tracer, ownerId, networkGroupId, memberId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: resyncNetworkGroupMember
 */
-func Resyncnetworkgroupmember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, memberId string) client.Response[models.NetworkGroupMemberResync] {
+func ResyncNetworkGroupMember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, memberId string) client.Response[models.NetworkGroupMemberResync] {
 	ctx, span := tracer.Start(ctx, "resyncNetworkGroupMember", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("memberId", memberId)))
 	defer span.End()
 

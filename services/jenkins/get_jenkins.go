@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getjenkins Get a Jenkins add-on
+GetJenkins Get a Jenkins add-on
 
 Returns the add-on: its host name, its version and the services configured beside Jenkins. Accepts the add-on's provider ID (`jenkins_…`) or its platform add-on ID (`addon_…`). The caller must be allowed to see the add-on, which the platform decides.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := jenkins.Getjenkins(ctx, client, tracer, id)
+	response := jenkins.GetJenkins(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: jenkins
 operationId: getJenkins
 */
-func Getjenkins(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.JenkinsAddonView] {
+func GetJenkins(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.JenkinsAddonView] {
 	ctx, span := tracer.Start(ctx, "getJenkins", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

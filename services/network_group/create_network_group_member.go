@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createnetworkgroupmember Add a member to a network group
+CreateNetworkGroupMember Add a member to a network group
 
 Requests the addition of an `APPLICATION`, `ADDON`, `EXTERNAL` or `LOADBALANCER` member, applied asynchronously. A given `domainName` must end with one of the configured DNS suffixes, otherwise one is derived; re-adding a member with the same ID and kind also answers 202, the same ID with another kind 409. Organisation members need the ADMIN or MANAGER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Createnetworkgroupmember(ctx, client, tracer, ownerId, networkGroupId, requestBody)
+	response := network_group.CreateNetworkGroupMember(ctx, client, tracer, ownerId, networkGroupId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: createNetworkGroupMember
 */
-func Createnetworkgroupmember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabeNetworkgroupMember) client.Response[client.Nothing] {
+func CreateNetworkGroupMember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabeNetworkgroupMember) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createNetworkGroupMember", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

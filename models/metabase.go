@@ -10,7 +10,7 @@ type Metabase struct {
 	EnvVars           map[string]string      `json:"envVars"`           // Environment variables of the add-on's application.
 	JavaVersion       string                 `json:"javaVersion"`       // Java version the add-on's application runs on.
 	Name              string                 `json:"name"`              // Add-on name.
-	OwnerID           UserId                 `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	OwnerID           UserOrOrgaId           `json:"ownerId"`           // ID of the owner: a user or an organisation.
 	Plan              MetabasePlanIdentifier `json:"plan"`              // Plan identifier.
 	ResourceID        MetabaseId             `json:"resourceId"`        // Metabase add-on ID (`metabase_…`).
 	Resources         MetabaseResources      `json:"resources"`         // Resources backing the add-on.

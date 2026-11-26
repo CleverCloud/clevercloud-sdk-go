@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listnetworkgrouppeers List the peers of a network group
+ListNetworkGroupPeers List the peers of a network group
 
 Returns the WireGuard peers of the network group, Clever Cloud instances and external peers alike; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Listnetworkgrouppeers(ctx, client, tracer, ownerId, networkGroupId)
+	response := network_group.ListNetworkGroupPeers(ctx, client, tracer, ownerId, networkGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: listNetworkGroupPeers
 */
-func Listnetworkgrouppeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Peer] {
+func ListNetworkGroupPeers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[[]models.Peer] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroupPeers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

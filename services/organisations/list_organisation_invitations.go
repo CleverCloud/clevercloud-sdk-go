@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listorganisationinvitations List the pending invitations of an organisation
+ListOrganisationInvitations List the pending invitations of an organisation
 
 Returns the invitations to join the organisation that are still waiting for an answer and have not expired, newest first. An invitation whose sender has since left the organisation, or no longer holds a role allowed to offer the invited one, is left out: it can no longer be accepted. Requires the `manage_organisations_members` OAuth right and the `ADMIN` or `MANAGER` role; a deleted organisation answers 403, and the organisation's partner may forbid managing members. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Listorganisationinvitations(ctx, client, tracer, id)
+	response := organisations.ListOrganisationInvitations(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: listOrganisationInvitations
 */
-func Listorganisationinvitations(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[[]models.InvitationView] {
+func ListOrganisationInvitations(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[[]models.InvitationView] {
 	ctx, span := tracer.Start(ctx, "listOrganisationInvitations", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

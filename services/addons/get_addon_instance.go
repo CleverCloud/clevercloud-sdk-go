@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getaddoninstance Get a running instance of an add-on
+GetAddonInstance Get a running instance of an add-on
 
 Returns one running instance of an add-on of the organisation. 404 when no running instance of the add-on has this ID. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := addons.Getaddoninstance(ctx, client, tracer, id, addonId, instanceId)
+	response := addons.GetAddonInstance(ctx, client, tracer, id, addonId, instanceId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: addons
 operationId: getAddonInstance
 */
-func Getaddoninstance(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, instanceId string) client.Response[models.SuperNovaInstanceView] {
+func GetAddonInstance(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, instanceId string) client.Response[models.SuperNovaInstanceView] {
 	ctx, span := tracer.Start(ctx, "getAddonInstance", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId), attribute.String("instanceId", instanceId)))
 	defer span.End()
 

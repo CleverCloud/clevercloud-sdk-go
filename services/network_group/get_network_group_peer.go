@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getnetworkgrouppeer Get a peer of a network group
+GetNetworkGroupPeer Get a peer of a network group
 
 Returns the peer; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Getnetworkgrouppeer(ctx, client, tracer, ownerId, networkGroupId, peerId)
+	response := network_group.GetNetworkGroupPeer(ctx, client, tracer, ownerId, networkGroupId, peerId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: getNetworkGroupPeer
 */
-func Getnetworkgrouppeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[models.Peer] {
+func GetNetworkGroupPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[models.Peer] {
 	ctx, span := tracer.Start(ctx, "getNetworkGroupPeer", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 

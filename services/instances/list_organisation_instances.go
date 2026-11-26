@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Listorganisationinstances List the instances of an organisation
+ListOrganisationInstances List the instances of an organisation
 
 Returns a map from the application ID (`app_…`) or, for an add-on that has instances, the add-on's real ID (`postgresql_…`, `redis_…`) to its instances. Requires the right to manage the organisation's applications, for OAuth1 and platform-service tokens alike (403 otherwise; an almighty token holds it), then membership (404 otherwise); a member whose role is not `ADMIN`, `MANAGER` or `DEVELOPER` (an `ACCOUNTING` member, for instance) gets a 200 with an empty JSON array `[]` instead of the map. Also callable by platform services with administrative rights.
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := instances.Listorganisationinstances(ctx, client, tracer, id)
+	response := instances.ListOrganisationInstances(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: instances
 operationId: listOrganisationInstances
 */
-func Listorganisationinstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[any] {
+func ListOrganisationInstances(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "listOrganisationInstances", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

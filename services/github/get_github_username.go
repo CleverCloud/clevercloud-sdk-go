@@ -10,7 +10,7 @@ import (
 )
 
 /*
-Getgithubusername Get your GitHub username
+GetGithubUsername Get your GitHub username
 
 Returns the login of the GitHub account linked to the authenticated user, as a JSON string. Requires the `access_personal_information` OAuth right (400, error id 7301, otherwise) and a linked GitHub account (404 otherwise). It is `null` when GitHub refuses the stored authorisation or answers with an error; the route answers 502 when GitHub cannot be reached.
 
@@ -23,7 +23,7 @@ Parameters:
 
 Example:
 
-	response := github.Getgithubusername(ctx, client, tracer)
+	response := github.GetGithubUsername(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -32,7 +32,7 @@ Example:
 x-service: github
 operationId: getGithubUsername
 */
-func Getgithubusername(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[*string] {
+func GetGithubUsername(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[*string] {
 	ctx, span := tracer.Start(ctx, "getGithubUsername")
 	defer span.End()
 

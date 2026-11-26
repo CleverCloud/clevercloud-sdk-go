@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createkubernetesnodegroup Create a node group
+CreateKubernetesNodeGroup Create a node group
 
 Creates a node group in the cluster and deploys it asynchronously; 409 when another node group of the cluster holds the name, 412 when the organisation's Kubernetes quota would be exceeded or when the cluster already holds 256 node groups, standalone nodes included. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Createkubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, requestBody)
+	response := kubernetes.CreateKubernetesNodeGroup(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNodeGroup
 */
-func Createkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
+func CreateKubernetesNodeGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "createKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

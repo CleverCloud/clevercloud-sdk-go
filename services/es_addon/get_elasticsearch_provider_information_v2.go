@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getelasticsearchproviderinformationv2 Get the Elasticsearch provider information
+GetElasticsearchProviderInformationV2 Get the Elasticsearch provider information
 
 Returns what a new Elasticsearch add-on can be created on: the versions available and the options each one supports. Open without authentication.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := es_addon.Getelasticsearchproviderinformationv2(ctx, client, tracer)
+	response := es_addon.GetElasticsearchProviderInformationV2(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: es_addon
 operationId: getElasticsearchProviderInformationV2
 */
-func Getelasticsearchproviderinformationv2(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ElasticsearchProvidersConsoleV2] {
+func GetElasticsearchProviderInformationV2(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ElasticsearchProvidersConsoleV2] {
 	ctx, span := tracer.Start(ctx, "getElasticsearchProviderInformationV2")
 	defer span.End()
 

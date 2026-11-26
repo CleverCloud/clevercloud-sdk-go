@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updateorganisationavatar Replace the avatar of an organisation
+UpdateOrganisationAvatar Replace the avatar of an organisation
 
 Uploads a new avatar sent as the raw image body (`image/bmp`, `image/gif`, `image/jpeg`, `image/png` or `image/tiff`), or with a JSON body takes it from the caller's Gravatar or linked GitHub account, and returns its URL. Requires the right to manage organisations and the `ADMIN` or `MANAGER` role. A service token can only upload an image.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Updateorganisationavatar(ctx, client, tracer, id, requestBody)
+	response := organisations.UpdateOrganisationAvatar(ctx, client, tracer, id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: organisations
 operationId: updateOrganisationAvatar
 */
-func Updateorganisationavatar(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAvatarSource) client.Response[models.UrlView] {
+func UpdateOrganisationAvatar(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAvatarSource) client.Response[models.UrlView] {
 	ctx, span := tracer.Start(ctx, "updateOrganisationAvatar", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

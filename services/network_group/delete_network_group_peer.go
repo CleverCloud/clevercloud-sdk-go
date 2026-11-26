@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletenetworkgrouppeer Remove a peer from a network group
+DeleteNetworkGroupPeer Remove a peer from a network group
 
 Requests the removal of an external peer, which is applied asynchronously; 404 when the network group or the peer does not exist. A Clever Cloud instance peer cannot be removed this way (401): it leaves the group with its instance or its member. Organisation members need the ADMIN or MANAGER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Deletenetworkgrouppeer(ctx, client, tracer, ownerId, networkGroupId, peerId)
+	response := network_group.DeleteNetworkGroupPeer(ctx, client, tracer, ownerId, networkGroupId, peerId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: deleteNetworkGroupPeer
 */
-func Deletenetworkgrouppeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[client.Nothing] {
+func DeleteNetworkGroupPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, peerId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteNetworkGroupPeer", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("peerId", peerId)))
 	defer span.End()
 

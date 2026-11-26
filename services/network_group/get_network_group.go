@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getnetworkgroup Get a network group
+GetNetworkGroup Get a network group
 
 Returns the network group with its members and peers; 404 when it does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Getnetworkgroup(ctx, client, tracer, ownerId, networkGroupId)
+	response := network_group.GetNetworkGroup(ctx, client, tracer, ownerId, networkGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: getNetworkGroup
 */
-func Getnetworkgroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[models.NetworkGroup] {
+func GetNetworkGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[models.NetworkGroup] {
 	ctx, span := tracer.Start(ctx, "getNetworkGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

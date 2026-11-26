@@ -6,5 +6,5 @@ package models
 type MfaStatusView struct {
 	BackupCodesState *MFABackupCodesState `json:"backupCodesState,omitempty"`
 	Configured       bool                 `json:"configured"`
-	Kind             string               `json:"kind"` // Multi-factor authentication kind, such as `TOTP`.
+	Kind             MfaKind              `json:"kind"` // Multi-factor authentication kind.
 }

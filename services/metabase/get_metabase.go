@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getmetabase Get a Metabase add-on
+GetMetabase Get a Metabase add-on
 
 Returns the add-on: access URL, installed and available versions, backing resources and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := metabase.Getmetabase(ctx, client, tracer, addonMetabaseId)
+	response := metabase.GetMetabase(ctx, client, tracer, addonMetabaseId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: metabase
 operationId: getMetabase
 */
-func Getmetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.Metabase] {
+func GetMetabase(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMetabaseId string) client.Response[models.Metabase] {
 	ctx, span := tracer.Start(ctx, "getMetabase", trace.WithAttributes(attribute.String("addonMetabaseId", addonMetabaseId)))
 	defer span.End()
 

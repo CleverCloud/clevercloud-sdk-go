@@ -2,16 +2,14 @@
 
 package models
 
-// Region A zone where resources can be deployed: its location, outbound IP ranges and tags.
+import "time"
+
+// Region Region view returned by region endpoints.  Source: ovd modules/ipam/types/Region.scala — `Region`
 type Region struct {
-	City        string   `json:"city"`                  // City name.
-	Country     string   `json:"country"`               // Country name.
-	CountryCode string   `json:"countryCode"`           // ISO country code.
-	DisplayName *string  `json:"displayName,omitempty"` // Display name of the zone, when it overrides the default one; always present, `null` when unset.
-	ID          string   `json:"id"`                    // Zone UUID.
-	Lat         float64  `json:"lat"`                   // Latitude.
-	Lon         float64  `json:"lon"`                   // Longitude.
-	Name        string   `json:"name"`                  // Zone short name (e.g. "par", "mtl").
-	OutboundIPs []string `json:"outboundIPs"`           // Outbound IP ranges of the zone, in CIDR notation.
-	Tags        []string `json:"tags"`                  // Zone tags (e.g. "infra:clever-cloud").
+	ID        string    `json:"id"`
+	Name      *string   `json:"name,omitempty"`
+	OwnerID   string    `json:"ownerId"`
+	Provider  string    `json:"provider"`
+	Tags      []string  `json:"tags,omitzero"` // Semantic tags (Flyway V5).
+	UpdatedAt time.Time `json:"updatedAt"`
 }

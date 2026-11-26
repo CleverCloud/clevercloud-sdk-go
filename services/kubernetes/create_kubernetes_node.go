@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createkubernetesnode Create a standalone node
+CreateKubernetesNode Create a standalone node
 
 Creates a single standalone node in the cluster and deploys it asynchronously; 409 when a node group or node of the cluster already holds the name, 412 when the organisation's Kubernetes quota would be exceeded or the cluster already holds 256 node groups and standalone nodes. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Createkubernetesnode(ctx, client, tracer, ownerId, kubernetesId, requestBody)
+	response := kubernetes.CreateKubernetesNode(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: createKubernetesNode
 */
-func Createkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
+func CreateKubernetesNode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
 	ctx, span := tracer.Start(ctx, "createKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

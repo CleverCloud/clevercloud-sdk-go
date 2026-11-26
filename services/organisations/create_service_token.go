@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createservicetoken Create a service token
+CreateServiceToken Create a service token
 
 Creates a token that calls the API on the organisation's behalf with the given `role`, optionally restricted to some applications and add-ons (`resources`), valid `ttl_seconds` (90 days by default, one year at most). Requires membership, the right to manage the organisation's services and permission to assign the requested role; creation is rate-limited per organisation. The token value appears only in this response. Answers 503 when service-token creation is temporarily unavailable for the organisation. `productId` and `locationId` in the response metadata may be empty strings and should not be relied on.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Createservicetoken(ctx, client, tracer, id, requestBody)
+	response := organisations.CreateServiceToken(ctx, client, tracer, id, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: organisations
 operationId: createServiceToken
 */
-func Createservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeServiceToken) client.Response[models.CreatedServiceToken] {
+func CreateServiceToken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeServiceToken) client.Response[models.CreatedServiceToken] {
 	ctx, span := tracer.Start(ctx, "createServiceToken", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

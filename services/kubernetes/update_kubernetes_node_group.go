@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updatekubernetesnodegroup Update a node group
+UpdateKubernetesNodeGroup Update a node group
 
 Updates the name, description, tag and node counts; an omitted or `null` `description` or `tag` keeps its current value and an empty string clears it. Flavor, taints and labels cannot change. Every update, a rename alone included, needs an active cluster and a `READY` node group (409 otherwise); the one exception is a `FAILED` group that still holds draining nodes, which a body carrying `drainPolicy` and not raising `targetNodeCount` may retry. A standalone node cannot be updated (412), and an upscale counts against the organisation's Kubernetes quota (412 when exceeded). A name another node group of the cluster holds, or a group whose state changes while the request runs, is a 409. A node count change resizes the group asynchronously. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
@@ -29,7 +29,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Updatekubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId, requestBody)
+	response := kubernetes.UpdateKubernetesNodeGroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -38,7 +38,7 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesNodeGroup
 */
-func Updatekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
+func UpdateKubernetesNodeGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string, requestBody *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 

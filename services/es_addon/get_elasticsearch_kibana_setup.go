@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getelasticsearchkibanasetup Get the Kibana setup script for one version
+GetElasticsearchKibanaSetup Get the Kibana setup script for one version
 
 Returns the script that installs and configures Kibana beside an Elasticsearch add-on, for the version named in the path. Open without authentication.
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := es_addon.Getelasticsearchkibanasetup(ctx, client, tracer, version)
+	response := es_addon.GetElasticsearchKibanaSetup(ctx, client, tracer, version)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: es_addon
 operationId: getElasticsearchKibanaSetup
 */
-func Getelasticsearchkibanasetup(ctx context.Context, c *client.Client, tracer trace.Tracer, version string) client.Response[client.PlainTextString] {
+func GetElasticsearchKibanaSetup(ctx context.Context, c *client.Client, tracer trace.Tracer, version string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getElasticsearchKibanaSetup", trace.WithAttributes(attribute.String("version", version)))
 	defer span.End()
 

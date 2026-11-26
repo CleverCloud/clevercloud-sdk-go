@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listpulsarpersistenttopics List a Pulsar add-on's persistent topics
+ListPulsarPersistentTopics List a Pulsar add-on's persistent topics
 
 Returns the persistent topics of the add-on's namespace as full names (`persistent://tenant/namespace/topic`). Pass `partitioned=true` to list the partitioned topics instead. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `access_organisations`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Listpulsarpersistenttopics(ctx, client, tracer, pulsarId)
+	response := pulsar.ListPulsarPersistentTopics(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: listPulsarPersistentTopics
 */
-func Listpulsarpersistenttopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[[]models.TopicView] {
+func ListPulsarPersistentTopics(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[[]models.TopicView] {
 	ctx, span := tracer.Start(ctx, "listPulsarPersistentTopics", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 

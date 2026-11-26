@@ -4,6 +4,6 @@ package models
 
 // MetabaseResources Resources backing a Metabase add-on.
 type MetabaseResources struct {
-	Entrypoint *AppId        `json:"entrypoint,omitempty"`
+	Entrypoint *AppOrAddonId `json:"entrypoint,omitempty"`
 	PgsqlID    *PostgresqlId `json:"pgsqlId,omitempty"`
 }

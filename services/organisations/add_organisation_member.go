@@ -13,7 +13,7 @@ import (
 )
 
 /*
-Addorganisationmember Invite a member to an organisation
+AddOrganisationMember Invite a member to an organisation
 
 Emails an invitation to `email` for the given `role` (`DEVELOPER` by default) and answers 201 with it. Requires the `manage_organisations_members` OAuth right and the `ADMIN` or `MANAGER` role, the caller may only grant a role it is allowed to assign, and invitations are rate-limited per sender and per invitee. With `invitationKey`, the authenticated user instead accepts that invitation and joins the organisation (200).
 
@@ -29,7 +29,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Addorganisationmember(ctx, client, tracer, id, requestBody, opts...)
+	response := organisations.AddOrganisationMember(ctx, client, tracer, id, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -38,7 +38,7 @@ Example:
 x-service: organisations
 operationId: addOrganisationMember
 */
-func Addorganisationmember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeMember, opts ...Option) client.Response[models.Message] {
+func AddOrganisationMember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeMember, opts ...Option) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "addOrganisationMember", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

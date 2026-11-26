@@ -4,8 +4,8 @@ package models
 
 // MatomoResources Resources backing a Matomo add-on.
 type MatomoResources struct {
-	Entrypoint *AppId   `json:"entrypoint,omitempty"`
-	KvID       *KvId    `json:"kvId,omitempty"`
-	MysqlID    *MysqlId `json:"mysqlId,omitempty"`
-	RedisID    *RedisId `json:"redisId,omitempty"`
+	Entrypoint *AppOrAddonId `json:"entrypoint,omitempty"`
+	KvID       *KvId         `json:"kvId,omitempty"`
+	MysqlID    *MysqlId      `json:"mysqlId,omitempty"`
+	RedisID    *RedisId      `json:"redisId,omitempty"`
 }

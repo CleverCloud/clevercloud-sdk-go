@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createnetworkgroupexternalpeer Add an external peer to a network group
+CreateNetworkGroupExternalPeer Add an external peer to a network group
 
 Requests the addition of a WireGuard peer running outside Clever Cloud under the member `parentMember`, and answers with its generated ID; the peer is created asynchronously. A `SERVER` peer needs `ip` and `port`. Organisation members need the ADMIN or MANAGER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Createnetworkgroupexternalpeer(ctx, client, tracer, ownerId, networkGroupId, requestBody)
+	response := network_group.CreateNetworkGroupExternalPeer(ctx, client, tracer, ownerId, networkGroupId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: createNetworkGroupExternalPeer
 */
-func Createnetworkgroupexternalpeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabeExternalPeer) client.Response[models.PeerCreated] {
+func CreateNetworkGroupExternalPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabeExternalPeer) client.Response[models.PeerCreated] {
 	ctx, span := tracer.Start(ctx, "createNetworkGroupExternalPeer", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

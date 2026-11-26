@@ -12,7 +12,7 @@ type Otoroshi struct {
 	InitialCredentials OtoroshiBasicCredentials `json:"initialCredentials"` // Initial administrator credentials of the back office.
 	JavaVersion        string                   `json:"javaVersion"`        // Java version the add-on's application runs on; empty when unknown.
 	Name               string                   `json:"name"`               // Add-on name.
-	OwnerID            UserId                   `json:"ownerId"`
+	OwnerID            UserOrOrgaId             `json:"ownerId"`
 	Plan               OtoroshiPlanIdentifier   `json:"plan"`
 	ResourceID         OtoroshiId               `json:"resourceId"`
 	Resources          OtoroshiResources        `json:"resources"` // Resources backing the add-on.

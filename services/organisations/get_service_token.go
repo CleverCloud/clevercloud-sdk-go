@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getservicetoken Get a service token
+GetServiceToken Get a service token
 
 Returns the service token's details, with the `creatorUserId` of the member who created it; 404 when unknown. `tokenId` may also be the token's revocation ID. Requires membership and the right to manage the organisation's services; a member without the `ADMIN` or `MANAGER` role may only read a token they created (403 otherwise). Also callable by platform services with administrative rights.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Getservicetoken(ctx, client, tracer, id, tokenId)
+	response := organisations.GetServiceToken(ctx, client, tracer, id, tokenId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: organisations
 operationId: getServiceToken
 */
-func Getservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[models.ServiceToken] {
+func GetServiceToken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[models.ServiceToken] {
 	ctx, span := tracer.Start(ctx, "getServiceToken", trace.WithAttributes(attribute.String("id", id), attribute.String("tokenId", tokenId)))
 	defer span.End()
 

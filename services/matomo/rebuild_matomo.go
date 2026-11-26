@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Rebuildmatomo Rebuild a Matomo add-on
+RebuildMatomo Rebuild a Matomo add-on
 
 Redeploys the add-on's PHP application without build cache. Answers 400 when the add-on has no application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := matomo.Rebuildmatomo(ctx, client, tracer, addonMatomoId)
+	response := matomo.RebuildMatomo(ctx, client, tracer, addonMatomoId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: matomo
 operationId: rebuildMatomo
 */
-func Rebuildmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[client.Nothing] {
+func RebuildMatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "rebuildMatomo", trace.WithAttributes(attribute.String("addonMatomoId", addonMatomoId)))
 	defer span.End()
 

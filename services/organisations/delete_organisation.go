@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Deleteorganisation Delete an organisation
+DeleteOrganisation Delete an organisation
 
 Deletes the organisation along with its applications and add-ons. Requires the `manage_organisations` OAuth right and the `ADMIN` role, and is refused (403) while the organisation owns add-on providers. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Deleteorganisation(ctx, client, tracer, id)
+	response := organisations.DeleteOrganisation(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: deleteOrganisation
 */
-func Deleteorganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.Message] {
+func DeleteOrganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "deleteOrganisation", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

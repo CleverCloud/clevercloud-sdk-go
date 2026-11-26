@@ -62,7 +62,7 @@ Fluent interface following URL path structure:
 ```go
 s := sdk.NewSDK(sdk.WithClient(client.New(client.WithAutoOauthConfig())))
 
-response := s.V4().Kubernetes().Organisations().Ownerid(orgID).Clusters().Getclusters(ctx)
+response := s.V4().Kubernetes().Organisations().Ownerid(orgID).Clusters().ListKubernetesClusters(ctx)
 if response.HasError() {
     log.Fatal(response.Error())
 }

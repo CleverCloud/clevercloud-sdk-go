@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Deletekubernetesnodegroup Delete a node group
+DeleteKubernetesNodeGroup Delete a node group
 
 Marks the node group for deletion and returns it with the `TERMINATING` status; its nodes are drained and removed asynchronously. 409 when the cluster is not active. Organisation members need the ADMIN, MANAGER or DEVELOPER role. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Deletekubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
+	response := kubernetes.DeleteKubernetesNodeGroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesNodeGroup
 */
-func Deletekubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
+func DeleteKubernetesNodeGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "deleteKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 

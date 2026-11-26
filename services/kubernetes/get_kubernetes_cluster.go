@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getkubernetescluster Get a Kubernetes cluster
+GetKubernetesCluster Get a Kubernetes cluster
 
 Returns the cluster; 404 when the organisation has no such cluster. `apiServerUrl` is the API server URL the default kubeconfig uses, absent until the cluster has one; a failed cluster or node group carries `failure`, a cluster waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Getkubernetescluster(ctx, client, tracer, ownerId, kubernetesId)
+	response := kubernetes.GetKubernetesCluster(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesCluster
 */
-func Getkubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+func GetKubernetesCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "getKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

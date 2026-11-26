@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Deletekubernetesnode Delete a standalone node
+DeleteKubernetesNode Delete a standalone node
 
 Marks the standalone node for deletion and returns it; it is drained and removed asynchronously. 404 when the cluster or the node does not exist, 409 when the cluster is not active. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Deletekubernetesnode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
+	response := kubernetes.DeleteKubernetesNode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesNode
 */
-func Deletekubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
+func DeleteKubernetesNode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
 	ctx, span := tracer.Start(ctx, "deleteKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeId", nodeId)))
 	defer span.End()
 

@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listkubernetesownerzones List the zones where an organisation can create clusters
+ListKubernetesOwnerZones List the zones where an organisation can create clusters
 
 Returns every active zone holding at least one deployment profile the organisation may use, each with those profiles; `prodDefault` marks the one a creation naming only the zone uses. An empty list when there is none. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Listkubernetesownerzones(ctx, client, tracer, ownerId)
+	response := kubernetes.ListKubernetesOwnerZones(ctx, client, tracer, ownerId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesOwnerZones
 */
-func Listkubernetesownerzones(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.KubernetesOwnerZone] {
+func ListKubernetesOwnerZones(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[[]models.KubernetesOwnerZone] {
 	ctx, span := tracer.Start(ctx, "listKubernetesOwnerZones", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 

@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Listorganisations List the organisations of the current user
+ListOrganisations List the organisations of the current user
 
 Returns every organisation the authenticated user is a member of. Requires the `access_organisations` OAuth right.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Listorganisations(ctx, client, tracer)
+	response := organisations.ListOrganisations(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: organisations
 operationId: listOrganisations
 */
-func Listorganisations(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.OrganisationView] {
+func ListOrganisations(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[[]models.OrganisationView] {
 	ctx, span := tracer.Start(ctx, "listOrganisations")
 	defer span.End()
 

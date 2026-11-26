@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Createpulsarpersistenttopictoken Issue an access token for a persistent topic
+CreatePulsarPersistentTopicToken Issue an access token for a persistent topic
 
 Returns a new access token (Biscuit) restricted to this topic of the add-on's namespace, to hand to a producer or consumer that must reach this topic only. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Createpulsarpersistenttopictoken(ctx, client, tracer, pulsarId, topic)
+	response := pulsar.CreatePulsarPersistentTopicToken(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: createPulsarPersistentTopicToken
 */
-func Createpulsarpersistenttopictoken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.PlainTextString] {
+func CreatePulsarPersistentTopicToken(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "createPulsarPersistentTopicToken", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 

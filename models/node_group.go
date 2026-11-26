@@ -6,7 +6,7 @@ import "time"
 
 // NodeGroup A node group of a Kubernetes cluster: a set of worker nodes sharing a flavor, taints and labels, ...
 type NodeGroup struct {
-	AutoscalingEnabled bool                  `json:"autoscalingEnabled"`    // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Wh...
+	AutoscalingEnabled bool                  `json:"autoscalingEnabled"`    // Deprecated: no effect; will be removed. Whether node-group autoscaling is enabled for this group
 	ClusterID          string                `json:"clusterId"`             // Parent cluster ID
 	CreatedAt          time.Time             `json:"createdAt"`             // Creation date
 	CurrentNodeCount   int                   `json:"currentNodeCount"`      // Current number of nodes in the `READY` status
@@ -15,8 +15,8 @@ type NodeGroup struct {
 	Flavor             NodeFlavor            `json:"flavor"`              // Node flavor (VM size)
 	ID                 string                `json:"id"`                  // Node group ID
 	Labels             map[string]string     `json:"labels"`              // Kubernetes labels applied to nodes
-	MaxNodeCount       int                   `json:"maxNodeCount"`        // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Ma...
-	MinNodeCount       int                   `json:"minNodeCount"`        // Deprecated: no effect once node autoprovisioning is installed on the cluster; will be removed. Mi...
+	MaxNodeCount       int                   `json:"maxNodeCount"`        // Deprecated: no effect; will be removed. Maximum number of nodes node-group autoscaling reaches
+	MinNodeCount       int                   `json:"minNodeCount"`        // Deprecated: no effect; will be removed. Minimum number of nodes node-group autoscaling keeps
 	Name               NodeGroupName         `json:"name"`                // Node group name
 	Status             NodeGroupStatusType   `json:"status"`              // Node group status
 	Tag                *string               `json:"tag,omitempty"`       // Optional tag

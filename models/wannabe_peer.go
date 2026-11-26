@@ -4,15 +4,15 @@ package models
 
 // WannabePeer Input to add a peer to a network group. `ip` and `port` are the peer's public endpoint: a `SERVER...
 type WannabePeer struct {
-	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname for this peer.
-	Hv           *string `json:"hv,omitempty"`          // Hypervisor the peer runs on; required for `CLEVER` peers.
-	ID           string  `json:"id"`                    // Peer identifier.
-	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).
-	Label        *string `json:"label,omitempty"`       // Human-readable label.
-	ParentEvent  *string `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
-	ParentMember string  `json:"parentMember"`          // Parent member this peer belongs to.
-	PeerKind     string  `json:"peerKind"`              // Peer kind: CLEVER | EXTERNAL
-	PeerRole     string  `json:"peerRole"`              // Peer role: CLIENT | SERVER
-	Port         *int    `json:"port,omitempty"`        // Public port (SERVER peers).
-	PublicKey    *string `json:"publicKey,omitempty"`   // WireGuard public key (base64).
+	Hostname     *string  `json:"hostname,omitempty"`    // DNS hostname for this peer.
+	Hv           *string  `json:"hv,omitempty"`          // Hypervisor the peer runs on; required for `CLEVER` peers.
+	ID           string   `json:"id"`                    // Peer identifier.
+	IP           *string  `json:"ip,omitempty"`          // Public address (SERVER peers).
+	Label        *string  `json:"label,omitempty"`       // Human-readable label.
+	ParentEvent  *string  `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
+	ParentMember string   `json:"parentMember"`          // Parent member this peer belongs to.
+	PeerKind     PeerKind `json:"peerKind"`              // Kind of the peer.
+	PeerRole     PeerRole `json:"peerRole"`              // Role of the peer.
+	Port         *int     `json:"port,omitempty"`        // Public port (SERVER peers).
+	PublicKey    *string  `json:"publicKey,omitempty"`   // WireGuard public key (base64).
 }

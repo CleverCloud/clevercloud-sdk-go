@@ -32,10 +32,10 @@ Example:
 	result := response.Payload()
 
 x-service: events
-operationId: get_event_socket
+operationId: getEventSocket
 */
 func GetEventSocket(ctx context.Context, c *client.Client, tracer trace.Tracer, opts ...Option) client.Response[any] {
-	ctx, span := tracer.Start(ctx, "get_event_socket")
+	ctx, span := tracer.Start(ctx, "getEventSocket")
 	defer span.End()
 
 	path := utils.Path("/v2/events/event-socket")

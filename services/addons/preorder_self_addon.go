@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Preorderselfaddon Preview the order of an add-on for the current user
+PreorderSelfAddon Preview the order of an add-on for the current user
 
 Returns the invoice preview of an add-on order for the user's personal account. The request body is not read: the preview is a zero-amount order carrying the account's billing details. Requires the `manage_organisations_services` OAuth right.
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := addons.Preorderselfaddon(ctx, client, tracer, requestBody)
+	response := addons.PreorderSelfAddon(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: addons
 operationId: preorderSelfAddon
 */
-func Preorderselfaddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
+func PreorderSelfAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
 	ctx, span := tracer.Start(ctx, "preorderSelfAddon")
 	defer span.End()
 

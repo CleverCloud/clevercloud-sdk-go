@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getkubernetesnodegroup Get a node group
+GetKubernetesNodeGroup Get a node group
 
 Returns the node group; a failed one carries `failure`, the latest failure cause and the nodes a worker roll could not drain. 404 when the cluster or the node group does not exist. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations. The cluster's node-group operator may also call it with its biscuit, scoped to this cluster.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Getkubernetesnodegroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
+	response := kubernetes.GetKubernetesNodeGroup(ctx, client, tracer, ownerId, kubernetesId, nodeGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesNodeGroup
 */
-func Getkubernetesnodegroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
+func GetKubernetesNodeGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeGroupId string) client.Response[models.NodeGroup] {
 	ctx, span := tracer.Start(ctx, "getKubernetesNodeGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeGroupId", nodeGroupId)))
 	defer span.End()
 

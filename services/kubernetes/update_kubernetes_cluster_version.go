@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updatekubernetesclusterversion Upgrade the Kubernetes version of a cluster
+UpdateKubernetesClusterVersion Upgrade the Kubernetes version of a cluster
 
 Starts an upgrade to `version`, carried out asynchronously: `scope` limits it to the control plane (`CONTROL_PLANE`) or to the worker nodes (`WORKERS`, which must name the version the control plane already runs), and `drainPolicy` (`STRICT` by default, or `FORCE`) decides what happens to a node whose pods will not leave. 400 `clever.kubernetes.invalid-version` for an unavailable version; 409 when the cluster cannot be upgraded in its current state or a node group is not ready to roll, the message naming each group and why. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Updatekubernetesclusterversion(ctx, client, tracer, ownerId, kubernetesId, requestBody)
+	response := kubernetes.UpdateKubernetesClusterVersion(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesClusterVersion
 */
-func Updatekubernetesclusterversion(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
+func UpdateKubernetesClusterVersion(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesClusterVersion", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

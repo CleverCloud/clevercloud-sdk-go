@@ -13,7 +13,7 @@ import (
 )
 
 /*
-Listnetworkgroups List the network groups of an organisation
+ListNetworkGroups List the network groups of an organisation
 
 Returns every network group the organisation owns, possibly none. Repeat `tags` to keep only the groups that carry every given tag. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Listnetworkgroups(ctx, client, tracer, ownerId, opts...)
+	response := network_group.ListNetworkGroups(ctx, client, tracer, ownerId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: listNetworkGroups
 */
-func Listnetworkgroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup] {
+func ListNetworkGroups(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.NetworkGroup] {
 	ctx, span := tracer.Start(ctx, "listNetworkGroups", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 

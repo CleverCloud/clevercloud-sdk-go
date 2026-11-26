@@ -9,7 +9,7 @@ type Matomo struct {
 	AvailableVersions []string             `json:"availableVersions"` // Versions on offer.
 	EnvVars           map[string]string    `json:"envVars"`           // Environment variables of the add-on's application.
 	Name              string               `json:"name"`              // Add-on name.
-	OwnerID           UserId               `json:"ownerId"`           // ID of the owner: a user or an organisation.
+	OwnerID           UserOrOrgaId         `json:"ownerId"`           // ID of the owner: a user or an organisation.
 	PhpVersion        string               `json:"phpVersion"`        // PHP version the add-on's application runs on.
 	Plan              MatomoPlanIdentifier `json:"plan"`              // Plan identifier (`BETA`).
 	ResourceID        MatomoId             `json:"resourceId"`        // Matomo add-on ID (`matomo_…`).

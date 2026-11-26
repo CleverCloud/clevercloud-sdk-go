@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listapplicationloadbalancers List the load balancers of an application
+ListApplicationLoadBalancers List the load balancers of an application
 
 Returns the HTTP load balancers serving the zone of the application, with the CNAME target and the addresses to point a domain at; the list may be empty. Requires the `access_organisations` right and a membership of the owner, whatever the role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := loadbalancerinfo.Listapplicationloadbalancers(ctx, client, tracer, ownerId, applicationId, kind)
+	response := loadbalancerinfo.ListApplicationLoadBalancers(ctx, client, tracer, ownerId, applicationId, kind)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: loadbalancerinfo
 operationId: listApplicationLoadBalancers
 */
-func Listapplicationloadbalancers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, applicationId string, kind string) client.Response[[]models.LoadBalancerInfo] {
+func ListApplicationLoadBalancers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, applicationId string, kind string) client.Response[[]models.LoadBalancerInfo] {
 	ctx, span := tracer.Start(ctx, "listApplicationLoadBalancers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("applicationId", applicationId), attribute.String("kind", kind)))
 	defer span.End()
 

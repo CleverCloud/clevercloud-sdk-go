@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getorganisation Get an organisation
+GetOrganisation Get an organisation
 
 Returns the organisation, which may be a personal space (`user_…`). The caller must be a member: a non-member gets 403, an unknown ID 404, and an organisation that is moderated, destroyed or deleted 403. Requires the `access_organisations` OAuth right. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Getorganisation(ctx, client, tracer, id)
+	response := organisations.GetOrganisation(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: getOrganisation
 */
-func Getorganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.OrganisationView] {
+func GetOrganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.OrganisationView] {
 	ctx, span := tracer.Start(ctx, "getOrganisation", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
