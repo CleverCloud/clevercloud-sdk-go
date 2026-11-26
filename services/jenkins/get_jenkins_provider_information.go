@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getjenkinsproviderinformation Get the Jenkins provider information
+GetJenkinsProviderInformation Get the Jenkins provider information
 
 Returns the Jenkins versions a new add-on can be created on and the options each one supports. Open without authentication.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := jenkins.Getjenkinsproviderinformation(ctx, client, tracer)
+	response := jenkins.GetJenkinsProviderInformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: jenkins
 operationId: getJenkinsProviderInformation
 */
-func Getjenkinsproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.JenkinsProvidersConsoleView] {
+func GetJenkinsProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.JenkinsProvidersConsoleView] {
 	ctx, span := tracer.Start(ctx, "getJenkinsProviderInformation")
 	defer span.End()
 

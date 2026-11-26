@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getelasticsearchapmserversetup Get the APM server setup script for one version
+GetElasticsearchApmServerSetup Get the APM server setup script for one version
 
 Returns the script that installs and configures the APM server beside an Elasticsearch add-on, for the version named in the path. Open without authentication.
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := es_addon.Getelasticsearchapmserversetup(ctx, client, tracer, version)
+	response := es_addon.GetElasticsearchApmServerSetup(ctx, client, tracer, version)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: es_addon
 operationId: getElasticsearchApmServerSetup
 */
-func Getelasticsearchapmserversetup(ctx context.Context, c *client.Client, tracer trace.Tracer, version string) client.Response[client.PlainTextString] {
+func GetElasticsearchApmServerSetup(ctx context.Context, c *client.Client, tracer trace.Tracer, version string) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getElasticsearchApmServerSetup", trace.WithAttributes(attribute.String("version", version)))
 	defer span.End()
 

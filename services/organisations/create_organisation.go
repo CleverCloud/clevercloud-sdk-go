@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Createorganisation Create an organisation
+CreateOrganisation Create an organisation
 
 Creates an organisation with the caller as its `ADMIN` member and returns it. Requires a validated email address; `name` (at most 128 characters) and `description` (at most 256) are mandatory. Creation is rate-limited per user and per IP address (403 when exceeded). Requires the `manage_organisations` OAuth right.
 
@@ -25,7 +25,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Createorganisation(ctx, client, tracer, requestBody)
+	response := organisations.CreateOrganisation(ctx, client, tracer, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -34,7 +34,7 @@ Example:
 x-service: organisations
 operationId: createOrganisation
 */
-func Createorganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeOrganisation) client.Response[models.OrganisationView] {
+func CreateOrganisation(ctx context.Context, c *client.Client, tracer trace.Tracer, requestBody *models.WannabeOrganisation) client.Response[models.OrganisationView] {
 	ctx, span := tracer.Start(ctx, "createOrganisation")
 	defer span.End()
 

@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Createpulsarnonpersistenttopic Create a non-persistent topic
+CreatePulsarNonPersistentTopic Create a non-persistent topic
 
 Creates a non-persistent topic in the add-on's namespace; answers 201. Pass `partitions_number` to create a partitioned topic with that many partitions. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Createpulsarnonpersistenttopic(ctx, client, tracer, pulsarId, topic)
+	response := pulsar.CreatePulsarNonPersistentTopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: createPulsarNonPersistentTopic
 */
-func Createpulsarnonpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
+func CreatePulsarNonPersistentTopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "createPulsarNonPersistentTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 

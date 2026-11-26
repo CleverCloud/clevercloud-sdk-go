@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Deletekubernetescluster Delete a Kubernetes cluster
+DeleteKubernetesCluster Delete a Kubernetes cluster
 
 Marks the cluster for deletion and returns it with the `DELETING` status; its resources are removed asynchronously. Deleting a cluster already being deleted returns it unchanged; 404 when the organisation has no such cluster. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Deletekubernetescluster(ctx, client, tracer, ownerId, kubernetesId)
+	response := kubernetes.DeleteKubernetesCluster(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: kubernetes
 operationId: deleteKubernetesCluster
 */
-func Deletekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
+func DeleteKubernetesCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "deleteKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

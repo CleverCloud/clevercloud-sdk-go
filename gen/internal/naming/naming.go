@@ -160,9 +160,11 @@ func PascalCase(s string) string {
 }
 
 // FunctionName is the exported function an operation id becomes, in the
-// services package and in the builder alike.
+// services package and in the builder alike. The words of a camelCase id are
+// kept apart: `listSelfCliTokens` is `ListSelfCliTokens`, `getAppId` is
+// `GetAppID`.
 func FunctionName(operationID string) string {
-	return PascalCase(operationID)
+	return PascalCase(SnakeCase(operationID))
 }
 
 // SnakeCase lower-cases a CamelCase name, splitting words at a capital that

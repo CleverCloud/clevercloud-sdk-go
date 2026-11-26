@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getorganisationpaymentinfo Get the billing details of an organisation
+GetOrganisationPaymentInfo Get the billing details of an organisation
 
 Returns the name, company, address and VAT number used to bill the organisation, with the missing fields listed in `errors`. Requires the `ADMIN` or `ACCOUNTING` role (or the caller's own personal space) and, for OAuth1, the rights to access the organisation's bills and credit count; an unknown or deleted organisation answers 403. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := payments.Getorganisationpaymentinfo(ctx, client, tracer, id)
+	response := payments.GetOrganisationPaymentInfo(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: payments
 operationId: getOrganisationPaymentInfo
 */
-func Getorganisationpaymentinfo(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.PaymentInfoView] {
+func GetOrganisationPaymentInfo(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.PaymentInfoView] {
 	ctx, span := tracer.Start(ctx, "getOrganisationPaymentInfo", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

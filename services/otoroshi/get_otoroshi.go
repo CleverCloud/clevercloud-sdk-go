@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getotoroshi Get an Otoroshi add-on
+GetOtoroshi Get an Otoroshi add-on
 
 Returns the add-on: access URL, installed and available versions, initial admin credentials, admin API URL and credentials, backing resources and network group. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := otoroshi.Getotoroshi(ctx, client, tracer, OtoroshiId)
+	response := otoroshi.GetOtoroshi(ctx, client, tracer, OtoroshiId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: otoroshi
 operationId: getOtoroshi
 */
-func Getotoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.Otoroshi] {
+func GetOtoroshi(ctx context.Context, c *client.Client, tracer trace.Tracer, OtoroshiId string) client.Response[models.Otoroshi] {
 	ctx, span := tracer.Start(ctx, "getOtoroshi", trace.WithAttributes(attribute.String("OtoroshiId", OtoroshiId)))
 	defer span.End()
 

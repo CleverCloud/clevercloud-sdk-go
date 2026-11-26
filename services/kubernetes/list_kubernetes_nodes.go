@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listkubernetesnodes List the standalone nodes of a cluster
+ListKubernetesNodes List the standalone nodes of a cluster
 
 Returns the cluster's standalone nodes that are not deleted, newest first; 404 when the organisation has no such cluster. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Listkubernetesnodes(ctx, client, tracer, ownerId, kubernetesId)
+	response := kubernetes.ListKubernetesNodes(ctx, client, tracer, ownerId, kubernetesId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesNodes
 */
-func Listkubernetesnodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[[]models.StandaloneNode] {
+func ListKubernetesNodes(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string) client.Response[[]models.StandaloneNode] {
 	ctx, span := tracer.Start(ctx, "listKubernetesNodes", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

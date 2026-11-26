@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getmetabaseproviderinformation Get the Metabase provider information
+GetMetabaseProviderInformation Get the Metabase provider information
 
 Returns the Metabase versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := metabase.Getmetabaseproviderinformation(ctx, client, tracer)
+	response := metabase.GetMetabaseProviderInformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: metabase
 operationId: getMetabaseProviderInformation
 */
-func Getmetabaseproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
+func GetMetabaseProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getMetabaseProviderInformation")
 	defer span.End()
 

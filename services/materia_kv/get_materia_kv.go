@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getmateriakv Get a Materia KV add-on of an owner
+GetMateriaKv Get a Materia KV add-on of an owner
 
 Returns the add-on of `ownerId`, its access token included. With OAuth1, the token needs the organisation access and service management rights (403 otherwise) and the caller must hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in `ownerId`; a caller without that role gets 404, as for an unknown add-on.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := materia_kv.Getmateriakv(ctx, client, tracer, ownerId, kvId)
+	response := materia_kv.GetMateriaKv(ctx, client, tracer, ownerId, kvId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: materia_kv
 operationId: getMateriaKv
 */
-func Getmateriakv(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string) client.Response[models.MateriaDB] {
+func GetMateriaKv(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kvId string) client.Response[models.MateriaDB] {
 	ctx, span := tracer.Start(ctx, "getMateriaKv", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kvId", kvId)))
 	defer span.End()
 

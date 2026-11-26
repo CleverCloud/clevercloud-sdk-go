@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getkubernetesnode Get a standalone node
+GetKubernetesNode Get a standalone node
 
 Returns the standalone node; 404 when the cluster or the node does not exist. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Getkubernetesnode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
+	response := kubernetes.GetKubernetesNode(ctx, client, tracer, ownerId, kubernetesId, nodeId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesNode
 */
-func Getkubernetesnode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
+func GetKubernetesNode(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, nodeId string) client.Response[models.StandaloneNode] {
 	ctx, span := tracer.Start(ctx, "getKubernetesNode", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId), attribute.String("nodeId", nodeId)))
 	defer span.End()
 

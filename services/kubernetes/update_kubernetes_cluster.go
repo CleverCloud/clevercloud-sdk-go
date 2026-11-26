@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updatekubernetescluster Update a Kubernetes cluster
+UpdateKubernetesCluster Update a Kubernetes cluster
 
 Updates the cluster's metadata and features. An absent or `null` `name`, `tags` or `description` keeps its current value; `[]` removes every tag and an empty string clears the description (`name` cannot be empty). `features` is applied as a JSON merge patch (RFC 7386): a flag set to `null` is unset. A feature change requires an active cluster and is carried out in the background, so `features` reports what is installed, not what was just requested; `features.nodeAutoprovisioning` and `features.autoscalingEnabled` each enable node autoprovisioning and are changed independently; leaving neither of them `true` is refused while nodes Karpenter provisioned (NodeClaims) exist, and deletes every NodePool, NodeOverlay and CleverNodeClass, and disabling `features.csi` while the cluster holds volumes or snapshots of its storage driver. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Updatekubernetescluster(ctx, client, tracer, ownerId, kubernetesId, requestBody)
+	response := kubernetes.UpdateKubernetesCluster(ctx, client, tracer, ownerId, kubernetesId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: updateKubernetesCluster
 */
-func Updatekubernetescluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
+func UpdateKubernetesCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, kubernetesId string, requestBody *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "updateKubernetesCluster", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("kubernetesId", kubernetesId)))
 	defer span.End()
 

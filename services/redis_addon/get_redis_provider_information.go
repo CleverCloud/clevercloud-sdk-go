@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getredisproviderinformation Get the Redis provider information
+GetRedisProviderInformation Get the Redis provider information
 
 Returns what a new Redis add-on can be created on: the shared clusters and the versions available as a dedicated instance with the options each one supports. Open without authentication.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := redis_addon.Getredisproviderinformation(ctx, client, tracer)
+	response := redis_addon.GetRedisProviderInformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: redis_addon
 operationId: getRedisProviderInformation
 */
-func Getredisproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.RedisProviderInfo] {
+func GetRedisProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.RedisProviderInfo] {
 	ctx, span := tracer.Start(ctx, "getRedisProviderInformation")
 	defer span.End()
 

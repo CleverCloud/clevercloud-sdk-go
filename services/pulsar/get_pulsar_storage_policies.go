@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getpulsarstoragepolicies Read a Pulsar add-on's storage policies
+GetPulsarStoragePolicies Read a Pulsar add-on's storage policies
 
 Returns the retention and offload (cold storage) policies of the add-on's namespace: sizes in bytes, durations in minutes, an unset limit omitted. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `access_organisations`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Getpulsarstoragepolicies(ctx, client, tracer, pulsarId)
+	response := pulsar.GetPulsarStoragePolicies(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: getPulsarStoragePolicies
 */
-func Getpulsarstoragepolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.StoragePolicies] {
+func GetPulsarStoragePolicies(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.StoragePolicies] {
 	ctx, span := tracer.Start(ctx, "getPulsarStoragePolicies", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 

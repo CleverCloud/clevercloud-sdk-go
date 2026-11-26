@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletenetworkgroup Delete a network group
+DeleteNetworkGroup Delete a network group
 
 Requests the deletion of the network group, which is applied asynchronously; 404 when it does not exist. Organisation members need the ADMIN or MANAGER role.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Deletenetworkgroup(ctx, client, tracer, ownerId, networkGroupId)
+	response := network_group.DeleteNetworkGroup(ctx, client, tracer, ownerId, networkGroupId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: network_group
 operationId: deleteNetworkGroup
 */
-func Deletenetworkgroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.Nothing] {
+func DeleteNetworkGroup(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteNetworkGroup", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

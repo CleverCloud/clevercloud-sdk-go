@@ -34,10 +34,10 @@ Example:
 	result := response.Payload()
 
 x-service: addons
-operationId: migrate_self_addon
+operationId: migrateSelfAddon
 */
 func MigrateSelfAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, addon_id string, requestBody *models.WannabePlanChange) client.Response[any] {
-	ctx, span := tracer.Start(ctx, "migrate_self_addon", trace.WithAttributes(attribute.String("addon_id", addon_id)))
+	ctx, span := tracer.Start(ctx, "migrateSelfAddon", trace.WithAttributes(attribute.String("addon_id", addon_id)))
 	defer span.End()
 
 	path := utils.Path("/v2/self/addons/%s/migration", addon_id)

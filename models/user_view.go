@@ -23,6 +23,6 @@ type UserView struct {
 	PartnerID         *string       `json:"partnerId,omitempty"`         // Identifier of the partner the user's account belongs to, a bare UUID; every user has one, the def...
 	PartnerName       *string       `json:"partnerName,omitempty"`       // Display name of the partner the user signed up through.
 	Phone             *string       `json:"phone,omitempty"`             // Phone number of the user; `null` until they set one.
-	PreferredMFA      string        `json:"preferredMFA"`                // Preferred multi-factor authentication kind; `NONE` when none is configured.
+	PreferredMFA      MfaKind       `json:"preferredMFA"`                // Preferred multi-factor authentication kind.
 	Zipcode           *string       `json:"zipcode,omitempty"`           // Postal code of the user's address; `null` until they fill it.
 }

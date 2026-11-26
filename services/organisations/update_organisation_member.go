@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Updateorganisationmember Update a member of an organisation
+UpdateOrganisationMember Update a member of an organisation
 
 Changes a member's `role` and/or `job`. Requires the `manage_organisations_members` OAuth right and the `ADMIN` or `MANAGER` role; the caller may only grant a role it is allowed to assign, may only edit a member whose current role it is allowed to assign (a member with no valid role, by an `ADMIN` only), and the last `ADMIN` cannot be demoted. Platform services with administrative rights can change the job title only.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Updateorganisationmember(ctx, client, tracer, id, userId, requestBody)
+	response := organisations.UpdateOrganisationMember(ctx, client, tracer, id, userId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: organisations
 operationId: updateOrganisationMember
 */
-func Updateorganisationmember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, userId string, requestBody *models.WannabeMember) client.Response[models.Message] {
+func UpdateOrganisationMember(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, userId string, requestBody *models.WannabeMember) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "updateOrganisationMember", trace.WithAttributes(attribute.String("id", id), attribute.String("userId", userId)))
 	defer span.End()
 

@@ -13,7 +13,7 @@ import (
 )
 
 /*
-Listkubernetesclusters List the Kubernetes clusters of an organisation
+ListKubernetesClusters List the Kubernetes clusters of an organisation
 
 Returns the organisation's clusters whose stored status is in `status`, every status but `DELETED` by default; 400 on an unknown status. A failed cluster carries `failure`, one waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Listkubernetesclusters(ctx, client, tracer, ownerId, opts...)
+	response := kubernetes.ListKubernetesClusters(ctx, client, tracer, ownerId, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: kubernetes
 operationId: listKubernetesClusters
 */
-func Listkubernetesclusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.KubernetesCluster] {
+func ListKubernetesClusters(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, opts ...Option) client.Response[[]models.KubernetesCluster] {
 	ctx, span := tracer.Start(ctx, "listKubernetesClusters", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 

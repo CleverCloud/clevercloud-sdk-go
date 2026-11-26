@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getmatomo Get a Matomo add-on
+GetMatomo Get a Matomo add-on
 
 Returns the add-on: access URL, installed and available versions, PHP version, backing resources and the environment variables of its application. The caller must own the add-on or hold the `ADMIN`, `MANAGER` or `DEVELOPER` role in its organisation, which must be active, and the token must hold `manage_organisations_services` (403 `6201` otherwise, answered before the add-on is read).
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := matomo.Getmatomo(ctx, client, tracer, addonMatomoId)
+	response := matomo.GetMatomo(ctx, client, tracer, addonMatomoId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: matomo
 operationId: getMatomo
 */
-func Getmatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.Matomo] {
+func GetMatomo(ctx context.Context, c *client.Client, tracer trace.Tracer, addonMatomoId string) client.Response[models.Matomo] {
 	ctx, span := tracer.Start(ctx, "getMatomo", trace.WithAttributes(attribute.String("addonMatomoId", addonMatomoId)))
 	defer span.End()
 

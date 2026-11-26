@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getkubernetesplugincatalog Get the Kubernetes plugin catalog
+GetKubernetesPluginCatalog Get the Kubernetes plugin catalog
 
 Returns the plugins the platform installs, the Kubernetes versions each one supports, and the migrations between their versions. The answer depends on no organisation, but the request must carry credentials.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Getkubernetesplugincatalog(ctx, client, tracer)
+	response := kubernetes.GetKubernetesPluginCatalog(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesPluginCatalog
 */
-func Getkubernetesplugincatalog(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.PublicPluginCatalog] {
+func GetKubernetesPluginCatalog(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.PublicPluginCatalog] {
 	ctx, span := tracer.Start(ctx, "getKubernetesPluginCatalog")
 	defer span.End()
 

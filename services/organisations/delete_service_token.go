@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deleteservicetoken Revoke a service token
+DeleteServiceToken Revoke a service token
 
 Revokes the service token, which then stops being accepted; answers 204. `tokenId` may also be the token's revocation ID. Requires membership and the right to manage the organisation's services; a member without the `ADMIN` role may only revoke a token they created (403 otherwise). A platform service may also revoke by its `session_…` ID a token that is not in any organisation's list; for every other caller that ID answers 404. A token that belongs to another organisation is refused with 403, whatever the caller's role. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Deleteservicetoken(ctx, client, tracer, id, tokenId)
+	response := organisations.DeleteServiceToken(ctx, client, tracer, id, tokenId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: deleteServiceToken
 */
-func Deleteservicetoken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[client.Nothing] {
+func DeleteServiceToken(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, tokenId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteServiceToken", trace.WithAttributes(attribute.String("id", id), attribute.String("tokenId", tokenId)))
 	defer span.End()
 

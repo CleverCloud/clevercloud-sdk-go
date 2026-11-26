@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletenetworkgroupmember Remove a member from a network group
+DeleteNetworkGroupMember Remove a member from a network group
 
 Requests the removal of the member, which is applied asynchronously; 404 when the network group or the member does not exist. Organisation members need the ADMIN or MANAGER role.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Deletenetworkgroupmember(ctx, client, tracer, ownerId, networkGroupId, memberId)
+	response := network_group.DeleteNetworkGroupMember(ctx, client, tracer, ownerId, networkGroupId, memberId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: network_group
 operationId: deleteNetworkGroupMember
 */
-func Deletenetworkgroupmember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, memberId string) client.Response[client.Nothing] {
+func DeleteNetworkGroupMember(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, memberId string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deleteNetworkGroupMember", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId), attribute.String("memberId", memberId)))
 	defer span.End()
 

@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getpulsarcluster Read a Pulsar cluster
+GetPulsarCluster Read a Pulsar cluster
 
 Returns one Pulsar cluster: endpoints, ports, version, zone, availability, cold storage support and supported plans. Any authenticated caller may read it. An unknown cluster answers 404.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Getpulsarcluster(ctx, client, tracer, clusterId)
+	response := pulsar.GetPulsarCluster(ctx, client, tracer, clusterId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: getPulsarCluster
 */
-func Getpulsarcluster(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string) client.Response[models.PulsarCluster] {
+func GetPulsarCluster(ctx context.Context, c *client.Client, tracer trace.Tracer, clusterId string) client.Response[models.PulsarCluster] {
 	ctx, span := tracer.Start(ctx, "getPulsarCluster", trace.WithAttributes(attribute.String("clusterId", clusterId)))
 	defer span.End()
 

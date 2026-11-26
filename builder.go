@@ -155,7 +155,7 @@ func (b *v2BackupsOwneridBuilderImpl) Ref(ref string) V2BackupsOwneridRefBuilder
 
 // V2BackupsOwneridRefBuilder provides access to operations
 type V2BackupsOwneridRefBuilder interface {
-	Getbackups(ctx context.Context) client.Response[[]models.AddonBackupEntry]
+	ListBackups(ctx context.Context) client.Response[[]models.AddonBackupEntry]
 }
 
 // v2BackupsOwneridRefBuilderImpl implements V2BackupsOwneridRefBuilder
@@ -174,15 +174,15 @@ func newV2BackupsOwneridRefBuilder(sdk *sdkImpl, ownerid string, ref string) V2B
 	}
 }
 
-// Getbackups calls addons.Getbackups
-func (b *v2BackupsOwneridRefBuilderImpl) Getbackups(ctx context.Context) client.Response[[]models.AddonBackupEntry] {
-	return addons.Getbackups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.ref)
+// ListBackups calls addons.ListBackups
+func (b *v2BackupsOwneridRefBuilderImpl) ListBackups(ctx context.Context) client.Response[[]models.AddonBackupEntry] {
+	return addons.ListBackups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.ref)
 }
 
 // V2EventsBuilder provides access to operations
 type V2EventsBuilder interface {
 	EventSocket() V2EventsEventSocketBuilder
-	GetEventsStream(ctx context.Context, opts ...events.Option) client.Response[client.Nothing]
+	StreamEvent(ctx context.Context, opts ...events.Option) client.Response[client.Nothing]
 }
 
 // v2EventsBuilderImpl implements V2EventsBuilder
@@ -200,9 +200,9 @@ func (b *v2EventsBuilderImpl) EventSocket() V2EventsEventSocketBuilder {
 	return newV2EventsEventSocketBuilder(b.sdk)
 }
 
-// GetEventsStream calls events.GetEventsStream
-func (b *v2EventsBuilderImpl) GetEventsStream(ctx context.Context, opts ...events.Option) client.Response[client.Nothing] {
-	return events.GetEventsStream(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// StreamEvent calls events.StreamEvent
+func (b *v2EventsBuilderImpl) StreamEvent(ctx context.Context, opts ...events.Option) client.Response[client.Nothing] {
+	return events.StreamEvent(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2EventsEventSocketBuilder provides access to operations
@@ -265,7 +265,7 @@ func (b *v2GithubBuilderImpl) Username() V2GithubUsernameBuilder {
 
 // V2GithubApplicationsBuilder provides access to operations
 type V2GithubApplicationsBuilder interface {
-	Getgithubapplications(ctx context.Context) client.Response[[]models.OAuthApplicationView]
+	ListGithubApplications(ctx context.Context) client.Response[[]models.OAuthApplicationView]
 }
 
 // v2GithubApplicationsBuilderImpl implements V2GithubApplicationsBuilder
@@ -278,14 +278,14 @@ func newV2GithubApplicationsBuilder(sdk *sdkImpl) V2GithubApplicationsBuilder {
 	return &v2GithubApplicationsBuilderImpl{sdk: sdk}
 }
 
-// Getgithubapplications calls github.Getgithubapplications
-func (b *v2GithubApplicationsBuilderImpl) Getgithubapplications(ctx context.Context) client.Response[[]models.OAuthApplicationView] {
-	return github.Getgithubapplications(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListGithubApplications calls github.ListGithubApplications
+func (b *v2GithubApplicationsBuilderImpl) ListGithubApplications(ctx context.Context) client.Response[[]models.OAuthApplicationView] {
+	return github.ListGithubApplications(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2GithubKeysBuilder provides access to operations
 type V2GithubKeysBuilder interface {
-	Getgithubkeys(ctx context.Context) client.Response[[]models.GithubSshKeyView]
+	ListGithubSshKeys(ctx context.Context) client.Response[[]models.GithubSshKeyView]
 }
 
 // v2GithubKeysBuilderImpl implements V2GithubKeysBuilder
@@ -298,14 +298,14 @@ func newV2GithubKeysBuilder(sdk *sdkImpl) V2GithubKeysBuilder {
 	return &v2GithubKeysBuilderImpl{sdk: sdk}
 }
 
-// Getgithubkeys calls github.Getgithubkeys
-func (b *v2GithubKeysBuilderImpl) Getgithubkeys(ctx context.Context) client.Response[[]models.GithubSshKeyView] {
-	return github.Getgithubkeys(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListGithubSshKeys calls github.ListGithubSshKeys
+func (b *v2GithubKeysBuilderImpl) ListGithubSshKeys(ctx context.Context) client.Response[[]models.GithubSshKeyView] {
+	return github.ListGithubSshKeys(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2GithubLinkBuilder provides access to operations
 type V2GithubLinkBuilder interface {
-	Deletegithublink(ctx context.Context) client.Response[models.Message]
+	UnlinkGithubAccount(ctx context.Context) client.Response[models.Message]
 }
 
 // v2GithubLinkBuilderImpl implements V2GithubLinkBuilder
@@ -318,14 +318,14 @@ func newV2GithubLinkBuilder(sdk *sdkImpl) V2GithubLinkBuilder {
 	return &v2GithubLinkBuilderImpl{sdk: sdk}
 }
 
-// Deletegithublink calls github.Deletegithublink
-func (b *v2GithubLinkBuilderImpl) Deletegithublink(ctx context.Context) client.Response[models.Message] {
-	return github.Deletegithublink(ctx, b.sdk.Client(), b.sdk.Tracer())
+// UnlinkGithubAccount calls github.UnlinkGithubAccount
+func (b *v2GithubLinkBuilderImpl) UnlinkGithubAccount(ctx context.Context) client.Response[models.Message] {
+	return github.UnlinkGithubAccount(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2GithubUsernameBuilder provides access to operations
 type V2GithubUsernameBuilder interface {
-	Getgithubusername(ctx context.Context) client.Response[*string]
+	GetGithubUsername(ctx context.Context) client.Response[*string]
 }
 
 // v2GithubUsernameBuilderImpl implements V2GithubUsernameBuilder
@@ -338,9 +338,9 @@ func newV2GithubUsernameBuilder(sdk *sdkImpl) V2GithubUsernameBuilder {
 	return &v2GithubUsernameBuilderImpl{sdk: sdk}
 }
 
-// Getgithubusername calls github.Getgithubusername
-func (b *v2GithubUsernameBuilderImpl) Getgithubusername(ctx context.Context) client.Response[*string] {
-	return github.Getgithubusername(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetGithubUsername calls github.GetGithubUsername
+func (b *v2GithubUsernameBuilderImpl) GetGithubUsername(ctx context.Context) client.Response[*string] {
+	return github.GetGithubUsername(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2NotificationsBuilder provides access to operations
@@ -398,8 +398,8 @@ func (b *v2NotificationsEmailhooksBuilderImpl) OwnerID(ownerID string) V2Notific
 // V2NotificationsEmailhooksOwnerIDBuilder provides access to operations
 type V2NotificationsEmailhooksOwnerIDBuilder interface {
 	ID(id string) V2NotificationsEmailhooksOwnerIDIDBuilder
-	ListEmailhooks(ctx context.Context) client.Response[[]models.EmailHookView]
-	CreateEmailhook(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.EmailHookView]
+	ListEmailNotifications(ctx context.Context) client.Response[[]models.EmailHookView]
+	CreateEmailNotification(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.EmailHookView]
 }
 
 // v2NotificationsEmailhooksOwnerIDBuilderImpl implements V2NotificationsEmailhooksOwnerIDBuilder
@@ -421,20 +421,20 @@ func (b *v2NotificationsEmailhooksOwnerIDBuilderImpl) ID(id string) V2Notificati
 	return newV2NotificationsEmailhooksOwnerIDIDBuilder(b.sdk, b.ownerID, id)
 }
 
-// ListEmailhooks calls notifications.ListEmailhooks
-func (b *v2NotificationsEmailhooksOwnerIDBuilderImpl) ListEmailhooks(ctx context.Context) client.Response[[]models.EmailHookView] {
-	return notifications.ListEmailhooks(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
+// ListEmailNotifications calls notifications.ListEmailNotifications
+func (b *v2NotificationsEmailhooksOwnerIDBuilderImpl) ListEmailNotifications(ctx context.Context) client.Response[[]models.EmailHookView] {
+	return notifications.ListEmailNotifications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
 }
 
-// CreateEmailhook calls notifications.CreateEmailhook
-func (b *v2NotificationsEmailhooksOwnerIDBuilderImpl) CreateEmailhook(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.EmailHookView] {
-	return notifications.CreateEmailhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, request)
+// CreateEmailNotification calls notifications.CreateEmailNotification
+func (b *v2NotificationsEmailhooksOwnerIDBuilderImpl) CreateEmailNotification(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.EmailHookView] {
+	return notifications.CreateEmailNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, request)
 }
 
 // V2NotificationsEmailhooksOwnerIDIDBuilder provides access to operations
 type V2NotificationsEmailhooksOwnerIDIDBuilder interface {
-	DeleteEmailhook(ctx context.Context) client.Response[client.Nothing]
-	UpdateEmailhook(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.WannabeEmailHook]
+	DeleteEmailNotification(ctx context.Context) client.Response[client.Nothing]
+	UpdateEmailNotification(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.WannabeEmailHook]
 }
 
 // v2NotificationsEmailhooksOwnerIDIDBuilderImpl implements V2NotificationsEmailhooksOwnerIDIDBuilder
@@ -453,14 +453,14 @@ func newV2NotificationsEmailhooksOwnerIDIDBuilder(sdk *sdkImpl, ownerID string, 
 	}
 }
 
-// DeleteEmailhook calls notifications.DeleteEmailhook
-func (b *v2NotificationsEmailhooksOwnerIDIDBuilderImpl) DeleteEmailhook(ctx context.Context) client.Response[client.Nothing] {
-	return notifications.DeleteEmailhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id)
+// DeleteEmailNotification calls notifications.DeleteEmailNotification
+func (b *v2NotificationsEmailhooksOwnerIDIDBuilderImpl) DeleteEmailNotification(ctx context.Context) client.Response[client.Nothing] {
+	return notifications.DeleteEmailNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id)
 }
 
-// UpdateEmailhook calls notifications.UpdateEmailhook
-func (b *v2NotificationsEmailhooksOwnerIDIDBuilderImpl) UpdateEmailhook(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.WannabeEmailHook] {
-	return notifications.UpdateEmailhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id, request)
+// UpdateEmailNotification calls notifications.UpdateEmailNotification
+func (b *v2NotificationsEmailhooksOwnerIDIDBuilderImpl) UpdateEmailNotification(ctx context.Context, request *models.WannabeEmailHook) client.Response[models.WannabeEmailHook] {
+	return notifications.UpdateEmailNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id, request)
 }
 
 // V2NotificationsInfoBuilder provides access to operations
@@ -491,7 +491,7 @@ func (b *v2NotificationsInfoBuilderImpl) Webhookformats() V2NotificationsInfoWeb
 
 // V2NotificationsInfoEventsBuilder provides access to operations
 type V2NotificationsInfoEventsBuilder interface {
-	GetEvents(ctx context.Context) client.Response[models.NotificationEventGroupsView]
+	ListNotificationEvents(ctx context.Context) client.Response[models.NotificationEventGroupsView]
 }
 
 // v2NotificationsInfoEventsBuilderImpl implements V2NotificationsInfoEventsBuilder
@@ -504,14 +504,14 @@ func newV2NotificationsInfoEventsBuilder(sdk *sdkImpl) V2NotificationsInfoEvents
 	return &v2NotificationsInfoEventsBuilderImpl{sdk: sdk}
 }
 
-// GetEvents calls notifications.GetEvents
-func (b *v2NotificationsInfoEventsBuilderImpl) GetEvents(ctx context.Context) client.Response[models.NotificationEventGroupsView] {
-	return notifications.GetEvents(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListNotificationEvents calls notifications.ListNotificationEvents
+func (b *v2NotificationsInfoEventsBuilderImpl) ListNotificationEvents(ctx context.Context) client.Response[models.NotificationEventGroupsView] {
+	return notifications.ListNotificationEvents(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2NotificationsInfoWebhookformatsBuilder provides access to operations
 type V2NotificationsInfoWebhookformatsBuilder interface {
-	GetWebhookFormats(ctx context.Context) client.Response[[]string]
+	ListWebhookNotificationFormats(ctx context.Context) client.Response[[]string]
 }
 
 // v2NotificationsInfoWebhookformatsBuilderImpl implements V2NotificationsInfoWebhookformatsBuilder
@@ -524,9 +524,9 @@ func newV2NotificationsInfoWebhookformatsBuilder(sdk *sdkImpl) V2NotificationsIn
 	return &v2NotificationsInfoWebhookformatsBuilderImpl{sdk: sdk}
 }
 
-// GetWebhookFormats calls notifications.GetWebhookFormats
-func (b *v2NotificationsInfoWebhookformatsBuilderImpl) GetWebhookFormats(ctx context.Context) client.Response[[]string] {
-	return notifications.GetWebhookFormats(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListWebhookNotificationFormats calls notifications.ListWebhookNotificationFormats
+func (b *v2NotificationsInfoWebhookformatsBuilderImpl) ListWebhookNotificationFormats(ctx context.Context) client.Response[[]string] {
+	return notifications.ListWebhookNotificationFormats(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2NotificationsWebhooksBuilder provides access to operations
@@ -552,8 +552,8 @@ func (b *v2NotificationsWebhooksBuilderImpl) OwnerID(ownerID string) V2Notificat
 // V2NotificationsWebhooksOwnerIDBuilder provides access to operations
 type V2NotificationsWebhooksOwnerIDBuilder interface {
 	ID(id string) V2NotificationsWebhooksOwnerIDIDBuilder
-	ListWebhooks(ctx context.Context) client.Response[[]models.WebhookView]
-	CreateWebhook(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WebhookView]
+	ListWebhookNotifications(ctx context.Context) client.Response[[]models.WebhookView]
+	CreateWebhookNotification(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WebhookView]
 }
 
 // v2NotificationsWebhooksOwnerIDBuilderImpl implements V2NotificationsWebhooksOwnerIDBuilder
@@ -575,20 +575,20 @@ func (b *v2NotificationsWebhooksOwnerIDBuilderImpl) ID(id string) V2Notification
 	return newV2NotificationsWebhooksOwnerIDIDBuilder(b.sdk, b.ownerID, id)
 }
 
-// ListWebhooks calls notifications.ListWebhooks
-func (b *v2NotificationsWebhooksOwnerIDBuilderImpl) ListWebhooks(ctx context.Context) client.Response[[]models.WebhookView] {
-	return notifications.ListWebhooks(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
+// ListWebhookNotifications calls notifications.ListWebhookNotifications
+func (b *v2NotificationsWebhooksOwnerIDBuilderImpl) ListWebhookNotifications(ctx context.Context) client.Response[[]models.WebhookView] {
+	return notifications.ListWebhookNotifications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID)
 }
 
-// CreateWebhook calls notifications.CreateWebhook
-func (b *v2NotificationsWebhooksOwnerIDBuilderImpl) CreateWebhook(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WebhookView] {
-	return notifications.CreateWebhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, request)
+// CreateWebhookNotification calls notifications.CreateWebhookNotification
+func (b *v2NotificationsWebhooksOwnerIDBuilderImpl) CreateWebhookNotification(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WebhookView] {
+	return notifications.CreateWebhookNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, request)
 }
 
 // V2NotificationsWebhooksOwnerIDIDBuilder provides access to operations
 type V2NotificationsWebhooksOwnerIDIDBuilder interface {
-	DeleteWebhook(ctx context.Context) client.Response[client.Nothing]
-	UpdateWebhook(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WannabeWebhook]
+	DeleteWebhookNotification(ctx context.Context) client.Response[client.Nothing]
+	UpdateWebhookNotification(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WannabeWebhook]
 }
 
 // v2NotificationsWebhooksOwnerIDIDBuilderImpl implements V2NotificationsWebhooksOwnerIDIDBuilder
@@ -607,14 +607,14 @@ func newV2NotificationsWebhooksOwnerIDIDBuilder(sdk *sdkImpl, ownerID string, id
 	}
 }
 
-// DeleteWebhook calls notifications.DeleteWebhook
-func (b *v2NotificationsWebhooksOwnerIDIDBuilderImpl) DeleteWebhook(ctx context.Context) client.Response[client.Nothing] {
-	return notifications.DeleteWebhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id)
+// DeleteWebhookNotification calls notifications.DeleteWebhookNotification
+func (b *v2NotificationsWebhooksOwnerIDIDBuilderImpl) DeleteWebhookNotification(ctx context.Context) client.Response[client.Nothing] {
+	return notifications.DeleteWebhookNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id)
 }
 
-// UpdateWebhook calls notifications.UpdateWebhook
-func (b *v2NotificationsWebhooksOwnerIDIDBuilderImpl) UpdateWebhook(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WannabeWebhook] {
-	return notifications.UpdateWebhook(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id, request)
+// UpdateWebhookNotification calls notifications.UpdateWebhookNotification
+func (b *v2NotificationsWebhooksOwnerIDIDBuilderImpl) UpdateWebhookNotification(ctx context.Context, request *models.WannabeWebhook) client.Response[models.WannabeWebhook] {
+	return notifications.UpdateWebhookNotification(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerID, b.id, request)
 }
 
 // V2OauthBuilder provides access to operations
@@ -663,7 +663,7 @@ func (b *v2OauthBuilderImpl) Rights() V2OauthRightsBuilder {
 
 // V2OauthAccessTokenBuilder provides access to operations
 type V2OauthAccessTokenBuilder interface {
-	Postaccesstokenrequest(ctx context.Context, request *models.OAuthAccessTokenParams) client.Response[models.OAuthAccessTokenAnswer]
+	CreateOauthAccessToken(ctx context.Context, request *models.OAuthAccessTokenParams) client.Response[models.OAuthAccessTokenAnswer]
 }
 
 // v2OauthAccessTokenBuilderImpl implements V2OauthAccessTokenBuilder
@@ -676,14 +676,14 @@ func newV2OauthAccessTokenBuilder(sdk *sdkImpl) V2OauthAccessTokenBuilder {
 	return &v2OauthAccessTokenBuilderImpl{sdk: sdk}
 }
 
-// Postaccesstokenrequest calls auth.Postaccesstokenrequest
-func (b *v2OauthAccessTokenBuilderImpl) Postaccesstokenrequest(ctx context.Context, request *models.OAuthAccessTokenParams) client.Response[models.OAuthAccessTokenAnswer] {
-	return auth.Postaccesstokenrequest(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateOauthAccessToken calls auth.CreateOauthAccessToken
+func (b *v2OauthAccessTokenBuilderImpl) CreateOauthAccessToken(ctx context.Context, request *models.OAuthAccessTokenParams) client.Response[models.OAuthAccessTokenAnswer] {
+	return auth.CreateOauthAccessToken(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2OauthAccessTokenQueryBuilder provides access to operations
 type V2OauthAccessTokenQueryBuilder interface {
-	Postaccesstokenrequestquery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthAccessTokenAnswer]
+	CreateOauthAccessTokenFromQuery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthAccessTokenAnswer]
 }
 
 // v2OauthAccessTokenQueryBuilderImpl implements V2OauthAccessTokenQueryBuilder
@@ -696,14 +696,14 @@ func newV2OauthAccessTokenQueryBuilder(sdk *sdkImpl) V2OauthAccessTokenQueryBuil
 	return &v2OauthAccessTokenQueryBuilderImpl{sdk: sdk}
 }
 
-// Postaccesstokenrequestquery calls auth.Postaccesstokenrequestquery
-func (b *v2OauthAccessTokenQueryBuilderImpl) Postaccesstokenrequestquery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthAccessTokenAnswer] {
-	return auth.Postaccesstokenrequestquery(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// CreateOauthAccessTokenFromQuery calls auth.CreateOauthAccessTokenFromQuery
+func (b *v2OauthAccessTokenQueryBuilderImpl) CreateOauthAccessTokenFromQuery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthAccessTokenAnswer] {
+	return auth.CreateOauthAccessTokenFromQuery(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2OauthRequestTokenBuilder provides access to operations
 type V2OauthRequestTokenBuilder interface {
-	Postreqtokenrequest(ctx context.Context, request *models.OAuthRequestTokenParams) client.Response[models.OAuthRequestTokenAnswer]
+	CreateOauthRequestToken(ctx context.Context, request *models.OAuthRequestTokenParams) client.Response[models.OAuthRequestTokenAnswer]
 }
 
 // v2OauthRequestTokenBuilderImpl implements V2OauthRequestTokenBuilder
@@ -716,14 +716,14 @@ func newV2OauthRequestTokenBuilder(sdk *sdkImpl) V2OauthRequestTokenBuilder {
 	return &v2OauthRequestTokenBuilderImpl{sdk: sdk}
 }
 
-// Postreqtokenrequest calls auth.Postreqtokenrequest
-func (b *v2OauthRequestTokenBuilderImpl) Postreqtokenrequest(ctx context.Context, request *models.OAuthRequestTokenParams) client.Response[models.OAuthRequestTokenAnswer] {
-	return auth.Postreqtokenrequest(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateOauthRequestToken calls auth.CreateOauthRequestToken
+func (b *v2OauthRequestTokenBuilderImpl) CreateOauthRequestToken(ctx context.Context, request *models.OAuthRequestTokenParams) client.Response[models.OAuthRequestTokenAnswer] {
+	return auth.CreateOauthRequestToken(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2OauthRequestTokenQueryBuilder provides access to operations
 type V2OauthRequestTokenQueryBuilder interface {
-	Postreqtokenrequestquerystring(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthRequestTokenAnswer]
+	CreateOauthRequestTokenFromQuery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthRequestTokenAnswer]
 }
 
 // v2OauthRequestTokenQueryBuilderImpl implements V2OauthRequestTokenQueryBuilder
@@ -736,14 +736,14 @@ func newV2OauthRequestTokenQueryBuilder(sdk *sdkImpl) V2OauthRequestTokenQueryBu
 	return &v2OauthRequestTokenQueryBuilderImpl{sdk: sdk}
 }
 
-// Postreqtokenrequestquerystring calls auth.Postreqtokenrequestquerystring
-func (b *v2OauthRequestTokenQueryBuilderImpl) Postreqtokenrequestquerystring(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthRequestTokenAnswer] {
-	return auth.Postreqtokenrequestquerystring(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// CreateOauthRequestTokenFromQuery calls auth.CreateOauthRequestTokenFromQuery
+func (b *v2OauthRequestTokenQueryBuilderImpl) CreateOauthRequestTokenFromQuery(ctx context.Context, opts ...auth.Option) client.Response[models.OAuthRequestTokenAnswer] {
+	return auth.CreateOauthRequestTokenFromQuery(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2OauthRightsBuilder provides access to operations
 type V2OauthRightsBuilder interface {
-	Getavailablerights(ctx context.Context) client.Response[map[string]string]
+	ListOauthRights(ctx context.Context) client.Response[map[string]string]
 }
 
 // v2OauthRightsBuilderImpl implements V2OauthRightsBuilder
@@ -756,16 +756,16 @@ func newV2OauthRightsBuilder(sdk *sdkImpl) V2OauthRightsBuilder {
 	return &v2OauthRightsBuilderImpl{sdk: sdk}
 }
 
-// Getavailablerights calls auth.Getavailablerights
-func (b *v2OauthRightsBuilderImpl) Getavailablerights(ctx context.Context) client.Response[map[string]string] {
-	return auth.Getavailablerights(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListOauthRights calls auth.ListOauthRights
+func (b *v2OauthRightsBuilderImpl) ListOauthRights(ctx context.Context) client.Response[map[string]string] {
+	return auth.ListOauthRights(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2OrganisationsBuilder provides access to operations
 type V2OrganisationsBuilder interface {
 	ID(id string) V2OrganisationsIDBuilder
-	Listorganisations(ctx context.Context) client.Response[[]models.OrganisationView]
-	Createorganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView]
+	ListOrganisations(ctx context.Context) client.Response[[]models.OrganisationView]
+	CreateOrganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView]
 }
 
 // v2OrganisationsBuilderImpl implements V2OrganisationsBuilder
@@ -783,14 +783,14 @@ func (b *v2OrganisationsBuilderImpl) ID(id string) V2OrganisationsIDBuilder {
 	return newV2OrganisationsIDBuilder(b.sdk, id)
 }
 
-// Listorganisations calls organisations.Listorganisations
-func (b *v2OrganisationsBuilderImpl) Listorganisations(ctx context.Context) client.Response[[]models.OrganisationView] {
-	return organisations.Listorganisations(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListOrganisations calls organisations.ListOrganisations
+func (b *v2OrganisationsBuilderImpl) ListOrganisations(ctx context.Context) client.Response[[]models.OrganisationView] {
+	return organisations.ListOrganisations(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Createorganisation calls organisations.Createorganisation
-func (b *v2OrganisationsBuilderImpl) Createorganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView] {
-	return organisations.Createorganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateOrganisation calls organisations.CreateOrganisation
+func (b *v2OrganisationsBuilderImpl) CreateOrganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView] {
+	return organisations.CreateOrganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2OrganisationsIDBuilder provides access to operations
@@ -807,9 +807,9 @@ type V2OrganisationsIDBuilder interface {
 	Namespaces() V2OrganisationsIDNamespacesBuilder
 	PaymentInfo() V2OrganisationsIDPaymentInfoBuilder
 	ServiceTokens() V2OrganisationsIDServiceTokensBuilder
-	Deleteorganisation(ctx context.Context) client.Response[models.Message]
-	Getorganisation(ctx context.Context) client.Response[models.OrganisationView]
-	Updateorganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView]
+	DeleteOrganisation(ctx context.Context) client.Response[models.Message]
+	GetOrganisation(ctx context.Context) client.Response[models.OrganisationView]
+	UpdateOrganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView]
 }
 
 // v2OrganisationsIDBuilderImpl implements V2OrganisationsIDBuilder
@@ -886,26 +886,26 @@ func (b *v2OrganisationsIDBuilderImpl) ServiceTokens() V2OrganisationsIDServiceT
 	return newV2OrganisationsIDServiceTokensBuilder(b.sdk, b.id)
 }
 
-// Deleteorganisation calls organisations.Deleteorganisation
-func (b *v2OrganisationsIDBuilderImpl) Deleteorganisation(ctx context.Context) client.Response[models.Message] {
-	return organisations.Deleteorganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// DeleteOrganisation calls organisations.DeleteOrganisation
+func (b *v2OrganisationsIDBuilderImpl) DeleteOrganisation(ctx context.Context) client.Response[models.Message] {
+	return organisations.DeleteOrganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Getorganisation calls organisations.Getorganisation
-func (b *v2OrganisationsIDBuilderImpl) Getorganisation(ctx context.Context) client.Response[models.OrganisationView] {
-	return organisations.Getorganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// GetOrganisation calls organisations.GetOrganisation
+func (b *v2OrganisationsIDBuilderImpl) GetOrganisation(ctx context.Context) client.Response[models.OrganisationView] {
+	return organisations.GetOrganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Updateorganisation calls organisations.Updateorganisation
-func (b *v2OrganisationsIDBuilderImpl) Updateorganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView] {
-	return organisations.Updateorganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// UpdateOrganisation calls organisations.UpdateOrganisation
+func (b *v2OrganisationsIDBuilderImpl) UpdateOrganisation(ctx context.Context, request *models.WannabeOrganisation) client.Response[models.OrganisationView] {
+	return organisations.UpdateOrganisation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDAddonprovidersBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersBuilder interface {
 	Providerid(providerid string) V2OrganisationsIDAddonprovidersProvideridBuilder
-	Getprovidersinfo(ctx context.Context) client.Response[[]models.AddonProviderEmbeddedView]
-	Createprovider(ctx context.Context, request *models.WannabeAddonProvider) client.Response[models.AddonProviderInfoFullView]
+	ListAddonProviders(ctx context.Context) client.Response[[]models.AddonProviderEmbeddedView]
+	CreateAddonProvider(ctx context.Context, request *models.WannabeAddonProvider) client.Response[models.AddonProviderInfoFullView]
 }
 
 // v2OrganisationsIDAddonprovidersBuilderImpl implements V2OrganisationsIDAddonprovidersBuilder
@@ -927,14 +927,14 @@ func (b *v2OrganisationsIDAddonprovidersBuilderImpl) Providerid(providerid strin
 	return newV2OrganisationsIDAddonprovidersProvideridBuilder(b.sdk, b.id, providerid)
 }
 
-// Getprovidersinfo calls organisations.Getprovidersinfo
-func (b *v2OrganisationsIDAddonprovidersBuilderImpl) Getprovidersinfo(ctx context.Context) client.Response[[]models.AddonProviderEmbeddedView] {
-	return organisations.Getprovidersinfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListAddonProviders calls organisations.ListAddonProviders
+func (b *v2OrganisationsIDAddonprovidersBuilderImpl) ListAddonProviders(ctx context.Context) client.Response[[]models.AddonProviderEmbeddedView] {
+	return organisations.ListAddonProviders(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Createprovider calls organisations.Createprovider
-func (b *v2OrganisationsIDAddonprovidersBuilderImpl) Createprovider(ctx context.Context, request *models.WannabeAddonProvider) client.Response[models.AddonProviderInfoFullView] {
-	return organisations.Createprovider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// CreateAddonProvider calls organisations.CreateAddonProvider
+func (b *v2OrganisationsIDAddonprovidersBuilderImpl) CreateAddonProvider(ctx context.Context, request *models.WannabeAddonProvider) client.Response[models.AddonProviderInfoFullView] {
+	return organisations.CreateAddonProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridBuilder provides access to operations
@@ -944,9 +944,9 @@ type V2OrganisationsIDAddonprovidersProvideridBuilder interface {
 	Sso() V2OrganisationsIDAddonprovidersProvideridSsoBuilder
 	Tags() V2OrganisationsIDAddonprovidersProvideridTagsBuilder
 	Testers() V2OrganisationsIDAddonprovidersProvideridTestersBuilder
-	Deleteprovider(ctx context.Context) client.Response[client.Nothing]
-	Getproviderinfo(ctx context.Context) client.Response[models.AddonProviderEmbeddedView]
-	Updateproviderinfos(ctx context.Context, request *models.WannabeAddonProviderInfos) client.Response[models.AddonProviderEmbeddedView]
+	DeleteAddonProvider(ctx context.Context) client.Response[client.Nothing]
+	GetAddonProvider(ctx context.Context) client.Response[models.AddonProviderEmbeddedView]
+	UpdateAddonProvider(ctx context.Context, request *models.WannabeAddonProviderInfos) client.Response[models.AddonProviderEmbeddedView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridBuilder
@@ -990,26 +990,26 @@ func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) Testers() V2Organ
 	return newV2OrganisationsIDAddonprovidersProvideridTestersBuilder(b.sdk, b.id, b.providerid)
 }
 
-// Deleteprovider calls organisations.Deleteprovider
-func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) Deleteprovider(ctx context.Context) client.Response[client.Nothing] {
-	return organisations.Deleteprovider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// DeleteAddonProvider calls organisations.DeleteAddonProvider
+func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) DeleteAddonProvider(ctx context.Context) client.Response[client.Nothing] {
+	return organisations.DeleteAddonProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
-// Getproviderinfo calls organisations.Getproviderinfo
-func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) Getproviderinfo(ctx context.Context) client.Response[models.AddonProviderEmbeddedView] {
-	return organisations.Getproviderinfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// GetAddonProvider calls organisations.GetAddonProvider
+func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) GetAddonProvider(ctx context.Context) client.Response[models.AddonProviderEmbeddedView] {
+	return organisations.GetAddonProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
-// Updateproviderinfos calls organisations.Updateproviderinfos
-func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) Updateproviderinfos(ctx context.Context, request *models.WannabeAddonProviderInfos) client.Response[models.AddonProviderEmbeddedView] {
-	return organisations.Updateproviderinfos(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
+// UpdateAddonProvider calls organisations.UpdateAddonProvider
+func (b *v2OrganisationsIDAddonprovidersProvideridBuilderImpl) UpdateAddonProvider(ctx context.Context, request *models.WannabeAddonProviderInfos) client.Response[models.AddonProviderEmbeddedView] {
+	return organisations.UpdateAddonProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridFeaturesBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridFeaturesBuilder interface {
 	Featureid(featureid string) V2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder
-	Getproviderfeatures(ctx context.Context) client.Response[[]models.AddonProviderFeatureView]
-	Addproviderfeature(ctx context.Context, request *models.WannabeAddonFeature) client.Response[models.AddonProviderFeatureView]
+	ListAddonProviderFeatures(ctx context.Context) client.Response[[]models.AddonProviderFeatureView]
+	CreateAddonProviderFeature(ctx context.Context, request *models.WannabeAddonFeature) client.Response[models.AddonProviderFeatureView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridFeaturesBuilder
@@ -1033,19 +1033,19 @@ func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl) Featureid
 	return newV2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder(b.sdk, b.id, b.providerid, featureid)
 }
 
-// Getproviderfeatures calls organisations.Getproviderfeatures
-func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl) Getproviderfeatures(ctx context.Context) client.Response[[]models.AddonProviderFeatureView] {
-	return organisations.Getproviderfeatures(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// ListAddonProviderFeatures calls organisations.ListAddonProviderFeatures
+func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl) ListAddonProviderFeatures(ctx context.Context) client.Response[[]models.AddonProviderFeatureView] {
+	return organisations.ListAddonProviderFeatures(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
-// Addproviderfeature calls organisations.Addproviderfeature
-func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl) Addproviderfeature(ctx context.Context, request *models.WannabeAddonFeature) client.Response[models.AddonProviderFeatureView] {
-	return organisations.Addproviderfeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
+// CreateAddonProviderFeature calls organisations.CreateAddonProviderFeature
+func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesBuilderImpl) CreateAddonProviderFeature(ctx context.Context, request *models.WannabeAddonFeature) client.Response[models.AddonProviderFeatureView] {
+	return organisations.CreateAddonProviderFeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder interface {
-	Deleteproviderfeature(ctx context.Context) client.Response[models.Message]
+	DeleteAddonProviderFeature(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder
@@ -1066,16 +1066,16 @@ func newV2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilder(sdk *s
 	}
 }
 
-// Deleteproviderfeature calls organisations.Deleteproviderfeature
-func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilderImpl) Deleteproviderfeature(ctx context.Context) client.Response[models.Message] {
-	return organisations.Deleteproviderfeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.featureid)
+// DeleteAddonProviderFeature calls organisations.DeleteAddonProviderFeature
+func (b *v2OrganisationsIDAddonprovidersProvideridFeaturesFeatureidBuilderImpl) DeleteAddonProviderFeature(ctx context.Context) client.Response[models.Message] {
+	return organisations.DeleteAddonProviderFeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.featureid)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridPlansBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridPlansBuilder interface {
 	Planid(planid string) V2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilder
-	Getproviderplans(ctx context.Context) client.Response[[]models.AddonPlanView]
-	Addproviderplan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView]
+	ListAddonProviderPlans(ctx context.Context) client.Response[[]models.AddonPlanView]
+	CreateAddonProviderPlan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridPlansBuilder
@@ -1099,22 +1099,22 @@ func (b *v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl) Planid(plani
 	return newV2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilder(b.sdk, b.id, b.providerid, planid)
 }
 
-// Getproviderplans calls organisations.Getproviderplans
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl) Getproviderplans(ctx context.Context) client.Response[[]models.AddonPlanView] {
-	return organisations.Getproviderplans(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// ListAddonProviderPlans calls organisations.ListAddonProviderPlans
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl) ListAddonProviderPlans(ctx context.Context) client.Response[[]models.AddonPlanView] {
+	return organisations.ListAddonProviderPlans(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
-// Addproviderplan calls organisations.Addproviderplan
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl) Addproviderplan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView] {
-	return organisations.Addproviderplan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
+// CreateAddonProviderPlan calls organisations.CreateAddonProviderPlan
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansBuilderImpl) CreateAddonProviderPlan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView] {
+	return organisations.CreateAddonProviderPlan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilder interface {
 	Features() V2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesBuilder
-	Deleteproviderplan(ctx context.Context) client.Response[client.Nothing]
-	Getproviderplan(ctx context.Context) client.Response[models.AddonPlanView]
-	Editproviderplan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView]
+	DeleteAddonProviderPlan(ctx context.Context) client.Response[client.Nothing]
+	GetAddonProviderPlan(ctx context.Context) client.Response[models.AddonPlanView]
+	UpdateAddonProviderPlan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilder
@@ -1140,19 +1140,19 @@ func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) Featur
 	return newV2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesBuilder(b.sdk, b.id, b.providerid, b.planid)
 }
 
-// Deleteproviderplan calls organisations.Deleteproviderplan
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) Deleteproviderplan(ctx context.Context) client.Response[client.Nothing] {
-	return organisations.Deleteproviderplan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid)
+// DeleteAddonProviderPlan calls organisations.DeleteAddonProviderPlan
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) DeleteAddonProviderPlan(ctx context.Context) client.Response[client.Nothing] {
+	return organisations.DeleteAddonProviderPlan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid)
 }
 
-// Getproviderplan calls organisations.Getproviderplan
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) Getproviderplan(ctx context.Context) client.Response[models.AddonPlanView] {
-	return organisations.Getproviderplan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid)
+// GetAddonProviderPlan calls organisations.GetAddonProviderPlan
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) GetAddonProviderPlan(ctx context.Context) client.Response[models.AddonPlanView] {
+	return organisations.GetAddonProviderPlan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid)
 }
 
-// Editproviderplan calls organisations.Editproviderplan
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) Editproviderplan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView] {
-	return organisations.Editproviderplan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, request)
+// UpdateAddonProviderPlan calls organisations.UpdateAddonProviderPlan
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidBuilderImpl) UpdateAddonProviderPlan(ctx context.Context, request *models.WannabeAddonPlan) client.Response[models.AddonPlanView] {
+	return organisations.UpdateAddonProviderPlan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesBuilder provides access to operations
@@ -1185,8 +1185,8 @@ func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesBuilderImpl
 
 // V2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilder interface {
-	Deleteproviderplanfeature(ctx context.Context) client.Response[client.Nothing]
-	Editproviderplanfeature(ctx context.Context, request any) client.Response[models.AddonPlanView]
+	DeleteAddonProviderPlanFeature(ctx context.Context) client.Response[client.Nothing]
+	UpdateAddonProviderPlanFeature(ctx context.Context, request any) client.Response[models.AddonPlanView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilder
@@ -1209,19 +1209,19 @@ func newV2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameB
 	}
 }
 
-// Deleteproviderplanfeature calls organisations.Deleteproviderplanfeature
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilderImpl) Deleteproviderplanfeature(ctx context.Context) client.Response[client.Nothing] {
-	return organisations.Deleteproviderplanfeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, b.featurename)
+// DeleteAddonProviderPlanFeature calls organisations.DeleteAddonProviderPlanFeature
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilderImpl) DeleteAddonProviderPlanFeature(ctx context.Context) client.Response[client.Nothing] {
+	return organisations.DeleteAddonProviderPlanFeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, b.featurename)
 }
 
-// Editproviderplanfeature calls organisations.Editproviderplanfeature
-func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilderImpl) Editproviderplanfeature(ctx context.Context, request any) client.Response[models.AddonPlanView] {
-	return organisations.Editproviderplanfeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, b.featurename, request)
+// UpdateAddonProviderPlanFeature calls organisations.UpdateAddonProviderPlanFeature
+func (b *v2OrganisationsIDAddonprovidersProvideridPlansPlanidFeaturesFeaturenameBuilderImpl) UpdateAddonProviderPlanFeature(ctx context.Context, request any) client.Response[models.AddonPlanView] {
+	return organisations.UpdateAddonProviderPlanFeature(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid, b.planid, b.featurename, request)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridSsoBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridSsoBuilder interface {
-	Getssodatafororga(ctx context.Context) client.Response[models.SsoDataView]
+	GetAddonProviderSso(ctx context.Context) client.Response[models.SsoDataView]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridSsoBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridSsoBuilder
@@ -1240,14 +1240,14 @@ func newV2OrganisationsIDAddonprovidersProvideridSsoBuilder(sdk *sdkImpl, id str
 	}
 }
 
-// Getssodatafororga calls organisations.Getssodatafororga
-func (b *v2OrganisationsIDAddonprovidersProvideridSsoBuilderImpl) Getssodatafororga(ctx context.Context) client.Response[models.SsoDataView] {
-	return organisations.Getssodatafororga(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// GetAddonProviderSso calls organisations.GetAddonProviderSso
+func (b *v2OrganisationsIDAddonprovidersProvideridSsoBuilderImpl) GetAddonProviderSso(ctx context.Context) client.Response[models.SsoDataView] {
+	return organisations.GetAddonProviderSso(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridTagsBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridTagsBuilder interface {
-	Getprovidertags(ctx context.Context) client.Response[[]models.SemanticTag]
+	ListAddonProviderTags(ctx context.Context) client.Response[[]models.SemanticTag]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridTagsBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridTagsBuilder
@@ -1266,14 +1266,14 @@ func newV2OrganisationsIDAddonprovidersProvideridTagsBuilder(sdk *sdkImpl, id st
 	}
 }
 
-// Getprovidertags calls organisations.Getprovidertags
-func (b *v2OrganisationsIDAddonprovidersProvideridTagsBuilderImpl) Getprovidertags(ctx context.Context) client.Response[[]models.SemanticTag] {
-	return organisations.Getprovidertags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// ListAddonProviderTags calls organisations.ListAddonProviderTags
+func (b *v2OrganisationsIDAddonprovidersProvideridTagsBuilderImpl) ListAddonProviderTags(ctx context.Context) client.Response[[]models.SemanticTag] {
+	return organisations.ListAddonProviderTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
 // V2OrganisationsIDAddonprovidersProvideridTestersBuilder provides access to operations
 type V2OrganisationsIDAddonprovidersProvideridTestersBuilder interface {
-	Addbetatester(ctx context.Context) client.Response[models.Message]
+	AddAddonProviderTester(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDAddonprovidersProvideridTestersBuilderImpl implements V2OrganisationsIDAddonprovidersProvideridTestersBuilder
@@ -1292,9 +1292,9 @@ func newV2OrganisationsIDAddonprovidersProvideridTestersBuilder(sdk *sdkImpl, id
 	}
 }
 
-// Addbetatester calls organisations.Addbetatester
-func (b *v2OrganisationsIDAddonprovidersProvideridTestersBuilderImpl) Addbetatester(ctx context.Context) client.Response[models.Message] {
-	return organisations.Addbetatester(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
+// AddAddonProviderTester calls organisations.AddAddonProviderTester
+func (b *v2OrganisationsIDAddonprovidersProvideridTestersBuilderImpl) AddAddonProviderTester(ctx context.Context) client.Response[models.Message] {
+	return organisations.AddAddonProviderTester(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.providerid)
 }
 
 // V2OrganisationsIDAddonsBuilder provides access to operations
@@ -1302,8 +1302,8 @@ type V2OrganisationsIDAddonsBuilder interface {
 	Addonid(addonid string) V2OrganisationsIDAddonsAddonidBuilder
 	AddonID(addonID string) V2OrganisationsIDAddonsAddonIDBuilder
 	Preorders() V2OrganisationsIDAddonsPreordersBuilder
-	Getaddonsbyorgaid(ctx context.Context) client.Response[[]models.AddonView]
-	Provisionaddonbyorgaid(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView]
+	ListAddons(ctx context.Context) client.Response[[]models.AddonView]
+	CreateAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView]
 }
 
 // v2OrganisationsIDAddonsBuilderImpl implements V2OrganisationsIDAddonsBuilder
@@ -1335,14 +1335,14 @@ func (b *v2OrganisationsIDAddonsBuilderImpl) Preorders() V2OrganisationsIDAddons
 	return newV2OrganisationsIDAddonsPreordersBuilder(b.sdk, b.id)
 }
 
-// Getaddonsbyorgaid calls addons.Getaddonsbyorgaid
-func (b *v2OrganisationsIDAddonsBuilderImpl) Getaddonsbyorgaid(ctx context.Context) client.Response[[]models.AddonView] {
-	return addons.Getaddonsbyorgaid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListAddons calls addons.ListAddons
+func (b *v2OrganisationsIDAddonsBuilderImpl) ListAddons(ctx context.Context) client.Response[[]models.AddonView] {
+	return addons.ListAddons(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Provisionaddonbyorgaid calls addons.Provisionaddonbyorgaid
-func (b *v2OrganisationsIDAddonsBuilderImpl) Provisionaddonbyorgaid(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView] {
-	return addons.Provisionaddonbyorgaid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// CreateAddon calls addons.CreateAddon
+func (b *v2OrganisationsIDAddonsBuilderImpl) CreateAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView] {
+	return addons.CreateAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDAddonsAddonidBuilder provides access to operations
@@ -1353,9 +1353,9 @@ type V2OrganisationsIDAddonsAddonidBuilder interface {
 	Migrations() V2OrganisationsIDAddonsAddonidMigrationsBuilder
 	Sso() V2OrganisationsIDAddonsAddonidSsoBuilder
 	Tags() V2OrganisationsIDAddonsAddonidTagsBuilder
-	Deprovisionaddonbyorgaandaddonid(ctx context.Context) client.Response[models.Message]
-	Getaddonbyorgaandaddonid(ctx context.Context) client.Response[models.AddonView]
-	Updateaddoninfo(ctx context.Context, request addons.UpdateaddoninfoBody) client.Response[models.AddonView]
+	DeleteAddon(ctx context.Context) client.Response[models.Message]
+	GetAddon(ctx context.Context) client.Response[models.AddonView]
+	UpdateAddon(ctx context.Context, request addons.UpdateAddonBody) client.Response[models.AddonView]
 }
 
 // v2OrganisationsIDAddonsAddonidBuilderImpl implements V2OrganisationsIDAddonsAddonidBuilder
@@ -1404,24 +1404,24 @@ func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) Tags() V2OrganisationsIDAddo
 	return newV2OrganisationsIDAddonsAddonidTagsBuilder(b.sdk, b.id, b.addonid)
 }
 
-// Deprovisionaddonbyorgaandaddonid calls addons.Deprovisionaddonbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) Deprovisionaddonbyorgaandaddonid(ctx context.Context) client.Response[models.Message] {
-	return addons.Deprovisionaddonbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// DeleteAddon calls addons.DeleteAddon
+func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) DeleteAddon(ctx context.Context) client.Response[models.Message] {
+	return addons.DeleteAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
-// Getaddonbyorgaandaddonid calls addons.Getaddonbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) Getaddonbyorgaandaddonid(ctx context.Context) client.Response[models.AddonView] {
-	return addons.Getaddonbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// GetAddon calls addons.GetAddon
+func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) GetAddon(ctx context.Context) client.Response[models.AddonView] {
+	return addons.GetAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
-// Updateaddoninfo calls addons.Updateaddoninfo
-func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) Updateaddoninfo(ctx context.Context, request addons.UpdateaddoninfoBody) client.Response[models.AddonView] {
-	return addons.Updateaddoninfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
+// UpdateAddon calls addons.UpdateAddon
+func (b *v2OrganisationsIDAddonsAddonidBuilderImpl) UpdateAddon(ctx context.Context, request addons.UpdateAddonBody) client.Response[models.AddonView] {
+	return addons.UpdateAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
 }
 
 // V2OrganisationsIDAddonsAddonidApplicationsBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidApplicationsBuilder interface {
-	Getapplicationslinkedtoaddonbyorgaandaddonid(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListAddonApplications(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2OrganisationsIDAddonsAddonidApplicationsBuilderImpl implements V2OrganisationsIDAddonsAddonidApplicationsBuilder
@@ -1440,14 +1440,14 @@ func newV2OrganisationsIDAddonsAddonidApplicationsBuilder(sdk *sdkImpl, id strin
 	}
 }
 
-// Getapplicationslinkedtoaddonbyorgaandaddonid calls addons.Getapplicationslinkedtoaddonbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidApplicationsBuilderImpl) Getapplicationslinkedtoaddonbyorgaandaddonid(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return addons.Getapplicationslinkedtoaddonbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// ListAddonApplications calls addons.ListAddonApplications
+func (b *v2OrganisationsIDAddonsAddonidApplicationsBuilderImpl) ListAddonApplications(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return addons.ListAddonApplications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
 // V2OrganisationsIDAddonsAddonidEnvBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidEnvBuilder interface {
-	Getaddonenvbyorgaandaddonid(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
+	GetAddonEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
 }
 
 // v2OrganisationsIDAddonsAddonidEnvBuilderImpl implements V2OrganisationsIDAddonsAddonidEnvBuilder
@@ -1466,15 +1466,15 @@ func newV2OrganisationsIDAddonsAddonidEnvBuilder(sdk *sdkImpl, id string, addoni
 	}
 }
 
-// Getaddonenvbyorgaandaddonid calls addons.Getaddonenvbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidEnvBuilderImpl) Getaddonenvbyorgaandaddonid(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
-	return addons.Getaddonenvbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// GetAddonEnvironment calls addons.GetAddonEnvironment
+func (b *v2OrganisationsIDAddonsAddonidEnvBuilderImpl) GetAddonEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
+	return addons.GetAddonEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
 // V2OrganisationsIDAddonsAddonidInstancesBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidInstancesBuilder interface {
 	Instanceid(instanceid string) V2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder
-	Getaddoninstances(ctx context.Context) client.Response[[]models.SuperNovaInstanceView]
+	ListAddonInstances(ctx context.Context) client.Response[[]models.SuperNovaInstanceView]
 }
 
 // v2OrganisationsIDAddonsAddonidInstancesBuilderImpl implements V2OrganisationsIDAddonsAddonidInstancesBuilder
@@ -1498,14 +1498,14 @@ func (b *v2OrganisationsIDAddonsAddonidInstancesBuilderImpl) Instanceid(instance
 	return newV2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder(b.sdk, b.id, b.addonid, instanceid)
 }
 
-// Getaddoninstances calls addons.Getaddoninstances
-func (b *v2OrganisationsIDAddonsAddonidInstancesBuilderImpl) Getaddoninstances(ctx context.Context) client.Response[[]models.SuperNovaInstanceView] {
-	return addons.Getaddoninstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// ListAddonInstances calls addons.ListAddonInstances
+func (b *v2OrganisationsIDAddonsAddonidInstancesBuilderImpl) ListAddonInstances(ctx context.Context) client.Response[[]models.SuperNovaInstanceView] {
+	return addons.ListAddonInstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
 // V2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder interface {
-	Getaddoninstance(ctx context.Context) client.Response[models.SuperNovaInstanceView]
+	GetAddonInstance(ctx context.Context) client.Response[models.SuperNovaInstanceView]
 }
 
 // v2OrganisationsIDAddonsAddonidInstancesInstanceidBuilderImpl implements V2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder
@@ -1526,17 +1526,17 @@ func newV2OrganisationsIDAddonsAddonidInstancesInstanceidBuilder(sdk *sdkImpl, i
 	}
 }
 
-// Getaddoninstance calls addons.Getaddoninstance
-func (b *v2OrganisationsIDAddonsAddonidInstancesInstanceidBuilderImpl) Getaddoninstance(ctx context.Context) client.Response[models.SuperNovaInstanceView] {
-	return addons.Getaddoninstance(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.instanceid)
+// GetAddonInstance calls addons.GetAddonInstance
+func (b *v2OrganisationsIDAddonsAddonidInstancesInstanceidBuilderImpl) GetAddonInstance(ctx context.Context) client.Response[models.SuperNovaInstanceView] {
+	return addons.GetAddonInstance(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.instanceid)
 }
 
 // V2OrganisationsIDAddonsAddonidMigrationsBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidMigrationsBuilder interface {
 	Migrationid(migrationid string) V2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilder
 	Preorders() V2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder
-	Getaddonmigrations(ctx context.Context) client.Response[any]
-	Changeplanbyorgaandaddonid(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
+	ListAddonMigrations(ctx context.Context) client.Response[any]
+	StartAddonMigration(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
 }
 
 // v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl implements V2OrganisationsIDAddonsAddonidMigrationsBuilder
@@ -1565,20 +1565,20 @@ func (b *v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl) Preorders() V2Orga
 	return newV2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder(b.sdk, b.id, b.addonid)
 }
 
-// Getaddonmigrations calls addons.Getaddonmigrations
-func (b *v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl) Getaddonmigrations(ctx context.Context) client.Response[any] {
-	return addons.Getaddonmigrations(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// ListAddonMigrations calls addons.ListAddonMigrations
+func (b *v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl) ListAddonMigrations(ctx context.Context) client.Response[any] {
+	return addons.ListAddonMigrations(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
-// Changeplanbyorgaandaddonid calls addons.Changeplanbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl) Changeplanbyorgaandaddonid(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
-	return addons.Changeplanbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
+// StartAddonMigration calls addons.StartAddonMigration
+func (b *v2OrganisationsIDAddonsAddonidMigrationsBuilderImpl) StartAddonMigration(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
+	return addons.StartAddonMigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
 }
 
 // V2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilder interface {
-	Abortaddonmigration(ctx context.Context) client.Response[any]
-	Getaddonmigration(ctx context.Context) client.Response[any]
+	CancelAddonMigration(ctx context.Context) client.Response[any]
+	GetAddonMigration(ctx context.Context) client.Response[any]
 }
 
 // v2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilderImpl implements V2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilder
@@ -1599,19 +1599,19 @@ func newV2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilder(sdk *sdkImpl,
 	}
 }
 
-// Abortaddonmigration calls addons.Abortaddonmigration
-func (b *v2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilderImpl) Abortaddonmigration(ctx context.Context) client.Response[any] {
-	return addons.Abortaddonmigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.migrationid)
+// CancelAddonMigration calls addons.CancelAddonMigration
+func (b *v2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilderImpl) CancelAddonMigration(ctx context.Context) client.Response[any] {
+	return addons.CancelAddonMigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.migrationid)
 }
 
-// Getaddonmigration calls addons.Getaddonmigration
-func (b *v2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilderImpl) Getaddonmigration(ctx context.Context) client.Response[any] {
-	return addons.Getaddonmigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.migrationid)
+// GetAddonMigration calls addons.GetAddonMigration
+func (b *v2OrganisationsIDAddonsAddonidMigrationsMigrationidBuilderImpl) GetAddonMigration(ctx context.Context) client.Response[any] {
+	return addons.GetAddonMigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.migrationid)
 }
 
 // V2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder interface {
-	Preordermigration(ctx context.Context, opts ...addons.Option) client.Response[models.InvoiceRendering]
+	ListAddonMigrationPreorders(ctx context.Context, opts ...addons.Option) client.Response[models.InvoiceRendering]
 }
 
 // v2OrganisationsIDAddonsAddonidMigrationsPreordersBuilderImpl implements V2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder
@@ -1630,14 +1630,14 @@ func newV2OrganisationsIDAddonsAddonidMigrationsPreordersBuilder(sdk *sdkImpl, i
 	}
 }
 
-// Preordermigration calls addons.Preordermigration
-func (b *v2OrganisationsIDAddonsAddonidMigrationsPreordersBuilderImpl) Preordermigration(ctx context.Context, opts ...addons.Option) client.Response[models.InvoiceRendering] {
-	return addons.Preordermigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, opts...)
+// ListAddonMigrationPreorders calls addons.ListAddonMigrationPreorders
+func (b *v2OrganisationsIDAddonsAddonidMigrationsPreordersBuilderImpl) ListAddonMigrationPreorders(ctx context.Context, opts ...addons.Option) client.Response[models.InvoiceRendering] {
+	return addons.ListAddonMigrationPreorders(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, opts...)
 }
 
 // V2OrganisationsIDAddonsAddonidSsoBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidSsoBuilder interface {
-	Getaddonssodatafororga(ctx context.Context) client.Response[models.AddonSSOData]
+	GetAddonSso(ctx context.Context) client.Response[models.AddonSSOData]
 }
 
 // v2OrganisationsIDAddonsAddonidSsoBuilderImpl implements V2OrganisationsIDAddonsAddonidSsoBuilder
@@ -1656,16 +1656,16 @@ func newV2OrganisationsIDAddonsAddonidSsoBuilder(sdk *sdkImpl, id string, addoni
 	}
 }
 
-// Getaddonssodatafororga calls addons.Getaddonssodatafororga
-func (b *v2OrganisationsIDAddonsAddonidSsoBuilderImpl) Getaddonssodatafororga(ctx context.Context) client.Response[models.AddonSSOData] {
-	return addons.Getaddonssodatafororga(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// GetAddonSso calls addons.GetAddonSso
+func (b *v2OrganisationsIDAddonsAddonidSsoBuilderImpl) GetAddonSso(ctx context.Context) client.Response[models.AddonSSOData] {
+	return addons.GetAddonSso(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
 // V2OrganisationsIDAddonsAddonidTagsBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidTagsBuilder interface {
 	Tag(tag string) V2OrganisationsIDAddonsAddonidTagsTagBuilder
-	Getaddontagsbyorgaidandaddonid(ctx context.Context) client.Response[[]string]
-	Replaceaddontags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag]
+	ListAddonTags(ctx context.Context) client.Response[[]string]
+	UpdateAddonTags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag]
 }
 
 // v2OrganisationsIDAddonsAddonidTagsBuilderImpl implements V2OrganisationsIDAddonsAddonidTagsBuilder
@@ -1689,20 +1689,20 @@ func (b *v2OrganisationsIDAddonsAddonidTagsBuilderImpl) Tag(tag string) V2Organi
 	return newV2OrganisationsIDAddonsAddonidTagsTagBuilder(b.sdk, b.id, b.addonid, tag)
 }
 
-// Getaddontagsbyorgaidandaddonid calls addons.Getaddontagsbyorgaidandaddonid
-func (b *v2OrganisationsIDAddonsAddonidTagsBuilderImpl) Getaddontagsbyorgaidandaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Getaddontagsbyorgaidandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
+// ListAddonTags calls addons.ListAddonTags
+func (b *v2OrganisationsIDAddonsAddonidTagsBuilderImpl) ListAddonTags(ctx context.Context) client.Response[[]string] {
+	return addons.ListAddonTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid)
 }
 
-// Replaceaddontags calls addons.Replaceaddontags
-func (b *v2OrganisationsIDAddonsAddonidTagsBuilderImpl) Replaceaddontags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag] {
-	return addons.Replaceaddontags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
+// UpdateAddonTags calls addons.UpdateAddonTags
+func (b *v2OrganisationsIDAddonsAddonidTagsBuilderImpl) UpdateAddonTags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag] {
+	return addons.UpdateAddonTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, request)
 }
 
 // V2OrganisationsIDAddonsAddonidTagsTagBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonidTagsTagBuilder interface {
-	Deleteaddontagbyorgaandaddonid(ctx context.Context) client.Response[[]string]
-	Addaddontagbyorgaandaddonid(ctx context.Context) client.Response[[]string]
+	DeleteAddonTag(ctx context.Context) client.Response[[]string]
+	CreateAddonTag(ctx context.Context) client.Response[[]string]
 }
 
 // v2OrganisationsIDAddonsAddonidTagsTagBuilderImpl implements V2OrganisationsIDAddonsAddonidTagsTagBuilder
@@ -1723,14 +1723,14 @@ func newV2OrganisationsIDAddonsAddonidTagsTagBuilder(sdk *sdkImpl, id string, ad
 	}
 }
 
-// Deleteaddontagbyorgaandaddonid calls addons.Deleteaddontagbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidTagsTagBuilderImpl) Deleteaddontagbyorgaandaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Deleteaddontagbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.tag)
+// DeleteAddonTag calls addons.DeleteAddonTag
+func (b *v2OrganisationsIDAddonsAddonidTagsTagBuilderImpl) DeleteAddonTag(ctx context.Context) client.Response[[]string] {
+	return addons.DeleteAddonTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.tag)
 }
 
-// Addaddontagbyorgaandaddonid calls addons.Addaddontagbyorgaandaddonid
-func (b *v2OrganisationsIDAddonsAddonidTagsTagBuilderImpl) Addaddontagbyorgaandaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Addaddontagbyorgaandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.tag)
+// CreateAddonTag calls addons.CreateAddonTag
+func (b *v2OrganisationsIDAddonsAddonidTagsTagBuilderImpl) CreateAddonTag(ctx context.Context) client.Response[[]string] {
+	return addons.CreateAddonTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonid, b.tag)
 }
 
 // V2OrganisationsIDAddonsAddonIDBuilder provides access to operations
@@ -1767,7 +1767,7 @@ func (b *v2OrganisationsIDAddonsAddonIDBuilderImpl) Sso() V2OrganisationsIDAddon
 
 // V2OrganisationsIDAddonsAddonIDMigrationBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonIDMigrationBuilder interface {
-	MigrateOrgAddon(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
+	MigrateAddon(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
 }
 
 // v2OrganisationsIDAddonsAddonIDMigrationBuilderImpl implements V2OrganisationsIDAddonsAddonIDMigrationBuilder
@@ -1786,14 +1786,14 @@ func newV2OrganisationsIDAddonsAddonIDMigrationBuilder(sdk *sdkImpl, id string, 
 	}
 }
 
-// MigrateOrgAddon calls addons.MigrateOrgAddon
-func (b *v2OrganisationsIDAddonsAddonIDMigrationBuilderImpl) MigrateOrgAddon(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
-	return addons.MigrateOrgAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonID, request)
+// MigrateAddon calls addons.MigrateAddon
+func (b *v2OrganisationsIDAddonsAddonIDMigrationBuilderImpl) MigrateAddon(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
+	return addons.MigrateAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonID, request)
 }
 
 // V2OrganisationsIDAddonsAddonIDSsoBuilder provides access to operations
 type V2OrganisationsIDAddonsAddonIDSsoBuilder interface {
-	SsoOrgAddon(ctx context.Context) client.Response[models.AddonSSOData]
+	CreateAddonSso(ctx context.Context) client.Response[models.AddonSSOData]
 }
 
 // v2OrganisationsIDAddonsAddonIDSsoBuilderImpl implements V2OrganisationsIDAddonsAddonIDSsoBuilder
@@ -1812,14 +1812,14 @@ func newV2OrganisationsIDAddonsAddonIDSsoBuilder(sdk *sdkImpl, id string, addonI
 	}
 }
 
-// SsoOrgAddon calls addons.SsoOrgAddon
-func (b *v2OrganisationsIDAddonsAddonIDSsoBuilderImpl) SsoOrgAddon(ctx context.Context) client.Response[models.AddonSSOData] {
-	return addons.SsoOrgAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonID)
+// CreateAddonSso calls addons.CreateAddonSso
+func (b *v2OrganisationsIDAddonsAddonIDSsoBuilderImpl) CreateAddonSso(ctx context.Context) client.Response[models.AddonSSOData] {
+	return addons.CreateAddonSso(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.addonID)
 }
 
 // V2OrganisationsIDAddonsPreordersBuilder provides access to operations
 type V2OrganisationsIDAddonsPreordersBuilder interface {
-	Preorderaddonbyorgaid(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering]
+	PreorderAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering]
 }
 
 // v2OrganisationsIDAddonsPreordersBuilderImpl implements V2OrganisationsIDAddonsPreordersBuilder
@@ -1836,17 +1836,17 @@ func newV2OrganisationsIDAddonsPreordersBuilder(sdk *sdkImpl, id string) V2Organ
 	}
 }
 
-// Preorderaddonbyorgaid calls addons.Preorderaddonbyorgaid
-func (b *v2OrganisationsIDAddonsPreordersBuilderImpl) Preorderaddonbyorgaid(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
-	return addons.Preorderaddonbyorgaid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// PreorderAddon calls addons.PreorderAddon
+func (b *v2OrganisationsIDAddonsPreordersBuilderImpl) PreorderAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
+	return addons.PreorderAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDApplicationsBuilder provides access to operations
 type V2OrganisationsIDApplicationsBuilder interface {
 	Appid(appid string) V2OrganisationsIDApplicationsAppidBuilder
 	AppID(appID string) V2OrganisationsIDApplicationsAppIDBuilder
-	Listorganisationapplications(ctx context.Context) client.Response[[]models.ApplicationView]
-	Createorganisationapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
+	ListApplications(ctx context.Context) client.Response[[]models.ApplicationView]
+	CreateApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsBuilderImpl implements V2OrganisationsIDApplicationsBuilder
@@ -1873,14 +1873,14 @@ func (b *v2OrganisationsIDApplicationsBuilderImpl) AppID(appID string) V2Organis
 	return newV2OrganisationsIDApplicationsAppIDBuilder(b.sdk, b.id, appID)
 }
 
-// Listorganisationapplications calls applications.Listorganisationapplications
-func (b *v2OrganisationsIDApplicationsBuilderImpl) Listorganisationapplications(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Listorganisationapplications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListApplications calls applications.ListApplications
+func (b *v2OrganisationsIDApplicationsBuilderImpl) ListApplications(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListApplications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Createorganisationapplication calls applications.Createorganisationapplication
-func (b *v2OrganisationsIDApplicationsBuilderImpl) Createorganisationapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
-	return applications.Createorganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// CreateApplication calls applications.CreateApplication
+func (b *v2OrganisationsIDApplicationsBuilderImpl) CreateApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
+	return applications.CreateApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDApplicationsAppidBuilder provides access to operations
@@ -1899,9 +1899,9 @@ type V2OrganisationsIDApplicationsAppidBuilder interface {
 	Tcpredirs() V2OrganisationsIDApplicationsAppidTcpredirsBuilder
 	Udpredirs() V2OrganisationsIDApplicationsAppidUdpredirsBuilder
 	Vhosts() V2OrganisationsIDApplicationsAppidVhostsBuilder
-	Deleteorganisationapplication(ctx context.Context) client.Response[models.Message]
-	Getorganisationapplication(ctx context.Context) client.Response[models.ApplicationView]
-	Updateorganisationapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
+	DeleteApplication(ctx context.Context) client.Response[models.Message]
+	GetApplication(ctx context.Context) client.Response[models.ApplicationView]
+	UpdateApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsAppidBuilderImpl implements V2OrganisationsIDApplicationsAppidBuilder
@@ -1990,27 +1990,27 @@ func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) Vhosts() V2Organisations
 	return newV2OrganisationsIDApplicationsAppidVhostsBuilder(b.sdk, b.id, b.appid)
 }
 
-// Deleteorganisationapplication calls applications.Deleteorganisationapplication
-func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) Deleteorganisationapplication(ctx context.Context) client.Response[models.Message] {
-	return applications.Deleteorganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// DeleteApplication calls applications.DeleteApplication
+func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) DeleteApplication(ctx context.Context) client.Response[models.Message] {
+	return applications.DeleteApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Getorganisationapplication calls applications.Getorganisationapplication
-func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) Getorganisationapplication(ctx context.Context) client.Response[models.ApplicationView] {
-	return applications.Getorganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplication calls applications.GetApplication
+func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) GetApplication(ctx context.Context) client.Response[models.ApplicationView] {
+	return applications.GetApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Updateorganisationapplication calls applications.Updateorganisationapplication
-func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) Updateorganisationapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
-	return applications.Updateorganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// UpdateApplication calls applications.UpdateApplication
+func (b *v2OrganisationsIDApplicationsAppidBuilderImpl) UpdateApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
+	return applications.UpdateApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidAddonsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidAddonsBuilder interface {
 	Addonid(addonid string) V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder
 	Env() V2OrganisationsIDApplicationsAppidAddonsEnvBuilder
-	Listorganisationapplicationaddons(ctx context.Context) client.Response[[]models.AddonView]
-	Linkorganisationapplicationaddon(ctx context.Context, request string) client.Response[client.Nothing]
+	ListApplicationAddons(ctx context.Context) client.Response[[]models.AddonView]
+	LinkApplicationAddon(ctx context.Context, request string) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidAddonsBuilderImpl implements V2OrganisationsIDApplicationsAppidAddonsBuilder
@@ -2039,19 +2039,19 @@ func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Env() V2Organisati
 	return newV2OrganisationsIDApplicationsAppidAddonsEnvBuilder(b.sdk, b.id, b.appid)
 }
 
-// Listorganisationapplicationaddons calls applications.Listorganisationapplicationaddons
-func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Listorganisationapplicationaddons(ctx context.Context) client.Response[[]models.AddonView] {
-	return applications.Listorganisationapplicationaddons(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationAddons calls applications.ListApplicationAddons
+func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) ListApplicationAddons(ctx context.Context) client.Response[[]models.AddonView] {
+	return applications.ListApplicationAddons(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Linkorganisationapplicationaddon calls applications.Linkorganisationapplicationaddon
-func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) Linkorganisationapplicationaddon(ctx context.Context, request string) client.Response[client.Nothing] {
-	return applications.Linkorganisationapplicationaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// LinkApplicationAddon calls applications.LinkApplicationAddon
+func (b *v2OrganisationsIDApplicationsAppidAddonsBuilderImpl) LinkApplicationAddon(ctx context.Context, request string) client.Response[client.Nothing] {
+	return applications.LinkApplicationAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder interface {
-	Unlinkorganisationapplicationaddon(ctx context.Context) client.Response[client.Nothing]
+	UnlinkApplicationAddon(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidAddonsAddonidBuilderImpl implements V2OrganisationsIDApplicationsAppidAddonsAddonidBuilder
@@ -2072,14 +2072,14 @@ func newV2OrganisationsIDApplicationsAppidAddonsAddonidBuilder(sdk *sdkImpl, id 
 	}
 }
 
-// Unlinkorganisationapplicationaddon calls applications.Unlinkorganisationapplicationaddon
-func (b *v2OrganisationsIDApplicationsAppidAddonsAddonidBuilderImpl) Unlinkorganisationapplicationaddon(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Unlinkorganisationapplicationaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.addonid)
+// UnlinkApplicationAddon calls applications.UnlinkApplicationAddon
+func (b *v2OrganisationsIDApplicationsAppidAddonsAddonidBuilderImpl) UnlinkApplicationAddon(ctx context.Context) client.Response[client.Nothing] {
+	return applications.UnlinkApplicationAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.addonid)
 }
 
 // V2OrganisationsIDApplicationsAppidAddonsEnvBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidAddonsEnvBuilder interface {
-	Listorganisationapplicationaddonsenvironmentvariables(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView]
+	GetApplicationAddonEnvironment(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView]
 }
 
 // v2OrganisationsIDApplicationsAppidAddonsEnvBuilderImpl implements V2OrganisationsIDApplicationsAppidAddonsEnvBuilder
@@ -2098,14 +2098,14 @@ func newV2OrganisationsIDApplicationsAppidAddonsEnvBuilder(sdk *sdkImpl, id stri
 	}
 }
 
-// Listorganisationapplicationaddonsenvironmentvariables calls applications.Listorganisationapplicationaddonsenvironmentvariables
-func (b *v2OrganisationsIDApplicationsAppidAddonsEnvBuilderImpl) Listorganisationapplicationaddonsenvironmentvariables(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView] {
-	return applications.Listorganisationapplicationaddonsenvironmentvariables(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplicationAddonEnvironment calls applications.GetApplicationAddonEnvironment
+func (b *v2OrganisationsIDApplicationsAppidAddonsEnvBuilderImpl) GetApplicationAddonEnvironment(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView] {
+	return applications.GetApplicationAddonEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidBranchBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidBranchBuilder interface {
-	Updateorganisationapplicationbranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message]
+	UpdateApplicationBranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppidBranchBuilderImpl implements V2OrganisationsIDApplicationsAppidBranchBuilder
@@ -2124,14 +2124,14 @@ func newV2OrganisationsIDApplicationsAppidBranchBuilder(sdk *sdkImpl, id string,
 	}
 }
 
-// Updateorganisationapplicationbranch calls applications.Updateorganisationapplicationbranch
-func (b *v2OrganisationsIDApplicationsAppidBranchBuilderImpl) Updateorganisationapplicationbranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message] {
-	return applications.Updateorganisationapplicationbranch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// UpdateApplicationBranch calls applications.UpdateApplicationBranch
+func (b *v2OrganisationsIDApplicationsAppidBranchBuilderImpl) UpdateApplicationBranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message] {
+	return applications.UpdateApplicationBranch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidBranchesBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidBranchesBuilder interface {
-	Listorganisationapplicationbranches(ctx context.Context) client.Response[[]string]
+	ListApplicationBranches(ctx context.Context) client.Response[[]string]
 }
 
 // v2OrganisationsIDApplicationsAppidBranchesBuilderImpl implements V2OrganisationsIDApplicationsAppidBranchesBuilder
@@ -2150,14 +2150,14 @@ func newV2OrganisationsIDApplicationsAppidBranchesBuilder(sdk *sdkImpl, id strin
 	}
 }
 
-// Listorganisationapplicationbranches calls applications.Listorganisationapplicationbranches
-func (b *v2OrganisationsIDApplicationsAppidBranchesBuilderImpl) Listorganisationapplicationbranches(ctx context.Context) client.Response[[]string] {
-	return applications.Listorganisationapplicationbranches(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationBranches calls applications.ListApplicationBranches
+func (b *v2OrganisationsIDApplicationsAppidBranchesBuilderImpl) ListApplicationBranches(ctx context.Context) client.Response[[]string] {
+	return applications.ListApplicationBranches(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidBuildflavorBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidBuildflavorBuilder interface {
-	Updateorganisationapplicationbuildinstanceflavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing]
+	UpdateApplicationBuildFlavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidBuildflavorBuilderImpl implements V2OrganisationsIDApplicationsAppidBuildflavorBuilder
@@ -2176,16 +2176,16 @@ func newV2OrganisationsIDApplicationsAppidBuildflavorBuilder(sdk *sdkImpl, id st
 	}
 }
 
-// Updateorganisationapplicationbuildinstanceflavor calls applications.Updateorganisationapplicationbuildinstanceflavor
-func (b *v2OrganisationsIDApplicationsAppidBuildflavorBuilderImpl) Updateorganisationapplicationbuildinstanceflavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing] {
-	return applications.Updateorganisationapplicationbuildinstanceflavor(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// UpdateApplicationBuildFlavor calls applications.UpdateApplicationBuildFlavor
+func (b *v2OrganisationsIDApplicationsAppidBuildflavorBuilderImpl) UpdateApplicationBuildFlavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing] {
+	return applications.UpdateApplicationBuildFlavor(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidDependenciesBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDependenciesBuilder interface {
 	Dependencyid(dependencyid string) V2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilder
 	Env() V2OrganisationsIDApplicationsAppidDependenciesEnvBuilder
-	Getapplicationdependenciesbyorgaandappid(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListApplicationDependencies(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsAppidDependenciesBuilderImpl implements V2OrganisationsIDApplicationsAppidDependenciesBuilder
@@ -2214,15 +2214,15 @@ func (b *v2OrganisationsIDApplicationsAppidDependenciesBuilderImpl) Env() V2Orga
 	return newV2OrganisationsIDApplicationsAppidDependenciesEnvBuilder(b.sdk, b.id, b.appid)
 }
 
-// Getapplicationdependenciesbyorgaandappid calls applications.Getapplicationdependenciesbyorgaandappid
-func (b *v2OrganisationsIDApplicationsAppidDependenciesBuilderImpl) Getapplicationdependenciesbyorgaandappid(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Getapplicationdependenciesbyorgaandappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationDependencies calls applications.ListApplicationDependencies
+func (b *v2OrganisationsIDApplicationsAppidDependenciesBuilderImpl) ListApplicationDependencies(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListApplicationDependencies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilder interface {
-	Deleteapplicationdependencybyorgaandappid(ctx context.Context) client.Response[client.Nothing]
-	Addapplicationdependencybyorgaandappid(ctx context.Context) client.Response[models.Message]
+	RemoveApplicationDependency(ctx context.Context) client.Response[client.Nothing]
+	AddApplicationDependency(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilderImpl implements V2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilder
@@ -2243,19 +2243,19 @@ func newV2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilder(sdk *s
 	}
 }
 
-// Deleteapplicationdependencybyorgaandappid calls applications.Deleteapplicationdependencybyorgaandappid
-func (b *v2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilderImpl) Deleteapplicationdependencybyorgaandappid(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Deleteapplicationdependencybyorgaandappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.dependencyid)
+// RemoveApplicationDependency calls applications.RemoveApplicationDependency
+func (b *v2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilderImpl) RemoveApplicationDependency(ctx context.Context) client.Response[client.Nothing] {
+	return applications.RemoveApplicationDependency(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.dependencyid)
 }
 
-// Addapplicationdependencybyorgaandappid calls applications.Addapplicationdependencybyorgaandappid
-func (b *v2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilderImpl) Addapplicationdependencybyorgaandappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Addapplicationdependencybyorgaandappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.dependencyid)
+// AddApplicationDependency calls applications.AddApplicationDependency
+func (b *v2OrganisationsIDApplicationsAppidDependenciesDependencyidBuilderImpl) AddApplicationDependency(ctx context.Context) client.Response[models.Message] {
+	return applications.AddApplicationDependency(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.dependencyid)
 }
 
 // V2OrganisationsIDApplicationsAppidDependenciesEnvBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDependenciesEnvBuilder interface {
-	Getapplicationdependenciesenvbyorgaandappid(ctx context.Context) client.Response[[]models.DependencyEnvView]
+	GetApplicationDependencyEnvironment(ctx context.Context) client.Response[[]models.DependencyEnvView]
 }
 
 // v2OrganisationsIDApplicationsAppidDependenciesEnvBuilderImpl implements V2OrganisationsIDApplicationsAppidDependenciesEnvBuilder
@@ -2274,14 +2274,14 @@ func newV2OrganisationsIDApplicationsAppidDependenciesEnvBuilder(sdk *sdkImpl, i
 	}
 }
 
-// Getapplicationdependenciesenvbyorgaandappid calls applications.Getapplicationdependenciesenvbyorgaandappid
-func (b *v2OrganisationsIDApplicationsAppidDependenciesEnvBuilderImpl) Getapplicationdependenciesenvbyorgaandappid(ctx context.Context) client.Response[[]models.DependencyEnvView] {
-	return applications.Getapplicationdependenciesenvbyorgaandappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplicationDependencyEnvironment calls applications.GetApplicationDependencyEnvironment
+func (b *v2OrganisationsIDApplicationsAppidDependenciesEnvBuilderImpl) GetApplicationDependencyEnvironment(ctx context.Context) client.Response[[]models.DependencyEnvView] {
+	return applications.GetApplicationDependencyEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidDependentsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDependentsBuilder interface {
-	Getapplicationdependentsbyorgaandappid(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListApplicationDependents(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsAppidDependentsBuilderImpl implements V2OrganisationsIDApplicationsAppidDependentsBuilder
@@ -2300,15 +2300,15 @@ func newV2OrganisationsIDApplicationsAppidDependentsBuilder(sdk *sdkImpl, id str
 	}
 }
 
-// Getapplicationdependentsbyorgaandappid calls applications.Getapplicationdependentsbyorgaandappid
-func (b *v2OrganisationsIDApplicationsAppidDependentsBuilderImpl) Getapplicationdependentsbyorgaandappid(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Getapplicationdependentsbyorgaandappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationDependents calls applications.ListApplicationDependents
+func (b *v2OrganisationsIDApplicationsAppidDependentsBuilderImpl) ListApplicationDependents(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListApplicationDependents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidDeploymentsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDeploymentsBuilder interface {
 	Deploymentid(deploymentid string) V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilder
-	Getapplicationdeploymentsfororga(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView]
+	ListApplicationDeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView]
 }
 
 // v2OrganisationsIDApplicationsAppidDeploymentsBuilderImpl implements V2OrganisationsIDApplicationsAppidDeploymentsBuilder
@@ -2332,15 +2332,15 @@ func (b *v2OrganisationsIDApplicationsAppidDeploymentsBuilderImpl) Deploymentid(
 	return newV2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilder(b.sdk, b.id, b.appid, deploymentid)
 }
 
-// Getapplicationdeploymentsfororga calls applications.Getapplicationdeploymentsfororga
-func (b *v2OrganisationsIDApplicationsAppidDeploymentsBuilderImpl) Getapplicationdeploymentsfororga(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView] {
-	return applications.Getapplicationdeploymentsfororga(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
+// ListApplicationDeployments calls applications.ListApplicationDeployments
+func (b *v2OrganisationsIDApplicationsAppidDeploymentsBuilderImpl) ListApplicationDeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView] {
+	return applications.ListApplicationDeployments(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
 }
 
 // V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilder interface {
 	Instances() V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilder
-	Getapplicationdeploymentfororga(ctx context.Context) client.Response[models.DeploymentView]
+	GetApplicationDeployment(ctx context.Context) client.Response[models.DeploymentView]
 }
 
 // v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilderImpl implements V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilder
@@ -2366,14 +2366,14 @@ func (b *v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilderImpl) I
 	return newV2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilder(b.sdk, b.id, b.appid, b.deploymentid)
 }
 
-// Getapplicationdeploymentfororga calls applications.Getapplicationdeploymentfororga
-func (b *v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilderImpl) Getapplicationdeploymentfororga(ctx context.Context) client.Response[models.DeploymentView] {
-	return applications.Getapplicationdeploymentfororga(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.deploymentid)
+// GetApplicationDeployment calls applications.GetApplicationDeployment
+func (b *v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidBuilderImpl) GetApplicationDeployment(ctx context.Context) client.Response[models.DeploymentView] {
+	return applications.GetApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.deploymentid)
 }
 
 // V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilder interface {
-	Cancelapplicationdeploymentfororga(ctx context.Context) client.Response[models.Message]
+	CancelApplicationDeployment(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl implements V2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilder
@@ -2394,16 +2394,16 @@ func newV2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilde
 	}
 }
 
-// Cancelapplicationdeploymentfororga calls applications.Cancelapplicationdeploymentfororga
-func (b *v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl) Cancelapplicationdeploymentfororga(ctx context.Context) client.Response[models.Message] {
-	return applications.Cancelapplicationdeploymentfororga(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.deploymentid)
+// CancelApplicationDeployment calls applications.CancelApplicationDeployment
+func (b *v2OrganisationsIDApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl) CancelApplicationDeployment(ctx context.Context) client.Response[models.Message] {
+	return applications.CancelApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.deploymentid)
 }
 
 // V2OrganisationsIDApplicationsAppidEnvBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidEnvBuilder interface {
 	Envname(envname string) V2OrganisationsIDApplicationsAppidEnvEnvnameBuilder
-	Listorganisationapplicationenvironmentvariables(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
-	Updateorganisationapplicationenvironmentvariables(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView]
+	GetApplicationEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
+	UpdateApplicationEnvironment(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsAppidEnvBuilderImpl implements V2OrganisationsIDApplicationsAppidEnvBuilder
@@ -2427,20 +2427,20 @@ func (b *v2OrganisationsIDApplicationsAppidEnvBuilderImpl) Envname(envname strin
 	return newV2OrganisationsIDApplicationsAppidEnvEnvnameBuilder(b.sdk, b.id, b.appid, envname)
 }
 
-// Listorganisationapplicationenvironmentvariables calls applications.Listorganisationapplicationenvironmentvariables
-func (b *v2OrganisationsIDApplicationsAppidEnvBuilderImpl) Listorganisationapplicationenvironmentvariables(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
-	return applications.Listorganisationapplicationenvironmentvariables(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplicationEnvironment calls applications.GetApplicationEnvironment
+func (b *v2OrganisationsIDApplicationsAppidEnvBuilderImpl) GetApplicationEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
+	return applications.GetApplicationEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Updateorganisationapplicationenvironmentvariables calls applications.Updateorganisationapplicationenvironmentvariables
-func (b *v2OrganisationsIDApplicationsAppidEnvBuilderImpl) Updateorganisationapplicationenvironmentvariables(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView] {
-	return applications.Updateorganisationapplicationenvironmentvariables(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request, opts...)
+// UpdateApplicationEnvironment calls applications.UpdateApplicationEnvironment
+func (b *v2OrganisationsIDApplicationsAppidEnvBuilderImpl) UpdateApplicationEnvironment(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView] {
+	return applications.UpdateApplicationEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request, opts...)
 }
 
 // V2OrganisationsIDApplicationsAppidEnvEnvnameBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidEnvEnvnameBuilder interface {
-	Deleteorganisationapplicationenvironmentvariable(ctx context.Context) client.Response[models.ApplicationView]
-	Updateorganisationapplicationenvironmentvariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView]
+	DeleteApplicationEnvironmentVariable(ctx context.Context) client.Response[models.ApplicationView]
+	SetApplicationEnvironmentVariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView]
 }
 
 // v2OrganisationsIDApplicationsAppidEnvEnvnameBuilderImpl implements V2OrganisationsIDApplicationsAppidEnvEnvnameBuilder
@@ -2461,20 +2461,20 @@ func newV2OrganisationsIDApplicationsAppidEnvEnvnameBuilder(sdk *sdkImpl, id str
 	}
 }
 
-// Deleteorganisationapplicationenvironmentvariable calls applications.Deleteorganisationapplicationenvironmentvariable
-func (b *v2OrganisationsIDApplicationsAppidEnvEnvnameBuilderImpl) Deleteorganisationapplicationenvironmentvariable(ctx context.Context) client.Response[models.ApplicationView] {
-	return applications.Deleteorganisationapplicationenvironmentvariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.envname)
+// DeleteApplicationEnvironmentVariable calls applications.DeleteApplicationEnvironmentVariable
+func (b *v2OrganisationsIDApplicationsAppidEnvEnvnameBuilderImpl) DeleteApplicationEnvironmentVariable(ctx context.Context) client.Response[models.ApplicationView] {
+	return applications.DeleteApplicationEnvironmentVariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.envname)
 }
 
-// Updateorganisationapplicationenvironmentvariable calls applications.Updateorganisationapplicationenvironmentvariable
-func (b *v2OrganisationsIDApplicationsAppidEnvEnvnameBuilderImpl) Updateorganisationapplicationenvironmentvariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView] {
-	return applications.Updateorganisationapplicationenvironmentvariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.envname, request)
+// SetApplicationEnvironmentVariable calls applications.SetApplicationEnvironmentVariable
+func (b *v2OrganisationsIDApplicationsAppidEnvEnvnameBuilderImpl) SetApplicationEnvironmentVariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView] {
+	return applications.SetApplicationEnvironmentVariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.envname, request)
 }
 
 // V2OrganisationsIDApplicationsAppidExposedEnvBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidExposedEnvBuilder interface {
-	Listorganisationappplicationexposedenvironmentvariables(ctx context.Context) client.Response[map[string]string]
-	Updateorganisationapplicationexposedenvironmentvariables(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message]
+	GetApplicationExposedEnvironment(ctx context.Context) client.Response[map[string]string]
+	UpdateApplicationExposedEnvironment(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppidExposedEnvBuilderImpl implements V2OrganisationsIDApplicationsAppidExposedEnvBuilder
@@ -2493,21 +2493,21 @@ func newV2OrganisationsIDApplicationsAppidExposedEnvBuilder(sdk *sdkImpl, id str
 	}
 }
 
-// Listorganisationappplicationexposedenvironmentvariables calls applications.Listorganisationappplicationexposedenvironmentvariables
-func (b *v2OrganisationsIDApplicationsAppidExposedEnvBuilderImpl) Listorganisationappplicationexposedenvironmentvariables(ctx context.Context) client.Response[map[string]string] {
-	return applications.Listorganisationappplicationexposedenvironmentvariables(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplicationExposedEnvironment calls applications.GetApplicationExposedEnvironment
+func (b *v2OrganisationsIDApplicationsAppidExposedEnvBuilderImpl) GetApplicationExposedEnvironment(ctx context.Context) client.Response[map[string]string] {
+	return applications.GetApplicationExposedEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Updateorganisationapplicationexposedenvironmentvariables calls applications.Updateorganisationapplicationexposedenvironmentvariables
-func (b *v2OrganisationsIDApplicationsAppidExposedEnvBuilderImpl) Updateorganisationapplicationexposedenvironmentvariables(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message] {
-	return applications.Updateorganisationapplicationexposedenvironmentvariables(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// UpdateApplicationExposedEnvironment calls applications.UpdateApplicationExposedEnvironment
+func (b *v2OrganisationsIDApplicationsAppidExposedEnvBuilderImpl) UpdateApplicationExposedEnvironment(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message] {
+	return applications.UpdateApplicationExposedEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidInstancesBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidInstancesBuilder interface {
-	Stoporganisationapplication(ctx context.Context) client.Response[models.Message]
-	Listorganisationapplicationinstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView]
-	Redeployorganisationapplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage]
+	UndeployApplication(ctx context.Context) client.Response[models.Message]
+	ListApplicationInstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView]
+	DeployApplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage]
 }
 
 // v2OrganisationsIDApplicationsAppidInstancesBuilderImpl implements V2OrganisationsIDApplicationsAppidInstancesBuilder
@@ -2526,26 +2526,26 @@ func newV2OrganisationsIDApplicationsAppidInstancesBuilder(sdk *sdkImpl, id stri
 	}
 }
 
-// Stoporganisationapplication calls applications.Stoporganisationapplication
-func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) Stoporganisationapplication(ctx context.Context) client.Response[models.Message] {
-	return applications.Stoporganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// UndeployApplication calls applications.UndeployApplication
+func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) UndeployApplication(ctx context.Context) client.Response[models.Message] {
+	return applications.UndeployApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Listorganisationapplicationinstances calls applications.Listorganisationapplicationinstances
-func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) Listorganisationapplicationinstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView] {
-	return applications.Listorganisationapplicationinstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
+// ListApplicationInstances calls applications.ListApplicationInstances
+func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) ListApplicationInstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView] {
+	return applications.ListApplicationInstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
 }
 
-// Redeployorganisationapplication calls applications.Redeployorganisationapplication
-func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) Redeployorganisationapplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage] {
-	return applications.Redeployorganisationapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
+// DeployApplication calls applications.DeployApplication
+func (b *v2OrganisationsIDApplicationsAppidInstancesBuilderImpl) DeployApplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage] {
+	return applications.DeployApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, opts...)
 }
 
 // V2OrganisationsIDApplicationsAppidTagsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidTagsBuilder interface {
 	Tag(tag string) V2OrganisationsIDApplicationsAppidTagsTagBuilder
-	Listorganisationapplicationtags(ctx context.Context) client.Response[[]string]
-	Updateorganisationapplicationtags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag]
+	ListApplicationTags(ctx context.Context) client.Response[[]string]
+	UpdateApplicationTags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag]
 }
 
 // v2OrganisationsIDApplicationsAppidTagsBuilderImpl implements V2OrganisationsIDApplicationsAppidTagsBuilder
@@ -2569,20 +2569,20 @@ func (b *v2OrganisationsIDApplicationsAppidTagsBuilderImpl) Tag(tag string) V2Or
 	return newV2OrganisationsIDApplicationsAppidTagsTagBuilder(b.sdk, b.id, b.appid, tag)
 }
 
-// Listorganisationapplicationtags calls applications.Listorganisationapplicationtags
-func (b *v2OrganisationsIDApplicationsAppidTagsBuilderImpl) Listorganisationapplicationtags(ctx context.Context) client.Response[[]string] {
-	return applications.Listorganisationapplicationtags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationTags calls applications.ListApplicationTags
+func (b *v2OrganisationsIDApplicationsAppidTagsBuilderImpl) ListApplicationTags(ctx context.Context) client.Response[[]string] {
+	return applications.ListApplicationTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Updateorganisationapplicationtags calls applications.Updateorganisationapplicationtags
-func (b *v2OrganisationsIDApplicationsAppidTagsBuilderImpl) Updateorganisationapplicationtags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag] {
-	return applications.Updateorganisationapplicationtags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// UpdateApplicationTags calls applications.UpdateApplicationTags
+func (b *v2OrganisationsIDApplicationsAppidTagsBuilderImpl) UpdateApplicationTags(ctx context.Context, request []*models.SemanticTag) client.Response[[]models.SemanticTag] {
+	return applications.UpdateApplicationTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidTagsTagBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidTagsTagBuilder interface {
-	Removeorganisationapplicationtag(ctx context.Context) client.Response[[]models.SemanticTag]
-	Addorganisationapplicationtag(ctx context.Context) client.Response[[]string]
+	DeleteApplicationTag(ctx context.Context) client.Response[[]models.SemanticTag]
+	CreateApplicationTag(ctx context.Context) client.Response[[]string]
 }
 
 // v2OrganisationsIDApplicationsAppidTagsTagBuilderImpl implements V2OrganisationsIDApplicationsAppidTagsTagBuilder
@@ -2603,21 +2603,21 @@ func newV2OrganisationsIDApplicationsAppidTagsTagBuilder(sdk *sdkImpl, id string
 	}
 }
 
-// Removeorganisationapplicationtag calls applications.Removeorganisationapplicationtag
-func (b *v2OrganisationsIDApplicationsAppidTagsTagBuilderImpl) Removeorganisationapplicationtag(ctx context.Context) client.Response[[]models.SemanticTag] {
-	return applications.Removeorganisationapplicationtag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.tag)
+// DeleteApplicationTag calls applications.DeleteApplicationTag
+func (b *v2OrganisationsIDApplicationsAppidTagsTagBuilderImpl) DeleteApplicationTag(ctx context.Context) client.Response[[]models.SemanticTag] {
+	return applications.DeleteApplicationTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.tag)
 }
 
-// Addorganisationapplicationtag calls applications.Addorganisationapplicationtag
-func (b *v2OrganisationsIDApplicationsAppidTagsTagBuilderImpl) Addorganisationapplicationtag(ctx context.Context) client.Response[[]string] {
-	return applications.Addorganisationapplicationtag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.tag)
+// CreateApplicationTag calls applications.CreateApplicationTag
+func (b *v2OrganisationsIDApplicationsAppidTagsTagBuilderImpl) CreateApplicationTag(ctx context.Context) client.Response[[]string] {
+	return applications.CreateApplicationTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.tag)
 }
 
 // V2OrganisationsIDApplicationsAppidTcpredirsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidTcpredirsBuilder interface {
 	Sourceport(sourceport int64) V2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder
-	Listorganisationapplicationtcpredirections(ctx context.Context) client.Response[[]models.TcpRedirView]
-	Createorganisationapplicationtcpredirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView]
+	ListApplicationTcpRedirections(ctx context.Context) client.Response[[]models.TcpRedirView]
+	CreateApplicationTcpRedirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView]
 }
 
 // v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl implements V2OrganisationsIDApplicationsAppidTcpredirsBuilder
@@ -2641,19 +2641,19 @@ func (b *v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl) Sourceport(sour
 	return newV2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder(b.sdk, b.id, b.appid, sourceport)
 }
 
-// Listorganisationapplicationtcpredirections calls applications.Listorganisationapplicationtcpredirections
-func (b *v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl) Listorganisationapplicationtcpredirections(ctx context.Context) client.Response[[]models.TcpRedirView] {
-	return applications.Listorganisationapplicationtcpredirections(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationTcpRedirections calls applications.ListApplicationTcpRedirections
+func (b *v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl) ListApplicationTcpRedirections(ctx context.Context) client.Response[[]models.TcpRedirView] {
+	return applications.ListApplicationTcpRedirections(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Createorganisationapplicationtcpredirection calls applications.Createorganisationapplicationtcpredirection
-func (b *v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl) Createorganisationapplicationtcpredirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView] {
-	return applications.Createorganisationapplicationtcpredirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// CreateApplicationTcpRedirection calls applications.CreateApplicationTcpRedirection
+func (b *v2OrganisationsIDApplicationsAppidTcpredirsBuilderImpl) CreateApplicationTcpRedirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView] {
+	return applications.CreateApplicationTcpRedirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder interface {
-	Deleteorganisationapplicationtcpredirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing]
+	DeleteApplicationTcpRedirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilderImpl implements V2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder
@@ -2674,16 +2674,16 @@ func newV2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilder(sdk *sdkImp
 	}
 }
 
-// Deleteorganisationapplicationtcpredirection calls applications.Deleteorganisationapplicationtcpredirection
-func (b *v2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilderImpl) Deleteorganisationapplicationtcpredirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing] {
-	return applications.Deleteorganisationapplicationtcpredirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.sourceport, opts...)
+// DeleteApplicationTcpRedirection calls applications.DeleteApplicationTcpRedirection
+func (b *v2OrganisationsIDApplicationsAppidTcpredirsSourceportBuilderImpl) DeleteApplicationTcpRedirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing] {
+	return applications.DeleteApplicationTcpRedirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.sourceport, opts...)
 }
 
 // V2OrganisationsIDApplicationsAppidUdpredirsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidUdpredirsBuilder interface {
 	Sourceport(sourceport int64) V2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder
-	Listorganisationapplicationudpredirections(ctx context.Context) client.Response[[]models.TcpRedirView]
-	Createorganisationapplicationudpredirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView]
+	ListApplicationUdpRedirections(ctx context.Context) client.Response[[]models.TcpRedirView]
+	CreateApplicationUdpRedirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView]
 }
 
 // v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl implements V2OrganisationsIDApplicationsAppidUdpredirsBuilder
@@ -2707,19 +2707,19 @@ func (b *v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl) Sourceport(sour
 	return newV2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder(b.sdk, b.id, b.appid, sourceport)
 }
 
-// Listorganisationapplicationudpredirections calls applications.Listorganisationapplicationudpredirections
-func (b *v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl) Listorganisationapplicationudpredirections(ctx context.Context) client.Response[[]models.TcpRedirView] {
-	return applications.Listorganisationapplicationudpredirections(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationUdpRedirections calls applications.ListApplicationUdpRedirections
+func (b *v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl) ListApplicationUdpRedirections(ctx context.Context) client.Response[[]models.TcpRedirView] {
+	return applications.ListApplicationUdpRedirections(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Createorganisationapplicationudpredirection calls applications.Createorganisationapplicationudpredirection
-func (b *v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl) Createorganisationapplicationudpredirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView] {
-	return applications.Createorganisationapplicationudpredirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// CreateApplicationUdpRedirection calls applications.CreateApplicationUdpRedirection
+func (b *v2OrganisationsIDApplicationsAppidUdpredirsBuilderImpl) CreateApplicationUdpRedirection(ctx context.Context, request *models.WannabeNamespace) client.Response[models.TcpRedirView] {
+	return applications.CreateApplicationUdpRedirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder interface {
-	Deleteorganisationapplicationudpredirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing]
+	DeleteApplicationUdpRedirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing]
 }
 
 // v2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilderImpl implements V2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder
@@ -2740,16 +2740,16 @@ func newV2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilder(sdk *sdkImp
 	}
 }
 
-// Deleteorganisationapplicationudpredirection calls applications.Deleteorganisationapplicationudpredirection
-func (b *v2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilderImpl) Deleteorganisationapplicationudpredirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing] {
-	return applications.Deleteorganisationapplicationudpredirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.sourceport, opts...)
+// DeleteApplicationUdpRedirection calls applications.DeleteApplicationUdpRedirection
+func (b *v2OrganisationsIDApplicationsAppidUdpredirsSourceportBuilderImpl) DeleteApplicationUdpRedirection(ctx context.Context, opts ...applications.Option) client.Response[client.Nothing] {
+	return applications.DeleteApplicationUdpRedirection(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.sourceport, opts...)
 }
 
 // V2OrganisationsIDApplicationsAppidVhostsBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidVhostsBuilder interface {
 	Domain(domain string) V2OrganisationsIDApplicationsAppidVhostsDomainBuilder
 	Favourite() V2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder
-	Listorganisationapplicationvirtualhosts(ctx context.Context) client.Response[[]models.VhostView]
+	ListApplicationDomains(ctx context.Context) client.Response[[]models.VhostView]
 }
 
 // v2OrganisationsIDApplicationsAppidVhostsBuilderImpl implements V2OrganisationsIDApplicationsAppidVhostsBuilder
@@ -2778,15 +2778,15 @@ func (b *v2OrganisationsIDApplicationsAppidVhostsBuilderImpl) Favourite() V2Orga
 	return newV2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder(b.sdk, b.id, b.appid)
 }
 
-// Listorganisationapplicationvirtualhosts calls applications.Listorganisationapplicationvirtualhosts
-func (b *v2OrganisationsIDApplicationsAppidVhostsBuilderImpl) Listorganisationapplicationvirtualhosts(ctx context.Context) client.Response[[]models.VhostView] {
-	return applications.Listorganisationapplicationvirtualhosts(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// ListApplicationDomains calls applications.ListApplicationDomains
+func (b *v2OrganisationsIDApplicationsAppidVhostsBuilderImpl) ListApplicationDomains(ctx context.Context) client.Response[[]models.VhostView] {
+	return applications.ListApplicationDomains(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
 // V2OrganisationsIDApplicationsAppidVhostsDomainBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidVhostsDomainBuilder interface {
-	Removeorganisationapplicationvirtualhost(ctx context.Context) client.Response[models.Message]
-	Addorganisationapplicationvirtualhost(ctx context.Context) client.Response[models.Message]
+	DeleteApplicationDomain(ctx context.Context) client.Response[models.Message]
+	CreateApplicationDomain(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppidVhostsDomainBuilderImpl implements V2OrganisationsIDApplicationsAppidVhostsDomainBuilder
@@ -2807,21 +2807,21 @@ func newV2OrganisationsIDApplicationsAppidVhostsDomainBuilder(sdk *sdkImpl, id s
 	}
 }
 
-// Removeorganisationapplicationvirtualhost calls applications.Removeorganisationapplicationvirtualhost
-func (b *v2OrganisationsIDApplicationsAppidVhostsDomainBuilderImpl) Removeorganisationapplicationvirtualhost(ctx context.Context) client.Response[models.Message] {
-	return applications.Removeorganisationapplicationvirtualhost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.domain)
+// DeleteApplicationDomain calls applications.DeleteApplicationDomain
+func (b *v2OrganisationsIDApplicationsAppidVhostsDomainBuilderImpl) DeleteApplicationDomain(ctx context.Context) client.Response[models.Message] {
+	return applications.DeleteApplicationDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.domain)
 }
 
-// Addorganisationapplicationvirtualhost calls applications.Addorganisationapplicationvirtualhost
-func (b *v2OrganisationsIDApplicationsAppidVhostsDomainBuilderImpl) Addorganisationapplicationvirtualhost(ctx context.Context) client.Response[models.Message] {
-	return applications.Addorganisationapplicationvirtualhost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.domain)
+// CreateApplicationDomain calls applications.CreateApplicationDomain
+func (b *v2OrganisationsIDApplicationsAppidVhostsDomainBuilderImpl) CreateApplicationDomain(ctx context.Context) client.Response[models.Message] {
+	return applications.CreateApplicationDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, b.domain)
 }
 
 // V2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder interface {
-	Removeorganisationapplicationfavouritevirtualhost(ctx context.Context) client.Response[client.Nothing]
-	Getorganisationapplicationfavouritevirtualhost(ctx context.Context) client.Response[models.VhostView]
-	Updateorganisationapplicationfavouritevirtualhost(ctx context.Context, request *models.VhostView) client.Response[models.VhostView]
+	UnsetApplicationPrimaryDomain(ctx context.Context) client.Response[client.Nothing]
+	GetApplicationPrimaryDomain(ctx context.Context) client.Response[models.VhostView]
+	SetApplicationPrimaryDomain(ctx context.Context, request *models.VhostView) client.Response[models.VhostView]
 }
 
 // v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl implements V2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder
@@ -2840,19 +2840,19 @@ func newV2OrganisationsIDApplicationsAppidVhostsFavouriteBuilder(sdk *sdkImpl, i
 	}
 }
 
-// Removeorganisationapplicationfavouritevirtualhost calls applications.Removeorganisationapplicationfavouritevirtualhost
-func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) Removeorganisationapplicationfavouritevirtualhost(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Removeorganisationapplicationfavouritevirtualhost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// UnsetApplicationPrimaryDomain calls applications.UnsetApplicationPrimaryDomain
+func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) UnsetApplicationPrimaryDomain(ctx context.Context) client.Response[client.Nothing] {
+	return applications.UnsetApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Getorganisationapplicationfavouritevirtualhost calls applications.Getorganisationapplicationfavouritevirtualhost
-func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) Getorganisationapplicationfavouritevirtualhost(ctx context.Context) client.Response[models.VhostView] {
-	return applications.Getorganisationapplicationfavouritevirtualhost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
+// GetApplicationPrimaryDomain calls applications.GetApplicationPrimaryDomain
+func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) GetApplicationPrimaryDomain(ctx context.Context) client.Response[models.VhostView] {
+	return applications.GetApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid)
 }
 
-// Updateorganisationapplicationfavouritevirtualhost calls applications.Updateorganisationapplicationfavouritevirtualhost
-func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) Updateorganisationapplicationfavouritevirtualhost(ctx context.Context, request *models.VhostView) client.Response[models.VhostView] {
-	return applications.Updateorganisationapplicationfavouritevirtualhost(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
+// SetApplicationPrimaryDomain calls applications.SetApplicationPrimaryDomain
+func (b *v2OrganisationsIDApplicationsAppidVhostsFavouriteBuilderImpl) SetApplicationPrimaryDomain(ctx context.Context, request *models.VhostView) client.Response[models.VhostView] {
+	return applications.SetApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appid, request)
 }
 
 // V2OrganisationsIDApplicationsAppIDBuilder provides access to operations
@@ -2909,7 +2909,7 @@ func (b *v2OrganisationsIDApplicationsAppIDGithubWebhookBuilderImpl) Secret() V2
 
 // V2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilder provides access to operations
 type V2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilder interface {
-	RotateOrgApplicationGithubWebhookSecret(ctx context.Context) client.Response[models.Message]
+	ResetApplicationGithubWebhookSecret(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilderImpl implements V2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilder
@@ -2928,14 +2928,14 @@ func newV2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilder(sdk *sdkImp
 	}
 }
 
-// RotateOrgApplicationGithubWebhookSecret calls applications.RotateOrgApplicationGithubWebhookSecret
-func (b *v2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilderImpl) RotateOrgApplicationGithubWebhookSecret(ctx context.Context) client.Response[models.Message] {
-	return applications.RotateOrgApplicationGithubWebhookSecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appID)
+// ResetApplicationGithubWebhookSecret calls applications.ResetApplicationGithubWebhookSecret
+func (b *v2OrganisationsIDApplicationsAppIDGithubWebhookSecretBuilderImpl) ResetApplicationGithubWebhookSecret(ctx context.Context) client.Response[models.Message] {
+	return applications.ResetApplicationGithubWebhookSecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.appID)
 }
 
 // V2OrganisationsIDAvatarBuilder provides access to operations
 type V2OrganisationsIDAvatarBuilder interface {
-	Updateorganisationavatar(ctx context.Context, request *models.WannabeAvatarSource) client.Response[models.UrlView]
+	UpdateOrganisationAvatar(ctx context.Context, request *models.WannabeAvatarSource) client.Response[models.UrlView]
 }
 
 // v2OrganisationsIDAvatarBuilderImpl implements V2OrganisationsIDAvatarBuilder
@@ -2952,16 +2952,16 @@ func newV2OrganisationsIDAvatarBuilder(sdk *sdkImpl, id string) V2OrganisationsI
 	}
 }
 
-// Updateorganisationavatar calls organisations.Updateorganisationavatar
-func (b *v2OrganisationsIDAvatarBuilderImpl) Updateorganisationavatar(ctx context.Context, request *models.WannabeAvatarSource) client.Response[models.UrlView] {
-	return organisations.Updateorganisationavatar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// UpdateOrganisationAvatar calls organisations.UpdateOrganisationAvatar
+func (b *v2OrganisationsIDAvatarBuilderImpl) UpdateOrganisationAvatar(ctx context.Context, request *models.WannabeAvatarSource) client.Response[models.UrlView] {
+	return organisations.UpdateOrganisationAvatar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDConsumersBuilder provides access to operations
 type V2OrganisationsIDConsumersBuilder interface {
 	Key(key string) V2OrganisationsIDConsumersKeyBuilder
-	Listorganisationconsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView]
-	Createorganisationconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
+	ListOauthConsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView]
+	CreateOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
 }
 
 // v2OrganisationsIDConsumersBuilderImpl implements V2OrganisationsIDConsumersBuilder
@@ -2983,22 +2983,22 @@ func (b *v2OrganisationsIDConsumersBuilderImpl) Key(key string) V2OrganisationsI
 	return newV2OrganisationsIDConsumersKeyBuilder(b.sdk, b.id, key)
 }
 
-// Listorganisationconsumers calls organisations.Listorganisationconsumers
-func (b *v2OrganisationsIDConsumersBuilderImpl) Listorganisationconsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView] {
-	return organisations.Listorganisationconsumers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListOauthConsumers calls organisations.ListOauthConsumers
+func (b *v2OrganisationsIDConsumersBuilderImpl) ListOauthConsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView] {
+	return organisations.ListOauthConsumers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Createorganisationconsumer calls organisations.Createorganisationconsumer
-func (b *v2OrganisationsIDConsumersBuilderImpl) Createorganisationconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
-	return organisations.Createorganisationconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// CreateOauthConsumer calls organisations.CreateOauthConsumer
+func (b *v2OrganisationsIDConsumersBuilderImpl) CreateOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
+	return organisations.CreateOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDConsumersKeyBuilder provides access to operations
 type V2OrganisationsIDConsumersKeyBuilder interface {
 	Secret() V2OrganisationsIDConsumersKeySecretBuilder
-	Deleteorganisationconsumer(ctx context.Context) client.Response[models.Message]
-	Getorganisationconsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView]
-	Updateorganisationconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
+	DeleteOauthConsumer(ctx context.Context) client.Response[models.Message]
+	GetOauthConsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView]
+	UpdateOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
 }
 
 // v2OrganisationsIDConsumersKeyBuilderImpl implements V2OrganisationsIDConsumersKeyBuilder
@@ -3022,24 +3022,24 @@ func (b *v2OrganisationsIDConsumersKeyBuilderImpl) Secret() V2OrganisationsIDCon
 	return newV2OrganisationsIDConsumersKeySecretBuilder(b.sdk, b.id, b.key)
 }
 
-// Deleteorganisationconsumer calls organisations.Deleteorganisationconsumer
-func (b *v2OrganisationsIDConsumersKeyBuilderImpl) Deleteorganisationconsumer(ctx context.Context) client.Response[models.Message] {
-	return organisations.Deleteorganisationconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
+// DeleteOauthConsumer calls organisations.DeleteOauthConsumer
+func (b *v2OrganisationsIDConsumersKeyBuilderImpl) DeleteOauthConsumer(ctx context.Context) client.Response[models.Message] {
+	return organisations.DeleteOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
 }
 
-// Getorganisationconsumer calls organisations.Getorganisationconsumer
-func (b *v2OrganisationsIDConsumersKeyBuilderImpl) Getorganisationconsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView] {
-	return organisations.Getorganisationconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
+// GetOauthConsumer calls organisations.GetOauthConsumer
+func (b *v2OrganisationsIDConsumersKeyBuilderImpl) GetOauthConsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView] {
+	return organisations.GetOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
 }
 
-// Updateorganisationconsumer calls organisations.Updateorganisationconsumer
-func (b *v2OrganisationsIDConsumersKeyBuilderImpl) Updateorganisationconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
-	return organisations.Updateorganisationconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key, request)
+// UpdateOauthConsumer calls organisations.UpdateOauthConsumer
+func (b *v2OrganisationsIDConsumersKeyBuilderImpl) UpdateOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
+	return organisations.UpdateOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key, request)
 }
 
 // V2OrganisationsIDConsumersKeySecretBuilder provides access to operations
 type V2OrganisationsIDConsumersKeySecretBuilder interface {
-	Getorganisationconsumersecret(ctx context.Context) client.Response[models.SecretView]
+	GetOauthConsumerSecret(ctx context.Context) client.Response[models.SecretView]
 }
 
 // v2OrganisationsIDConsumersKeySecretBuilderImpl implements V2OrganisationsIDConsumersKeySecretBuilder
@@ -3058,14 +3058,14 @@ func newV2OrganisationsIDConsumersKeySecretBuilder(sdk *sdkImpl, id string, key 
 	}
 }
 
-// Getorganisationconsumersecret calls organisations.Getorganisationconsumersecret
-func (b *v2OrganisationsIDConsumersKeySecretBuilderImpl) Getorganisationconsumersecret(ctx context.Context) client.Response[models.SecretView] {
-	return organisations.Getorganisationconsumersecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
+// GetOauthConsumerSecret calls organisations.GetOauthConsumerSecret
+func (b *v2OrganisationsIDConsumersKeySecretBuilderImpl) GetOauthConsumerSecret(ctx context.Context) client.Response[models.SecretView] {
+	return organisations.GetOauthConsumerSecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.key)
 }
 
 // V2OrganisationsIDDeploymentsBuilder provides access to operations
 type V2OrganisationsIDDeploymentsBuilder interface {
-	Listorganisationdeployments(ctx context.Context, opts ...organisations.Option) client.Response[any]
+	ListOrganisationDeployments(ctx context.Context, opts ...organisations.Option) client.Response[any]
 }
 
 // v2OrganisationsIDDeploymentsBuilderImpl implements V2OrganisationsIDDeploymentsBuilder
@@ -3082,14 +3082,14 @@ func newV2OrganisationsIDDeploymentsBuilder(sdk *sdkImpl, id string) V2Organisat
 	}
 }
 
-// Listorganisationdeployments calls organisations.Listorganisationdeployments
-func (b *v2OrganisationsIDDeploymentsBuilderImpl) Listorganisationdeployments(ctx context.Context, opts ...organisations.Option) client.Response[any] {
-	return organisations.Listorganisationdeployments(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
+// ListOrganisationDeployments calls organisations.ListOrganisationDeployments
+func (b *v2OrganisationsIDDeploymentsBuilderImpl) ListOrganisationDeployments(ctx context.Context, opts ...organisations.Option) client.Response[any] {
+	return organisations.ListOrganisationDeployments(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
 }
 
 // V2OrganisationsIDDrainPolicyBuilder provides access to operations
 type V2OrganisationsIDDrainPolicyBuilder interface {
-	Getorganisationdrainpolicy(ctx context.Context) client.Response[models.OrganisationDrainPolicyView]
+	GetOrganisationDrainPolicy(ctx context.Context) client.Response[models.OrganisationDrainPolicyView]
 }
 
 // v2OrganisationsIDDrainPolicyBuilderImpl implements V2OrganisationsIDDrainPolicyBuilder
@@ -3106,14 +3106,14 @@ func newV2OrganisationsIDDrainPolicyBuilder(sdk *sdkImpl, id string) V2Organisat
 	}
 }
 
-// Getorganisationdrainpolicy calls organisations.Getorganisationdrainpolicy
-func (b *v2OrganisationsIDDrainPolicyBuilderImpl) Getorganisationdrainpolicy(ctx context.Context) client.Response[models.OrganisationDrainPolicyView] {
-	return organisations.Getorganisationdrainpolicy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// GetOrganisationDrainPolicy calls organisations.GetOrganisationDrainPolicy
+func (b *v2OrganisationsIDDrainPolicyBuilderImpl) GetOrganisationDrainPolicy(ctx context.Context) client.Response[models.OrganisationDrainPolicyView] {
+	return organisations.GetOrganisationDrainPolicy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V2OrganisationsIDInstancesBuilder provides access to operations
 type V2OrganisationsIDInstancesBuilder interface {
-	Listorganisationinstances(ctx context.Context) client.Response[any]
+	ListOrganisationInstances(ctx context.Context) client.Response[any]
 }
 
 // v2OrganisationsIDInstancesBuilderImpl implements V2OrganisationsIDInstancesBuilder
@@ -3130,17 +3130,17 @@ func newV2OrganisationsIDInstancesBuilder(sdk *sdkImpl, id string) V2Organisatio
 	}
 }
 
-// Listorganisationinstances calls instances.Listorganisationinstances
-func (b *v2OrganisationsIDInstancesBuilderImpl) Listorganisationinstances(ctx context.Context) client.Response[any] {
-	return instances.Listorganisationinstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListOrganisationInstances calls instances.ListOrganisationInstances
+func (b *v2OrganisationsIDInstancesBuilderImpl) ListOrganisationInstances(ctx context.Context) client.Response[any] {
+	return instances.ListOrganisationInstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V2OrganisationsIDMembersBuilder provides access to operations
 type V2OrganisationsIDMembersBuilder interface {
 	Userid(userid string) V2OrganisationsIDMembersUseridBuilder
 	Invitations() V2OrganisationsIDMembersInvitationsBuilder
-	Listorganisationmembers(ctx context.Context) client.Response[[]models.MemberView]
-	Addorganisationmember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message]
+	ListOrganisationMembers(ctx context.Context) client.Response[[]models.MemberView]
+	AddOrganisationMember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message]
 }
 
 // v2OrganisationsIDMembersBuilderImpl implements V2OrganisationsIDMembersBuilder
@@ -3167,20 +3167,20 @@ func (b *v2OrganisationsIDMembersBuilderImpl) Invitations() V2OrganisationsIDMem
 	return newV2OrganisationsIDMembersInvitationsBuilder(b.sdk, b.id)
 }
 
-// Listorganisationmembers calls organisations.Listorganisationmembers
-func (b *v2OrganisationsIDMembersBuilderImpl) Listorganisationmembers(ctx context.Context) client.Response[[]models.MemberView] {
-	return organisations.Listorganisationmembers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListOrganisationMembers calls organisations.ListOrganisationMembers
+func (b *v2OrganisationsIDMembersBuilderImpl) ListOrganisationMembers(ctx context.Context) client.Response[[]models.MemberView] {
+	return organisations.ListOrganisationMembers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
-// Addorganisationmember calls organisations.Addorganisationmember
-func (b *v2OrganisationsIDMembersBuilderImpl) Addorganisationmember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message] {
-	return organisations.Addorganisationmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request, opts...)
+// AddOrganisationMember calls organisations.AddOrganisationMember
+func (b *v2OrganisationsIDMembersBuilderImpl) AddOrganisationMember(ctx context.Context, request *models.WannabeMember, opts ...organisations.Option) client.Response[models.Message] {
+	return organisations.AddOrganisationMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request, opts...)
 }
 
 // V2OrganisationsIDMembersUseridBuilder provides access to operations
 type V2OrganisationsIDMembersUseridBuilder interface {
-	Removeorganisationmember(ctx context.Context) client.Response[models.Message]
-	Updateorganisationmember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message]
+	RemoveOrganisationMember(ctx context.Context) client.Response[models.Message]
+	UpdateOrganisationMember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message]
 }
 
 // v2OrganisationsIDMembersUseridBuilderImpl implements V2OrganisationsIDMembersUseridBuilder
@@ -3199,20 +3199,20 @@ func newV2OrganisationsIDMembersUseridBuilder(sdk *sdkImpl, id string, userid st
 	}
 }
 
-// Removeorganisationmember calls organisations.Removeorganisationmember
-func (b *v2OrganisationsIDMembersUseridBuilderImpl) Removeorganisationmember(ctx context.Context) client.Response[models.Message] {
-	return organisations.Removeorganisationmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid)
+// RemoveOrganisationMember calls organisations.RemoveOrganisationMember
+func (b *v2OrganisationsIDMembersUseridBuilderImpl) RemoveOrganisationMember(ctx context.Context) client.Response[models.Message] {
+	return organisations.RemoveOrganisationMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid)
 }
 
-// Updateorganisationmember calls organisations.Updateorganisationmember
-func (b *v2OrganisationsIDMembersUseridBuilderImpl) Updateorganisationmember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message] {
-	return organisations.Updateorganisationmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid, request)
+// UpdateOrganisationMember calls organisations.UpdateOrganisationMember
+func (b *v2OrganisationsIDMembersUseridBuilderImpl) UpdateOrganisationMember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message] {
+	return organisations.UpdateOrganisationMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid, request)
 }
 
 // V2OrganisationsIDMembersInvitationsBuilder provides access to operations
 type V2OrganisationsIDMembersInvitationsBuilder interface {
 	Invitationid(invitationid string) V2OrganisationsIDMembersInvitationsInvitationidBuilder
-	Listorganisationinvitations(ctx context.Context) client.Response[[]models.InvitationView]
+	ListOrganisationInvitations(ctx context.Context) client.Response[[]models.InvitationView]
 }
 
 // v2OrganisationsIDMembersInvitationsBuilderImpl implements V2OrganisationsIDMembersInvitationsBuilder
@@ -3234,14 +3234,14 @@ func (b *v2OrganisationsIDMembersInvitationsBuilderImpl) Invitationid(invitation
 	return newV2OrganisationsIDMembersInvitationsInvitationidBuilder(b.sdk, b.id, invitationid)
 }
 
-// Listorganisationinvitations calls organisations.Listorganisationinvitations
-func (b *v2OrganisationsIDMembersInvitationsBuilderImpl) Listorganisationinvitations(ctx context.Context) client.Response[[]models.InvitationView] {
-	return organisations.Listorganisationinvitations(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListOrganisationInvitations calls organisations.ListOrganisationInvitations
+func (b *v2OrganisationsIDMembersInvitationsBuilderImpl) ListOrganisationInvitations(ctx context.Context) client.Response[[]models.InvitationView] {
+	return organisations.ListOrganisationInvitations(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V2OrganisationsIDMembersInvitationsInvitationidBuilder provides access to operations
 type V2OrganisationsIDMembersInvitationsInvitationidBuilder interface {
-	Cancelorganisationinvitation(ctx context.Context) client.Response[models.Message]
+	CancelOrganisationInvitation(ctx context.Context) client.Response[models.Message]
 }
 
 // v2OrganisationsIDMembersInvitationsInvitationidBuilderImpl implements V2OrganisationsIDMembersInvitationsInvitationidBuilder
@@ -3260,14 +3260,14 @@ func newV2OrganisationsIDMembersInvitationsInvitationidBuilder(sdk *sdkImpl, id 
 	}
 }
 
-// Cancelorganisationinvitation calls organisations.Cancelorganisationinvitation
-func (b *v2OrganisationsIDMembersInvitationsInvitationidBuilderImpl) Cancelorganisationinvitation(ctx context.Context) client.Response[models.Message] {
-	return organisations.Cancelorganisationinvitation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.invitationid)
+// CancelOrganisationInvitation calls organisations.CancelOrganisationInvitation
+func (b *v2OrganisationsIDMembersInvitationsInvitationidBuilderImpl) CancelOrganisationInvitation(ctx context.Context) client.Response[models.Message] {
+	return organisations.CancelOrganisationInvitation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.invitationid)
 }
 
 // V2OrganisationsIDNamespacesBuilder provides access to operations
 type V2OrganisationsIDNamespacesBuilder interface {
-	Listorganisationnamespaces(ctx context.Context) client.Response[[]models.NamespaceView]
+	ListTcpRedirectionNamespaces(ctx context.Context) client.Response[[]models.NamespaceView]
 }
 
 // v2OrganisationsIDNamespacesBuilderImpl implements V2OrganisationsIDNamespacesBuilder
@@ -3284,14 +3284,14 @@ func newV2OrganisationsIDNamespacesBuilder(sdk *sdkImpl, id string) V2Organisati
 	}
 }
 
-// Listorganisationnamespaces calls organisations.Listorganisationnamespaces
-func (b *v2OrganisationsIDNamespacesBuilderImpl) Listorganisationnamespaces(ctx context.Context) client.Response[[]models.NamespaceView] {
-	return organisations.Listorganisationnamespaces(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListTcpRedirectionNamespaces calls organisations.ListTcpRedirectionNamespaces
+func (b *v2OrganisationsIDNamespacesBuilderImpl) ListTcpRedirectionNamespaces(ctx context.Context) client.Response[[]models.NamespaceView] {
+	return organisations.ListTcpRedirectionNamespaces(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V2OrganisationsIDPaymentInfoBuilder provides access to operations
 type V2OrganisationsIDPaymentInfoBuilder interface {
-	Getorganisationpaymentinfo(ctx context.Context) client.Response[models.PaymentInfoView]
+	GetOrganisationPaymentInfo(ctx context.Context) client.Response[models.PaymentInfoView]
 }
 
 // v2OrganisationsIDPaymentInfoBuilderImpl implements V2OrganisationsIDPaymentInfoBuilder
@@ -3308,16 +3308,16 @@ func newV2OrganisationsIDPaymentInfoBuilder(sdk *sdkImpl, id string) V2Organisat
 	}
 }
 
-// Getorganisationpaymentinfo calls payments.Getorganisationpaymentinfo
-func (b *v2OrganisationsIDPaymentInfoBuilderImpl) Getorganisationpaymentinfo(ctx context.Context) client.Response[models.PaymentInfoView] {
-	return payments.Getorganisationpaymentinfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// GetOrganisationPaymentInfo calls payments.GetOrganisationPaymentInfo
+func (b *v2OrganisationsIDPaymentInfoBuilderImpl) GetOrganisationPaymentInfo(ctx context.Context) client.Response[models.PaymentInfoView] {
+	return payments.GetOrganisationPaymentInfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V2OrganisationsIDServiceTokensBuilder provides access to operations
 type V2OrganisationsIDServiceTokensBuilder interface {
 	Tokenid(tokenid string) V2OrganisationsIDServiceTokensTokenidBuilder
-	Listservicetokens(ctx context.Context, opts ...organisations.Option) client.Response[models.ListresponseServicetoken]
-	Createservicetoken(ctx context.Context, request *models.WannabeServiceToken) client.Response[models.CreatedServiceToken]
+	ListServiceTokens(ctx context.Context, opts ...organisations.Option) client.Response[models.ListresponseServicetoken]
+	CreateServiceToken(ctx context.Context, request *models.WannabeServiceToken) client.Response[models.CreatedServiceToken]
 }
 
 // v2OrganisationsIDServiceTokensBuilderImpl implements V2OrganisationsIDServiceTokensBuilder
@@ -3339,20 +3339,20 @@ func (b *v2OrganisationsIDServiceTokensBuilderImpl) Tokenid(tokenid string) V2Or
 	return newV2OrganisationsIDServiceTokensTokenidBuilder(b.sdk, b.id, tokenid)
 }
 
-// Listservicetokens calls organisations.Listservicetokens
-func (b *v2OrganisationsIDServiceTokensBuilderImpl) Listservicetokens(ctx context.Context, opts ...organisations.Option) client.Response[models.ListresponseServicetoken] {
-	return organisations.Listservicetokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
+// ListServiceTokens calls organisations.ListServiceTokens
+func (b *v2OrganisationsIDServiceTokensBuilderImpl) ListServiceTokens(ctx context.Context, opts ...organisations.Option) client.Response[models.ListresponseServicetoken] {
+	return organisations.ListServiceTokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, opts...)
 }
 
-// Createservicetoken calls organisations.Createservicetoken
-func (b *v2OrganisationsIDServiceTokensBuilderImpl) Createservicetoken(ctx context.Context, request *models.WannabeServiceToken) client.Response[models.CreatedServiceToken] {
-	return organisations.Createservicetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+// CreateServiceToken calls organisations.CreateServiceToken
+func (b *v2OrganisationsIDServiceTokensBuilderImpl) CreateServiceToken(ctx context.Context, request *models.WannabeServiceToken) client.Response[models.CreatedServiceToken] {
+	return organisations.CreateServiceToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
 }
 
 // V2OrganisationsIDServiceTokensTokenidBuilder provides access to operations
 type V2OrganisationsIDServiceTokensTokenidBuilder interface {
-	Deleteservicetoken(ctx context.Context) client.Response[client.Nothing]
-	Getservicetoken(ctx context.Context) client.Response[models.ServiceToken]
+	DeleteServiceToken(ctx context.Context) client.Response[client.Nothing]
+	GetServiceToken(ctx context.Context) client.Response[models.ServiceToken]
 }
 
 // v2OrganisationsIDServiceTokensTokenidBuilderImpl implements V2OrganisationsIDServiceTokensTokenidBuilder
@@ -3371,14 +3371,14 @@ func newV2OrganisationsIDServiceTokensTokenidBuilder(sdk *sdkImpl, id string, to
 	}
 }
 
-// Deleteservicetoken calls organisations.Deleteservicetoken
-func (b *v2OrganisationsIDServiceTokensTokenidBuilderImpl) Deleteservicetoken(ctx context.Context) client.Response[client.Nothing] {
-	return organisations.Deleteservicetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.tokenid)
+// DeleteServiceToken calls organisations.DeleteServiceToken
+func (b *v2OrganisationsIDServiceTokensTokenidBuilderImpl) DeleteServiceToken(ctx context.Context) client.Response[client.Nothing] {
+	return organisations.DeleteServiceToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.tokenid)
 }
 
-// Getservicetoken calls organisations.Getservicetoken
-func (b *v2OrganisationsIDServiceTokensTokenidBuilderImpl) Getservicetoken(ctx context.Context) client.Response[models.ServiceToken] {
-	return organisations.Getservicetoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.tokenid)
+// GetServiceToken calls organisations.GetServiceToken
+func (b *v2OrganisationsIDServiceTokensTokenidBuilderImpl) GetServiceToken(ctx context.Context) client.Response[models.ServiceToken] {
+	return organisations.GetServiceToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.tokenid)
 }
 
 // V2ProductsBuilder provides access to operations
@@ -3416,7 +3416,7 @@ func (b *v2ProductsBuilderImpl) Instances() V2ProductsInstancesBuilder {
 // V2ProductsAddonprovidersBuilder provides access to operations
 type V2ProductsAddonprovidersBuilder interface {
 	ProviderID(providerID string) V2ProductsAddonprovidersProviderIDBuilder
-	Getaddonproviders(ctx context.Context, opts ...products.Option) client.Response[[]models.AddonProviderInfoFullView]
+	ListProductAddons(ctx context.Context, opts ...products.Option) client.Response[[]models.AddonProviderInfoFullView]
 }
 
 // v2ProductsAddonprovidersBuilderImpl implements V2ProductsAddonprovidersBuilder
@@ -3434,16 +3434,16 @@ func (b *v2ProductsAddonprovidersBuilderImpl) ProviderID(providerID string) V2Pr
 	return newV2ProductsAddonprovidersProviderIDBuilder(b.sdk, providerID)
 }
 
-// Getaddonproviders calls products.Getaddonproviders
-func (b *v2ProductsAddonprovidersBuilderImpl) Getaddonproviders(ctx context.Context, opts ...products.Option) client.Response[[]models.AddonProviderInfoFullView] {
-	return products.Getaddonproviders(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ListProductAddons calls products.ListProductAddons
+func (b *v2ProductsAddonprovidersBuilderImpl) ListProductAddons(ctx context.Context, opts ...products.Option) client.Response[[]models.AddonProviderInfoFullView] {
+	return products.ListProductAddons(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2ProductsAddonprovidersProviderIDBuilder provides access to operations
 type V2ProductsAddonprovidersProviderIDBuilder interface {
 	Informations() V2ProductsAddonprovidersProviderIDInformationsBuilder
 	Versions() V2ProductsAddonprovidersProviderIDVersionsBuilder
-	Getaddonprovider(ctx context.Context, opts ...products.Option) client.Response[models.AddonProviderInfoFullView]
+	GetProductAddon(ctx context.Context, opts ...products.Option) client.Response[models.AddonProviderInfoFullView]
 }
 
 // v2ProductsAddonprovidersProviderIDBuilderImpl implements V2ProductsAddonprovidersProviderIDBuilder
@@ -3470,14 +3470,14 @@ func (b *v2ProductsAddonprovidersProviderIDBuilderImpl) Versions() V2ProductsAdd
 	return newV2ProductsAddonprovidersProviderIDVersionsBuilder(b.sdk, b.providerID)
 }
 
-// Getaddonprovider calls products.Getaddonprovider
-func (b *v2ProductsAddonprovidersProviderIDBuilderImpl) Getaddonprovider(ctx context.Context, opts ...products.Option) client.Response[models.AddonProviderInfoFullView] {
-	return products.Getaddonprovider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID, opts...)
+// GetProductAddon calls products.GetProductAddon
+func (b *v2ProductsAddonprovidersProviderIDBuilderImpl) GetProductAddon(ctx context.Context, opts ...products.Option) client.Response[models.AddonProviderInfoFullView] {
+	return products.GetProductAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID, opts...)
 }
 
 // V2ProductsAddonprovidersProviderIDInformationsBuilder provides access to operations
 type V2ProductsAddonprovidersProviderIDInformationsBuilder interface {
-	Getaddonproviderinfos(ctx context.Context) client.Response[models.AddonProviderConsoleInfos]
+	GetProductAddonInformation(ctx context.Context) client.Response[models.AddonProviderConsoleInfos]
 }
 
 // v2ProductsAddonprovidersProviderIDInformationsBuilderImpl implements V2ProductsAddonprovidersProviderIDInformationsBuilder
@@ -3494,14 +3494,14 @@ func newV2ProductsAddonprovidersProviderIDInformationsBuilder(sdk *sdkImpl, prov
 	}
 }
 
-// Getaddonproviderinfos calls products.Getaddonproviderinfos
-func (b *v2ProductsAddonprovidersProviderIDInformationsBuilderImpl) Getaddonproviderinfos(ctx context.Context) client.Response[models.AddonProviderConsoleInfos] {
-	return products.Getaddonproviderinfos(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID)
+// GetProductAddonInformation calls products.GetProductAddonInformation
+func (b *v2ProductsAddonprovidersProviderIDInformationsBuilderImpl) GetProductAddonInformation(ctx context.Context) client.Response[models.AddonProviderConsoleInfos] {
+	return products.GetProductAddonInformation(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID)
 }
 
 // V2ProductsAddonprovidersProviderIDVersionsBuilder provides access to operations
 type V2ProductsAddonprovidersProviderIDVersionsBuilder interface {
-	Getaddonproviderversions(ctx context.Context) client.Response[models.AddonProviderConsoleVersions]
+	ListProductAddonVersions(ctx context.Context) client.Response[models.AddonProviderConsoleVersions]
 }
 
 // v2ProductsAddonprovidersProviderIDVersionsBuilderImpl implements V2ProductsAddonprovidersProviderIDVersionsBuilder
@@ -3518,14 +3518,14 @@ func newV2ProductsAddonprovidersProviderIDVersionsBuilder(sdk *sdkImpl, provider
 	}
 }
 
-// Getaddonproviderversions calls products.Getaddonproviderversions
-func (b *v2ProductsAddonprovidersProviderIDVersionsBuilderImpl) Getaddonproviderversions(ctx context.Context) client.Response[models.AddonProviderConsoleVersions] {
-	return products.Getaddonproviderversions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID)
+// ListProductAddonVersions calls products.ListProductAddonVersions
+func (b *v2ProductsAddonprovidersProviderIDVersionsBuilderImpl) ListProductAddonVersions(ctx context.Context) client.Response[models.AddonProviderConsoleVersions] {
+	return products.ListProductAddonVersions(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID)
 }
 
 // V2ProductsFlavorsBuilder provides access to operations
 type V2ProductsFlavorsBuilder interface {
-	Getflavors(ctx context.Context, opts ...products.Option) client.Response[[]models.Flavor]
+	ListProductFlavors(ctx context.Context, opts ...products.Option) client.Response[[]models.Flavor]
 }
 
 // v2ProductsFlavorsBuilderImpl implements V2ProductsFlavorsBuilder
@@ -3538,14 +3538,14 @@ func newV2ProductsFlavorsBuilder(sdk *sdkImpl) V2ProductsFlavorsBuilder {
 	return &v2ProductsFlavorsBuilderImpl{sdk: sdk}
 }
 
-// Getflavors calls products.Getflavors
-func (b *v2ProductsFlavorsBuilderImpl) Getflavors(ctx context.Context, opts ...products.Option) client.Response[[]models.Flavor] {
-	return products.Getflavors(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ListProductFlavors calls products.ListProductFlavors
+func (b *v2ProductsFlavorsBuilderImpl) ListProductFlavors(ctx context.Context, opts ...products.Option) client.Response[[]models.Flavor] {
+	return products.ListProductFlavors(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2ProductsInstancesBuilder provides access to operations
 type V2ProductsInstancesBuilder interface {
-	Getavailableinstances(ctx context.Context, opts ...products.Option) client.Response[[]models.AvailableInstanceView]
+	ListProductRuntimes(ctx context.Context, opts ...products.Option) client.Response[[]models.AvailableInstanceView]
 }
 
 // v2ProductsInstancesBuilderImpl implements V2ProductsInstancesBuilder
@@ -3558,9 +3558,9 @@ func newV2ProductsInstancesBuilder(sdk *sdkImpl) V2ProductsInstancesBuilder {
 	return &v2ProductsInstancesBuilderImpl{sdk: sdk}
 }
 
-// Getavailableinstances calls products.Getavailableinstances
-func (b *v2ProductsInstancesBuilderImpl) Getavailableinstances(ctx context.Context, opts ...products.Option) client.Response[[]models.AvailableInstanceView] {
-	return products.Getavailableinstances(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ListProductRuntimes calls products.ListProductRuntimes
+func (b *v2ProductsInstancesBuilderImpl) ListProductRuntimes(ctx context.Context, opts ...products.Option) client.Response[[]models.AvailableInstanceView] {
+	return products.ListProductRuntimes(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2ProvidersBuilder provides access to operations
@@ -3636,7 +3636,7 @@ func (b *v2ProvidersEsAddonBuilderImpl) Resources() V2ProvidersEsAddonResourcesB
 // V2ProvidersEsAddonApmServerSetupBuilder provides access to operations
 type V2ProvidersEsAddonApmServerSetupBuilder interface {
 	Version(version string) V2ProvidersEsAddonApmServerSetupVersionBuilder
-	Getelasticsearchapmserversetupforversion7(ctx context.Context) client.Response[client.PlainTextString]
+	GetElasticsearchApmServerSetupForVersion7(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v2ProvidersEsAddonApmServerSetupBuilderImpl implements V2ProvidersEsAddonApmServerSetupBuilder
@@ -3654,14 +3654,14 @@ func (b *v2ProvidersEsAddonApmServerSetupBuilderImpl) Version(version string) V2
 	return newV2ProvidersEsAddonApmServerSetupVersionBuilder(b.sdk, version)
 }
 
-// Getelasticsearchapmserversetupforversion7 calls es_addon.Getelasticsearchapmserversetupforversion7
-func (b *v2ProvidersEsAddonApmServerSetupBuilderImpl) Getelasticsearchapmserversetupforversion7(ctx context.Context) client.Response[client.PlainTextString] {
-	return esaddon.Getelasticsearchapmserversetupforversion7(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetElasticsearchApmServerSetupForVersion7 calls es_addon.GetElasticsearchApmServerSetupForVersion7
+func (b *v2ProvidersEsAddonApmServerSetupBuilderImpl) GetElasticsearchApmServerSetupForVersion7(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.GetElasticsearchApmServerSetupForVersion7(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersEsAddonApmServerSetupVersionBuilder provides access to operations
 type V2ProvidersEsAddonApmServerSetupVersionBuilder interface {
-	Getelasticsearchapmserversetup(ctx context.Context) client.Response[client.PlainTextString]
+	GetElasticsearchApmServerSetup(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v2ProvidersEsAddonApmServerSetupVersionBuilderImpl implements V2ProvidersEsAddonApmServerSetupVersionBuilder
@@ -3678,15 +3678,15 @@ func newV2ProvidersEsAddonApmServerSetupVersionBuilder(sdk *sdkImpl, version str
 	}
 }
 
-// Getelasticsearchapmserversetup calls es_addon.Getelasticsearchapmserversetup
-func (b *v2ProvidersEsAddonApmServerSetupVersionBuilderImpl) Getelasticsearchapmserversetup(ctx context.Context) client.Response[client.PlainTextString] {
-	return esaddon.Getelasticsearchapmserversetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+// GetElasticsearchApmServerSetup calls es_addon.GetElasticsearchApmServerSetup
+func (b *v2ProvidersEsAddonApmServerSetupVersionBuilderImpl) GetElasticsearchApmServerSetup(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.GetElasticsearchApmServerSetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
 }
 
 // V2ProvidersEsAddonKibanaSetupBuilder provides access to operations
 type V2ProvidersEsAddonKibanaSetupBuilder interface {
 	Version(version string) V2ProvidersEsAddonKibanaSetupVersionBuilder
-	Getelasticsearchkibanasetupforversion7(ctx context.Context) client.Response[client.PlainTextString]
+	GetElasticsearchKibanaSetupForVersion7(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v2ProvidersEsAddonKibanaSetupBuilderImpl implements V2ProvidersEsAddonKibanaSetupBuilder
@@ -3704,14 +3704,14 @@ func (b *v2ProvidersEsAddonKibanaSetupBuilderImpl) Version(version string) V2Pro
 	return newV2ProvidersEsAddonKibanaSetupVersionBuilder(b.sdk, version)
 }
 
-// Getelasticsearchkibanasetupforversion7 calls es_addon.Getelasticsearchkibanasetupforversion7
-func (b *v2ProvidersEsAddonKibanaSetupBuilderImpl) Getelasticsearchkibanasetupforversion7(ctx context.Context) client.Response[client.PlainTextString] {
-	return esaddon.Getelasticsearchkibanasetupforversion7(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetElasticsearchKibanaSetupForVersion7 calls es_addon.GetElasticsearchKibanaSetupForVersion7
+func (b *v2ProvidersEsAddonKibanaSetupBuilderImpl) GetElasticsearchKibanaSetupForVersion7(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.GetElasticsearchKibanaSetupForVersion7(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersEsAddonKibanaSetupVersionBuilder provides access to operations
 type V2ProvidersEsAddonKibanaSetupVersionBuilder interface {
-	Getelasticsearchkibanasetup(ctx context.Context) client.Response[client.PlainTextString]
+	GetElasticsearchKibanaSetup(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v2ProvidersEsAddonKibanaSetupVersionBuilderImpl implements V2ProvidersEsAddonKibanaSetupVersionBuilder
@@ -3728,9 +3728,9 @@ func newV2ProvidersEsAddonKibanaSetupVersionBuilder(sdk *sdkImpl, version string
 	}
 }
 
-// Getelasticsearchkibanasetup calls es_addon.Getelasticsearchkibanasetup
-func (b *v2ProvidersEsAddonKibanaSetupVersionBuilderImpl) Getelasticsearchkibanasetup(ctx context.Context) client.Response[client.PlainTextString] {
-	return esaddon.Getelasticsearchkibanasetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
+// GetElasticsearchKibanaSetup calls es_addon.GetElasticsearchKibanaSetup
+func (b *v2ProvidersEsAddonKibanaSetupVersionBuilderImpl) GetElasticsearchKibanaSetup(ctx context.Context) client.Response[client.PlainTextString] {
+	return esaddon.GetElasticsearchKibanaSetup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.version)
 }
 
 // V2ProvidersEsAddonResourcesBuilder provides access to operations
@@ -3761,7 +3761,7 @@ func (b *v2ProvidersEsAddonResourcesBuilderImpl) Versions() V2ProvidersEsAddonRe
 
 // V2ProvidersEsAddonResourcesProviderinfosBuilder provides access to operations
 type V2ProvidersEsAddonResourcesProviderinfosBuilder interface {
-	Getelasticsearchproviderinformationv2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2]
+	GetElasticsearchProviderInformationV2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2]
 }
 
 // v2ProvidersEsAddonResourcesProviderinfosBuilderImpl implements V2ProvidersEsAddonResourcesProviderinfosBuilder
@@ -3774,14 +3774,14 @@ func newV2ProvidersEsAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2Provider
 	return &v2ProvidersEsAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
 }
 
-// Getelasticsearchproviderinformationv2 calls es_addon.Getelasticsearchproviderinformationv2
-func (b *v2ProvidersEsAddonResourcesProviderinfosBuilderImpl) Getelasticsearchproviderinformationv2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2] {
-	return esaddon.Getelasticsearchproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetElasticsearchProviderInformationV2 calls es_addon.GetElasticsearchProviderInformationV2
+func (b *v2ProvidersEsAddonResourcesProviderinfosBuilderImpl) GetElasticsearchProviderInformationV2(ctx context.Context) client.Response[models.ElasticsearchProvidersConsoleV2] {
+	return esaddon.GetElasticsearchProviderInformationV2(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersEsAddonResourcesVersionsBuilder provides access to operations
 type V2ProvidersEsAddonResourcesVersionsBuilder interface {
-	Getelasticsearchaddonversions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole]
+	ListElasticsearchVersions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole]
 }
 
 // v2ProvidersEsAddonResourcesVersionsBuilderImpl implements V2ProvidersEsAddonResourcesVersionsBuilder
@@ -3794,9 +3794,9 @@ func newV2ProvidersEsAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersEsAd
 	return &v2ProvidersEsAddonResourcesVersionsBuilderImpl{sdk: sdk}
 }
 
-// Getelasticsearchaddonversions calls es_addon.Getelasticsearchaddonversions
-func (b *v2ProvidersEsAddonResourcesVersionsBuilderImpl) Getelasticsearchaddonversions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole] {
-	return esaddon.Getelasticsearchaddonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListElasticsearchVersions calls es_addon.ListElasticsearchVersions
+func (b *v2ProvidersEsAddonResourcesVersionsBuilderImpl) ListElasticsearchVersions(ctx context.Context) client.Response[models.ElasticsearchVersionsConsole] {
+	return esaddon.ListElasticsearchVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersMysqlAddonBuilder provides access to operations
@@ -3847,7 +3847,7 @@ func (b *v2ProvidersMysqlAddonResourcesBuilderImpl) Versions() V2ProvidersMysqlA
 
 // V2ProvidersMysqlAddonResourcesProviderinfosBuilder provides access to operations
 type V2ProvidersMysqlAddonResourcesProviderinfosBuilder interface {
-	Getmysqlproviderinformationv2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2]
+	GetMysqlProviderInformationV2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2]
 }
 
 // v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl implements V2ProvidersMysqlAddonResourcesProviderinfosBuilder
@@ -3860,14 +3860,14 @@ func newV2ProvidersMysqlAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2Provi
 	return &v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
 }
 
-// Getmysqlproviderinformationv2 calls my_sql_addon.Getmysqlproviderinformationv2
-func (b *v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl) Getmysqlproviderinformationv2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2] {
-	return mysqladdon.Getmysqlproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetMysqlProviderInformationV2 calls my_sql_addon.GetMysqlProviderInformationV2
+func (b *v2ProvidersMysqlAddonResourcesProviderinfosBuilderImpl) GetMysqlProviderInformationV2(ctx context.Context) client.Response[models.MysqlProvidersConsoleV2] {
+	return mysqladdon.GetMysqlProviderInformationV2(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersMysqlAddonResourcesVersionsBuilder provides access to operations
 type V2ProvidersMysqlAddonResourcesVersionsBuilder interface {
-	Getmysqladdonversions(ctx context.Context) client.Response[models.MysqlVersionsConsole]
+	ListMysqlVersions(ctx context.Context) client.Response[models.MysqlVersionsConsole]
 }
 
 // v2ProvidersMysqlAddonResourcesVersionsBuilderImpl implements V2ProvidersMysqlAddonResourcesVersionsBuilder
@@ -3880,9 +3880,9 @@ func newV2ProvidersMysqlAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersM
 	return &v2ProvidersMysqlAddonResourcesVersionsBuilderImpl{sdk: sdk}
 }
 
-// Getmysqladdonversions calls my_sql_addon.Getmysqladdonversions
-func (b *v2ProvidersMysqlAddonResourcesVersionsBuilderImpl) Getmysqladdonversions(ctx context.Context) client.Response[models.MysqlVersionsConsole] {
-	return mysqladdon.Getmysqladdonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListMysqlVersions calls my_sql_addon.ListMysqlVersions
+func (b *v2ProvidersMysqlAddonResourcesVersionsBuilderImpl) ListMysqlVersions(ctx context.Context) client.Response[models.MysqlVersionsConsole] {
+	return mysqladdon.ListMysqlVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersPostgresqlAddonBuilder provides access to operations
@@ -3933,7 +3933,7 @@ func (b *v2ProvidersPostgresqlAddonResourcesBuilderImpl) Versions() V2ProvidersP
 
 // V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder provides access to operations
 type V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder interface {
-	Getpostgresqlproviderinformationv2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2]
+	GetPostgresqlProviderInformationV2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2]
 }
 
 // v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl implements V2ProvidersPostgresqlAddonResourcesProviderinfosBuilder
@@ -3946,14 +3946,14 @@ func newV2ProvidersPostgresqlAddonResourcesProviderinfosBuilder(sdk *sdkImpl) V2
 	return &v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl{sdk: sdk}
 }
 
-// Getpostgresqlproviderinformationv2 calls postgresql_addon.Getpostgresqlproviderinformationv2
-func (b *v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl) Getpostgresqlproviderinformationv2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2] {
-	return postgresqladdon.Getpostgresqlproviderinformationv2(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetPostgresqlProviderInformationV2 calls postgresql_addon.GetPostgresqlProviderInformationV2
+func (b *v2ProvidersPostgresqlAddonResourcesProviderinfosBuilderImpl) GetPostgresqlProviderInformationV2(ctx context.Context) client.Response[models.PostgresqlProvidersConsoleViewV2] {
+	return postgresqladdon.GetPostgresqlProviderInformationV2(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersPostgresqlAddonResourcesVersionsBuilder provides access to operations
 type V2ProvidersPostgresqlAddonResourcesVersionsBuilder interface {
-	Getpostgresqladdonversions(ctx context.Context) client.Response[models.PostgresqlVersionsView]
+	ListPostgresqlVersions(ctx context.Context) client.Response[models.PostgresqlVersionsView]
 }
 
 // v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl implements V2ProvidersPostgresqlAddonResourcesVersionsBuilder
@@ -3966,9 +3966,9 @@ func newV2ProvidersPostgresqlAddonResourcesVersionsBuilder(sdk *sdkImpl) V2Provi
 	return &v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl{sdk: sdk}
 }
 
-// Getpostgresqladdonversions calls postgresql_addon.Getpostgresqladdonversions
-func (b *v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl) Getpostgresqladdonversions(ctx context.Context) client.Response[models.PostgresqlVersionsView] {
-	return postgresqladdon.Getpostgresqladdonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListPostgresqlVersions calls postgresql_addon.ListPostgresqlVersions
+func (b *v2ProvidersPostgresqlAddonResourcesVersionsBuilderImpl) ListPostgresqlVersions(ctx context.Context) client.Response[models.PostgresqlVersionsView] {
+	return postgresqladdon.ListPostgresqlVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2ProvidersRedisAddonBuilder provides access to operations
@@ -4013,7 +4013,7 @@ func (b *v2ProvidersRedisAddonResourcesBuilderImpl) Versions() V2ProvidersRedisA
 
 // V2ProvidersRedisAddonResourcesVersionsBuilder provides access to operations
 type V2ProvidersRedisAddonResourcesVersionsBuilder interface {
-	Getredisaddonversions(ctx context.Context) client.Response[models.RedisVersions]
+	ListRedisVersions(ctx context.Context) client.Response[models.RedisVersions]
 }
 
 // v2ProvidersRedisAddonResourcesVersionsBuilderImpl implements V2ProvidersRedisAddonResourcesVersionsBuilder
@@ -4026,9 +4026,9 @@ func newV2ProvidersRedisAddonResourcesVersionsBuilder(sdk *sdkImpl) V2ProvidersR
 	return &v2ProvidersRedisAddonResourcesVersionsBuilderImpl{sdk: sdk}
 }
 
-// Getredisaddonversions calls redis_addon.Getredisaddonversions
-func (b *v2ProvidersRedisAddonResourcesVersionsBuilderImpl) Getredisaddonversions(ctx context.Context) client.Response[models.RedisVersions] {
-	return redisaddon.Getredisaddonversions(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListRedisVersions calls redis_addon.ListRedisVersions
+func (b *v2ProvidersRedisAddonResourcesVersionsBuilderImpl) ListRedisVersions(ctx context.Context) client.Response[models.RedisVersions] {
+	return redisaddon.ListRedisVersions(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfBuilder provides access to operations
@@ -4049,9 +4049,9 @@ type V2SelfBuilder interface {
 	PaymentInfo() V2SelfPaymentInfoBuilder
 	Tokens() V2SelfTokensBuilder
 	ValidateEmail() V2SelfValidateEmailBuilder
-	DeleteSelf(ctx context.Context) client.Response[models.Message]
-	Getuser1(ctx context.Context) client.Response[models.UserView]
-	Edituser(ctx context.Context, request *models.WannabeUser) client.Response[models.UserView]
+	DeleteProfile(ctx context.Context) client.Response[models.Message]
+	GetProfile(ctx context.Context) client.Response[models.UserView]
+	UpdateProfile(ctx context.Context, request *models.WannabeUser) client.Response[models.UserView]
 }
 
 // v2SelfBuilderImpl implements V2SelfBuilder
@@ -4144,19 +4144,19 @@ func (b *v2SelfBuilderImpl) ValidateEmail() V2SelfValidateEmailBuilder {
 	return newV2SelfValidateEmailBuilder(b.sdk)
 }
 
-// DeleteSelf calls self.DeleteSelf
-func (b *v2SelfBuilderImpl) DeleteSelf(ctx context.Context) client.Response[models.Message] {
-	return self.DeleteSelf(ctx, b.sdk.Client(), b.sdk.Tracer())
+// DeleteProfile calls self.DeleteProfile
+func (b *v2SelfBuilderImpl) DeleteProfile(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteProfile(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Getuser1 calls self.Getuser1
-func (b *v2SelfBuilderImpl) Getuser1(ctx context.Context) client.Response[models.UserView] {
-	return self.Getuser1(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetProfile calls self.GetProfile
+func (b *v2SelfBuilderImpl) GetProfile(ctx context.Context) client.Response[models.UserView] {
+	return self.GetProfile(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Edituser calls self.Edituser
-func (b *v2SelfBuilderImpl) Edituser(ctx context.Context, request *models.WannabeUser) client.Response[models.UserView] {
-	return self.Edituser(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// UpdateProfile calls self.UpdateProfile
+func (b *v2SelfBuilderImpl) UpdateProfile(ctx context.Context, request *models.WannabeUser) client.Response[models.UserView] {
+	return self.UpdateProfile(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfAddonsBuilder provides access to operations
@@ -4164,8 +4164,8 @@ type V2SelfAddonsBuilder interface {
 	Addonid(addonid string) V2SelfAddonsAddonidBuilder
 	AddonID(addonID string) V2SelfAddonsAddonIDBuilder
 	Preorders() V2SelfAddonsPreordersBuilder
-	Getselfaddons(ctx context.Context) client.Response[[]models.AddonView]
-	Provisionselfaddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView]
+	ListSelfAddons(ctx context.Context) client.Response[[]models.AddonView]
+	CreateSelfAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView]
 }
 
 // v2SelfAddonsBuilderImpl implements V2SelfAddonsBuilder
@@ -4193,14 +4193,14 @@ func (b *v2SelfAddonsBuilderImpl) Preorders() V2SelfAddonsPreordersBuilder {
 	return newV2SelfAddonsPreordersBuilder(b.sdk)
 }
 
-// Getselfaddons calls addons.Getselfaddons
-func (b *v2SelfAddonsBuilderImpl) Getselfaddons(ctx context.Context) client.Response[[]models.AddonView] {
-	return addons.Getselfaddons(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListSelfAddons calls addons.ListSelfAddons
+func (b *v2SelfAddonsBuilderImpl) ListSelfAddons(ctx context.Context) client.Response[[]models.AddonView] {
+	return addons.ListSelfAddons(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Provisionselfaddon calls addons.Provisionselfaddon
-func (b *v2SelfAddonsBuilderImpl) Provisionselfaddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView] {
-	return addons.Provisionselfaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateSelfAddon calls addons.CreateSelfAddon
+func (b *v2SelfAddonsBuilderImpl) CreateSelfAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView] {
+	return addons.CreateSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfAddonsAddonidBuilder provides access to operations
@@ -4210,9 +4210,9 @@ type V2SelfAddonsAddonidBuilder interface {
 	Plan() V2SelfAddonsAddonidPlanBuilder
 	Sso() V2SelfAddonsAddonidSsoBuilder
 	Tags() V2SelfAddonsAddonidTagsBuilder
-	Deprovisionselfaddonbyid(ctx context.Context) client.Response[models.Message]
-	Getselfaddonbyid(ctx context.Context) client.Response[models.AddonView]
-	Renameaddon(ctx context.Context, request addons.RenameaddonBody) client.Response[models.AddonView]
+	DeleteSelfAddon(ctx context.Context) client.Response[models.Message]
+	GetSelfAddon(ctx context.Context) client.Response[models.AddonView]
+	UpdateSelfAddon(ctx context.Context, request addons.UpdateSelfAddonBody) client.Response[models.AddonView]
 }
 
 // v2SelfAddonsAddonidBuilderImpl implements V2SelfAddonsAddonidBuilder
@@ -4254,24 +4254,24 @@ func (b *v2SelfAddonsAddonidBuilderImpl) Tags() V2SelfAddonsAddonidTagsBuilder {
 	return newV2SelfAddonsAddonidTagsBuilder(b.sdk, b.addonid)
 }
 
-// Deprovisionselfaddonbyid calls addons.Deprovisionselfaddonbyid
-func (b *v2SelfAddonsAddonidBuilderImpl) Deprovisionselfaddonbyid(ctx context.Context) client.Response[models.Message] {
-	return addons.Deprovisionselfaddonbyid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// DeleteSelfAddon calls addons.DeleteSelfAddon
+func (b *v2SelfAddonsAddonidBuilderImpl) DeleteSelfAddon(ctx context.Context) client.Response[models.Message] {
+	return addons.DeleteSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
-// Getselfaddonbyid calls addons.Getselfaddonbyid
-func (b *v2SelfAddonsAddonidBuilderImpl) Getselfaddonbyid(ctx context.Context) client.Response[models.AddonView] {
-	return addons.Getselfaddonbyid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// GetSelfAddon calls addons.GetSelfAddon
+func (b *v2SelfAddonsAddonidBuilderImpl) GetSelfAddon(ctx context.Context) client.Response[models.AddonView] {
+	return addons.GetSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
-// Renameaddon calls addons.Renameaddon
-func (b *v2SelfAddonsAddonidBuilderImpl) Renameaddon(ctx context.Context, request addons.RenameaddonBody) client.Response[models.AddonView] {
-	return addons.Renameaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
+// UpdateSelfAddon calls addons.UpdateSelfAddon
+func (b *v2SelfAddonsAddonidBuilderImpl) UpdateSelfAddon(ctx context.Context, request addons.UpdateSelfAddonBody) client.Response[models.AddonView] {
+	return addons.UpdateSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
 }
 
 // V2SelfAddonsAddonidApplicationsBuilder provides access to operations
 type V2SelfAddonsAddonidApplicationsBuilder interface {
-	Getselfapplicationslinkedtoaddonbyaddonid(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListSelfAddonApplications(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2SelfAddonsAddonidApplicationsBuilderImpl implements V2SelfAddonsAddonidApplicationsBuilder
@@ -4288,14 +4288,14 @@ func newV2SelfAddonsAddonidApplicationsBuilder(sdk *sdkImpl, addonid string) V2S
 	}
 }
 
-// Getselfapplicationslinkedtoaddonbyaddonid calls addons.Getselfapplicationslinkedtoaddonbyaddonid
-func (b *v2SelfAddonsAddonidApplicationsBuilderImpl) Getselfapplicationslinkedtoaddonbyaddonid(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return addons.Getselfapplicationslinkedtoaddonbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// ListSelfAddonApplications calls addons.ListSelfAddonApplications
+func (b *v2SelfAddonsAddonidApplicationsBuilderImpl) ListSelfAddonApplications(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return addons.ListSelfAddonApplications(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2SelfAddonsAddonidEnvBuilder provides access to operations
 type V2SelfAddonsAddonidEnvBuilder interface {
-	Getselfaddonenvbyaddonid(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
+	GetSelfAddonEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
 }
 
 // v2SelfAddonsAddonidEnvBuilderImpl implements V2SelfAddonsAddonidEnvBuilder
@@ -4312,14 +4312,14 @@ func newV2SelfAddonsAddonidEnvBuilder(sdk *sdkImpl, addonid string) V2SelfAddons
 	}
 }
 
-// Getselfaddonenvbyaddonid calls addons.Getselfaddonenvbyaddonid
-func (b *v2SelfAddonsAddonidEnvBuilderImpl) Getselfaddonenvbyaddonid(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
-	return addons.Getselfaddonenvbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// GetSelfAddonEnvironment calls addons.GetSelfAddonEnvironment
+func (b *v2SelfAddonsAddonidEnvBuilderImpl) GetSelfAddonEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
+	return addons.GetSelfAddonEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2SelfAddonsAddonidPlanBuilder provides access to operations
 type V2SelfAddonsAddonidPlanBuilder interface {
-	Changeselfaddonplanbyaddonid(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
+	UpdateSelfAddonPlan(ctx context.Context, request *models.WannabePlanChange) client.Response[any]
 }
 
 // v2SelfAddonsAddonidPlanBuilderImpl implements V2SelfAddonsAddonidPlanBuilder
@@ -4336,14 +4336,14 @@ func newV2SelfAddonsAddonidPlanBuilder(sdk *sdkImpl, addonid string) V2SelfAddon
 	}
 }
 
-// Changeselfaddonplanbyaddonid calls addons.Changeselfaddonplanbyaddonid
-func (b *v2SelfAddonsAddonidPlanBuilderImpl) Changeselfaddonplanbyaddonid(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
-	return addons.Changeselfaddonplanbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
+// UpdateSelfAddonPlan calls addons.UpdateSelfAddonPlan
+func (b *v2SelfAddonsAddonidPlanBuilderImpl) UpdateSelfAddonPlan(ctx context.Context, request *models.WannabePlanChange) client.Response[any] {
+	return addons.UpdateSelfAddonPlan(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
 }
 
 // V2SelfAddonsAddonidSsoBuilder provides access to operations
 type V2SelfAddonsAddonidSsoBuilder interface {
-	Getaddonssodata(ctx context.Context) client.Response[models.AddonSSOData]
+	GetSelfAddonSso(ctx context.Context) client.Response[models.AddonSSOData]
 }
 
 // v2SelfAddonsAddonidSsoBuilderImpl implements V2SelfAddonsAddonidSsoBuilder
@@ -4360,15 +4360,15 @@ func newV2SelfAddonsAddonidSsoBuilder(sdk *sdkImpl, addonid string) V2SelfAddons
 	}
 }
 
-// Getaddonssodata calls addons.Getaddonssodata
-func (b *v2SelfAddonsAddonidSsoBuilderImpl) Getaddonssodata(ctx context.Context) client.Response[models.AddonSSOData] {
-	return addons.Getaddonssodata(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// GetSelfAddonSso calls addons.GetSelfAddonSso
+func (b *v2SelfAddonsAddonidSsoBuilderImpl) GetSelfAddonSso(ctx context.Context) client.Response[models.AddonSSOData] {
+	return addons.GetSelfAddonSso(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2SelfAddonsAddonidTagsBuilder provides access to operations
 type V2SelfAddonsAddonidTagsBuilder interface {
 	Tag(tag string) V2SelfAddonsAddonidTagsTagBuilder
-	Getselfaddontagsbyaddonid(ctx context.Context) client.Response[[]string]
+	ListSelfAddonTags(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfAddonsAddonidTagsBuilderImpl implements V2SelfAddonsAddonidTagsBuilder
@@ -4390,15 +4390,15 @@ func (b *v2SelfAddonsAddonidTagsBuilderImpl) Tag(tag string) V2SelfAddonsAddonid
 	return newV2SelfAddonsAddonidTagsTagBuilder(b.sdk, b.addonid, tag)
 }
 
-// Getselfaddontagsbyaddonid calls addons.Getselfaddontagsbyaddonid
-func (b *v2SelfAddonsAddonidTagsBuilderImpl) Getselfaddontagsbyaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Getselfaddontagsbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// ListSelfAddonTags calls addons.ListSelfAddonTags
+func (b *v2SelfAddonsAddonidTagsBuilderImpl) ListSelfAddonTags(ctx context.Context) client.Response[[]string] {
+	return addons.ListSelfAddonTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V2SelfAddonsAddonidTagsTagBuilder provides access to operations
 type V2SelfAddonsAddonidTagsTagBuilder interface {
-	Deleteselfaddontagbyaddonid(ctx context.Context) client.Response[[]string]
-	Addselfaddontagbyaddonid(ctx context.Context) client.Response[[]string]
+	DeleteSelfAddonTag(ctx context.Context) client.Response[[]string]
+	CreateSelfAddonTag(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfAddonsAddonidTagsTagBuilderImpl implements V2SelfAddonsAddonidTagsTagBuilder
@@ -4417,14 +4417,14 @@ func newV2SelfAddonsAddonidTagsTagBuilder(sdk *sdkImpl, addonid string, tag stri
 	}
 }
 
-// Deleteselfaddontagbyaddonid calls addons.Deleteselfaddontagbyaddonid
-func (b *v2SelfAddonsAddonidTagsTagBuilderImpl) Deleteselfaddontagbyaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Deleteselfaddontagbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.tag)
+// DeleteSelfAddonTag calls addons.DeleteSelfAddonTag
+func (b *v2SelfAddonsAddonidTagsTagBuilderImpl) DeleteSelfAddonTag(ctx context.Context) client.Response[[]string] {
+	return addons.DeleteSelfAddonTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.tag)
 }
 
-// Addselfaddontagbyaddonid calls addons.Addselfaddontagbyaddonid
-func (b *v2SelfAddonsAddonidTagsTagBuilderImpl) Addselfaddontagbyaddonid(ctx context.Context) client.Response[[]string] {
-	return addons.Addselfaddontagbyaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.tag)
+// CreateSelfAddonTag calls addons.CreateSelfAddonTag
+func (b *v2SelfAddonsAddonidTagsTagBuilderImpl) CreateSelfAddonTag(ctx context.Context) client.Response[[]string] {
+	return addons.CreateSelfAddonTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, b.tag)
 }
 
 // V2SelfAddonsAddonIDBuilder provides access to operations
@@ -4483,7 +4483,7 @@ func (b *v2SelfAddonsAddonIDMigrationBuilderImpl) MigrateSelfAddon(ctx context.C
 
 // V2SelfAddonsAddonIDSsoBuilder provides access to operations
 type V2SelfAddonsAddonIDSsoBuilder interface {
-	SsoSelfAddon(ctx context.Context) client.Response[models.AddonSSOData]
+	CreateSelfAddonSso(ctx context.Context) client.Response[models.AddonSSOData]
 }
 
 // v2SelfAddonsAddonIDSsoBuilderImpl implements V2SelfAddonsAddonIDSsoBuilder
@@ -4500,14 +4500,14 @@ func newV2SelfAddonsAddonIDSsoBuilder(sdk *sdkImpl, addonID string) V2SelfAddons
 	}
 }
 
-// SsoSelfAddon calls addons.SsoSelfAddon
-func (b *v2SelfAddonsAddonIDSsoBuilderImpl) SsoSelfAddon(ctx context.Context) client.Response[models.AddonSSOData] {
-	return addons.SsoSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
+// CreateSelfAddonSso calls addons.CreateSelfAddonSso
+func (b *v2SelfAddonsAddonIDSsoBuilderImpl) CreateSelfAddonSso(ctx context.Context) client.Response[models.AddonSSOData] {
+	return addons.CreateSelfAddonSso(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonID)
 }
 
 // V2SelfAddonsPreordersBuilder provides access to operations
 type V2SelfAddonsPreordersBuilder interface {
-	Preorderselfaddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering]
+	PreorderSelfAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering]
 }
 
 // v2SelfAddonsPreordersBuilderImpl implements V2SelfAddonsPreordersBuilder
@@ -4520,16 +4520,16 @@ func newV2SelfAddonsPreordersBuilder(sdk *sdkImpl) V2SelfAddonsPreordersBuilder 
 	return &v2SelfAddonsPreordersBuilderImpl{sdk: sdk}
 }
 
-// Preorderselfaddon calls addons.Preorderselfaddon
-func (b *v2SelfAddonsPreordersBuilderImpl) Preorderselfaddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
-	return addons.Preorderselfaddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// PreorderSelfAddon calls addons.PreorderSelfAddon
+func (b *v2SelfAddonsPreordersBuilderImpl) PreorderSelfAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.InvoiceRendering] {
+	return addons.PreorderSelfAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfApplicationsBuilder provides access to operations
 type V2SelfApplicationsBuilder interface {
 	Appid(appid string) V2SelfApplicationsAppidBuilder
-	Getselfapplications(ctx context.Context) client.Response[[]models.ApplicationView]
-	Addselfapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
+	ListSelfApplications(ctx context.Context) client.Response[[]models.ApplicationView]
+	CreateSelfApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
 }
 
 // v2SelfApplicationsBuilderImpl implements V2SelfApplicationsBuilder
@@ -4547,14 +4547,14 @@ func (b *v2SelfApplicationsBuilderImpl) Appid(appid string) V2SelfApplicationsAp
 	return newV2SelfApplicationsAppidBuilder(b.sdk, appid)
 }
 
-// Getselfapplications calls applications.Getselfapplications
-func (b *v2SelfApplicationsBuilderImpl) Getselfapplications(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Getselfapplications(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListSelfApplications calls applications.ListSelfApplications
+func (b *v2SelfApplicationsBuilderImpl) ListSelfApplications(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListSelfApplications(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Addselfapplication calls applications.Addselfapplication
-func (b *v2SelfApplicationsBuilderImpl) Addselfapplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
-	return applications.Addselfapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateSelfApplication calls applications.CreateSelfApplication
+func (b *v2SelfApplicationsBuilderImpl) CreateSelfApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
+	return applications.CreateSelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfApplicationsAppidBuilder provides access to operations
@@ -4571,9 +4571,9 @@ type V2SelfApplicationsAppidBuilder interface {
 	Instances() V2SelfApplicationsAppidInstancesBuilder
 	Tags() V2SelfApplicationsAppidTagsBuilder
 	Vhosts() V2SelfApplicationsAppidVhostsBuilder
-	Deleteselfapplicationbyappid(ctx context.Context) client.Response[models.Message]
-	Getselfapplicationbyappid(ctx context.Context) client.Response[models.ApplicationView]
-	Editselfapplicationbyappid(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
+	DeleteSelfApplication(ctx context.Context) client.Response[models.Message]
+	GetSelfApplication(ctx context.Context) client.Response[models.ApplicationView]
+	UpdateSelfApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView]
 }
 
 // v2SelfApplicationsAppidBuilderImpl implements V2SelfApplicationsAppidBuilder
@@ -4650,27 +4650,27 @@ func (b *v2SelfApplicationsAppidBuilderImpl) Vhosts() V2SelfApplicationsAppidVho
 	return newV2SelfApplicationsAppidVhostsBuilder(b.sdk, b.appid)
 }
 
-// Deleteselfapplicationbyappid calls applications.Deleteselfapplicationbyappid
-func (b *v2SelfApplicationsAppidBuilderImpl) Deleteselfapplicationbyappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Deleteselfapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// DeleteSelfApplication calls applications.DeleteSelfApplication
+func (b *v2SelfApplicationsAppidBuilderImpl) DeleteSelfApplication(ctx context.Context) client.Response[models.Message] {
+	return applications.DeleteSelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Getselfapplicationbyappid calls applications.Getselfapplicationbyappid
-func (b *v2SelfApplicationsAppidBuilderImpl) Getselfapplicationbyappid(ctx context.Context) client.Response[models.ApplicationView] {
-	return applications.Getselfapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplication calls applications.GetSelfApplication
+func (b *v2SelfApplicationsAppidBuilderImpl) GetSelfApplication(ctx context.Context) client.Response[models.ApplicationView] {
+	return applications.GetSelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Editselfapplicationbyappid calls applications.Editselfapplicationbyappid
-func (b *v2SelfApplicationsAppidBuilderImpl) Editselfapplicationbyappid(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
-	return applications.Editselfapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// UpdateSelfApplication calls applications.UpdateSelfApplication
+func (b *v2SelfApplicationsAppidBuilderImpl) UpdateSelfApplication(ctx context.Context, request *models.WannabeApplication) client.Response[models.ApplicationView] {
+	return applications.UpdateSelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidAddonsBuilder provides access to operations
 type V2SelfApplicationsAppidAddonsBuilder interface {
 	Addonid(addonid string) V2SelfApplicationsAppidAddonsAddonidBuilder
 	Env() V2SelfApplicationsAppidAddonsEnvBuilder
-	Getselfaddonslinkedtoapplicationbyappid(ctx context.Context) client.Response[[]models.AddonView]
-	Linkselfaddontoapplicationbyappid(ctx context.Context, request string) client.Response[client.Nothing]
+	ListSelfApplicationAddons(ctx context.Context) client.Response[[]models.AddonView]
+	LinkSelfApplicationAddon(ctx context.Context, request string) client.Response[client.Nothing]
 }
 
 // v2SelfApplicationsAppidAddonsBuilderImpl implements V2SelfApplicationsAppidAddonsBuilder
@@ -4697,19 +4697,19 @@ func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Env() V2SelfApplicationsAppid
 	return newV2SelfApplicationsAppidAddonsEnvBuilder(b.sdk, b.appid)
 }
 
-// Getselfaddonslinkedtoapplicationbyappid calls applications.Getselfaddonslinkedtoapplicationbyappid
-func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Getselfaddonslinkedtoapplicationbyappid(ctx context.Context) client.Response[[]models.AddonView] {
-	return applications.Getselfaddonslinkedtoapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationAddons calls applications.ListSelfApplicationAddons
+func (b *v2SelfApplicationsAppidAddonsBuilderImpl) ListSelfApplicationAddons(ctx context.Context) client.Response[[]models.AddonView] {
+	return applications.ListSelfApplicationAddons(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Linkselfaddontoapplicationbyappid calls applications.Linkselfaddontoapplicationbyappid
-func (b *v2SelfApplicationsAppidAddonsBuilderImpl) Linkselfaddontoapplicationbyappid(ctx context.Context, request string) client.Response[client.Nothing] {
-	return applications.Linkselfaddontoapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// LinkSelfApplicationAddon calls applications.LinkSelfApplicationAddon
+func (b *v2SelfApplicationsAppidAddonsBuilderImpl) LinkSelfApplicationAddon(ctx context.Context, request string) client.Response[client.Nothing] {
+	return applications.LinkSelfApplicationAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidAddonsAddonidBuilder provides access to operations
 type V2SelfApplicationsAppidAddonsAddonidBuilder interface {
-	Unlinkselfddonfromapplicationbyappandaddonid(ctx context.Context) client.Response[client.Nothing]
+	UnlinkSelfApplicationAddon(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v2SelfApplicationsAppidAddonsAddonidBuilderImpl implements V2SelfApplicationsAppidAddonsAddonidBuilder
@@ -4728,14 +4728,14 @@ func newV2SelfApplicationsAppidAddonsAddonidBuilder(sdk *sdkImpl, appid string, 
 	}
 }
 
-// Unlinkselfddonfromapplicationbyappandaddonid calls applications.Unlinkselfddonfromapplicationbyappandaddonid
-func (b *v2SelfApplicationsAppidAddonsAddonidBuilderImpl) Unlinkselfddonfromapplicationbyappandaddonid(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Unlinkselfddonfromapplicationbyappandaddonid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.addonid)
+// UnlinkSelfApplicationAddon calls applications.UnlinkSelfApplicationAddon
+func (b *v2SelfApplicationsAppidAddonsAddonidBuilderImpl) UnlinkSelfApplicationAddon(ctx context.Context) client.Response[client.Nothing] {
+	return applications.UnlinkSelfApplicationAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.addonid)
 }
 
 // V2SelfApplicationsAppidAddonsEnvBuilder provides access to operations
 type V2SelfApplicationsAppidAddonsEnvBuilder interface {
-	Getselfenvofaddonslinkedtoapplicationbyappid(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView]
+	GetSelfApplicationAddonEnvironment(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView]
 }
 
 // v2SelfApplicationsAppidAddonsEnvBuilderImpl implements V2SelfApplicationsAppidAddonsEnvBuilder
@@ -4752,14 +4752,14 @@ func newV2SelfApplicationsAppidAddonsEnvBuilder(sdk *sdkImpl, appid string) V2Se
 	}
 }
 
-// Getselfenvofaddonslinkedtoapplicationbyappid calls applications.Getselfenvofaddonslinkedtoapplicationbyappid
-func (b *v2SelfApplicationsAppidAddonsEnvBuilderImpl) Getselfenvofaddonslinkedtoapplicationbyappid(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView] {
-	return applications.Getselfenvofaddonslinkedtoapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplicationAddonEnvironment calls applications.GetSelfApplicationAddonEnvironment
+func (b *v2SelfApplicationsAppidAddonsEnvBuilderImpl) GetSelfApplicationAddonEnvironment(ctx context.Context) client.Response[[]models.LinkedAddonEnvironmentView] {
+	return applications.GetSelfApplicationAddonEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidBranchBuilder provides access to operations
 type V2SelfApplicationsAppidBranchBuilder interface {
-	Setselfapplicationbranchbyappid(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message]
+	UpdateSelfApplicationBranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message]
 }
 
 // v2SelfApplicationsAppidBranchBuilderImpl implements V2SelfApplicationsAppidBranchBuilder
@@ -4776,14 +4776,14 @@ func newV2SelfApplicationsAppidBranchBuilder(sdk *sdkImpl, appid string) V2SelfA
 	}
 }
 
-// Setselfapplicationbranchbyappid calls applications.Setselfapplicationbranchbyappid
-func (b *v2SelfApplicationsAppidBranchBuilderImpl) Setselfapplicationbranchbyappid(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message] {
-	return applications.Setselfapplicationbranchbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// UpdateSelfApplicationBranch calls applications.UpdateSelfApplicationBranch
+func (b *v2SelfApplicationsAppidBranchBuilderImpl) UpdateSelfApplicationBranch(ctx context.Context, request *models.WannabeBranch) client.Response[models.Message] {
+	return applications.UpdateSelfApplicationBranch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidBranchesBuilder provides access to operations
 type V2SelfApplicationsAppidBranchesBuilder interface {
-	Getselfapplicationbranchesbyappid(ctx context.Context) client.Response[[]string]
+	ListSelfApplicationBranches(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfApplicationsAppidBranchesBuilderImpl implements V2SelfApplicationsAppidBranchesBuilder
@@ -4800,14 +4800,14 @@ func newV2SelfApplicationsAppidBranchesBuilder(sdk *sdkImpl, appid string) V2Sel
 	}
 }
 
-// Getselfapplicationbranchesbyappid calls applications.Getselfapplicationbranchesbyappid
-func (b *v2SelfApplicationsAppidBranchesBuilderImpl) Getselfapplicationbranchesbyappid(ctx context.Context) client.Response[[]string] {
-	return applications.Getselfapplicationbranchesbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationBranches calls applications.ListSelfApplicationBranches
+func (b *v2SelfApplicationsAppidBranchesBuilderImpl) ListSelfApplicationBranches(ctx context.Context) client.Response[[]string] {
+	return applications.ListSelfApplicationBranches(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidBuildflavorBuilder provides access to operations
 type V2SelfApplicationsAppidBuildflavorBuilder interface {
-	Setselfbuildinstanceflavorbyappid(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing]
+	UpdateSelfApplicationBuildFlavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing]
 }
 
 // v2SelfApplicationsAppidBuildflavorBuilderImpl implements V2SelfApplicationsAppidBuildflavorBuilder
@@ -4824,16 +4824,16 @@ func newV2SelfApplicationsAppidBuildflavorBuilder(sdk *sdkImpl, appid string) V2
 	}
 }
 
-// Setselfbuildinstanceflavorbyappid calls applications.Setselfbuildinstanceflavorbyappid
-func (b *v2SelfApplicationsAppidBuildflavorBuilderImpl) Setselfbuildinstanceflavorbyappid(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing] {
-	return applications.Setselfbuildinstanceflavorbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// UpdateSelfApplicationBuildFlavor calls applications.UpdateSelfApplicationBuildFlavor
+func (b *v2SelfApplicationsAppidBuildflavorBuilderImpl) UpdateSelfApplicationBuildFlavor(ctx context.Context, request *models.WannabeBuildFlavor) client.Response[client.Nothing] {
+	return applications.UpdateSelfApplicationBuildFlavor(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidDependenciesBuilder provides access to operations
 type V2SelfApplicationsAppidDependenciesBuilder interface {
 	Dependencyid(dependencyid string) V2SelfApplicationsAppidDependenciesDependencyidBuilder
 	Env() V2SelfApplicationsAppidDependenciesEnvBuilder
-	Getselfapplicationdependenciesbyappid(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListSelfApplicationDependencies(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2SelfApplicationsAppidDependenciesBuilderImpl implements V2SelfApplicationsAppidDependenciesBuilder
@@ -4860,15 +4860,15 @@ func (b *v2SelfApplicationsAppidDependenciesBuilderImpl) Env() V2SelfApplication
 	return newV2SelfApplicationsAppidDependenciesEnvBuilder(b.sdk, b.appid)
 }
 
-// Getselfapplicationdependenciesbyappid calls applications.Getselfapplicationdependenciesbyappid
-func (b *v2SelfApplicationsAppidDependenciesBuilderImpl) Getselfapplicationdependenciesbyappid(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Getselfapplicationdependenciesbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationDependencies calls applications.ListSelfApplicationDependencies
+func (b *v2SelfApplicationsAppidDependenciesBuilderImpl) ListSelfApplicationDependencies(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListSelfApplicationDependencies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidDependenciesDependencyidBuilder provides access to operations
 type V2SelfApplicationsAppidDependenciesDependencyidBuilder interface {
-	Deleteselfapplicationdependencybyappid(ctx context.Context) client.Response[client.Nothing]
-	Addselfapplicationdependencybyappid(ctx context.Context) client.Response[models.Message]
+	RemoveSelfApplicationDependency(ctx context.Context) client.Response[client.Nothing]
+	AddSelfApplicationDependency(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfApplicationsAppidDependenciesDependencyidBuilderImpl implements V2SelfApplicationsAppidDependenciesDependencyidBuilder
@@ -4887,19 +4887,19 @@ func newV2SelfApplicationsAppidDependenciesDependencyidBuilder(sdk *sdkImpl, app
 	}
 }
 
-// Deleteselfapplicationdependencybyappid calls applications.Deleteselfapplicationdependencybyappid
-func (b *v2SelfApplicationsAppidDependenciesDependencyidBuilderImpl) Deleteselfapplicationdependencybyappid(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Deleteselfapplicationdependencybyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.dependencyid)
+// RemoveSelfApplicationDependency calls applications.RemoveSelfApplicationDependency
+func (b *v2SelfApplicationsAppidDependenciesDependencyidBuilderImpl) RemoveSelfApplicationDependency(ctx context.Context) client.Response[client.Nothing] {
+	return applications.RemoveSelfApplicationDependency(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.dependencyid)
 }
 
-// Addselfapplicationdependencybyappid calls applications.Addselfapplicationdependencybyappid
-func (b *v2SelfApplicationsAppidDependenciesDependencyidBuilderImpl) Addselfapplicationdependencybyappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Addselfapplicationdependencybyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.dependencyid)
+// AddSelfApplicationDependency calls applications.AddSelfApplicationDependency
+func (b *v2SelfApplicationsAppidDependenciesDependencyidBuilderImpl) AddSelfApplicationDependency(ctx context.Context) client.Response[models.Message] {
+	return applications.AddSelfApplicationDependency(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.dependencyid)
 }
 
 // V2SelfApplicationsAppidDependenciesEnvBuilder provides access to operations
 type V2SelfApplicationsAppidDependenciesEnvBuilder interface {
-	Getselfapplicationdependenciesenvbyappid(ctx context.Context) client.Response[[]models.DependencyEnvView]
+	GetSelfApplicationDependencyEnvironment(ctx context.Context) client.Response[[]models.DependencyEnvView]
 }
 
 // v2SelfApplicationsAppidDependenciesEnvBuilderImpl implements V2SelfApplicationsAppidDependenciesEnvBuilder
@@ -4916,14 +4916,14 @@ func newV2SelfApplicationsAppidDependenciesEnvBuilder(sdk *sdkImpl, appid string
 	}
 }
 
-// Getselfapplicationdependenciesenvbyappid calls applications.Getselfapplicationdependenciesenvbyappid
-func (b *v2SelfApplicationsAppidDependenciesEnvBuilderImpl) Getselfapplicationdependenciesenvbyappid(ctx context.Context) client.Response[[]models.DependencyEnvView] {
-	return applications.Getselfapplicationdependenciesenvbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplicationDependencyEnvironment calls applications.GetSelfApplicationDependencyEnvironment
+func (b *v2SelfApplicationsAppidDependenciesEnvBuilderImpl) GetSelfApplicationDependencyEnvironment(ctx context.Context) client.Response[[]models.DependencyEnvView] {
+	return applications.GetSelfApplicationDependencyEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidDependentsBuilder provides access to operations
 type V2SelfApplicationsAppidDependentsBuilder interface {
-	Getselfapplicationdependents(ctx context.Context) client.Response[[]models.ApplicationView]
+	ListSelfApplicationDependents(ctx context.Context) client.Response[[]models.ApplicationView]
 }
 
 // v2SelfApplicationsAppidDependentsBuilderImpl implements V2SelfApplicationsAppidDependentsBuilder
@@ -4940,15 +4940,15 @@ func newV2SelfApplicationsAppidDependentsBuilder(sdk *sdkImpl, appid string) V2S
 	}
 }
 
-// Getselfapplicationdependents calls applications.Getselfapplicationdependents
-func (b *v2SelfApplicationsAppidDependentsBuilderImpl) Getselfapplicationdependents(ctx context.Context) client.Response[[]models.ApplicationView] {
-	return applications.Getselfapplicationdependents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationDependents calls applications.ListSelfApplicationDependents
+func (b *v2SelfApplicationsAppidDependentsBuilderImpl) ListSelfApplicationDependents(ctx context.Context) client.Response[[]models.ApplicationView] {
+	return applications.ListSelfApplicationDependents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidDeploymentsBuilder provides access to operations
 type V2SelfApplicationsAppidDeploymentsBuilder interface {
 	Deploymentid(deploymentid string) V2SelfApplicationsAppidDeploymentsDeploymentidBuilder
-	Getapplicationdeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView]
+	ListSelfApplicationDeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView]
 }
 
 // v2SelfApplicationsAppidDeploymentsBuilderImpl implements V2SelfApplicationsAppidDeploymentsBuilder
@@ -4970,15 +4970,15 @@ func (b *v2SelfApplicationsAppidDeploymentsBuilderImpl) Deploymentid(deploymenti
 	return newV2SelfApplicationsAppidDeploymentsDeploymentidBuilder(b.sdk, b.appid, deploymentid)
 }
 
-// Getapplicationdeployments calls applications.Getapplicationdeployments
-func (b *v2SelfApplicationsAppidDeploymentsBuilderImpl) Getapplicationdeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView] {
-	return applications.Getapplicationdeployments(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
+// ListSelfApplicationDeployments calls applications.ListSelfApplicationDeployments
+func (b *v2SelfApplicationsAppidDeploymentsBuilderImpl) ListSelfApplicationDeployments(ctx context.Context, opts ...applications.Option) client.Response[[]models.DeploymentView] {
+	return applications.ListSelfApplicationDeployments(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
 }
 
 // V2SelfApplicationsAppidDeploymentsDeploymentidBuilder provides access to operations
 type V2SelfApplicationsAppidDeploymentsDeploymentidBuilder interface {
 	Instances() V2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder
-	Getapplicationdeployment(ctx context.Context) client.Response[models.DeploymentView]
+	GetSelfApplicationDeployment(ctx context.Context) client.Response[models.DeploymentView]
 }
 
 // v2SelfApplicationsAppidDeploymentsDeploymentidBuilderImpl implements V2SelfApplicationsAppidDeploymentsDeploymentidBuilder
@@ -5002,14 +5002,14 @@ func (b *v2SelfApplicationsAppidDeploymentsDeploymentidBuilderImpl) Instances() 
 	return newV2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder(b.sdk, b.appid, b.deploymentid)
 }
 
-// Getapplicationdeployment calls applications.Getapplicationdeployment
-func (b *v2SelfApplicationsAppidDeploymentsDeploymentidBuilderImpl) Getapplicationdeployment(ctx context.Context) client.Response[models.DeploymentView] {
-	return applications.Getapplicationdeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.deploymentid)
+// GetSelfApplicationDeployment calls applications.GetSelfApplicationDeployment
+func (b *v2SelfApplicationsAppidDeploymentsDeploymentidBuilderImpl) GetSelfApplicationDeployment(ctx context.Context) client.Response[models.DeploymentView] {
+	return applications.GetSelfApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.deploymentid)
 }
 
 // V2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder provides access to operations
 type V2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder interface {
-	Canceldeploy(ctx context.Context) client.Response[models.Message]
+	CancelSelfApplicationDeployment(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl implements V2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder
@@ -5028,16 +5028,16 @@ func newV2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilder(sdk *sdkI
 	}
 }
 
-// Canceldeploy calls applications.Canceldeploy
-func (b *v2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl) Canceldeploy(ctx context.Context) client.Response[models.Message] {
-	return applications.Canceldeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.deploymentid)
+// CancelSelfApplicationDeployment calls applications.CancelSelfApplicationDeployment
+func (b *v2SelfApplicationsAppidDeploymentsDeploymentidInstancesBuilderImpl) CancelSelfApplicationDeployment(ctx context.Context) client.Response[models.Message] {
+	return applications.CancelSelfApplicationDeployment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.deploymentid)
 }
 
 // V2SelfApplicationsAppidEnvBuilder provides access to operations
 type V2SelfApplicationsAppidEnvBuilder interface {
 	Envname(envname string) V2SelfApplicationsAppidEnvEnvnameBuilder
-	Getselfapplicationenvbyappid(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
-	Editselfapplicationenvbyappid(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView]
+	GetSelfApplicationEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView]
+	UpdateSelfApplicationEnvironment(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView]
 }
 
 // v2SelfApplicationsAppidEnvBuilderImpl implements V2SelfApplicationsAppidEnvBuilder
@@ -5059,20 +5059,20 @@ func (b *v2SelfApplicationsAppidEnvBuilderImpl) Envname(envname string) V2SelfAp
 	return newV2SelfApplicationsAppidEnvEnvnameBuilder(b.sdk, b.appid, envname)
 }
 
-// Getselfapplicationenvbyappid calls applications.Getselfapplicationenvbyappid
-func (b *v2SelfApplicationsAppidEnvBuilderImpl) Getselfapplicationenvbyappid(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
-	return applications.Getselfapplicationenvbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplicationEnvironment calls applications.GetSelfApplicationEnvironment
+func (b *v2SelfApplicationsAppidEnvBuilderImpl) GetSelfApplicationEnvironment(ctx context.Context) client.Response[[]models.AddonEnvironmentView] {
+	return applications.GetSelfApplicationEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Editselfapplicationenvbyappid calls applications.Editselfapplicationenvbyappid
-func (b *v2SelfApplicationsAppidEnvBuilderImpl) Editselfapplicationenvbyappid(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView] {
-	return applications.Editselfapplicationenvbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request, opts...)
+// UpdateSelfApplicationEnvironment calls applications.UpdateSelfApplicationEnvironment
+func (b *v2SelfApplicationsAppidEnvBuilderImpl) UpdateSelfApplicationEnvironment(ctx context.Context, request map[string]string, opts ...applications.Option) client.Response[models.ApplicationView] {
+	return applications.UpdateSelfApplicationEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request, opts...)
 }
 
 // V2SelfApplicationsAppidEnvEnvnameBuilder provides access to operations
 type V2SelfApplicationsAppidEnvEnvnameBuilder interface {
-	Removeselfapplicationenvbyappidandenvname(ctx context.Context) client.Response[models.ApplicationView]
-	Editselfapplicationenvbyappidandenvname(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView]
+	DeleteSelfApplicationEnvironmentVariable(ctx context.Context) client.Response[models.ApplicationView]
+	SetSelfApplicationEnvironmentVariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView]
 }
 
 // v2SelfApplicationsAppidEnvEnvnameBuilderImpl implements V2SelfApplicationsAppidEnvEnvnameBuilder
@@ -5091,20 +5091,20 @@ func newV2SelfApplicationsAppidEnvEnvnameBuilder(sdk *sdkImpl, appid string, env
 	}
 }
 
-// Removeselfapplicationenvbyappidandenvname calls applications.Removeselfapplicationenvbyappidandenvname
-func (b *v2SelfApplicationsAppidEnvEnvnameBuilderImpl) Removeselfapplicationenvbyappidandenvname(ctx context.Context) client.Response[models.ApplicationView] {
-	return applications.Removeselfapplicationenvbyappidandenvname(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.envname)
+// DeleteSelfApplicationEnvironmentVariable calls applications.DeleteSelfApplicationEnvironmentVariable
+func (b *v2SelfApplicationsAppidEnvEnvnameBuilderImpl) DeleteSelfApplicationEnvironmentVariable(ctx context.Context) client.Response[models.ApplicationView] {
+	return applications.DeleteSelfApplicationEnvironmentVariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.envname)
 }
 
-// Editselfapplicationenvbyappidandenvname calls applications.Editselfapplicationenvbyappidandenvname
-func (b *v2SelfApplicationsAppidEnvEnvnameBuilderImpl) Editselfapplicationenvbyappidandenvname(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView] {
-	return applications.Editselfapplicationenvbyappidandenvname(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.envname, request)
+// SetSelfApplicationEnvironmentVariable calls applications.SetSelfApplicationEnvironmentVariable
+func (b *v2SelfApplicationsAppidEnvEnvnameBuilderImpl) SetSelfApplicationEnvironmentVariable(ctx context.Context, request *models.WannabeValue) client.Response[models.ApplicationView] {
+	return applications.SetSelfApplicationEnvironmentVariable(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.envname, request)
 }
 
 // V2SelfApplicationsAppidExposedEnvBuilder provides access to operations
 type V2SelfApplicationsAppidExposedEnvBuilder interface {
-	Getselfexposedenvbyappid(ctx context.Context) client.Response[map[string]string]
-	Updateselfexposedenvbyappid(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message]
+	GetSelfApplicationExposedEnvironment(ctx context.Context) client.Response[map[string]string]
+	UpdateSelfApplicationExposedEnvironment(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message]
 }
 
 // v2SelfApplicationsAppidExposedEnvBuilderImpl implements V2SelfApplicationsAppidExposedEnvBuilder
@@ -5121,21 +5121,21 @@ func newV2SelfApplicationsAppidExposedEnvBuilder(sdk *sdkImpl, appid string) V2S
 	}
 }
 
-// Getselfexposedenvbyappid calls applications.Getselfexposedenvbyappid
-func (b *v2SelfApplicationsAppidExposedEnvBuilderImpl) Getselfexposedenvbyappid(ctx context.Context) client.Response[map[string]string] {
-	return applications.Getselfexposedenvbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplicationExposedEnvironment calls applications.GetSelfApplicationExposedEnvironment
+func (b *v2SelfApplicationsAppidExposedEnvBuilderImpl) GetSelfApplicationExposedEnvironment(ctx context.Context) client.Response[map[string]string] {
+	return applications.GetSelfApplicationExposedEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Updateselfexposedenvbyappid calls applications.Updateselfexposedenvbyappid
-func (b *v2SelfApplicationsAppidExposedEnvBuilderImpl) Updateselfexposedenvbyappid(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message] {
-	return applications.Updateselfexposedenvbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// UpdateSelfApplicationExposedEnvironment calls applications.UpdateSelfApplicationExposedEnvironment
+func (b *v2SelfApplicationsAppidExposedEnvBuilderImpl) UpdateSelfApplicationExposedEnvironment(ctx context.Context, request *models.WannabeExposedEnv) client.Response[models.Message] {
+	return applications.UpdateSelfApplicationExposedEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfApplicationsAppidInstancesBuilder provides access to operations
 type V2SelfApplicationsAppidInstancesBuilder interface {
-	Undeployselfapplicationbyappid(ctx context.Context) client.Response[models.Message]
-	Getselfapplicationinstancesbyappid(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView]
-	Redeployselfapplicationbyappid(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage]
+	UndeploySelfApplication(ctx context.Context) client.Response[models.Message]
+	ListSelfApplicationInstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView]
+	DeploySelfApplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage]
 }
 
 // v2SelfApplicationsAppidInstancesBuilderImpl implements V2SelfApplicationsAppidInstancesBuilder
@@ -5152,25 +5152,25 @@ func newV2SelfApplicationsAppidInstancesBuilder(sdk *sdkImpl, appid string) V2Se
 	}
 }
 
-// Undeployselfapplicationbyappid calls applications.Undeployselfapplicationbyappid
-func (b *v2SelfApplicationsAppidInstancesBuilderImpl) Undeployselfapplicationbyappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Undeployselfapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// UndeploySelfApplication calls applications.UndeploySelfApplication
+func (b *v2SelfApplicationsAppidInstancesBuilderImpl) UndeploySelfApplication(ctx context.Context) client.Response[models.Message] {
+	return applications.UndeploySelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Getselfapplicationinstancesbyappid calls applications.Getselfapplicationinstancesbyappid
-func (b *v2SelfApplicationsAppidInstancesBuilderImpl) Getselfapplicationinstancesbyappid(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView] {
-	return applications.Getselfapplicationinstancesbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
+// ListSelfApplicationInstances calls applications.ListSelfApplicationInstances
+func (b *v2SelfApplicationsAppidInstancesBuilderImpl) ListSelfApplicationInstances(ctx context.Context, opts ...applications.Option) client.Response[[]models.SuperNovaInstanceView] {
+	return applications.ListSelfApplicationInstances(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
 }
 
-// Redeployselfapplicationbyappid calls applications.Redeployselfapplicationbyappid
-func (b *v2SelfApplicationsAppidInstancesBuilderImpl) Redeployselfapplicationbyappid(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage] {
-	return applications.Redeployselfapplicationbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
+// DeploySelfApplication calls applications.DeploySelfApplication
+func (b *v2SelfApplicationsAppidInstancesBuilderImpl) DeploySelfApplication(ctx context.Context, opts ...applications.Option) client.Response[models.DeploySuccessMessage] {
+	return applications.DeploySelfApplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, opts...)
 }
 
 // V2SelfApplicationsAppidTagsBuilder provides access to operations
 type V2SelfApplicationsAppidTagsBuilder interface {
 	Tag(tag string) V2SelfApplicationsAppidTagsTagBuilder
-	Getselfapplicationtagsbyappid(ctx context.Context) client.Response[[]string]
+	ListSelfApplicationTags(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfApplicationsAppidTagsBuilderImpl implements V2SelfApplicationsAppidTagsBuilder
@@ -5192,15 +5192,15 @@ func (b *v2SelfApplicationsAppidTagsBuilderImpl) Tag(tag string) V2SelfApplicati
 	return newV2SelfApplicationsAppidTagsTagBuilder(b.sdk, b.appid, tag)
 }
 
-// Getselfapplicationtagsbyappid calls applications.Getselfapplicationtagsbyappid
-func (b *v2SelfApplicationsAppidTagsBuilderImpl) Getselfapplicationtagsbyappid(ctx context.Context) client.Response[[]string] {
-	return applications.Getselfapplicationtagsbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationTags calls applications.ListSelfApplicationTags
+func (b *v2SelfApplicationsAppidTagsBuilderImpl) ListSelfApplicationTags(ctx context.Context) client.Response[[]string] {
+	return applications.ListSelfApplicationTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidTagsTagBuilder provides access to operations
 type V2SelfApplicationsAppidTagsTagBuilder interface {
-	Deleteselfapplicationtagappid(ctx context.Context) client.Response[[]models.SemanticTag]
-	Addselfapplicationtagbyappid(ctx context.Context) client.Response[[]string]
+	DeleteSelfApplicationTag(ctx context.Context) client.Response[[]models.SemanticTag]
+	CreateSelfApplicationTag(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfApplicationsAppidTagsTagBuilderImpl implements V2SelfApplicationsAppidTagsTagBuilder
@@ -5219,21 +5219,21 @@ func newV2SelfApplicationsAppidTagsTagBuilder(sdk *sdkImpl, appid string, tag st
 	}
 }
 
-// Deleteselfapplicationtagappid calls applications.Deleteselfapplicationtagappid
-func (b *v2SelfApplicationsAppidTagsTagBuilderImpl) Deleteselfapplicationtagappid(ctx context.Context) client.Response[[]models.SemanticTag] {
-	return applications.Deleteselfapplicationtagappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.tag)
+// DeleteSelfApplicationTag calls applications.DeleteSelfApplicationTag
+func (b *v2SelfApplicationsAppidTagsTagBuilderImpl) DeleteSelfApplicationTag(ctx context.Context) client.Response[[]models.SemanticTag] {
+	return applications.DeleteSelfApplicationTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.tag)
 }
 
-// Addselfapplicationtagbyappid calls applications.Addselfapplicationtagbyappid
-func (b *v2SelfApplicationsAppidTagsTagBuilderImpl) Addselfapplicationtagbyappid(ctx context.Context) client.Response[[]string] {
-	return applications.Addselfapplicationtagbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.tag)
+// CreateSelfApplicationTag calls applications.CreateSelfApplicationTag
+func (b *v2SelfApplicationsAppidTagsTagBuilderImpl) CreateSelfApplicationTag(ctx context.Context) client.Response[[]string] {
+	return applications.CreateSelfApplicationTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.tag)
 }
 
 // V2SelfApplicationsAppidVhostsBuilder provides access to operations
 type V2SelfApplicationsAppidVhostsBuilder interface {
 	Domain(domain string) V2SelfApplicationsAppidVhostsDomainBuilder
 	Favourite() V2SelfApplicationsAppidVhostsFavouriteBuilder
-	Getselfvhostbyappid(ctx context.Context) client.Response[[]models.VhostView]
+	ListSelfApplicationDomains(ctx context.Context) client.Response[[]models.VhostView]
 }
 
 // v2SelfApplicationsAppidVhostsBuilderImpl implements V2SelfApplicationsAppidVhostsBuilder
@@ -5260,15 +5260,15 @@ func (b *v2SelfApplicationsAppidVhostsBuilderImpl) Favourite() V2SelfApplication
 	return newV2SelfApplicationsAppidVhostsFavouriteBuilder(b.sdk, b.appid)
 }
 
-// Getselfvhostbyappid calls applications.Getselfvhostbyappid
-func (b *v2SelfApplicationsAppidVhostsBuilderImpl) Getselfvhostbyappid(ctx context.Context) client.Response[[]models.VhostView] {
-	return applications.Getselfvhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// ListSelfApplicationDomains calls applications.ListSelfApplicationDomains
+func (b *v2SelfApplicationsAppidVhostsBuilderImpl) ListSelfApplicationDomains(ctx context.Context) client.Response[[]models.VhostView] {
+	return applications.ListSelfApplicationDomains(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V2SelfApplicationsAppidVhostsDomainBuilder provides access to operations
 type V2SelfApplicationsAppidVhostsDomainBuilder interface {
-	Removeselfvhostbyappid(ctx context.Context) client.Response[models.Message]
-	Addselfvhostbyappid(ctx context.Context) client.Response[models.Message]
+	DeleteSelfApplicationDomain(ctx context.Context) client.Response[models.Message]
+	CreateSelfApplicationDomain(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfApplicationsAppidVhostsDomainBuilderImpl implements V2SelfApplicationsAppidVhostsDomainBuilder
@@ -5287,21 +5287,21 @@ func newV2SelfApplicationsAppidVhostsDomainBuilder(sdk *sdkImpl, appid string, d
 	}
 }
 
-// Removeselfvhostbyappid calls applications.Removeselfvhostbyappid
-func (b *v2SelfApplicationsAppidVhostsDomainBuilderImpl) Removeselfvhostbyappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Removeselfvhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.domain)
+// DeleteSelfApplicationDomain calls applications.DeleteSelfApplicationDomain
+func (b *v2SelfApplicationsAppidVhostsDomainBuilderImpl) DeleteSelfApplicationDomain(ctx context.Context) client.Response[models.Message] {
+	return applications.DeleteSelfApplicationDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.domain)
 }
 
-// Addselfvhostbyappid calls applications.Addselfvhostbyappid
-func (b *v2SelfApplicationsAppidVhostsDomainBuilderImpl) Addselfvhostbyappid(ctx context.Context) client.Response[models.Message] {
-	return applications.Addselfvhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.domain)
+// CreateSelfApplicationDomain calls applications.CreateSelfApplicationDomain
+func (b *v2SelfApplicationsAppidVhostsDomainBuilderImpl) CreateSelfApplicationDomain(ctx context.Context) client.Response[models.Message] {
+	return applications.CreateSelfApplicationDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, b.domain)
 }
 
 // V2SelfApplicationsAppidVhostsFavouriteBuilder provides access to operations
 type V2SelfApplicationsAppidVhostsFavouriteBuilder interface {
-	Unmarkselffavouritevhostbyappid(ctx context.Context) client.Response[client.Nothing]
-	Getselffavouritevhostbyappid(ctx context.Context) client.Response[models.VhostView]
-	Markselffavouritevhostbyappid(ctx context.Context, request *models.VhostView) client.Response[models.VhostView]
+	UnsetSelfApplicationPrimaryDomain(ctx context.Context) client.Response[client.Nothing]
+	GetSelfApplicationPrimaryDomain(ctx context.Context) client.Response[models.VhostView]
+	SetSelfApplicationPrimaryDomain(ctx context.Context, request *models.VhostView) client.Response[models.VhostView]
 }
 
 // v2SelfApplicationsAppidVhostsFavouriteBuilderImpl implements V2SelfApplicationsAppidVhostsFavouriteBuilder
@@ -5318,24 +5318,24 @@ func newV2SelfApplicationsAppidVhostsFavouriteBuilder(sdk *sdkImpl, appid string
 	}
 }
 
-// Unmarkselffavouritevhostbyappid calls applications.Unmarkselffavouritevhostbyappid
-func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) Unmarkselffavouritevhostbyappid(ctx context.Context) client.Response[client.Nothing] {
-	return applications.Unmarkselffavouritevhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// UnsetSelfApplicationPrimaryDomain calls applications.UnsetSelfApplicationPrimaryDomain
+func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) UnsetSelfApplicationPrimaryDomain(ctx context.Context) client.Response[client.Nothing] {
+	return applications.UnsetSelfApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Getselffavouritevhostbyappid calls applications.Getselffavouritevhostbyappid
-func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) Getselffavouritevhostbyappid(ctx context.Context) client.Response[models.VhostView] {
-	return applications.Getselffavouritevhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetSelfApplicationPrimaryDomain calls applications.GetSelfApplicationPrimaryDomain
+func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) GetSelfApplicationPrimaryDomain(ctx context.Context) client.Response[models.VhostView] {
+	return applications.GetSelfApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
-// Markselffavouritevhostbyappid calls applications.Markselffavouritevhostbyappid
-func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) Markselffavouritevhostbyappid(ctx context.Context, request *models.VhostView) client.Response[models.VhostView] {
-	return applications.Markselffavouritevhostbyappid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
+// SetSelfApplicationPrimaryDomain calls applications.SetSelfApplicationPrimaryDomain
+func (b *v2SelfApplicationsAppidVhostsFavouriteBuilderImpl) SetSelfApplicationPrimaryDomain(ctx context.Context, request *models.VhostView) client.Response[models.VhostView] {
+	return applications.SetSelfApplicationPrimaryDomain(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid, request)
 }
 
 // V2SelfAvatarBuilder provides access to operations
 type V2SelfAvatarBuilder interface {
-	Setuseravatarfromstring(ctx context.Context, request *models.AvatarInput) client.Response[models.UrlView]
+	UpdateProfileAvatar(ctx context.Context, request *models.AvatarInput) client.Response[models.UrlView]
 }
 
 // v2SelfAvatarBuilderImpl implements V2SelfAvatarBuilder
@@ -5348,14 +5348,14 @@ func newV2SelfAvatarBuilder(sdk *sdkImpl) V2SelfAvatarBuilder {
 	return &v2SelfAvatarBuilderImpl{sdk: sdk}
 }
 
-// Setuseravatarfromstring calls self.Setuseravatarfromstring
-func (b *v2SelfAvatarBuilderImpl) Setuseravatarfromstring(ctx context.Context, request *models.AvatarInput) client.Response[models.UrlView] {
-	return self.Setuseravatarfromstring(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// UpdateProfileAvatar calls self.UpdateProfileAvatar
+func (b *v2SelfAvatarBuilderImpl) UpdateProfileAvatar(ctx context.Context, request *models.AvatarInput) client.Response[models.UrlView] {
+	return self.UpdateProfileAvatar(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfChangePasswordBuilder provides access to operations
 type V2SelfChangePasswordBuilder interface {
-	Changeuserpassword(ctx context.Context, request *models.WannabePassword) client.Response[models.Message]
+	UpdateAuthPassword(ctx context.Context, request *models.WannabePassword) client.Response[models.Message]
 }
 
 // v2SelfChangePasswordBuilderImpl implements V2SelfChangePasswordBuilder
@@ -5368,14 +5368,14 @@ func newV2SelfChangePasswordBuilder(sdk *sdkImpl) V2SelfChangePasswordBuilder {
 	return &v2SelfChangePasswordBuilderImpl{sdk: sdk}
 }
 
-// Changeuserpassword calls self.Changeuserpassword
-func (b *v2SelfChangePasswordBuilderImpl) Changeuserpassword(ctx context.Context, request *models.WannabePassword) client.Response[models.Message] {
-	return self.Changeuserpassword(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// UpdateAuthPassword calls self.UpdateAuthPassword
+func (b *v2SelfChangePasswordBuilderImpl) UpdateAuthPassword(ctx context.Context, request *models.WannabePassword) client.Response[models.Message] {
+	return self.UpdateAuthPassword(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfCliTokensBuilder provides access to operations
 type V2SelfCliTokensBuilder interface {
-	Getselfclitokens(ctx context.Context, opts ...self.Option) client.Response[string]
+	ListSelfCliTokens(ctx context.Context, opts ...self.Option) client.Response[string]
 }
 
 // v2SelfCliTokensBuilderImpl implements V2SelfCliTokensBuilder
@@ -5388,14 +5388,14 @@ func newV2SelfCliTokensBuilder(sdk *sdkImpl) V2SelfCliTokensBuilder {
 	return &v2SelfCliTokensBuilderImpl{sdk: sdk}
 }
 
-// Getselfclitokens calls self.Getselfclitokens
-func (b *v2SelfCliTokensBuilderImpl) Getselfclitokens(ctx context.Context, opts ...self.Option) client.Response[string] {
-	return self.Getselfclitokens(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ListSelfCliTokens calls self.ListSelfCliTokens
+func (b *v2SelfCliTokensBuilderImpl) ListSelfCliTokens(ctx context.Context, opts ...self.Option) client.Response[string] {
+	return self.ListSelfCliTokens(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2SelfConfirmationEmailBuilder provides access to operations
 type V2SelfConfirmationEmailBuilder interface {
-	Getconfirmationemail(ctx context.Context) client.Response[models.Message]
+	RequestProfileEmailConfirmation(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfConfirmationEmailBuilderImpl implements V2SelfConfirmationEmailBuilder
@@ -5408,16 +5408,16 @@ func newV2SelfConfirmationEmailBuilder(sdk *sdkImpl) V2SelfConfirmationEmailBuil
 	return &v2SelfConfirmationEmailBuilderImpl{sdk: sdk}
 }
 
-// Getconfirmationemail calls self.Getconfirmationemail
-func (b *v2SelfConfirmationEmailBuilderImpl) Getconfirmationemail(ctx context.Context) client.Response[models.Message] {
-	return self.Getconfirmationemail(ctx, b.sdk.Client(), b.sdk.Tracer())
+// RequestProfileEmailConfirmation calls self.RequestProfileEmailConfirmation
+func (b *v2SelfConfirmationEmailBuilderImpl) RequestProfileEmailConfirmation(ctx context.Context) client.Response[models.Message] {
+	return self.RequestProfileEmailConfirmation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfConsumersBuilder provides access to operations
 type V2SelfConsumersBuilder interface {
 	Key(key string) V2SelfConsumersKeyBuilder
-	Getselfconsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView]
-	Createselfconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
+	ListSelfOauthConsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView]
+	CreateSelfOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
 }
 
 // v2SelfConsumersBuilderImpl implements V2SelfConsumersBuilder
@@ -5435,23 +5435,23 @@ func (b *v2SelfConsumersBuilderImpl) Key(key string) V2SelfConsumersKeyBuilder {
 	return newV2SelfConsumersKeyBuilder(b.sdk, key)
 }
 
-// Getselfconsumers calls self.Getselfconsumers
-func (b *v2SelfConsumersBuilderImpl) Getselfconsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView] {
-	return self.Getselfconsumers(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListSelfOauthConsumers calls self.ListSelfOauthConsumers
+func (b *v2SelfConsumersBuilderImpl) ListSelfOauthConsumers(ctx context.Context) client.Response[[]models.OAuth1ConsumerView] {
+	return self.ListSelfOauthConsumers(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Createselfconsumer calls self.Createselfconsumer
-func (b *v2SelfConsumersBuilderImpl) Createselfconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
-	return self.Createselfconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
+// CreateSelfOauthConsumer calls self.CreateSelfOauthConsumer
+func (b *v2SelfConsumersBuilderImpl) CreateSelfOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
+	return self.CreateSelfOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), request)
 }
 
 // V2SelfConsumersKeyBuilder provides access to operations
 type V2SelfConsumersKeyBuilder interface {
 	Secret() V2SelfConsumersKeySecretBuilder
 	Tokens() V2SelfConsumersKeyTokensBuilder
-	Deleteselfconsumer(ctx context.Context) client.Response[models.Message]
-	Getselfconsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView]
-	Updateselfconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
+	DeleteSelfOauthConsumer(ctx context.Context) client.Response[models.Message]
+	GetSelfOauthConsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView]
+	UpdateSelfOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView]
 }
 
 // v2SelfConsumersKeyBuilderImpl implements V2SelfConsumersKeyBuilder
@@ -5478,24 +5478,24 @@ func (b *v2SelfConsumersKeyBuilderImpl) Tokens() V2SelfConsumersKeyTokensBuilder
 	return newV2SelfConsumersKeyTokensBuilder(b.sdk, b.key)
 }
 
-// Deleteselfconsumer calls self.Deleteselfconsumer
-func (b *v2SelfConsumersKeyBuilderImpl) Deleteselfconsumer(ctx context.Context) client.Response[models.Message] {
-	return self.Deleteselfconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+// DeleteSelfOauthConsumer calls self.DeleteSelfOauthConsumer
+func (b *v2SelfConsumersKeyBuilderImpl) DeleteSelfOauthConsumer(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteSelfOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
 }
 
-// Getselfconsumer calls self.Getselfconsumer
-func (b *v2SelfConsumersKeyBuilderImpl) Getselfconsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView] {
-	return self.Getselfconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+// GetSelfOauthConsumer calls self.GetSelfOauthConsumer
+func (b *v2SelfConsumersKeyBuilderImpl) GetSelfOauthConsumer(ctx context.Context) client.Response[models.OAuth1ConsumerView] {
+	return self.GetSelfOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
 }
 
-// Updateselfconsumer calls self.Updateselfconsumer
-func (b *v2SelfConsumersKeyBuilderImpl) Updateselfconsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
-	return self.Updateselfconsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key, request)
+// UpdateSelfOauthConsumer calls self.UpdateSelfOauthConsumer
+func (b *v2SelfConsumersKeyBuilderImpl) UpdateSelfOauthConsumer(ctx context.Context, request *models.WannabeOAuth1Consumer) client.Response[models.OAuth1ConsumerView] {
+	return self.UpdateSelfOauthConsumer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key, request)
 }
 
 // V2SelfConsumersKeySecretBuilder provides access to operations
 type V2SelfConsumersKeySecretBuilder interface {
-	Getselfconsumersecret(ctx context.Context) client.Response[models.SecretView]
+	GetSelfOauthConsumerSecret(ctx context.Context) client.Response[models.SecretView]
 }
 
 // v2SelfConsumersKeySecretBuilderImpl implements V2SelfConsumersKeySecretBuilder
@@ -5512,14 +5512,14 @@ func newV2SelfConsumersKeySecretBuilder(sdk *sdkImpl, key string) V2SelfConsumer
 	}
 }
 
-// Getselfconsumersecret calls self.Getselfconsumersecret
-func (b *v2SelfConsumersKeySecretBuilderImpl) Getselfconsumersecret(ctx context.Context) client.Response[models.SecretView] {
-	return self.Getselfconsumersecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+// GetSelfOauthConsumerSecret calls self.GetSelfOauthConsumerSecret
+func (b *v2SelfConsumersKeySecretBuilderImpl) GetSelfOauthConsumerSecret(ctx context.Context) client.Response[models.SecretView] {
+	return self.GetSelfOauthConsumerSecret(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
 }
 
 // V2SelfConsumersKeyTokensBuilder provides access to operations
 type V2SelfConsumersKeyTokensBuilder interface {
-	GetConsumerTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView]
+	ListSelfOauthConsumerTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView]
 }
 
 // v2SelfConsumersKeyTokensBuilderImpl implements V2SelfConsumersKeyTokensBuilder
@@ -5536,15 +5536,15 @@ func newV2SelfConsumersKeyTokensBuilder(sdk *sdkImpl, key string) V2SelfConsumer
 	}
 }
 
-// GetConsumerTokens calls self.GetConsumerTokens
-func (b *v2SelfConsumersKeyTokensBuilderImpl) GetConsumerTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView] {
-	return self.GetConsumerTokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+// ListSelfOauthConsumerTokens calls self.ListSelfOauthConsumerTokens
+func (b *v2SelfConsumersKeyTokensBuilderImpl) ListSelfOauthConsumerTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView] {
+	return self.ListSelfOauthConsumerTokens(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
 }
 
 // V2SelfEmailsBuilder provides access to operations
 type V2SelfEmailsBuilder interface {
 	Email(email string) V2SelfEmailsEmailBuilder
-	Getemailaddresses(ctx context.Context) client.Response[[]string]
+	ListProfileEmailAddresses(ctx context.Context) client.Response[[]string]
 }
 
 // v2SelfEmailsBuilderImpl implements V2SelfEmailsBuilder
@@ -5562,15 +5562,15 @@ func (b *v2SelfEmailsBuilderImpl) Email(email string) V2SelfEmailsEmailBuilder {
 	return newV2SelfEmailsEmailBuilder(b.sdk, email)
 }
 
-// Getemailaddresses calls self.Getemailaddresses
-func (b *v2SelfEmailsBuilderImpl) Getemailaddresses(ctx context.Context) client.Response[[]string] {
-	return self.Getemailaddresses(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListProfileEmailAddresses calls self.ListProfileEmailAddresses
+func (b *v2SelfEmailsBuilderImpl) ListProfileEmailAddresses(ctx context.Context) client.Response[[]string] {
+	return self.ListProfileEmailAddresses(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfEmailsEmailBuilder provides access to operations
 type V2SelfEmailsEmailBuilder interface {
-	Removeemailaddress(ctx context.Context) client.Response[models.Message]
-	Addemailaddress(ctx context.Context, request *models.SecondaryEmailPayload) client.Response[models.Message]
+	DeleteProfileEmailAddress(ctx context.Context) client.Response[models.Message]
+	CreateProfileEmailAddress(ctx context.Context, request *models.SecondaryEmailPayload) client.Response[models.Message]
 }
 
 // v2SelfEmailsEmailBuilderImpl implements V2SelfEmailsEmailBuilder
@@ -5587,19 +5587,19 @@ func newV2SelfEmailsEmailBuilder(sdk *sdkImpl, email string) V2SelfEmailsEmailBu
 	}
 }
 
-// Removeemailaddress calls self.Removeemailaddress
-func (b *v2SelfEmailsEmailBuilderImpl) Removeemailaddress(ctx context.Context) client.Response[models.Message] {
-	return self.Removeemailaddress(ctx, b.sdk.Client(), b.sdk.Tracer(), b.email)
+// DeleteProfileEmailAddress calls self.DeleteProfileEmailAddress
+func (b *v2SelfEmailsEmailBuilderImpl) DeleteProfileEmailAddress(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteProfileEmailAddress(ctx, b.sdk.Client(), b.sdk.Tracer(), b.email)
 }
 
-// Addemailaddress calls self.Addemailaddress
-func (b *v2SelfEmailsEmailBuilderImpl) Addemailaddress(ctx context.Context, request *models.SecondaryEmailPayload) client.Response[models.Message] {
-	return self.Addemailaddress(ctx, b.sdk.Client(), b.sdk.Tracer(), b.email, request)
+// CreateProfileEmailAddress calls self.CreateProfileEmailAddress
+func (b *v2SelfEmailsEmailBuilderImpl) CreateProfileEmailAddress(ctx context.Context, request *models.SecondaryEmailPayload) client.Response[models.Message] {
+	return self.CreateProfileEmailAddress(ctx, b.sdk.Client(), b.sdk.Tracer(), b.email, request)
 }
 
 // V2SelfIDBuilder provides access to operations
 type V2SelfIDBuilder interface {
-	Getid(ctx context.Context) client.Response[models.OwnerIdView]
+	GetProfileID(ctx context.Context) client.Response[models.OwnerIdView]
 }
 
 // v2SelfIDBuilderImpl implements V2SelfIDBuilder
@@ -5612,14 +5612,14 @@ func newV2SelfIDBuilder(sdk *sdkImpl) V2SelfIDBuilder {
 	return &v2SelfIDBuilderImpl{sdk: sdk}
 }
 
-// Getid calls self.Getid
-func (b *v2SelfIDBuilderImpl) Getid(ctx context.Context) client.Response[models.OwnerIdView] {
-	return self.Getid(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetProfileID calls self.GetProfileID
+func (b *v2SelfIDBuilderImpl) GetProfileID(ctx context.Context) client.Response[models.OwnerIdView] {
+	return self.GetProfileID(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfInstancesBuilder provides access to operations
 type V2SelfInstancesBuilder interface {
-	Getselfinstancesforallapps(ctx context.Context) client.Response[map[string][]any]
+	ListSelfInstances(ctx context.Context) client.Response[map[string][]any]
 }
 
 // v2SelfInstancesBuilderImpl implements V2SelfInstancesBuilder
@@ -5632,15 +5632,15 @@ func newV2SelfInstancesBuilder(sdk *sdkImpl) V2SelfInstancesBuilder {
 	return &v2SelfInstancesBuilderImpl{sdk: sdk}
 }
 
-// Getselfinstancesforallapps calls instances.Getselfinstancesforallapps
-func (b *v2SelfInstancesBuilderImpl) Getselfinstancesforallapps(ctx context.Context) client.Response[map[string][]any] {
-	return instances.Getselfinstancesforallapps(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListSelfInstances calls instances.ListSelfInstances
+func (b *v2SelfInstancesBuilderImpl) ListSelfInstances(ctx context.Context) client.Response[map[string][]any] {
+	return instances.ListSelfInstances(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfKeysBuilder provides access to operations
 type V2SelfKeysBuilder interface {
 	Key(key string) V2SelfKeysKeyBuilder
-	Getsshkeys(ctx context.Context) client.Response[[]models.SshKeyView]
+	ListPersonalSshKeys(ctx context.Context) client.Response[[]models.SshKeyView]
 }
 
 // v2SelfKeysBuilderImpl implements V2SelfKeysBuilder
@@ -5658,15 +5658,15 @@ func (b *v2SelfKeysBuilderImpl) Key(key string) V2SelfKeysKeyBuilder {
 	return newV2SelfKeysKeyBuilder(b.sdk, key)
 }
 
-// Getsshkeys calls self.Getsshkeys
-func (b *v2SelfKeysBuilderImpl) Getsshkeys(ctx context.Context) client.Response[[]models.SshKeyView] {
-	return self.Getsshkeys(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListPersonalSshKeys calls self.ListPersonalSshKeys
+func (b *v2SelfKeysBuilderImpl) ListPersonalSshKeys(ctx context.Context) client.Response[[]models.SshKeyView] {
+	return self.ListPersonalSshKeys(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfKeysKeyBuilder provides access to operations
 type V2SelfKeysKeyBuilder interface {
-	Removesshkey(ctx context.Context) client.Response[models.Message]
-	Addsshkey(ctx context.Context, request string) client.Response[models.Message]
+	DeletePersonalSshKey(ctx context.Context) client.Response[models.Message]
+	CreatePersonalSshKey(ctx context.Context, request string) client.Response[models.Message]
 }
 
 // v2SelfKeysKeyBuilderImpl implements V2SelfKeysKeyBuilder
@@ -5683,14 +5683,14 @@ func newV2SelfKeysKeyBuilder(sdk *sdkImpl, key string) V2SelfKeysKeyBuilder {
 	}
 }
 
-// Removesshkey calls self.Removesshkey
-func (b *v2SelfKeysKeyBuilderImpl) Removesshkey(ctx context.Context) client.Response[models.Message] {
-	return self.Removesshkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
+// DeletePersonalSshKey calls self.DeletePersonalSshKey
+func (b *v2SelfKeysKeyBuilderImpl) DeletePersonalSshKey(ctx context.Context) client.Response[models.Message] {
+	return self.DeletePersonalSshKey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key)
 }
 
-// Addsshkey calls self.Addsshkey
-func (b *v2SelfKeysKeyBuilderImpl) Addsshkey(ctx context.Context, request string) client.Response[models.Message] {
-	return self.Addsshkey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key, request)
+// CreatePersonalSshKey calls self.CreatePersonalSshKey
+func (b *v2SelfKeysKeyBuilderImpl) CreatePersonalSshKey(ctx context.Context, request string) client.Response[models.Message] {
+	return self.CreatePersonalSshKey(ctx, b.sdk.Client(), b.sdk.Tracer(), b.key, request)
 }
 
 // V2SelfMfaBuilder provides access to operations
@@ -5717,10 +5717,10 @@ func (b *v2SelfMfaBuilderImpl) Kind(kind string) V2SelfMfaKindBuilder {
 type V2SelfMfaKindBuilder interface {
 	Backupcodes() V2SelfMfaKindBackupcodesBuilder
 	Confirmation() V2SelfMfaKindConfirmationBuilder
-	Deleteselfmfa(ctx context.Context) client.Response[models.Message]
-	GetMfa(ctx context.Context) client.Response[models.MfaStatusView]
-	Createselfmfa(ctx context.Context) client.Response[models.MfaEnrollmentResponse]
-	Setselffavouritemfa(ctx context.Context) client.Response[models.Message]
+	DeleteAuthMfa(ctx context.Context) client.Response[models.Message]
+	GetAuthMfa(ctx context.Context) client.Response[models.MfaStatusView]
+	CreateAuthMfa(ctx context.Context) client.Response[models.MfaEnrollmentResponse]
+	SetAuthMfaFavourite(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfMfaKindBuilderImpl implements V2SelfMfaKindBuilder
@@ -5747,29 +5747,29 @@ func (b *v2SelfMfaKindBuilderImpl) Confirmation() V2SelfMfaKindConfirmationBuild
 	return newV2SelfMfaKindConfirmationBuilder(b.sdk, b.kind)
 }
 
-// Deleteselfmfa calls self.Deleteselfmfa
-func (b *v2SelfMfaKindBuilderImpl) Deleteselfmfa(ctx context.Context) client.Response[models.Message] {
-	return self.Deleteselfmfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
+// DeleteAuthMfa calls self.DeleteAuthMfa
+func (b *v2SelfMfaKindBuilderImpl) DeleteAuthMfa(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteAuthMfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
 }
 
-// GetMfa calls self.GetMfa
-func (b *v2SelfMfaKindBuilderImpl) GetMfa(ctx context.Context) client.Response[models.MfaStatusView] {
-	return self.GetMfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
+// GetAuthMfa calls self.GetAuthMfa
+func (b *v2SelfMfaKindBuilderImpl) GetAuthMfa(ctx context.Context) client.Response[models.MfaStatusView] {
+	return self.GetAuthMfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
 }
 
-// Createselfmfa calls self.Createselfmfa
-func (b *v2SelfMfaKindBuilderImpl) Createselfmfa(ctx context.Context) client.Response[models.MfaEnrollmentResponse] {
-	return self.Createselfmfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
+// CreateAuthMfa calls self.CreateAuthMfa
+func (b *v2SelfMfaKindBuilderImpl) CreateAuthMfa(ctx context.Context) client.Response[models.MfaEnrollmentResponse] {
+	return self.CreateAuthMfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
 }
 
-// Setselffavouritemfa calls self.Setselffavouritemfa
-func (b *v2SelfMfaKindBuilderImpl) Setselffavouritemfa(ctx context.Context) client.Response[models.Message] {
-	return self.Setselffavouritemfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
+// SetAuthMfaFavourite calls self.SetAuthMfaFavourite
+func (b *v2SelfMfaKindBuilderImpl) SetAuthMfaFavourite(ctx context.Context) client.Response[models.Message] {
+	return self.SetAuthMfaFavourite(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
 }
 
 // V2SelfMfaKindBackupcodesBuilder provides access to operations
 type V2SelfMfaKindBackupcodesBuilder interface {
-	Regenerateselfbackupcodes(ctx context.Context) client.Response[models.MFABackupCodes]
+	ResetAuthMfaBackupCodes(ctx context.Context) client.Response[models.MFABackupCodes]
 }
 
 // v2SelfMfaKindBackupcodesBuilderImpl implements V2SelfMfaKindBackupcodesBuilder
@@ -5786,14 +5786,14 @@ func newV2SelfMfaKindBackupcodesBuilder(sdk *sdkImpl, kind string) V2SelfMfaKind
 	}
 }
 
-// Regenerateselfbackupcodes calls self.Regenerateselfbackupcodes
-func (b *v2SelfMfaKindBackupcodesBuilderImpl) Regenerateselfbackupcodes(ctx context.Context) client.Response[models.MFABackupCodes] {
-	return self.Regenerateselfbackupcodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
+// ResetAuthMfaBackupCodes calls self.ResetAuthMfaBackupCodes
+func (b *v2SelfMfaKindBackupcodesBuilderImpl) ResetAuthMfaBackupCodes(ctx context.Context) client.Response[models.MFABackupCodes] {
+	return self.ResetAuthMfaBackupCodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind)
 }
 
 // V2SelfMfaKindConfirmationBuilder provides access to operations
 type V2SelfMfaKindConfirmationBuilder interface {
-	Validateselfmfa(ctx context.Context, request *models.WannabeMFACreds) client.Response[models.MFABackupCodes]
+	ConfirmAuthMfa(ctx context.Context, request *models.WannabeMFACreds) client.Response[models.MFABackupCodes]
 }
 
 // v2SelfMfaKindConfirmationBuilderImpl implements V2SelfMfaKindConfirmationBuilder
@@ -5810,14 +5810,14 @@ func newV2SelfMfaKindConfirmationBuilder(sdk *sdkImpl, kind string) V2SelfMfaKin
 	}
 }
 
-// Validateselfmfa calls self.Validateselfmfa
-func (b *v2SelfMfaKindConfirmationBuilderImpl) Validateselfmfa(ctx context.Context, request *models.WannabeMFACreds) client.Response[models.MFABackupCodes] {
-	return self.Validateselfmfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind, request)
+// ConfirmAuthMfa calls self.ConfirmAuthMfa
+func (b *v2SelfMfaKindConfirmationBuilderImpl) ConfirmAuthMfa(ctx context.Context, request *models.WannabeMFACreds) client.Response[models.MFABackupCodes] {
+	return self.ConfirmAuthMfa(ctx, b.sdk.Client(), b.sdk.Tracer(), b.kind, request)
 }
 
 // V2SelfOrganisationsBuilder provides access to operations
 type V2SelfOrganisationsBuilder interface {
-	GetSelfOrganisations(ctx context.Context) client.Response[[]any]
+	ListSelfOrganisations(ctx context.Context) client.Response[[]any]
 }
 
 // v2SelfOrganisationsBuilderImpl implements V2SelfOrganisationsBuilder
@@ -5830,14 +5830,14 @@ func newV2SelfOrganisationsBuilder(sdk *sdkImpl) V2SelfOrganisationsBuilder {
 	return &v2SelfOrganisationsBuilderImpl{sdk: sdk}
 }
 
-// GetSelfOrganisations calls organisations.GetSelfOrganisations
-func (b *v2SelfOrganisationsBuilderImpl) GetSelfOrganisations(ctx context.Context) client.Response[[]any] {
-	return organisations.GetSelfOrganisations(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListSelfOrganisations calls organisations.ListSelfOrganisations
+func (b *v2SelfOrganisationsBuilderImpl) ListSelfOrganisations(ctx context.Context) client.Response[[]any] {
+	return organisations.ListSelfOrganisations(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfPaymentInfoBuilder provides access to operations
 type V2SelfPaymentInfoBuilder interface {
-	Getselfpaymentinfo(ctx context.Context) client.Response[models.PaymentInfoView]
+	GetSelfPaymentInfo(ctx context.Context) client.Response[models.PaymentInfoView]
 }
 
 // v2SelfPaymentInfoBuilderImpl implements V2SelfPaymentInfoBuilder
@@ -5850,17 +5850,17 @@ func newV2SelfPaymentInfoBuilder(sdk *sdkImpl) V2SelfPaymentInfoBuilder {
 	return &v2SelfPaymentInfoBuilderImpl{sdk: sdk}
 }
 
-// Getselfpaymentinfo calls payments.Getselfpaymentinfo
-func (b *v2SelfPaymentInfoBuilderImpl) Getselfpaymentinfo(ctx context.Context) client.Response[models.PaymentInfoView] {
-	return payments.Getselfpaymentinfo(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetSelfPaymentInfo calls payments.GetSelfPaymentInfo
+func (b *v2SelfPaymentInfoBuilderImpl) GetSelfPaymentInfo(ctx context.Context) client.Response[models.PaymentInfoView] {
+	return payments.GetSelfPaymentInfo(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfTokensBuilder provides access to operations
 type V2SelfTokensBuilder interface {
 	Token(token string) V2SelfTokensTokenBuilder
 	Current() V2SelfTokensCurrentBuilder
-	Revokeselftokens(ctx context.Context) client.Response[models.Message]
-	Listselftokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView]
+	DeleteAllOauthTokens(ctx context.Context) client.Response[models.Message]
+	ListOauthTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView]
 }
 
 // v2SelfTokensBuilderImpl implements V2SelfTokensBuilder
@@ -5883,19 +5883,19 @@ func (b *v2SelfTokensBuilderImpl) Current() V2SelfTokensCurrentBuilder {
 	return newV2SelfTokensCurrentBuilder(b.sdk)
 }
 
-// Revokeselftokens calls self.Revokeselftokens
-func (b *v2SelfTokensBuilderImpl) Revokeselftokens(ctx context.Context) client.Response[models.Message] {
-	return self.Revokeselftokens(ctx, b.sdk.Client(), b.sdk.Tracer())
+// DeleteAllOauthTokens calls self.DeleteAllOauthTokens
+func (b *v2SelfTokensBuilderImpl) DeleteAllOauthTokens(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteAllOauthTokens(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
-// Listselftokens calls self.Listselftokens
-func (b *v2SelfTokensBuilderImpl) Listselftokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView] {
-	return self.Listselftokens(ctx, b.sdk.Client(), b.sdk.Tracer())
+// ListOauthTokens calls self.ListOauthTokens
+func (b *v2SelfTokensBuilderImpl) ListOauthTokens(ctx context.Context) client.Response[[]models.OAuth1AccessTokenView] {
+	return self.ListOauthTokens(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfTokensTokenBuilder provides access to operations
 type V2SelfTokensTokenBuilder interface {
-	Revokeselftoken(ctx context.Context) client.Response[models.Message]
+	DeleteOauthToken(ctx context.Context) client.Response[models.Message]
 }
 
 // v2SelfTokensTokenBuilderImpl implements V2SelfTokensTokenBuilder
@@ -5912,14 +5912,14 @@ func newV2SelfTokensTokenBuilder(sdk *sdkImpl, token string) V2SelfTokensTokenBu
 	}
 }
 
-// Revokeselftoken calls self.Revokeselftoken
-func (b *v2SelfTokensTokenBuilderImpl) Revokeselftoken(ctx context.Context) client.Response[models.Message] {
-	return self.Revokeselftoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.token)
+// DeleteOauthToken calls self.DeleteOauthToken
+func (b *v2SelfTokensTokenBuilderImpl) DeleteOauthToken(ctx context.Context) client.Response[models.Message] {
+	return self.DeleteOauthToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.token)
 }
 
 // V2SelfTokensCurrentBuilder provides access to operations
 type V2SelfTokensCurrentBuilder interface {
-	Getcurrenttokeninfo(ctx context.Context) client.Response[models.OAuth1AccessTokenView]
+	GetCurrentOauthTokenInfo(ctx context.Context) client.Response[models.OAuth1AccessTokenView]
 }
 
 // v2SelfTokensCurrentBuilderImpl implements V2SelfTokensCurrentBuilder
@@ -5932,14 +5932,14 @@ func newV2SelfTokensCurrentBuilder(sdk *sdkImpl) V2SelfTokensCurrentBuilder {
 	return &v2SelfTokensCurrentBuilderImpl{sdk: sdk}
 }
 
-// Getcurrenttokeninfo calls self.Getcurrenttokeninfo
-func (b *v2SelfTokensCurrentBuilderImpl) Getcurrenttokeninfo(ctx context.Context) client.Response[models.OAuth1AccessTokenView] {
-	return self.Getcurrenttokeninfo(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetCurrentOauthTokenInfo calls self.GetCurrentOauthTokenInfo
+func (b *v2SelfTokensCurrentBuilderImpl) GetCurrentOauthTokenInfo(ctx context.Context) client.Response[models.OAuth1AccessTokenView] {
+	return self.GetCurrentOauthTokenInfo(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V2SelfValidateEmailBuilder provides access to operations
 type V2SelfValidateEmailBuilder interface {
-	Validateemail(ctx context.Context, opts ...self.Option) client.Response[models.Message]
+	ConfirmProfileEmailAddress(ctx context.Context, opts ...self.Option) client.Response[models.Message]
 }
 
 // v2SelfValidateEmailBuilderImpl implements V2SelfValidateEmailBuilder
@@ -5952,14 +5952,14 @@ func newV2SelfValidateEmailBuilder(sdk *sdkImpl) V2SelfValidateEmailBuilder {
 	return &v2SelfValidateEmailBuilderImpl{sdk: sdk}
 }
 
-// Validateemail calls self.Validateemail
-func (b *v2SelfValidateEmailBuilderImpl) Validateemail(ctx context.Context, opts ...self.Option) client.Response[models.Message] {
-	return self.Validateemail(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ConfirmProfileEmailAddress calls self.ConfirmProfileEmailAddress
+func (b *v2SelfValidateEmailBuilderImpl) ConfirmProfileEmailAddress(ctx context.Context, opts ...self.Option) client.Response[models.Message] {
+	return self.ConfirmProfileEmailAddress(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V2SummaryBuilder provides access to operations
 type V2SummaryBuilder interface {
-	Getsummary(ctx context.Context, opts ...self.Option) client.Response[models.SummaryView]
+	GetOrganisationSummary(ctx context.Context, opts ...self.Option) client.Response[models.SummaryView]
 }
 
 // v2SummaryBuilderImpl implements V2SummaryBuilder
@@ -5972,9 +5972,9 @@ func newV2SummaryBuilder(sdk *sdkImpl) V2SummaryBuilder {
 	return &v2SummaryBuilderImpl{sdk: sdk}
 }
 
-// Getsummary calls self.Getsummary
-func (b *v2SummaryBuilderImpl) Getsummary(ctx context.Context, opts ...self.Option) client.Response[models.SummaryView] {
-	return self.Getsummary(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// GetOrganisationSummary calls self.GetOrganisationSummary
+func (b *v2SummaryBuilderImpl) GetOrganisationSummary(ctx context.Context, opts ...self.Option) client.Response[models.SummaryView] {
+	return self.GetOrganisationSummary(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4Builder provides access to operations
@@ -6167,7 +6167,7 @@ func (b *v4AccesslogsOrganisationsOrgidApplicationsResourceidBuilderImpl) Access
 
 // V4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilder provides access to operations
 type V4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilder interface {
-	V4GetOrgAppAccesslogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
+	StreamApplicationAccessLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
 }
 
 // v4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilderImpl implements V4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilder
@@ -6186,9 +6186,9 @@ func newV4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilder(sd
 	}
 }
 
-// V4GetOrgAppAccesslogs calls logs.V4GetOrgAppAccesslogs
-func (b *v4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilderImpl) V4GetOrgAppAccesslogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
-	return logs.V4GetOrgAppAccesslogs(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
+// StreamApplicationAccessLog calls logs.StreamApplicationAccessLog
+func (b *v4AccesslogsOrganisationsOrgidApplicationsResourceidAccesslogsBuilderImpl) StreamApplicationAccessLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
+	return logs.StreamApplicationAccessLog(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
 }
 
 // V4AccesslogsOrganisationsOrgidResourcesBuilder provides access to operations
@@ -6243,7 +6243,7 @@ func (b *v4AccesslogsOrganisationsOrgidResourcesResourceidBuilderImpl) Accesslog
 
 // V4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilder provides access to operations
 type V4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilder interface {
-	V4GetOrgResourceAccesslogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
+	StreamResourceAccessLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
 }
 
 // v4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilderImpl implements V4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilder
@@ -6262,9 +6262,9 @@ func newV4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilder(sdk *
 	}
 }
 
-// V4GetOrgResourceAccesslogs calls logs.V4GetOrgResourceAccesslogs
-func (b *v4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilderImpl) V4GetOrgResourceAccesslogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
-	return logs.V4GetOrgResourceAccesslogs(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
+// StreamResourceAccessLog calls logs.StreamResourceAccessLog
+func (b *v4AccesslogsOrganisationsOrgidResourcesResourceidAccesslogsBuilderImpl) StreamResourceAccessLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
+	return logs.StreamResourceAccessLog(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
 }
 
 // V4AddonProvidersBuilder provides access to operations
@@ -6427,7 +6427,7 @@ func (b *v4AddonProvidersProviderIDAddonsBuilderImpl) RealID(realID string) V4Ad
 
 // V4AddonProvidersProviderIDAddonsRealIDBuilder provides access to operations
 type V4AddonProvidersProviderIDAddonsRealIDBuilder interface {
-	V4GetAddonFromProvider(ctx context.Context) client.Response[any]
+	GetAddonFromProvider(ctx context.Context) client.Response[any]
 }
 
 // v4AddonProvidersProviderIDAddonsRealIDBuilderImpl implements V4AddonProvidersProviderIDAddonsRealIDBuilder
@@ -6446,9 +6446,9 @@ func newV4AddonProvidersProviderIDAddonsRealIDBuilder(sdk *sdkImpl, providerID s
 	}
 }
 
-// V4GetAddonFromProvider calls addons.V4GetAddonFromProvider
-func (b *v4AddonProvidersProviderIDAddonsRealIDBuilderImpl) V4GetAddonFromProvider(ctx context.Context) client.Response[any] {
-	return addons.V4GetAddonFromProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID, b.realID)
+// GetAddonFromProvider calls addons.GetAddonFromProvider
+func (b *v4AddonProvidersProviderIDAddonsRealIDBuilderImpl) GetAddonFromProvider(ctx context.Context) client.Response[any] {
+	return addons.GetAddonFromProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.providerID, b.realID)
 }
 
 // V4AddonProvidersAddonKeycloakBuilder provides access to operations
@@ -6497,7 +6497,7 @@ type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder interface {
 	Reboot() V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilder
 	Rebuild() V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilder
 	Version() V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionBuilder
-	Getkeycloakwithoutownerid(ctx context.Context) client.Response[models.Keycloak]
+	GetKeycloakInfo(ctx context.Context) client.Response[models.Keycloak]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilder
@@ -6534,15 +6534,15 @@ func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilderImpl) Version(
 	return newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionBuilder(b.sdk, b.addonkeycloakid)
 }
 
-// Getkeycloakwithoutownerid calls keycloak.Getkeycloakwithoutownerid
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilderImpl) Getkeycloakwithoutownerid(ctx context.Context) client.Response[models.Keycloak] {
-	return keycloak.Getkeycloakwithoutownerid(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// GetKeycloakInfo calls keycloak.GetKeycloakInfo
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidBuilderImpl) GetKeycloakInfo(ctx context.Context) client.Response[models.Keycloak] {
+	return keycloak.GetKeycloakInfo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilder interface {
-	Deletengkeycloakapplication(ctx context.Context) client.Response[client.Nothing]
-	Createngkeycloakapplication(ctx context.Context) client.Response[models.Keycloak]
+	DeleteKeycloakNetworkGroup(ctx context.Context) client.Response[client.Nothing]
+	CreateKeycloakNetworkGroup(ctx context.Context) client.Response[models.Keycloak]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilder
@@ -6559,19 +6559,19 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilder(sd
 	}
 }
 
-// Deletengkeycloakapplication calls keycloak.Deletengkeycloakapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilderImpl) Deletengkeycloakapplication(ctx context.Context) client.Response[client.Nothing] {
-	return keycloak.Deletengkeycloakapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// DeleteKeycloakNetworkGroup calls keycloak.DeleteKeycloakNetworkGroup
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilderImpl) DeleteKeycloakNetworkGroup(ctx context.Context) client.Response[client.Nothing] {
+	return keycloak.DeleteKeycloakNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
-// Createngkeycloakapplication calls keycloak.Createngkeycloakapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilderImpl) Createngkeycloakapplication(ctx context.Context) client.Response[models.Keycloak] {
-	return keycloak.Createngkeycloakapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// CreateKeycloakNetworkGroup calls keycloak.CreateKeycloakNetworkGroup
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidNetworkgroupBuilderImpl) CreateKeycloakNetworkGroup(ctx context.Context) client.Response[models.Keycloak] {
+	return keycloak.CreateKeycloakNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilder interface {
-	Rebootkeycloakapplication(ctx context.Context) client.Response[client.Nothing]
+	RebootKeycloak(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilder
@@ -6588,14 +6588,14 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilder(sdk *sdk
 	}
 }
 
-// Rebootkeycloakapplication calls keycloak.Rebootkeycloakapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilderImpl) Rebootkeycloakapplication(ctx context.Context) client.Response[client.Nothing] {
-	return keycloak.Rebootkeycloakapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// RebootKeycloak calls keycloak.RebootKeycloak
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebootBuilderImpl) RebootKeycloak(ctx context.Context) client.Response[client.Nothing] {
+	return keycloak.RebootKeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilder interface {
-	Rebuildkeycloakapplication(ctx context.Context) client.Response[client.Nothing]
+	RebuildKeycloak(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilder
@@ -6612,9 +6612,9 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilder(sdk *sd
 	}
 }
 
-// Rebuildkeycloakapplication calls keycloak.Rebuildkeycloakapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilderImpl) Rebuildkeycloakapplication(ctx context.Context) client.Response[client.Nothing] {
-	return keycloak.Rebuildkeycloakapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// RebuildKeycloak calls keycloak.RebuildKeycloak
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidRebuildBuilderImpl) RebuildKeycloak(ctx context.Context) client.Response[client.Nothing] {
+	return keycloak.RebuildKeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionBuilder provides access to operations
@@ -6649,7 +6649,7 @@ func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionBuilderImpl) U
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilder interface {
-	Getcheckversionkeycloakapplication(ctx context.Context) client.Response[models.KeycloakVersionChecker]
+	CheckKeycloakVersion(ctx context.Context) client.Response[models.KeycloakVersionChecker]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilder
@@ -6666,14 +6666,14 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilder(sd
 	}
 }
 
-// Getcheckversionkeycloakapplication calls keycloak.Getcheckversionkeycloakapplication
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilderImpl) Getcheckversionkeycloakapplication(ctx context.Context) client.Response[models.KeycloakVersionChecker] {
-	return keycloak.Getcheckversionkeycloakapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
+// CheckKeycloakVersion calls keycloak.CheckKeycloakVersion
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionCheckBuilderImpl) CheckKeycloakVersion(ctx context.Context) client.Response[models.KeycloakVersionChecker] {
+	return keycloak.CheckKeycloakVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid)
 }
 
 // V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilder provides access to operations
 type V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilder interface {
-	Createversionupdatekeycloak(ctx context.Context, request *models.KeycloakPatchRequest) client.Response[models.Keycloak]
+	UpdateKeycloakVersion(ctx context.Context, request *models.KeycloakPatchRequest) client.Response[models.Keycloak]
 }
 
 // v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilderImpl implements V4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilder
@@ -6690,15 +6690,15 @@ func newV4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilder(s
 	}
 }
 
-// Createversionupdatekeycloak calls keycloak.Createversionupdatekeycloak
-func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilderImpl) Createversionupdatekeycloak(ctx context.Context, request *models.KeycloakPatchRequest) client.Response[models.Keycloak] {
-	return keycloak.Createversionupdatekeycloak(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid, request)
+// UpdateKeycloakVersion calls keycloak.UpdateKeycloakVersion
+func (b *v4AddonProvidersAddonKeycloakAddonsAddonkeycloakidVersionUpdateBuilderImpl) UpdateKeycloakVersion(ctx context.Context, request *models.KeycloakPatchRequest) client.Response[models.Keycloak] {
+	return keycloak.UpdateKeycloakVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonkeycloakid, request)
 }
 
 // V4AddonProvidersAddonMatomoBuilder provides access to operations
 type V4AddonProvidersAddonMatomoBuilder interface {
 	Addons() V4AddonProvidersAddonMatomoAddonsBuilder
-	Getmatomoproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
+	GetMatomoProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
 // v4AddonProvidersAddonMatomoBuilderImpl implements V4AddonProvidersAddonMatomoBuilder
@@ -6716,9 +6716,9 @@ func (b *v4AddonProvidersAddonMatomoBuilderImpl) Addons() V4AddonProvidersAddonM
 	return newV4AddonProvidersAddonMatomoAddonsBuilder(b.sdk)
 }
 
-// Getmatomoproviderinformation calls matomo.Getmatomoproviderinformation
-func (b *v4AddonProvidersAddonMatomoBuilderImpl) Getmatomoproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
-	return matomo.Getmatomoproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetMatomoProviderInformation calls matomo.GetMatomoProviderInformation
+func (b *v4AddonProvidersAddonMatomoBuilderImpl) GetMatomoProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return matomo.GetMatomoProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersAddonMatomoAddonsBuilder provides access to operations
@@ -6746,7 +6746,7 @@ type V4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilder interface {
 	Reboot() V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder
 	Rebuild() V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder
 	Version() V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder
-	Getmatomo(ctx context.Context) client.Response[models.Matomo]
+	GetMatomo(ctx context.Context) client.Response[models.Matomo]
 }
 
 // v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilder
@@ -6778,14 +6778,14 @@ func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) Version() V4
 	return newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder(b.sdk, b.addonmatomoid)
 }
 
-// Getmatomo calls matomo.Getmatomo
-func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) Getmatomo(ctx context.Context) client.Response[models.Matomo] {
-	return matomo.Getmatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+// GetMatomo calls matomo.GetMatomo
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidBuilderImpl) GetMatomo(ctx context.Context) client.Response[models.Matomo] {
+	return matomo.GetMatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
 }
 
 // V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder provides access to operations
 type V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder interface {
-	Rebootmatomo(ctx context.Context) client.Response[client.Nothing]
+	RebootMatomo(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder
@@ -6802,14 +6802,14 @@ func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilder(sdk *sdkImpl
 	}
 }
 
-// Rebootmatomo calls matomo.Rebootmatomo
-func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilderImpl) Rebootmatomo(ctx context.Context) client.Response[client.Nothing] {
-	return matomo.Rebootmatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+// RebootMatomo calls matomo.RebootMatomo
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebootBuilderImpl) RebootMatomo(ctx context.Context) client.Response[client.Nothing] {
+	return matomo.RebootMatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
 }
 
 // V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder provides access to operations
 type V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder interface {
-	Rebuildmatomo(ctx context.Context) client.Response[client.Nothing]
+	RebuildMatomo(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder
@@ -6826,9 +6826,9 @@ func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilder(sdk *sdkImp
 	}
 }
 
-// Rebuildmatomo calls matomo.Rebuildmatomo
-func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilderImpl) Rebuildmatomo(ctx context.Context) client.Response[client.Nothing] {
-	return matomo.Rebuildmatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+// RebuildMatomo calls matomo.RebuildMatomo
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidRebuildBuilderImpl) RebuildMatomo(ctx context.Context) client.Response[client.Nothing] {
+	return matomo.RebuildMatomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
 }
 
 // V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilder provides access to operations
@@ -6863,7 +6863,7 @@ func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionBuilderImpl) Updat
 
 // V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder provides access to operations
 type V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder interface {
-	Getcheckversionmatomoapplication(ctx context.Context) client.Response[models.MatomoVersionCheck]
+	CheckMatomoVersion(ctx context.Context) client.Response[models.MatomoVersionCheck]
 }
 
 // v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder
@@ -6880,14 +6880,14 @@ func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilder(sdk *s
 	}
 }
 
-// Getcheckversionmatomoapplication calls matomo.Getcheckversionmatomoapplication
-func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl) Getcheckversionmatomoapplication(ctx context.Context) client.Response[models.MatomoVersionCheck] {
-	return matomo.Getcheckversionmatomoapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
+// CheckMatomoVersion calls matomo.CheckMatomoVersion
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionCheckBuilderImpl) CheckMatomoVersion(ctx context.Context) client.Response[models.MatomoVersionCheck] {
+	return matomo.CheckMatomoVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid)
 }
 
 // V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder provides access to operations
 type V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder interface {
-	Createversionupdatematomo(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo]
+	UpdateMatomoVersion(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo]
 }
 
 // v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl implements V4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder
@@ -6904,9 +6904,9 @@ func newV4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilder(sdk *
 	}
 }
 
-// Createversionupdatematomo calls matomo.Createversionupdatematomo
-func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl) Createversionupdatematomo(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo] {
-	return matomo.Createversionupdatematomo(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid, request)
+// UpdateMatomoVersion calls matomo.UpdateMatomoVersion
+func (b *v4AddonProvidersAddonMatomoAddonsAddonmatomoidVersionUpdateBuilderImpl) UpdateMatomoVersion(ctx context.Context, request *models.MatomoPatchRequest) client.Response[models.Matomo] {
+	return matomo.UpdateMatomoVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmatomoid, request)
 }
 
 // V4AddonProvidersAddonMetabaseBuilder provides access to operations
@@ -6954,7 +6954,7 @@ type V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilder interface {
 	Reboot() V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilder
 	Rebuild() V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilder
 	Version() V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionBuilder
-	Getmetabase(ctx context.Context) client.Response[models.Metabase]
+	GetMetabase(ctx context.Context) client.Response[models.Metabase]
 }
 
 // v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilderImpl implements V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilder
@@ -6986,14 +6986,14 @@ func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilderImpl) Version(
 	return newV4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionBuilder(b.sdk, b.addonmetabaseid)
 }
 
-// Getmetabase calls metabase.Getmetabase
-func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilderImpl) Getmetabase(ctx context.Context) client.Response[models.Metabase] {
-	return metabase.Getmetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
+// GetMetabase calls metabase.GetMetabase
+func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidBuilderImpl) GetMetabase(ctx context.Context) client.Response[models.Metabase] {
+	return metabase.GetMetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
 }
 
 // V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilder provides access to operations
 type V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilder interface {
-	Rebootmetabaseapplication(ctx context.Context) client.Response[client.Nothing]
+	RebootMetabase(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilderImpl implements V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilder
@@ -7010,14 +7010,14 @@ func newV4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilder(sdk *sdk
 	}
 }
 
-// Rebootmetabaseapplication calls metabase.Rebootmetabaseapplication
-func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilderImpl) Rebootmetabaseapplication(ctx context.Context) client.Response[client.Nothing] {
-	return metabase.Rebootmetabaseapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
+// RebootMetabase calls metabase.RebootMetabase
+func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebootBuilderImpl) RebootMetabase(ctx context.Context) client.Response[client.Nothing] {
+	return metabase.RebootMetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
 }
 
 // V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilder provides access to operations
 type V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilder interface {
-	Rebuildmetabaseapplication(ctx context.Context) client.Response[client.Nothing]
+	RebuildMetabase(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilderImpl implements V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilder
@@ -7034,9 +7034,9 @@ func newV4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilder(sdk *sd
 	}
 }
 
-// Rebuildmetabaseapplication calls metabase.Rebuildmetabaseapplication
-func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilderImpl) Rebuildmetabaseapplication(ctx context.Context) client.Response[client.Nothing] {
-	return metabase.Rebuildmetabaseapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
+// RebuildMetabase calls metabase.RebuildMetabase
+func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidRebuildBuilderImpl) RebuildMetabase(ctx context.Context) client.Response[client.Nothing] {
+	return metabase.RebuildMetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
 }
 
 // V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionBuilder provides access to operations
@@ -7071,7 +7071,7 @@ func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionBuilderImpl) U
 
 // V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilder provides access to operations
 type V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilder interface {
-	Getcheckversionmetabaseapplication(ctx context.Context) client.Response[models.MetabaseVersionCheck]
+	CheckMetabaseVersion(ctx context.Context) client.Response[models.MetabaseVersionCheck]
 }
 
 // v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilderImpl implements V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilder
@@ -7088,14 +7088,14 @@ func newV4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilder(sd
 	}
 }
 
-// Getcheckversionmetabaseapplication calls metabase.Getcheckversionmetabaseapplication
-func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilderImpl) Getcheckversionmetabaseapplication(ctx context.Context) client.Response[models.MetabaseVersionCheck] {
-	return metabase.Getcheckversionmetabaseapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
+// CheckMetabaseVersion calls metabase.CheckMetabaseVersion
+func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionCheckBuilderImpl) CheckMetabaseVersion(ctx context.Context) client.Response[models.MetabaseVersionCheck] {
+	return metabase.CheckMetabaseVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid)
 }
 
 // V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilder provides access to operations
 type V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilder interface {
-	Createversionupdatemetabase(ctx context.Context, request *models.MetabasePatchRequest) client.Response[models.Metabase]
+	UpdateMetabaseVersion(ctx context.Context, request *models.MetabasePatchRequest) client.Response[models.Metabase]
 }
 
 // v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilderImpl implements V4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilder
@@ -7112,9 +7112,9 @@ func newV4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilder(s
 	}
 }
 
-// Createversionupdatemetabase calls metabase.Createversionupdatemetabase
-func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilderImpl) Createversionupdatemetabase(ctx context.Context, request *models.MetabasePatchRequest) client.Response[models.Metabase] {
-	return metabase.Createversionupdatemetabase(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid, request)
+// UpdateMetabaseVersion calls metabase.UpdateMetabaseVersion
+func (b *v4AddonProvidersAddonMetabaseAddonsAddonmetabaseidVersionUpdateBuilderImpl) UpdateMetabaseVersion(ctx context.Context, request *models.MetabasePatchRequest) client.Response[models.Metabase] {
+	return metabase.UpdateMetabaseVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonmetabaseid, request)
 }
 
 // V4AddonProvidersAddonOtoroshiBuilder provides access to operations
@@ -7164,7 +7164,7 @@ type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilder interface {
 	Reboot() V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilder
 	Rebuild() V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilder
 	Version() V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionBuilder
-	Getotoroshi(ctx context.Context) client.Response[models.Otoroshi]
+	GetOtoroshi(ctx context.Context) client.Response[models.Otoroshi]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilder
@@ -7206,14 +7206,14 @@ func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilderImpl) Version() V4A
 	return newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionBuilder(b.sdk, b.otoroshiid)
 }
 
-// Getotoroshi calls otoroshi.Getotoroshi
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilderImpl) Getotoroshi(ctx context.Context) client.Response[models.Otoroshi] {
-	return otoroshi.Getotoroshi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// GetOtoroshi calls otoroshi.GetOtoroshi
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidBuilderImpl) GetOtoroshi(ctx context.Context) client.Response[models.Otoroshi] {
+	return otoroshi.GetOtoroshi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder interface {
-	Getotoroshiconfigfile(ctx context.Context) client.Response[client.PlainTextString]
+	GetOtoroshiConfig(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder
@@ -7230,15 +7230,15 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilder(sdk *sdkI
 	}
 }
 
-// Getotoroshiconfigfile calls otoroshi.Getotoroshiconfigfile
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl) Getotoroshiconfigfile(ctx context.Context) client.Response[client.PlainTextString] {
-	return otoroshi.Getotoroshiconfigfile(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// GetOtoroshiConfig calls otoroshi.GetOtoroshiConfig
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidConfigYAMLBuilderImpl) GetOtoroshiConfig(ctx context.Context) client.Response[client.PlainTextString] {
+	return otoroshi.GetOtoroshiConfig(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilder interface {
-	Deletengotoroshiapplication(ctx context.Context) client.Response[client.Nothing]
-	Createngotoroshiapplication(ctx context.Context) client.Response[models.Otoroshi]
+	DeleteOtoroshiNetworkGroup(ctx context.Context) client.Response[client.Nothing]
+	CreateOtoroshiNetworkGroup(ctx context.Context) client.Response[models.Otoroshi]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilder
@@ -7255,19 +7255,19 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilder(sdk *sd
 	}
 }
 
-// Deletengotoroshiapplication calls otoroshi.Deletengotoroshiapplication
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilderImpl) Deletengotoroshiapplication(ctx context.Context) client.Response[client.Nothing] {
-	return otoroshi.Deletengotoroshiapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// DeleteOtoroshiNetworkGroup calls otoroshi.DeleteOtoroshiNetworkGroup
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilderImpl) DeleteOtoroshiNetworkGroup(ctx context.Context) client.Response[client.Nothing] {
+	return otoroshi.DeleteOtoroshiNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
-// Createngotoroshiapplication calls otoroshi.Createngotoroshiapplication
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilderImpl) Createngotoroshiapplication(ctx context.Context) client.Response[models.Otoroshi] {
-	return otoroshi.Createngotoroshiapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// CreateOtoroshiNetworkGroup calls otoroshi.CreateOtoroshiNetworkGroup
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidNetworkgroupBuilderImpl) CreateOtoroshiNetworkGroup(ctx context.Context) client.Response[models.Otoroshi] {
+	return otoroshi.CreateOtoroshiNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilder interface {
-	Rebootapplication(ctx context.Context) client.Response[client.Nothing]
+	RebootOtoroshi(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilder
@@ -7284,14 +7284,14 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilder(sdk *sdkImpl,
 	}
 }
 
-// Rebootapplication calls otoroshi.Rebootapplication
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilderImpl) Rebootapplication(ctx context.Context) client.Response[client.Nothing] {
-	return otoroshi.Rebootapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// RebootOtoroshi calls otoroshi.RebootOtoroshi
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebootBuilderImpl) RebootOtoroshi(ctx context.Context) client.Response[client.Nothing] {
+	return otoroshi.RebootOtoroshi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilder interface {
-	Rebuildapplication(ctx context.Context) client.Response[client.Nothing]
+	RebuildOtoroshi(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilder
@@ -7308,9 +7308,9 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilder(sdk *sdkImpl
 	}
 }
 
-// Rebuildapplication calls otoroshi.Rebuildapplication
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilderImpl) Rebuildapplication(ctx context.Context) client.Response[client.Nothing] {
-	return otoroshi.Rebuildapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// RebuildOtoroshi calls otoroshi.RebuildOtoroshi
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidRebuildBuilderImpl) RebuildOtoroshi(ctx context.Context) client.Response[client.Nothing] {
+	return otoroshi.RebuildOtoroshi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionBuilder provides access to operations
@@ -7345,7 +7345,7 @@ func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionBuilderImpl) Update
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilder interface {
-	Getcheckversionotoroshiapplication(ctx context.Context) client.Response[models.OtoroshiVersionChecker]
+	CheckOtoroshiVersion(ctx context.Context) client.Response[models.OtoroshiVersionChecker]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilder
@@ -7362,14 +7362,14 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilder(sdk *sd
 	}
 }
 
-// Getcheckversionotoroshiapplication calls otoroshi.Getcheckversionotoroshiapplication
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilderImpl) Getcheckversionotoroshiapplication(ctx context.Context) client.Response[models.OtoroshiVersionChecker] {
-	return otoroshi.Getcheckversionotoroshiapplication(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
+// CheckOtoroshiVersion calls otoroshi.CheckOtoroshiVersion
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionCheckBuilderImpl) CheckOtoroshiVersion(ctx context.Context) client.Response[models.OtoroshiVersionChecker] {
+	return otoroshi.CheckOtoroshiVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid)
 }
 
 // V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilder provides access to operations
 type V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilder interface {
-	Createversionupdateotoroshi(ctx context.Context, request *models.OtoroshiPatchRequest) client.Response[models.Otoroshi]
+	UpdateOtoroshiVersion(ctx context.Context, request *models.OtoroshiPatchRequest) client.Response[models.Otoroshi]
 }
 
 // v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilderImpl implements V4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilder
@@ -7386,9 +7386,9 @@ func newV4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilder(sdk *s
 	}
 }
 
-// Createversionupdateotoroshi calls otoroshi.Createversionupdateotoroshi
-func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilderImpl) Createversionupdateotoroshi(ctx context.Context, request *models.OtoroshiPatchRequest) client.Response[models.Otoroshi] {
-	return otoroshi.Createversionupdateotoroshi(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid, request)
+// UpdateOtoroshiVersion calls otoroshi.UpdateOtoroshiVersion
+func (b *v4AddonProvidersAddonOtoroshiAddonsOtoroshiidVersionUpdateBuilderImpl) UpdateOtoroshiVersion(ctx context.Context, request *models.OtoroshiPatchRequest) client.Response[models.Otoroshi] {
+	return otoroshi.UpdateOtoroshiVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.otoroshiid, request)
 }
 
 // V4AddonProvidersAddonPulsarBuilder provides access to operations
@@ -7442,7 +7442,7 @@ type V4AddonProvidersAddonPulsarAddonsPulsaridBuilder interface {
 	NonPersistentTopics() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder
 	StoragePolicies() V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder
 	Topics() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder
-	Getpulsar(ctx context.Context) client.Response[models.Pulsar]
+	GetPulsar(ctx context.Context) client.Response[models.Pulsar]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridBuilder
@@ -7474,15 +7474,15 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) Topics() V4AddonP
 	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder(b.sdk, b.pulsarid)
 }
 
-// Getpulsar calls pulsar.Getpulsar
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) Getpulsar(ctx context.Context) client.Response[models.Pulsar] {
-	return pulsar.Getpulsar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
+// GetPulsar calls pulsar.GetPulsar
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridBuilderImpl) GetPulsar(ctx context.Context) client.Response[models.Pulsar] {
+	return pulsar.GetPulsar(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder interface {
 	Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder
-	Listpulsarnonpersistenttopics(ctx context.Context) client.Response[[]models.TopicView]
+	ListPulsarNonPersistentTopics(ctx context.Context) client.Response[[]models.TopicView]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilder
@@ -7504,17 +7504,17 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl
 	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder(b.sdk, b.pulsarid, topic)
 }
 
-// Listpulsarnonpersistenttopics calls pulsar.Listpulsarnonpersistenttopics
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl) Listpulsarnonpersistenttopics(ctx context.Context) client.Response[[]models.TopicView] {
-	return pulsar.Listpulsarnonpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
+// ListPulsarNonPersistentTopics calls pulsar.ListPulsarNonPersistentTopics
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsBuilderImpl) ListPulsarNonPersistentTopics(ctx context.Context) client.Response[[]models.TopicView] {
+	return pulsar.ListPulsarNonPersistentTopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder interface {
 	Token() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
 	Unload() V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder
-	Deletepulsarnonpersistenttopic(ctx context.Context) client.Response[client.Nothing]
-	Createpulsarnonpersistenttopic(ctx context.Context) client.Response[client.Nothing]
+	DeletePulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing]
+	CreatePulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilder
@@ -7543,19 +7543,19 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilde
 	return newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder(b.sdk, b.pulsarid, b.topic)
 }
 
-// Deletepulsarnonpersistenttopic calls pulsar.Deletepulsarnonpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Deletepulsarnonpersistenttopic(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Deletepulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// DeletePulsarNonPersistentTopic calls pulsar.DeletePulsarNonPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) DeletePulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.DeletePulsarNonPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
-// Createpulsarnonpersistenttopic calls pulsar.Createpulsarnonpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) Createpulsarnonpersistenttopic(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Createpulsarnonpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// CreatePulsarNonPersistentTopic calls pulsar.CreatePulsarNonPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicBuilderImpl) CreatePulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.CreatePulsarNonPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder interface {
-	Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString]
+	CreatePulsarNonPersistentTopicToken(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilder
@@ -7574,14 +7574,14 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBu
 	}
 }
 
-// Createpulsarnonpersistenttopictoken calls pulsar.Createpulsarnonpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl) Createpulsarnonpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString] {
-	return pulsar.Createpulsarnonpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// CreatePulsarNonPersistentTopicToken calls pulsar.CreatePulsarNonPersistentTopicToken
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicTokenBuilderImpl) CreatePulsarNonPersistentTopicToken(ctx context.Context) client.Response[client.PlainTextString] {
+	return pulsar.CreatePulsarNonPersistentTopicToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder interface {
-	Triggerpulsarnonpersistenttopicunload(ctx context.Context) client.Response[client.Nothing]
+	UnloadPulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilder
@@ -7600,15 +7600,15 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadB
 	}
 }
 
-// Triggerpulsarnonpersistenttopicunload calls pulsar.Triggerpulsarnonpersistenttopicunload
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl) Triggerpulsarnonpersistenttopicunload(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Triggerpulsarnonpersistenttopicunload(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// UnloadPulsarNonPersistentTopic calls pulsar.UnloadPulsarNonPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridNonPersistentTopicsTopicUnloadBuilderImpl) UnloadPulsarNonPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.UnloadPulsarNonPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder interface {
-	Getpulsarstoragepolicies(ctx context.Context) client.Response[models.StoragePolicies]
-	Updatepulsarstoragepolicies(ctx context.Context, request *models.StoragePolicies) client.Response[models.StoragePolicies]
+	GetPulsarStoragePolicies(ctx context.Context) client.Response[models.StoragePolicies]
+	UpdatePulsarStoragePolicies(ctx context.Context, request *models.StoragePolicies) client.Response[models.StoragePolicies]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder
@@ -7625,20 +7625,20 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilder(sdk *sdk
 	}
 }
 
-// Getpulsarstoragepolicies calls pulsar.Getpulsarstoragepolicies
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) Getpulsarstoragepolicies(ctx context.Context) client.Response[models.StoragePolicies] {
-	return pulsar.Getpulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
+// GetPulsarStoragePolicies calls pulsar.GetPulsarStoragePolicies
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) GetPulsarStoragePolicies(ctx context.Context) client.Response[models.StoragePolicies] {
+	return pulsar.GetPulsarStoragePolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
-// Updatepulsarstoragepolicies calls pulsar.Updatepulsarstoragepolicies
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) Updatepulsarstoragepolicies(ctx context.Context, request *models.StoragePolicies) client.Response[models.StoragePolicies] {
-	return pulsar.Updatepulsarstoragepolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, request)
+// UpdatePulsarStoragePolicies calls pulsar.UpdatePulsarStoragePolicies
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridStoragePoliciesBuilderImpl) UpdatePulsarStoragePolicies(ctx context.Context, request *models.StoragePolicies) client.Response[models.StoragePolicies] {
+	return pulsar.UpdatePulsarStoragePolicies(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, request)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder interface {
 	Topic(topic string) V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder
-	Listpulsarpersistenttopics(ctx context.Context) client.Response[[]models.TopicView]
+	ListPulsarPersistentTopics(ctx context.Context) client.Response[[]models.TopicView]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilder
@@ -7660,17 +7660,17 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl) Topic(topic
 	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder(b.sdk, b.pulsarid, topic)
 }
 
-// Listpulsarpersistenttopics calls pulsar.Listpulsarpersistenttopics
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl) Listpulsarpersistenttopics(ctx context.Context) client.Response[[]models.TopicView] {
-	return pulsar.Listpulsarpersistenttopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
+// ListPulsarPersistentTopics calls pulsar.ListPulsarPersistentTopics
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsBuilderImpl) ListPulsarPersistentTopics(ctx context.Context) client.Response[[]models.TopicView] {
+	return pulsar.ListPulsarPersistentTopics(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder interface {
 	Token() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
 	Unload() V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder
-	Deletepulsarpersistenttopic(ctx context.Context) client.Response[client.Nothing]
-	Createpulsarpersistenttopic(ctx context.Context) client.Response[client.Nothing]
+	DeletePulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing]
+	CreatePulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilder
@@ -7699,19 +7699,19 @@ func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Unload
 	return newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder(b.sdk, b.pulsarid, b.topic)
 }
 
-// Deletepulsarpersistenttopic calls pulsar.Deletepulsarpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Deletepulsarpersistenttopic(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Deletepulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// DeletePulsarPersistentTopic calls pulsar.DeletePulsarPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) DeletePulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.DeletePulsarPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
-// Createpulsarpersistenttopic calls pulsar.Createpulsarpersistenttopic
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) Createpulsarpersistenttopic(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Createpulsarpersistenttopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// CreatePulsarPersistentTopic calls pulsar.CreatePulsarPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicBuilderImpl) CreatePulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.CreatePulsarPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder interface {
-	Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString]
+	CreatePulsarPersistentTopicToken(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder
@@ -7730,14 +7730,14 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilder(sdk *sd
 	}
 }
 
-// Createpulsarpersistenttopictoken calls pulsar.Createpulsarpersistenttopictoken
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl) Createpulsarpersistenttopictoken(ctx context.Context) client.Response[client.PlainTextString] {
-	return pulsar.Createpulsarpersistenttopictoken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// CreatePulsarPersistentTopicToken calls pulsar.CreatePulsarPersistentTopicToken
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicTokenBuilderImpl) CreatePulsarPersistentTopicToken(ctx context.Context) client.Response[client.PlainTextString] {
+	return pulsar.CreatePulsarPersistentTopicToken(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder provides access to operations
 type V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder interface {
-	Triggerpulsarpersistenttopicunload(ctx context.Context) client.Response[client.Nothing]
+	UnloadPulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing]
 }
 
 // v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl implements V4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder
@@ -7756,9 +7756,9 @@ func newV4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilder(sdk *s
 	}
 }
 
-// Triggerpulsarpersistenttopicunload calls pulsar.Triggerpulsarpersistenttopicunload
-func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl) Triggerpulsarpersistenttopicunload(ctx context.Context) client.Response[client.Nothing] {
-	return pulsar.Triggerpulsarpersistenttopicunload(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
+// UnloadPulsarPersistentTopic calls pulsar.UnloadPulsarPersistentTopic
+func (b *v4AddonProvidersAddonPulsarAddonsPulsaridTopicsTopicUnloadBuilderImpl) UnloadPulsarPersistentTopic(ctx context.Context) client.Response[client.Nothing] {
+	return pulsar.UnloadPulsarPersistentTopic(ctx, b.sdk.Client(), b.sdk.Tracer(), b.pulsarid, b.topic)
 }
 
 // V4AddonProvidersAddonPulsarClustersBuilder provides access to operations
@@ -7783,7 +7783,7 @@ func (b *v4AddonProvidersAddonPulsarClustersBuilderImpl) Clusterid(clusterid str
 
 // V4AddonProvidersAddonPulsarClustersClusteridBuilder provides access to operations
 type V4AddonProvidersAddonPulsarClustersClusteridBuilder interface {
-	Getpulsarcluster(ctx context.Context) client.Response[models.PulsarCluster]
+	GetPulsarCluster(ctx context.Context) client.Response[models.PulsarCluster]
 }
 
 // v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl implements V4AddonProvidersAddonPulsarClustersClusteridBuilder
@@ -7800,9 +7800,9 @@ func newV4AddonProvidersAddonPulsarClustersClusteridBuilder(sdk *sdkImpl, cluste
 	}
 }
 
-// Getpulsarcluster calls pulsar.Getpulsarcluster
-func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) Getpulsarcluster(ctx context.Context) client.Response[models.PulsarCluster] {
-	return pulsar.Getpulsarcluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
+// GetPulsarCluster calls pulsar.GetPulsarCluster
+func (b *v4AddonProvidersAddonPulsarClustersClusteridBuilderImpl) GetPulsarCluster(ctx context.Context) client.Response[models.PulsarCluster] {
+	return pulsar.GetPulsarCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.clusterid)
 }
 
 // V4AddonProvidersConfigProviderBuilder provides access to operations
@@ -7848,7 +7848,7 @@ func (b *v4AddonProvidersConfigProviderAddonsBuilderImpl) Addonid(addonid string
 // V4AddonProvidersConfigProviderAddonsAddonidBuilder provides access to operations
 type V4AddonProvidersConfigProviderAddonsAddonidBuilder interface {
 	Env() V4AddonProvidersConfigProviderAddonsAddonidEnvBuilder
-	Getconfigurationprovider(ctx context.Context) client.Response[models.ConfigProvider]
+	GetConfigProvider(ctx context.Context) client.Response[models.ConfigProvider]
 }
 
 // v4AddonProvidersConfigProviderAddonsAddonidBuilderImpl implements V4AddonProvidersConfigProviderAddonsAddonidBuilder
@@ -7870,15 +7870,15 @@ func (b *v4AddonProvidersConfigProviderAddonsAddonidBuilderImpl) Env() V4AddonPr
 	return newV4AddonProvidersConfigProviderAddonsAddonidEnvBuilder(b.sdk, b.addonid)
 }
 
-// Getconfigurationprovider calls configuration_provider.Getconfigurationprovider
-func (b *v4AddonProvidersConfigProviderAddonsAddonidBuilderImpl) Getconfigurationprovider(ctx context.Context) client.Response[models.ConfigProvider] {
-	return configurationprovider.Getconfigurationprovider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// GetConfigProvider calls configuration_provider.GetConfigProvider
+func (b *v4AddonProvidersConfigProviderAddonsAddonidBuilderImpl) GetConfigProvider(ctx context.Context) client.Response[models.ConfigProvider] {
+	return configurationprovider.GetConfigProvider(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
 // V4AddonProvidersConfigProviderAddonsAddonidEnvBuilder provides access to operations
 type V4AddonProvidersConfigProviderAddonsAddonidEnvBuilder interface {
-	Listconfigurationproviderenv(ctx context.Context) client.Response[[]models.WannabeEnvVar]
-	Replaceconfigurationproviderenv(ctx context.Context, request []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar]
+	GetConfigProviderEnvironment(ctx context.Context) client.Response[[]models.WannabeEnvVar]
+	UpdateConfigProviderEnvironment(ctx context.Context, request []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar]
 }
 
 // v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl implements V4AddonProvidersConfigProviderAddonsAddonidEnvBuilder
@@ -7895,20 +7895,20 @@ func newV4AddonProvidersConfigProviderAddonsAddonidEnvBuilder(sdk *sdkImpl, addo
 	}
 }
 
-// Listconfigurationproviderenv calls configuration_provider.Listconfigurationproviderenv
-func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) Listconfigurationproviderenv(ctx context.Context) client.Response[[]models.WannabeEnvVar] {
-	return configurationprovider.Listconfigurationproviderenv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
+// GetConfigProviderEnvironment calls configuration_provider.GetConfigProviderEnvironment
+func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) GetConfigProviderEnvironment(ctx context.Context) client.Response[[]models.WannabeEnvVar] {
+	return configurationprovider.GetConfigProviderEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid)
 }
 
-// Replaceconfigurationproviderenv calls configuration_provider.Replaceconfigurationproviderenv
-func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) Replaceconfigurationproviderenv(ctx context.Context, request []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar] {
-	return configurationprovider.Replaceconfigurationproviderenv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
+// UpdateConfigProviderEnvironment calls configuration_provider.UpdateConfigProviderEnvironment
+func (b *v4AddonProvidersConfigProviderAddonsAddonidEnvBuilderImpl) UpdateConfigProviderEnvironment(ctx context.Context, request []*models.WannabeEnvVar) client.Response[[]models.WannabeEnvVar] {
+	return configurationprovider.UpdateConfigProviderEnvironment(ctx, b.sdk.Client(), b.sdk.Tracer(), b.addonid, request)
 }
 
 // V4AddonProvidersEsAddonBuilder provides access to operations
 type V4AddonProvidersEsAddonBuilder interface {
 	Addons() V4AddonProvidersEsAddonAddonsBuilder
-	Getelasticsearchproviderinformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole]
+	GetElasticsearchProviderInformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole]
 }
 
 // v4AddonProvidersEsAddonBuilderImpl implements V4AddonProvidersEsAddonBuilder
@@ -7926,9 +7926,9 @@ func (b *v4AddonProvidersEsAddonBuilderImpl) Addons() V4AddonProvidersEsAddonAdd
 	return newV4AddonProvidersEsAddonAddonsBuilder(b.sdk)
 }
 
-// Getelasticsearchproviderinformation calls es_addon.Getelasticsearchproviderinformation
-func (b *v4AddonProvidersEsAddonBuilderImpl) Getelasticsearchproviderinformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole] {
-	return esaddon.Getelasticsearchproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetElasticsearchProviderInformation calls es_addon.GetElasticsearchProviderInformation
+func (b *v4AddonProvidersEsAddonBuilderImpl) GetElasticsearchProviderInformation(ctx context.Context) client.Response[models.ElasticsearchProvidersConsole] {
+	return esaddon.GetElasticsearchProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersEsAddonAddonsBuilder provides access to operations
@@ -7953,7 +7953,7 @@ func (b *v4AddonProvidersEsAddonAddonsBuilderImpl) Appid(appid string) V4AddonPr
 
 // V4AddonProvidersEsAddonAddonsAppidBuilder provides access to operations
 type V4AddonProvidersEsAddonAddonsAppidBuilder interface {
-	Getelasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView]
+	GetElasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView]
 }
 
 // v4AddonProvidersEsAddonAddonsAppidBuilderImpl implements V4AddonProvidersEsAddonAddonsAppidBuilder
@@ -7970,15 +7970,15 @@ func newV4AddonProvidersEsAddonAddonsAppidBuilder(sdk *sdkImpl, appid string) V4
 	}
 }
 
-// Getelasticsearch calls es_addon.Getelasticsearch
-func (b *v4AddonProvidersEsAddonAddonsAppidBuilderImpl) Getelasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView] {
-	return esaddon.Getelasticsearch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
+// GetElasticsearch calls es_addon.GetElasticsearch
+func (b *v4AddonProvidersEsAddonAddonsAppidBuilderImpl) GetElasticsearch(ctx context.Context) client.Response[models.ElasticsearchAddonView] {
+	return esaddon.GetElasticsearch(ctx, b.sdk.Client(), b.sdk.Tracer(), b.appid)
 }
 
 // V4AddonProvidersJenkinsBuilder provides access to operations
 type V4AddonProvidersJenkinsBuilder interface {
 	Addons() V4AddonProvidersJenkinsAddonsBuilder
-	Getjenkinsproviderinformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView]
+	GetJenkinsProviderInformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView]
 }
 
 // v4AddonProvidersJenkinsBuilderImpl implements V4AddonProvidersJenkinsBuilder
@@ -7996,9 +7996,9 @@ func (b *v4AddonProvidersJenkinsBuilderImpl) Addons() V4AddonProvidersJenkinsAdd
 	return newV4AddonProvidersJenkinsAddonsBuilder(b.sdk)
 }
 
-// Getjenkinsproviderinformation calls jenkins.Getjenkinsproviderinformation
-func (b *v4AddonProvidersJenkinsBuilderImpl) Getjenkinsproviderinformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView] {
-	return jenkins.Getjenkinsproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetJenkinsProviderInformation calls jenkins.GetJenkinsProviderInformation
+func (b *v4AddonProvidersJenkinsBuilderImpl) GetJenkinsProviderInformation(ctx context.Context) client.Response[models.JenkinsProvidersConsoleView] {
+	return jenkins.GetJenkinsProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersJenkinsAddonsBuilder provides access to operations
@@ -8024,7 +8024,7 @@ func (b *v4AddonProvidersJenkinsAddonsBuilderImpl) ID(id string) V4AddonProvider
 // V4AddonProvidersJenkinsAddonsIDBuilder provides access to operations
 type V4AddonProvidersJenkinsAddonsIDBuilder interface {
 	Updates() V4AddonProvidersJenkinsAddonsIDUpdatesBuilder
-	Getjenkins(ctx context.Context) client.Response[models.JenkinsAddonView]
+	GetJenkins(ctx context.Context) client.Response[models.JenkinsAddonView]
 }
 
 // v4AddonProvidersJenkinsAddonsIDBuilderImpl implements V4AddonProvidersJenkinsAddonsIDBuilder
@@ -8046,14 +8046,14 @@ func (b *v4AddonProvidersJenkinsAddonsIDBuilderImpl) Updates() V4AddonProvidersJ
 	return newV4AddonProvidersJenkinsAddonsIDUpdatesBuilder(b.sdk, b.id)
 }
 
-// Getjenkins calls jenkins.Getjenkins
-func (b *v4AddonProvidersJenkinsAddonsIDBuilderImpl) Getjenkins(ctx context.Context) client.Response[models.JenkinsAddonView] {
-	return jenkins.Getjenkins(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// GetJenkins calls jenkins.GetJenkins
+func (b *v4AddonProvidersJenkinsAddonsIDBuilderImpl) GetJenkins(ctx context.Context) client.Response[models.JenkinsAddonView] {
+	return jenkins.GetJenkins(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V4AddonProvidersJenkinsAddonsIDUpdatesBuilder provides access to operations
 type V4AddonProvidersJenkinsAddonsIDUpdatesBuilder interface {
-	Getjenkinsavailableupdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView]
+	ListJenkinsUpdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView]
 }
 
 // v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl implements V4AddonProvidersJenkinsAddonsIDUpdatesBuilder
@@ -8070,14 +8070,14 @@ func newV4AddonProvidersJenkinsAddonsIDUpdatesBuilder(sdk *sdkImpl, id string) V
 	}
 }
 
-// Getjenkinsavailableupdates calls jenkins.Getjenkinsavailableupdates
-func (b *v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl) Getjenkinsavailableupdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView] {
-	return jenkins.Getjenkinsavailableupdates(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
+// ListJenkinsUpdates calls jenkins.ListJenkinsUpdates
+func (b *v4AddonProvidersJenkinsAddonsIDUpdatesBuilderImpl) ListJenkinsUpdates(ctx context.Context) client.Response[models.JenkinsUpdateCenterView] {
+	return jenkins.ListJenkinsUpdates(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id)
 }
 
 // V4AddonProvidersKeycloakBuilder provides access to operations
 type V4AddonProvidersKeycloakBuilder interface {
-	Getkeycloakproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
+	GetKeycloakProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
 // v4AddonProvidersKeycloakBuilderImpl implements V4AddonProvidersKeycloakBuilder
@@ -8090,14 +8090,14 @@ func newV4AddonProvidersKeycloakBuilder(sdk *sdkImpl) V4AddonProvidersKeycloakBu
 	return &v4AddonProvidersKeycloakBuilderImpl{sdk: sdk}
 }
 
-// Getkeycloakproviderinformation calls keycloak.Getkeycloakproviderinformation
-func (b *v4AddonProvidersKeycloakBuilderImpl) Getkeycloakproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
-	return keycloak.Getkeycloakproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetKeycloakProviderInformation calls keycloak.GetKeycloakProviderInformation
+func (b *v4AddonProvidersKeycloakBuilderImpl) GetKeycloakProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return keycloak.GetKeycloakProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersKvBuilder provides access to operations
 type V4AddonProvidersKvBuilder interface {
-	Getmateriakvprovider(ctx context.Context) client.Response[models.ProviderConsoleView]
+	GetMateriaKvProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
 // v4AddonProvidersKvBuilderImpl implements V4AddonProvidersKvBuilder
@@ -8110,14 +8110,14 @@ func newV4AddonProvidersKvBuilder(sdk *sdkImpl) V4AddonProvidersKvBuilder {
 	return &v4AddonProvidersKvBuilderImpl{sdk: sdk}
 }
 
-// Getmateriakvprovider calls materia_kv.Getmateriakvprovider
-func (b *v4AddonProvidersKvBuilderImpl) Getmateriakvprovider(ctx context.Context) client.Response[models.ProviderConsoleView] {
-	return materiakv.Getmateriakvprovider(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetMateriaKvProviderInformation calls materia_kv.GetMateriaKvProviderInformation
+func (b *v4AddonProvidersKvBuilderImpl) GetMateriaKvProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return materiakv.GetMateriaKvProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersMetabaseBuilder provides access to operations
 type V4AddonProvidersMetabaseBuilder interface {
-	Getmetabaseproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
+	GetMetabaseProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
 // v4AddonProvidersMetabaseBuilderImpl implements V4AddonProvidersMetabaseBuilder
@@ -8130,14 +8130,14 @@ func newV4AddonProvidersMetabaseBuilder(sdk *sdkImpl) V4AddonProvidersMetabaseBu
 	return &v4AddonProvidersMetabaseBuilderImpl{sdk: sdk}
 }
 
-// Getmetabaseproviderinformation calls metabase.Getmetabaseproviderinformation
-func (b *v4AddonProvidersMetabaseBuilderImpl) Getmetabaseproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
-	return metabase.Getmetabaseproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetMetabaseProviderInformation calls metabase.GetMetabaseProviderInformation
+func (b *v4AddonProvidersMetabaseBuilderImpl) GetMetabaseProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return metabase.GetMetabaseProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersMysqlAddonBuilder provides access to operations
 type V4AddonProvidersMysqlAddonBuilder interface {
-	Getmysqlproviderinformation(ctx context.Context) client.Response[models.MysqlProvidersConsole]
+	GetMysqlProviderInformation(ctx context.Context) client.Response[models.MysqlProvidersConsole]
 }
 
 // v4AddonProvidersMysqlAddonBuilderImpl implements V4AddonProvidersMysqlAddonBuilder
@@ -8150,14 +8150,14 @@ func newV4AddonProvidersMysqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersMysqlAdd
 	return &v4AddonProvidersMysqlAddonBuilderImpl{sdk: sdk}
 }
 
-// Getmysqlproviderinformation calls my_sql_addon.Getmysqlproviderinformation
-func (b *v4AddonProvidersMysqlAddonBuilderImpl) Getmysqlproviderinformation(ctx context.Context) client.Response[models.MysqlProvidersConsole] {
-	return mysqladdon.Getmysqlproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetMysqlProviderInformation calls my_sql_addon.GetMysqlProviderInformation
+func (b *v4AddonProvidersMysqlAddonBuilderImpl) GetMysqlProviderInformation(ctx context.Context) client.Response[models.MysqlProvidersConsole] {
+	return mysqladdon.GetMysqlProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersOtoroshiBuilder provides access to operations
 type V4AddonProvidersOtoroshiBuilder interface {
-	Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView]
+	GetOtoroshiProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView]
 }
 
 // v4AddonProvidersOtoroshiBuilderImpl implements V4AddonProvidersOtoroshiBuilder
@@ -8170,14 +8170,14 @@ func newV4AddonProvidersOtoroshiBuilder(sdk *sdkImpl) V4AddonProvidersOtoroshiBu
 	return &v4AddonProvidersOtoroshiBuilderImpl{sdk: sdk}
 }
 
-// Getotoroshiproviderinformation calls otoroshi.Getotoroshiproviderinformation
-func (b *v4AddonProvidersOtoroshiBuilderImpl) Getotoroshiproviderinformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
-	return otoroshi.Getotoroshiproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetOtoroshiProviderInformation calls otoroshi.GetOtoroshiProviderInformation
+func (b *v4AddonProvidersOtoroshiBuilderImpl) GetOtoroshiProviderInformation(ctx context.Context) client.Response[models.ProviderConsoleView] {
+	return otoroshi.GetOtoroshiProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4AddonProvidersPostgresqlAddonBuilder provides access to operations
 type V4AddonProvidersPostgresqlAddonBuilder interface {
-	Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole]
+	GetPostgresqlProviderInformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole]
 }
 
 // v4AddonProvidersPostgresqlAddonBuilderImpl implements V4AddonProvidersPostgresqlAddonBuilder
@@ -8190,14 +8190,14 @@ func newV4AddonProvidersPostgresqlAddonBuilder(sdk *sdkImpl) V4AddonProvidersPos
 	return &v4AddonProvidersPostgresqlAddonBuilderImpl{sdk: sdk}
 }
 
-// Getpostgresqlproviderinformation calls postgresql_addon.Getpostgresqlproviderinformation
-func (b *v4AddonProvidersPostgresqlAddonBuilderImpl) Getpostgresqlproviderinformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole] {
-	return postgresqladdon.Getpostgresqlproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// GetPostgresqlProviderInformation calls postgresql_addon.GetPostgresqlProviderInformation
+func (b *v4AddonProvidersPostgresqlAddonBuilderImpl) GetPostgresqlProviderInformation(ctx context.Context, opts ...postgresqladdon.Option) client.Response[models.PostgresqlProvidersConsole] {
+	return postgresqladdon.GetPostgresqlProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4AddonProvidersRedisAddonBuilder provides access to operations
 type V4AddonProvidersRedisAddonBuilder interface {
-	Getredisproviderinformation(ctx context.Context) client.Response[models.RedisProviderInfo]
+	GetRedisProviderInformation(ctx context.Context) client.Response[models.RedisProviderInfo]
 }
 
 // v4AddonProvidersRedisAddonBuilderImpl implements V4AddonProvidersRedisAddonBuilder
@@ -8210,9 +8210,9 @@ func newV4AddonProvidersRedisAddonBuilder(sdk *sdkImpl) V4AddonProvidersRedisAdd
 	return &v4AddonProvidersRedisAddonBuilderImpl{sdk: sdk}
 }
 
-// Getredisproviderinformation calls redis_addon.Getredisproviderinformation
-func (b *v4AddonProvidersRedisAddonBuilderImpl) Getredisproviderinformation(ctx context.Context) client.Response[models.RedisProviderInfo] {
-	return redisaddon.Getredisproviderinformation(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetRedisProviderInformation calls redis_addon.GetRedisProviderInformation
+func (b *v4AddonProvidersRedisAddonBuilderImpl) GetRedisProviderInformation(ctx context.Context) client.Response[models.RedisProviderInfo] {
+	return redisaddon.GetRedisProviderInformation(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4KubernetesBuilder provides access to operations
@@ -8306,8 +8306,8 @@ func (b *v4KubernetesOrganisationsOwneridBuilderImpl) Zones() V4KubernetesOrgani
 // V4KubernetesOrganisationsOwneridClustersBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersBuilder interface {
 	Kubernetesid(kubernetesid string) V4KubernetesOrganisationsOwneridClustersKubernetesidBuilder
-	Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster]
-	Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster]
+	ListKubernetesClusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster]
+	CreateKubernetesCluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersBuilderImpl implements V4KubernetesOrganisationsOwneridClustersBuilder
@@ -8329,14 +8329,14 @@ func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Kubernetesid(kuber
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidBuilder(b.sdk, b.ownerid, kubernetesid)
 }
 
-// Listkubernetesclusters calls kubernetes.Listkubernetesclusters
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Listkubernetesclusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster] {
-	return kubernetes.Listkubernetesclusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+// ListKubernetesClusters calls kubernetes.ListKubernetesClusters
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) ListKubernetesClusters(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.KubernetesCluster] {
+	return kubernetes.ListKubernetesClusters(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
-// Createkubernetescluster calls kubernetes.Createkubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) Createkubernetescluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster] {
-	return kubernetes.Createkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
+// CreateKubernetesCluster calls kubernetes.CreateKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersBuilderImpl) CreateKubernetesCluster(ctx context.Context, request *models.ClusterCreationPayload) client.Response[models.KubernetesCluster] {
+	return kubernetes.CreateKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidBuilder provides access to operations
@@ -8353,9 +8353,9 @@ type V4KubernetesOrganisationsOwneridClustersKubernetesidBuilder interface {
 	Resume() V4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder
 	SniMigration() V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder
 	Version() V4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilder
-	Deletekubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster]
-	Getkubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster]
-	Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster]
+	DeleteKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster]
+	GetKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster]
+	UpdateKubernetesCluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidBuilder
@@ -8434,19 +8434,19 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Versio
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilder(b.sdk, b.ownerid, b.kubernetesid)
 }
 
-// Deletekubernetescluster calls kubernetes.Deletekubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Deletekubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster] {
-	return kubernetes.Deletekubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// DeleteKubernetesCluster calls kubernetes.DeleteKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) DeleteKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster] {
+	return kubernetes.DeleteKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
-// Getkubernetescluster calls kubernetes.Getkubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Getkubernetescluster(ctx context.Context) client.Response[models.KubernetesCluster] {
-	return kubernetes.Getkubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// GetKubernetesCluster calls kubernetes.GetKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) GetKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster] {
+	return kubernetes.GetKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
-// Updatekubernetescluster calls kubernetes.Updatekubernetescluster
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Updatekubernetescluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
-	return kubernetes.Updatekubernetescluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// UpdateKubernetesCluster calls kubernetes.UpdateKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) UpdateKubernetesCluster(ctx context.Context, request *models.ClusterPatchPayload) client.Response[models.KubernetesCluster] {
+	return kubernetes.UpdateKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidCsiBuilder provides access to operations
@@ -8477,7 +8477,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidCsiBuilderImpl) Cep
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilder interface {
-	Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.KubernetesCluster]
+	AddKubernetesPersistentStorage(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilder
@@ -8496,14 +8496,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilder(sdk *
 	}
 }
 
-// Assignkubernetescephcsiplugin calls kubernetes.Assignkubernetescephcsiplugin
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilderImpl) Assignkubernetescephcsiplugin(ctx context.Context) client.Response[models.KubernetesCluster] {
-	return kubernetes.Assignkubernetescephcsiplugin(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// AddKubernetesPersistentStorage calls kubernetes.AddKubernetesPersistentStorage
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidCsiCephBuilderImpl) AddKubernetesPersistentStorage(ctx context.Context) client.Response[models.KubernetesCluster] {
+	return kubernetes.AddKubernetesPersistentStorage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilder interface {
-	Listclusterdeploymentevents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.DeploymentEvent]
+	ListKubernetesClusterDeploymentEvents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.DeploymentEvent]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilder
@@ -8522,14 +8522,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuil
 	}
 }
 
-// Listclusterdeploymentevents calls kubernetes.Listclusterdeploymentevents
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilderImpl) Listclusterdeploymentevents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.DeploymentEvent] {
-	return kubernetes.Listclusterdeploymentevents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
+// ListKubernetesClusterDeploymentEvents calls kubernetes.ListKubernetesClusterDeploymentEvents
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidDeploymentEventsBuilderImpl) ListKubernetesClusterDeploymentEvents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.DeploymentEvent] {
+	return kubernetes.ListKubernetesClusterDeploymentEvents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilder interface {
-	Listclusterevents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterDeploymentEvent]
+	ListKubernetesClusterEvents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterDeploymentEvent]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilder
@@ -8548,9 +8548,9 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilder(sdk *s
 	}
 }
 
-// Listclusterevents calls kubernetes.Listclusterevents
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilderImpl) Listclusterevents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterDeploymentEvent] {
-	return kubernetes.Listclusterevents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
+// ListKubernetesClusterEvents calls kubernetes.ListKubernetesClusterEvents
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidEventsBuilderImpl) ListKubernetesClusterEvents(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.ClusterDeploymentEvent] {
+	return kubernetes.ListKubernetesClusterEvents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigBuilder provides access to operations
@@ -8581,7 +8581,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigBuilderIm
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilder interface {
-	Getkubeconfigpresignedurl(ctx context.Context) client.Response[models.PresignedUrl]
+	GetKubernetesKubeconfigPresignedURL(ctx context.Context) client.Response[models.PresignedUrl]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilder
@@ -8600,14 +8600,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedU
 	}
 }
 
-// Getkubeconfigpresignedurl calls kubernetes.Getkubeconfigpresignedurl
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilderImpl) Getkubeconfigpresignedurl(ctx context.Context) client.Response[models.PresignedUrl] {
-	return kubernetes.Getkubeconfigpresignedurl(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// GetKubernetesKubeconfigPresignedURL calls kubernetes.GetKubernetesKubeconfigPresignedURL
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigPresignedURLBuilderImpl) GetKubernetesKubeconfigPresignedURL(ctx context.Context) client.Response[models.PresignedUrl] {
+	return kubernetes.GetKubernetesKubeconfigPresignedURL(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder interface {
-	Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString]
+	GetKubernetesKubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilder
@@ -8626,16 +8626,16 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilde
 	}
 }
 
-// Getkubeconfig calls kubernetes.Getkubeconfig
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl) Getkubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString] {
-	return kubernetes.Getkubeconfig(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
+// GetKubernetesKubeconfig calls kubernetes.GetKubernetesKubeconfig
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidKubeconfigYAMLBuilderImpl) GetKubernetesKubeconfig(ctx context.Context, opts ...kubernetes.Option) client.Response[client.PlainTextString] {
+	return kubernetes.GetKubernetesKubeconfig(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilder interface {
 	Nodegroupid(nodegroupid string) V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilder
-	Listkubernetesnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroup]
-	Createkubernetesnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroup]
+	ListKubernetesNodeGroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroup]
+	CreateKubernetesNodeGroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroup]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilder
@@ -8659,22 +8659,22 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderIm
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilder(b.sdk, b.ownerid, b.kubernetesid, nodegroupid)
 }
 
-// Listkubernetesnodegroups calls kubernetes.Listkubernetesnodegroups
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderImpl) Listkubernetesnodegroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroup] {
-	return kubernetes.Listkubernetesnodegroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
+// ListKubernetesNodeGroups calls kubernetes.ListKubernetesNodeGroups
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderImpl) ListKubernetesNodeGroups(ctx context.Context, opts ...kubernetes.Option) client.Response[[]models.NodeGroup] {
+	return kubernetes.ListKubernetesNodeGroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
-// Createkubernetesnodegroup calls kubernetes.Createkubernetesnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderImpl) Createkubernetesnodegroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
-	return kubernetes.Createkubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// CreateKubernetesNodeGroup calls kubernetes.CreateKubernetesNodeGroup
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsBuilderImpl) CreateKubernetesNodeGroup(ctx context.Context, request *models.NodeGroupCreationPayload) client.Response[models.NodeGroup] {
+	return kubernetes.CreateKubernetesNodeGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilder interface {
 	Resume() V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilder
-	Deletekubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroup]
-	Getkubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroup]
-	Updatekubernetesnodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroup]
+	DeleteKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup]
+	GetKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup]
+	UpdateKubernetesNodeGroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroup]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilder
@@ -8700,24 +8700,24 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroup
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilder(b.sdk, b.ownerid, b.kubernetesid, b.nodegroupid)
 }
 
-// Deletekubernetesnodegroup calls kubernetes.Deletekubernetesnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) Deletekubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroup] {
-	return kubernetes.Deletekubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
+// DeleteKubernetesNodeGroup calls kubernetes.DeleteKubernetesNodeGroup
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) DeleteKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup] {
+	return kubernetes.DeleteKubernetesNodeGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
 }
 
-// Getkubernetesnodegroup calls kubernetes.Getkubernetesnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) Getkubernetesnodegroup(ctx context.Context) client.Response[models.NodeGroup] {
-	return kubernetes.Getkubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
+// GetKubernetesNodeGroup calls kubernetes.GetKubernetesNodeGroup
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) GetKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup] {
+	return kubernetes.GetKubernetesNodeGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
 }
 
-// Updatekubernetesnodegroup calls kubernetes.Updatekubernetesnodegroup
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) Updatekubernetesnodegroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
-	return kubernetes.Updatekubernetesnodegroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid, request)
+// UpdateKubernetesNodeGroup calls kubernetes.UpdateKubernetesNodeGroup
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidBuilderImpl) UpdateKubernetesNodeGroup(ctx context.Context, request *models.NodeGroupPatchPayload) client.Response[models.NodeGroup] {
+	return kubernetes.UpdateKubernetesNodeGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilder interface {
-	Triggerkubernetesnodegroupresume(ctx context.Context) client.Response[models.NodeGroup]
+	ResumeKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilder
@@ -8738,16 +8738,16 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupi
 	}
 }
 
-// Triggerkubernetesnodegroupresume calls kubernetes.Triggerkubernetesnodegroupresume
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilderImpl) Triggerkubernetesnodegroupresume(ctx context.Context) client.Response[models.NodeGroup] {
-	return kubernetes.Triggerkubernetesnodegroupresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
+// ResumeKubernetesNodeGroup calls kubernetes.ResumeKubernetesNodeGroup
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodeGroupsNodegroupidResumeBuilderImpl) ResumeKubernetesNodeGroup(ctx context.Context) client.Response[models.NodeGroup] {
+	return kubernetes.ResumeKubernetesNodeGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodegroupid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilder interface {
 	Nodeid(nodeid string) V4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder
-	Listkubernetesnodes(ctx context.Context) client.Response[[]models.StandaloneNode]
-	Createkubernetesnode(ctx context.Context, request *models.WannabeStandaloneNode) client.Response[models.StandaloneNode]
+	ListKubernetesNodes(ctx context.Context) client.Response[[]models.StandaloneNode]
+	CreateKubernetesNode(ctx context.Context, request *models.WannabeStandaloneNode) client.Response[models.StandaloneNode]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilder
@@ -8771,20 +8771,20 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl) N
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder(b.sdk, b.ownerid, b.kubernetesid, nodeid)
 }
 
-// Listkubernetesnodes calls kubernetes.Listkubernetesnodes
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl) Listkubernetesnodes(ctx context.Context) client.Response[[]models.StandaloneNode] {
-	return kubernetes.Listkubernetesnodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// ListKubernetesNodes calls kubernetes.ListKubernetesNodes
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl) ListKubernetesNodes(ctx context.Context) client.Response[[]models.StandaloneNode] {
+	return kubernetes.ListKubernetesNodes(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
-// Createkubernetesnode calls kubernetes.Createkubernetesnode
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl) Createkubernetesnode(ctx context.Context, request *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
-	return kubernetes.Createkubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// CreateKubernetesNode calls kubernetes.CreateKubernetesNode
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesBuilderImpl) CreateKubernetesNode(ctx context.Context, request *models.WannabeStandaloneNode) client.Response[models.StandaloneNode] {
+	return kubernetes.CreateKubernetesNode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder interface {
-	Deletekubernetesnode(ctx context.Context) client.Response[models.StandaloneNode]
-	Getkubernetesnode(ctx context.Context) client.Response[models.StandaloneNode]
+	DeleteKubernetesNode(ctx context.Context) client.Response[models.StandaloneNode]
+	GetKubernetesNode(ctx context.Context) client.Response[models.StandaloneNode]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder
@@ -8805,14 +8805,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilder(s
 	}
 }
 
-// Deletekubernetesnode calls kubernetes.Deletekubernetesnode
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilderImpl) Deletekubernetesnode(ctx context.Context) client.Response[models.StandaloneNode] {
-	return kubernetes.Deletekubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodeid)
+// DeleteKubernetesNode calls kubernetes.DeleteKubernetesNode
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilderImpl) DeleteKubernetesNode(ctx context.Context) client.Response[models.StandaloneNode] {
+	return kubernetes.DeleteKubernetesNode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodeid)
 }
 
-// Getkubernetesnode calls kubernetes.Getkubernetesnode
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilderImpl) Getkubernetesnode(ctx context.Context) client.Response[models.StandaloneNode] {
-	return kubernetes.Getkubernetesnode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodeid)
+// GetKubernetesNode calls kubernetes.GetKubernetesNode
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidNodesNodeidBuilderImpl) GetKubernetesNode(ctx context.Context) client.Response[models.StandaloneNode] {
+	return kubernetes.GetKubernetesNode(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.nodeid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidPluginsBuilder provides access to operations
@@ -8843,7 +8843,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidPluginsBuilderImpl)
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilder interface {
-	Triggerkubernetesclusterpluginsreconcile(ctx context.Context) client.Response[models.KubernetesCluster]
+	ReconcileKubernetesClusterPlugins(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilder
@@ -8862,14 +8862,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuil
 	}
 }
 
-// Triggerkubernetesclusterpluginsreconcile calls kubernetes.Triggerkubernetesclusterpluginsreconcile
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilderImpl) Triggerkubernetesclusterpluginsreconcile(ctx context.Context) client.Response[models.KubernetesCluster] {
-	return kubernetes.Triggerkubernetesclusterpluginsreconcile(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// ReconcileKubernetesClusterPlugins calls kubernetes.ReconcileKubernetesClusterPlugins
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidPluginsReconcileBuilderImpl) ReconcileKubernetesClusterPlugins(ctx context.Context) client.Response[models.KubernetesCluster] {
+	return kubernetes.ReconcileKubernetesClusterPlugins(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilder interface {
-	Triggerkubernetesclusterredeploy(ctx context.Context, request *models.RedeployControlPlanePayload) client.Response[models.KubernetesCluster]
+	RedeployKubernetesCluster(ctx context.Context, request *models.RedeployControlPlanePayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilder
@@ -8888,14 +8888,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilder(sdk 
 	}
 }
 
-// Triggerkubernetesclusterredeploy calls kubernetes.Triggerkubernetesclusterredeploy
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilderImpl) Triggerkubernetesclusterredeploy(ctx context.Context, request *models.RedeployControlPlanePayload) client.Response[models.KubernetesCluster] {
-	return kubernetes.Triggerkubernetesclusterredeploy(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// RedeployKubernetesCluster calls kubernetes.RedeployKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilderImpl) RedeployKubernetesCluster(ctx context.Context, request *models.RedeployControlPlanePayload) client.Response[models.KubernetesCluster] {
+	return kubernetes.RedeployKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder interface {
-	Triggerkubernetesclusterresume(ctx context.Context, request *models.ResumeClusterPayload) client.Response[models.KubernetesCluster]
+	ResumeKubernetesCluster(ctx context.Context, request *models.ResumeClusterPayload) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder
@@ -8914,14 +8914,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder(sdk *s
 	}
 }
 
-// Triggerkubernetesclusterresume calls kubernetes.Triggerkubernetesclusterresume
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilderImpl) Triggerkubernetesclusterresume(ctx context.Context, request *models.ResumeClusterPayload) client.Response[models.KubernetesCluster] {
-	return kubernetes.Triggerkubernetesclusterresume(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// ResumeKubernetesCluster calls kubernetes.ResumeKubernetesCluster
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilderImpl) ResumeKubernetesCluster(ctx context.Context, request *models.ResumeClusterPayload) client.Response[models.KubernetesCluster] {
+	return kubernetes.ResumeKubernetesCluster(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder interface {
-	Triggerkubernetesclustersnimigration(ctx context.Context) client.Response[models.KubernetesCluster]
+	MigrateKubernetesClusterSni(ctx context.Context) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder
@@ -8940,9 +8940,9 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder(
 	}
 }
 
-// Triggerkubernetesclustersnimigration calls kubernetes.Triggerkubernetesclustersnimigration
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilderImpl) Triggerkubernetesclustersnimigration(ctx context.Context) client.Response[models.KubernetesCluster] {
-	return kubernetes.Triggerkubernetesclustersnimigration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+// MigrateKubernetesClusterSni calls kubernetes.MigrateKubernetesClusterSni
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilderImpl) MigrateKubernetesClusterSni(ctx context.Context) client.Response[models.KubernetesCluster] {
+	return kubernetes.MigrateKubernetesClusterSni(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilder provides access to operations
@@ -8979,7 +8979,7 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilderImpl)
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilder interface {
-	Getkubernetesclusterversioncheck(ctx context.Context, opts ...kubernetes.Option) client.Response[models.ClusterVersionCheck]
+	CheckKubernetesClusterVersion(ctx context.Context, opts ...kubernetes.Option) client.Response[models.ClusterVersionCheck]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilder
@@ -8998,14 +8998,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilder(
 	}
 }
 
-// Getkubernetesclusterversioncheck calls kubernetes.Getkubernetesclusterversioncheck
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilderImpl) Getkubernetesclusterversioncheck(ctx context.Context, opts ...kubernetes.Option) client.Response[models.ClusterVersionCheck] {
-	return kubernetes.Getkubernetesclusterversioncheck(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
+// CheckKubernetesClusterVersion calls kubernetes.CheckKubernetesClusterVersion
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidVersionCheckBuilderImpl) CheckKubernetesClusterVersion(ctx context.Context, opts ...kubernetes.Option) client.Response[models.ClusterVersionCheck] {
+	return kubernetes.CheckKubernetesClusterVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, opts...)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilder interface {
-	Updatekubernetesclusterversion(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster]
+	UpdateKubernetesClusterVersion(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster]
 }
 
 // v4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilder
@@ -9024,14 +9024,14 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilder
 	}
 }
 
-// Updatekubernetesclusterversion calls kubernetes.Updatekubernetesclusterversion
-func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilderImpl) Updatekubernetesclusterversion(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
-	return kubernetes.Updatekubernetesclusterversion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
+// UpdateKubernetesClusterVersion calls kubernetes.UpdateKubernetesClusterVersion
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidVersionUpdateBuilderImpl) UpdateKubernetesClusterVersion(ctx context.Context, request *models.PatchClusterVersion) client.Response[models.KubernetesCluster] {
+	return kubernetes.UpdateKubernetesClusterVersion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, request)
 }
 
 // V4KubernetesOrganisationsOwneridQuotaBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridQuotaBuilder interface {
-	Getkubernetesquota(ctx context.Context) client.Response[models.Quota]
+	GetKubernetesQuota(ctx context.Context) client.Response[models.Quota]
 }
 
 // v4KubernetesOrganisationsOwneridQuotaBuilderImpl implements V4KubernetesOrganisationsOwneridQuotaBuilder
@@ -9048,14 +9048,14 @@ func newV4KubernetesOrganisationsOwneridQuotaBuilder(sdk *sdkImpl, ownerid strin
 	}
 }
 
-// Getkubernetesquota calls kubernetes.Getkubernetesquota
-func (b *v4KubernetesOrganisationsOwneridQuotaBuilderImpl) Getkubernetesquota(ctx context.Context) client.Response[models.Quota] {
-	return kubernetes.Getkubernetesquota(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
+// GetKubernetesQuota calls kubernetes.GetKubernetesQuota
+func (b *v4KubernetesOrganisationsOwneridQuotaBuilderImpl) GetKubernetesQuota(ctx context.Context) client.Response[models.Quota] {
+	return kubernetes.GetKubernetesQuota(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
 }
 
 // V4KubernetesOrganisationsOwneridUsageBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridUsageBuilder interface {
-	Listkubernetescurrentusage(ctx context.Context) client.Response[[]models.ClusterItemUsage]
+	ListKubernetesUsage(ctx context.Context) client.Response[[]models.ClusterItemUsage]
 }
 
 // v4KubernetesOrganisationsOwneridUsageBuilderImpl implements V4KubernetesOrganisationsOwneridUsageBuilder
@@ -9072,14 +9072,14 @@ func newV4KubernetesOrganisationsOwneridUsageBuilder(sdk *sdkImpl, ownerid strin
 	}
 }
 
-// Listkubernetescurrentusage calls kubernetes.Listkubernetescurrentusage
-func (b *v4KubernetesOrganisationsOwneridUsageBuilderImpl) Listkubernetescurrentusage(ctx context.Context) client.Response[[]models.ClusterItemUsage] {
-	return kubernetes.Listkubernetescurrentusage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
+// ListKubernetesUsage calls kubernetes.ListKubernetesUsage
+func (b *v4KubernetesOrganisationsOwneridUsageBuilderImpl) ListKubernetesUsage(ctx context.Context) client.Response[[]models.ClusterItemUsage] {
+	return kubernetes.ListKubernetesUsage(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
 }
 
 // V4KubernetesOrganisationsOwneridZonesBuilder provides access to operations
 type V4KubernetesOrganisationsOwneridZonesBuilder interface {
-	Listkubernetesownerzones(ctx context.Context) client.Response[[]models.KubernetesOwnerZone]
+	ListKubernetesOwnerZones(ctx context.Context) client.Response[[]models.KubernetesOwnerZone]
 }
 
 // v4KubernetesOrganisationsOwneridZonesBuilderImpl implements V4KubernetesOrganisationsOwneridZonesBuilder
@@ -9096,9 +9096,9 @@ func newV4KubernetesOrganisationsOwneridZonesBuilder(sdk *sdkImpl, ownerid strin
 	}
 }
 
-// Listkubernetesownerzones calls kubernetes.Listkubernetesownerzones
-func (b *v4KubernetesOrganisationsOwneridZonesBuilderImpl) Listkubernetesownerzones(ctx context.Context) client.Response[[]models.KubernetesOwnerZone] {
-	return kubernetes.Listkubernetesownerzones(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
+// ListKubernetesOwnerZones calls kubernetes.ListKubernetesOwnerZones
+func (b *v4KubernetesOrganisationsOwneridZonesBuilderImpl) ListKubernetesOwnerZones(ctx context.Context) client.Response[[]models.KubernetesOwnerZone] {
+	return kubernetes.ListKubernetesOwnerZones(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid)
 }
 
 // V4KubernetesPluginsBuilder provides access to operations
@@ -9123,7 +9123,7 @@ func (b *v4KubernetesPluginsBuilderImpl) Catalog() V4KubernetesPluginsCatalogBui
 
 // V4KubernetesPluginsCatalogBuilder provides access to operations
 type V4KubernetesPluginsCatalogBuilder interface {
-	Getkubernetesplugincatalog(ctx context.Context) client.Response[models.PublicPluginCatalog]
+	GetKubernetesPluginCatalog(ctx context.Context) client.Response[models.PublicPluginCatalog]
 }
 
 // v4KubernetesPluginsCatalogBuilderImpl implements V4KubernetesPluginsCatalogBuilder
@@ -9136,14 +9136,14 @@ func newV4KubernetesPluginsCatalogBuilder(sdk *sdkImpl) V4KubernetesPluginsCatal
 	return &v4KubernetesPluginsCatalogBuilderImpl{sdk: sdk}
 }
 
-// Getkubernetesplugincatalog calls kubernetes.Getkubernetesplugincatalog
-func (b *v4KubernetesPluginsCatalogBuilderImpl) Getkubernetesplugincatalog(ctx context.Context) client.Response[models.PublicPluginCatalog] {
-	return kubernetes.Getkubernetesplugincatalog(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetKubernetesPluginCatalog calls kubernetes.GetKubernetesPluginCatalog
+func (b *v4KubernetesPluginsCatalogBuilderImpl) GetKubernetesPluginCatalog(ctx context.Context) client.Response[models.PublicPluginCatalog] {
+	return kubernetes.GetKubernetesPluginCatalog(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4KubernetesProductBuilder provides access to operations
 type V4KubernetesProductBuilder interface {
-	Getkubernetesserviceconfig(ctx context.Context) client.Response[models.KubernetesServiceConfig]
+	GetKubernetesProduct(ctx context.Context) client.Response[models.KubernetesServiceConfig]
 }
 
 // v4KubernetesProductBuilderImpl implements V4KubernetesProductBuilder
@@ -9156,9 +9156,9 @@ func newV4KubernetesProductBuilder(sdk *sdkImpl) V4KubernetesProductBuilder {
 	return &v4KubernetesProductBuilderImpl{sdk: sdk}
 }
 
-// Getkubernetesserviceconfig calls kubernetes.Getkubernetesserviceconfig
-func (b *v4KubernetesProductBuilderImpl) Getkubernetesserviceconfig(ctx context.Context) client.Response[models.KubernetesServiceConfig] {
-	return kubernetes.Getkubernetesserviceconfig(ctx, b.sdk.Client(), b.sdk.Tracer())
+// GetKubernetesProduct calls kubernetes.GetKubernetesProduct
+func (b *v4KubernetesProductBuilderImpl) GetKubernetesProduct(ctx context.Context) client.Response[models.KubernetesServiceConfig] {
+	return kubernetes.GetKubernetesProduct(ctx, b.sdk.Client(), b.sdk.Tracer())
 }
 
 // V4LoadBalancersBuilder provides access to operations
@@ -9309,7 +9309,7 @@ func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersBuilderImp
 
 // V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder provides access to operations
 type V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder interface {
-	Listaddonloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
+	ListAddonLoadBalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
 }
 
 // v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl implements V4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder
@@ -9330,9 +9330,9 @@ func newV4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilder
 	}
 }
 
-// Listaddonloadbalancers calls loadbalancerinfo.Listaddonloadbalancers
-func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl) Listaddonloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
-	return loadbalancerinfo.Listaddonloadbalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonid, b.kind)
+// ListAddonLoadBalancers calls loadbalancerinfo.ListAddonLoadBalancers
+func (b *v4LoadBalancersOrganisationsOwneridAddonsAddonidLoadBalancersKindBuilderImpl) ListAddonLoadBalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
+	return loadbalancerinfo.ListAddonLoadBalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.addonid, b.kind)
 }
 
 // V4LoadBalancersOrganisationsOwneridApplicationsBuilder provides access to operations
@@ -9413,7 +9413,7 @@ func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalance
 
 // V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder provides access to operations
 type V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder interface {
-	Listapplicationloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
+	ListApplicationLoadBalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo]
 }
 
 // v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl implements V4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilder
@@ -9434,9 +9434,9 @@ func newV4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancer
 	}
 }
 
-// Listapplicationloadbalancers calls loadbalancerinfo.Listapplicationloadbalancers
-func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl) Listapplicationloadbalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
-	return loadbalancerinfo.Listapplicationloadbalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.applicationid, b.kind)
+// ListApplicationLoadBalancers calls loadbalancerinfo.ListApplicationLoadBalancers
+func (b *v4LoadBalancersOrganisationsOwneridApplicationsApplicationidLoadBalancersKindBuilderImpl) ListApplicationLoadBalancers(ctx context.Context) client.Response[[]models.LoadBalancerInfo] {
+	return loadbalancerinfo.ListApplicationLoadBalancers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.applicationid, b.kind)
 }
 
 // V4LogsBuilder provides access to operations
@@ -9561,7 +9561,7 @@ func (b *v4LogsOrganisationsOrgidApplicationsAppidBuilderImpl) Logs() V4LogsOrga
 
 // V4LogsOrganisationsOrgidApplicationsAppidLogsBuilder provides access to operations
 type V4LogsOrganisationsOrgidApplicationsAppidLogsBuilder interface {
-	V4GetOrgAppLogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
+	StreamApplicationRuntimeLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
 }
 
 // v4LogsOrganisationsOrgidApplicationsAppidLogsBuilderImpl implements V4LogsOrganisationsOrgidApplicationsAppidLogsBuilder
@@ -9580,9 +9580,9 @@ func newV4LogsOrganisationsOrgidApplicationsAppidLogsBuilder(sdk *sdkImpl, orgid
 	}
 }
 
-// V4GetOrgAppLogs calls logs.V4GetOrgAppLogs
-func (b *v4LogsOrganisationsOrgidApplicationsAppidLogsBuilderImpl) V4GetOrgAppLogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
-	return logs.V4GetOrgAppLogs(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.appid, opts...)
+// StreamApplicationRuntimeLog calls logs.StreamApplicationRuntimeLog
+func (b *v4LogsOrganisationsOrgidApplicationsAppidLogsBuilderImpl) StreamApplicationRuntimeLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
+	return logs.StreamApplicationRuntimeLog(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.appid, opts...)
 }
 
 // V4LogsOrganisationsOrgidResourcesBuilder provides access to operations
@@ -9637,7 +9637,7 @@ func (b *v4LogsOrganisationsOrgidResourcesResourceidBuilderImpl) Logs() V4LogsOr
 
 // V4LogsOrganisationsOrgidResourcesResourceidLogsBuilder provides access to operations
 type V4LogsOrganisationsOrgidResourcesResourceidLogsBuilder interface {
-	V4GetOrgResourceLogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
+	StreamResourceRuntimeLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing]
 }
 
 // v4LogsOrganisationsOrgidResourcesResourceidLogsBuilderImpl implements V4LogsOrganisationsOrgidResourcesResourceidLogsBuilder
@@ -9656,9 +9656,9 @@ func newV4LogsOrganisationsOrgidResourcesResourceidLogsBuilder(sdk *sdkImpl, org
 	}
 }
 
-// V4GetOrgResourceLogs calls logs.V4GetOrgResourceLogs
-func (b *v4LogsOrganisationsOrgidResourcesResourceidLogsBuilderImpl) V4GetOrgResourceLogs(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
-	return logs.V4GetOrgResourceLogs(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
+// StreamResourceRuntimeLog calls logs.StreamResourceRuntimeLog
+func (b *v4LogsOrganisationsOrgidResourcesResourceidLogsBuilderImpl) StreamResourceRuntimeLog(ctx context.Context, opts ...logs.Option) client.Response[client.Nothing] {
+	return logs.StreamResourceRuntimeLog(ctx, b.sdk.Client(), b.sdk.Tracer(), b.orgid, b.resourceid, opts...)
 }
 
 // V4MateriaBuilder provides access to operations
@@ -9775,7 +9775,7 @@ func (b *v4MateriaOrganisationsOwneridMateriaDatabasesBuilderImpl) Kvid(kvid str
 
 // V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder provides access to operations
 type V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder interface {
-	Getmateriakv(ctx context.Context) client.Response[models.MateriaDB]
+	GetMateriaKv(ctx context.Context) client.Response[models.MateriaDB]
 }
 
 // v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl implements V4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder
@@ -9794,9 +9794,9 @@ func newV4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilder(sdk *sdkImpl, o
 	}
 }
 
-// Getmateriakv calls materia_kv.Getmateriakv
-func (b *v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl) Getmateriakv(ctx context.Context) client.Response[models.MateriaDB] {
-	return materiakv.Getmateriakv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kvid)
+// GetMateriaKv calls materia_kv.GetMateriaKv
+func (b *v4MateriaOrganisationsOwneridMateriaDatabasesKvidBuilderImpl) GetMateriaKv(ctx context.Context) client.Response[models.MateriaDB] {
+	return materiakv.GetMateriaKv(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kvid)
 }
 
 // V4NetworkgroupsBuilder provides access to operations
@@ -9867,8 +9867,8 @@ func (b *v4NetworkgroupsOrganisationsOwneridBuilderImpl) Networkgroups() V4Netwo
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilder interface {
 	Networkgroupid(networkgroupid string) V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder
 	Search() V4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder
-	Listnetworkgroups(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroup]
-	Createnetworkgroup(ctx context.Context, request *models.WannabeNetworkGroup) client.Response[client.Nothing]
+	ListNetworkGroups(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroup]
+	CreateNetworkGroup(ctx context.Context, request *models.WannabeNetworkGroup) client.Response[client.Nothing]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilder
@@ -9895,14 +9895,14 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl) Search() V
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder(b.sdk, b.ownerid)
 }
 
-// Listnetworkgroups calls network_group.Listnetworkgroups
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl) Listnetworkgroups(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroup] {
-	return networkgroup.Listnetworkgroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+// ListNetworkGroups calls network_group.ListNetworkGroups
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl) ListNetworkGroups(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroup] {
+	return networkgroup.ListNetworkGroups(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
-// Createnetworkgroup calls network_group.Createnetworkgroup
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl) Createnetworkgroup(ctx context.Context, request *models.WannabeNetworkGroup) client.Response[client.Nothing] {
-	return networkgroup.Createnetworkgroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
+// CreateNetworkGroup calls network_group.CreateNetworkGroup
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsBuilderImpl) CreateNetworkGroup(ctx context.Context, request *models.WannabeNetworkGroup) client.Response[client.Nothing] {
+	return networkgroup.CreateNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, request)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder provides access to operations
@@ -9911,8 +9911,8 @@ type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder inter
 	Members() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilder
 	Peers() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder
 	Stream() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilder
-	Deletenetworkgroup(ctx context.Context) client.Response[client.Nothing]
-	Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup]
+	DeleteNetworkGroup(ctx context.Context) client.Response[client.Nothing]
+	GetNetworkGroup(ctx context.Context) client.Response[models.NetworkGroup]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilder
@@ -9951,20 +9951,20 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderIm
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilder(b.sdk, b.ownerid, b.networkgroupid)
 }
 
-// Deletenetworkgroup calls network_group.Deletenetworkgroup
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) Deletenetworkgroup(ctx context.Context) client.Response[client.Nothing] {
-	return networkgroup.Deletenetworkgroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
+// DeleteNetworkGroup calls network_group.DeleteNetworkGroup
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) DeleteNetworkGroup(ctx context.Context) client.Response[client.Nothing] {
+	return networkgroup.DeleteNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
-// Getnetworkgroup calls network_group.Getnetworkgroup
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) Getnetworkgroup(ctx context.Context) client.Response[models.NetworkGroup] {
-	return networkgroup.Getnetworkgroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
+// GetNetworkGroup calls network_group.GetNetworkGroup
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidBuilderImpl) GetNetworkGroup(ctx context.Context) client.Response[models.NetworkGroup] {
+	return networkgroup.GetNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilder interface {
 	Peerid(peerid string) V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilder
-	Createnetworkgroupexternalpeer(ctx context.Context, request *models.WannabeExternalPeer) client.Response[models.PeerCreated]
+	CreateNetworkGroupExternalPeer(ctx context.Context, request *models.WannabeExternalPeer) client.Response[models.PeerCreated]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilder
@@ -9988,15 +9988,15 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalP
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilder(b.sdk, b.ownerid, b.networkgroupid, peerid)
 }
 
-// Createnetworkgroupexternalpeer calls network_group.Createnetworkgroupexternalpeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilderImpl) Createnetworkgroupexternalpeer(ctx context.Context, request *models.WannabeExternalPeer) client.Response[models.PeerCreated] {
-	return networkgroup.Createnetworkgroupexternalpeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
+// CreateNetworkGroupExternalPeer calls network_group.CreateNetworkGroupExternalPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersBuilderImpl) CreateNetworkGroupExternalPeer(ctx context.Context, request *models.WannabeExternalPeer) client.Response[models.PeerCreated] {
+	return networkgroup.CreateNetworkGroupExternalPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilder interface {
-	Deletenetworkgroupexternalpeer(ctx context.Context) client.Response[client.Nothing]
-	GetExternalPeer(ctx context.Context) client.Response[models.Peer]
+	DeleteNetworkGroupExternalPeer(ctx context.Context) client.Response[client.Nothing]
+	GetNetworkGroupExternalPeer(ctx context.Context) client.Response[models.Peer]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilder
@@ -10017,21 +10017,21 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPe
 	}
 }
 
-// Deletenetworkgroupexternalpeer calls network_group.Deletenetworkgroupexternalpeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilderImpl) Deletenetworkgroupexternalpeer(ctx context.Context) client.Response[client.Nothing] {
-	return networkgroup.Deletenetworkgroupexternalpeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// DeleteNetworkGroupExternalPeer calls network_group.DeleteNetworkGroupExternalPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilderImpl) DeleteNetworkGroupExternalPeer(ctx context.Context) client.Response[client.Nothing] {
+	return networkgroup.DeleteNetworkGroupExternalPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
-// GetExternalPeer calls network_group.GetExternalPeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilderImpl) GetExternalPeer(ctx context.Context) client.Response[models.Peer] {
-	return networkgroup.GetExternalPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// GetNetworkGroupExternalPeer calls network_group.GetNetworkGroupExternalPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidExternalPeersPeeridBuilderImpl) GetNetworkGroupExternalPeer(ctx context.Context) client.Response[models.Peer] {
+	return networkgroup.GetNetworkGroupExternalPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilder interface {
 	Memberid(memberid string) V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder
-	Listnetworkgroupmembers(ctx context.Context) client.Response[[]models.Member]
-	Createnetworkgroupmember(ctx context.Context, request *models.WannabeNetworkgroupMember) client.Response[client.Nothing]
+	ListNetworkGroupMembers(ctx context.Context) client.Response[[]models.Member]
+	CreateNetworkGroupMember(ctx context.Context, request *models.WannabeNetworkgroupMember) client.Response[client.Nothing]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilder
@@ -10055,21 +10055,21 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBu
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder(b.sdk, b.ownerid, b.networkgroupid, memberid)
 }
 
-// Listnetworkgroupmembers calls network_group.Listnetworkgroupmembers
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilderImpl) Listnetworkgroupmembers(ctx context.Context) client.Response[[]models.Member] {
-	return networkgroup.Listnetworkgroupmembers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
+// ListNetworkGroupMembers calls network_group.ListNetworkGroupMembers
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilderImpl) ListNetworkGroupMembers(ctx context.Context) client.Response[[]models.Member] {
+	return networkgroup.ListNetworkGroupMembers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
-// Createnetworkgroupmember calls network_group.Createnetworkgroupmember
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilderImpl) Createnetworkgroupmember(ctx context.Context, request *models.WannabeNetworkgroupMember) client.Response[client.Nothing] {
-	return networkgroup.Createnetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
+// CreateNetworkGroupMember calls network_group.CreateNetworkGroupMember
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersBuilderImpl) CreateNetworkGroupMember(ctx context.Context, request *models.WannabeNetworkgroupMember) client.Response[client.Nothing] {
+	return networkgroup.CreateNetworkGroupMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder interface {
 	Resync() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder
-	Deletenetworkgroupmember(ctx context.Context) client.Response[client.Nothing]
-	Getnetworkgroupmember(ctx context.Context) client.Response[models.Member]
+	DeleteNetworkGroupMember(ctx context.Context) client.Response[client.Nothing]
+	GetNetworkGroupMember(ctx context.Context) client.Response[models.Member]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilder
@@ -10095,19 +10095,19 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMe
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder(b.sdk, b.ownerid, b.networkgroupid, b.memberid)
 }
 
-// Deletenetworkgroupmember calls network_group.Deletenetworkgroupmember
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) Deletenetworkgroupmember(ctx context.Context) client.Response[client.Nothing] {
-	return networkgroup.Deletenetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
+// DeleteNetworkGroupMember calls network_group.DeleteNetworkGroupMember
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) DeleteNetworkGroupMember(ctx context.Context) client.Response[client.Nothing] {
+	return networkgroup.DeleteNetworkGroupMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
 }
 
-// Getnetworkgroupmember calls network_group.Getnetworkgroupmember
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) Getnetworkgroupmember(ctx context.Context) client.Response[models.Member] {
-	return networkgroup.Getnetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
+// GetNetworkGroupMember calls network_group.GetNetworkGroupMember
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidBuilderImpl) GetNetworkGroupMember(ctx context.Context) client.Response[models.Member] {
+	return networkgroup.GetNetworkGroupMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder interface {
-	Resyncnetworkgroupmember(ctx context.Context) client.Response[models.NetworkGroupMemberResync]
+	ResyncNetworkGroupMember(ctx context.Context) client.Response[models.NetworkGroupMemberResync]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilder
@@ -10128,16 +10128,16 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMem
 	}
 }
 
-// Resyncnetworkgroupmember calls network_group.Resyncnetworkgroupmember
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl) Resyncnetworkgroupmember(ctx context.Context) client.Response[models.NetworkGroupMemberResync] {
-	return networkgroup.Resyncnetworkgroupmember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
+// ResyncNetworkGroupMember calls network_group.ResyncNetworkGroupMember
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidMembersMemberidResyncBuilderImpl) ResyncNetworkGroupMember(ctx context.Context) client.Response[models.NetworkGroupMemberResync] {
+	return networkgroup.ResyncNetworkGroupMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.memberid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder interface {
 	Peerid(peerid string) V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilder
-	Listnetworkgrouppeers(ctx context.Context) client.Response[[]models.Peer]
-	Createnetworkgrouppeer(ctx context.Context, request *models.WannabePeer) client.Response[models.PeerCreated]
+	ListNetworkGroupPeers(ctx context.Context) client.Response[[]models.Peer]
+	CreateNetworkGroupPeer(ctx context.Context, request *models.WannabePeer) client.Response[models.PeerCreated]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilder
@@ -10161,21 +10161,21 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuil
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilder(b.sdk, b.ownerid, b.networkgroupid, peerid)
 }
 
-// Listnetworkgrouppeers calls network_group.Listnetworkgrouppeers
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilderImpl) Listnetworkgrouppeers(ctx context.Context) client.Response[[]models.Peer] {
-	return networkgroup.Listnetworkgrouppeers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
+// ListNetworkGroupPeers calls network_group.ListNetworkGroupPeers
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilderImpl) ListNetworkGroupPeers(ctx context.Context) client.Response[[]models.Peer] {
+	return networkgroup.ListNetworkGroupPeers(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
-// Createnetworkgrouppeer calls network_group.Createnetworkgrouppeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilderImpl) Createnetworkgrouppeer(ctx context.Context, request *models.WannabePeer) client.Response[models.PeerCreated] {
-	return networkgroup.Createnetworkgrouppeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
+// CreateNetworkGroupPeer calls network_group.CreateNetworkGroupPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersBuilderImpl) CreateNetworkGroupPeer(ctx context.Context, request *models.WannabePeer) client.Response[models.PeerCreated] {
+	return networkgroup.CreateNetworkGroupPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, request)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilder interface {
 	Wireguard() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardBuilder
-	Deletenetworkgrouppeer(ctx context.Context) client.Response[client.Nothing]
-	Getnetworkgrouppeer(ctx context.Context) client.Response[models.Peer]
+	DeleteNetworkGroupPeer(ctx context.Context) client.Response[client.Nothing]
+	GetNetworkGroupPeer(ctx context.Context) client.Response[models.Peer]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilder
@@ -10201,14 +10201,14 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeer
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardBuilder(b.sdk, b.ownerid, b.networkgroupid, b.peerid)
 }
 
-// Deletenetworkgrouppeer calls network_group.Deletenetworkgrouppeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilderImpl) Deletenetworkgrouppeer(ctx context.Context) client.Response[client.Nothing] {
-	return networkgroup.Deletenetworkgrouppeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// DeleteNetworkGroupPeer calls network_group.DeleteNetworkGroupPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilderImpl) DeleteNetworkGroupPeer(ctx context.Context) client.Response[client.Nothing] {
+	return networkgroup.DeleteNetworkGroupPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
-// Getnetworkgrouppeer calls network_group.Getnetworkgrouppeer
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilderImpl) Getnetworkgrouppeer(ctx context.Context) client.Response[models.Peer] {
-	return networkgroup.Getnetworkgrouppeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// GetNetworkGroupPeer calls network_group.GetNetworkGroupPeer
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridBuilderImpl) GetNetworkGroupPeer(ctx context.Context) client.Response[models.Peer] {
+	return networkgroup.GetNetworkGroupPeer(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardBuilder provides access to operations
@@ -10243,7 +10243,7 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeer
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilder interface {
 	PresignedURL() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilder
 	Stream() V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder
-	Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString]
+	GetNetworkGroupWireguardConfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilder
@@ -10274,14 +10274,14 @@ func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeer
 	return newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder(b.sdk, b.ownerid, b.networkgroupid, b.peerid)
 }
 
-// Getwireguardconfiguration calls network_group.Getwireguardconfiguration
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl) Getwireguardconfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString] {
-	return networkgroup.Getwireguardconfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid, opts...)
+// GetNetworkGroupWireguardConfiguration calls network_group.GetNetworkGroupWireguardConfiguration
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationBuilderImpl) GetNetworkGroupWireguardConfiguration(ctx context.Context, opts ...networkgroup.Option) client.Response[client.PlainTextString] {
+	return networkgroup.GetNetworkGroupWireguardConfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid, opts...)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilder interface {
-	Getwireguardconfigpresignedurl(ctx context.Context) client.Response[models.PresignedURL]
+	GetNetworkGroupWireguardConfigurationPresignedURL(ctx context.Context) client.Response[models.PresignedURL]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilder
@@ -10302,14 +10302,14 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeri
 	}
 }
 
-// Getwireguardconfigpresignedurl calls network_group.Getwireguardconfigpresignedurl
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilderImpl) Getwireguardconfigpresignedurl(ctx context.Context) client.Response[models.PresignedURL] {
-	return networkgroup.Getwireguardconfigpresignedurl(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// GetNetworkGroupWireguardConfigurationPresignedURL calls network_group.GetNetworkGroupWireguardConfigurationPresignedURL
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationPresignedURLBuilderImpl) GetNetworkGroupWireguardConfigurationPresignedURL(ctx context.Context) client.Response[models.PresignedURL] {
+	return networkgroup.GetNetworkGroupWireguardConfigurationPresignedURL(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder interface {
-	Getwireguardconfigurationstream(ctx context.Context) client.Response[client.PlainTextString]
+	StreamNetworkGroupWireguardConfiguration(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilder
@@ -10330,14 +10330,14 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeri
 	}
 }
 
-// Getwireguardconfigurationstream calls network_group.Getwireguardconfigurationstream
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilderImpl) Getwireguardconfigurationstream(ctx context.Context) client.Response[client.PlainTextString] {
-	return networkgroup.Getwireguardconfigurationstream(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
+// StreamNetworkGroupWireguardConfiguration calls network_group.StreamNetworkGroupWireguardConfiguration
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidPeersPeeridWireguardConfigurationStreamBuilderImpl) StreamNetworkGroupWireguardConfiguration(ctx context.Context) client.Response[client.PlainTextString] {
+	return networkgroup.StreamNetworkGroupWireguardConfiguration(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid, b.peerid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilder interface {
-	Getnetworkgroupstream(ctx context.Context) client.Response[client.PlainTextString]
+	StreamNetworkGroup(ctx context.Context) client.Response[client.PlainTextString]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilder
@@ -10356,14 +10356,14 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuil
 	}
 }
 
-// Getnetworkgroupstream calls network_group.Getnetworkgroupstream
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilderImpl) Getnetworkgroupstream(ctx context.Context) client.Response[client.PlainTextString] {
-	return networkgroup.Getnetworkgroupstream(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
+// StreamNetworkGroup calls network_group.StreamNetworkGroup
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsNetworkgroupidStreamBuilderImpl) StreamNetworkGroup(ctx context.Context) client.Response[client.PlainTextString] {
+	return networkgroup.StreamNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.networkgroupid)
 }
 
 // V4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder provides access to operations
 type V4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder interface {
-	Listnetworkgroupcomponents(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroupComponent]
+	SearchNetworkGroup(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroupComponent]
 }
 
 // v4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilderImpl implements V4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder
@@ -10380,9 +10380,9 @@ func newV4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilder(sdk *sdkIm
 	}
 }
 
-// Listnetworkgroupcomponents calls network_group.Listnetworkgroupcomponents
-func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilderImpl) Listnetworkgroupcomponents(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroupComponent] {
-	return networkgroup.Listnetworkgroupcomponents(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
+// SearchNetworkGroup calls network_group.SearchNetworkGroup
+func (b *v4NetworkgroupsOrganisationsOwneridNetworkgroupsSearchBuilderImpl) SearchNetworkGroup(ctx context.Context, opts ...networkgroup.Option) client.Response[[]models.NetworkGroupComponent] {
+	return networkgroup.SearchNetworkGroup(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, opts...)
 }
 
 // V4ProductsBuilder provides access to operations
@@ -10408,7 +10408,7 @@ func (b *v4ProductsBuilderImpl) Zones() V4ProductsZonesBuilder {
 // V4ProductsZonesBuilder provides access to operations
 type V4ProductsZonesBuilder interface {
 	Zonename(zonename string) V4ProductsZonesZonenameBuilder
-	Listregions(ctx context.Context, opts ...zone.Option) client.Response[[]models.Region]
+	ListZones(ctx context.Context, opts ...zone.Option) client.Response[[]models.Region]
 }
 
 // v4ProductsZonesBuilderImpl implements V4ProductsZonesBuilder
@@ -10426,14 +10426,14 @@ func (b *v4ProductsZonesBuilderImpl) Zonename(zonename string) V4ProductsZonesZo
 	return newV4ProductsZonesZonenameBuilder(b.sdk, zonename)
 }
 
-// Listregions calls zone.Listregions
-func (b *v4ProductsZonesBuilderImpl) Listregions(ctx context.Context, opts ...zone.Option) client.Response[[]models.Region] {
-	return zone.Listregions(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
+// ListZones calls zone.ListZones
+func (b *v4ProductsZonesBuilderImpl) ListZones(ctx context.Context, opts ...zone.Option) client.Response[[]models.Region] {
+	return zone.ListZones(ctx, b.sdk.Client(), b.sdk.Tracer(), opts...)
 }
 
 // V4ProductsZonesZonenameBuilder provides access to operations
 type V4ProductsZonesZonenameBuilder interface {
-	Getregion(ctx context.Context, opts ...zone.Option) client.Response[models.Region]
+	GetZone(ctx context.Context, opts ...zone.Option) client.Response[models.Region]
 }
 
 // v4ProductsZonesZonenameBuilderImpl implements V4ProductsZonesZonenameBuilder
@@ -10450,7 +10450,7 @@ func newV4ProductsZonesZonenameBuilder(sdk *sdkImpl, zonename string) V4Products
 	}
 }
 
-// Getregion calls zone.Getregion
-func (b *v4ProductsZonesZonenameBuilderImpl) Getregion(ctx context.Context, opts ...zone.Option) client.Response[models.Region] {
-	return zone.Getregion(ctx, b.sdk.Client(), b.sdk.Tracer(), b.zonename, opts...)
+// GetZone calls zone.GetZone
+func (b *v4ProductsZonesZonenameBuilderImpl) GetZone(ctx context.Context, opts ...zone.Option) client.Response[models.Region] {
+	return zone.GetZone(ctx, b.sdk.Client(), b.sdk.Tracer(), b.zonename, opts...)
 }

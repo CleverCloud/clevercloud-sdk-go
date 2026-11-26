@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getpulsar Read a Pulsar add-on
+GetPulsar Read a Pulsar add-on
 
 Returns the add-on: tenant, namespace, cluster, plan, status, cold storage state and access token. Only an active add-on is returned: an add-on pending deletion or already deleted answers 404. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin, manager or developer role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `access_organisations`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Getpulsar(ctx, client, tracer, pulsarId)
+	response := pulsar.GetPulsar(ctx, client, tracer, pulsarId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: getPulsar
 */
-func Getpulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
+func GetPulsar(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string) client.Response[models.Pulsar] {
 	ctx, span := tracer.Start(ctx, "getPulsar", trace.WithAttributes(attribute.String("pulsarId", pulsarId)))
 	defer span.End()
 

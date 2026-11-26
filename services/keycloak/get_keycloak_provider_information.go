@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getkeycloakproviderinformation Get the Keycloak provider information
+GetKeycloakProviderInformation Get the Keycloak provider information
 
 Returns the Keycloak versions that can be provisioned, with the options each one supports, and the default version. Requires an authenticated user.
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := keycloak.Getkeycloakproviderinformation(ctx, client, tracer)
+	response := keycloak.GetKeycloakProviderInformation(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: keycloak
 operationId: getKeycloakProviderInformation
 */
-func Getkeycloakproviderinformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
+func GetKeycloakProviderInformation(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.ProviderConsoleView] {
 	ctx, span := tracer.Start(ctx, "getKeycloakProviderInformation")
 	defer span.End()
 

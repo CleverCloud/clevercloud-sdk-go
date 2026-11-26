@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Deletepulsarpersistenttopic Delete a persistent topic
+DeletePulsarPersistentTopic Delete a persistent topic
 
 Deletes a persistent topic of the add-on's namespace; answers 204. `partitioned` defaults to `true` on this route (set it to `false` for a non-partitioned topic), and `force=true` deletes the topic even with connected producers or consumers. An invalid topic name answers 400. The caller must own the add-on (personal add-on) or be a member of the owning organisation with the admin or manager role: a non-member gets 404 and any other role 403. An OAuth1 token must also hold `manage_organisations_services`: 403 `6201` otherwise, once the ownership and role checks pass. Platform services may also call it.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := pulsar.Deletepulsarpersistenttopic(ctx, client, tracer, pulsarId, topic)
+	response := pulsar.DeletePulsarPersistentTopic(ctx, client, tracer, pulsarId, topic)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: pulsar
 operationId: deletePulsarPersistentTopic
 */
-func Deletepulsarpersistenttopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
+func DeletePulsarPersistentTopic(ctx context.Context, c *client.Client, tracer trace.Tracer, pulsarId string, topic string) client.Response[client.Nothing] {
 	ctx, span := tracer.Start(ctx, "deletePulsarPersistentTopic", trace.WithAttributes(attribute.String("pulsarId", pulsarId), attribute.String("topic", topic)))
 	defer span.End()
 

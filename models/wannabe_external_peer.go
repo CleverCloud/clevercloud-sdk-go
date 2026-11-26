@@ -4,12 +4,12 @@ package models
 
 // WannabeExternalPeer Input to add an external (customer-managed) peer to a network group.
 type WannabeExternalPeer struct {
-	Hostname     *string `json:"hostname,omitempty"`    // DNS hostname.
-	IP           *string `json:"ip,omitempty"`          // Public address (SERVER peers).
-	Label        string  `json:"label"`                 // Human-readable label.
-	ParentEvent  *string `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
-	ParentMember string  `json:"parentMember"`          // Parent member this external peer belongs to.
-	PeerRole     string  `json:"peerRole"`              // Peer role: CLIENT | SERVER
-	Port         *int    `json:"port,omitempty"`        // Public port (SERVER peers).
-	PublicKey    string  `json:"publicKey"`             // WireGuard public key (base64, required for external peers).
+	Hostname     *string  `json:"hostname,omitempty"`    // DNS hostname.
+	IP           *string  `json:"ip,omitempty"`          // Public address (SERVER peers).
+	Label        string   `json:"label"`                 // Human-readable label.
+	ParentEvent  *string  `json:"parentEvent,omitempty"` // Deployment event that created this peer, when any.
+	ParentMember string   `json:"parentMember"`          // Parent member this external peer belongs to.
+	PeerRole     PeerRole `json:"peerRole"`              // Role of the peer.
+	Port         *int     `json:"port,omitempty"`        // Public port (SERVER peers).
+	PublicKey    string   `json:"publicKey"`             // WireGuard public key (base64, required for external peers).
 }

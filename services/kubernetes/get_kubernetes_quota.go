@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getkubernetesquota Get the Kubernetes quota of an organisation
+GetKubernetesQuota Get the Kubernetes quota of an organisation
 
 Returns the organisation's Kubernetes resource ceilings, the platform defaults unless they were raised. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := kubernetes.Getkubernetesquota(ctx, client, tracer, ownerId)
+	response := kubernetes.GetKubernetesQuota(ctx, client, tracer, ownerId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: kubernetes
 operationId: getKubernetesQuota
 */
-func Getkubernetesquota(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[models.Quota] {
+func GetKubernetesQuota(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string) client.Response[models.Quota] {
 	ctx, span := tracer.Start(ctx, "getKubernetesQuota", trace.WithAttributes(attribute.String("ownerId", ownerId)))
 	defer span.End()
 

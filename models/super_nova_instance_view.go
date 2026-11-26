@@ -15,5 +15,5 @@ type SuperNovaInstanceView struct {
 	ID             string           `json:"id"` // Identifier of the instance, a bare UUID.
 	IP             *string          `json:"ip,omitempty"`
 	InstanceNumber *int             `json:"instanceNumber,omitempty"` // Index of the instance among the instances of its application, starting at 0; 0 when unknown, and ...
-	State          string           `json:"state"`                    // Current lifecycle state of the instance.
+	State          InstanceState    `json:"state"`                    // Current lifecycle state of the instance.
 }

@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getorganisationdrainpolicy Get the drain policy of an organisation
+GetOrganisationDrainPolicy Get the drain policy of an organisation
 
 Returns, for each drain kind (`LOG`, `ACCESSLOG`, `AUDITLOG`), whether the organisation requires it on its resources, and the drain templates applied; recipient credentials are masked. The caller must be a member (403 otherwise); an unknown organisation or a personal space answers 404. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Getorganisationdrainpolicy(ctx, client, tracer, id)
+	response := organisations.GetOrganisationDrainPolicy(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: getOrganisationDrainPolicy
 */
-func Getorganisationdrainpolicy(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.OrganisationDrainPolicyView] {
+func GetOrganisationDrainPolicy(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[models.OrganisationDrainPolicyView] {
 	ctx, span := tracer.Start(ctx, "getOrganisationDrainPolicy", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

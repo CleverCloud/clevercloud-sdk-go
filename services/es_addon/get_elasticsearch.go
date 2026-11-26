@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Getelasticsearch Get an Elasticsearch add-on
+GetElasticsearch Get an Elasticsearch add-on
 
 Returns the add-on: its plan, its zone, its version, the services it runs beside Elasticsearch, and the credentials it is reached with (the passwords of its Elasticsearch, Kibana and APM accounts, and the authentication token its APM agents send). The caller must be allowed to see the add-on, which the platform decides.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := es_addon.Getelasticsearch(ctx, client, tracer, appId)
+	response := es_addon.GetElasticsearch(ctx, client, tracer, appId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: es_addon
 operationId: getElasticsearch
 */
-func Getelasticsearch(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[models.ElasticsearchAddonView] {
+func GetElasticsearch(ctx context.Context, c *client.Client, tracer trace.Tracer, appId string) client.Response[models.ElasticsearchAddonView] {
 	ctx, span := tracer.Start(ctx, "getElasticsearch", trace.WithAttributes(attribute.String("appId", appId)))
 	defer span.End()
 

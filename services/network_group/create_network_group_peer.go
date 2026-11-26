@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Createnetworkgrouppeer Add a peer to a network group
+CreateNetworkGroupPeer Add a peer to a network group
 
 Requests the addition of a WireGuard peer under the member `parentMember` and answers 201 with its ID; the peer is created asynchronously. A `SERVER` peer needs `ip` and `port`, an external peer its `publicKey`; 409 when the peer ID already exists. Organisation members need the ADMIN or MANAGER role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := network_group.Createnetworkgrouppeer(ctx, client, tracer, ownerId, networkGroupId, requestBody)
+	response := network_group.CreateNetworkGroupPeer(ctx, client, tracer, ownerId, networkGroupId, requestBody)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: network_group
 operationId: createNetworkGroupPeer
 */
-func Createnetworkgrouppeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabePeer) client.Response[models.PeerCreated] {
+func CreateNetworkGroupPeer(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, networkGroupId string, requestBody *models.WannabePeer) client.Response[models.PeerCreated] {
 	ctx, span := tracer.Start(ctx, "createNetworkGroupPeer", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("networkGroupId", networkGroupId)))
 	defer span.End()
 

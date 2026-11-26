@@ -10,7 +10,7 @@ import (
 )
 
 /*
-Getelasticsearchkibanasetupforversion7 Get the Kibana setup script
+GetElasticsearchKibanaSetupForVersion7 Get the Kibana setup script
 
 Returns the script that installs and configures Kibana beside an Elasticsearch add-on, for Elasticsearch 7. Open without authentication.
 
@@ -23,7 +23,7 @@ Parameters:
 
 Example:
 
-	response := es_addon.Getelasticsearchkibanasetupforversion7(ctx, client, tracer)
+	response := es_addon.GetElasticsearchKibanaSetupForVersion7(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -32,7 +32,7 @@ Example:
 x-service: es_addon
 operationId: getElasticsearchKibanaSetupForVersion7
 */
-func Getelasticsearchkibanasetupforversion7(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.PlainTextString] {
+func GetElasticsearchKibanaSetupForVersion7(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[client.PlainTextString] {
 	ctx, span := tracer.Start(ctx, "getElasticsearchKibanaSetupForVersion7")
 	defer span.End()
 

@@ -4,31 +4,32 @@ package models
 
 // ApplicationView An application: its identity, region, instance configuration, deployment settings, domains, envir...
 type ApplicationView struct {
-	Appliance      *string                `json:"appliance,omitempty"` // Name of the appliance repository the application was created from; `null` when the application is...
-	Archived       bool                   `json:"archived"`            // Whether the application is marked as archived; archived applications are still returned by listings.
-	Branch         *string                `json:"branch,omitempty"`    // Git branch configured for the application, as set; `null` when none is set.
-	BuildFlavor    *Flavor                `json:"buildFlavor,omitempty"`
-	CancelOnPush   bool                   `json:"cancelOnPush"`       // Whether pushing new code cancels a deployment that is still running.
-	CommitID       *string                `json:"commitId,omitempty"` // Commit the application deploys: the last one pushed to its branch or the one selected on a redepl...
-	CreationDate   int                    `json:"creationDate"`       // When the application was created, as a Unix timestamp in milliseconds; 0 when unknown.
-	DeployURL      *string                `json:"deployUrl,omitempty"`
-	Deployment     DeploymentInfoView     `json:"deployment"`
-	Description    string                 `json:"description"` // Free text description of the application.
-	Env            []AddonEnvironmentView `json:"env"`         // Environment variables set on the application.
-	Favourite      bool                   `json:"favourite"`   // Whether the application is marked as a favourite; the mark belongs to the application and is the ...
-	ForceHTTPS     string                 `json:"forceHttps"`
-	Homogeneous    bool                   `json:"homogeneous"`
-	ID             string                 `json:"id"` // Identifier of the application, of the form `app_<uuid>`.
-	Instance       InstanceView           `json:"instance"`
-	LastDeploy     int                    `json:"last_deploy"`    // Sequence number of the application's last deployment; 0 when it has never been deployed.
-	Name           string                 `json:"name"`           // Display name of the application.
-	OwnerID        string                 `json:"ownerId"`        // Identifier of the user or organisation owning the application.
-	SeparateBuild  bool                   `json:"separateBuild"`  // Whether the build runs on its own dedicated instance rather than on the run instance.
-	State          string                 `json:"state"`          // Whether the application is meant to be running, and why it may not be.
-	StickySessions bool                   `json:"stickySessions"` // Whether the load balancer pins a client to the instance that served it first.
-	Vhosts         []VhostView            `json:"vhosts"`
-	WebhookSecret  *string                `json:"webhookSecret,omitempty"`
-	WebhookURL     *string                `json:"webhookUrl,omitempty"`
-	Zone           string                 `json:"zone"`             // Short name of the zone the application runs in, not its display name; empty when the application ...
-	ZoneID         *string                `json:"zoneId,omitempty"` // Identifier of the zone the application runs in.
+	Appliance                 *string                `json:"appliance,omitempty"` // Name of the appliance repository the application was created from; `null` when the application is...
+	Archived                  bool                   `json:"archived"`            // Whether the application is marked as archived; archived applications are still returned by listings.
+	Branch                    *string                `json:"branch,omitempty"`    // Git branch configured for the application, as set; `null` when none is set.
+	BuildFlavor               *Flavor                `json:"buildFlavor,omitempty"`
+	CancelOnPush              bool                   `json:"cancelOnPush"`       // Whether pushing new code cancels a deployment that is still running.
+	CommitID                  *string                `json:"commitId,omitempty"` // Commit the application deploys: the last one pushed to its branch or the one selected on a redepl...
+	CreationDate              int                    `json:"creationDate"`       // When the application was created, as a Unix timestamp in milliseconds; 0 when unknown.
+	DeployURL                 *string                `json:"deployUrl,omitempty"`
+	Deployment                DeploymentInfoView     `json:"deployment"`
+	Description               string                 `json:"description"` // Free text description of the application.
+	Env                       []AddonEnvironmentView `json:"env"`         // Environment variables set on the application.
+	Favourite                 bool                   `json:"favourite"`   // Whether the application is marked as a favourite; the mark belongs to the application and is the ...
+	ForceHTTPS                string                 `json:"forceHttps"`
+	Homogeneous               bool                   `json:"homogeneous"`
+	ID                        string                 `json:"id"` // Identifier of the application, of the form `app_<uuid>`.
+	Instance                  InstanceView           `json:"instance"`
+	LastDeploy                int                    `json:"last_deploy"`               // Sequence number of the application's last deployment; 0 when it has never been deployed.
+	Name                      string                 `json:"name"`                      // Display name of the application.
+	OwnerID                   string                 `json:"ownerId"`                   // Identifier of the user or organisation owning the application.
+	RedeployOnLinkedEnvChange bool                   `json:"redeployOnLinkedEnvChange"` // Whether the application is redeployed when the environment of a linked add-on or of an applicatio...
+	SeparateBuild             bool                   `json:"separateBuild"`             // Whether the build runs on its own dedicated instance rather than on the run instance.
+	State                     string                 `json:"state"`                     // Whether the application is meant to be running, and why it may not be.
+	StickySessions            bool                   `json:"stickySessions"`            // Whether the load balancer pins a client to the instance that served it first.
+	Vhosts                    []VhostView            `json:"vhosts"`
+	WebhookSecret             *string                `json:"webhookSecret,omitempty"`
+	WebhookURL                *string                `json:"webhookUrl,omitempty"`
+	Zone                      string                 `json:"zone"`             // Short name of the zone the application runs in, not its display name; empty when the application ...
+	ZoneID                    *string                `json:"zoneId,omitempty"` // Identifier of the zone the application runs in.
 }

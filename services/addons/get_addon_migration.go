@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getaddonmigration Get a plan migration of an add-on
+GetAddonMigration Get a plan migration of an add-on
 
 Returns one plan migration of the add-on as its provider reports it (provider-defined JSON, forwarded with the provider's status). 404 when the add-on has no provider. Requires the `manage_organisations_services` OAuth right and the admin, manager or developer role in the organisation (403 otherwise, or when the organisation is deleted). Also callable by platform services holding all rights.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := addons.Getaddonmigration(ctx, client, tracer, id, addonId, migrationId)
+	response := addons.GetAddonMigration(ctx, client, tracer, id, addonId, migrationId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: addons
 operationId: getAddonMigration
 */
-func Getaddonmigration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, migrationId string) client.Response[any] {
+func GetAddonMigration(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, addonId string, migrationId string) client.Response[any] {
 	ctx, span := tracer.Start(ctx, "getAddonMigration", trace.WithAttributes(attribute.String("id", id), attribute.String("addonId", addonId), attribute.String("migrationId", migrationId)))
 	defer span.End()
 

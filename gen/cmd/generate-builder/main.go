@@ -186,7 +186,7 @@ func extractOperations(spec *openapi31.Spec) []BuilderOperation {
 			}
 
 			operations = append(operations, BuilderOperation{
-				Name:        operationID,
+				Name:        functionName,
 				Path:        path,
 				Method:      method,
 				Package:     packageName,
@@ -501,7 +501,7 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
 		// Add method to interface
-		method := Id(toPascalCase(op.Name)).Params(params...).Add(returnType)
+		method := Id(op.Name).Params(params...).Add(returnType)
 		interfaceMethods = append(interfaceMethods, method)
 	}
 
@@ -600,10 +600,10 @@ func generateBuilderNodes(f *File, node *BuilderNode, prefix string, parentField
 
 		returnType := Qual("go.clever-cloud.dev/client", "Response").Types(op.Response.Code(inline))
 
-		f.Comment(fmt.Sprintf("%s calls %s.%s", toPascalCase(op.Name), op.Package, toPascalCase(op.Name)))
-		f.Func().Params(Id("b").Op("*").Id(implName)).Id(toPascalCase(op.Name)).
+		f.Comment(fmt.Sprintf("%s calls %s.%s", op.Name, op.Package, op.Name))
+		f.Func().Params(Id("b").Op("*").Id(implName)).Id(op.Name).
 			Params(params...).Add(returnType).Block(
-			Return(Qual("go.clever-cloud.dev/sdk/services/"+op.Package, toPascalCase(op.Name)).Call(callParams...)))
+			Return(Qual("go.clever-cloud.dev/sdk/services/"+op.Package, op.Name).Call(callParams...)))
 		f.Line()
 	}
 

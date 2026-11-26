@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Getselfpaymentinfo Get the current user's billing details
+GetSelfPaymentInfo Get the current user's billing details
 
 Returns the name, company, postal address, country and VAT number used to bill the user's personal space, with an `errors` map of the fields still missing or invalid. Requires the `access_organisations_bills` right (403, error id 13002).
 
@@ -24,7 +24,7 @@ Parameters:
 
 Example:
 
-	response := payments.Getselfpaymentinfo(ctx, client, tracer)
+	response := payments.GetSelfPaymentInfo(ctx, client, tracer)
 	if response.HasError() {
 		// Handle error
 	}
@@ -33,7 +33,7 @@ Example:
 x-service: payments
 operationId: getSelfPaymentInfo
 */
-func Getselfpaymentinfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.PaymentInfoView] {
+func GetSelfPaymentInfo(ctx context.Context, c *client.Client, tracer trace.Tracer) client.Response[models.PaymentInfoView] {
 	ctx, span := tracer.Start(ctx, "getSelfPaymentInfo")
 	defer span.End()
 

@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listorganisationmembers List the members of an organisation
+ListOrganisationMembers List the members of an organisation
 
 Returns each member with their user profile, role and job title. The caller must be a member (403 otherwise), the organisation must not be deleted (403), and the organisation's partner may forbid listing members. Also callable by platform services with administrative rights.
 
@@ -26,7 +26,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Listorganisationmembers(ctx, client, tracer, id)
+	response := organisations.ListOrganisationMembers(ctx, client, tracer, id)
 	if response.HasError() {
 		// Handle error
 	}
@@ -35,7 +35,7 @@ Example:
 x-service: organisations
 operationId: listOrganisationMembers
 */
-func Listorganisationmembers(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[[]models.MemberView] {
+func ListOrganisationMembers(ctx context.Context, c *client.Client, tracer trace.Tracer, id string) client.Response[[]models.MemberView] {
 	ctx, span := tracer.Start(ctx, "listOrganisationMembers", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 

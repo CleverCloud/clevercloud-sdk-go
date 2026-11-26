@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Cancelorganisationinvitation Cancel a pending invitation to an organisation
+CancelOrganisationInvitation Cancel a pending invitation to an organisation
 
 Cancels an invitation that is still waiting for an answer: its link stops working at once. Requires the `manage_organisations_members` OAuth right, the `ADMIN` or `MANAGER` role, and being allowed to assign the role the invitation offers (a `MANAGER` cannot cancel an `ADMIN` invitation). Answers 404 when the organisation has no pending invitation with that ID, including one already accepted, expired or cancelled, and one the listing leaves out because its sender may no longer offer its role. Also callable by platform services with administrative rights.
 
@@ -27,7 +27,7 @@ Parameters:
 
 Example:
 
-	response := organisations.Cancelorganisationinvitation(ctx, client, tracer, id, invitationId)
+	response := organisations.CancelOrganisationInvitation(ctx, client, tracer, id, invitationId)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,7 +36,7 @@ Example:
 x-service: organisations
 operationId: cancelOrganisationInvitation
 */
-func Cancelorganisationinvitation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, invitationId string) client.Response[models.Message] {
+func CancelOrganisationInvitation(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, invitationId string) client.Response[models.Message] {
 	ctx, span := tracer.Start(ctx, "cancelOrganisationInvitation", trace.WithAttributes(attribute.String("id", id), attribute.String("invitationId", invitationId)))
 	defer span.End()
 

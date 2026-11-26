@@ -12,7 +12,7 @@ import (
 )
 
 /*
-Listaddonloadbalancers List the load balancers of an add-on
+ListAddonLoadBalancers List the load balancers of an add-on
 
 Returns the TCP load balancers serving the zone of the add-on, with the CNAME target and the addresses to connect through; the list may be empty. Requires the `access_organisations` right and a membership of the owner, whatever the role.
 
@@ -28,7 +28,7 @@ Parameters:
 
 Example:
 
-	response := loadbalancerinfo.Listaddonloadbalancers(ctx, client, tracer, ownerId, addonId, kind)
+	response := loadbalancerinfo.ListAddonLoadBalancers(ctx, client, tracer, ownerId, addonId, kind)
 	if response.HasError() {
 		// Handle error
 	}
@@ -37,7 +37,7 @@ Example:
 x-service: loadbalancerinfo
 operationId: listAddonLoadBalancers
 */
-func Listaddonloadbalancers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonId string, kind string) client.Response[[]models.LoadBalancerInfo] {
+func ListAddonLoadBalancers(ctx context.Context, c *client.Client, tracer trace.Tracer, ownerId string, addonId string, kind string) client.Response[[]models.LoadBalancerInfo] {
 	ctx, span := tracer.Start(ctx, "listAddonLoadBalancers", trace.WithAttributes(attribute.String("ownerId", ownerId), attribute.String("addonId", addonId), attribute.String("kind", kind)))
 	defer span.End()
 
