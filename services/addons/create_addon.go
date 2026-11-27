@@ -4,6 +4,7 @@ package addons
 
 import (
 	"context"
+	"fmt"
 	client "go.clever-cloud.dev/client"
 	utils "go.clever-cloud.dev/sdk/internal/utils"
 	models "go.clever-cloud.dev/sdk/models"
@@ -22,12 +23,13 @@ Parameters:
   - tracer: OpenTelemetry tracer for observability
   - id: Organisation ID
   - requestBody: the request payload
+  - opts: optional query parameters
 
 # Returns the operation result or an error
 
 Example:
 
-	response := addons.CreateAddon(ctx, client, tracer, id, requestBody)
+	response := addons.CreateAddon(ctx, client, tracer, id, requestBody, opts...)
 	if response.HasError() {
 		// Handle error
 	}
@@ -36,11 +38,17 @@ Example:
 x-service: addons
 operationId: createAddon
 */
-func CreateAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAddonProvision) client.Response[models.AddonView] {
+func CreateAddon(ctx context.Context, c *client.Client, tracer trace.Tracer, id string, requestBody *models.WannabeAddonProvision, opts ...Option) client.Response[models.AddonView] {
 	ctx, span := tracer.Start(ctx, "createAddon", trace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
 
 	path := utils.Path("/v2/organisations/%s/addons", id)
+
+	// Build query parameters
+	query := buildQueryString(opts...)
+	if query != "" {
+		path = fmt.Sprintf("%s?%s", path, query)
+	}
 
 	// Make API call
 	response := client.Post[models.AddonView](ctx, c, path, requestBody)

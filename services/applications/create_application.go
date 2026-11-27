@@ -14,7 +14,7 @@ import (
 /*
 CreateApplication Create an application in an organisation
 
-Creates an application owned by the organisation and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation, which must be active. With the organisation's Jenkins token, the new application is tagged `type:jenkins-runner` and `origin:jenkins-addon`.
+Creates an application owned by the organisation and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation, which must be active. With the organisation's Jenkins token, the new application is tagged `type:jenkins-runner` and `origin:jenkins-addon`. A member restricted by tags must give one of its tags in `tags` when it has several (400 otherwise); a member with a single tag gets it added to the new resource. A member restricted by tags may only give tags it carries (403 otherwise).
 
 Parameters:
   - ctx: context for the request

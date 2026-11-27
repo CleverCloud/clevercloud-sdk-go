@@ -14,7 +14,7 @@ import (
 /*
 CreateServiceToken Create a service token
 
-Creates a token that calls the API on the organisation's behalf with the given `role`, optionally restricted to some applications and add-ons (`resources`), valid `ttl_seconds` (90 days by default, one year at most). Requires membership, the right to manage the organisation's services and permission to assign the requested role; creation is rate-limited per organisation. The token value appears only in this response. Answers 503 when service-token creation is temporarily unavailable for the organisation. `productId` and `locationId` in the response metadata may be empty strings and should not be relied on.
+Creates a token that calls the API on the organisation's behalf with the given `role`, optionally restricted to some applications and add-ons (`resources`), valid `ttl_seconds` (90 days by default, one year at most). Requires membership, the right to manage the organisation's services and permission to assign the requested role; a member restricted by tags cannot create one (403). Creation is rate-limited per organisation. The token value appears only in this response. Answers 503 when service-token creation is temporarily unavailable for the organisation. `productId` and `locationId` in the response metadata may be empty strings and should not be relied on.
 
 Parameters:
   - ctx: context for the request

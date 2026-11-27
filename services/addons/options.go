@@ -14,12 +14,20 @@ type Option func(*Options)
 // Options holds query parameters for addons operations
 type Options struct {
 	Planid *string `url:"planId,omitempty"`
+	Tag    *string `url:"tag,omitempty"`
 }
 
 // WithPlanid sets the planId query parameter
 func WithPlanid(planId string) Option {
 	return func(o *Options) {
 		o.Planid = &planId
+	}
+}
+
+// WithTag sets the tag query parameter
+func WithTag(tag string) Option {
+	return func(o *Options) {
+		o.Tag = &tag
 	}
 }
 
@@ -33,6 +41,9 @@ func buildQueryString(opts ...Option) string {
 	var params []string
 	if options.Planid != nil {
 		params = append(params, fmt.Sprintf("planId=%s", url.QueryEscape(*options.Planid)))
+	}
+	if options.Tag != nil {
+		params = append(params, fmt.Sprintf("tag=%s", url.QueryEscape(*options.Tag)))
 	}
 
 	if len(params) == 0 {

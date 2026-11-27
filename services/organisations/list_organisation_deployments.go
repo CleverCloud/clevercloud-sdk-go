@@ -14,7 +14,7 @@ import (
 /*
 ListOrganisationDeployments List the recent deployments of an organisation's applications
 
-Returns a map from application ID (`app_…`) to its most recent deployments, newest first, at most `limit` per application. Requires the right to manage the organisation's applications, for OAuth1 and platform-service tokens alike (403 otherwise; an almighty token holds it), then membership (404 otherwise); a member whose role is not `ADMIN`, `MANAGER` or `DEVELOPER` (an `ACCOUNTING` member, for instance) gets a 200 with an empty JSON array `[]` instead of the map. Also callable by platform services with administrative rights.
+Returns a map from application ID (`app_…`) to its most recent deployments, newest first, at most `limit` per application; the applications the caller does not see (its tags outside the caller's) are left out. Requires the right to manage the organisation's applications, for OAuth1 and platform-service tokens alike (403 otherwise; an almighty token holds it), then membership (404 otherwise); a member whose role is not `ADMIN`, `MANAGER` or `DEVELOPER` (an `ACCOUNTING` member, for instance) gets a 200 with an empty JSON array `[]` instead of the map. Also callable by platform services with administrative rights.
 
 Parameters:
   - ctx: context for the request

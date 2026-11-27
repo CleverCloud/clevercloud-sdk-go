@@ -14,7 +14,7 @@ import (
 /*
 ListApplicationDependents List the applications depending on an application
 
-Returns the applications that depend on an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
+Returns the applications that depend on an organisation's application; a dependent the caller does not see (its tags outside the caller's) is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request

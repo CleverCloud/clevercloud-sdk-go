@@ -14,7 +14,7 @@ import (
 /*
 UpdateApplicationTags Replace the tags of an application
 
-Replaces every tag of an organisation's application with the given list and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
+Replaces every tag of an organisation's application with the given list and returns it. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation. A member restricted by tags may only add or remove its own tags and must keep at least one of them (403 otherwise).
 
 Parameters:
   - ctx: context for the request

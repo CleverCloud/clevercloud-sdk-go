@@ -14,7 +14,7 @@ import (
 /*
 ListNetworkGroupMembers List the members of a network group
 
-Returns the applications, add-ons, load balancers and external resources that belong to the network group; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns the applications, add-ons, load balancers and external resources that belong to the network group; 404 when the group does not exist or belongs to another owner. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

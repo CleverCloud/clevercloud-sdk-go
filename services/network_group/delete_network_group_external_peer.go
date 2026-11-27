@@ -13,7 +13,7 @@ import (
 /*
 DeleteNetworkGroupExternalPeer Remove an external peer from a network group
 
-Requests the removal of the external peer, which is applied asynchronously; 404 when the network group or the peer does not exist, 401 for a Clever Cloud instance peer. Organisation members need the ADMIN or MANAGER role.
+Requests the removal of the external peer, which is applied asynchronously; 404 when the network group or the peer does not exist, or the group belongs to another owner, 403 for a Clever Cloud instance peer. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request

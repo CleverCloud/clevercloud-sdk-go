@@ -13,7 +13,7 @@ import (
 /*
 DeleteNetworkGroupMember Remove a member from a network group
 
-Requests the removal of the member, which is applied asynchronously; 404 when the network group or the member does not exist. Organisation members need the ADMIN or MANAGER role.
+Requests the removal of the member, which is applied asynchronously; 404 when the network group or the member does not exist, or the group belongs to another owner. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request

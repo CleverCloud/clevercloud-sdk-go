@@ -14,7 +14,7 @@ import (
 /*
 ResyncNetworkGroupMember Resync the peers of a network group member
 
-Walks the running instances of an `APPLICATION` or `ADDON` member once and, for each, reports what it found and did: the peer is present, its WireGuard key request was sent again (its creation waits for the key), its creation was started, or the instance was skipped, with the reason. A failure on one instance is that instance's `skipped`, never an error of the call; a creation already under way is reported `creation_started` with the reason `creation already in flight`. 503 when the running instances cannot be listed. 404 when the network group or the member does not exist; 422 for an `EXTERNAL` or `LOADBALANCER` member, which has no instances. Organisation members need the ADMIN or MANAGER role.
+Walks the running instances of an `APPLICATION` or `ADDON` member once and, for each, reports what it found and did: the peer is present, its WireGuard key request was sent again (its creation waits for the key), its creation was started, or the instance was skipped, with the reason. A failure on one instance is that instance's `skipped`, never an error of the call; a creation already under way is reported `creation_started` with the reason `creation already in flight`. 503 when the running instances cannot be listed. 404 when the network group or the member does not exist, or the group belongs to another owner; 422 for an `EXTERNAL` or `LOADBALANCER` member, which has no instances. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request

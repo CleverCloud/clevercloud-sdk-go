@@ -14,7 +14,7 @@ import (
 /*
 GetNetworkGroupPeer Get a peer of a network group
 
-Returns the peer; 404 when the network group or the peer does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns the peer; 404 when the network group or the peer does not exist, or the group belongs to another owner. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

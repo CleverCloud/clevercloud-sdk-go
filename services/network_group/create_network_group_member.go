@@ -14,7 +14,7 @@ import (
 /*
 CreateNetworkGroupMember Add a member to a network group
 
-Requests the addition of an `APPLICATION`, `ADDON`, `EXTERNAL` or `LOADBALANCER` member, applied asynchronously. A given `domainName` must end with one of the configured DNS suffixes, otherwise one is derived; re-adding a member with the same ID and kind also answers 202, the same ID with another kind 409. Organisation members need the ADMIN or MANAGER role.
+Requests the addition of an `APPLICATION`, `ADDON`, `EXTERNAL` or `LOADBALANCER` member, applied asynchronously. A given `domainName` must end with one of the configured DNS suffixes, otherwise one is derived; re-adding a member with the same ID and kind also answers 202, the same ID with another kind 409. Organisation members need the ADMIN or MANAGER role; a member restricted by tags gets a 404 for an application or add-on it does not see.
 
 Parameters:
   - ctx: context for the request
