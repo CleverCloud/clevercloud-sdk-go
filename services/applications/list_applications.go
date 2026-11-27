@@ -14,7 +14,7 @@ import (
 /*
 ListApplications List the applications of an organisation
 
-Returns the applications owned by the organisation. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list. The organisation's Jenkins token lists only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
+Returns the applications owned by the organisation; an application the caller does not see (its tags outside the caller's) is left out. Requires membership of the organisation; a member without the ADMIN, MANAGER or DEVELOPER role gets an empty list. The organisation's Jenkins token lists only the applications tagged `type:jenkins-runner` and `origin:jenkins-addon`.
 
 Parameters:
   - ctx: context for the request

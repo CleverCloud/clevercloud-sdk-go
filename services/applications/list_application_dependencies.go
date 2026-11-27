@@ -14,7 +14,7 @@ import (
 /*
 ListApplicationDependencies List the dependencies of an application
 
-Returns the applications an organisation's application depends on; a dependency owned by another owner is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
+Returns the applications an organisation's application depends on; a dependency owned by another owner, or one the caller does not see (its tags outside the caller's), is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
 
 Parameters:
   - ctx: context for the request

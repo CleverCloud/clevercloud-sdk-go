@@ -14,7 +14,7 @@ import (
 /*
 GetNetworkGroupWireguardConfigurationPresignedURL Get a presigned URL for a peer's WireGuard configuration
 
-Returns a URL that downloads the peer's WireGuard configuration with no other credential, valid 60 minutes; keep it secret, as its token grants that download for every peer of the organisation's network groups until it expires. 404 when the network group or the peer does not exist; a biscuit cannot obtain one. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns a URL that downloads the peer's WireGuard configuration with no other credential, valid 60 minutes; keep it secret, as its token grants that download for every peer of the organisation's network groups until it expires. 404 when the network group or the peer does not exist, or the group belongs to another owner; a biscuit cannot obtain one. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

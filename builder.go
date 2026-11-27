@@ -1303,7 +1303,7 @@ type V2OrganisationsIDAddonsBuilder interface {
 	AddonID(addonID string) V2OrganisationsIDAddonsAddonIDBuilder
 	Preorders() V2OrganisationsIDAddonsPreordersBuilder
 	ListAddons(ctx context.Context) client.Response[[]models.AddonView]
-	CreateAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView]
+	CreateAddon(ctx context.Context, request *models.WannabeAddonProvision, opts ...addons.Option) client.Response[models.AddonView]
 }
 
 // v2OrganisationsIDAddonsBuilderImpl implements V2OrganisationsIDAddonsBuilder
@@ -1341,8 +1341,8 @@ func (b *v2OrganisationsIDAddonsBuilderImpl) ListAddons(ctx context.Context) cli
 }
 
 // CreateAddon calls addons.CreateAddon
-func (b *v2OrganisationsIDAddonsBuilderImpl) CreateAddon(ctx context.Context, request *models.WannabeAddonProvision) client.Response[models.AddonView] {
-	return addons.CreateAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request)
+func (b *v2OrganisationsIDAddonsBuilderImpl) CreateAddon(ctx context.Context, request *models.WannabeAddonProvision, opts ...addons.Option) client.Response[models.AddonView] {
+	return addons.CreateAddon(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, request, opts...)
 }
 
 // V2OrganisationsIDAddonsAddonidBuilder provides access to operations
@@ -3179,6 +3179,7 @@ func (b *v2OrganisationsIDMembersBuilderImpl) AddOrganisationMember(ctx context.
 
 // V2OrganisationsIDMembersUseridBuilder provides access to operations
 type V2OrganisationsIDMembersUseridBuilder interface {
+	Tags() V2OrganisationsIDMembersUseridTagsBuilder
 	RemoveOrganisationMember(ctx context.Context) client.Response[models.Message]
 	UpdateOrganisationMember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message]
 }
@@ -3199,6 +3200,11 @@ func newV2OrganisationsIDMembersUseridBuilder(sdk *sdkImpl, id string, userid st
 	}
 }
 
+// Tags returns Tags builder
+func (b *v2OrganisationsIDMembersUseridBuilderImpl) Tags() V2OrganisationsIDMembersUseridTagsBuilder {
+	return newV2OrganisationsIDMembersUseridTagsBuilder(b.sdk, b.id, b.userid)
+}
+
 // RemoveOrganisationMember calls organisations.RemoveOrganisationMember
 func (b *v2OrganisationsIDMembersUseridBuilderImpl) RemoveOrganisationMember(ctx context.Context) client.Response[models.Message] {
 	return organisations.RemoveOrganisationMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid)
@@ -3207,6 +3213,72 @@ func (b *v2OrganisationsIDMembersUseridBuilderImpl) RemoveOrganisationMember(ctx
 // UpdateOrganisationMember calls organisations.UpdateOrganisationMember
 func (b *v2OrganisationsIDMembersUseridBuilderImpl) UpdateOrganisationMember(ctx context.Context, request *models.WannabeMember) client.Response[models.Message] {
 	return organisations.UpdateOrganisationMember(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid, request)
+}
+
+// V2OrganisationsIDMembersUseridTagsBuilder provides access to operations
+type V2OrganisationsIDMembersUseridTagsBuilder interface {
+	Tag(tag string) V2OrganisationsIDMembersUseridTagsTagBuilder
+	GetOrganisationMemberTags(ctx context.Context) client.Response[[]string]
+}
+
+// v2OrganisationsIDMembersUseridTagsBuilderImpl implements V2OrganisationsIDMembersUseridTagsBuilder
+type v2OrganisationsIDMembersUseridTagsBuilderImpl struct {
+	sdk    *sdkImpl
+	id     string
+	userid string
+}
+
+// newV2OrganisationsIDMembersUseridTagsBuilder creates a new V2OrganisationsIDMembersUseridTagsBuilder
+func newV2OrganisationsIDMembersUseridTagsBuilder(sdk *sdkImpl, id string, userid string) V2OrganisationsIDMembersUseridTagsBuilder {
+	return &v2OrganisationsIDMembersUseridTagsBuilderImpl{
+		id:     id,
+		sdk:    sdk,
+		userid: userid,
+	}
+}
+
+// Tag returns builder for tag
+func (b *v2OrganisationsIDMembersUseridTagsBuilderImpl) Tag(tag string) V2OrganisationsIDMembersUseridTagsTagBuilder {
+	return newV2OrganisationsIDMembersUseridTagsTagBuilder(b.sdk, b.id, b.userid, tag)
+}
+
+// GetOrganisationMemberTags calls organisations.GetOrganisationMemberTags
+func (b *v2OrganisationsIDMembersUseridTagsBuilderImpl) GetOrganisationMemberTags(ctx context.Context) client.Response[[]string] {
+	return organisations.GetOrganisationMemberTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid)
+}
+
+// V2OrganisationsIDMembersUseridTagsTagBuilder provides access to operations
+type V2OrganisationsIDMembersUseridTagsTagBuilder interface {
+	RemoveOrganisationMemberTag(ctx context.Context) client.Response[[]string]
+	AddOrganisationMemberTag(ctx context.Context) client.Response[[]string]
+}
+
+// v2OrganisationsIDMembersUseridTagsTagBuilderImpl implements V2OrganisationsIDMembersUseridTagsTagBuilder
+type v2OrganisationsIDMembersUseridTagsTagBuilderImpl struct {
+	sdk    *sdkImpl
+	id     string
+	userid string
+	tag    string
+}
+
+// newV2OrganisationsIDMembersUseridTagsTagBuilder creates a new V2OrganisationsIDMembersUseridTagsTagBuilder
+func newV2OrganisationsIDMembersUseridTagsTagBuilder(sdk *sdkImpl, id string, userid string, tag string) V2OrganisationsIDMembersUseridTagsTagBuilder {
+	return &v2OrganisationsIDMembersUseridTagsTagBuilderImpl{
+		id:     id,
+		sdk:    sdk,
+		tag:    tag,
+		userid: userid,
+	}
+}
+
+// RemoveOrganisationMemberTag calls organisations.RemoveOrganisationMemberTag
+func (b *v2OrganisationsIDMembersUseridTagsTagBuilderImpl) RemoveOrganisationMemberTag(ctx context.Context) client.Response[[]string] {
+	return organisations.RemoveOrganisationMemberTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid, b.tag)
+}
+
+// AddOrganisationMemberTag calls organisations.AddOrganisationMemberTag
+func (b *v2OrganisationsIDMembersUseridTagsTagBuilderImpl) AddOrganisationMemberTag(ctx context.Context) client.Response[[]string] {
+	return organisations.AddOrganisationMemberTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.id, b.userid, b.tag)
 }
 
 // V2OrganisationsIDMembersInvitationsBuilder provides access to operations
@@ -8352,6 +8424,7 @@ type V4KubernetesOrganisationsOwneridClustersKubernetesidBuilder interface {
 	Redeploy() V4KubernetesOrganisationsOwneridClustersKubernetesidRedeployBuilder
 	Resume() V4KubernetesOrganisationsOwneridClustersKubernetesidResumeBuilder
 	SniMigration() V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder
+	Tags() V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder
 	Version() V4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilder
 	DeleteKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster]
 	GetKubernetesCluster(ctx context.Context) client.Response[models.KubernetesCluster]
@@ -8427,6 +8500,11 @@ func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Resume
 // SniMigration returns SniMigration builder
 func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) SniMigration() V4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder {
 	return newV4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder(b.sdk, b.ownerid, b.kubernetesid)
+}
+
+// Tags returns Tags builder
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidBuilderImpl) Tags() V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder(b.sdk, b.ownerid, b.kubernetesid)
 }
 
 // Version returns Version builder
@@ -8943,6 +9021,72 @@ func newV4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilder(
 // MigrateKubernetesClusterSni calls kubernetes.MigrateKubernetesClusterSni
 func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidSniMigrationBuilderImpl) MigrateKubernetesClusterSni(ctx context.Context) client.Response[models.KubernetesCluster] {
 	return kubernetes.MigrateKubernetesClusterSni(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+}
+
+// V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder interface {
+	Tag(tag string) V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder
+	GetKubernetesClusterTags(ctx context.Context) client.Response[[]string]
+}
+
+// v4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder
+type v4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilderImpl struct {
+	sdk          *sdkImpl
+	ownerid      string
+	kubernetesid string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder creates a new V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder
+func newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder(sdk *sdkImpl, ownerid string, kubernetesid string) V4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilderImpl{
+		kubernetesid: kubernetesid,
+		ownerid:      ownerid,
+		sdk:          sdk,
+	}
+}
+
+// Tag returns builder for tag
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilderImpl) Tag(tag string) V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder {
+	return newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder(b.sdk, b.ownerid, b.kubernetesid, tag)
+}
+
+// GetKubernetesClusterTags calls kubernetes.GetKubernetesClusterTags
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidTagsBuilderImpl) GetKubernetesClusterTags(ctx context.Context) client.Response[[]string] {
+	return kubernetes.GetKubernetesClusterTags(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid)
+}
+
+// V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder provides access to operations
+type V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder interface {
+	RemoveKubernetesClusterTag(ctx context.Context) client.Response[[]string]
+	AddKubernetesClusterTag(ctx context.Context) client.Response[[]string]
+}
+
+// v4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilderImpl implements V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder
+type v4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilderImpl struct {
+	sdk          *sdkImpl
+	ownerid      string
+	kubernetesid string
+	tag          string
+}
+
+// newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder creates a new V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder
+func newV4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder(sdk *sdkImpl, ownerid string, kubernetesid string, tag string) V4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilder {
+	return &v4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilderImpl{
+		kubernetesid: kubernetesid,
+		ownerid:      ownerid,
+		sdk:          sdk,
+		tag:          tag,
+	}
+}
+
+// RemoveKubernetesClusterTag calls kubernetes.RemoveKubernetesClusterTag
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilderImpl) RemoveKubernetesClusterTag(ctx context.Context) client.Response[[]string] {
+	return kubernetes.RemoveKubernetesClusterTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.tag)
+}
+
+// AddKubernetesClusterTag calls kubernetes.AddKubernetesClusterTag
+func (b *v4KubernetesOrganisationsOwneridClustersKubernetesidTagsTagBuilderImpl) AddKubernetesClusterTag(ctx context.Context) client.Response[[]string] {
+	return kubernetes.AddKubernetesClusterTag(ctx, b.sdk.Client(), b.sdk.Tracer(), b.ownerid, b.kubernetesid, b.tag)
 }
 
 // V4KubernetesOrganisationsOwneridClustersKubernetesidVersionBuilder provides access to operations

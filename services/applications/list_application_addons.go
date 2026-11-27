@@ -14,7 +14,7 @@ import (
 /*
 ListApplicationAddons List the add-ons linked to an application
 
-Returns the add-ons linked to an organisation's application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
+Returns the add-ons linked to an organisation's application; an add-on the caller does not see (its tags outside the caller's) is left out. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation; also callable by the platform administration service.
 
 Parameters:
   - ctx: context for the request

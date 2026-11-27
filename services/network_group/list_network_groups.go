@@ -15,7 +15,7 @@ import (
 /*
 ListNetworkGroups List the network groups of an organisation
 
-Returns every network group the organisation owns, possibly none. Repeat `tags` to keep only the groups that carry every given tag. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns every network group the organisation owns, possibly none; a network group the caller does not see (its tags outside the caller's) is left out. Repeat `tags` to keep only the groups that carry every given tag. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

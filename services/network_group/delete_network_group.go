@@ -13,7 +13,7 @@ import (
 /*
 DeleteNetworkGroup Delete a network group
 
-Requests the deletion of the network group, which is applied asynchronously; 404 when it does not exist. Organisation members need the ADMIN or MANAGER role.
+Requests the deletion of the network group, which is applied asynchronously; 404 when it does not exist or belongs to another owner. Organisation members need the ADMIN or MANAGER role.
 
 Parameters:
   - ctx: context for the request

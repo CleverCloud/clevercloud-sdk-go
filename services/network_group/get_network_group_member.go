@@ -14,7 +14,7 @@ import (
 /*
 GetNetworkGroupMember Get a member of a network group
 
-Returns the member; 404 when the network group or the member does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns the member; 404 when the network group or the member does not exist, or the group belongs to another owner. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

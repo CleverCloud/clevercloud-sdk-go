@@ -14,7 +14,7 @@ import (
 /*
 UpdateApplication Update an application of an organisation
 
-Edits an organisation's application from the given application definition and returns the updated application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation.
+Edits an organisation's application from the given application definition and returns the updated application. Requires the ADMIN, MANAGER or DEVELOPER role in the organisation. When the definition carries `tags`, a member restricted by tags may only add or remove its own tags and must keep at least one of them (403 otherwise).
 
 Parameters:
   - ctx: context for the request

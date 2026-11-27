@@ -14,7 +14,7 @@ import (
 /*
 ListNetworkGroupPeers List the peers of a network group
 
-Returns the WireGuard peers of the network group, Clever Cloud instances and external peers alike; 404 when the group does not exist. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
+Returns the WireGuard peers of the network group, Clever Cloud instances and external peers alike; 404 when the group does not exist or belongs to another owner. Organisation members need the ADMIN, MANAGER or DEVELOPER role.
 
 Parameters:
   - ctx: context for the request

@@ -15,7 +15,7 @@ import (
 /*
 ListKubernetesClusters List the Kubernetes clusters of an organisation
 
-Returns the organisation's clusters whose stored status is in `status`, every status but `DELETED` by default; 400 on an unknown status. A failed cluster carries `failure`, one waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
+Returns the organisation's clusters whose stored status is in `status`, every status but `DELETED` by default; 400 on an unknown status. A cluster the caller does not see (its tags outside the caller's) is left out. A failed cluster carries `failure`, one waiting on a dependency `waiting`. Callable by any member of the organisation with a role other than `NONE`, when the organisation has access to Kubernetes; an OAuth1 token must also grant access to organisations.
 
 Parameters:
   - ctx: context for the request

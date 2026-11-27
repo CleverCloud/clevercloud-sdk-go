@@ -14,7 +14,7 @@ import (
 /*
 GetOrganisationSummary Get the summary of your account
 
-Returns the authenticated user with the applications, add-ons and OAuth consumers of their personal space, and every organisation they are a member of with their role in it and its applications, add-ons, OAuth consumers and add-on providers. Requires an authenticated user (401 otherwise) and the `access_personal_information` OAuth right (403 otherwise); 404 when the user no longer exists. `full` is accepted and changes nothing.
+Returns the authenticated user with the applications, add-ons and OAuth consumers of their personal space, and every organisation they are a member of with their role in it and its applications, add-ons, OAuth consumers and add-on providers; the applications and add-ons a member restricted by tags does not see are left out. Requires an authenticated user (401 otherwise) and the `access_personal_information` OAuth right (403 otherwise); 404 when the user no longer exists. `full` is accepted and changes nothing.
 
 Parameters:
   - ctx: context for the request

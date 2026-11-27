@@ -14,7 +14,7 @@ import (
 /*
 CreateNetworkGroup Create a network group
 
-Requests the creation of a network group, optionally with an ID, a label, tags and initial members. The group is created asynchronously and cannot be read until it is; 409 when its ID or label is already being created. Organisation members need the ADMIN or MANAGER role.
+Requests the creation of a network group, optionally with an ID, a label, tags and initial members. The group is created asynchronously and cannot be read until it is; 409 when its ID or label is already being created. Organisation members need the ADMIN or MANAGER role. A member restricted by tags must give one of its tags in `tags` when it has several (400 otherwise); a member with a single tag gets it added to the new resource. A member restricted by tags may only give tags it carries (403 otherwise). An initial member it does not see answers 404.
 
 Parameters:
   - ctx: context for the request
